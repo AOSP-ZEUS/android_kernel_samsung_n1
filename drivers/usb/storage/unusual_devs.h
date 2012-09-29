@@ -1840,6 +1840,15 @@ UNUSUAL_DEV(  0x12d1, 0x143F, 0x0000, 0x0000,
 		USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_huawei_e220_init,
 		0),
 
+<<<<<<< HEAD
+=======
+UNUSUAL_DEV(  0x12d1, 0x1446, 0x0000, 0x0000,
+		"HUAWEI MOBILE",
+		"Mass Storage",
+		USB_SC_DEVICE, USB_PR_DEVICE, usb_stor_huawei_e220_init,
+		0),
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Reported by Vilius Bilinkevicius <vilisas AT xxx DOT lt) */
 UNUSUAL_DEV(  0x132b, 0x000b, 0x0001, 0x0001,
 		"Minolta",

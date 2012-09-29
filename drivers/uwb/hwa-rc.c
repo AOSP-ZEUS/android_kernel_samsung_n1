@@ -645,8 +645,12 @@ void hwarc_neep_cb(struct urb *urb)
 		dev_err(dev, "NEEP: URB error %d\n", urb->status);
 	}
 	result = usb_submit_urb(urb, GFP_ATOMIC);
+<<<<<<< HEAD
 	if (result < 0 && result != -ENODEV && result != -EPERM) {
 		/* ignoring unrecoverable errors */
+=======
+	if (result < 0) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dev_err(dev, "NEEP: Can't resubmit URB (%d) resetting device\n",
 			result);
 		goto error;

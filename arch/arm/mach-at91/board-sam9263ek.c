@@ -56,7 +56,11 @@
 static void __init ek_init_early(void)
 {
 	/* Initialize processor: 16.367 MHz crystal */
+<<<<<<< HEAD
 	at91sam9263_initialize(16367660);
+=======
+	at91_initialize(16367660);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* DBGU on ttyS0. (Rx & Tx only) */
 	at91_register_uart(0, 0, 0);
@@ -68,12 +72,15 @@ static void __init ek_init_early(void)
 	at91_set_serial_console(0);
 }
 
+<<<<<<< HEAD
 static void __init ek_init_irq(void)
 {
 	at91sam9263_init_interrupts(NULL);
 }
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * USB Host port
  */
@@ -452,8 +459,14 @@ static void __init ek_board_init(void)
 MACHINE_START(AT91SAM9263EK, "Atmel AT91SAM9263-EK")
 	/* Maintainer: Atmel */
 	.timer		= &at91sam926x_timer,
+<<<<<<< HEAD
 	.map_io		= at91sam9263_map_io,
 	.init_early	= ek_init_early,
 	.init_irq	= ek_init_irq,
+=======
+	.map_io		= at91_map_io,
+	.init_early	= ek_init_early,
+	.init_irq	= at91_init_irq_default,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine	= ek_board_init,
 MACHINE_END

@@ -3,9 +3,12 @@
 
 #define IBLOCK_VERSION		"4.0"
 
+<<<<<<< HEAD
 #define IBLOCK_HBA_QUEUE_DEPTH	512
 #define IBLOCK_DEVICE_QUEUE_DEPTH	32
 #define IBLOCK_MAX_DEVICE_QUEUE_DEPTH	128
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define IBLOCK_MAX_CDBS		16
 #define IBLOCK_LBA_SHIFT	9
 
@@ -15,6 +18,7 @@ struct iblock_req {
 	atomic_t ib_bio_cnt;
 	atomic_t ib_bio_err_cnt;
 	struct bio *ib_bio;
+<<<<<<< HEAD
 	struct iblock_dev *ib_dev;
 } ____cacheline_aligned;
 
@@ -27,6 +31,14 @@ struct iblock_dev {
 	int	ibd_major;
 	int	ibd_minor;
 	u32	ibd_depth;
+=======
+} ____cacheline_aligned;
+
+#define IBDF_HAS_UDEV_PATH		0x01
+
+struct iblock_dev {
+	unsigned char ibd_udev_path[SE_UDEV_PATH_LEN];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32	ibd_flags;
 	struct bio_set	*ibd_bio_set;
 	struct block_device *ibd_bd;

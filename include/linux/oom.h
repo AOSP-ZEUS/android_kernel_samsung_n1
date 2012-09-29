@@ -64,10 +64,13 @@ static inline void oom_killer_enable(void)
 	oom_killer_disabled = false;
 }
 
+<<<<<<< HEAD
 /* The badness from the OOM killer */
 extern unsigned long badness(struct task_struct *p, struct mem_cgroup *mem,
 		      const nodemask_t *nodemask, unsigned long uptime);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern struct task_struct *find_lock_task_mm(struct task_struct *p);
 
 /* sysctls */

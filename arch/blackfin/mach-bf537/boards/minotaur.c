@@ -159,14 +159,20 @@ static struct flash_platform_data bfin_spi_flash_data = {
 /* SPI flash chip (m25p64) */
 static struct bfin5xx_spi_chip spi_flash_chip_info = {
 	.enable_dma = 0,         /* use dma transfer with this chip*/
+<<<<<<< HEAD
 	.bits_per_word = 8,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 #endif
 
 #if defined(CONFIG_MMC_SPI) || defined(CONFIG_MMC_SPI_MODULE)
 static struct bfin5xx_spi_chip mmc_spi_chip_info = {
 	.enable_dma = 0,
+<<<<<<< HEAD
 	.bits_per_word = 8,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 #endif
 

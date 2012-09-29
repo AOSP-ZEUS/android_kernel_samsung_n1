@@ -366,7 +366,12 @@ static void isp_stat_bufs_free(struct ispstat *stat)
 				dma_unmap_sg(isp->dev, buf->iovm->sgt->sgl,
 					     buf->iovm->sgt->nents,
 					     DMA_FROM_DEVICE);
+<<<<<<< HEAD
 			iommu_vfree(isp->iommu, buf->iommu_addr);
+=======
+			omap_iommu_vfree(isp->domain, isp->dev,
+							buf->iommu_addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else {
 			if (!buf->virt_addr)
 				continue;
@@ -399,8 +404,13 @@ static int isp_stat_bufs_alloc_iommu(struct ispstat *stat, unsigned int size)
 		struct iovm_struct *iovm;
 
 		WARN_ON(buf->dma_addr);
+<<<<<<< HEAD
 		buf->iommu_addr = iommu_vmalloc(isp->iommu, 0, size,
 						IOMMU_FLAG);
+=======
+		buf->iommu_addr = omap_iommu_vmalloc(isp->domain, isp->dev, 0,
+							size, IOMMU_FLAG);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (IS_ERR((void *)buf->iommu_addr)) {
 			dev_err(stat->isp->dev,
 				 "%s: Can't acquire memory for "
@@ -409,7 +419,11 @@ static int isp_stat_bufs_alloc_iommu(struct ispstat *stat, unsigned int size)
 			return -ENOMEM;
 		}
 
+<<<<<<< HEAD
 		iovm = find_iovm_area(isp->iommu, buf->iommu_addr);
+=======
+		iovm = omap_find_iovm_area(isp->dev, buf->iommu_addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!iovm ||
 		    !dma_map_sg(isp->dev, iovm->sgt->sgl, iovm->sgt->nents,
 				DMA_FROM_DEVICE)) {
@@ -418,7 +432,11 @@ static int isp_stat_bufs_alloc_iommu(struct ispstat *stat, unsigned int size)
 		}
 		buf->iovm = iovm;
 
+<<<<<<< HEAD
 		buf->virt_addr = da_to_va(stat->isp->iommu,
+=======
+		buf->virt_addr = omap_da_to_va(stat->isp->dev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					  (u32)buf->iommu_addr);
 		buf->empty = 1;
 		dev_dbg(stat->isp->dev, "%s: buffer[%d] allocated."
@@ -1032,7 +1050,10 @@ static int isp_stat_init_entities(struct ispstat *stat, const char *name,
 	snprintf(subdev->name, V4L2_SUBDEV_NAME_SIZE, "OMAP3 ISP %s", name);
 	subdev->grp_id = 1 << 16;	/* group ID for isp subdevs */
 	subdev->flags |= V4L2_SUBDEV_FL_HAS_EVENTS | V4L2_SUBDEV_FL_HAS_DEVNODE;
+<<<<<<< HEAD
 	subdev->nevents = STAT_NEVENTS;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	v4l2_set_subdevdata(subdev, stat);
 
 	stat->pad.flags = MEDIA_PAD_FL_SINK;
@@ -1050,7 +1071,11 @@ int omap3isp_stat_subscribe_event(struct v4l2_subdev *subdev,
 	if (sub->type != stat->event_type)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	return v4l2_event_subscribe(fh, sub);
+=======
+	return v4l2_event_subscribe(fh, sub, STAT_NEVENTS);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int omap3isp_stat_unsubscribe_event(struct v4l2_subdev *subdev,

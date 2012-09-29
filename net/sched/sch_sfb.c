@@ -93,7 +93,12 @@ struct sfb_skb_cb {
 
 static inline struct sfb_skb_cb *sfb_skb_cb(const struct sk_buff *skb)
 {
+<<<<<<< HEAD
 	qdisc_cb_private_validate(skb, sizeof(struct sfb_skb_cb));
+=======
+	BUILD_BUG_ON(sizeof(skb->cb) <
+		sizeof(struct qdisc_skb_cb) + sizeof(struct sfb_skb_cb));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return (struct sfb_skb_cb *)qdisc_skb_cb(skb)->data;
 }
 

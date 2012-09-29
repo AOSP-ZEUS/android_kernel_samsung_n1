@@ -61,6 +61,7 @@
 #include "iwch_user.h"
 #include "common.h"
 
+<<<<<<< HEAD
 static int iwch_modify_port(struct ib_device *ibdev,
 			    u8 port, int port_modify_mask,
 			    struct ib_port_modify *props)
@@ -68,6 +69,8 @@ static int iwch_modify_port(struct ib_device *ibdev,
 	return -ENOSYS;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct ib_ah *iwch_ah_create(struct ib_pd *pd,
 				    struct ib_ah_attr *ah_attr)
 {
@@ -1392,7 +1395,10 @@ int iwch_register_device(struct iwch_dev *dev)
 	dev->ibdev.dma_device = &(dev->rdev.rnic_info.pdev->dev);
 	dev->ibdev.query_device = iwch_query_device;
 	dev->ibdev.query_port = iwch_query_port;
+<<<<<<< HEAD
 	dev->ibdev.modify_port = iwch_modify_port;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev->ibdev.query_pkey = iwch_query_pkey;
 	dev->ibdev.query_gid = iwch_query_gid;
 	dev->ibdev.alloc_ucontext = iwch_alloc_ucontext;

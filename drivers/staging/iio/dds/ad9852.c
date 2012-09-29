@@ -58,7 +58,10 @@ struct ad9852_config {
 
 struct ad9852_state {
 	struct mutex lock;
+<<<<<<< HEAD
 	struct iio_dev *idev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct spi_device *sdev;
 };
 
@@ -72,7 +75,11 @@ static ssize_t ad9852_set_parameter(struct device *dev,
 	int ret;
 	struct ad9852_config *config = (struct ad9852_config *)buf;
 	struct iio_dev *idev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad9852_state *st = idev->dev_data;
+=======
+	struct ad9852_state *st = iio_priv(idev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	xfer.len = 3;
 	xfer.tx_buf = &config->phajst0[0];
@@ -230,6 +237,7 @@ static const struct iio_info ad9852_info = {
 static int __devinit ad9852_probe(struct spi_device *spi)
 {
 	struct ad9852_state *st;
+<<<<<<< HEAD
 	int ret = 0;
 
 	st = kzalloc(sizeof(*st), GFP_KERNEL);
@@ -254,6 +262,26 @@ static int __devinit ad9852_probe(struct spi_device *spi)
 	st->idev->modes = INDIO_DIRECT_MODE;
 
 	ret = iio_device_register(st->idev);
+=======
+	struct iio_dev *idev;
+	int ret = 0;
+
+	idev = iio_allocate_device(sizeof(*st));
+	if (idev == NULL) {
+		ret = -ENOMEM;
+		goto error_ret;
+	}
+	st = iio_priv(idev);
+	spi_set_drvdata(spi, idev);
+	mutex_init(&st->lock);
+	st->sdev = spi;
+
+	idev->dev.parent = &spi->dev;
+	idev->info = &ad9852_info;
+	idev->modes = INDIO_DIRECT_MODE;
+
+	ret = iio_device_register(idev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_free_dev;
 	spi->max_speed_hz = 2000000;
@@ -261,22 +289,35 @@ static int __devinit ad9852_probe(struct spi_device *spi)
 	spi->bits_per_word = 8;
 	spi_setup(spi);
 	ad9852_init(st);
+<<<<<<< HEAD
 	return 0;
 
 error_free_dev:
 	iio_free_device(st->idev);
 error_free_st:
 	kfree(st);
+=======
+
+	return 0;
+
+error_free_dev:
+	iio_free_device(idev);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_ret:
 	return ret;
 }
 
 static int __devexit ad9852_remove(struct spi_device *spi)
 {
+<<<<<<< HEAD
 	struct ad9852_state *st = spi_get_drvdata(spi);
 
 	iio_device_unregister(st->idev);
 	kfree(st);
+=======
+	iio_device_unregister(spi_get_drvdata(spi));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

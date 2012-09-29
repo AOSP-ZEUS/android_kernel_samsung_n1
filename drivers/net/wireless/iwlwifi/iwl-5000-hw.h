@@ -75,7 +75,11 @@ static inline s32 iwl_temp_calib_to_offset(struct iwl_priv *priv)
 {
 	u16 temperature, voltage;
 	__le16 *temp_calib =
+<<<<<<< HEAD
 		(__le16 *)iwl_eeprom_query_addr(priv, EEPROM_5000_TEMPERATURE);
+=======
+		(__le16 *)iwl_eeprom_query_addr(priv, EEPROM_TEMPERATURE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	temperature = le16_to_cpu(temp_calib[0]);
 	voltage = le16_to_cpu(temp_calib[1]);

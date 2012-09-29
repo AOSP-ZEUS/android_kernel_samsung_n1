@@ -151,6 +151,7 @@ static void iwl4965_accumulative_statistics(struct iwl_priv *priv,
 
 #define REG_RECALIB_PERIOD (60)
 
+<<<<<<< HEAD
 /**
  * iwl4965_good_plcp_health - checks for plcp error.
  *
@@ -226,6 +227,8 @@ bool iwl4965_good_plcp_health(struct iwl_priv *priv,
 	return rc;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void iwl4965_rx_statistics(struct iwl_priv *priv,
 			      struct iwl_rx_mem_buffer *rxb)
 {
@@ -248,8 +251,12 @@ void iwl4965_rx_statistics(struct iwl_priv *priv,
 	iwl4965_accumulative_statistics(priv, (__le32 *)&pkt->u.stats);
 #endif
 
+<<<<<<< HEAD
 	iwl_legacy_recover_from_statistics(priv, pkt);
 
+=======
+	/* TODO: reading some of statistics is unneeded */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	memcpy(&priv->_4965.statistics, &pkt->u.stats,
 		sizeof(priv->_4965.statistics));
 

@@ -30,6 +30,10 @@
 #define DRV_VERSION	"2.1"
 #define DRV_RELDATE	"July  6, 2008"
 
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/pci.h>
@@ -560,7 +564,11 @@ struct netdev_private {
 	struct net_device *dev;
 	struct pci_dev *pci_dev;
 #ifdef VLAN_SUPPORT
+<<<<<<< HEAD
 	struct vlan_group *vlgrp;
+=======
+	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 	void *queue_mem;
 	dma_addr_t queue_mem_dma;
@@ -606,6 +614,7 @@ static const struct ethtool_ops ethtool_ops;
 
 
 #ifdef VLAN_SUPPORT
+<<<<<<< HEAD
 static void netdev_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 {
         struct netdev_private *np = netdev_priv(dev);
@@ -618,6 +627,8 @@ static void netdev_vlan_rx_register(struct net_device *dev, struct vlan_group *g
         spin_unlock(&np->lock);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void netdev_vlan_rx_add_vid(struct net_device *dev, unsigned short vid)
 {
 	struct netdev_private *np = netdev_priv(dev);
@@ -625,6 +636,10 @@ static void netdev_vlan_rx_add_vid(struct net_device *dev, unsigned short vid)
 	spin_lock(&np->lock);
 	if (debug > 1)
 		printk("%s: Adding vlanid %d to vlan filter\n", dev->name, vid);
+<<<<<<< HEAD
+=======
+	set_bit(vid, np->active_vlans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	set_rx_mode(dev);
 	spin_unlock(&np->lock);
 }
@@ -636,7 +651,11 @@ static void netdev_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 	spin_lock(&np->lock);
 	if (debug > 1)
 		printk("%s: removing vlanid %d from vlan filter\n", dev->name, vid);
+<<<<<<< HEAD
 	vlan_group_set_device(np->vlgrp, vid, NULL);
+=======
+	clear_bit(vid, np->active_vlans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	set_rx_mode(dev);
 	spin_unlock(&np->lock);
 }
@@ -647,6 +666,7 @@ static const struct net_device_ops netdev_ops = {
 	.ndo_open		= netdev_open,
 	.ndo_stop		= netdev_close,
 	.ndo_start_xmit		= start_tx,
+<<<<<<< HEAD
 	.ndo_tx_timeout 	= tx_timeout,
 	.ndo_get_stats 		= get_stats,
 	.ndo_set_multicast_list = &set_rx_mode,
@@ -656,6 +676,16 @@ static const struct net_device_ops netdev_ops = {
 	.ndo_validate_addr	= eth_validate_addr,
 #ifdef VLAN_SUPPORT
 	.ndo_vlan_rx_register	= netdev_vlan_rx_register,
+=======
+	.ndo_tx_timeout		= tx_timeout,
+	.ndo_get_stats		= get_stats,
+	.ndo_set_multicast_list = &set_rx_mode,
+	.ndo_do_ioctl		= netdev_ioctl,
+	.ndo_change_mtu		= eth_change_mtu,
+	.ndo_set_mac_address	= eth_mac_addr,
+	.ndo_validate_addr	= eth_validate_addr,
+#ifdef VLAN_SUPPORT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ndo_vlan_rx_add_vid	= netdev_vlan_rx_add_vid,
 	.ndo_vlan_rx_kill_vid	= netdev_vlan_rx_kill_vid,
 #endif
@@ -1527,13 +1557,18 @@ static int __netdev_rx(struct net_device *dev, int *quota)
 			printk(KERN_DEBUG "%s: checksum_hw, status2 = %#x\n", dev->name, le16_to_cpu(desc->status2));
 		}
 #ifdef VLAN_SUPPORT
+<<<<<<< HEAD
 		if (np->vlgrp && le16_to_cpu(desc->status2) & 0x0200) {
+=======
+		if (le16_to_cpu(desc->status2) & 0x0200) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			u16 vlid = le16_to_cpu(desc->vlanid);
 
 			if (debug > 4) {
 				printk(KERN_DEBUG "  netdev_rx() vlanid = %d\n",
 				       vlid);
 			}
+<<<<<<< HEAD
 			/*
 			 * vlan_hwaccel_rx expects a packet with the VLAN tag
 			 * stripped out.
@@ -1542,6 +1577,12 @@ static int __netdev_rx(struct net_device *dev, int *quota)
 		} else
 #endif /* VLAN_SUPPORT */
 			netif_receive_skb(skb);
+=======
+			__vlan_hwaccel_put_tag(skb, vlid);
+		}
+#endif /* VLAN_SUPPORT */
+		netif_receive_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dev->stats.rx_packets++;
 
 	next_rx:
@@ -1751,6 +1792,35 @@ static struct net_device_stats *get_stats(struct net_device *dev)
 	return &dev->stats;
 }
 
+<<<<<<< HEAD
+=======
+#ifdef VLAN_SUPPORT
+static u32 set_vlan_mode(struct netdev_private *np)
+{
+	u32 ret = VlanMode;
+	u16 vid;
+	void __iomem *filter_addr = np->base + HashTable + 8;
+	int vlan_count = 0;
+
+	for_each_set_bit(vid, np->active_vlans, VLAN_N_VID) {
+		if (vlan_count == 32)
+			break;
+		writew(vid, filter_addr);
+		filter_addr += 16;
+		vlan_count++;
+	}
+	if (vlan_count == 32) {
+		ret |= PerfectFilterVlan;
+		while (vlan_count < 32) {
+			writew(0, filter_addr);
+			filter_addr += 16;
+			vlan_count++;
+		}
+	}
+	return ret;
+}
+#endif /* VLAN_SUPPORT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static void set_rx_mode(struct net_device *dev)
 {
@@ -1759,6 +1829,7 @@ static void set_rx_mode(struct net_device *dev)
 	u32 rx_mode = MinVLANPrio;
 	struct netdev_hw_addr *ha;
 	int i;
+<<<<<<< HEAD
 #ifdef VLAN_SUPPORT
 
 	rx_mode |= VlanMode;
@@ -1783,6 +1854,11 @@ static void set_rx_mode(struct net_device *dev)
 			}
 		}
 	}
+=======
+
+#ifdef VLAN_SUPPORT
+	rx_mode |= set_vlan_mode(np);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* VLAN_SUPPORT */
 
 	if (dev->flags & IFF_PROMISC) {	/* Set promiscuous. */

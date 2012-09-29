@@ -874,6 +874,11 @@ lpfc_cmpl_els_flogi(struct lpfc_hba *phba, struct lpfc_iocbq *cmdiocb,
 					phba->fcf.current_rec.fcf_indx,
 					irsp->ulpStatus, irsp->un.ulpWord[4],
 					irsp->ulpTimeout);
+<<<<<<< HEAD
+=======
+			lpfc_sli4_set_fcf_flogi_fail(phba,
+					phba->fcf.current_rec.fcf_indx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			fcf_index = lpfc_sli4_fcf_rr_next_index_get(phba);
 			rc = lpfc_sli4_fcf_rr_next_proc(vport, fcf_index);
 			if (rc)

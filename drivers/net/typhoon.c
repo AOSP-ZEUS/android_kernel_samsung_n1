@@ -2367,7 +2367,11 @@ typhoon_init_one(struct pci_dev *pdev, const struct pci_device_id *ent)
 
 	dev->irq = pdev->irq;
 	tp = netdev_priv(dev);
+<<<<<<< HEAD
 	tp->shared = (struct typhoon_shared *) shared;
+=======
+	tp->shared = shared;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tp->shared_dma = shared_dma;
 	tp->pdev = pdev;
 	tp->tx_pdev = pdev;

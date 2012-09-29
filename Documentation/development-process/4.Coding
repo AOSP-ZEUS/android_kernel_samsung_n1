@@ -244,7 +244,11 @@ testing purposes.  In particular, you should turn on:
  - DEBUG_SLAB can find a variety of memory allocation and use errors; it
    should be used on most development kernels.
 
+<<<<<<< HEAD
  - DEBUG_SPINLOCK, DEBUG_SPINLOCK_SLEEP, and DEBUG_MUTEXES will find a
+=======
+ - DEBUG_SPINLOCK, DEBUG_ATOMIC_SLEEP, and DEBUG_MUTEXES will find a
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
    number of common locking errors.
 
 There are quite a few other debugging options, some of which will be

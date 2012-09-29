@@ -16,6 +16,10 @@ config GENERIC_CLOCKEVENTS
 
 config M68000
 	bool
+<<<<<<< HEAD
+=======
+	select CPU_HAS_NO_BITFIELDS
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  The Freescale (was Motorola) 68000 CPU is the first generation of
 	  the well known M68K family of processors. The CPU core as well as
@@ -25,6 +29,10 @@ config M68000
 
 config MCPU32
 	bool
+<<<<<<< HEAD
+=======
+	select CPU_HAS_NO_BITFIELDS
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  The Freescale (was then Motorola) CPU32 is a CPU core that is
 	  based on the 68020 processor. For the most part it is used in
@@ -34,6 +42,10 @@ config COLDFIRE
 	bool
 	select GENERIC_GPIO
 	select ARCH_REQUIRE_GPIOLIB
+<<<<<<< HEAD
+=======
+	select CPU_HAS_NO_BITFIELDS
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  The Freescale ColdFire family of processors is a modern derivitive
 	  of the 68000 processor family. They are mainly targeted at embedded

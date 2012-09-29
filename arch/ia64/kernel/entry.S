@@ -1614,7 +1614,11 @@ sys_call_table:
 	data8 sys_sched_get_priority_min
 	data8 sys_sched_rr_get_interval
 	data8 sys_nanosleep
+<<<<<<< HEAD
 	data8 sys_nfsservctl
+=======
+	data8 sys_ni_syscall			// old nfsservctl
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	data8 sys_prctl				// 1170
 	data8 sys_getpagesize
 	data8 sys_mmap2

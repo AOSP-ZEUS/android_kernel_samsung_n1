@@ -350,6 +350,7 @@ ENTRY(arm1020e_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(arm1020e_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(arm1020e_cache_fns)
 	.long	arm1020e_flush_icache_all
 	.long	arm1020e_flush_kern_cache_all
@@ -361,6 +362,10 @@ ENTRY(arm1020e_cache_fns)
 	.long	arm1020e_dma_map_area
 	.long	arm1020e_dma_unmap_area
 	.long	arm1020e_dma_flush_range
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions arm1020e
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align	5
 ENTRY(cpu_arm1020e_dcache_clean_area)
@@ -458,6 +463,7 @@ arm1020e_crval:
 	crval	clear=0x00007f3f, mmuset=0x00003935, ucset=0x00001930
 
 	__INITDATA
+<<<<<<< HEAD
 
 /*
  * Purpose : Function pointers used to access above functions - all calls
@@ -495,6 +501,16 @@ cpu_elf_name:
 cpu_arm1020e_name:
 	.asciz	"ARM1020E"
 	.size	cpu_arm1020e_name, . - cpu_arm1020e_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions arm1020e, dabort=v4t_early_abort, pabort=legacy_pabort
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv5te"
+	string	cpu_elf_name, "v5"
+	string	cpu_arm1020e_name, "ARM1020E"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 

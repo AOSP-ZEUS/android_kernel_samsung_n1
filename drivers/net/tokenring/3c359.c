@@ -304,7 +304,11 @@ static int __devinit xl_probe(struct pci_dev *pdev,
 
 	if ((i = pci_request_regions(pdev,"3c359"))) { 
 		return i ; 
+<<<<<<< HEAD
 	} ; 
+=======
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* 
 	 * Allowing init_trdev to allocate the private data will align
@@ -1773,7 +1777,13 @@ static void xl_wait_misr_flags(struct net_device *dev)
 	if (readb(xl_mmio + MMIO_MACDATA) != 0) {  /* Misr not clear */
 		for (i=0; i<6; i++) { 
 			writel(MEM_BYTE_READ | 0xDFFE0 | i, xl_mmio + MMIO_MAC_ACCESS_CMD) ; 
+<<<<<<< HEAD
 			while (readb(xl_mmio + MMIO_MACDATA) != 0 ) {} ; /* Empty Loop */
+=======
+			while (readb(xl_mmio + MMIO_MACDATA) != 0) {
+				;	/* Empty Loop */
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} 
 	}
 

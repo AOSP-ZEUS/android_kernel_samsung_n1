@@ -182,7 +182,11 @@ extern int			 affs_add_entry(struct inode *dir, struct inode *inode, struct dent
 
 void		affs_free_prealloc(struct inode *inode);
 extern void	affs_truncate(struct inode *);
+<<<<<<< HEAD
 int		affs_file_fsync(struct file *, int);
+=======
+int		affs_file_fsync(struct file *, loff_t, loff_t, int);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* dir.c */
 

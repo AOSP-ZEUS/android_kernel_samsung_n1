@@ -7,7 +7,11 @@
 #include <linux/nfs_xdr.h>
 #include <linux/sunrpc/xprt.h>
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct nfs4_session;
 struct nfs_iostats;
@@ -16,6 +20,10 @@ struct nfs4_sequence_args;
 struct nfs4_sequence_res;
 struct nfs_server;
 struct nfs4_minor_version_ops;
+<<<<<<< HEAD
+=======
+struct server_scope;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * The nfs_client identifies our client state to the server.
@@ -77,12 +85,20 @@ struct nfs_client {
 	/* The flags used for obtaining the clientid during EXCHANGE_ID */
 	u32			cl_exchange_flags;
 	struct nfs4_session	*cl_session; 	/* sharred session */
+<<<<<<< HEAD
 	struct list_head	cl_layouts;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* CONFIG_NFS_V4 */
 
 #ifdef CONFIG_NFS_FSCACHE
 	struct fscache_cookie	*fscache;	/* client index cache cookie */
 #endif
+<<<<<<< HEAD
+=======
+
+	struct server_scope	*server_scope;	/* from exchange_id */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*
@@ -129,8 +145,14 @@ struct nfs_server {
 	struct fscache_cookie	*fscache;	/* superblock cookie */
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_NFS_V4
 	u32			attr_bitmask[2];/* V4 bitmask representing the set
+=======
+	u32			pnfs_blksize;	/* layout_blksize attr */
+#ifdef CONFIG_NFS_V4
+	u32			attr_bitmask[3];/* V4 bitmask representing the set
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 						   of attributes supported on this
 						   filesystem */
 	u32			cache_consistency_bitmask[2];
@@ -143,12 +165,20 @@ struct nfs_server {
 						   filesystem */
 	struct pnfs_layoutdriver_type  *pnfs_curr_ld; /* Active layout driver */
 	struct rpc_wait_queue	roc_rpcwaitq;
+<<<<<<< HEAD
+=======
+	void			*pnfs_ld_data;	/* per mount point data */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* the following fields are protected by nfs_client->cl_lock */
 	struct rb_root		state_owners;
 	struct rb_root		openowner_id;
 	struct rb_root		lockowner_id;
 #endif
+<<<<<<< HEAD
+=======
+	struct list_head	layouts;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct list_head	delegations;
 	void (*destroy)(struct nfs_server *);
 

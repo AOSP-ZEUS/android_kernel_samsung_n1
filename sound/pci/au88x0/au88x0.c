@@ -196,7 +196,11 @@ snd_vortex_create(struct snd_card *card, struct pci_dev *pci, vortex_t ** rchip)
 	}
 
 	if ((err = request_irq(pci->irq, vortex_interrupt,
+<<<<<<< HEAD
 	                       IRQF_SHARED, CARD_NAME_SHORT,
+=======
+			       IRQF_SHARED, KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	                       chip)) != 0) {
 		printk(KERN_ERR "cannot grab irq\n");
 		goto irq_out;
@@ -375,7 +379,11 @@ static void __devexit snd_vortex_remove(struct pci_dev *pci)
 
 // pci_driver definition
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name = CARD_NAME_SHORT,
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_vortex_ids,
 	.probe = snd_vortex_probe,
 	.remove = __devexit_p(snd_vortex_remove),

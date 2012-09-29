@@ -34,6 +34,10 @@ int
 nouveau_notifier_init_channel(struct nouveau_channel *chan)
 {
 	struct drm_device *dev = chan->dev;
+<<<<<<< HEAD
+=======
+	struct drm_nouveau_private *dev_priv = dev->dev_private;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct nouveau_bo *ntfy = NULL;
 	uint32_t flags, ttmpl;
 	int ret;
@@ -46,7 +50,11 @@ nouveau_notifier_init_channel(struct nouveau_channel *chan)
 		ttmpl = TTM_PL_FLAG_TT;
 	}
 
+<<<<<<< HEAD
 	ret = nouveau_gem_new(dev, NULL, PAGE_SIZE, 0, flags, 0, 0, &ntfy);
+=======
+	ret = nouveau_gem_new(dev, PAGE_SIZE, 0, flags, 0, 0, &ntfy);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		return ret;
 
@@ -58,14 +66,30 @@ nouveau_notifier_init_channel(struct nouveau_channel *chan)
 	if (ret)
 		goto out_err;
 
+<<<<<<< HEAD
+=======
+	if (dev_priv->card_type >= NV_50) {
+		ret = nouveau_bo_vma_add(ntfy, chan->vm, &chan->notifier_vma);
+		if (ret)
+			goto out_err;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = drm_mm_init(&chan->notifier_heap, 0, ntfy->bo.mem.size);
 	if (ret)
 		goto out_err;
 
 	chan->notifier_bo = ntfy;
 out_err:
+<<<<<<< HEAD
 	if (ret)
 		drm_gem_object_unreference_unlocked(ntfy->gem);
+=======
+	if (ret) {
+		nouveau_bo_vma_del(ntfy, &chan->notifier_vma);
+		drm_gem_object_unreference_unlocked(ntfy->gem);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return ret;
 }
@@ -78,6 +102,10 @@ nouveau_notifier_takedown_channel(struct nouveau_channel *chan)
 	if (!chan->notifier_bo)
 		return;
 
+<<<<<<< HEAD
+=======
+	nouveau_bo_vma_del(chan->notifier_bo, &chan->notifier_vma);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	nouveau_bo_unmap(chan->notifier_bo);
 	mutex_lock(&dev->struct_mutex);
 	nouveau_bo_unpin(chan->notifier_bo);
@@ -122,10 +150,17 @@ nouveau_notifier_alloc(struct nouveau_channel *chan, uint32_t handle,
 			target = NV_MEM_TARGET_VRAM;
 		else
 			target = NV_MEM_TARGET_GART;
+<<<<<<< HEAD
 		offset  = chan->notifier_bo->bo.mem.start << PAGE_SHIFT;
 	} else {
 		target = NV_MEM_TARGET_VM;
 		offset = chan->notifier_bo->vma.offset;
+=======
+		offset  = chan->notifier_bo->bo.offset;
+	} else {
+		target = NV_MEM_TARGET_VM;
+		offset = chan->notifier_vma.offset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	offset += mem->start;
 
@@ -183,7 +218,11 @@ nouveau_ioctl_notifier_alloc(struct drm_device *dev, void *data,
 	if (unlikely(dev_priv->card_type >= NV_C0))
 		return -EINVAL;
 
+<<<<<<< HEAD
 	chan = nouveau_channel_get(dev, file_priv, na->channel);
+=======
+	chan = nouveau_channel_get(file_priv, na->channel);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (IS_ERR(chan))
 		return PTR_ERR(chan);
 

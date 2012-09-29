@@ -22,6 +22,10 @@
 
 #include <cpu/dma-register.h>
 #include <cpu/sh7722.h>
+<<<<<<< HEAD
+=======
+#include <cpu/serial.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static const struct sh_dmae_slave_config sh7722_dmae_slaves[] = {
 	{
@@ -185,6 +189,11 @@ static struct plat_sci_port scif0_platform_data = {
 	.scbrr_algo_id	= SCBRR_ALGO_2,
 	.type           = PORT_SCIF,
 	.irqs           = { 80, 80, 80, 80 },
+<<<<<<< HEAD
+=======
+	.ops		= &sh7722_sci_port_ops,
+	.regtype	= SCIx_SH4_SCIF_NO_SCSPTR_REGTYPE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct platform_device scif0_device = {
@@ -202,6 +211,11 @@ static struct plat_sci_port scif1_platform_data = {
 	.scbrr_algo_id	= SCBRR_ALGO_2,
 	.type           = PORT_SCIF,
 	.irqs           = { 81, 81, 81, 81 },
+<<<<<<< HEAD
+=======
+	.ops		= &sh7722_sci_port_ops,
+	.regtype	= SCIx_SH4_SCIF_NO_SCSPTR_REGTYPE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct platform_device scif1_device = {
@@ -219,6 +233,11 @@ static struct plat_sci_port scif2_platform_data = {
 	.scbrr_algo_id	= SCBRR_ALGO_2,
 	.type           = PORT_SCIF,
 	.irqs           = { 82, 82, 82, 82 },
+<<<<<<< HEAD
+=======
+	.ops		= &sh7722_sci_port_ops,
+	.regtype	= SCIx_SH4_SCIF_NO_SCSPTR_REGTYPE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct platform_device scif2_device = {

@@ -12,9 +12,13 @@ obj-				:=
 # Objects we always build independent of SoC choice
 
 obj-y				+= init.o
+<<<<<<< HEAD
 ifndef CONFIG_S5P_HIGH_RES_TIMERS
 obj-$(CONFIG_ARCH_USES_GETTIMEOFFSET)   += time.o
 endif
+=======
+obj-$(CONFIG_ARCH_USES_GETTIMEOFFSET)   += time.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-y				+= clock.o
 obj-y				+= pwm-clock.o
 obj-y				+= gpio.o
@@ -61,6 +65,10 @@ obj-$(CONFIG_SAMSUNG_DEV_IDE)	+= dev-ide.o
 obj-$(CONFIG_SAMSUNG_DEV_TS)	+= dev-ts.o
 obj-$(CONFIG_SAMSUNG_DEV_KEYPAD)	+= dev-keypad.o
 obj-$(CONFIG_SAMSUNG_DEV_PWM)	+= dev-pwm.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SAMSUNG_DEV_BACKLIGHT)	+= dev-backlight.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 # DMA support
 

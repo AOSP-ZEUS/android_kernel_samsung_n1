@@ -1625,8 +1625,13 @@ static void __vub300_command_response(struct vub300_mmc_host *vub300,
 		cmd->error = respretval;
 	} else if (cmd->error) {
 		/*
+<<<<<<< HEAD
 		 * the error occured sending the command
 		 * or recieving the response
+=======
+		 * the error occurred sending the command
+		 * or receiving the response
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 */
 	} else if (vub300->command_out_urb->status) {
 		vub300->usb_transport_fail = vub300->command_out_urb->status;

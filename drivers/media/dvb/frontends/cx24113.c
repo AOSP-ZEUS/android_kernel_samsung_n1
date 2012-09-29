@@ -31,8 +31,13 @@
 
 static int debug;
 
+<<<<<<< HEAD
 #define info(args...) do { printk(KERN_INFO "CX24113: " args); } while (0)
 #define err(args...)  do { printk(KERN_ERR  "CX24113: " args); } while (0)
+=======
+#define cx_info(args...) do { printk(KERN_INFO "CX24113: " args); } while (0)
+#define cx_err(args...)  do { printk(KERN_ERR  "CX24113: " args); } while (0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define dprintk(args...) \
 	do { \
@@ -341,7 +346,11 @@ static void cx24113_calc_pll_nf(struct cx24113_state *state, u16 *n, s32 *f)
 	} while (N < 6 && R < 3);
 
 	if (N < 6) {
+<<<<<<< HEAD
 		err("strange frequency: N < 6\n");
+=======
+		cx_err("strange frequency: N < 6\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	}
 	F = freq_hz;
@@ -563,7 +572,11 @@ struct dvb_frontend *cx24113_attach(struct dvb_frontend *fe,
 		kzalloc(sizeof(struct cx24113_state), GFP_KERNEL);
 	int rc;
 	if (state == NULL) {
+<<<<<<< HEAD
 		err("Unable to kzalloc\n");
+=======
+		cx_err("Unable to kzalloc\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto error;
 	}
 
@@ -571,7 +584,11 @@ struct dvb_frontend *cx24113_attach(struct dvb_frontend *fe,
 	state->config = config;
 	state->i2c = i2c;
 
+<<<<<<< HEAD
 	info("trying to detect myself\n");
+=======
+	cx_info("trying to detect myself\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* making a dummy read, because of some expected troubles
 	 * after power on */
@@ -579,13 +596,18 @@ struct dvb_frontend *cx24113_attach(struct dvb_frontend *fe,
 
 	rc = cx24113_readreg(state, 0x00);
 	if (rc < 0) {
+<<<<<<< HEAD
 		info("CX24113 not found.\n");
+=======
+		cx_info("CX24113 not found.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto error;
 	}
 	state->rev = rc;
 
 	switch (rc) {
 	case 0x43:
+<<<<<<< HEAD
 		info("detected CX24113 variant\n");
 		break;
 	case REV_CX24113:
@@ -597,6 +619,19 @@ struct dvb_frontend *cx24113_attach(struct dvb_frontend *fe,
 	}
 	state->ver = cx24113_readreg(state, 0x01);
 	info("version: %x\n", state->ver);
+=======
+		cx_info("detected CX24113 variant\n");
+		break;
+	case REV_CX24113:
+		cx_info("successfully detected\n");
+		break;
+	default:
+		cx_err("unsupported device id: %x\n", state->rev);
+		goto error;
+	}
+	state->ver = cx24113_readreg(state, 0x01);
+	cx_info("version: %x\n", state->ver);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* create dvb_frontend */
 	memcpy(&fe->ops.tuner_ops, &cx24113_tuner_ops,

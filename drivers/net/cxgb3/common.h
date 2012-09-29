@@ -367,7 +367,10 @@ struct vpd_params {
 
 struct pci_params {
 	unsigned int vpd_cap_addr;
+<<<<<<< HEAD
 	unsigned int pcie_cap_addr;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned short speed;
 	unsigned char width;
 	unsigned char variant;

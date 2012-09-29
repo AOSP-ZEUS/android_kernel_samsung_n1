@@ -61,6 +61,11 @@
 #include <locale.h>
 
 #define DEFAULT_SEPARATOR	" "
+<<<<<<< HEAD
+=======
+#define CNTR_NOT_SUPPORTED	"<not supported>"
+#define CNTR_NOT_COUNTED	"<not counted>"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct perf_event_attr default_attrs[] = {
 
@@ -191,6 +196,10 @@ static int			big_num_opt			=  -1;
 static const char		*cpu_list;
 static const char		*csv_sep			= NULL;
 static bool			csv_output			= false;
+<<<<<<< HEAD
+=======
+static bool			group				= false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static volatile int done = 0;
 
@@ -278,14 +287,22 @@ static int create_perf_stat_counter(struct perf_evsel *evsel)
 	attr->inherit = !no_inherit;
 
 	if (system_wide)
+<<<<<<< HEAD
 		return perf_evsel__open_per_cpu(evsel, evsel_list->cpus, false);
+=======
+		return perf_evsel__open_per_cpu(evsel, evsel_list->cpus, group);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (target_pid == -1 && target_tid == -1) {
 		attr->disabled = 1;
 		attr->enable_on_exec = 1;
 	}
 
+<<<<<<< HEAD
 	return perf_evsel__open_per_thread(evsel, evsel_list->threads, false);
+=======
+	return perf_evsel__open_per_thread(evsel, evsel_list->threads, group);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -448,6 +465,10 @@ static int run_perf_stat(int argc __used, const char **argv)
 				if (verbose)
 					ui__warning("%s event is not supported by the kernel.\n",
 						    event_name(counter));
+<<<<<<< HEAD
+=======
+				counter->supported = false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				continue;
 			}
 
@@ -466,6 +487,10 @@ static int run_perf_stat(int argc __used, const char **argv)
 			die("Not all events could be opened.\n");
 			return -1;
 		}
+<<<<<<< HEAD
+=======
+		counter->supported = true;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (perf_evlist__set_filters(evsel_list)) {
@@ -513,7 +538,14 @@ static void print_noise_pct(double total, double avg)
 	if (avg)
 		pct = 100.0*total/avg;
 
+<<<<<<< HEAD
 	fprintf(stderr, "  ( +-%6.2f%% )", pct);
+=======
+	if (csv_output)
+		fprintf(stderr, "%s%.2f%%", csv_sep, pct);
+	else
+		fprintf(stderr, "  ( +-%6.2f%% )", pct);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void print_noise(struct perf_evsel *evsel, double avg)
@@ -861,7 +893,11 @@ static void print_counter_aggr(struct perf_evsel *counter)
 	if (scaled == -1) {
 		fprintf(stderr, "%*s%s%*s",
 			csv_output ? 0 : 18,
+<<<<<<< HEAD
 			"<not counted>",
+=======
+			counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			csv_sep,
 			csv_output ? 0 : -24,
 			event_name(counter));
@@ -878,13 +914,21 @@ static void print_counter_aggr(struct perf_evsel *counter)
 	else
 		abs_printout(-1, counter, avg);
 
+<<<<<<< HEAD
+=======
+	print_noise(counter, avg);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (csv_output) {
 		fputc('\n', stderr);
 		return;
 	}
 
+<<<<<<< HEAD
 	print_noise(counter, avg);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (scaled) {
 		double avg_enabled, avg_running;
 
@@ -914,7 +958,12 @@ static void print_counter(struct perf_evsel *counter)
 				csv_output ? 0 : -4,
 				evsel_list->cpus->map[cpu], csv_sep,
 				csv_output ? 0 : 18,
+<<<<<<< HEAD
 				"<not counted>", csv_sep,
+=======
+				counter->supported ? CNTR_NOT_COUNTED : CNTR_NOT_SUPPORTED,
+				csv_sep,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				csv_output ? 0 : -24,
 				event_name(counter));
 
@@ -1024,7 +1073,11 @@ static int stat__set_big_num(const struct option *opt __used,
 static const struct option options[] = {
 	OPT_CALLBACK('e', "event", &evsel_list, "event",
 		     "event selector. use 'perf list' to list available events",
+<<<<<<< HEAD
 		     parse_events),
+=======
+		     parse_events_option),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	OPT_CALLBACK(0, "filter", &evsel_list, "filter",
 		     "event filter", parse_filter),
 	OPT_BOOLEAN('i', "no-inherit", &no_inherit,
@@ -1035,6 +1088,11 @@ static const struct option options[] = {
 		    "stat events on existing thread id"),
 	OPT_BOOLEAN('a', "all-cpus", &system_wide,
 		    "system-wide collection from all CPUs"),
+<<<<<<< HEAD
+=======
+	OPT_BOOLEAN('g', "group", &group,
+		    "put the counters into a counter group"),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	OPT_BOOLEAN('c', "scale", &scale,
 		    "scale/normalize counters"),
 	OPT_INCR('v', "verbose", &verbose,

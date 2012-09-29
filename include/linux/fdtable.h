@@ -13,7 +13,11 @@
 #include <linux/init.h>
 #include <linux/fs.h>
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * The default fd array needs to be at least BITS_PER_LONG,
@@ -60,7 +64,10 @@ struct files_struct {
 
 #define rcu_dereference_check_fdtable(files, fdtfd) \
 	(rcu_dereference_check((fdtfd), \
+<<<<<<< HEAD
 			       rcu_read_lock_held() || \
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			       lockdep_is_held(&(files)->file_lock) || \
 			       atomic_read(&(files)->count) == 1 || \
 			       rcu_my_thread_group_empty()))

@@ -8,7 +8,11 @@
 #include <linux/stringify.h>
 #include <linux/netdevice.h>
 #include <linux/pci.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/io.h>
 
 #include <linux/ssb/ssb.h>
@@ -532,6 +536,11 @@ struct b43legacy_dma {
 
 	struct b43legacy_dmaring *rx_ring0;
 	struct b43legacy_dmaring *rx_ring3; /* only on core.rev < 5 */
+<<<<<<< HEAD
+=======
+
+	u32 translation; /* Routing bits */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* Data structures for PIO transmission, per 80211 core. */

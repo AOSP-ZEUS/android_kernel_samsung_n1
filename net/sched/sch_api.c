@@ -1644,7 +1644,11 @@ done:
  * to this qdisc, (optionally) tests for protocol and asks
  * specific classifiers.
  */
+<<<<<<< HEAD
 int tc_classify_compat(struct sk_buff *skb, struct tcf_proto *tp,
+=======
+int tc_classify_compat(struct sk_buff *skb, const struct tcf_proto *tp,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		       struct tcf_result *res)
 {
 	__be16 protocol = skb->protocol;
@@ -1668,12 +1672,20 @@ int tc_classify_compat(struct sk_buff *skb, struct tcf_proto *tp,
 }
 EXPORT_SYMBOL(tc_classify_compat);
 
+<<<<<<< HEAD
 int tc_classify(struct sk_buff *skb, struct tcf_proto *tp,
+=======
+int tc_classify(struct sk_buff *skb, const struct tcf_proto *tp,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		struct tcf_result *res)
 {
 	int err = 0;
 #ifdef CONFIG_NET_CLS_ACT
+<<<<<<< HEAD
 	struct tcf_proto *otp = tp;
+=======
+	const struct tcf_proto *otp = tp;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 reclassify:
 #endif
 
@@ -1792,12 +1804,21 @@ static int __init pktsched_init(void)
 	register_qdisc(&pfifo_head_drop_qdisc_ops);
 	register_qdisc(&mq_qdisc_ops);
 
+<<<<<<< HEAD
 	rtnl_register(PF_UNSPEC, RTM_NEWQDISC, tc_modify_qdisc, NULL);
 	rtnl_register(PF_UNSPEC, RTM_DELQDISC, tc_get_qdisc, NULL);
 	rtnl_register(PF_UNSPEC, RTM_GETQDISC, tc_get_qdisc, tc_dump_qdisc);
 	rtnl_register(PF_UNSPEC, RTM_NEWTCLASS, tc_ctl_tclass, NULL);
 	rtnl_register(PF_UNSPEC, RTM_DELTCLASS, tc_ctl_tclass, NULL);
 	rtnl_register(PF_UNSPEC, RTM_GETTCLASS, tc_ctl_tclass, tc_dump_tclass);
+=======
+	rtnl_register(PF_UNSPEC, RTM_NEWQDISC, tc_modify_qdisc, NULL, NULL);
+	rtnl_register(PF_UNSPEC, RTM_DELQDISC, tc_get_qdisc, NULL, NULL);
+	rtnl_register(PF_UNSPEC, RTM_GETQDISC, tc_get_qdisc, tc_dump_qdisc, NULL);
+	rtnl_register(PF_UNSPEC, RTM_NEWTCLASS, tc_ctl_tclass, NULL, NULL);
+	rtnl_register(PF_UNSPEC, RTM_DELTCLASS, tc_ctl_tclass, NULL, NULL);
+	rtnl_register(PF_UNSPEC, RTM_GETTCLASS, tc_ctl_tclass, tc_dump_tclass, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

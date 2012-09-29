@@ -361,6 +361,21 @@ int scsi_is_target_device(const struct device *dev)
 }
 EXPORT_SYMBOL(scsi_is_target_device);
 
+<<<<<<< HEAD
+=======
+#ifdef SCSI_PATCH_AGAINST_RACE_CONDITION
+static void scsi_target_reap_usercontext(struct work_struct *work)
+{
+	struct scsi_target *starget =
+		container_of(work, struct scsi_target, reap_work);
+
+	transport_remove_device(&starget->dev);
+	device_del(&starget->dev);
+	scsi_target_destroy(starget);
+}
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct scsi_target *__scsi_find_target(struct device *parent,
 					      int channel, uint id)
 {
@@ -426,6 +441,12 @@ static struct scsi_target *scsi_alloc_target(struct device *parent,
 	starget->state = STARGET_CREATED;
 	starget->scsi_level = SCSI_2;
 	starget->max_target_blocked = SCSI_DEFAULT_TARGET_BLOCKED;
+<<<<<<< HEAD
+=======
+#ifdef SCSI_PATCH_AGAINST_RACE_CONDITION
+	INIT_WORK(&starget->reap_work, scsi_target_reap_usercontext);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  retry:
 	spin_lock_irqsave(shost->host_lock, flags);
 
@@ -461,11 +482,25 @@ static struct scsi_target *scsi_alloc_target(struct device *parent,
 	}
 	/* Unfortunately, we found a dying target; need to
 	 * wait until it's dead before we can get a new one */
+<<<<<<< HEAD
 	put_device(&found_target->dev);
 	flush_scheduled_work();
 	goto retry;
 }
 
+=======
+#ifdef SCSI_PATCH_AGAINST_RACE_CONDITION
+	flush_work(&found_target->reap_work);
+#endif
+	put_device(&found_target->dev);
+#ifndef SCSI_PATCH_AGAINST_RACE_CONDITION
+	flush_scheduled_work();
+#endif
+	goto retry;
+}
+
+#ifndef SCSI_PATCH_AGAINST_RACE_CONDITION
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void scsi_target_reap_usercontext(struct work_struct *work)
 {
 	struct scsi_target *starget =
@@ -475,6 +510,10 @@ static void scsi_target_reap_usercontext(struct work_struct *work)
 	device_del(&starget->dev);
 	scsi_target_destroy(starget);
 }
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * scsi_target_reap - check to see if target is in use and destroy if not
@@ -506,8 +545,17 @@ void scsi_target_reap(struct scsi_target *starget)
 	if (state == STARGET_CREATED)
 		scsi_target_destroy(starget);
 	else
+<<<<<<< HEAD
 		execute_in_process_context(scsi_target_reap_usercontext,
 					   &starget->ew);
+=======
+#ifndef SCSI_PATCH_AGAINST_RACE_CONDITION
+		execute_in_process_context(scsi_target_reap_usercontext,
+					   &starget->ew);
+#else
+		queue_work(scsi_wq, &starget->reap_work);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -1815,7 +1863,10 @@ static void scsi_finish_async_scan(struct async_scan_data *data)
 	}
 	spin_unlock(&async_scan_lock);
 
+<<<<<<< HEAD
 	scsi_autopm_put_host(shost);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	scsi_host_put(shost);
 	kfree(data);
 }
@@ -1842,6 +1893,10 @@ static int do_scan_async(void *_data)
 
 	do_scsi_scan_host(shost);
 	scsi_finish_async_scan(data);
+<<<<<<< HEAD
+=======
+	scsi_autopm_put_host(shost);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -1869,7 +1924,11 @@ void scsi_scan_host(struct Scsi_Host *shost)
 	p = kthread_run(do_scan_async, data, "scsi_scan_%d", shost->host_no);
 	if (IS_ERR(p))
 		do_scan_async(data);
+<<<<<<< HEAD
 	/* scsi_autopm_put_host(shost) is called in scsi_finish_async_scan() */
+=======
+	/* scsi_autopm_put_host(shost) is called in do_scan_async() */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL(scsi_scan_host);
 

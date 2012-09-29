@@ -909,6 +909,10 @@ static struct sk_buff **ipv6_gro_receive(struct sk_buff **head,
 		skb_reset_transport_header(skb);
 		__skb_push(skb, skb_gro_offset(skb));
 
+<<<<<<< HEAD
+=======
+		ops = rcu_dereference(inet6_protos[proto]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!ops || !ops->gro_receive)
 			goto out_unlock;
 
@@ -1112,8 +1116,11 @@ static int __init inet6_init(void)
 		goto out;
 	}
 
+<<<<<<< HEAD
 	initialize_hashidentrnd();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	err = proto_register(&tcpv6_prot, 1);
 	if (err)
 		goto out;

@@ -260,6 +260,10 @@ struct sdhci_ops {
 #endif
 
 	void	(*set_clock)(struct sdhci_host *host, unsigned int clock);
+<<<<<<< HEAD
+=======
+	void	(*set_card_clock)(struct sdhci_host *host, unsigned int clock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int		(*enable_dma)(struct sdhci_host *host);
 	unsigned int	(*get_max_clock)(struct sdhci_host *host);
@@ -270,6 +274,7 @@ struct sdhci_ops {
 	void (*platform_send_init_74_clocks)(struct sdhci_host *host,
 					     u8 power_mode);
 	unsigned int    (*get_ro)(struct sdhci_host *host);
+<<<<<<< HEAD
 	void	(*platform_reset_enter)(struct sdhci_host *host, u8 mask);
 	void	(*platform_reset_exit)(struct sdhci_host *host, u8 mask);
 	int	(*set_uhs_signaling)(struct sdhci_host *host, unsigned int uhs);
@@ -277,6 +282,20 @@ struct sdhci_ops {
 	void            (*set_ios)(struct sdhci_host *host,
 				   struct mmc_ios *ios);
 	void			(*adjust_cfg)(struct sdhci_host *host, int rw);
+=======
+	unsigned int    (*get_cd)(struct sdhci_host *host);
+	void	(*platform_reset_enter)(struct sdhci_host *host, u8 mask);
+	void	(*platform_reset_exit)(struct sdhci_host *host, u8 mask);
+	int	(*set_uhs_signaling)(struct sdhci_host *host, unsigned int uhs);
+	int	(*suspend)(struct sdhci_host *host, pm_message_t state);
+	int	(*resume)(struct sdhci_host *host);
+	int	(*switch_signal_voltage)(struct sdhci_host *host,
+				unsigned int signal_voltage);
+	int	(*execute_freq_tuning)(struct sdhci_host *sdhci);
+#if defined CONFIG_MACH_BOSE_ATT
+	int (*card_detect)(struct sdhci_host *host);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #ifdef CONFIG_MMC_SDHCI_IO_ACCESSORS
@@ -371,6 +390,14 @@ static inline void *sdhci_priv(struct sdhci_host *host)
 {
 	return (void *)host->private;
 }
+<<<<<<< HEAD
+=======
+#if defined CONFIG_MACH_BOSE_ATT
+extern struct class *sec_class;
+extern struct stmpe *g_stmpe;
+extern int stmpe_reg_read(struct stmpe *stmpe, u8 reg);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern void sdhci_card_detect(struct sdhci_host *host);
 extern int sdhci_add_host(struct sdhci_host *host);

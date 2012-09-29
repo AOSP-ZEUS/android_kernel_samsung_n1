@@ -111,8 +111,11 @@ static struct usb_descriptor_header *hs_adb_descs[] = {
 	NULL,
 };
 
+<<<<<<< HEAD
 static void adb_ready_callback(void);
 static void adb_closed_callback(void);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* temporary variable used between adb_open() and adb_gadget_bind() */
 static struct adb_dev *_adb_dev;
@@ -149,12 +152,25 @@ static void adb_request_free(struct usb_request *req, struct usb_ep *ep)
 
 static inline int adb_lock(atomic_t *excl)
 {
+<<<<<<< HEAD
 	if (atomic_inc_return(excl) == 1) {
 		return 0;
 	} else {
 		atomic_dec(excl);
 		return -1;
 	}
+=======
+	int ret = -1;
+
+	preempt_disable();
+	if (atomic_inc_return(excl) == 1) {
+		ret = 0;
+	} else
+		atomic_dec(excl);
+
+	preempt_enable();
+	return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline void adb_unlock(atomic_t *excl)
@@ -408,29 +424,73 @@ static ssize_t adb_write(struct file *fp, const char __user *buf,
 
 static int adb_open(struct inode *ip, struct file *fp)
 {
+<<<<<<< HEAD
 	pr_info("adb_open\n");
 	if (!_adb_dev)
 		return -ENODEV;
 
 	if (adb_lock(&_adb_dev->open_excl))
 		return -EBUSY;
+=======
+	static unsigned long last_print;
+	static unsigned long count = 0;
+
+	if (!_adb_dev)
+		return -ENODEV;
+
+	if (++count == 1)
+		last_print = jiffies;
+	else {
+		if (!time_before(jiffies, last_print + HZ/2))
+			count = 0;
+		last_print = jiffies;
+	}
+
+	if (adb_lock(&_adb_dev->open_excl)) {
+		cpu_relax();
+		return -EBUSY;
+	}
+
+	if (count < 5)
+		printk(KERN_INFO "adb_open(%s)\n", current->comm);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	fp->private_data = _adb_dev;
 
 	/* clear the error latch */
 	_adb_dev->error = 0;
 
+<<<<<<< HEAD
 	adb_ready_callback();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
 static int adb_release(struct inode *ip, struct file *fp)
 {
+<<<<<<< HEAD
 	pr_info("adb_release\n");
 
 	adb_closed_callback();
 
+=======
+	static unsigned long last_print;
+	static unsigned long count = 0;
+
+	if (++count == 1)
+		last_print = jiffies;
+	else {
+		if (!time_before(jiffies, last_print + HZ/2))
+			count = 0;
+		last_print = jiffies;
+	}
+
+	if (count < 5)
+		printk(KERN_INFO "adb_release\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	adb_unlock(&_adb_dev->open_excl);
 	return 0;
 }
@@ -515,6 +575,7 @@ static int adb_function_set_alt(struct usb_function *f,
 	int ret;
 
 	DBG(cdev, "adb_function_set_alt intf: %d alt: %d\n", intf, alt);
+<<<<<<< HEAD
 	ret = usb_ep_enable(dev->ep_in,
 			ep_choose(cdev->gadget,
 				&adb_highspeed_in_desc,
@@ -525,6 +586,14 @@ static int adb_function_set_alt(struct usb_function *f,
 			ep_choose(cdev->gadget,
 				&adb_highspeed_out_desc,
 				&adb_fullspeed_out_desc));
+=======
+	config_ep_by_speed(cdev->gadget, f, dev->ep_in);
+	ret = usb_ep_enable(dev->ep_in);
+	if (ret)
+		return ret;
+	config_ep_by_speed(cdev->gadget, f, dev->ep_out);
+	ret = usb_ep_enable(dev->ep_out);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret) {
 		usb_ep_disable(dev->ep_in);
 		return ret;

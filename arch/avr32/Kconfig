@@ -8,9 +8,15 @@ config AVR32
 	select HAVE_KPROBES
 	select HAVE_GENERIC_HARDIRQS
 	select GENERIC_IRQ_PROBE
+<<<<<<< HEAD
 	select GENERIC_ATOMIC64
 	select HARDIRQS_SW_RESEND
 	select GENERIC_IRQ_SHOW
+=======
+	select HARDIRQS_SW_RESEND
+	select GENERIC_IRQ_SHOW
+	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  AVR32 is a high-performance 32-bit RISC microprocessor core,
 	  designed for cost-sensitive embedded applications, with particular

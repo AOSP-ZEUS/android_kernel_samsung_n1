@@ -69,8 +69,14 @@
 #define PSR_c		0x000000ff	/* Control		*/
 
 /*
+<<<<<<< HEAD
  * ARMv7 groups of APSR bits
  */
+=======
+ * ARMv7 groups of PSR bits
+ */
+#define APSR_MASK	0xf80f0000	/* N, Z, C, V, Q and GE flags */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PSR_ISET_MASK	0x01000010	/* ISA state (J, T) mask */
 #define PSR_IT_MASK	0x0600fc00	/* If-Then execution state mask */
 #define PSR_ENDIAN_MASK	0x00000200	/* Endianness state mask */
@@ -200,6 +206,17 @@ extern unsigned long profile_pc(struct pt_regs *regs);
 #define PREDICATE_ALWAYS	0xe0000000
 
 /*
+<<<<<<< HEAD
+=======
+ * True if instr is a 32-bit thumb instruction. This works if instr
+ * is the first or only half-word of a thumb instruction. It also works
+ * when instr holds all 32-bits of a wide thumb instruction if stored
+ * in the form (first_half<<16)|(second_half)
+ */
+#define is_wide_instruction(instr)	((unsigned)(instr) >= 0xe800)
+
+/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * kprobe-based event tracer support
  */
 #include <linux/stddef.h>

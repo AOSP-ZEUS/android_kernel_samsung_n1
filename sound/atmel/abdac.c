@@ -448,7 +448,11 @@ static int __devinit atmel_abdac_probe(struct platform_device *pdev)
 		goto out_free_card;
 	}
 
+<<<<<<< HEAD
 	dac->regs = ioremap(regs->start, regs->end - regs->start + 1);
+=======
+	dac->regs = ioremap(regs->start, resource_size(regs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!dac->regs) {
 		dev_dbg(&pdev->dev, "could not remap register memory\n");
 		goto out_free_card;

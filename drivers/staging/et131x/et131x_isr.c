@@ -222,7 +222,11 @@ irqreturn_t et131x_isr(int irq, void *dev_id)
 	 * DPC. We will clear the software copy of that in that
 	 * routine.
 	 */
+<<<<<<< HEAD
 	adapter->Stats.InterruptStatus = status;
+=======
+	adapter->stats.InterruptStatus = status;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Schedule the ISR handler as a bottom-half task in the
 	 * kernel's tq_immediate queue, and mark the queue for
@@ -244,8 +248,13 @@ void et131x_isr_handler(struct work_struct *work)
 {
 	struct et131x_adapter *etdev =
 		container_of(work, struct et131x_adapter, task);
+<<<<<<< HEAD
 	u32 status = etdev->Stats.InterruptStatus;
 	ADDRESS_MAP_t __iomem *iomem = etdev->regs;
+=======
+	u32 status = etdev->stats.InterruptStatus;
+	struct address_map __iomem *iomem = etdev->regs;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * These first two are by far the most common.  Once handled, we clear
@@ -268,7 +277,11 @@ void et131x_isr_handler(struct work_struct *work)
 			u32 txdma_err;
 
 			/* Following read also clears the register (COR) */
+<<<<<<< HEAD
 			txdma_err = readl(&iomem->txdma.TxDmaError);
+=======
+			txdma_err = readl(&iomem->txdma.tx_dma_error);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			dev_warn(&etdev->pdev->dev,
 				    "TXDMA_ERR interrupt, error = %d\n",
@@ -365,7 +378,12 @@ void et131x_isr_handler(struct work_struct *work)
 		/* Handle the PHY interrupt */
 		if (status & ET_INTR_PHY) {
 			u32 pm_csr;
+<<<<<<< HEAD
 			MI_BMSR_t BmsrInts, BmsrData;
+=======
+			u16 bmsr_ints;
+			u16 bmsr_data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			u16 myisr;
 
 			/* If we are in coma mode when we get this interrupt,
@@ -390,6 +408,7 @@ void et131x_isr_handler(struct work_struct *work)
 			if (!etdev->ReplicaPhyLoopbk) {
 				MiRead(etdev,
 				       (uint8_t) offsetof(struct mi_regs, bmsr),
+<<<<<<< HEAD
 				       &BmsrData.value);
 
 				BmsrInts.value =
@@ -398,6 +417,15 @@ void et131x_isr_handler(struct work_struct *work)
 
 				/* Do all the cable in / cable out stuff */
 				et131x_Mii_check(etdev, BmsrData, BmsrInts);
+=======
+				       &bmsr_data);
+
+				bmsr_ints = etdev->bmsr ^ bmsr_data;
+				etdev->bmsr = bmsr_data;
+
+				/* Do all the cable in / cable out stuff */
+				et131x_Mii_check(etdev, bmsr_data, bmsr_ints);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 		}
 

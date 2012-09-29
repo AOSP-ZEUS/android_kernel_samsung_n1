@@ -23,8 +23,15 @@
 
 #if defined(CONFIG_SMP_ON_UP) && !defined(CONFIG_DEBUG_SPINLOCK)
 #define ARM_EXIT_KEEP(x)	x
+<<<<<<< HEAD
 #else
 #define ARM_EXIT_KEEP(x)
+=======
+#define ARM_EXIT_DISCARD(x)
+#else
+#define ARM_EXIT_KEEP(x)
+#define ARM_EXIT_DISCARD(x)	x
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 OUTPUT_ARCH(arm)
@@ -38,6 +45,7 @@ jiffies = jiffies_64 + 4;
 
 SECTIONS
 {
+<<<<<<< HEAD
 #ifdef CONFIG_XIP_KERNEL
 	. = XIP_VIRT_ADDR(CONFIG_XIP_PHYS_ADDR);
 #else
@@ -90,6 +98,14 @@ SECTIONS
 #endif
 
 	/*
+=======
+	/*
+	 * XXX: The linker does not define how output sections are
+	 * assigned to input sections when there are multiple statements
+	 * matching the same input section name.  There is no documented
+	 * order of matching.
+	 *
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * unwind exit sections must be discarded before the rest of the
 	 * unwind sections get included.
 	 */
@@ -98,6 +114,12 @@ SECTIONS
 		*(.ARM.extab.exit.text)
 		ARM_CPU_DISCARD(*(.ARM.exidx.cpuexit.text))
 		ARM_CPU_DISCARD(*(.ARM.extab.cpuexit.text))
+<<<<<<< HEAD
+=======
+		ARM_EXIT_DISCARD(EXIT_TEXT)
+		ARM_EXIT_DISCARD(EXIT_DATA)
+		EXIT_CALL
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef CONFIG_HOTPLUG
 		*(.ARM.exidx.devexit.text)
 		*(.ARM.extab.devexit.text)
@@ -106,10 +128,31 @@ SECTIONS
 		*(.fixup)
 		*(__ex_table)
 #endif
+<<<<<<< HEAD
 	}
 
 	.text : {			/* Real text segment		*/
 		_text = .;		/* Text and read-only data	*/
+=======
+#ifndef CONFIG_SMP_ON_UP
+		*(.alt.smp.init)
+#endif
+		*(.discard)
+		*(.discard.*)
+	}
+
+#ifdef CONFIG_XIP_KERNEL
+	. = XIP_VIRT_ADDR(CONFIG_XIP_PHYS_ADDR);
+#else
+	. = PAGE_OFFSET + TEXT_OFFSET;
+#endif
+	.head.text : {
+		_text = .;
+		HEAD_TEXT
+	}
+	.text : {			/* Real text segment		*/
+		_stext = .;		/* Text and read-only data	*/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			__exception_text_start = .;
 			*(.exception.text)
 			__exception_text_end = .;
@@ -122,8 +165,11 @@ SECTIONS
 			*(.fixup)
 #endif
 			*(.gnu.warning)
+<<<<<<< HEAD
 			*(.rodata)
 			*(.rodata.*)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			*(.glue_7)
 			*(.glue_7t)
 		. = ALIGN(4);
@@ -152,10 +198,69 @@ SECTIONS
 
 	_etext = .;			/* End of text and rodata section */
 
+<<<<<<< HEAD
+=======
+#ifndef CONFIG_XIP_KERNEL
+	. = ALIGN(PAGE_SIZE);
+	__init_begin = .;
+#endif
+
+	INIT_TEXT_SECTION(8)
+	.exit.text : {
+		ARM_EXIT_KEEP(EXIT_TEXT)
+	}
+	.init.proc.info : {
+		ARM_CPU_DISCARD(PROC_INFO)
+	}
+	.init.arch.info : {
+		__arch_info_begin = .;
+		*(.arch.info.init)
+		__arch_info_end = .;
+	}
+	.init.tagtable : {
+		__tagtable_begin = .;
+		*(.taglist.init)
+		__tagtable_end = .;
+	}
+#ifdef CONFIG_SMP_ON_UP
+	.init.smpalt : {
+		__smpalt_begin = .;
+		*(.alt.smp.init)
+		__smpalt_end = .;
+	}
+#endif
+	.init.pv_table : {
+		__pv_table_begin = .;
+		*(.pv_table)
+		__pv_table_end = .;
+	}
+	.init.data : {
+#ifndef CONFIG_XIP_KERNEL
+		INIT_DATA
+#endif
+		INIT_SETUP(16)
+		INIT_CALLS
+		CON_INITCALL
+		SECURITY_INITCALL
+		INIT_RAM_FS
+	}
+#ifndef CONFIG_XIP_KERNEL
+	.exit.data : {
+		ARM_EXIT_KEEP(EXIT_DATA)
+	}
+#endif
+
+	PERCPU_SECTION(32)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_XIP_KERNEL
 	__data_loc = ALIGN(4);		/* location in binary */
 	. = PAGE_OFFSET + TEXT_OFFSET;
 #else
+<<<<<<< HEAD
+=======
+	__init_end = .;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	. = ALIGN(THREAD_SIZE);
 	__data_loc = .;
 #endif
@@ -267,6 +372,7 @@ SECTIONS
 
 	STABS_DEBUG
 	.comment 0 : { *(.comment) }
+<<<<<<< HEAD
 
 	/* Default discards */
 	DISCARDS
@@ -276,6 +382,8 @@ SECTIONS
 		*(.alt.smp.init)
 	}
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*

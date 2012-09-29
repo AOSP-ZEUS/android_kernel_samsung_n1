@@ -1364,10 +1364,16 @@ static int rj54n1_video_probe(struct soc_camera_device *icd,
 	int data1, data2;
 	int ret;
 
+<<<<<<< HEAD
 	/* This could be a BUG_ON() or a WARN_ON(), or remove it completely */
 	if (!icd->dev.parent ||
 	    to_soc_camera_host(icd->dev.parent)->nr != icd->iface)
 		return -ENODEV;
+=======
+	/* We must have a parent by now. And it cannot be a wrong one. */
+	BUG_ON(!icd->parent ||
+	       to_soc_camera_host(icd->parent)->nr != icd->iface);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Read out the chip version register */
 	data1 = reg_read(client, RJ54N1_DEV_CODE);

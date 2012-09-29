@@ -717,4 +717,8 @@ MACHINE_START(DAVINCI_EVM, "DaVinci DM644x EVM")
 	.init_irq     = davinci_irq_init,
 	.timer	      = &davinci_timer,
 	.init_machine = davinci_evm_init,
+<<<<<<< HEAD
+=======
+	.dma_zone_size	= SZ_128M,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

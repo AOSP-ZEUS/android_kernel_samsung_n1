@@ -722,8 +722,12 @@ static int __devinit adp8860_probe(struct i2c_client *client,
 		goto out2;
 	}
 
+<<<<<<< HEAD
 	bl->props.max_brightness =
 		bl->props.brightness = ADP8860_MAX_BRIGHTNESS;
+=======
+	bl->props.brightness = ADP8860_MAX_BRIGHTNESS;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	data->bl = bl;
 

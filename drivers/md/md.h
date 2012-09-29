@@ -29,6 +29,16 @@
 typedef struct mddev_s mddev_t;
 typedef struct mdk_rdev_s mdk_rdev_t;
 
+<<<<<<< HEAD
+=======
+/* Bad block numbers are stored sorted in a single page.
+ * 64bits is used for each block or extent.
+ * 54 bits are sector number, 9 bits are extent size,
+ * 1 bit is an 'acknowledged' flag.
+ */
+#define MD_MAX_BADBLOCKS	(PAGE_SIZE/8)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * MD's 'extended' device
  */
@@ -48,7 +58,11 @@ struct mdk_rdev_s
 	struct block_device *meta_bdev;
 	struct block_device *bdev;	/* block device handle */
 
+<<<<<<< HEAD
 	struct page	*sb_page;
+=======
+	struct page	*sb_page, *bb_page;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int		sb_loaded;
 	__u64		sb_events;
 	sector_t	data_offset;	/* start of data in array */
@@ -74,9 +88,35 @@ struct mdk_rdev_s
 #define	In_sync		2		/* device is in_sync with rest of array */
 #define	WriteMostly	4		/* Avoid reading if at all possible */
 #define	AutoDetected	7		/* added by auto-detect */
+<<<<<<< HEAD
 #define Blocked		8		/* An error occurred on an externally
 					 * managed array, don't allow writes
 					 * until it is cleared */
+=======
+#define Blocked		8		/* An error occurred but has not yet
+					 * been acknowledged by the metadata
+					 * handler, so don't allow writes
+					 * until it is cleared */
+#define WriteErrorSeen	9		/* A write error has been seen on this
+					 * device
+					 */
+#define FaultRecorded	10		/* Intermediate state for clearing
+					 * Blocked.  The Fault is/will-be
+					 * recorded in the metadata, but that
+					 * metadata hasn't been stored safely
+					 * on disk yet.
+					 */
+#define BlockedBadBlocks 11		/* A writer is blocked because they
+					 * found an unacknowledged bad-block.
+					 * This can safely be cleared at any
+					 * time, and the writer will re-check.
+					 * It may be set at any time, and at
+					 * worst the writer will timeout and
+					 * re-check.  So setting it as
+					 * accurately as possible is good, but
+					 * not absolutely critical.
+					 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wait_queue_head_t blocked_wait;
 
 	int desc_nr;			/* descriptor index in the superblock */
@@ -111,8 +151,59 @@ struct mdk_rdev_s
 
 	struct sysfs_dirent *sysfs_state; /* handle for 'state'
 					   * sysfs entry */
+<<<<<<< HEAD
 };
 
+=======
+
+	struct badblocks {
+		int	count;		/* count of bad blocks */
+		int	unacked_exist;	/* there probably are unacknowledged
+					 * bad blocks.  This is only cleared
+					 * when a read discovers none
+					 */
+		int	shift;		/* shift from sectors to block size
+					 * a -ve shift means badblocks are
+					 * disabled.*/
+		u64	*page;		/* badblock list */
+		int	changed;
+		seqlock_t lock;
+
+		sector_t sector;
+		sector_t size;		/* in sectors */
+	} badblocks;
+};
+
+#define BB_LEN_MASK	(0x00000000000001FFULL)
+#define BB_OFFSET_MASK	(0x7FFFFFFFFFFFFE00ULL)
+#define BB_ACK_MASK	(0x8000000000000000ULL)
+#define BB_MAX_LEN	512
+#define BB_OFFSET(x)	(((x) & BB_OFFSET_MASK) >> 9)
+#define BB_LEN(x)	(((x) & BB_LEN_MASK) + 1)
+#define BB_ACK(x)	(!!((x) & BB_ACK_MASK))
+#define BB_MAKE(a, l, ack) (((a)<<9) | ((l)-1) | ((u64)(!!(ack)) << 63))
+
+extern int md_is_badblock(struct badblocks *bb, sector_t s, int sectors,
+			  sector_t *first_bad, int *bad_sectors);
+static inline int is_badblock(mdk_rdev_t *rdev, sector_t s, int sectors,
+			      sector_t *first_bad, int *bad_sectors)
+{
+	if (unlikely(rdev->badblocks.count)) {
+		int rv = md_is_badblock(&rdev->badblocks, rdev->data_offset + s,
+					sectors,
+					first_bad, bad_sectors);
+		if (rv)
+			*first_bad -= rdev->data_offset;
+		return rv;
+	}
+	return 0;
+}
+extern int rdev_set_badblocks(mdk_rdev_t *rdev, sector_t s, int sectors,
+			      int acknowledged);
+extern int rdev_clear_badblocks(mdk_rdev_t *rdev, sector_t s, int sectors);
+extern void md_ack_all_badblocks(struct badblocks *bb);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct mddev_s
 {
 	void				*private;
@@ -239,9 +330,18 @@ struct mddev_s
 #define	MD_RECOVERY_FROZEN	9
 
 	unsigned long			recovery;
+<<<<<<< HEAD
 	int				recovery_disabled; /* if we detect that recovery
 							    * will always fail, set this
 							    * so we don't loop trying */
+=======
+	/* If a RAID personality determines that recovery (of a particular
+	 * device) will fail due to a read error on the source device, it
+	 * takes a copy of this number and does not attempt recovery again
+	 * until this number changes.
+	 */
+	int				recovery_disabled;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int				in_sync;	/* know to not need resync */
 	/* 'open_mutex' avoids races between 'md_open' and 'do_md_stop', so
@@ -304,11 +404,14 @@ struct mddev_s
 							 * hot-adding a bitmap.  It should
 							 * eventually be settable by sysfs.
 							 */
+<<<<<<< HEAD
 		/* When md is serving under dm, it might use a
 		 * dirty_log to store the bits.
 		 */
 		struct dm_dirty_log *log;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		struct mutex		mutex;
 		unsigned long		chunksize;
 		unsigned long		daemon_sleep; /* how many jiffies between updates? */
@@ -413,6 +516,23 @@ static inline char * mdname (mddev_t * mddev)
 	return mddev->gendisk ? mddev->gendisk->disk_name : "mdX";
 }
 
+<<<<<<< HEAD
+=======
+static inline int sysfs_link_rdev(mddev_t *mddev, mdk_rdev_t *rdev)
+{
+	char nm[20];
+	sprintf(nm, "rd%d", rdev->raid_disk);
+	return sysfs_create_link(&mddev->kobj, &rdev->kobj, nm);
+}
+
+static inline void sysfs_unlink_rdev(mddev_t *mddev, mdk_rdev_t *rdev)
+{
+	char nm[20];
+	sprintf(nm, "rd%d", rdev->raid_disk);
+	sysfs_remove_link(&mddev->kobj, nm);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * iterates through some rdev ringlist. It's safe to remove the
  * current 'rdev'. Dont touch 'tmp' though.
@@ -505,7 +625,11 @@ extern void mddev_init(mddev_t *mddev);
 extern int md_run(mddev_t *mddev);
 extern void md_stop(mddev_t *mddev);
 extern void md_stop_writes(mddev_t *mddev);
+<<<<<<< HEAD
 extern void md_rdev_init(mdk_rdev_t *rdev);
+=======
+extern int md_rdev_init(mdk_rdev_t *rdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern void mddev_suspend(mddev_t *mddev);
 extern void mddev_resume(mddev_t *mddev);
@@ -514,4 +638,8 @@ extern struct bio *bio_clone_mddev(struct bio *bio, gfp_t gfp_mask,
 extern struct bio *bio_alloc_mddev(gfp_t gfp_mask, int nr_iovecs,
 				   mddev_t *mddev);
 extern int mddev_check_plugged(mddev_t *mddev);
+<<<<<<< HEAD
+=======
+extern void md_trim_bio(struct bio *bio, int offset, int size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* _MD_MD_H */

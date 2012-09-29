@@ -56,5 +56,10 @@ obj-$(CONFIG_TRACEPOINTS) += power-traces.o
 ifeq ($(CONFIG_TRACING),y)
 obj-$(CONFIG_KGDB_KDB) += trace_kdb.o
 endif
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_TRACELEVEL) += tracelevel.o
+obj-$(CONFIG_TRACEDUMP) += tracedump.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 libftrace-y := ftrace.o

@@ -110,7 +110,11 @@ fan_set_cur_state(struct thermal_cooling_device *cdev, unsigned long state)
 	return result;
 }
 
+<<<<<<< HEAD
 static struct thermal_cooling_device_ops fan_cooling_ops = {
+=======
+static const struct thermal_cooling_device_ops fan_cooling_ops = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.get_max_state = fan_get_max_state,
 	.get_cur_state = fan_get_cur_state,
 	.set_cur_state = fan_set_cur_state,

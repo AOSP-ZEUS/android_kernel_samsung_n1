@@ -173,6 +173,20 @@ static void v4l2_device_release(struct device *cd)
 		media_device_unregister_entity(&vdev->entity);
 #endif
 
+<<<<<<< HEAD
+=======
+	/* Do not call v4l2_device_put if there is no release callback set.
+	 * Drivers that have no v4l2_device release callback might free the
+	 * v4l2_dev instance in the video_device release callback below, so we
+	 * must perform this check here.
+	 *
+	 * TODO: In the long run all drivers that use v4l2_device should use the
+	 * v4l2_device release callback. This check will then be unnecessary.
+	 */
+	if (v4l2_dev && v4l2_dev->release == NULL)
+		v4l2_dev = NULL;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Release video_device and perform other
 	   cleanups as needed. */
 	vdev->release(vdev);

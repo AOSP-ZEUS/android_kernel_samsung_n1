@@ -45,8 +45,11 @@ void ec_write(unsigned short addr, unsigned char val)
 	/*  flush the write action */
 	inb(EC_IO_PORT_DATA);
 	spin_unlock_irqrestore(&index_access_lock, flags);
+<<<<<<< HEAD
 
 	return;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(ec_write);
 

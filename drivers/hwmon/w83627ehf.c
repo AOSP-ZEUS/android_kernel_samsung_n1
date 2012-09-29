@@ -1583,7 +1583,11 @@ store_##reg(struct device *dev, struct device_attribute *attr, \
 	val = step_time_to_reg(val, data->pwm_mode[nr]); \
 	mutex_lock(&data->update_lock); \
 	data->reg[nr] = val; \
+<<<<<<< HEAD
 	w83627ehf_write_value(data, data->REG_##REG[nr], val); \
+=======
+	w83627ehf_write_value(data, W83627EHF_REG_##REG[nr], val); \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mutex_unlock(&data->update_lock); \
 	return count; \
 } \
@@ -1823,8 +1827,12 @@ static int __devinit w83627ehf_probe(struct platform_device *pdev)
 		goto exit;
 	}
 
+<<<<<<< HEAD
 	data = devm_kzalloc(&pdev->dev, sizeof(struct w83627ehf_data),
 			    GFP_KERNEL);
+=======
+	data = kzalloc(sizeof(struct w83627ehf_data), GFP_KERNEL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!data) {
 		err = -ENOMEM;
 		goto exit_release;
@@ -2105,6 +2113,7 @@ static int __devinit w83627ehf_probe(struct platform_device *pdev)
 		fan4min = 0;
 		fan5pin = 0;
 	} else if (sio_data->kind == nct6776) {
+<<<<<<< HEAD
 		bool gpok = superio_inb(sio_data->sioreg, 0x27) & 0x80;
 		u8 regval;
 
@@ -2128,6 +2137,11 @@ static int __devinit w83627ehf_probe(struct platform_device *pdev)
 			fan5pin = !!(superio_inb(sio_data->sioreg, 0x1C)
 				     & 0x02);
 
+=======
+		fan3pin = !(superio_inb(sio_data->sioreg, 0x24) & 0x40);
+		fan4pin = !!(superio_inb(sio_data->sioreg, 0x1C) & 0x01);
+		fan5pin = !!(superio_inb(sio_data->sioreg, 0x1C) & 0x02);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		fan4min = fan4pin;
 	} else if (sio_data->kind == w83667hg || sio_data->kind == w83667hg_b) {
 		fan3pin = 1;
@@ -2320,8 +2334,14 @@ static int __devinit w83627ehf_probe(struct platform_device *pdev)
 
 exit_remove:
 	w83627ehf_device_remove_files(dev);
+<<<<<<< HEAD
 exit_release:
 	platform_set_drvdata(pdev, NULL);
+=======
+	kfree(data);
+	platform_set_drvdata(pdev, NULL);
+exit_release:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	release_region(res->start, IOREGION_LENGTH);
 exit:
 	return err;
@@ -2335,6 +2355,10 @@ static int __devexit w83627ehf_remove(struct platform_device *pdev)
 	w83627ehf_device_remove_files(&pdev->dev);
 	release_region(data->addr, IOREGION_LENGTH);
 	platform_set_drvdata(pdev, NULL);
+<<<<<<< HEAD
+=======
+	kfree(data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

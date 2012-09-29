@@ -113,6 +113,11 @@ static const struct imxi2c_platform_data mx53_smd_i2c_data __initconst = {
 
 static void __init mx53_smd_board_init(void)
 {
+<<<<<<< HEAD
+=======
+	imx53_soc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mxc_iomux_v3_setup_multiple_pads(mx53_smd_pads,
 					ARRAY_SIZE(mx53_smd_pads));
 	mx53_smd_init_uart();

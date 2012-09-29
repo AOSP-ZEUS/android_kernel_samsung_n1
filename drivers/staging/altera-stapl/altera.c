@@ -2430,6 +2430,7 @@ int altera_init(struct altera_config *config, const struct firmware *fw)
 	int index = 0;
 	s32 offset = 0L;
 	s32 error_address = 0L;
+<<<<<<< HEAD
 
 	key = kzalloc(33 * sizeof(char), GFP_KERNEL);
 	if (!key)
@@ -2440,6 +2441,25 @@ int altera_init(struct altera_config *config, const struct firmware *fw)
 	astate = kzalloc(sizeof(struct altera_state), GFP_KERNEL);
 	if (!astate)
 		return -ENOMEM;
+=======
+	int retval = 0;
+
+	key = kzalloc(33, GFP_KERNEL);
+	if (!key) {
+		retval = -ENOMEM;
+		goto out;
+	}
+	value = kzalloc(257, GFP_KERNEL);
+	if (!value) {
+		retval = -ENOMEM;
+		goto free_key;
+	}
+	astate = kzalloc(sizeof(struct altera_state), GFP_KERNEL);
+	if (!astate) {
+		retval = -ENOMEM;
+		goto free_value;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	astate->config = config;
 	if (!astate->config->jtag_io) {
@@ -2518,10 +2538,20 @@ int altera_init(struct altera_config *config, const struct firmware *fw)
 	} else if (exec_result)
 		printk(KERN_ERR "%s: error %d\n", __func__, exec_result);
 
+<<<<<<< HEAD
 	kfree(key);
 	kfree(value);
 	kfree(astate);
 
 	return 0;
+=======
+	kfree(astate);
+free_value:
+	kfree(value);
+free_key:
+	kfree(key);
+out:
+	return retval;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL(altera_init);

@@ -28,6 +28,10 @@
 #include <asm/irq.h>
 #include <asm/timer.h>
 #include <asm/nmi.h>
+<<<<<<< HEAD
+=======
+#include <asm/compat.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/smp.h>
 #include "entry.h"
 

@@ -22,8 +22,13 @@
 #ifndef _ATL1C_H_
 #define _ATL1C_H_
 
+<<<<<<< HEAD
 #include <linux/version.h>
 #include <linux/init.h>
+=======
+#include <linux/init.h>
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/types.h>
 #include <linux/errno.h>
 #include <linux/module.h>
@@ -555,7 +560,10 @@ struct atl1c_smb {
 struct atl1c_adapter {
 	struct net_device   *netdev;
 	struct pci_dev      *pdev;
+<<<<<<< HEAD
 	struct vlan_group   *vlgrp;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct napi_struct  napi;
 	struct atl1c_hw        hw;
 	struct atl1c_hw_stats  hw_stats;

@@ -410,6 +410,7 @@ void rt2x00lib_txdone(struct queue_entry *entry,
 	/*
 	 * If the data queue was below the threshold before the txdone
 	 * handler we must make sure the packet queue in the mac80211 stack
+<<<<<<< HEAD
 	 * is reenabled when the txdone handler has finished. This has to be
 	 * serialized with rt2x00mac_tx(), otherwise we can wake up queue
 	 * before it was stopped.
@@ -418,6 +419,12 @@ void rt2x00lib_txdone(struct queue_entry *entry,
 	if (!rt2x00queue_threshold(entry->queue))
 		rt2x00queue_unpause_queue(entry->queue);
 	spin_unlock_bh(&entry->queue->tx_lock);
+=======
+	 * is reenabled when the txdone handler has finished.
+	 */
+	if (!rt2x00queue_threshold(entry->queue))
+		rt2x00queue_unpause_queue(entry->queue);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(rt2x00lib_txdone);
 
@@ -603,6 +610,21 @@ void rt2x00lib_rxdone(struct queue_entry *entry)
 	rt2x00dev->ops->lib->fill_rxdone(entry, &rxdesc);
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Check for valid size in case we get corrupted descriptor from
+	 * hardware.
+	 */
+	if (unlikely(rxdesc.size == 0 ||
+		     rxdesc.size > entry->queue->data_size)) {
+		WARNING(rt2x00dev, "Wrong frame size %d max %d.\n",
+			rxdesc.size, entry->queue->data_size);
+		dev_kfree_skb(entry->skb);
+		goto renew_skb;
+	}
+
+	/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * The data behind the ieee80211 header must be
 	 * aligned on a 4 byte boundary.
 	 */
@@ -662,6 +684,10 @@ void rt2x00lib_rxdone(struct queue_entry *entry)
 
 	ieee80211_rx_ni(rt2x00dev->hw, entry->skb);
 
+<<<<<<< HEAD
+=======
+renew_skb:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Replace the skb with the freshly allocated one.
 	 */

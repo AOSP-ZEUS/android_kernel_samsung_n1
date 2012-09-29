@@ -33,8 +33,11 @@
 #include <linux/device.h>
 #include <linux/miscdevice.h>
 
+<<<<<<< HEAD
 #include <linux/hid.h>
 #include <linux/hiddev.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/usb.h>
 #include <linux/usb/ch9.h>
 #include <linux/usb/f_accessory.h>
@@ -42,7 +45,11 @@
 #define BULK_BUFFER_SIZE    16384
 #define ACC_STRING_SIZE     256
 
+<<<<<<< HEAD
 #define PROTOCOL_VERSION    2
+=======
+#define PROTOCOL_VERSION    1
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* String IDs */
 #define INTERFACE_STRING_INDEX	0
@@ -51,6 +58,7 @@
 #define TX_REQ_MAX 4
 #define RX_REQ_MAX 2
 
+<<<<<<< HEAD
 struct acc_hid_dev {
 	struct list_head	list;
 	struct hid_device *hid;
@@ -65,6 +73,8 @@ struct acc_hid_dev {
 	int report_desc_offset;
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct acc_dev {
 	struct usb_function function;
 	struct usb_composite_dev *cdev;
@@ -94,8 +104,11 @@ struct acc_dev {
 	/* set to 1 if we have a pending start request */
 	int start_requested;
 
+<<<<<<< HEAD
 	int audio_mode;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* synchronize access to our device file */
 	atomic_t open_excl;
 
@@ -105,6 +118,7 @@ struct acc_dev {
 	wait_queue_head_t write_wq;
 	struct usb_request *rx_req[RX_REQ_MAX];
 	int rx_done;
+<<<<<<< HEAD
 
 	/* delayed work for handling ACCESSORY_START */
 	struct delayed_work start_work;
@@ -120,6 +134,9 @@ struct acc_dev {
 
 	/* list of dead HID devices to unregister */
 	struct list_head	dead_hid_list;
+=======
+	struct delayed_work work;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct usb_interface_descriptor acc_interface_desc = {
@@ -328,6 +345,7 @@ static void acc_complete_set_string(struct usb_ep *ep, struct usb_request *req)
 	}
 }
 
+<<<<<<< HEAD
 static void acc_complete_set_hid_report_desc(struct usb_ep *ep,
 		struct usb_request *req)
 {
@@ -482,6 +500,8 @@ static int acc_unregister_hid(struct acc_dev *dev, int id)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __init create_bulk_endpoints(struct acc_dev *dev,
 				struct usb_endpoint_descriptor *in_desc,
 				struct usb_endpoint_descriptor *out_desc)
@@ -539,7 +559,11 @@ static int __init create_bulk_endpoints(struct acc_dev *dev,
 	return 0;
 
 fail:
+<<<<<<< HEAD
 	pr_err("acc_bind() could not allocate requests\n");
+=======
+	printk(KERN_ERR "acc_bind() could not allocate requests\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	while ((req = req_get(dev, &dev->tx_idle)))
 		acc_request_free(req, dev->ep_in);
 	for (i = 0; i < RX_REQ_MAX; i++)
@@ -696,8 +720,11 @@ static long acc_ioctl(struct file *fp, unsigned code, unsigned long value)
 		break;
 	case ACCESSORY_IS_START_REQUESTED:
 		return dev->start_requested;
+<<<<<<< HEAD
 	case ACCESSORY_GET_AUDIO_MODE:
 		return dev->audio_mode;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (!src)
 		return -EINVAL;
@@ -728,7 +755,11 @@ static int acc_release(struct inode *ip, struct file *fp)
 	return 0;
 }
 
+<<<<<<< HEAD
 /* file operations for /dev/usb_accessory */
+=======
+/* file operations for /dev/acc_usb */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct file_operations acc_fops = {
 	.owner = THIS_MODULE,
 	.read = acc_read,
@@ -738,6 +769,7 @@ static const struct file_operations acc_fops = {
 	.release = acc_release,
 };
 
+<<<<<<< HEAD
 static int acc_hid_probe(struct hid_device *hdev,
 		const struct hid_device_id *id)
 {
@@ -749,12 +781,15 @@ static int acc_hid_probe(struct hid_device *hdev,
 	return hid_hw_start(hdev, HID_CONNECT_DEFAULT);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct miscdevice acc_device = {
 	.minor = MISC_DYNAMIC_MINOR,
 	.name = "usb_accessory",
 	.fops = &acc_fops,
 };
 
+<<<<<<< HEAD
 static const struct hid_device_id acc_hid_table[] = {
 	{ HID_USB_DEVICE(HID_ANY_ID, HID_ANY_ID) },
 	{ }
@@ -765,20 +800,28 @@ static struct hid_driver acc_hid_driver = {
 	.id_table = acc_hid_table,
 	.probe = acc_hid_probe,
 };
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int acc_ctrlrequest(struct usb_composite_dev *cdev,
 				const struct usb_ctrlrequest *ctrl)
 {
 	struct acc_dev	*dev = _acc_dev;
 	int	value = -EOPNOTSUPP;
+<<<<<<< HEAD
 	struct acc_hid_dev *hid;
 	int offset;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 b_requestType = ctrl->bRequestType;
 	u8 b_request = ctrl->bRequest;
 	u16	w_index = le16_to_cpu(ctrl->wIndex);
 	u16	w_value = le16_to_cpu(ctrl->wValue);
 	u16	w_length = le16_to_cpu(ctrl->wLength);
+<<<<<<< HEAD
 	unsigned long flags;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
 	printk(KERN_INFO "acc_ctrlrequest "
@@ -791,13 +834,18 @@ static int acc_ctrlrequest(struct usb_composite_dev *cdev,
 		if (b_request == ACCESSORY_START) {
 			dev->start_requested = 1;
 			schedule_delayed_work(
+<<<<<<< HEAD
 				&dev->start_work, msecs_to_jiffies(10));
+=======
+				&dev->work, msecs_to_jiffies(10));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			value = 0;
 		} else if (b_request == ACCESSORY_SEND_STRING) {
 			dev->string_index = w_index;
 			cdev->gadget->ep0->driver_data = dev;
 			cdev->req->complete = acc_complete_set_string;
 			value = w_length;
+<<<<<<< HEAD
 		} else if (b_request == ACCESSORY_SET_AUDIO_MODE &&
 				w_index == 0 && w_length == 0) {
 			dev->audio_mode = w_value;
@@ -834,13 +882,19 @@ static int acc_ctrlrequest(struct usb_composite_dev *cdev,
 			cdev->req->context = hid;
 			cdev->req->complete = acc_complete_send_hid_event;
 			value = w_length;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	} else if (b_requestType == (USB_DIR_IN | USB_TYPE_VENDOR)) {
 		if (b_request == ACCESSORY_GET_PROTOCOL) {
 			*((u16 *)cdev->req->buf) = PROTOCOL_VERSION;
 			value = sizeof(u16);
 
+<<<<<<< HEAD
 			/* clear strings left over from a previous session */
+=======
+			/* clear any strings left over from a previous session */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			memset(dev->manufacturer, 0, sizeof(dev->manufacturer));
 			memset(dev->model, 0, sizeof(dev->model));
 			memset(dev->description, 0, sizeof(dev->description));
@@ -848,7 +902,10 @@ static int acc_ctrlrequest(struct usb_composite_dev *cdev,
 			memset(dev->uri, 0, sizeof(dev->uri));
 			memset(dev->serial, 0, sizeof(dev->serial));
 			dev->start_requested = 0;
+<<<<<<< HEAD
 			dev->audio_mode = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -861,7 +918,10 @@ static int acc_ctrlrequest(struct usb_composite_dev *cdev,
 				__func__);
 	}
 
+<<<<<<< HEAD
 err:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (value == -EOPNOTSUPP)
 		VDBG(cdev,
 			"unknown class-specific control req "
@@ -881,10 +941,13 @@ acc_function_bind(struct usb_configuration *c, struct usb_function *f)
 
 	DBG(cdev, "acc_function_bind dev: %p\n", dev);
 
+<<<<<<< HEAD
 	ret = hid_register_driver(&acc_hid_driver);
 	if (ret)
 		return ret;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev->start_requested = 0;
 
 	/* allocate interface ID(s) */
@@ -914,6 +977,7 @@ acc_function_bind(struct usb_configuration *c, struct usb_function *f)
 }
 
 static void
+<<<<<<< HEAD
 kill_all_hid_devices(struct acc_dev *dev)
 {
 	struct acc_hid_dev *hid;
@@ -944,6 +1008,8 @@ acc_hid_unbind(struct acc_dev *dev)
 }
 
 static void
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 acc_function_unbind(struct usb_configuration *c, struct usb_function *f)
 {
 	struct acc_dev	*dev = func_to_dev(f);
@@ -954,16 +1020,23 @@ acc_function_unbind(struct usb_configuration *c, struct usb_function *f)
 		acc_request_free(req, dev->ep_in);
 	for (i = 0; i < RX_REQ_MAX; i++)
 		acc_request_free(dev->rx_req[i], dev->ep_out);
+<<<<<<< HEAD
 
 	acc_hid_unbind(dev);
 }
 
 static void acc_start_work(struct work_struct *data)
+=======
+}
+
+static void acc_work(struct work_struct *data)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	char *envp[2] = { "ACCESSORY=START", NULL };
 	kobject_uevent_env(&acc_device.this_device->kobj, KOBJ_CHANGE, envp);
 }
 
+<<<<<<< HEAD
 static int acc_hid_init(struct acc_hid_dev *hdev)
 {
 	struct hid_device *hid;
@@ -1052,6 +1125,8 @@ static void acc_hid_work(struct work_struct *data)
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int acc_function_set_alt(struct usb_function *f,
 		unsigned intf, unsigned alt)
 {
@@ -1060,6 +1135,7 @@ static int acc_function_set_alt(struct usb_function *f,
 	int ret;
 
 	DBG(cdev, "acc_function_set_alt intf: %d alt: %d\n", intf, alt);
+<<<<<<< HEAD
 	ret = usb_ep_enable(dev->ep_in,
 			ep_choose(cdev->gadget,
 				&acc_highspeed_in_desc,
@@ -1070,6 +1146,14 @@ static int acc_function_set_alt(struct usb_function *f,
 			ep_choose(cdev->gadget,
 				&acc_highspeed_out_desc,
 				&acc_fullspeed_out_desc));
+=======
+	config_ep_by_speed(cdev->gadget, f, dev->ep_in);
+	ret = usb_ep_enable(dev->ep_in);
+	if (ret)
+		return ret;
+	config_ep_by_speed(cdev->gadget, f, dev->ep_out);
+	ret = usb_ep_enable(dev->ep_out);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret) {
 		usb_ep_disable(dev->ep_in);
 		return ret;
@@ -1141,11 +1225,15 @@ static int acc_setup(void)
 	init_waitqueue_head(&dev->write_wq);
 	atomic_set(&dev->open_excl, 0);
 	INIT_LIST_HEAD(&dev->tx_idle);
+<<<<<<< HEAD
 	INIT_LIST_HEAD(&dev->hid_list);
 	INIT_LIST_HEAD(&dev->new_hid_list);
 	INIT_LIST_HEAD(&dev->dead_hid_list);
 	INIT_DELAYED_WORK(&dev->start_work, acc_start_work);
 	INIT_WORK(&dev->hid_work, acc_hid_work);
+=======
+	INIT_DELAYED_WORK(&dev->work, acc_work);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* _acc_dev must be set before calling usb_gadget_register_driver */
 	_acc_dev = dev;
@@ -1158,6 +1246,7 @@ static int acc_setup(void)
 
 err:
 	kfree(dev);
+<<<<<<< HEAD
 	pr_err("USB accessory gadget driver failed to initialize\n");
 	return ret;
 }
@@ -1168,6 +1257,12 @@ static void acc_disconnect(void)
 	kill_all_hid_devices(_acc_dev);
 }
 
+=======
+	printk(KERN_ERR "USB accessory gadget driver failed to initialize\n");
+	return ret;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void acc_cleanup(void)
 {
 	misc_deregister(&acc_device);

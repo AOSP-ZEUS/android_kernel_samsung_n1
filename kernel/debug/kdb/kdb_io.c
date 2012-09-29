@@ -31,6 +31,7 @@ char kdb_prompt_str[CMD_BUFLEN];
 
 int kdb_trap_printk;
 
+<<<<<<< HEAD
 static void kgdb_transition_check(char *buffer)
 {
 	int slen = strlen(buffer);
@@ -40,6 +41,23 @@ static void kgdb_transition_check(char *buffer)
 		KDB_STATE_SET(KGDB_TRANS);
 		kdb_printf("%s", buffer);
 	}
+=======
+static int kgdb_transition_check(char *buffer)
+{
+	if (buffer[0] != '+' && buffer[0] != '$') {
+		KDB_STATE_SET(KGDB_TRANS);
+		kdb_printf("%s", buffer);
+	} else {
+		int slen = strlen(buffer);
+		if (slen > 3 && buffer[slen - 3] == '#') {
+			kdb_gdb_state_pass(buffer);
+			strcpy(buffer, "kgdb");
+			KDB_STATE_SET(DOING_KGDB);
+			return 1;
+		}
+	}
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int kdb_read_get_key(char *buffer, size_t bufsize)
@@ -251,6 +269,13 @@ poll_again:
 	case 13: /* enter */
 		*lastchar++ = '\n';
 		*lastchar++ = '\0';
+<<<<<<< HEAD
+=======
+		if (!KDB_STATE(KGDB_TRANS)) {
+			KDB_STATE_SET(KGDB_TRANS);
+			kdb_printf("%s", buffer);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		kdb_printf("\n");
 		return buffer;
 	case 4: /* Del */
@@ -382,22 +407,43 @@ poll_again:
 				 * printed characters if we think that
 				 * kgdb is connecting, until the check
 				 * fails */
+<<<<<<< HEAD
 				if (!KDB_STATE(KGDB_TRANS))
 					kgdb_transition_check(buffer);
 				else
 					kdb_printf("%c", key);
+=======
+				if (!KDB_STATE(KGDB_TRANS)) {
+					if (kgdb_transition_check(buffer))
+						return buffer;
+				} else {
+					kdb_printf("%c", key);
+				}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 			/* Special escape to kgdb */
 			if (lastchar - buffer >= 5 &&
 			    strcmp(lastchar - 5, "$?#3f") == 0) {
+<<<<<<< HEAD
+=======
+				kdb_gdb_state_pass(lastchar - 5);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				strcpy(buffer, "kgdb");
 				KDB_STATE_SET(DOING_KGDB);
 				return buffer;
 			}
+<<<<<<< HEAD
 			if (lastchar - buffer >= 14 &&
 			    strcmp(lastchar - 14, "$qSupported#37") == 0) {
 				strcpy(buffer, "kgdb");
 				KDB_STATE_SET(DOING_KGDB2);
+=======
+			if (lastchar - buffer >= 11 &&
+			    strcmp(lastchar - 11, "$qSupported") == 0) {
+				kdb_gdb_state_pass(lastchar - 11);
+				strcpy(buffer, "kgdb");
+				KDB_STATE_SET(DOING_KGDB);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				return buffer;
 			}
 		}

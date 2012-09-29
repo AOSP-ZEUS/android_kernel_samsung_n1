@@ -1375,6 +1375,13 @@ static int omap_pullup(struct usb_gadget *gadget, int is_on)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int omap_udc_start(struct usb_gadget_driver *driver,
+		int (*bind)(struct usb_gadget *));
+static int omap_udc_stop(struct usb_gadget_driver *driver);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct usb_gadget_ops omap_gadget_ops = {
 	.get_frame		= omap_get_frame,
 	.wakeup			= omap_wakeup,
@@ -1382,6 +1389,11 @@ static struct usb_gadget_ops omap_gadget_ops = {
 	.vbus_session		= omap_vbus_session,
 	.vbus_draw		= omap_vbus_draw,
 	.pullup			= omap_pullup,
+<<<<<<< HEAD
+=======
+	.start			= omap_udc_start,
+	.stop			= omap_udc_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*-------------------------------------------------------------------------*/
@@ -2102,7 +2114,11 @@ static inline int machine_without_vbus_sense(void)
 		);
 }
 
+<<<<<<< HEAD
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int omap_udc_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	int		status = -ENODEV;
@@ -2186,9 +2202,14 @@ done:
 		omap_udc_enable_clock(0);
 	return status;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
 
 int usb_gadget_unregister_driver (struct usb_gadget_driver *driver)
+=======
+
+static int omap_udc_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	unsigned long	flags;
 	int		status = -ENODEV;
@@ -2222,8 +2243,11 @@ int usb_gadget_unregister_driver (struct usb_gadget_driver *driver)
 	DBG("unregistered driver '%s'\n", driver->driver.name);
 	return status;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_unregister_driver);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*-------------------------------------------------------------------------*/
 
@@ -2991,9 +3015,22 @@ known:
 
 	create_proc_file();
 	status = device_add(&udc->gadget.dev);
+<<<<<<< HEAD
 	if (!status)
 		return status;
 	/* If fail, fall through */
+=======
+	if (status)
+		goto cleanup4;
+
+	status = usb_add_gadget_udc(&pdev->dev, &udc->gadget);
+	if (!status)
+		return status;
+	/* If fail, fall through */
+cleanup4:
+	remove_proc_file();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef	USE_ISO
 cleanup3:
 	free_irq(pdev->resource[2].start, udc);
@@ -3029,6 +3066,11 @@ static int __exit omap_udc_remove(struct platform_device *pdev)
 
 	if (!udc)
 		return -ENODEV;
+<<<<<<< HEAD
+=======
+
+	usb_del_gadget_udc(&udc->gadget);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (udc->driver)
 		return -EBUSY;
 

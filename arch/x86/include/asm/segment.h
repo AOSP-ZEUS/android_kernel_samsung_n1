@@ -162,7 +162,11 @@
 #define GDT_ENTRY_DEFAULT_USER32_CS 4
 #define GDT_ENTRY_DEFAULT_USER_DS 5
 #define GDT_ENTRY_DEFAULT_USER_CS 6
+<<<<<<< HEAD
 #define __USER32_CS   (GDT_ENTRY_DEFAULT_USER32_CS * 8 + 3)
+=======
+#define __USER32_CS   (GDT_ENTRY_DEFAULT_USER32_CS*8+3)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define __USER32_DS	__USER_DS
 
 #define GDT_ENTRY_TSS 8	/* needs two entries */

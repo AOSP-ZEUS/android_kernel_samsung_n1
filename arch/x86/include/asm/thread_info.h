@@ -21,7 +21,11 @@ struct task_struct;
 struct exec_domain;
 #include <asm/processor.h>
 #include <asm/ftrace.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct thread_info {
 	struct task_struct	*task;		/* main task structure */
@@ -242,6 +246,11 @@ static inline struct thread_info *current_thread_info(void)
  * ever touches our thread-synchronous status, so we don't
  * have to worry about atomic accesses.
  */
+<<<<<<< HEAD
+=======
+#define TS_USEDFPU		0x0001	/* FPU was used by this task
+					   this quantum (SMP) */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define TS_COMPAT		0x0002	/* 32bit syscall active (64BIT)*/
 #define TS_POLLING		0x0004	/* idle task polling need_resched,
 					   skip sending interrupt */

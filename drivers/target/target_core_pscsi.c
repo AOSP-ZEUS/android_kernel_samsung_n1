@@ -55,6 +55,7 @@ static struct se_subsystem_api pscsi_template;
 
 static void pscsi_req_done(struct request *, int);
 
+<<<<<<< HEAD
 /*	pscsi_get_sh():
  *
  *
@@ -73,6 +74,8 @@ static struct Scsi_Host *pscsi_get_sh(u32 host_no)
 	return sh;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*	pscsi_attach_hba():
  *
  * 	pscsi_get_sh() used scsi_host_lookup() to locate struct Scsi_Host.
@@ -80,6 +83,7 @@ static struct Scsi_Host *pscsi_get_sh(u32 host_no)
  */
 static int pscsi_attach_hba(struct se_hba *hba, u32 host_id)
 {
+<<<<<<< HEAD
 	int hba_depth;
 	struct pscsi_hba_virt *phv;
 
@@ -102,6 +106,25 @@ static int pscsi_attach_hba(struct se_hba *hba, u32 host_id)
 	printk(KERN_INFO "CORE_HBA[%d] - Attached SCSI HBA to Generic"
 		" Target Core with TCQ Depth: %d\n", hba->hba_id,
 		atomic_read(&hba->max_queue_depth));
+=======
+	struct pscsi_hba_virt *phv;
+
+	phv = kzalloc(sizeof(struct pscsi_hba_virt), GFP_KERNEL);
+	if (!phv) {
+		pr_err("Unable to allocate struct pscsi_hba_virt\n");
+		return -ENOMEM;
+	}
+	phv->phv_host_id = host_id;
+	phv->phv_mode = PHV_VIRUTAL_HOST_ID;
+
+	hba->hba_ptr = phv;
+
+	pr_debug("CORE_HBA[%d] - TCM SCSI HBA Driver %s on"
+		" Generic Target Core Stack %s\n", hba->hba_id,
+		PSCSI_VERSION, TARGET_CORE_MOD_VERSION);
+	pr_debug("CORE_HBA[%d] - Attached SCSI HBA to Generic\n",
+	       hba->hba_id);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -114,12 +137,20 @@ static void pscsi_detach_hba(struct se_hba *hba)
 	if (scsi_host) {
 		scsi_host_put(scsi_host);
 
+<<<<<<< HEAD
 		printk(KERN_INFO "CORE_HBA[%d] - Detached SCSI HBA: %s from"
+=======
+		pr_debug("CORE_HBA[%d] - Detached SCSI HBA: %s from"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			" Generic Target Core\n", hba->hba_id,
 			(scsi_host->hostt->name) ? (scsi_host->hostt->name) :
 			"Unknown");
 	} else
+<<<<<<< HEAD
 		printk(KERN_INFO "CORE_HBA[%d] - Detached Virtual SCSI HBA"
+=======
+		pr_debug("CORE_HBA[%d] - Detached Virtual SCSI HBA"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			" from Generic Target Core\n", hba->hba_id);
 
 	kfree(phv);
@@ -130,20 +161,33 @@ static int pscsi_pmode_enable_hba(struct se_hba *hba, unsigned long mode_flag)
 {
 	struct pscsi_hba_virt *phv = (struct pscsi_hba_virt *)hba->hba_ptr;
 	struct Scsi_Host *sh = phv->phv_lld_host;
+<<<<<<< HEAD
 	int hba_depth = PSCSI_VIRTUAL_HBA_DEPTH;
 	/*
 	 * Release the struct Scsi_Host
 	 */
 	if (!(mode_flag)) {
 		if (!(sh))
+=======
+	/*
+	 * Release the struct Scsi_Host
+	 */
+	if (!mode_flag) {
+		if (!sh)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return 0;
 
 		phv->phv_lld_host = NULL;
 		phv->phv_mode = PHV_VIRUTAL_HOST_ID;
+<<<<<<< HEAD
 		atomic_set(&hba->left_queue_depth, hba_depth);
 		atomic_set(&hba->max_queue_depth, hba_depth);
 
 		printk(KERN_INFO "CORE_HBA[%d] - Disabled pSCSI HBA Passthrough"
+=======
+
+		pr_debug("CORE_HBA[%d] - Disabled pSCSI HBA Passthrough"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			" %s\n", hba->hba_id, (sh->hostt->name) ?
 			(sh->hostt->name) : "Unknown");
 
@@ -154,6 +198,7 @@ static int pscsi_pmode_enable_hba(struct se_hba *hba, unsigned long mode_flag)
 	 * Otherwise, locate struct Scsi_Host from the original passed
 	 * pSCSI Host ID and enable for phba mode
 	 */
+<<<<<<< HEAD
 	sh = pscsi_get_sh(phv->phv_host_id);
 	if (!(sh)) {
 		printk(KERN_ERR "pSCSI: Unable to locate SCSI Host for"
@@ -170,11 +215,23 @@ static int pscsi_pmode_enable_hba(struct se_hba *hba, unsigned long mode_flag)
 
 	atomic_set(&hba->left_queue_depth, hba_depth);
 	atomic_set(&hba->max_queue_depth, hba_depth);
+=======
+	sh = scsi_host_lookup(phv->phv_host_id);
+	if (IS_ERR(sh)) {
+		pr_err("pSCSI: Unable to locate SCSI Host for"
+			" phv_host_id: %d\n", phv->phv_host_id);
+		return PTR_ERR(sh);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	phv->phv_lld_host = sh;
 	phv->phv_mode = PHV_LLD_SCSI_HOST_NO;
 
+<<<<<<< HEAD
 	printk(KERN_INFO "CORE_HBA[%d] - Enabled pSCSI HBA Passthrough %s\n",
+=======
+	pr_debug("CORE_HBA[%d] - Enabled pSCSI HBA Passthrough %s\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		hba->hba_id, (sh->hostt->name) ? (sh->hostt->name) : "Unknown");
 
 	return 1;
@@ -236,7 +293,11 @@ pscsi_get_inquiry_vpd_serial(struct scsi_device *sdev, struct t10_wwn *wwn)
 
 	buf = kzalloc(INQUIRY_VPD_SERIAL_LEN, GFP_KERNEL);
 	if (!buf)
+<<<<<<< HEAD
 		return -1;
+=======
+		return -ENOMEM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	memset(cdb, 0, MAX_COMMAND_SIZE);
 	cdb[0] = INQUIRY;
@@ -259,7 +320,11 @@ pscsi_get_inquiry_vpd_serial(struct scsi_device *sdev, struct t10_wwn *wwn)
 
 out_free:
 	kfree(buf);
+<<<<<<< HEAD
 	return -1;
+=======
+	return -EPERM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void
@@ -293,6 +358,7 @@ pscsi_get_inquiry_vpd_device_ident(struct scsi_device *sdev,
 		page_83 = &buf[off];
 		ident_len = page_83[3];
 		if (!ident_len) {
+<<<<<<< HEAD
 			printk(KERN_ERR "page_83[3]: identifier"
 					" length zero!\n");
 			break;
@@ -302,6 +368,17 @@ pscsi_get_inquiry_vpd_device_ident(struct scsi_device *sdev,
 		vpd = kzalloc(sizeof(struct t10_vpd), GFP_KERNEL);
 		if (!vpd) {
 			printk(KERN_ERR "Unable to allocate memory for"
+=======
+			pr_err("page_83[3]: identifier"
+					" length zero!\n");
+			break;
+		}
+		pr_debug("T10 VPD Identifer Length: %d\n", ident_len);
+
+		vpd = kzalloc(sizeof(struct t10_vpd), GFP_KERNEL);
+		if (!vpd) {
+			pr_err("Unable to allocate memory for"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					" struct t10_vpd\n");
 			goto out;
 		}
@@ -353,7 +430,11 @@ static struct se_device *pscsi_add_device_to_list(
 	if (!sd->queue_depth) {
 		sd->queue_depth = PSCSI_DEFAULT_QUEUEDEPTH;
 
+<<<<<<< HEAD
 		printk(KERN_ERR "Set broken SCSI Device %d:%d:%d"
+=======
+		pr_err("Set broken SCSI Device %d:%d:%d"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			" queue_depth to %d\n", sd->channel, sd->id,
 				sd->lun, sd->queue_depth);
 	}
@@ -364,10 +445,15 @@ static struct se_device *pscsi_add_device_to_list(
 	q = sd->request_queue;
 	limits = &dev_limits.limits;
 	limits->logical_block_size = sd->sector_size;
+<<<<<<< HEAD
 	limits->max_hw_sectors = (sd->host->max_sectors > queue_max_hw_sectors(q)) ?
 				  queue_max_hw_sectors(q) : sd->host->max_sectors;
 	limits->max_sectors = (sd->host->max_sectors > queue_max_sectors(q)) ?
 				  queue_max_sectors(q) : sd->host->max_sectors;
+=======
+	limits->max_hw_sectors = min_t(int, sd->host->max_sectors, queue_max_hw_sectors(q));
+	limits->max_sectors = min_t(int, sd->host->max_sectors, queue_max_sectors(q));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev_limits.hw_queue_depth = sd->queue_depth;
 	dev_limits.queue_depth = sd->queue_depth;
 	/*
@@ -391,9 +477,15 @@ static struct se_device *pscsi_add_device_to_list(
 	pdv->pdv_sd = sd;
 
 	dev = transport_add_device_to_core_hba(hba, &pscsi_template,
+<<<<<<< HEAD
 				se_dev, dev_flags, (void *)pdv,
 				&dev_limits, NULL, NULL);
 	if (!(dev)) {
+=======
+				se_dev, dev_flags, pdv,
+				&dev_limits, NULL, NULL);
+	if (!dev) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pdv->pdv_sd = NULL;
 		return NULL;
 	}
@@ -423,14 +515,24 @@ static void *pscsi_allocate_virtdevice(struct se_hba *hba, const char *name)
 	struct pscsi_dev_virt *pdv;
 
 	pdv = kzalloc(sizeof(struct pscsi_dev_virt), GFP_KERNEL);
+<<<<<<< HEAD
 	if (!(pdv)) {
 		printk(KERN_ERR "Unable to allocate memory for struct pscsi_dev_virt\n");
+=======
+	if (!pdv) {
+		pr_err("Unable to allocate memory for struct pscsi_dev_virt\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return NULL;
 	}
 	pdv->pdv_se_hba = hba;
 
+<<<<<<< HEAD
 	printk(KERN_INFO "PSCSI: Allocated pdv: %p for %s\n", pdv, name);
 	return (void *)pdv;
+=======
+	pr_debug("PSCSI: Allocated pdv: %p for %s\n", pdv, name);
+	return pdv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -450,7 +552,11 @@ static struct se_device *pscsi_create_type_disk(
 	u32 dev_flags = 0;
 
 	if (scsi_device_get(sd)) {
+<<<<<<< HEAD
 		printk(KERN_ERR "scsi_device_get() failed for %d:%d:%d:%d\n",
+=======
+		pr_err("scsi_device_get() failed for %d:%d:%d:%d\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			sh->host_no, sd->channel, sd->id, sd->lun);
 		spin_unlock_irq(sh->host_lock);
 		return NULL;
@@ -463,19 +569,31 @@ static struct se_device *pscsi_create_type_disk(
 	bd = blkdev_get_by_path(se_dev->se_dev_udev_path,
 				FMODE_WRITE|FMODE_READ|FMODE_EXCL, pdv);
 	if (IS_ERR(bd)) {
+<<<<<<< HEAD
 		printk(KERN_ERR "pSCSI: blkdev_get_by_path() failed\n");
+=======
+		pr_err("pSCSI: blkdev_get_by_path() failed\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		scsi_device_put(sd);
 		return NULL;
 	}
 	pdv->pdv_bd = bd;
 
 	dev = pscsi_add_device_to_list(hba, se_dev, pdv, sd, dev_flags);
+<<<<<<< HEAD
 	if (!(dev)) {
+=======
+	if (!dev) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		blkdev_put(pdv->pdv_bd, FMODE_WRITE|FMODE_READ|FMODE_EXCL);
 		scsi_device_put(sd);
 		return NULL;
 	}
+<<<<<<< HEAD
 	printk(KERN_INFO "CORE_PSCSI[%d] - Added TYPE_DISK for %d:%d:%d:%d\n",
+=======
+	pr_debug("CORE_PSCSI[%d] - Added TYPE_DISK for %d:%d:%d:%d\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		phv->phv_host_id, sh->host_no, sd->channel, sd->id, sd->lun);
 
 	return dev;
@@ -497,7 +615,11 @@ static struct se_device *pscsi_create_type_rom(
 	u32 dev_flags = 0;
 
 	if (scsi_device_get(sd)) {
+<<<<<<< HEAD
 		printk(KERN_ERR "scsi_device_get() failed for %d:%d:%d:%d\n",
+=======
+		pr_err("scsi_device_get() failed for %d:%d:%d:%d\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			sh->host_no, sd->channel, sd->id, sd->lun);
 		spin_unlock_irq(sh->host_lock);
 		return NULL;
@@ -505,11 +627,19 @@ static struct se_device *pscsi_create_type_rom(
 	spin_unlock_irq(sh->host_lock);
 
 	dev = pscsi_add_device_to_list(hba, se_dev, pdv, sd, dev_flags);
+<<<<<<< HEAD
 	if (!(dev)) {
 		scsi_device_put(sd);
 		return NULL;
 	}
 	printk(KERN_INFO "CORE_PSCSI[%d] - Added Type: %s for %d:%d:%d:%d\n",
+=======
+	if (!dev) {
+		scsi_device_put(sd);
+		return NULL;
+	}
+	pr_debug("CORE_PSCSI[%d] - Added Type: %s for %d:%d:%d:%d\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		phv->phv_host_id, scsi_device_type(sd->type), sh->host_no,
 		sd->channel, sd->id, sd->lun);
 
@@ -533,10 +663,17 @@ static struct se_device *pscsi_create_type_other(
 
 	spin_unlock_irq(sh->host_lock);
 	dev = pscsi_add_device_to_list(hba, se_dev, pdv, sd, dev_flags);
+<<<<<<< HEAD
 	if (!(dev))
 		return NULL;
 
 	printk(KERN_INFO "CORE_PSCSI[%d] - Added Type: %s for %d:%d:%d:%d\n",
+=======
+	if (!dev)
+		return NULL;
+
+	pr_debug("CORE_PSCSI[%d] - Added Type: %s for %d:%d:%d:%d\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		phv->phv_host_id, scsi_device_type(sd->type), sh->host_no,
 		sd->channel, sd->id, sd->lun);
 
@@ -555,8 +692,13 @@ static struct se_device *pscsi_create_virtdevice(
 	struct Scsi_Host *sh = phv->phv_lld_host;
 	int legacy_mode_enable = 0;
 
+<<<<<<< HEAD
 	if (!(pdv)) {
 		printk(KERN_ERR "Unable to locate struct pscsi_dev_virt"
+=======
+	if (!pdv) {
+		pr_err("Unable to locate struct pscsi_dev_virt"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				" parameter\n");
 		return ERR_PTR(-EINVAL);
 	}
@@ -564,9 +706,15 @@ static struct se_device *pscsi_create_virtdevice(
 	 * If not running in PHV_LLD_SCSI_HOST_NO mode, locate the
 	 * struct Scsi_Host we will need to bring the TCM/pSCSI object online
 	 */
+<<<<<<< HEAD
 	if (!(sh)) {
 		if (phv->phv_mode == PHV_LLD_SCSI_HOST_NO) {
 			printk(KERN_ERR "pSCSI: Unable to locate struct"
+=======
+	if (!sh) {
+		if (phv->phv_mode == PHV_LLD_SCSI_HOST_NO) {
+			pr_err("pSCSI: Unable to locate struct"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				" Scsi_Host for PHV_LLD_SCSI_HOST_NO\n");
 			return ERR_PTR(-ENODEV);
 		}
@@ -575,7 +723,11 @@ static struct se_device *pscsi_create_virtdevice(
 		 * reference, we enforce that udev_path has been set
 		 */
 		if (!(se_dev->su_dev_flags & SDF_USING_UDEV_PATH)) {
+<<<<<<< HEAD
 			printk(KERN_ERR "pSCSI: udev_path attribute has not"
+=======
+			pr_err("pSCSI: udev_path attribute has not"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				" been set before ENABLE=1\n");
 			return ERR_PTR(-EINVAL);
 		}
@@ -586,8 +738,13 @@ static struct se_device *pscsi_create_virtdevice(
 		 */
 		if (!(pdv->pdv_flags & PDF_HAS_VIRT_HOST_ID)) {
 			spin_lock(&hba->device_lock);
+<<<<<<< HEAD
 			if (!(list_empty(&hba->hba_dev_list))) {
 				printk(KERN_ERR "pSCSI: Unable to set hba_mode"
+=======
+			if (!list_empty(&hba->hba_dev_list)) {
+				pr_err("pSCSI: Unable to set hba_mode"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					" with active devices\n");
 				spin_unlock(&hba->device_lock);
 				return ERR_PTR(-EEXIST);
@@ -601,16 +758,28 @@ static struct se_device *pscsi_create_virtdevice(
 			hba->hba_flags |= HBA_FLAGS_PSCSI_MODE;
 			sh = phv->phv_lld_host;
 		} else {
+<<<<<<< HEAD
 			sh = pscsi_get_sh(pdv->pdv_host_id);
 			if (!(sh)) {
 				printk(KERN_ERR "pSCSI: Unable to locate"
 					" pdv_host_id: %d\n", pdv->pdv_host_id);
 				return ERR_PTR(-ENODEV);
+=======
+			sh = scsi_host_lookup(pdv->pdv_host_id);
+			if (IS_ERR(sh)) {
+				pr_err("pSCSI: Unable to locate"
+					" pdv_host_id: %d\n", pdv->pdv_host_id);
+				return (struct se_device *) sh;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 		}
 	} else {
 		if (phv->phv_mode == PHV_VIRUTAL_HOST_ID) {
+<<<<<<< HEAD
 			printk(KERN_ERR "pSCSI: PHV_VIRUTAL_HOST_ID set while"
+=======
+			pr_err("pSCSI: PHV_VIRUTAL_HOST_ID set while"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				" struct Scsi_Host exists\n");
 			return ERR_PTR(-EEXIST);
 		}
@@ -639,7 +808,11 @@ static struct se_device *pscsi_create_virtdevice(
 			break;
 		}
 
+<<<<<<< HEAD
 		if (!(dev)) {
+=======
+		if (!dev) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (phv->phv_mode == PHV_VIRUTAL_HOST_ID)
 				scsi_host_put(sh);
 			else if (legacy_mode_enable) {
@@ -653,7 +826,11 @@ static struct se_device *pscsi_create_virtdevice(
 	}
 	spin_unlock_irq(sh->host_lock);
 
+<<<<<<< HEAD
 	printk(KERN_ERR "pSCSI: Unable to locate %d:%d:%d:%d\n", sh->host_no,
+=======
+	pr_err("pSCSI: Unable to locate %d:%d:%d:%d\n", sh->host_no,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pdv->pdv_channel_id,  pdv->pdv_target_id, pdv->pdv_lun_id);
 
 	if (phv->phv_mode == PHV_VIRUTAL_HOST_ID)
@@ -728,6 +905,7 @@ static int pscsi_transport_complete(struct se_task *task)
 	 */
 	if (((cdb[0] == MODE_SENSE) || (cdb[0] == MODE_SENSE_10)) &&
 	     (status_byte(result) << 1) == SAM_STAT_GOOD) {
+<<<<<<< HEAD
 		if (!TASK_CMD(task)->se_deve)
 			goto after_mode_sense;
 
@@ -735,6 +913,14 @@ static int pscsi_transport_complete(struct se_task *task)
 				TRANSPORT_LUNFLAGS_READ_ONLY) {
 			unsigned char *buf = (unsigned char *)
 				T_TASK(task->task_se_cmd)->t_task_buf;
+=======
+		if (!task->task_se_cmd->se_deve)
+			goto after_mode_sense;
+
+		if (task->task_se_cmd->se_deve->lun_flags &
+				TRANSPORT_LUNFLAGS_READ_ONLY) {
+			unsigned char *buf = transport_kmap_first_data_page(task->task_se_cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			if (cdb[0] == MODE_SENSE_10) {
 				if (!(buf[3] & 0x80))
@@ -743,6 +929,11 @@ static int pscsi_transport_complete(struct se_task *task)
 				if (!(buf[2] & 0x80))
 					buf[2] |= 0x80;
 			}
+<<<<<<< HEAD
+=======
+
+			transport_kunmap_first_data_page(task->task_se_cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 after_mode_sense:
@@ -766,8 +957,13 @@ after_mode_sense:
 		u32 blocksize;
 
 		buf = sg_virt(&sg[0]);
+<<<<<<< HEAD
 		if (!(buf)) {
 			printk(KERN_ERR "Unable to get buf for scatterlist\n");
+=======
+		if (!buf) {
+			pr_err("Unable to get buf for scatterlist\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto after_mode_select;
 		}
 
@@ -797,6 +993,7 @@ after_mode_select:
 }
 
 static struct se_task *
+<<<<<<< HEAD
 pscsi_alloc_task(struct se_cmd *cmd)
 {
 	struct pscsi_plugin_task *pt;
@@ -825,6 +1022,22 @@ pscsi_alloc_task(struct se_cmd *cmd)
 	} else
 		pt->pscsi_cdb = &pt->__pscsi_cdb[0];
 
+=======
+pscsi_alloc_task(unsigned char *cdb)
+{
+	struct pscsi_plugin_task *pt;
+
+	/*
+	 * Dynamically alloc cdb space, since it may be larger than
+	 * TCM_MAX_COMMAND_SIZE
+	 */
+	pt = kzalloc(sizeof(*pt) + scsi_command_size(cdb), GFP_KERNEL);
+	if (!pt) {
+		pr_err("Unable to allocate struct pscsi_plugin_task\n");
+		return NULL;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return &pt->pscsi_task;
 }
 
@@ -849,7 +1062,11 @@ static inline void pscsi_blk_init_request(
 	 * also set the end_io_data pointer.to struct se_task.
 	 */
 	req->end_io = pscsi_req_done;
+<<<<<<< HEAD
 	req->end_io_data = (void *)task;
+=======
+	req->end_io_data = task;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Load the referenced struct se_task's SCSI CDB into
 	 * include/linux/blkdev.h:struct request->cmd
@@ -859,7 +1076,11 @@ static inline void pscsi_blk_init_request(
 	/*
 	 * Setup pointer for outgoing sense data.
 	 */
+<<<<<<< HEAD
 	req->sense = (void *)&pt->pscsi_sense[0];
+=======
+	req->sense = &pt->pscsi_sense[0];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	req->sense_len = 0;
 }
 
@@ -874,8 +1095,13 @@ static int pscsi_blk_get_request(struct se_task *task)
 	pt->pscsi_req = blk_get_request(pdv->pdv_sd->request_queue,
 			(task->task_data_direction == DMA_TO_DEVICE),
 			GFP_KERNEL);
+<<<<<<< HEAD
 	if (!(pt->pscsi_req) || IS_ERR(pt->pscsi_req)) {
 		printk(KERN_ERR "PSCSI: blk_get_request() failed: %ld\n",
+=======
+	if (!pt->pscsi_req || IS_ERR(pt->pscsi_req)) {
+		pr_err("PSCSI: blk_get_request() failed: %ld\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				IS_ERR(pt->pscsi_req));
 		return PYX_TRANSPORT_LU_COMM_FAILURE;
 	}
@@ -920,6 +1146,7 @@ static int pscsi_do_task(struct se_task *task)
 static void pscsi_free_task(struct se_task *task)
 {
 	struct pscsi_plugin_task *pt = PSCSI_TASK(task);
+<<<<<<< HEAD
 	struct se_cmd *cmd = task->task_se_cmd;
 
 	/*
@@ -929,6 +1156,10 @@ static void pscsi_free_task(struct se_task *task)
 	if (T_TASK(cmd)->t_task_cdb != T_TASK(cmd)->__t_task_cdb)
 		kfree(pt->pscsi_cdb);
 	/*
+=======
+
+	/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * We do not release the bio(s) here associated with this task, as
 	 * this is handled by bio_put() and pscsi_bi_endio().
 	 */
@@ -973,7 +1204,11 @@ static ssize_t pscsi_set_configfs_dev_params(struct se_hba *hba,
 		switch (token) {
 		case Opt_scsi_host_id:
 			if (phv->phv_mode == PHV_LLD_SCSI_HOST_NO) {
+<<<<<<< HEAD
 				printk(KERN_ERR "PSCSI[%d]: Unable to accept"
+=======
+				pr_err("PSCSI[%d]: Unable to accept"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					" scsi_host_id while phv_mode =="
 					" PHV_LLD_SCSI_HOST_NO\n",
 					phv->phv_host_id);
@@ -982,14 +1217,22 @@ static ssize_t pscsi_set_configfs_dev_params(struct se_hba *hba,
 			}
 			match_int(args, &arg);
 			pdv->pdv_host_id = arg;
+<<<<<<< HEAD
 			printk(KERN_INFO "PSCSI[%d]: Referencing SCSI Host ID:"
+=======
+			pr_debug("PSCSI[%d]: Referencing SCSI Host ID:"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				" %d\n", phv->phv_host_id, pdv->pdv_host_id);
 			pdv->pdv_flags |= PDF_HAS_VIRT_HOST_ID;
 			break;
 		case Opt_scsi_channel_id:
 			match_int(args, &arg);
 			pdv->pdv_channel_id = arg;
+<<<<<<< HEAD
 			printk(KERN_INFO "PSCSI[%d]: Referencing SCSI Channel"
+=======
+			pr_debug("PSCSI[%d]: Referencing SCSI Channel"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				" ID: %d\n",  phv->phv_host_id,
 				pdv->pdv_channel_id);
 			pdv->pdv_flags |= PDF_HAS_CHANNEL_ID;
@@ -997,7 +1240,11 @@ static ssize_t pscsi_set_configfs_dev_params(struct se_hba *hba,
 		case Opt_scsi_target_id:
 			match_int(args, &arg);
 			pdv->pdv_target_id = arg;
+<<<<<<< HEAD
 			printk(KERN_INFO "PSCSI[%d]: Referencing SCSI Target"
+=======
+			pr_debug("PSCSI[%d]: Referencing SCSI Target"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				" ID: %d\n", phv->phv_host_id,
 				pdv->pdv_target_id);
 			pdv->pdv_flags |= PDF_HAS_TARGET_ID;
@@ -1005,7 +1252,11 @@ static ssize_t pscsi_set_configfs_dev_params(struct se_hba *hba,
 		case Opt_scsi_lun_id:
 			match_int(args, &arg);
 			pdv->pdv_lun_id = arg;
+<<<<<<< HEAD
 			printk(KERN_INFO "PSCSI[%d]: Referencing SCSI LUN ID:"
+=======
+			pr_debug("PSCSI[%d]: Referencing SCSI LUN ID:"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				" %d\n", phv->phv_host_id, pdv->pdv_lun_id);
 			pdv->pdv_flags |= PDF_HAS_LUN_ID;
 			break;
@@ -1028,9 +1279,15 @@ static ssize_t pscsi_check_configfs_dev_params(
 	if (!(pdv->pdv_flags & PDF_HAS_CHANNEL_ID) ||
 	    !(pdv->pdv_flags & PDF_HAS_TARGET_ID) ||
 	    !(pdv->pdv_flags & PDF_HAS_LUN_ID)) {
+<<<<<<< HEAD
 		printk(KERN_ERR "Missing scsi_channel_id=, scsi_target_id= and"
 			" scsi_lun_id= parameters\n");
 		return -1;
+=======
+		pr_err("Missing scsi_channel_id=, scsi_target_id= and"
+			" scsi_lun_id= parameters\n");
+		return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return 0;
@@ -1090,7 +1347,11 @@ static void pscsi_bi_endio(struct bio *bio, int error)
 	bio_put(bio);
 }
 
+<<<<<<< HEAD
 static inline struct bio *pscsi_get_bio(struct pscsi_dev_virt *pdv, int sg_num)
+=======
+static inline struct bio *pscsi_get_bio(int sg_num)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct bio *bio;
 	/*
@@ -1098,8 +1359,13 @@ static inline struct bio *pscsi_get_bio(struct pscsi_dev_virt *pdv, int sg_num)
 	 * in block/blk-core.c:blk_make_request()
 	 */
 	bio = bio_kmalloc(GFP_KERNEL, sg_num);
+<<<<<<< HEAD
 	if (!(bio)) {
 		printk(KERN_ERR "PSCSI: bio_kmalloc() failed\n");
+=======
+	if (!bio) {
+		pr_err("PSCSI: bio_kmalloc() failed\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return NULL;
 	}
 	bio->bi_end_io = pscsi_bi_endio;
@@ -1107,6 +1373,7 @@ static inline struct bio *pscsi_get_bio(struct pscsi_dev_virt *pdv, int sg_num)
 	return bio;
 }
 
+<<<<<<< HEAD
 #if 0
 #define DEBUG_PSCSI(x...) printk(x)
 #else
@@ -1114,6 +1381,9 @@ static inline struct bio *pscsi_get_bio(struct pscsi_dev_virt *pdv, int sg_num)
 #endif
 
 static int __pscsi_map_task_SG(
+=======
+static int __pscsi_map_SG(
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct se_task *task,
 	struct scatterlist *task_sg,
 	u32 task_sg_num,
@@ -1134,7 +1404,11 @@ static int __pscsi_map_task_SG(
 		return 0;
 	/*
 	 * For SCF_SCSI_DATA_SG_IO_CDB, Use fs/bio.c:bio_add_page() to setup
+<<<<<<< HEAD
 	 * the bio_vec maplist from TC< struct se_mem -> task->task_sg ->
+=======
+	 * the bio_vec maplist from task->task_sg ->
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * struct scatterlist memory.  The struct se_task->task_sg[] currently needs
 	 * to be attached to struct bios for submission to Linux/SCSI using
 	 * struct request to struct scsi_device->request_queue.
@@ -1143,34 +1417,55 @@ static int __pscsi_map_task_SG(
 	 * is ported to upstream SCSI passthrough functionality that accepts
 	 * struct scatterlist->page_link or struct page as a paraemeter.
 	 */
+<<<<<<< HEAD
 	DEBUG_PSCSI("PSCSI: nr_pages: %d\n", nr_pages);
+=======
+	pr_debug("PSCSI: nr_pages: %d\n", nr_pages);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	for_each_sg(task_sg, sg, task_sg_num, i) {
 		page = sg_page(sg);
 		off = sg->offset;
 		len = sg->length;
 
+<<<<<<< HEAD
 		DEBUG_PSCSI("PSCSI: i: %d page: %p len: %d off: %d\n", i,
+=======
+		pr_debug("PSCSI: i: %d page: %p len: %d off: %d\n", i,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			page, len, off);
 
 		while (len > 0 && data_len > 0) {
 			bytes = min_t(unsigned int, len, PAGE_SIZE - off);
 			bytes = min(bytes, data_len);
 
+<<<<<<< HEAD
 			if (!(bio)) {
+=======
+			if (!bio) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				nr_vecs = min_t(int, BIO_MAX_PAGES, nr_pages);
 				nr_pages -= nr_vecs;
 				/*
 				 * Calls bio_kmalloc() and sets bio->bi_end_io()
 				 */
+<<<<<<< HEAD
 				bio = pscsi_get_bio(pdv, nr_vecs);
 				if (!(bio))
+=======
+				bio = pscsi_get_bio(nr_vecs);
+				if (!bio)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					goto fail;
 
 				if (rw)
 					bio->bi_rw |= REQ_WRITE;
 
+<<<<<<< HEAD
 				DEBUG_PSCSI("PSCSI: Allocated bio: %p,"
+=======
+				pr_debug("PSCSI: Allocated bio: %p,"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					" dir: %s nr_vecs: %d\n", bio,
 					(rw) ? "rw" : "r", nr_vecs);
 				/*
@@ -1185,7 +1480,11 @@ static int __pscsi_map_task_SG(
 					tbio = tbio->bi_next = bio;
 			}
 
+<<<<<<< HEAD
 			DEBUG_PSCSI("PSCSI: Calling bio_add_pc_page() i: %d"
+=======
+			pr_debug("PSCSI: Calling bio_add_pc_page() i: %d"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				" bio: %p page: %p len: %d off: %d\n", i, bio,
 				page, len, off);
 
@@ -1194,11 +1493,19 @@ static int __pscsi_map_task_SG(
 			if (rc != bytes)
 				goto fail;
 
+<<<<<<< HEAD
 			DEBUG_PSCSI("PSCSI: bio->bi_vcnt: %d nr_vecs: %d\n",
 				bio->bi_vcnt, nr_vecs);
 
 			if (bio->bi_vcnt > nr_vecs) {
 				DEBUG_PSCSI("PSCSI: Reached bio->bi_vcnt max:"
+=======
+			pr_debug("PSCSI: bio->bi_vcnt: %d nr_vecs: %d\n",
+				bio->bi_vcnt, nr_vecs);
+
+			if (bio->bi_vcnt > nr_vecs) {
+				pr_debug("PSCSI: Reached bio->bi_vcnt max:"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					" %d i: %d bio: %p, allocating another"
 					" bio\n", bio->bi_vcnt, i, bio);
 				/*
@@ -1220,15 +1527,24 @@ static int __pscsi_map_task_SG(
 	 * Setup the primary pt->pscsi_req used for non BIDI and BIDI-COMMAND
 	 * primary SCSI WRITE poayload mapped for struct se_task->task_sg[]
 	 */
+<<<<<<< HEAD
 	if (!(bidi_read)) {
+=======
+	if (!bidi_read) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * Starting with v2.6.31, call blk_make_request() passing in *hbio to
 		 * allocate the pSCSI task a struct request.
 		 */
 		pt->pscsi_req = blk_make_request(pdv->pdv_sd->request_queue,
 					hbio, GFP_KERNEL);
+<<<<<<< HEAD
 		if (!(pt->pscsi_req)) {
 			printk(KERN_ERR "pSCSI: blk_make_request() failed\n");
+=======
+		if (!pt->pscsi_req) {
+			pr_err("pSCSI: blk_make_request() failed\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto fail;
 		}
 		/*
@@ -1237,7 +1553,11 @@ static int __pscsi_map_task_SG(
 		 */
 		pscsi_blk_init_request(task, pt, pt->pscsi_req, 0);
 
+<<<<<<< HEAD
 		return task->task_sg_num;
+=======
+		return task->task_sg_nents;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	/*
 	 * Setup the secondary pt->pscsi_req->next_rq used for the extra BIDI-COMMAND
@@ -1245,13 +1565,22 @@ static int __pscsi_map_task_SG(
 	 */
 	pt->pscsi_req->next_rq = blk_make_request(pdv->pdv_sd->request_queue,
 					hbio, GFP_KERNEL);
+<<<<<<< HEAD
 	if (!(pt->pscsi_req->next_rq)) {
 		printk(KERN_ERR "pSCSI: blk_make_request() failed for BIDI\n");
+=======
+	if (!pt->pscsi_req->next_rq) {
+		pr_err("pSCSI: blk_make_request() failed for BIDI\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto fail;
 	}
 	pscsi_blk_init_request(task, pt, pt->pscsi_req->next_rq, 1);
 
+<<<<<<< HEAD
 	return task->task_sg_num;
+=======
+	return task->task_sg_nents;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 fail:
 	while (hbio) {
 		bio = hbio;
@@ -1262,7 +1591,14 @@ fail:
 	return ret;
 }
 
+<<<<<<< HEAD
 static int pscsi_map_task_SG(struct se_task *task)
+=======
+/*
+ * pSCSI maps both ->map_control_SG() and ->map_data_SG() to a single call.
+ */
+static int pscsi_map_SG(struct se_task *task)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int ret;
 
@@ -1270,14 +1606,23 @@ static int pscsi_map_task_SG(struct se_task *task)
 	 * Setup the main struct request for the task->task_sg[] payload
 	 */
 
+<<<<<<< HEAD
 	ret = __pscsi_map_task_SG(task, task->task_sg, task->task_sg_num, 0);
+=======
+	ret = __pscsi_map_SG(task, task->task_sg, task->task_sg_nents, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret >= 0 && task->task_sg_bidi) {
 		/*
 		 * If present, set up the extra BIDI-COMMAND SCSI READ
 		 * struct request and payload.
 		 */
+<<<<<<< HEAD
 		ret = __pscsi_map_task_SG(task, task->task_sg_bidi,
 					task->task_sg_num, 1);
+=======
+		ret = __pscsi_map_SG(task, task->task_sg_bidi,
+					task->task_sg_nents, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (ret < 0)
@@ -1285,6 +1630,7 @@ static int pscsi_map_task_SG(struct se_task *task)
 	return 0;
 }
 
+<<<<<<< HEAD
 /*	pscsi_map_task_non_SG():
  *
  *
@@ -1312,6 +1658,8 @@ static int pscsi_map_task_non_SG(struct se_task *task)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int pscsi_CDB_none(struct se_task *task)
 {
 	return pscsi_blk_get_request(task);
@@ -1383,9 +1731,15 @@ static inline void pscsi_process_SAM_status(
 	struct pscsi_plugin_task *pt)
 {
 	task->task_scsi_status = status_byte(pt->pscsi_result);
+<<<<<<< HEAD
 	if ((task->task_scsi_status)) {
 		task->task_scsi_status <<= 1;
 		printk(KERN_INFO "PSCSI Status Byte exception at task: %p CDB:"
+=======
+	if (task->task_scsi_status) {
+		task->task_scsi_status <<= 1;
+		pr_debug("PSCSI Status Byte exception at task: %p CDB:"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			" 0x%02x Result: 0x%08x\n", task, pt->pscsi_cdb[0],
 			pt->pscsi_result);
 	}
@@ -1395,18 +1749,29 @@ static inline void pscsi_process_SAM_status(
 		transport_complete_task(task, (!task->task_scsi_status));
 		break;
 	default:
+<<<<<<< HEAD
 		printk(KERN_INFO "PSCSI Host Byte exception at task: %p CDB:"
+=======
+		pr_debug("PSCSI Host Byte exception at task: %p CDB:"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			" 0x%02x Result: 0x%08x\n", task, pt->pscsi_cdb[0],
 			pt->pscsi_result);
 		task->task_scsi_status = SAM_STAT_CHECK_CONDITION;
 		task->task_error_status = PYX_TRANSPORT_UNKNOWN_SAM_OPCODE;
+<<<<<<< HEAD
 		TASK_CMD(task)->transport_error_status =
+=======
+		task->task_se_cmd->transport_error_status =
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					PYX_TRANSPORT_UNKNOWN_SAM_OPCODE;
 		transport_complete_task(task, 0);
 		break;
 	}
+<<<<<<< HEAD
 
 	return;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void pscsi_req_done(struct request *req, int uptodate)
@@ -1433,8 +1798,13 @@ static struct se_subsystem_api pscsi_template = {
 	.owner			= THIS_MODULE,
 	.transport_type		= TRANSPORT_PLUGIN_PHBA_PDEV,
 	.cdb_none		= pscsi_CDB_none,
+<<<<<<< HEAD
 	.map_task_non_SG	= pscsi_map_task_non_SG,
 	.map_task_SG		= pscsi_map_task_SG,
+=======
+	.map_control_SG		= pscsi_map_SG,
+	.map_data_SG		= pscsi_map_SG,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.attach_hba		= pscsi_attach_hba,
 	.detach_hba		= pscsi_detach_hba,
 	.pmode_enable_hba	= pscsi_pmode_enable_hba,

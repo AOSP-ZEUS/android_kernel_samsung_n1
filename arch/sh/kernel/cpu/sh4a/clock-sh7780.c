@@ -97,8 +97,11 @@ static struct clk *sh7780_onchip_clocks[] = {
 	&sh7780_shyway_clk,
 };
 
+<<<<<<< HEAD
 #define CLKDEV_CON_ID(_id, _clk) { .con_id = _id, .clk = _clk }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct clk_lookup lookups[] = {
 	/* main clocks */
 	CLKDEV_CON_ID("shyway_clk", &sh7780_shyway_clk),

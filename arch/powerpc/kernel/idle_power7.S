@@ -73,7 +73,10 @@ _GLOBAL(power7_idle)
 	b	.
 
 _GLOBAL(power7_wakeup_loss)
+<<<<<<< HEAD
 	GET_PACA(r13)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ld	r1,PACAR1(r13)
 	REST_NVGPRS(r1)
 	REST_GPR(2, r1)
@@ -87,7 +90,10 @@ _GLOBAL(power7_wakeup_loss)
 	rfid
 
 _GLOBAL(power7_wakeup_noloss)
+<<<<<<< HEAD
 	GET_PACA(r13)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ld	r1,PACAR1(r13)
 	ld	r4,_MSR(r1)
 	ld	r5,_NIP(r1)

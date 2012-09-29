@@ -44,6 +44,10 @@ struct samsung_i2s {
 	 * Also corresponds to clocks of I2SMOD[10]
 	 */
 	const char **src_clk;
+<<<<<<< HEAD
+=======
+	dma_addr_t idma_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /**

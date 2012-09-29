@@ -411,7 +411,11 @@ static void __init omap_sx1_init(void)
 static void __init omap_sx1_init_irq(void)
 {
 	omap1_init_common_hw();
+<<<<<<< HEAD
 	omap_init_irq();
+=======
+	omap1_init_irq();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 /*----------------------------------------*/
 
@@ -426,5 +430,9 @@ MACHINE_START(SX1, "OMAP310 based Siemens SX1")
 	.reserve	= omap_reserve,
 	.init_irq	= omap_sx1_init_irq,
 	.init_machine	= omap_sx1_init,
+<<<<<<< HEAD
 	.timer		= &omap_timer,
+=======
+	.timer		= &omap1_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

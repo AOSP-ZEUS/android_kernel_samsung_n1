@@ -51,6 +51,7 @@
 #include <linux/security.h>
 struct linux_binprm;
 
+<<<<<<< HEAD
 /**
  * tracehook_expect_breakpoints - guess if task memory might be touched
  * @task:		current task, making a new mapping
@@ -66,12 +67,18 @@ static inline int tracehook_expect_breakpoints(struct task_struct *task)
 	return (task_ptrace(task) & PT_PTRACED) != 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * ptrace report for syscall entry and exit looks identical.
  */
 static inline void ptrace_report_syscall(struct pt_regs *regs)
 {
+<<<<<<< HEAD
 	int ptrace = task_ptrace(current);
+=======
+	int ptrace = current->ptrace;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!(ptrace & PT_PTRACED))
 		return;
@@ -145,6 +152,7 @@ static inline void tracehook_report_syscall_exit(struct pt_regs *regs, int step)
 }
 
 /**
+<<<<<<< HEAD
  * tracehook_unsafe_exec - check for exec declared unsafe due to tracing
  * @task:		current task doing exec
  *
@@ -368,6 +376,8 @@ static inline void tracehook_finish_release_task(struct task_struct *task)
 }
 
 /**
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * tracehook_signal_handler - signal handler setup is complete
  * @sig:		number of signal being delivered
  * @info:		siginfo_t of signal being delivered
@@ -390,6 +400,7 @@ static inline void tracehook_signal_handler(int sig, siginfo_t *info,
 		ptrace_notify(SIGTRAP);
 }
 
+<<<<<<< HEAD
 /**
  * tracehook_consider_ignored_signal - suppress short-circuit of ignored signal
  * @task:		task receiving the signal
@@ -535,6 +546,8 @@ static inline void tracehook_report_death(struct task_struct *task,
 {
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef TIF_NOTIFY_RESUME
 /**
  * set_notify_resume - cause tracehook_notify_resume() to be called

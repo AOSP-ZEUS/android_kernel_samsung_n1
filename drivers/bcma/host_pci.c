@@ -65,6 +65,57 @@ static void bcma_host_pci_write32(struct bcma_device *core, u16 offset,
 	iowrite32(value, core->bus->mmio + offset);
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_BCMA_BLOCKIO
+void bcma_host_pci_block_read(struct bcma_device *core, void *buffer,
+			      size_t count, u16 offset, u8 reg_width)
+{
+	void __iomem *addr = core->bus->mmio + offset;
+	if (core->bus->mapped_core != core)
+		bcma_host_pci_switch_core(core);
+	switch (reg_width) {
+	case sizeof(u8):
+		ioread8_rep(addr, buffer, count);
+		break;
+	case sizeof(u16):
+		WARN_ON(count & 1);
+		ioread16_rep(addr, buffer, count >> 1);
+		break;
+	case sizeof(u32):
+		WARN_ON(count & 3);
+		ioread32_rep(addr, buffer, count >> 2);
+		break;
+	default:
+		WARN_ON(1);
+	}
+}
+
+void bcma_host_pci_block_write(struct bcma_device *core, const void *buffer,
+			       size_t count, u16 offset, u8 reg_width)
+{
+	void __iomem *addr = core->bus->mmio + offset;
+	if (core->bus->mapped_core != core)
+		bcma_host_pci_switch_core(core);
+	switch (reg_width) {
+	case sizeof(u8):
+		iowrite8_rep(addr, buffer, count);
+		break;
+	case sizeof(u16):
+		WARN_ON(count & 1);
+		iowrite16_rep(addr, buffer, count >> 1);
+		break;
+	case sizeof(u32):
+		WARN_ON(count & 3);
+		iowrite32_rep(addr, buffer, count >> 2);
+		break;
+	default:
+		WARN_ON(1);
+	}
+}
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static u32 bcma_host_pci_aread32(struct bcma_device *core, u16 offset)
 {
 	if (core->bus->mapped_core != core)
@@ -87,6 +138,13 @@ const struct bcma_host_ops bcma_host_pci_ops = {
 	.write8		= bcma_host_pci_write8,
 	.write16	= bcma_host_pci_write16,
 	.write32	= bcma_host_pci_write32,
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_BCMA_BLOCKIO
+	.block_read	= bcma_host_pci_block_read,
+	.block_write	= bcma_host_pci_block_write,
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.aread32	= bcma_host_pci_aread32,
 	.awrite32	= bcma_host_pci_awrite32,
 };
@@ -175,6 +233,10 @@ static DEFINE_PCI_DEVICE_TABLE(bcma_pci_bridge_tbl) = {
 	{ PCI_DEVICE(PCI_VENDOR_ID_BROADCOM, 0x0576) },
 	{ PCI_DEVICE(PCI_VENDOR_ID_BROADCOM, 0x4331) },
 	{ PCI_DEVICE(PCI_VENDOR_ID_BROADCOM, 0x4353) },
+<<<<<<< HEAD
+=======
+	{ PCI_DEVICE(PCI_VENDOR_ID_BROADCOM, 0x4357) },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ PCI_DEVICE(PCI_VENDOR_ID_BROADCOM, 0x4727) },
 	{ 0, },
 };

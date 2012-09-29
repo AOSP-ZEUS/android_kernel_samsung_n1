@@ -120,7 +120,10 @@ extern void do_dabr(struct pt_regs *regs, unsigned long address,
 		    unsigned long error_code);
 #endif
 extern void print_backtrace(unsigned long *);
+<<<<<<< HEAD
 extern void show_regs(struct pt_regs * regs);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void flush_instruction_cache(void);
 extern void hard_reset_now(void);
 extern void poweroff_now(void);

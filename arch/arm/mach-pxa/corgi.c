@@ -722,6 +722,10 @@ MACHINE_START(CORGI, "SHARP Corgi")
 	.fixup		= fixup_corgi,
 	.map_io		= pxa25x_map_io,
 	.init_irq	= pxa25x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa25x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine	= corgi_init,
 	.timer		= &pxa_timer,
 MACHINE_END
@@ -732,6 +736,10 @@ MACHINE_START(SHEPHERD, "SHARP Shepherd")
 	.fixup		= fixup_corgi,
 	.map_io		= pxa25x_map_io,
 	.init_irq	= pxa25x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa25x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine	= corgi_init,
 	.timer		= &pxa_timer,
 MACHINE_END
@@ -742,6 +750,10 @@ MACHINE_START(HUSKY, "SHARP Husky")
 	.fixup		= fixup_corgi,
 	.map_io		= pxa25x_map_io,
 	.init_irq	= pxa25x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa25x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine	= corgi_init,
 	.timer		= &pxa_timer,
 MACHINE_END

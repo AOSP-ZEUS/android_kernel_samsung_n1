@@ -39,6 +39,15 @@
 /* dma on! */
 #define REAL_DMA
 
+<<<<<<< HEAD
+=======
+#define NDEBUG 0
+
+#define NDEBUG_ABORT		0x00100000
+#define NDEBUG_TAGS		0x00200000
+#define NDEBUG_MERGING		0x00400000
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "scsi.h"
 #include "initio.h"
 #include <scsi/scsi_host.h>
@@ -50,8 +59,11 @@ extern int sun3_map_test(unsigned long, char *);
 /*#define RESET_BOOT */
 #define DRIVER_SETUP
 
+<<<<<<< HEAD
 #define NDEBUG 0
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * BUG can be used to trigger a strange code-size related hang on 2.1 kernels
  */
@@ -137,7 +149,11 @@ static struct Scsi_Host *default_instance;
  *
  */
  
+<<<<<<< HEAD
 static int sun3scsi_detect(struct scsi_host_template * tpnt)
+=======
+static int __init sun3scsi_detect(struct scsi_host_template * tpnt)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	unsigned long ioaddr, irq = 0;
 	static int called = 0;
@@ -283,6 +299,10 @@ int sun3scsi_release (struct Scsi_Host *shpnt)
 
 	iounmap((void *)sun3_scsi_regp);
 
+<<<<<<< HEAD
+=======
+	NCR5380_exit(shpnt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

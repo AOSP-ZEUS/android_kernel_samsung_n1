@@ -5,7 +5,11 @@
 
   Copyright (c) 2005 Martin Langer <martin-langer@gmx.de>,
   Copyright (c) 2005 Stefano Brivio <stefano.brivio@polimi.it>
+<<<<<<< HEAD
   Copyright (c) 2005-2007 Michael Buesch <mb@bu3sch.de>
+=======
+  Copyright (c) 2005-2007 Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
   Copyright (c) 2005 Danny van Dyk <kugelfang@gentoo.org>
   Copyright (c) 2005 Andreas Jaggi <andreas.jaggi@waterwave.ch>
 
@@ -138,7 +142,11 @@ static int b43_register_led(struct b43_wldev *dev, struct b43_led *led,
 	led->led_dev.default_trigger = default_trigger;
 	led->led_dev.brightness_set = b43_led_brightness_set;
 
+<<<<<<< HEAD
 	err = led_classdev_register(dev->sdev->dev, &led->led_dev);
+=======
+	err = led_classdev_register(dev->dev->dev, &led->led_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err) {
 		b43warn(dev->wl, "LEDs: Failed to register %s\n", name);
 		led->wl = NULL;
@@ -215,6 +223,7 @@ static void b43_led_get_sprominfo(struct b43_wldev *dev,
 				  enum b43_led_behaviour *behaviour,
 				  bool *activelow)
 {
+<<<<<<< HEAD
 	struct ssb_bus *bus = dev->sdev->bus;
 	u8 sprom[4];
 
@@ -222,6 +231,14 @@ static void b43_led_get_sprominfo(struct b43_wldev *dev,
 	sprom[1] = bus->sprom.gpio1;
 	sprom[2] = bus->sprom.gpio2;
 	sprom[3] = bus->sprom.gpio3;
+=======
+	u8 sprom[4];
+
+	sprom[0] = dev->dev->bus_sprom->gpio0;
+	sprom[1] = dev->dev->bus_sprom->gpio1;
+	sprom[2] = dev->dev->bus_sprom->gpio2;
+	sprom[3] = dev->dev->bus_sprom->gpio3;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (sprom[led_index] == 0xFF) {
 		/* There is no LED information in the SPROM
@@ -231,12 +248,20 @@ static void b43_led_get_sprominfo(struct b43_wldev *dev,
 		case 0:
 			*behaviour = B43_LED_ACTIVITY;
 			*activelow = 1;
+<<<<<<< HEAD
 			if (bus->boardinfo.vendor == PCI_VENDOR_ID_COMPAQ)
+=======
+			if (dev->dev->board_vendor == PCI_VENDOR_ID_COMPAQ)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				*behaviour = B43_LED_RADIO_ALL;
 			break;
 		case 1:
 			*behaviour = B43_LED_RADIO_B;
+<<<<<<< HEAD
 			if (bus->boardinfo.vendor == PCI_VENDOR_ID_ASUSTEK)
+=======
+			if (dev->dev->board_vendor == PCI_VENDOR_ID_ASUSTEK)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				*behaviour = B43_LED_ASSOC;
 			break;
 		case 2:

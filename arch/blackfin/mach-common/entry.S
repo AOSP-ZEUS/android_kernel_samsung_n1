@@ -1543,7 +1543,11 @@ ENTRY(_sys_call_table)
 	.long _sys_ni_syscall	/* for vm86 */
 	.long _sys_ni_syscall	/* old "query_module" */
 	.long _sys_ni_syscall	/* sys_poll */
+<<<<<<< HEAD
 	.long _sys_nfsservctl
+=======
+	.long _sys_ni_syscall   /* old nfsservctl */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.long _sys_setresgid	/* setresgid16 */	/* 170 */
 	.long _sys_getresgid	/* getresgid16 */
 	.long _sys_prctl

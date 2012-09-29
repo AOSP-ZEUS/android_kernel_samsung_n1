@@ -383,6 +383,11 @@ static int w8001_setup(struct w8001 *w8001)
 	dev->evbit[0] = BIT_MASK(EV_KEY) | BIT_MASK(EV_ABS);
 	strlcat(w8001->name, "Wacom Serial", sizeof(w8001->name));
 
+<<<<<<< HEAD
+=======
+	__set_bit(INPUT_PROP_DIRECT, dev->propbit);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* penabled? */
 	error = w8001_command(w8001, W8001_CMD_QUERY, true);
 	if (!error) {

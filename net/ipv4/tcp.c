@@ -864,7 +864,11 @@ wait_for_memory:
 	}
 
 out:
+<<<<<<< HEAD
 	if (copied && !(flags & MSG_SENDPAGE_NOTLAST))
+=======
+	if (copied)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tcp_push(sk, flags, mss_now, tp->nonagle);
 	return copied;
 

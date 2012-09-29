@@ -892,7 +892,11 @@ static int m32r_sio_request_port(struct uart_port *port)
 	 * If we have a mapbase, then request that as well.
 	 */
 	if (ret == 0 && up->port.flags & UPF_IOREMAP) {
+<<<<<<< HEAD
 		int size = res->end - res->start + 1;
+=======
+		int size = resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		up->port.membase = ioremap(up->port.mapbase, size);
 		if (!up->port.membase)

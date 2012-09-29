@@ -17,6 +17,11 @@
  * Jan 20, 1998        Ben Greear     Initial Version
  *****************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/errno.h>
 #include <linux/kernel.h>
@@ -155,7 +160,11 @@ int __net_init vlan_proc_init(struct net *net)
 	return 0;
 
 err:
+<<<<<<< HEAD
 	pr_err("%s: can't create entry in proc filesystem!\n", __func__);
+=======
+	pr_err("can't create entry in proc filesystem!\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	vlan_proc_cleanup(net);
 	return -ENOBUFS;
 }
@@ -229,7 +238,11 @@ static void *vlan_seq_next(struct seq_file *seq, void *v, loff_t *pos)
 
 	++*pos;
 
+<<<<<<< HEAD
 	dev = (struct net_device *)v;
+=======
+	dev = v;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (v == SEQ_START_TOKEN)
 		dev = net_device_entry(&net->dev_base_head);
 

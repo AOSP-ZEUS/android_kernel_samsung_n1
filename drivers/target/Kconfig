@@ -31,5 +31,9 @@ config TCM_PSCSI
 
 source "drivers/target/loopback/Kconfig"
 source "drivers/target/tcm_fc/Kconfig"
+<<<<<<< HEAD
+=======
+source "drivers/target/iscsi/Kconfig"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 endif

@@ -32,11 +32,19 @@ int frag_reassemble_skb(struct sk_buff *skb, struct bat_priv *bat_priv,
 void frag_list_free(struct list_head *head);
 int unicast_send_skb(struct sk_buff *skb, struct bat_priv *bat_priv);
 int frag_send_skb(struct sk_buff *skb, struct bat_priv *bat_priv,
+<<<<<<< HEAD
 		  struct hard_iface *hard_iface, uint8_t dstaddr[]);
 
 static inline int frag_can_reassemble(struct sk_buff *skb, int mtu)
 {
 	struct unicast_frag_packet *unicast_packet;
+=======
+		  struct hard_iface *hard_iface, const uint8_t dstaddr[]);
+
+static inline int frag_can_reassemble(const struct sk_buff *skb, int mtu)
+{
+	const struct unicast_frag_packet *unicast_packet;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int uneven_correction = 0;
 	unsigned int merged_size;
 
@@ -49,7 +57,11 @@ static inline int frag_can_reassemble(struct sk_buff *skb, int mtu)
 			uneven_correction = -1;
 	}
 
+<<<<<<< HEAD
 	merged_size = (skb->len - sizeof(struct unicast_frag_packet)) * 2;
+=======
+	merged_size = (skb->len - sizeof(*unicast_packet)) * 2;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	merged_size += sizeof(struct unicast_packet) + uneven_correction;
 
 	return merged_size <= mtu;

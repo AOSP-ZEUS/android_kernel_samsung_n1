@@ -51,16 +51,27 @@ static int ltq_wdt_ok_to_close;
 static void
 ltq_wdt_enable(void)
 {
+<<<<<<< HEAD
 	ltq_wdt_timeout = ltq_wdt_timeout *
 			(ltq_io_region_clk_rate / LTQ_WDT_DIVIDER) + 0x1000;
 	if (ltq_wdt_timeout > LTQ_MAX_TIMEOUT)
 		ltq_wdt_timeout = LTQ_MAX_TIMEOUT;
+=======
+	unsigned long int timeout = ltq_wdt_timeout *
+			(ltq_io_region_clk_rate / LTQ_WDT_DIVIDER) + 0x1000;
+	if (timeout > LTQ_MAX_TIMEOUT)
+		timeout = LTQ_MAX_TIMEOUT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* write the first password magic */
 	ltq_w32(LTQ_WDT_PW1, ltq_wdt_membase + LTQ_WDT_CR);
 	/* write the second magic plus the configuration and new timeout */
 	ltq_w32(LTQ_WDT_SR_EN | LTQ_WDT_SR_PWD | LTQ_WDT_SR_CLKDIV |
+<<<<<<< HEAD
 		LTQ_WDT_PW2 | ltq_wdt_timeout, ltq_wdt_membase + LTQ_WDT_CR);
+=======
+		LTQ_WDT_PW2 | timeout, ltq_wdt_membase + LTQ_WDT_CR);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void

@@ -257,6 +257,10 @@ static int ce4100_conf_read(unsigned int seg, unsigned int bus,
 {
 	int i;
 
+<<<<<<< HEAD
+=======
+	WARN_ON(seg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (bus == 1) {
 		for (i = 0; i < ARRAY_SIZE(bus1_fixups); i++) {
 			if (bus1_fixups[i].dev_func == devfn &&
@@ -282,6 +286,10 @@ static int ce4100_conf_write(unsigned int seg, unsigned int bus,
 {
 	int i;
 
+<<<<<<< HEAD
+=======
+	WARN_ON(seg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (bus == 1) {
 		for (i = 0; i < ARRAY_SIZE(bus1_fixups); i++) {
 			if (bus1_fixups[i].dev_func == devfn &&

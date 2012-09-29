@@ -2103,6 +2103,7 @@ static void hp100_set_multicast_list(struct net_device *dev)
 #endif
 			netdev_for_each_mc_addr(ha, dev) {
 				addrs = ha->addr;
+<<<<<<< HEAD
 				if ((*addrs & 0x01) == 0x01) {	/* multicast address? */
 #ifdef HP100_DEBUG
 					printk("hp100: %s: multicast = %pM, ",
@@ -2117,6 +2118,20 @@ static void hp100_set_multicast_list(struct net_device *dev)
 #endif
 					lp->hash_bytes[idx >> 3] |= (1 << (idx & 7));
 				}
+=======
+#ifdef HP100_DEBUG
+				printk("hp100: %s: multicast = %pM, ",
+					     dev->name, addrs);
+#endif
+				for (i = idx = 0; i < 6; i++) {
+					idx ^= *addrs++ & 0x3f;
+					printk(":%02x:", idx);
+				}
+#ifdef HP100_DEBUG
+				printk("idx = %i\n", idx);
+#endif
+				lp->hash_bytes[idx >> 3] |= (1 << (idx & 7));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 		}
 #else

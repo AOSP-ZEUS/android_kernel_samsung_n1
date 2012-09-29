@@ -30,12 +30,15 @@
 #define VERSATILE_PCI_VIRT_BASE		(void __iomem *)0xe8000000ul
 #define VERSATILE_PCI_CFG_VIRT_BASE	(void __iomem *)0xe9000000ul
 
+<<<<<<< HEAD
 /* CIK guesswork */
 #define PCIBIOS_MIN_IO			0x44000000
 #define PCIBIOS_MIN_MEM			0x50000000
 
 #define pcibios_assign_all_busses()     1
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* macro to get at IO space when running virtually */
 #define IO_ADDRESS(x)		(((x) & 0x0fffffff) + (((x) >> 4) & 0x0f000000) + 0xf0000000)
 

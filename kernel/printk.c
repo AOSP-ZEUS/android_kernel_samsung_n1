@@ -43,6 +43,12 @@
 #include <linux/rculist.h>
 
 #include <asm/uaccess.h>
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+#include <linux/io.h>
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Architectures can override it:
@@ -172,6 +178,29 @@ void log_buf_kexec_setup(void)
 }
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+/*{{Mark for GetLog -1/2*/
+struct struct_kernel_log_mark {
+	u32 special_mark_1;
+	u32 special_mark_2;
+	u32 special_mark_3;
+	u32 special_mark_4;
+	void *p__log_buf;
+};
+
+static struct struct_kernel_log_mark kernel_log_mark = {
+	.special_mark_1 = (('*' << 24) | ('^' << 16) | ('^' << 8) | ('*' << 0)),
+	.special_mark_2 = (('I' << 24) | ('n' << 16) | ('f' << 8) | ('o' << 0)),
+	.special_mark_3 = (('H' << 24) | ('e' << 16) | ('r' << 8) | ('e' << 0)),
+	.special_mark_4 = (('k' << 24) | ('l' << 16) | ('o' << 8) | ('g' << 0)),
+	.p__log_buf = __log_buf,
+};
+/*}} Mark for GetLog -1/2*/
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* requested log_buf_len from kernel cmdline */
 static unsigned long __initdata new_log_buf_len;
 
@@ -185,6 +214,15 @@ static int __init log_buf_len_setup(char *str)
 	if (size > log_buf_len)
 		new_log_buf_len = size;
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+	/*{{Mark for GetLog -2/2*/
+	kernel_log_mark.p__log_buf = __log_buf;
+	/*}} Mark for GetLog -2/2*/
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 early_param("log_buf_len", log_buf_len_setup);
@@ -835,7 +873,11 @@ static inline int can_use_console(unsigned int cpu)
 static int console_trylock_for_printk(unsigned int cpu)
 	__releases(&logbuf_lock)
 {
+<<<<<<< HEAD
 	int retval = 0;
+=======
+	int retval = 0, wake = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (console_trylock()) {
 		retval = 1;
@@ -848,12 +890,21 @@ static int console_trylock_for_printk(unsigned int cpu)
 		 */
 		if (!can_use_console(cpu)) {
 			console_locked = 0;
+<<<<<<< HEAD
 			up(&console_sem);
+=======
+			wake = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			retval = 0;
 		}
 	}
 	printk_cpu = UINT_MAX;
 	spin_unlock(&logbuf_lock);
+<<<<<<< HEAD
+=======
+	if (wake)
+		up(&console_sem);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return retval;
 }
 static const char recursion_bug_msg [] =
@@ -1298,7 +1349,11 @@ void console_unlock(void)
 {
 	unsigned long flags;
 	unsigned _con_start, _log_end;
+<<<<<<< HEAD
 	unsigned wake_klogd = 0;
+=======
+	unsigned wake_klogd = 0, retry = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (console_suspended) {
 		up(&console_sem);
@@ -1307,6 +1362,10 @@ void console_unlock(void)
 
 	console_may_schedule = 0;
 
+<<<<<<< HEAD
+=======
+again:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for ( ; ; ) {
 		spin_lock_irqsave(&logbuf_lock, flags);
 		wake_klogd |= log_start - log_end;
@@ -1327,8 +1386,28 @@ void console_unlock(void)
 	if (unlikely(exclusive_console))
 		exclusive_console = NULL;
 
+<<<<<<< HEAD
 	up(&console_sem);
 	spin_unlock_irqrestore(&logbuf_lock, flags);
+=======
+	spin_unlock(&logbuf_lock);
+
+	up(&console_sem);
+
+	/*
+	 * Someone could have filled up the buffer again, so re-check if there's
+	 * something to flush. In case we cannot trylock the console_sem again,
+	 * there's a new owner and the console_unlock() from them will do the
+	 * flush, no worries.
+	 */
+	spin_lock(&logbuf_lock);
+	if (con_start != log_end)
+		retry = 1;
+	spin_unlock_irqrestore(&logbuf_lock, flags);
+	if (retry && console_trylock())
+		goto again;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (wake_klogd)
 		wake_up_klogd();
 }

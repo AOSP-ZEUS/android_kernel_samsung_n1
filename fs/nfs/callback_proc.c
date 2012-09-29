@@ -111,6 +111,10 @@ int nfs4_validate_delegation_stateid(struct nfs_delegation *delegation, const nf
 static u32 initiate_file_draining(struct nfs_client *clp,
 				  struct cb_layoutrecallargs *args)
 {
+<<<<<<< HEAD
+=======
+	struct nfs_server *server;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct pnfs_layout_hdr *lo;
 	struct inode *ino;
 	bool found = false;
@@ -118,6 +122,7 @@ static u32 initiate_file_draining(struct nfs_client *clp,
 	LIST_HEAD(free_me_list);
 
 	spin_lock(&clp->cl_lock);
+<<<<<<< HEAD
 	list_for_each_entry(lo, &clp->cl_layouts, plh_layouts) {
 		if (nfs_compare_fh(&args->cbl_fh,
 				   &NFS_I(lo->plh_inode)->fh))
@@ -133,6 +138,30 @@ static u32 initiate_file_draining(struct nfs_client *clp,
 		break;
 	}
 	spin_unlock(&clp->cl_lock);
+=======
+	rcu_read_lock();
+	list_for_each_entry_rcu(server, &clp->cl_superblocks, client_link) {
+		list_for_each_entry(lo, &server->layouts, plh_layouts) {
+			if (nfs_compare_fh(&args->cbl_fh,
+					   &NFS_I(lo->plh_inode)->fh))
+				continue;
+			ino = igrab(lo->plh_inode);
+			if (!ino)
+				continue;
+			found = true;
+			/* Without this, layout can be freed as soon
+			 * as we release cl_lock.
+			 */
+			get_layout_hdr(lo);
+			break;
+		}
+		if (found)
+			break;
+	}
+	rcu_read_unlock();
+	spin_unlock(&clp->cl_lock);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!found)
 		return NFS4ERR_NOMATCHING_LAYOUT;
 
@@ -154,6 +183,10 @@ static u32 initiate_file_draining(struct nfs_client *clp,
 static u32 initiate_bulk_draining(struct nfs_client *clp,
 				  struct cb_layoutrecallargs *args)
 {
+<<<<<<< HEAD
+=======
+	struct nfs_server *server;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct pnfs_layout_hdr *lo;
 	struct inode *ino;
 	u32 rv = NFS4ERR_NOMATCHING_LAYOUT;
@@ -167,6 +200,7 @@ static u32 initiate_bulk_draining(struct nfs_client *clp,
 	};
 
 	spin_lock(&clp->cl_lock);
+<<<<<<< HEAD
 	list_for_each_entry(lo, &clp->cl_layouts, plh_layouts) {
 		if ((args->cbl_recall_type == RETURN_FSID) &&
 		    memcmp(&NFS_SERVER(lo->plh_inode)->fsid,
@@ -179,6 +213,26 @@ static u32 initiate_bulk_draining(struct nfs_client *clp,
 		list_add(&lo->plh_bulk_recall, &recall_list);
 	}
 	spin_unlock(&clp->cl_lock);
+=======
+	rcu_read_lock();
+	list_for_each_entry_rcu(server, &clp->cl_superblocks, client_link) {
+		if ((args->cbl_recall_type == RETURN_FSID) &&
+		    memcmp(&server->fsid, &args->cbl_fsid,
+			   sizeof(struct nfs_fsid)))
+			continue;
+
+		list_for_each_entry(lo, &server->layouts, plh_layouts) {
+			if (!igrab(lo->plh_inode))
+				continue;
+			get_layout_hdr(lo);
+			BUG_ON(!list_empty(&lo->plh_bulk_recall));
+			list_add(&lo->plh_bulk_recall, &recall_list);
+		}
+	}
+	rcu_read_unlock();
+	spin_unlock(&clp->cl_lock);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	list_for_each_entry_safe(lo, tmp,
 				 &recall_list, plh_bulk_recall) {
 		ino = lo->plh_inode;

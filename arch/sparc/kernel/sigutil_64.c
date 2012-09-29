@@ -14,7 +14,11 @@ int save_fpu_state(struct pt_regs *regs, __siginfo_fpu_t __user *fpu)
 	unsigned long *fpregs = current_thread_info()->fpregs;
 	unsigned long fprs;
 	int err = 0;
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	fprs = current_thread_info()->fpsaved[0];
 	if (fprs & FPRS_DL)
 		err |= copy_to_user(&fpu->si_float_regs[0], fpregs,

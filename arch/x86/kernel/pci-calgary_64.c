@@ -1553,7 +1553,11 @@ static void __init calgary_fixup_one_tce_space(struct pci_dev *dev)
 			continue;
 
 		/* cover the whole region */
+<<<<<<< HEAD
 		npages = (r->end - r->start) >> PAGE_SHIFT;
+=======
+		npages = resource_size(r) >> PAGE_SHIFT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		npages++;
 
 		iommu_range_reserve(tbl, r->start, npages);

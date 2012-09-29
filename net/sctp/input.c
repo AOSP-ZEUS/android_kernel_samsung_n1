@@ -510,8 +510,12 @@ struct sock *sctp_err_lookup(int family, struct sk_buff *skb,
 	 * discard the packet.
 	 */
 	if (vtag == 0) {
+<<<<<<< HEAD
 		chunkhdr = (struct sctp_init_chunk *)((void *)sctphdr
 				+ sizeof(struct sctphdr));
+=======
+		chunkhdr = (void *)sctphdr + sizeof(struct sctphdr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (len < sizeof(struct sctphdr) + sizeof(sctp_chunkhdr_t)
 			  + sizeof(__be32) ||
 		    chunkhdr->chunk_hdr.type != SCTP_CID_INIT ||

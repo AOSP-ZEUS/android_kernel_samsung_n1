@@ -14,7 +14,11 @@ Why:	/proc/<pid>/oom_adj allows userspace to influence the oom killer's
 
 	A much more powerful interface, /proc/<pid>/oom_score_adj, was
 	introduced with the oom killer rewrite that allows users to increase or
+<<<<<<< HEAD
 	decrease the badness() score linearly.  This interface will replace
+=======
+	decrease the badness score linearly.  This interface will replace
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/proc/<pid>/oom_adj.
 
 	A warning will be emitted to the kernel log if an application uses this

@@ -311,7 +311,11 @@ static int __devinit snd_cs5535audio_create(struct snd_card *card,
 	cs5535au->port = pci_resource_start(pci, 0);
 
 	if (request_irq(pci->irq, snd_cs5535audio_interrupt,
+<<<<<<< HEAD
 			IRQF_SHARED, "CS5535 Audio", cs5535au)) {
+=======
+			IRQF_SHARED, KBUILD_MODNAME, cs5535au)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		snd_printk(KERN_ERR "unable to grab IRQ %d\n", pci->irq);
 		err = -EBUSY;
 		goto sndfail;
@@ -395,7 +399,11 @@ static void __devexit snd_cs5535audio_remove(struct pci_dev *pci)
 }
 
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name = DRIVER_NAME,
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_cs5535audio_ids,
 	.probe = snd_cs5535audio_probe,
 	.remove = __devexit_p(snd_cs5535audio_remove),

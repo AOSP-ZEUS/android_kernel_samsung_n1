@@ -13,6 +13,10 @@ config ARCH_OMAP1
 	bool "TI OMAP1"
 	select CLKDEV_LOOKUP
 	select CLKSRC_MMIO
+<<<<<<< HEAD
+=======
+	select GENERIC_IRQ_CHIP
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  "Systems based on omap7xx, omap15xx or omap16xx"
 
@@ -131,6 +135,7 @@ config OMAP_MBOX_KFIFO_SIZE
 	  This can also be changed at runtime (via the mbox_kfifo_size
 	  module parameter).
 
+<<<<<<< HEAD
 config OMAP_IOMMU
 	tristate
 
@@ -143,6 +148,8 @@ config OMAP_IOMMU_DEBUG
 
          Say N unless you know you need this.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config OMAP_IOMMU_IVA2
 	bool
 
@@ -211,9 +218,12 @@ choice
 	depends on ARCH_OMAP
 	default OMAP_PM_NOOP
 
+<<<<<<< HEAD
 config OMAP_PM_NONE
 	bool "No PM layer"
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config OMAP_PM_NOOP
 	bool "No-op/debug PM layer"
 

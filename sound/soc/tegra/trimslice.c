@@ -163,7 +163,11 @@ static __devinit int tegra_snd_trimslice_probe(struct platform_device *pdev)
 		return -ENOMEM;
 	}
 
+<<<<<<< HEAD
 	ret = tegra_asoc_utils_init(&trimslice->util_data, &pdev->dev);
+=======
+	ret = tegra_asoc_utils_init(&trimslice->util_data, &pdev->dev, card);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto err_free_trimslice;
 

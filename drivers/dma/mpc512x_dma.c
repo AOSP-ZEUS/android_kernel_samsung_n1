@@ -44,6 +44,11 @@
 
 #include <linux/random.h>
 
+<<<<<<< HEAD
+=======
+#include "dmaengine.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Number of DMA Transfer descriptors allocated per channel */
 #define MPC_DMA_DESCRIPTORS	64
 
@@ -188,7 +193,10 @@ struct mpc_dma_chan {
 	struct list_head		completed;
 	struct mpc_dma_tcd		*tcd;
 	dma_addr_t			tcd_paddr;
+<<<<<<< HEAD
 	dma_cookie_t			completed_cookie;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Lock for this structure */
 	spinlock_t			lock;
@@ -365,7 +373,11 @@ static void mpc_dma_process_completed(struct mpc_dma *mdma)
 		/* Free descriptors */
 		spin_lock_irqsave(&mchan->lock, flags);
 		list_splice_tail_init(&list, &mchan->free);
+<<<<<<< HEAD
 		mchan->completed_cookie = last_cookie;
+=======
+		mchan->chan.completed_cookie = last_cookie;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_unlock_irqrestore(&mchan->lock, flags);
 	}
 }
@@ -438,6 +450,7 @@ static dma_cookie_t mpc_dma_tx_submit(struct dma_async_tx_descriptor *txd)
 		mpc_dma_execute(mchan);
 
 	/* Update cookie */
+<<<<<<< HEAD
 	cookie = mchan->chan.cookie + 1;
 	if (cookie <= 0)
 		cookie = 1;
@@ -445,6 +458,9 @@ static dma_cookie_t mpc_dma_tx_submit(struct dma_async_tx_descriptor *txd)
 	mchan->chan.cookie = cookie;
 	mdesc->desc.cookie = cookie;
 
+=======
+	cookie = dma_cookie_assign(txd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock_irqrestore(&mchan->lock, flags);
 
 	return cookie;
@@ -562,6 +578,7 @@ mpc_dma_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
 	       struct dma_tx_state *txstate)
 {
 	struct mpc_dma_chan *mchan = dma_chan_to_mpc_dma_chan(chan);
+<<<<<<< HEAD
 	unsigned long flags;
 	dma_cookie_t last_used;
 	dma_cookie_t last_complete;
@@ -573,6 +590,16 @@ mpc_dma_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
 
 	dma_set_tx_state(txstate, last_complete, last_used, 0);
 	return dma_async_is_complete(cookie, last_complete, last_used);
+=======
+	enum dma_status ret;
+	unsigned long flags;
+
+	spin_lock_irqsave(&mchan->lock, flags);
+	ret = dma_cookie_status(chan, cookie, txstate);
+	spin_unlock_irqrestore(&mchan->lock, flags);
+
+	return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Prepare descriptor for memory to memory copy */
@@ -742,8 +769,12 @@ static int __devinit mpc_dma_probe(struct platform_device *op)
 
 		mchan->chan.device = dma;
 		mchan->chan.chan_id = i;
+<<<<<<< HEAD
 		mchan->chan.cookie = 1;
 		mchan->completed_cookie = mchan->chan.cookie;
+=======
+		dma_cookie_init(&mchan->chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		INIT_LIST_HEAD(&mchan->free);
 		INIT_LIST_HEAD(&mchan->prepared);

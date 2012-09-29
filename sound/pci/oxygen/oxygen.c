@@ -859,7 +859,11 @@ static int __devinit generic_oxygen_probe(struct pci_dev *pci,
 }
 
 static struct pci_driver oxygen_driver = {
+<<<<<<< HEAD
 	.name = "CMI8788",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = oxygen_ids,
 	.probe = generic_oxygen_probe,
 	.remove = __devexit_p(oxygen_pci_remove),

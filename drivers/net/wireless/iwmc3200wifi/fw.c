@@ -187,7 +187,11 @@ static int iwm_load_img(struct iwm_priv *iwm, const char *img_name)
 		if (ret < 0)
 			goto err_release_fw;
 		opcode_idx++;
+<<<<<<< HEAD
 	};
+=======
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Read firmware version */
 	fw_offset = iwm_fw_op_offset(iwm, fw, IWM_HDR_REC_OP_SW_VER, 0);

@@ -27,6 +27,24 @@
 
 asmlinkage void preempt_schedule(void);
 
+<<<<<<< HEAD
+=======
+#define preempt_check_resched() \
+do { \
+	if (unlikely(test_thread_flag(TIF_NEED_RESCHED))) \
+		preempt_schedule(); \
+} while (0)
+
+#else /* !CONFIG_PREEMPT */
+
+#define preempt_check_resched()		do { } while (0)
+
+#endif /* CONFIG_PREEMPT */
+
+
+#ifdef CONFIG_PREEMPT_COUNT
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define preempt_disable() \
 do { \
 	inc_preempt_count(); \
@@ -39,12 +57,15 @@ do { \
 	dec_preempt_count(); \
 } while (0)
 
+<<<<<<< HEAD
 #define preempt_check_resched() \
 do { \
 	if (unlikely(test_thread_flag(TIF_NEED_RESCHED))) \
 		preempt_schedule(); \
 } while (0)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define preempt_enable() \
 do { \
 	preempt_enable_no_resched(); \
@@ -80,18 +101,29 @@ do { \
 	preempt_check_resched(); \
 } while (0)
 
+<<<<<<< HEAD
 #else
+=======
+#else /* !CONFIG_PREEMPT_COUNT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define preempt_disable()		do { } while (0)
 #define preempt_enable_no_resched()	do { } while (0)
 #define preempt_enable()		do { } while (0)
+<<<<<<< HEAD
 #define preempt_check_resched()		do { } while (0)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define preempt_disable_notrace()		do { } while (0)
 #define preempt_enable_no_resched_notrace()	do { } while (0)
 #define preempt_enable_notrace()		do { } while (0)
 
+<<<<<<< HEAD
 #endif
+=======
+#endif /* CONFIG_PREEMPT_COUNT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_PREEMPT_NOTIFIERS
 

@@ -600,7 +600,11 @@ static void ocfs2_bg_alloc_cleanup(handle_t *handle,
 		ret = ocfs2_free_clusters(handle, cluster_ac->ac_inode,
 					  cluster_ac->ac_bh,
 					  le64_to_cpu(rec->e_blkno),
+<<<<<<< HEAD
 					  le16_to_cpu(rec->e_leaf_clusters));
+=======
+					  le32_to_cpu(rec->e_leaf_clusters));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret)
 			mlog_errno(ret);
 		/* Try all the clusters to free */
@@ -1628,7 +1632,11 @@ static int ocfs2_bg_discontig_fix_by_rec(struct ocfs2_suballoc_result *res,
 {
 	unsigned int bpc = le16_to_cpu(cl->cl_bpc);
 	unsigned int bitoff = le32_to_cpu(rec->e_cpos) * bpc;
+<<<<<<< HEAD
 	unsigned int bitcount = le16_to_cpu(rec->e_leaf_clusters) * bpc;
+=======
+	unsigned int bitcount = le32_to_cpu(rec->e_leaf_clusters) * bpc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (res->sr_bit_offset < bitoff)
 		return 0;

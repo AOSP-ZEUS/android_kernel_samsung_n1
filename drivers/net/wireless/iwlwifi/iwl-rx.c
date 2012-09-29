@@ -41,6 +41,7 @@
 #include "iwl-agn-calib.h"
 #include "iwl-agn.h"
 
+<<<<<<< HEAD
 /******************************************************************************
  *
  * RX path functions
@@ -218,6 +219,8 @@ err_rb:
 err_bd:
 	return -ENOMEM;
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /******************************************************************************
  *
@@ -347,7 +350,11 @@ static bool iwl_good_ack_health(struct iwl_priv *priv,
 	int actual_delta, expected_delta, ba_timeout_delta;
 	struct statistics_tx *old;
 
+<<<<<<< HEAD
 	if (priv->_agn.agg_tids_count)
+=======
+	if (priv->agg_tids_count)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return true;
 
 	old = &priv->statistics.tx;
@@ -665,8 +672,13 @@ static void iwl_rx_statistics(struct iwl_priv *priv,
 		iwl_rx_calc_noise(priv);
 		queue_work(priv->workqueue, &priv->run_time_calib_work);
 	}
+<<<<<<< HEAD
 	if (priv->cfg->ops->lib->temp_ops.temperature && change)
 		priv->cfg->ops->lib->temp_ops.temperature(priv);
+=======
+	if (priv->cfg->lib->temperature && change)
+		priv->cfg->lib->temperature(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void iwl_rx_reply_statistics(struct iwl_priv *priv,
@@ -769,8 +781,13 @@ static void iwl_rx_reply_rx_phy(struct iwl_priv *priv,
 {
 	struct iwl_rx_packet *pkt = rxb_addr(rxb);
 
+<<<<<<< HEAD
 	priv->_agn.last_phy_res_valid = true;
 	memcpy(&priv->_agn.last_phy_res, pkt->u.raw,
+=======
+	priv->last_phy_res_valid = true;
+	memcpy(&priv->last_phy_res, pkt->u.raw,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	       sizeof(struct iwl_rx_phy_res));
 }
 
@@ -943,6 +960,50 @@ static u32 iwl_translate_rx_status(struct iwl_priv *priv, u32 decrypt_in)
 	return decrypt_out;
 }
 
+<<<<<<< HEAD
+=======
+/* Calc max signal level (dBm) among 3 possible receivers */
+static int iwlagn_calc_rssi(struct iwl_priv *priv,
+			     struct iwl_rx_phy_res *rx_resp)
+{
+	/* data from PHY/DSP regarding signal strength, etc.,
+	 *   contents are always there, not configurable by host
+	 */
+	struct iwlagn_non_cfg_phy *ncphy =
+		(struct iwlagn_non_cfg_phy *)rx_resp->non_cfg_phy_buf;
+	u32 val, rssi_a, rssi_b, rssi_c, max_rssi;
+	u8 agc;
+
+	val  = le32_to_cpu(ncphy->non_cfg_phy[IWLAGN_RX_RES_AGC_IDX]);
+	agc = (val & IWLAGN_OFDM_AGC_MSK) >> IWLAGN_OFDM_AGC_BIT_POS;
+
+	/* Find max rssi among 3 possible receivers.
+	 * These values are measured by the digital signal processor (DSP).
+	 * They should stay fairly constant even as the signal strength varies,
+	 *   if the radio's automatic gain control (AGC) is working right.
+	 * AGC value (see below) will provide the "interesting" info.
+	 */
+	val = le32_to_cpu(ncphy->non_cfg_phy[IWLAGN_RX_RES_RSSI_AB_IDX]);
+	rssi_a = (val & IWLAGN_OFDM_RSSI_INBAND_A_BITMSK) >>
+		IWLAGN_OFDM_RSSI_A_BIT_POS;
+	rssi_b = (val & IWLAGN_OFDM_RSSI_INBAND_B_BITMSK) >>
+		IWLAGN_OFDM_RSSI_B_BIT_POS;
+	val = le32_to_cpu(ncphy->non_cfg_phy[IWLAGN_RX_RES_RSSI_C_IDX]);
+	rssi_c = (val & IWLAGN_OFDM_RSSI_INBAND_C_BITMSK) >>
+		IWLAGN_OFDM_RSSI_C_BIT_POS;
+
+	max_rssi = max_t(u32, rssi_a, rssi_b);
+	max_rssi = max_t(u32, max_rssi, rssi_c);
+
+	IWL_DEBUG_STATS(priv, "Rssi In A %d B %d C %d Max %d AGC dB %d\n",
+		rssi_a, rssi_b, rssi_c, max_rssi, agc);
+
+	/* dBm = max_rssi dB - agc dB - constant.
+	 * Higher AGC (higher radio gain) means lower signal. */
+	return max_rssi - agc - IWLAGN_RSSI_OFFSET;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Called for REPLY_RX (legacy ABG frames), or
  * REPLY_RX_MPDU_CMD (HT high-throughput N frames). */
 static void iwl_rx_reply_rx(struct iwl_priv *priv,
@@ -977,11 +1038,19 @@ static void iwl_rx_reply_rx(struct iwl_priv *priv,
 				phy_res->cfg_phy_cnt + len);
 		ampdu_status = le32_to_cpu(rx_pkt_status);
 	} else {
+<<<<<<< HEAD
 		if (!priv->_agn.last_phy_res_valid) {
 			IWL_ERR(priv, "MPDU frame without cached PHY data\n");
 			return;
 		}
 		phy_res = &priv->_agn.last_phy_res;
+=======
+		if (!priv->last_phy_res_valid) {
+			IWL_ERR(priv, "MPDU frame without cached PHY data\n");
+			return;
+		}
+		phy_res = &priv->last_phy_res;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		amsdu = (struct iwl_rx_mpdu_res_start *)pkt->u.raw;
 		header = (struct ieee80211_hdr *)(pkt->u.raw + sizeof(*amsdu));
 		len = le16_to_cpu(amsdu->byte_count);
@@ -1024,7 +1093,11 @@ static void iwl_rx_reply_rx(struct iwl_priv *priv,
 	priv->ucode_beacon_time = le32_to_cpu(phy_res->beacon_time_stamp);
 
 	/* Find max signal strength (dBm) among 3 antenna/receiver chains */
+<<<<<<< HEAD
 	rx_status.signal = priv->cfg->ops->utils->calc_rssi(priv, phy_res);
+=======
+	rx_status.signal = iwlagn_calc_rssi(priv, phy_res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	iwl_dbg_log_rx_data_frame(priv, len, header);
 	IWL_DEBUG_STATS_LIMIT(priv, "Rssi %d, TSF %llu\n",
@@ -1102,6 +1175,69 @@ void iwl_setup_rx_handlers(struct iwl_priv *priv)
 	/* block ack */
 	handlers[REPLY_COMPRESSED_BA]		= iwlagn_rx_reply_compressed_ba;
 
+<<<<<<< HEAD
 	/* Set up hardware specific Rx handlers */
 	priv->cfg->ops->lib->rx_handler_setup(priv);
+=======
+	/* init calibration handlers */
+	priv->rx_handlers[CALIBRATION_RES_NOTIFICATION] =
+					iwlagn_rx_calib_result;
+	priv->rx_handlers[REPLY_TX] = iwlagn_rx_reply_tx;
+
+	/* set up notification wait support */
+	spin_lock_init(&priv->notif_wait_lock);
+	INIT_LIST_HEAD(&priv->notif_waits);
+	init_waitqueue_head(&priv->notif_waitq);
+
+	/* Set up BT Rx handlers */
+	if (priv->cfg->lib->bt_rx_handler_setup)
+		priv->cfg->lib->bt_rx_handler_setup(priv);
+
+}
+
+void iwl_rx_dispatch(struct iwl_priv *priv, struct iwl_rx_mem_buffer *rxb)
+{
+	struct iwl_rx_packet *pkt = rxb_addr(rxb);
+
+	/*
+	 * Do the notification wait before RX handlers so
+	 * even if the RX handler consumes the RXB we have
+	 * access to it in the notification wait entry.
+	 */
+	if (!list_empty(&priv->notif_waits)) {
+		struct iwl_notification_wait *w;
+
+		spin_lock(&priv->notif_wait_lock);
+		list_for_each_entry(w, &priv->notif_waits, list) {
+			if (w->cmd != pkt->hdr.cmd)
+				continue;
+			IWL_DEBUG_RX(priv,
+				"Notif: %s, 0x%02x - wake the callers up\n",
+				get_cmd_string(pkt->hdr.cmd),
+				pkt->hdr.cmd);
+			w->triggered = true;
+			if (w->fn)
+				w->fn(priv, pkt, w->fn_data);
+		}
+		spin_unlock(&priv->notif_wait_lock);
+
+		wake_up_all(&priv->notif_waitq);
+	}
+
+	if (priv->pre_rx_handler)
+		priv->pre_rx_handler(priv, rxb);
+
+	/* Based on type of command response or notification,
+	 *   handle those that need handling via function in
+	 *   rx_handlers table.  See iwl_setup_rx_handlers() */
+	if (priv->rx_handlers[pkt->hdr.cmd]) {
+		priv->isr_stats.rx_handlers[pkt->hdr.cmd]++;
+		priv->rx_handlers[pkt->hdr.cmd] (priv, rxb);
+	} else {
+		/* No handling needed */
+		IWL_DEBUG_RX(priv,
+			"No handler needed for %s, 0x%02x\n",
+			get_cmd_string(pkt->hdr.cmd), pkt->hdr.cmd);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

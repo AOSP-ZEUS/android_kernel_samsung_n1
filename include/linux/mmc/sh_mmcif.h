@@ -11,8 +11,13 @@
  *
  */
 
+<<<<<<< HEAD
 #ifndef __SH_MMCIF_H__
 #define __SH_MMCIF_H__
+=======
+#ifndef LINUX_MMC_SH_MMCIF_H
+#define LINUX_MMC_SH_MMCIF_H
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <linux/io.h>
 #include <linux/platform_device.h>
@@ -220,4 +225,8 @@ static inline void sh_mmcif_boot_init(void __iomem *base)
 	sh_mmcif_boot_cmd(base, 0x03400040, 0x00010000);
 }
 
+<<<<<<< HEAD
 #endif /* __SH_MMCIF_H__ */
+=======
+#endif /* LINUX_MMC_SH_MMCIF_H */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

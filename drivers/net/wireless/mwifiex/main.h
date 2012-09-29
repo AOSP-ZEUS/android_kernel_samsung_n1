@@ -39,7 +39,10 @@
 #include "fw.h"
 
 extern const char driver_version[];
+<<<<<<< HEAD
 extern struct mwifiex_adapter *g_adapter;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 enum {
 	MWIFIEX_ASYNC_CMD,
@@ -48,6 +51,7 @@ enum {
 
 #define DRV_MODE_STA       0x1
 
+<<<<<<< HEAD
 #define SD8787_W0   0x30
 #define SD8787_W1   0x31
 #define SD8787_A0   0x40
@@ -57,6 +61,8 @@ enum {
 #define SD8787_W1_FW_NAME "mrvl/sd8787_uapsta_w1.bin"
 #define SD8787_AX_FW_NAME "mrvl/sd8787_uapsta.bin"
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct mwifiex_drv_mode {
 	u16 drv_mode;
 	u16 intf_num;
@@ -190,6 +196,10 @@ struct mwifiex_ra_list_tbl {
 	struct sk_buff_head skb_head;
 	u8 ra[ETH_ALEN];
 	u32 total_pkts_size;
+<<<<<<< HEAD
+=======
+	u32 total_pkts;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 is_11n_enabled;
 };
 
@@ -576,10 +586,17 @@ struct mwifiex_adapter {
 	u8 priv_num;
 	struct mwifiex_drv_mode *drv_mode;
 	const struct firmware *firmware;
+<<<<<<< HEAD
 	struct device *dev;
 	bool surprise_removed;
 	u32 fw_release_number;
 	u32 revision_id;
+=======
+	char fw_name[32];
+	struct device *dev;
+	bool surprise_removed;
+	u32 fw_release_number;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16 init_wait_q_woken;
 	wait_queue_head_t init_wait_q;
 	void *card;
@@ -745,10 +762,17 @@ void mwifiex_process_sleep_confirm_resp(struct mwifiex_adapter *, u8 *,
 int mwifiex_cmd_enh_power_mode(struct mwifiex_private *priv,
 			       struct host_cmd_ds_command *cmd,
 			       u16 cmd_action, uint16_t ps_bitmap,
+<<<<<<< HEAD
 			       void *data_buf);
 int mwifiex_ret_enh_power_mode(struct mwifiex_private *priv,
 			       struct host_cmd_ds_command *resp,
 			       void *data_buf);
+=======
+			       struct mwifiex_ds_auto_ds *auto_ds);
+int mwifiex_ret_enh_power_mode(struct mwifiex_private *priv,
+			       struct host_cmd_ds_command *resp,
+			       struct mwifiex_ds_pm_cfg *pm_cfg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void mwifiex_process_hs_config(struct mwifiex_adapter *adapter);
 void mwifiex_hs_activated_event(struct mwifiex_private *priv,
 					u8 activated);
@@ -760,7 +784,11 @@ int mwifiex_sta_prepare_cmd(struct mwifiex_private *, uint16_t cmd_no,
 			    u16 cmd_action, u32 cmd_oid,
 			    void *data_buf, void *cmd_buf);
 int mwifiex_process_sta_cmdresp(struct mwifiex_private *, u16 cmdresp_no,
+<<<<<<< HEAD
 				void *cmd_buf);
+=======
+				struct host_cmd_ds_command *resp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int mwifiex_process_sta_rx_packet(struct mwifiex_adapter *,
 				  struct sk_buff *skb);
 int mwifiex_process_sta_event(struct mwifiex_private *);
@@ -769,7 +797,11 @@ int mwifiex_sta_init_cmd(struct mwifiex_private *, u8 first_sta);
 int mwifiex_scan_networks(struct mwifiex_private *priv,
 			  const struct mwifiex_user_scan_cfg *user_scan_in);
 int mwifiex_cmd_802_11_scan(struct host_cmd_ds_command *cmd,
+<<<<<<< HEAD
 			    void *data_buf);
+=======
+			    struct mwifiex_scan_cmd_config *scan_cfg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void mwifiex_queue_scan_cmd(struct mwifiex_private *priv,
 			    struct cmd_ctrl_node *cmd_node);
 int mwifiex_ret_802_11_scan(struct mwifiex_private *priv,
@@ -786,8 +818,13 @@ s32 mwifiex_ssid_cmp(struct mwifiex_802_11_ssid *ssid1,
 int mwifiex_associate(struct mwifiex_private *priv,
 		      struct mwifiex_bssdescriptor *bss_desc);
 int mwifiex_cmd_802_11_associate(struct mwifiex_private *priv,
+<<<<<<< HEAD
 				 struct host_cmd_ds_command
 				 *cmd, void *data_buf);
+=======
+				 struct host_cmd_ds_command *cmd,
+				 struct mwifiex_bssdescriptor *bss_desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int mwifiex_ret_802_11_associate(struct mwifiex_private *priv,
 				 struct host_cmd_ds_command *resp);
 void mwifiex_reset_connect_state(struct mwifiex_private *priv);
@@ -800,10 +837,17 @@ int mwifiex_adhoc_join(struct mwifiex_private *priv,
 		       struct mwifiex_bssdescriptor *bss_desc);
 int mwifiex_cmd_802_11_ad_hoc_start(struct mwifiex_private *priv,
 				    struct host_cmd_ds_command *cmd,
+<<<<<<< HEAD
 				    void *data_buf);
 int mwifiex_cmd_802_11_ad_hoc_join(struct mwifiex_private *priv,
 				   struct host_cmd_ds_command *cmd,
 				   void *data_buf);
+=======
+				    struct mwifiex_802_11_ssid *req_ssid);
+int mwifiex_cmd_802_11_ad_hoc_join(struct mwifiex_private *priv,
+				   struct host_cmd_ds_command *cmd,
+				   struct mwifiex_bssdescriptor *bss_desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int mwifiex_ret_802_11_ad_hoc(struct mwifiex_private *priv,
 			      struct host_cmd_ds_command *resp);
 int mwifiex_cmd_802_11_bg_scan_query(struct host_cmd_ds_command *cmd);
@@ -938,6 +982,10 @@ int mwifiex_set_hs_params(struct mwifiex_private *priv,
 			      struct mwifiex_ds_hs_cfg *hscfg);
 int mwifiex_cancel_hs(struct mwifiex_private *priv, int cmd_type);
 int mwifiex_enable_hs(struct mwifiex_adapter *adapter);
+<<<<<<< HEAD
+=======
+int mwifiex_disable_auto_ds(struct mwifiex_private *priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int mwifiex_get_signal_info(struct mwifiex_private *priv,
 			    struct mwifiex_ds_get_signal *signal);
 int mwifiex_drv_get_data_rate(struct mwifiex_private *priv,

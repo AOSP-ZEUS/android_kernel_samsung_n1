@@ -10,6 +10,7 @@
 #include <linux/pci.h>
 #include <linux/list.h>
 #include <linux/ioport.h>
+<<<<<<< HEAD
 
 struct device_node;
 
@@ -62,6 +63,12 @@ static inline int ppc_pci_has_flag(int flag)
 #endif
 
 
+=======
+#include <asm-generic/pci-bridge.h>
+
+struct device_node;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Structure of a PCI controller (host bridge)
  */
@@ -171,6 +178,7 @@ static inline struct pci_controller *pci_bus_to_host(const struct pci_bus *bus)
 
 #ifndef CONFIG_PPC64
 
+<<<<<<< HEAD
 static inline struct device_node *pci_bus_to_OF_node(struct pci_bus *bus)
 {
 	struct pci_controller *host;
@@ -180,6 +188,11 @@ static inline struct device_node *pci_bus_to_OF_node(struct pci_bus *bus)
 	host = pci_bus_to_host(bus);
 	return host ? host->dn : NULL;
 }
+=======
+extern int pci_device_from_OF_node(struct device_node *node,
+				   u8 *bus, u8 *devfn);
+extern void pci_create_OF_bus_map(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline int isa_vaddr_is_ioport(void __iomem *address)
 {
@@ -223,6 +236,7 @@ struct pci_dn {
 /* Get the pointer to a device_node's pci_dn */
 #define PCI_DN(dn)	((struct pci_dn *) (dn)->data)
 
+<<<<<<< HEAD
 extern struct device_node *fetch_dev_dn(struct pci_dev *dev);
 extern void * update_dn_pci_info(struct device_node *dn, void *data);
 
@@ -234,6 +248,10 @@ static inline struct device_node *pci_device_to_OF_node(struct pci_dev *dev)
 	return dev->dev.of_node ? dev->dev.of_node : fetch_dev_dn(dev);
 }
 
+=======
+extern void * update_dn_pci_info(struct device_node *dn, void *data);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int pci_device_from_OF_node(struct device_node *np,
 					  u8 *bus, u8 *devfn)
 {
@@ -244,6 +262,7 @@ static inline int pci_device_from_OF_node(struct device_node *np,
 	return 0;
 }
 
+<<<<<<< HEAD
 static inline struct device_node *pci_bus_to_OF_node(struct pci_bus *bus)
 {
 	if (bus->self)
@@ -252,6 +271,8 @@ static inline struct device_node *pci_bus_to_OF_node(struct pci_bus *bus)
 		return bus->dev.of_node; /* Must be root bus (PHB) */
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /** Find the bus corresponding to the indicated device node */
 extern struct pci_bus *pcibios_find_pci_bus(struct device_node *dn);
 

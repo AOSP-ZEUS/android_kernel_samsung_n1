@@ -7,6 +7,10 @@
  */
 #include <linux/kernel.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/bitops.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/types.h>
 #include <linux/module.h>
 #include <linux/list.h>
@@ -33,8 +37,13 @@
 #include <linux/netdevice.h>
 #include <linux/etherdevice.h>
 #include <linux/ethtool.h>
+<<<<<<< HEAD
 #include <linux/skbuff.h>
 #include <linux/if_vlan.h>
+=======
+#include <linux/if_vlan.h>
+#include <linux/skbuff.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/delay.h>
 #include <linux/mm.h>
 #include <linux/vmalloc.h>
@@ -415,7 +424,11 @@ static int ql_set_mac_addr_reg(struct ql_adapter *qdev, u8 *addr, u32 type,
 				      (qdev->
 				       func << CAM_OUT_FUNC_SHIFT) |
 					(0 << CAM_OUT_CQ_ID_SHIFT));
+<<<<<<< HEAD
 			if (qdev->vlgrp)
+=======
+			if (qdev->ndev->features & NETIF_F_HW_VLAN_RX)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				cam_output |= CAM_OUT_RV;
 			/* route to NIC core */
 			ql_write32(qdev, MAC_ADDR_DATA, cam_output);
@@ -1507,10 +1520,16 @@ static void ql_process_mac_rx_gro_page(struct ql_adapter *qdev,
 	rx_ring->rx_bytes += length;
 	skb->ip_summed = CHECKSUM_UNNECESSARY;
 	skb_record_rx_queue(skb, rx_ring->cq_id);
+<<<<<<< HEAD
 	if (qdev->vlgrp && (vlan_id != 0xffff))
 		vlan_gro_frags(&rx_ring->napi, qdev->vlgrp, vlan_id);
 	else
 		napi_gro_frags(napi);
+=======
+	if (vlan_id != 0xffff)
+		__vlan_hwaccel_put_tag(skb, vlan_id);
+	napi_gro_frags(napi);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Process an inbound completion from an rx ring. */
@@ -1594,6 +1613,7 @@ static void ql_process_mac_rx_page(struct ql_adapter *qdev,
 	}
 
 	skb_record_rx_queue(skb, rx_ring->cq_id);
+<<<<<<< HEAD
 	if (skb->ip_summed == CHECKSUM_UNNECESSARY) {
 		if (qdev->vlgrp && (vlan_id != 0xffff))
 			vlan_gro_receive(napi, qdev->vlgrp, vlan_id, skb);
@@ -1605,6 +1625,14 @@ static void ql_process_mac_rx_page(struct ql_adapter *qdev,
 		else
 			netif_receive_skb(skb);
 	}
+=======
+	if (vlan_id != 0xffff)
+		__vlan_hwaccel_put_tag(skb, vlan_id);
+	if (skb->ip_summed == CHECKSUM_UNNECESSARY)
+		napi_gro_receive(napi, skb);
+	else
+		netif_receive_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return;
 err_out:
 	dev_kfree_skb_any(skb);
@@ -1707,6 +1735,7 @@ static void ql_process_mac_rx_skb(struct ql_adapter *qdev,
 	}
 
 	skb_record_rx_queue(skb, rx_ring->cq_id);
+<<<<<<< HEAD
 	if (skb->ip_summed == CHECKSUM_UNNECESSARY) {
 		if (qdev->vlgrp && (vlan_id != 0xffff))
 			vlan_gro_receive(&rx_ring->napi, qdev->vlgrp,
@@ -1719,6 +1748,14 @@ static void ql_process_mac_rx_skb(struct ql_adapter *qdev,
 		else
 			netif_receive_skb(skb);
 	}
+=======
+	if (vlan_id != 0xffff)
+		__vlan_hwaccel_put_tag(skb, vlan_id);
+	if (skb->ip_summed == CHECKSUM_UNNECESSARY)
+		napi_gro_receive(&rx_ring->napi, skb);
+	else
+		netif_receive_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void ql_realign_skb(struct sk_buff *skb, int len)
@@ -2028,6 +2065,7 @@ static void ql_process_mac_split_rx_intr(struct ql_adapter *qdev,
 	rx_ring->rx_packets++;
 	rx_ring->rx_bytes += skb->len;
 	skb_record_rx_queue(skb, rx_ring->cq_id);
+<<<<<<< HEAD
 	if (skb->ip_summed == CHECKSUM_UNNECESSARY) {
 		if (qdev->vlgrp &&
 			(ib_mac_rsp->flags2 & IB_MAC_IOCB_RSP_V) &&
@@ -2044,6 +2082,14 @@ static void ql_process_mac_split_rx_intr(struct ql_adapter *qdev,
 		else
 			netif_receive_skb(skb);
 	}
+=======
+	if ((ib_mac_rsp->flags2 & IB_MAC_IOCB_RSP_V) && (vlan_id != 0))
+		__vlan_hwaccel_put_tag(skb, vlan_id);
+	if (skb->ip_summed == CHECKSUM_UNNECESSARY)
+		napi_gro_receive(&rx_ring->napi, skb);
+	else
+		netif_receive_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Process an inbound completion from an rx ring. */
@@ -2334,6 +2380,7 @@ static int ql_napi_poll_msix(struct napi_struct *napi, int budget)
 	return work_done;
 }
 
+<<<<<<< HEAD
 static void qlge_vlan_rx_register(struct net_device *ndev, struct vlan_group *grp)
 {
 	struct ql_adapter *qdev = netdev_priv(ndev);
@@ -2346,11 +2393,25 @@ static void qlge_vlan_rx_register(struct net_device *ndev, struct vlan_group *gr
 			   NIC_RCV_CFG_VLAN_MATCH_AND_NON);
 	} else {
 		netif_printk(qdev, ifup, KERN_DEBUG, qdev->ndev,
+=======
+static void qlge_vlan_mode(struct net_device *ndev, u32 features)
+{
+	struct ql_adapter *qdev = netdev_priv(ndev);
+
+	if (features & NETIF_F_HW_VLAN_RX) {
+		netif_printk(qdev, ifup, KERN_DEBUG, ndev,
+			     "Turning on VLAN in NIC_RCV_CFG.\n");
+		ql_write32(qdev, NIC_RCV_CFG, NIC_RCV_CFG_VLAN_MASK |
+				 NIC_RCV_CFG_VLAN_MATCH_AND_NON);
+	} else {
+		netif_printk(qdev, ifup, KERN_DEBUG, ndev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			     "Turning off VLAN in NIC_RCV_CFG.\n");
 		ql_write32(qdev, NIC_RCV_CFG, NIC_RCV_CFG_VLAN_MASK);
 	}
 }
 
+<<<<<<< HEAD
 static void qlge_vlan_rx_add_vid(struct net_device *ndev, u16 vid)
 {
 	struct ql_adapter *qdev = netdev_priv(ndev);
@@ -2360,11 +2421,42 @@ static void qlge_vlan_rx_add_vid(struct net_device *ndev, u16 vid)
 	status = ql_sem_spinlock(qdev, SEM_MAC_ADDR_MASK);
 	if (status)
 		return;
+=======
+static u32 qlge_fix_features(struct net_device *ndev, u32 features)
+{
+	/*
+	 * Since there is no support for separate rx/tx vlan accel
+	 * enable/disable make sure tx flag is always in same state as rx.
+	 */
+	if (features & NETIF_F_HW_VLAN_RX)
+		features |= NETIF_F_HW_VLAN_TX;
+	else
+		features &= ~NETIF_F_HW_VLAN_TX;
+
+	return features;
+}
+
+static int qlge_set_features(struct net_device *ndev, u32 features)
+{
+	u32 changed = ndev->features ^ features;
+
+	if (changed & NETIF_F_HW_VLAN_RX)
+		qlge_vlan_mode(ndev, features);
+
+	return 0;
+}
+
+static void __qlge_vlan_rx_add_vid(struct ql_adapter *qdev, u16 vid)
+{
+	u32 enable_bit = MAC_ADDR_E;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ql_set_mac_addr_reg
 	    (qdev, (u8 *) &enable_bit, MAC_ADDR_TYPE_VLAN, vid)) {
 		netif_err(qdev, ifup, qdev->ndev,
 			  "Failed to init vlan address.\n");
 	}
+<<<<<<< HEAD
 	ql_sem_unlock(qdev, SEM_MAC_ADDR_MASK);
 }
 
@@ -2372,23 +2464,62 @@ static void qlge_vlan_rx_kill_vid(struct net_device *ndev, u16 vid)
 {
 	struct ql_adapter *qdev = netdev_priv(ndev);
 	u32 enable_bit = 0;
+=======
+}
+
+static void qlge_vlan_rx_add_vid(struct net_device *ndev, u16 vid)
+{
+	struct ql_adapter *qdev = netdev_priv(ndev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int status;
 
 	status = ql_sem_spinlock(qdev, SEM_MAC_ADDR_MASK);
 	if (status)
 		return;
 
+<<<<<<< HEAD
+=======
+	__qlge_vlan_rx_add_vid(qdev, vid);
+	set_bit(vid, qdev->active_vlans);
+
+	ql_sem_unlock(qdev, SEM_MAC_ADDR_MASK);
+}
+
+static void __qlge_vlan_rx_kill_vid(struct ql_adapter *qdev, u16 vid)
+{
+	u32 enable_bit = 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ql_set_mac_addr_reg
 	    (qdev, (u8 *) &enable_bit, MAC_ADDR_TYPE_VLAN, vid)) {
 		netif_err(qdev, ifup, qdev->ndev,
 			  "Failed to clear vlan address.\n");
 	}
+<<<<<<< HEAD
 	ql_sem_unlock(qdev, SEM_MAC_ADDR_MASK);
 
+=======
+}
+
+static void qlge_vlan_rx_kill_vid(struct net_device *ndev, u16 vid)
+{
+	struct ql_adapter *qdev = netdev_priv(ndev);
+	int status;
+
+	status = ql_sem_spinlock(qdev, SEM_MAC_ADDR_MASK);
+	if (status)
+		return;
+
+	__qlge_vlan_rx_kill_vid(qdev, vid);
+	clear_bit(vid, qdev->active_vlans);
+
+	ql_sem_unlock(qdev, SEM_MAC_ADDR_MASK);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void qlge_restore_vlan(struct ql_adapter *qdev)
 {
+<<<<<<< HEAD
 	qlge_vlan_rx_register(qdev->ndev, qdev->vlgrp);
 
 	if (qdev->vlgrp) {
@@ -2399,6 +2530,19 @@ static void qlge_restore_vlan(struct ql_adapter *qdev)
 			qlge_vlan_rx_add_vid(qdev->ndev, vid);
 		}
 	}
+=======
+	int status;
+	u16 vid;
+
+	status = ql_sem_spinlock(qdev, SEM_MAC_ADDR_MASK);
+	if (status)
+		return;
+
+	for_each_set_bit(vid, qdev->active_vlans, VLAN_N_VID)
+		__qlge_vlan_rx_add_vid(qdev, vid);
+
+	ql_sem_unlock(qdev, SEM_MAC_ADDR_MASK);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* MSI-X Multiple Vector Interrupt Handler for inbound completions. */
@@ -3096,7 +3240,11 @@ static int ql_start_rx_ring(struct ql_adapter *qdev, struct rx_ring *rx_ring)
 	if (rx_ring->lbq_len) {
 		cqicb->flags |= FLAGS_LL;	/* Load lbq values */
 		tmp = (u64)rx_ring->lbq_base_dma;
+<<<<<<< HEAD
 		base_indirect_ptr = (__le64 *) rx_ring->lbq_base_indirect;
+=======
+		base_indirect_ptr = rx_ring->lbq_base_indirect;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		page_entries = 0;
 		do {
 			*base_indirect_ptr = cpu_to_le64(tmp);
@@ -3120,7 +3268,11 @@ static int ql_start_rx_ring(struct ql_adapter *qdev, struct rx_ring *rx_ring)
 	if (rx_ring->sbq_len) {
 		cqicb->flags |= FLAGS_LS;	/* Load sbq values */
 		tmp = (u64)rx_ring->sbq_base_dma;
+<<<<<<< HEAD
 		base_indirect_ptr = (__le64 *) rx_ring->sbq_base_indirect;
+=======
+		base_indirect_ptr = rx_ring->sbq_base_indirect;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		page_entries = 0;
 		do {
 			*base_indirect_ptr = cpu_to_le64(tmp);
@@ -4661,7 +4813,12 @@ static const struct net_device_ops qlge_netdev_ops = {
 	.ndo_set_mac_address	= qlge_set_mac_address,
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_tx_timeout		= qlge_tx_timeout,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register	= qlge_vlan_rx_register,
+=======
+	.ndo_fix_features	= qlge_fix_features,
+	.ndo_set_features	= qlge_set_features,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ndo_vlan_rx_add_vid	= qlge_vlan_rx_add_vid,
 	.ndo_vlan_rx_kill_vid	= qlge_vlan_rx_kill_vid,
 };

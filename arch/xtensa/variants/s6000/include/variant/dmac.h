@@ -357,7 +357,11 @@ static inline u32 s6dmac_channel_enabled(u32 dmac, int chan)
 static inline void s6dmac_dp_setup_group(u32 dmac, int port,
 			int nrch, int frrep)
 {
+<<<<<<< HEAD
 	const static u8 mask[4] = {0, 3, 1, 2};
+=======
+	static const u8 mask[4] = {0, 3, 1, 2};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	BUG_ON(dmac != S6_REG_DPDMA);
 	if ((port < 0) || (port > 3) || (nrch < 1) || (nrch > 4))
 		return;

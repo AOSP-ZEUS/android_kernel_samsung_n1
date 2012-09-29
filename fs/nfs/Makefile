@@ -23,3 +23,7 @@ obj-$(CONFIG_PNFS_FILE_LAYOUT) += nfs_layout_nfsv41_files.o
 nfs_layout_nfsv41_files-y := nfs4filelayout.o nfs4filelayoutdev.o
 
 obj-$(CONFIG_PNFS_OBJLAYOUT) += objlayout/
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_PNFS_BLOCK) += blocklayout/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

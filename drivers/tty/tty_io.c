@@ -94,6 +94,10 @@
 #include <linux/delay.h>
 #include <linux/seq_file.h>
 #include <linux/serial.h>
+<<<<<<< HEAD
+=======
+#include <linux/ratelimit.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <linux/uaccess.h>
 #include <asm/system.h>
@@ -1438,8 +1442,12 @@ err_module_put:
 
 	/* call the tty release_tty routine to clean out this slot */
 err_release_tty:
+<<<<<<< HEAD
 	if (printk_ratelimit())
 		printk(KERN_INFO "tty_init_dev: ldisc open failed, "
+=======
+	printk_ratelimited(KERN_INFO "tty_init_dev: ldisc open failed, "
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				 "clearing slot %d\n", idx);
 	release_tty(tty, idx);
 	return ERR_PTR(retval);

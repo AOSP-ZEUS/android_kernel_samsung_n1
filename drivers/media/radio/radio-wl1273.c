@@ -1382,7 +1382,11 @@ static int wl1273_fm_g_volatile_ctrl(struct v4l2_ctrl *ctrl)
 
 	switch (ctrl->id) {
 	case  V4L2_CID_TUNE_ANTENNA_CAPACITOR:
+<<<<<<< HEAD
 		ctrl->cur.val = wl1273_fm_get_tx_ctune(radio);
+=======
+		ctrl->val = wl1273_fm_get_tx_ctune(radio);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 
 	default:

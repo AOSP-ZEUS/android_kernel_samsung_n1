@@ -42,11 +42,14 @@
  */
 struct user_desc;
 
+<<<<<<< HEAD
 extern int get_fpxregs(struct user_fxsr_struct __user *buf,
 		       struct task_struct *child);
 extern int set_fpxregs(struct user_fxsr_struct __user *buf,
 		       struct task_struct *tsk);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern int ptrace_get_thread_area(struct task_struct *child, int idx,
                                   struct user_desc __user *user_desc);
 

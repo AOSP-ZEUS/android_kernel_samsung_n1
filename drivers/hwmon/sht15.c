@@ -32,7 +32,11 @@
 #include <linux/sht15.h>
 #include <linux/regulator/consumer.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Commands */
 #define SHT15_MEASURE_TEMP		0x03
@@ -671,7 +675,11 @@ static ssize_t sht15_show_status(struct device *dev,
  * @buf:	sysfs buffer to read the new heater state from.
  * @count:	length of the data.
  *
+<<<<<<< HEAD
  * Will be called on read access to heater_enable sysfs attribute.
+=======
+ * Will be called on write access to heater_enable sysfs attribute.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Returns number of bytes actually decoded, negative errno on error.
  */
 static ssize_t sht15_store_heater(struct device *dev,

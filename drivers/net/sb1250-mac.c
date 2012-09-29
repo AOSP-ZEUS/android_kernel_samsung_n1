@@ -2597,7 +2597,11 @@ static int __devinit sbmac_probe(struct platform_device *pldev)
 
 	res = platform_get_resource(pldev, IORESOURCE_MEM, 0);
 	BUG_ON(!res);
+<<<<<<< HEAD
 	sbm_base = ioremap_nocache(res->start, res->end - res->start + 1);
+=======
+	sbm_base = ioremap_nocache(res->start, resource_size(res));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!sbm_base) {
 		printk(KERN_ERR "%s: unable to map device registers\n",
 		       dev_name(&pldev->dev));

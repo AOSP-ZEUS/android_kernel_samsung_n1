@@ -145,7 +145,10 @@ static char *__env[] = {
 #endif
  "RADIX=16",
  "MDCOUNT=8",			/* lines of md output */
+<<<<<<< HEAD
  "BTARGS=9",			/* 9 possible args in bt */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  KDB_PLATFORM_ENV,
  "DTABCOUNT=30",
  "NOSECT=1",
@@ -172,6 +175,10 @@ static char *__env[] = {
  (char *)0,
  (char *)0,
  (char *)0,
+<<<<<<< HEAD
+=======
+ (char *)0,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const int __nenv = (sizeof(__env) / sizeof(char *));
@@ -1386,7 +1393,11 @@ int kdb_main_loop(kdb_reason_t reason, kdb_reason_t reason2, int error,
 		}
 
 		if (result == KDB_CMD_KGDB) {
+<<<<<<< HEAD
 			if (!(KDB_STATE(DOING_KGDB) || KDB_STATE(DOING_KGDB2)))
+=======
+			if (!KDB_STATE(DOING_KGDB))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				kdb_printf("Entering please attach debugger "
 					   "or use $D#44+ or $3#33\n");
 			break;

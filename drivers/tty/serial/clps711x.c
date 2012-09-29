@@ -154,9 +154,16 @@ static irqreturn_t clps711xuart_int_tx(int irq, void *dev_id)
 		port->x_char = 0;
 		return IRQ_HANDLED;
 	}
+<<<<<<< HEAD
 
 	if (uart_circ_empty(xmit) || uart_tx_stopped(port))
 		goto disable_tx_irq;
+=======
+	if (uart_circ_empty(xmit) || uart_tx_stopped(port)) {
+		clps711xuart_stop_tx(port);
+		return IRQ_HANDLED;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	count = port->fifosize >> 1;
 	do {
@@ -170,11 +177,16 @@ static irqreturn_t clps711xuart_int_tx(int irq, void *dev_id)
 	if (uart_circ_chars_pending(xmit) < WAKEUP_CHARS)
 		uart_write_wakeup(port);
 
+<<<<<<< HEAD
 	if (uart_circ_empty(xmit)) {
 	disable_tx_irq:
 		disable_irq_nosync(TX_IRQ(port));
 		tx_enabled(port) = 0;
 	}
+=======
+	if (uart_circ_empty(xmit))
+		clps711xuart_stop_tx(port);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return IRQ_HANDLED;
 }

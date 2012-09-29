@@ -494,7 +494,11 @@ static __init int celleb_setup_pciex(struct device_node *node,
 		pr_err("PCIEXC:Failed to get config resource.\n");
 		return 1;
 	}
+<<<<<<< HEAD
 	phb->cfg_addr = ioremap(r.start, r.end - r.start + 1);
+=======
+	phb->cfg_addr = ioremap(r.start, resource_size(&r));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!phb->cfg_addr) {
 		pr_err("PCIEXC:Failed to remap SMMIO region.\n");
 		return 1;

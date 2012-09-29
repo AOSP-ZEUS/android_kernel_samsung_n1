@@ -123,6 +123,10 @@ static int xterm_open(int input, int output, int primary, void *d,
 		err = -errno;
 		printk(UM_KERN_ERR "xterm_open : unlink failed, errno = %d\n",
 		       errno);
+<<<<<<< HEAD
+=======
+		close(fd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return err;
 	}
 	close(fd);

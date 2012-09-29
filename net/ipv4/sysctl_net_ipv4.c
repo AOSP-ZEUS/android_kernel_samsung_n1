@@ -398,6 +398,7 @@ static struct ctl_table ipv4_table[] = {
 		.proc_handler	= proc_dointvec_jiffies,
 	},
 	{
+<<<<<<< HEAD
 		.procname	= "inet_peer_gc_mintime",
 		.data		= &inet_peer_gc_mintime,
 		.maxlen		= sizeof(int),
@@ -412,6 +413,8 @@ static struct ctl_table ipv4_table[] = {
 		.proc_handler	= proc_dointvec_jiffies,
 	},
 	{
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.procname	= "tcp_orphan_retries",
 		.data		= &sysctl_tcp_orphan_retries,
 		.maxlen		= sizeof(int),

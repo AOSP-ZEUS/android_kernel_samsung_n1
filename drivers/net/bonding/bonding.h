@@ -147,6 +147,10 @@ struct bond_params {
 	int updelay;
 	int downdelay;
 	int lacp_fast;
+<<<<<<< HEAD
+=======
+	unsigned int min_links;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ad_select;
 	char primary[IFNAMSIZ];
 	int primary_reselect;
@@ -239,8 +243,11 @@ struct bonding {
 	struct   alb_bond_info alb_info;
 	struct   bond_params params;
 	struct   list_head vlan_list;
+<<<<<<< HEAD
 	struct   vlan_group *vlgrp;
 	struct   packet_type arp_mon_pt;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct   workqueue_struct *wq;
 	struct   delayed_work mii_work;
 	struct   delayed_work arp_work;
@@ -253,6 +260,14 @@ struct bonding {
 #endif /* CONFIG_DEBUG_FS */
 };
 
+<<<<<<< HEAD
+=======
+static inline bool bond_vlan_used(struct bonding *bond)
+{
+	return !list_empty(&bond->vlan_list);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define bond_slave_get_rcu(dev) \
 	((struct slave *) rcu_dereference(dev->rx_handler_data))
 

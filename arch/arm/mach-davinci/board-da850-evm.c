@@ -1143,6 +1143,11 @@ static __init int da850_evm_init_cpufreq(void)
 static __init int da850_evm_init_cpufreq(void) { return 0; }
 #endif
 
+<<<<<<< HEAD
+=======
+#define DA850EVM_SATA_REFCLKPN_RATE	(100 * 1000 * 1000)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static __init void da850_evm_init(void)
 {
 	int ret;
@@ -1264,6 +1269,14 @@ static __init void da850_evm_init(void)
 		pr_warning("da850_evm_init: spi 1 registration failed: %d\n",
 				ret);
 
+<<<<<<< HEAD
+=======
+	ret = da850_register_sata(DA850EVM_SATA_REFCLKPN_RATE);
+	if (ret)
+		pr_warning("da850_evm_init: sata registration failed: %d\n",
+				ret);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	da850_evm_setup_mac_addr();
 }
 
@@ -1289,4 +1302,8 @@ MACHINE_START(DAVINCI_DA850_EVM, "DaVinci DA850/OMAP-L138/AM18x EVM")
 	.init_irq	= cp_intc_init,
 	.timer		= &davinci_timer,
 	.init_machine	= da850_evm_init,
+<<<<<<< HEAD
+=======
+	.dma_zone_size	= SZ_128M,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

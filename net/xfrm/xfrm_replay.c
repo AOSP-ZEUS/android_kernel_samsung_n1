@@ -166,7 +166,11 @@ static void xfrm_replay_advance(struct xfrm_state *x, __be32 net_seq)
 	}
 
 	if (xfrm_aevent_is_on(xs_net(x)))
+<<<<<<< HEAD
 		x->repl->notify(x, XFRM_REPLAY_UPDATE);
+=======
+		xfrm_replay_notify(x, XFRM_REPLAY_UPDATE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int xfrm_replay_overflow_bmp(struct xfrm_state *x, struct sk_buff *skb)
@@ -293,7 +297,11 @@ static void xfrm_replay_advance_bmp(struct xfrm_state *x, __be32 net_seq)
 	}
 
 	if (xfrm_aevent_is_on(xs_net(x)))
+<<<<<<< HEAD
 		x->repl->notify(x, XFRM_REPLAY_UPDATE);
+=======
+		xfrm_replay_notify(x, XFRM_REPLAY_UPDATE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void xfrm_replay_notify_bmp(struct xfrm_state *x, int event)
@@ -502,7 +510,11 @@ static void xfrm_replay_advance_esn(struct xfrm_state *x, __be32 net_seq)
 	}
 
 	if (xfrm_aevent_is_on(xs_net(x)))
+<<<<<<< HEAD
 		x->repl->notify(x, XFRM_REPLAY_UPDATE);
+=======
+		xfrm_replay_notify(x, XFRM_REPLAY_UPDATE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct xfrm_replay xfrm_replay_legacy = {

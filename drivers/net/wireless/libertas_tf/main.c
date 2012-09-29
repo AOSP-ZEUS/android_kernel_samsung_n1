@@ -9,6 +9,10 @@
  */
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
+<<<<<<< HEAD
+=======
+#include <linux/hardirq.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h>
 
 #include <linux/etherdevice.h>
@@ -585,7 +589,11 @@ int lbtf_rx(struct lbtf_private *priv, struct sk_buff *skb)
 	need_padding ^= ieee80211_has_a4(hdr->frame_control);
 	need_padding ^= ieee80211_is_data_qos(hdr->frame_control) &&
 			(*ieee80211_get_qos_ctl(hdr) &
+<<<<<<< HEAD
 			 IEEE80211_QOS_CONTROL_A_MSDU_PRESENT);
+=======
+			 IEEE80211_QOS_CTL_A_MSDU_PRESENT);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (need_padding) {
 		memmove(skb->data + 2, skb->data, skb->len);

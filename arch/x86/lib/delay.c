@@ -48,9 +48,15 @@ static void delay_loop(unsigned long loops)
 }
 
 /* TSC based delay: */
+<<<<<<< HEAD
 static void delay_tsc(unsigned long __loops)
 {
 	u32 bclock, now, loops = __loops;
+=======
+static void delay_tsc(unsigned long loops)
+{
+	unsigned long bclock, now;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int cpu;
 
 	preempt_disable();

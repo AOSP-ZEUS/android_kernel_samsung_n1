@@ -3828,7 +3828,11 @@ static int oxu_drv_probe(struct platform_device *pdev)
 		return -ENODEV;
 	}
 	memstart = res->start;
+<<<<<<< HEAD
 	memlen = res->end - res->start + 1;
+=======
+	memlen = resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev_dbg(&pdev->dev, "MEM resource %lx-%lx\n", memstart, memlen);
 	if (!request_mem_region(memstart, memlen,
 				oxu_hc_driver.description)) {

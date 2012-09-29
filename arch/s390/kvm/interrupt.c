@@ -128,6 +128,13 @@ static void __do_deliver_interrupt(struct kvm_vcpu *vcpu,
 		if (rc == -EFAULT)
 			exception = 1;
 
+<<<<<<< HEAD
+=======
+		rc = put_guest_u16(vcpu, __LC_CPU_ADDRESS, inti->emerg.code);
+		if (rc == -EFAULT)
+			exception = 1;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rc = copy_to_guest(vcpu, __LC_EXT_OLD_PSW,
 			 &vcpu->arch.sie_block->gpsw, sizeof(psw_t));
 		if (rc == -EFAULT)
@@ -220,6 +227,10 @@ static void __do_deliver_interrupt(struct kvm_vcpu *vcpu,
 			offsetof(struct _lowcore, restart_psw), sizeof(psw_t));
 		if (rc == -EFAULT)
 			exception = 1;
+<<<<<<< HEAD
+=======
+		atomic_clear_mask(CPUSTAT_STOPPED, &vcpu->arch.sie_block->cpuflags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 
 	case KVM_S390_PROGRAM_INT:

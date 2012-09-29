@@ -38,5 +38,10 @@ int sysfs_add_meshif(struct net_device *dev);
 void sysfs_del_meshif(struct net_device *dev);
 int sysfs_add_hardif(struct kobject **hardif_obj, struct net_device *dev);
 void sysfs_del_hardif(struct kobject **hardif_obj);
+<<<<<<< HEAD
+=======
+int throw_uevent(struct bat_priv *bat_priv, enum uev_type type,
+		 enum uev_action action, const char *data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _NET_BATMAN_ADV_SYSFS_H_ */

@@ -40,6 +40,10 @@
 #ifndef _SOCK_H
 #define _SOCK_H
 
+<<<<<<< HEAD
+=======
+#include <linux/hardirq.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/kernel.h>
 #include <linux/list.h>
 #include <linux/list_nulls.h>
@@ -562,6 +566,10 @@ enum sock_flags {
 	SOCK_TIMESTAMPING_SYS_HARDWARE, /* %SOF_TIMESTAMPING_SYS_HARDWARE */
 	SOCK_FASYNC, /* fasync() active */
 	SOCK_RXQ_OVFL,
+<<<<<<< HEAD
+=======
+	SOCK_ZEROCOPY, /* buffers from userspace */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static inline void sock_copy_flags(struct sock *nsk, struct sock *osk)
@@ -1301,8 +1309,12 @@ extern unsigned long sock_i_ino(struct sock *sk);
 static inline struct dst_entry *
 __sk_dst_get(struct sock *sk)
 {
+<<<<<<< HEAD
 	return rcu_dereference_check(sk->sk_dst_cache, rcu_read_lock_held() ||
 						       sock_owned_by_user(sk) ||
+=======
+	return rcu_dereference_check(sk->sk_dst_cache, sock_owned_by_user(sk) ||
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 						       lockdep_is_held(&sk->sk_lock.slock));
 }
 

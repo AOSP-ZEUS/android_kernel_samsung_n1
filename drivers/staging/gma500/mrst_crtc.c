@@ -19,12 +19,20 @@
 #include <linux/pm_runtime.h>
 
 #include <drm/drmP.h>
+<<<<<<< HEAD
 #include "psb_fb.h"
+=======
+#include "framebuffer.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "psb_drv.h"
 #include "psb_intel_drv.h"
 #include "psb_intel_reg.h"
 #include "psb_intel_display.h"
+<<<<<<< HEAD
 #include "psb_powermgmt.h"
+=======
+#include "power.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct psb_intel_range_t {
 	int min, max;
@@ -86,7 +94,11 @@ static const struct mrst_limit_t *mrst_limit(struct drm_crtc *crtc)
 {
 	const struct mrst_limit_t *limit = NULL;
 	struct drm_device *dev = crtc->dev;
+<<<<<<< HEAD
 	DRM_DRIVER_PRIVATE_T *dev_priv = dev->dev_private;
+=======
+	struct drm_psb_private *dev_priv = dev->dev_private;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (psb_intel_pipe_has_type(crtc, INTEL_OUTPUT_LVDS)
 	    || psb_intel_pipe_has_type(crtc, INTEL_OUTPUT_MIPI)) {
@@ -103,7 +115,11 @@ static const struct mrst_limit_t *mrst_limit(struct drm_crtc *crtc)
 		}
 	} else {
 		limit = NULL;
+<<<<<<< HEAD
 		PSB_DEBUG_ENTRY("mrst_limit Wrong display type.\n");
+=======
+		dev_err(dev->dev, "mrst_limit Wrong display type.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return limit;
@@ -117,7 +133,11 @@ static void mrst_clock(int refclk, struct mrst_clock_t *clock)
 
 void mrstPrintPll(char *prefix, struct mrst_clock_t *clock)
 {
+<<<<<<< HEAD
 	PSB_DEBUG_ENTRY("%s: dotclock = %d,  m = %d, p1 = %d.\n",
+=======
+	pr_debug("%s: dotclock = %d,  m = %d, p1 = %d.\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	     prefix, clock->dot, clock->m, clock->p1);
 }
 
@@ -149,8 +169,12 @@ mrstFindBestPLL(struct drm_crtc *crtc, int target, int refclk,
 			}
 		}
 	}
+<<<<<<< HEAD
 	DRM_DEBUG("mrstFindBestPLL err = %d.\n", err);
 
+=======
+	dev_dbg(crtc->dev->dev, "mrstFindBestPLL err = %d.\n", err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return err != target;
 }
 
@@ -172,8 +196,11 @@ static void mrst_crtc_dpms(struct drm_crtc *crtc, int mode)
 	u32 temp;
 	bool enabled;
 
+<<<<<<< HEAD
 	PSB_DEBUG_ENTRY("mode = %d, pipe = %d\n", mode, pipe);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!gma_power_begin(dev, true))
 		return;
 
@@ -296,7 +323,11 @@ static int mrst_crtc_mode_set(struct drm_crtc *crtc,
 {
 	struct drm_device *dev = crtc->dev;
 	struct psb_intel_crtc *psb_intel_crtc = to_psb_intel_crtc(crtc);
+<<<<<<< HEAD
 	DRM_DRIVER_PRIVATE_T *dev_priv = dev->dev_private;
+=======
+	struct drm_psb_private *dev_priv = dev->dev_private;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int pipe = psb_intel_crtc->pipe;
 	int fp_reg = (pipe == 0) ? MRST_FPA0 : FPB0;
 	int dpll_reg = (pipe == 0) ? MRST_DPLL_A : DPLL_B;
@@ -320,8 +351,11 @@ static int mrst_crtc_mode_set(struct drm_crtc *crtc,
 	uint64_t scalingType = DRM_MODE_SCALE_FULLSCREEN;
 	struct drm_encoder *encoder;
 
+<<<<<<< HEAD
 	PSB_DEBUG_ENTRY("pipe = 0x%x\n", pipe);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!gma_power_begin(dev, true))
 		return 0;
 
@@ -446,10 +480,16 @@ static int mrst_crtc_mode_set(struct drm_crtc *crtc,
 	ok = mrstFindBestPLL(crtc, adjusted_mode->clock, refclk, &clock);
 
 	if (!ok) {
+<<<<<<< HEAD
 		PSB_DEBUG_ENTRY(
 			"mrstFindBestPLL fail in mrst_crtc_mode_set.\n");
 	} else {
 		PSB_DEBUG_ENTRY("mrst_crtc_mode_set pixel clock = %d,"
+=======
+		dev_dbg(dev->dev, "mrstFindBestPLL fail in mrst_crtc_mode_set.\n");
+	} else {
+		dev_dbg(dev->dev, "mrst_crtc_mode_set pixel clock = %d,"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			 "m = %x, p1 = %x.\n", clock.dot, clock.m,
 			 clock.p1);
 	}
@@ -540,11 +580,17 @@ int mrst_pipe_set_base(struct drm_crtc *crtc,
 	u32 dspcntr;
 	int ret = 0;
 
+<<<<<<< HEAD
 	PSB_DEBUG_ENTRY("\n");
 
 	/* no fb bound */
 	if (!crtc->fb) {
 		DRM_DEBUG("No FB bound\n");
+=======
+	/* no fb bound */
+	if (!crtc->fb) {
+		dev_dbg(dev->dev, "No FB bound\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 	}
 
@@ -574,13 +620,20 @@ int mrst_pipe_set_base(struct drm_crtc *crtc,
 		dspcntr |= DISPPLANE_32BPP_NO_ALPHA;
 		break;
 	default:
+<<<<<<< HEAD
 		DRM_ERROR("Unknown color depth\n");
+=======
+		dev_err(dev->dev, "Unknown color depth\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = -EINVAL;
 		goto pipe_set_base_exit;
 	}
 	REG_WRITE(dspcntr_reg, dspcntr);
 
+<<<<<<< HEAD
 	DRM_DEBUG("Writing base %08lX %08lX %d %d\n", start, offset, x, y);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (0 /* FIXMEAC - check what PSB needs */) {
 		REG_WRITE(dspbase, offset);
 		REG_READ(dspbase);

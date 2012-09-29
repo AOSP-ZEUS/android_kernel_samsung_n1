@@ -37,6 +37,10 @@
 #include "tda8290.h"
 #include "tda18271.h"
 #include "lgdt330x.h"
+<<<<<<< HEAD
+=======
+#include "xc4000.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "xc5000.h"
 #include "max2165.h"
 #include "tda10048.h"
@@ -921,6 +925,29 @@ static int dvb_register(struct cx23885_tsport *port)
 				fe->ops.tuner_ops.set_config(fe, &ctl);
 		}
 		break;
+<<<<<<< HEAD
+=======
+	case CX23885_BOARD_LEADTEK_WINFAST_PXDVR3200_H_XC4000:
+		i2c_bus = &dev->i2c_bus[0];
+
+		fe0->dvb.frontend = dvb_attach(zl10353_attach,
+					       &dvico_fusionhdtv_xc3028,
+					       &i2c_bus->i2c_adap);
+		if (fe0->dvb.frontend != NULL) {
+			struct dvb_frontend	*fe;
+			struct xc4000_config	cfg = {
+				.i2c_address	  = 0x61,
+				.default_pm	  = 0,
+				.dvb_amplitude	  = 134,
+				.set_smoothedcvbs = 1,
+				.if_khz		  = 4560
+			};
+
+			fe = dvb_attach(xc4000_attach, fe0->dvb.frontend,
+					&dev->i2c_bus[1].i2c_adap, &cfg);
+		}
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case CX23885_BOARD_TBS_6920:
 		i2c_bus = &dev->i2c_bus[1];
 
@@ -1249,7 +1276,11 @@ int cx23885_dvb_unregister(struct cx23885_tsport *port)
 	 * implement MFE support.
 	 */
 	fe0 = videobuf_dvb_get_frontend(&port->frontends, 1);
+<<<<<<< HEAD
 	if (fe0->dvb.frontend)
+=======
+	if (fe0 && fe0->dvb.frontend)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		videobuf_dvb_unregister_bus(&port->frontends);
 
 	switch (port->dev->board) {

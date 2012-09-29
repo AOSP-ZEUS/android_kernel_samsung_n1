@@ -83,14 +83,21 @@ config RT2800PCI_RT33XX
 config RT2800PCI_RT35XX
 	bool "rt2800pci - Include support for rt35xx devices (EXPERIMENTAL)"
 	depends on EXPERIMENTAL
+<<<<<<< HEAD
 	default n
+=======
+	default y
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	---help---
 	  This adds support for rt35xx wireless chipset family to the
 	  rt2800pci driver.
 	  Supported chips: RT3060, RT3062, RT3562, RT3592
 
+<<<<<<< HEAD
 	  Support for these devices is non-functional at the moment and is
 	  intended for testers and developers.
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 config RT2800PCI_RT53XX
        bool "rt2800pci - Include support for rt53xx devices (EXPERIMENTAL)"
@@ -154,15 +161,22 @@ config RT2800USB_RT33XX
 config RT2800USB_RT35XX
 	bool "rt2800usb - Include support for rt35xx devices (EXPERIMENTAL)"
 	depends on EXPERIMENTAL
+<<<<<<< HEAD
 	default n
+=======
+	default y
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	---help---
 	  This adds support for rt35xx wireless chipset family to the
 	  rt2800usb driver.
 	  Supported chips: RT3572
 
+<<<<<<< HEAD
 	  Support for these devices is non-functional at the moment and is
 	  intended for testers and developers.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config RT2800USB_RT53XX
        bool "rt2800usb - Include support for rt53xx devices (EXPERIMENTAL)"
        depends on EXPERIMENTAL

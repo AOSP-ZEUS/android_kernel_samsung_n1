@@ -30,7 +30,10 @@
 
 #include "easycap.h"
 
+<<<<<<< HEAD
 #ifndef CONFIG_EASYCAP_OSS
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*--------------------------------------------------------------------------*/
 /*
  *  PARAMETERS USED WHEN REGISTERING THE AUDIO INTERFACE
@@ -92,10 +95,13 @@ easycap_alsa_complete(struct urb *purb)
 		SAY("ERROR: peasycap is NULL\n");
 		return;
 	}
+<<<<<<< HEAD
 	if (memcmp(&peasycap->telltale[0], TELLTALE, strlen(TELLTALE))) {
 		SAY("ERROR: bad peasycap\n");
 		return;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	much = 0;
 	if (peasycap->audio_idle) {
 		JOM(16, "%i=audio_idle  %i=audio_isoc_streaming\n",
@@ -310,10 +316,13 @@ static int easycap_alsa_open(struct snd_pcm_substream *pss)
 		SAY("ERROR:  peasycap is NULL\n");
 		return -EFAULT;
 	}
+<<<<<<< HEAD
 	if (memcmp(&peasycap->telltale[0], TELLTALE, strlen(TELLTALE))) {
 		SAY("ERROR: bad peasycap\n");
 		return -EFAULT;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (peasycap->psnd_card != psnd_card) {
 		SAM("ERROR: bad peasycap->psnd_card\n");
 		return -EFAULT;
@@ -350,10 +359,13 @@ static int easycap_alsa_close(struct snd_pcm_substream *pss)
 		SAY("ERROR:  peasycap is NULL\n");
 		return -EFAULT;
 	}
+<<<<<<< HEAD
 	if (memcmp(&peasycap->telltale[0], TELLTALE, strlen(TELLTALE))) {
 		SAY("ERROR: bad peasycap\n");
 		return -EFAULT;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pss->private_data = NULL;
 	peasycap->psubstream = NULL;
 	JOT(4, "ending successfully\n");
@@ -441,10 +453,13 @@ static int easycap_alsa_prepare(struct snd_pcm_substream *pss)
 		SAY("ERROR:  peasycap is NULL\n");
 		return -EFAULT;
 	}
+<<<<<<< HEAD
 	if (memcmp(&peasycap->telltale[0], TELLTALE, strlen(TELLTALE))) {
 		SAY("ERROR: bad peasycap\n");
 		return -EFAULT;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	JOM(16, "ALSA decides %8i Hz=rate\n", pss->runtime->rate);
 	JOM(16, "ALSA decides %8ld =period_size\n", pss->runtime->period_size);
@@ -488,11 +503,14 @@ static int easycap_alsa_trigger(struct snd_pcm_substream *pss, int cmd)
 		SAY("ERROR:  peasycap is NULL\n");
 		return -EFAULT;
 	}
+<<<<<<< HEAD
 	if (memcmp(&peasycap->telltale[0], TELLTALE, strlen(TELLTALE))) {
 		SAY("ERROR: bad peasycap\n");
 		return -EFAULT;
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (cmd) {
 	case SNDRV_PCM_TRIGGER_START: {
 		peasycap->audio_idle = 0;
@@ -523,10 +541,13 @@ static snd_pcm_uframes_t easycap_alsa_pointer(struct snd_pcm_substream *pss)
 		SAY("ERROR:  peasycap is NULL\n");
 		return -EFAULT;
 	}
+<<<<<<< HEAD
 	if (memcmp(&peasycap->telltale[0], TELLTALE, strlen(TELLTALE))) {
 		SAY("ERROR: bad peasycap\n");
 		return -EFAULT;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if ((0 != peasycap->audio_eof) || (0 != peasycap->audio_idle)) {
 		JOM(8, "returning -EIO because  "
 		    "%i=audio_idle  %i=audio_eof\n",
@@ -584,10 +605,13 @@ int easycap_alsa_probe(struct easycap *peasycap)
 		SAY("ERROR: peasycap is NULL\n");
 		return -ENODEV;
 	}
+<<<<<<< HEAD
 	if (memcmp(&peasycap->telltale[0], TELLTALE, strlen(TELLTALE))) {
 		SAY("ERROR: bad peasycap\n");
 		return -EFAULT;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (0 > peasycap->minor) {
 		SAY("ERROR: no minor\n");
 		return -ENODEV;
@@ -644,7 +668,10 @@ int easycap_alsa_probe(struct easycap *peasycap)
 	SAM("registered %s\n", &psnd_card->id[0]);
 	return 0;
 }
+<<<<<<< HEAD
 #endif /*! CONFIG_EASYCAP_OSS */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*****************************************************************************/
 /*****************************************************************************/
@@ -762,11 +789,15 @@ submit_audio_urbs(struct easycap *peasycap)
 			purb->transfer_flags = URB_ISO_ASAP;
 			purb->transfer_buffer = peasycap->audio_isoc_buffer[isbuf].pgo;
 			purb->transfer_buffer_length = peasycap->audio_isoc_buffer_size;
+<<<<<<< HEAD
 #ifdef CONFIG_EASYCAP_OSS
 			purb->complete = easyoss_complete;
 #else /* CONFIG_EASYCAP_OSS */
 			purb->complete = easycap_alsa_complete;
 #endif /* CONFIG_EASYCAP_OSS */
+=======
+			purb->complete = easycap_alsa_complete;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			purb->context = peasycap;
 			purb->start_frame = 0;
 			purb->number_of_packets = peasycap->audio_isoc_framesperdesc;

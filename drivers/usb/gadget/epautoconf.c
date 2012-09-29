@@ -63,13 +63,23 @@ static int
 ep_matches (
 	struct usb_gadget		*gadget,
 	struct usb_ep			*ep,
+<<<<<<< HEAD
 	struct usb_endpoint_descriptor	*desc
+=======
+	struct usb_endpoint_descriptor	*desc,
+	struct usb_ss_ep_comp_descriptor *ep_comp
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 )
 {
 	u8		type;
 	const char	*tmp;
 	u16		max;
 
+<<<<<<< HEAD
+=======
+	int		num_req_streams = 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* endpoint already claimed? */
 	if (NULL != ep->driver_data)
 		return 0;
@@ -129,6 +139,25 @@ ep_matches (
 	}
 
 	/*
+<<<<<<< HEAD
+=======
+	 * Get the number of required streams from the EP companion
+	 * descriptor and see if the EP matches it
+	 */
+	if (usb_endpoint_xfer_bulk(desc)) {
+		if (ep_comp) {
+			num_req_streams = ep_comp->bmAttributes & 0x1f;
+			if (num_req_streams > ep->max_streams)
+				return 0;
+			/* Update the ep_comp descriptor if needed */
+			if (num_req_streams != ep->max_streams)
+				ep_comp->bmAttributes = ep->max_streams;
+		}
+
+	}
+
+	/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * If the protocol driver hasn't yet decided on wMaxPacketSize
 	 * and wants to know the maximum possible, provide the info.
 	 */
@@ -142,13 +171,21 @@ ep_matches (
 	max = 0x7ff & le16_to_cpu(desc->wMaxPacketSize);
 	switch (type) {
 	case USB_ENDPOINT_XFER_INT:
+<<<<<<< HEAD
 		/* INT:  limit 64 bytes full speed, 1024 high speed */
+=======
+		/* INT:  limit 64 bytes full speed, 1024 high/super speed */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!gadget->is_dualspeed && max > 64)
 			return 0;
 		/* FALLTHROUGH */
 
 	case USB_ENDPOINT_XFER_ISOC:
+<<<<<<< HEAD
 		/* ISO:  limit 1023 bytes full speed, 1024 high speed */
+=======
+		/* ISO:  limit 1023 bytes full speed, 1024 high/super speed */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ep->maxpacket < max)
 			return 0;
 		if (!gadget->is_dualspeed && max > 1023)
@@ -183,7 +220,11 @@ ep_matches (
 	}
 
 	/* report (variable) full speed bulk maxpacket */
+<<<<<<< HEAD
 	if (USB_ENDPOINT_XFER_BULK == type) {
+=======
+	if ((USB_ENDPOINT_XFER_BULK == type) && !ep_comp) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int size = ep->maxpacket;
 
 		/* min() doesn't work on bitfields with gcc-3.5 */
@@ -191,6 +232,10 @@ ep_matches (
 			size = 64;
 		desc->wMaxPacketSize = cpu_to_le16(size);
 	}
+<<<<<<< HEAD
+=======
+	ep->address = desc->bEndpointAddress;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 1;
 }
 
@@ -207,6 +252,7 @@ find_ep (struct usb_gadget *gadget, const char *name)
 }
 
 /**
+<<<<<<< HEAD
  * usb_ep_autoconfig - choose an endpoint matching the descriptor
  * @gadget: The device to which the endpoint must belong.
  * @desc: Endpoint descriptor, with endpoint direction and transfer mode
@@ -217,12 +263,35 @@ find_ep (struct usb_gadget *gadget, const char *name)
  * routine simplifies writing gadget drivers that work with multiple
  * USB device controllers.  The endpoint would be passed later to
  * usb_ep_enable(), along with some descriptor.
+=======
+ * usb_ep_autoconfig_ss() - choose an endpoint matching the ep
+ * descriptor and ep companion descriptor
+ * @gadget: The device to which the endpoint must belong.
+ * @desc: Endpoint descriptor, with endpoint direction and transfer mode
+ *    initialized.  For periodic transfers, the maximum packet
+ *    size must also be initialized.  This is modified on
+ *    success.
+ * @ep_comp: Endpoint companion descriptor, with the required
+ *    number of streams. Will be modified when the chosen EP
+ *    supports a different number of streams.
+ *
+ * This routine replaces the usb_ep_autoconfig when needed
+ * superspeed enhancments. If such enhancemnets are required,
+ * the FD should call usb_ep_autoconfig_ss directly and provide
+ * the additional ep_comp parameter.
+ *
+ * By choosing an endpoint to use with the specified descriptor,
+ * this routine simplifies writing gadget drivers that work with
+ * multiple USB device controllers.  The endpoint would be
+ * passed later to usb_ep_enable(), along with some descriptor.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * That second descriptor won't always be the same as the first one.
  * For example, isochronous endpoints can be autoconfigured for high
  * bandwidth, and then used in several lower bandwidth altsettings.
  * Also, high and full speed descriptors will be different.
  *
+<<<<<<< HEAD
  * Be sure to examine and test the results of autoconfiguration on your
  * hardware.  This code may not make the best choices about how to use the
  * USB controller, and it can't know all the restrictions that may apply.
@@ -239,6 +308,29 @@ find_ep (struct usb_gadget *gadget, const char *name)
 struct usb_ep *usb_ep_autoconfig (
 	struct usb_gadget		*gadget,
 	struct usb_endpoint_descriptor	*desc
+=======
+ * Be sure to examine and test the results of autoconfiguration
+ * on your hardware.  This code may not make the best choices
+ * about how to use the USB controller, and it can't know all
+ * the restrictions that may apply. Some combinations of driver
+ * and hardware won't be able to autoconfigure.
+ *
+ * On success, this returns an un-claimed usb_ep, and modifies the endpoint
+ * descriptor bEndpointAddress.  For bulk endpoints, the wMaxPacket value
+ * is initialized as if the endpoint were used at full speed and
+ * the bmAttribute field in the ep companion descriptor is
+ * updated with the assigned number of streams if it is
+ * different from the original value. To prevent the endpoint
+ * from being returned by a later autoconfig call, claim it by
+ * assigning ep->driver_data to some non-null value.
+ *
+ * On failure, this returns a null endpoint descriptor.
+ */
+struct usb_ep *usb_ep_autoconfig_ss(
+	struct usb_gadget		*gadget,
+	struct usb_endpoint_descriptor	*desc,
+	struct usb_ss_ep_comp_descriptor *ep_comp
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 )
 {
 	struct usb_ep	*ep;
@@ -252,23 +344,41 @@ struct usb_ep *usb_ep_autoconfig (
 	if (gadget_is_net2280 (gadget) && type == USB_ENDPOINT_XFER_INT) {
 		/* ep-e, ep-f are PIO with only 64 byte fifos */
 		ep = find_ep (gadget, "ep-e");
+<<<<<<< HEAD
 		if (ep && ep_matches (gadget, ep, desc))
 			return ep;
 		ep = find_ep (gadget, "ep-f");
 		if (ep && ep_matches (gadget, ep, desc))
+=======
+		if (ep && ep_matches(gadget, ep, desc, ep_comp))
+			return ep;
+		ep = find_ep (gadget, "ep-f");
+		if (ep && ep_matches(gadget, ep, desc, ep_comp))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return ep;
 
 	} else if (gadget_is_goku (gadget)) {
 		if (USB_ENDPOINT_XFER_INT == type) {
 			/* single buffering is enough */
+<<<<<<< HEAD
 			ep = find_ep (gadget, "ep3-bulk");
 			if (ep && ep_matches (gadget, ep, desc))
+=======
+			ep = find_ep(gadget, "ep3-bulk");
+			if (ep && ep_matches(gadget, ep, desc, ep_comp))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				return ep;
 		} else if (USB_ENDPOINT_XFER_BULK == type
 				&& (USB_DIR_IN & desc->bEndpointAddress)) {
 			/* DMA may be available */
+<<<<<<< HEAD
 			ep = find_ep (gadget, "ep2-bulk");
 			if (ep && ep_matches (gadget, ep, desc))
+=======
+			ep = find_ep(gadget, "ep2-bulk");
+			if (ep && ep_matches(gadget, ep, desc,
+					      ep_comp))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				return ep;
 		}
 
@@ -287,6 +397,7 @@ struct usb_ep *usb_ep_autoconfig (
 				ep = find_ep(gadget, "ep2out");
 		} else
 			ep = NULL;
+<<<<<<< HEAD
 		if (ep && ep_matches (gadget, ep, desc))
 			return ep;
 #endif
@@ -344,11 +455,20 @@ struct usb_ep *usb_ep_autoconfig (
 			if (ep && ep_matches(gadget, ep, desc))
 				return ep;
 		}
+=======
+		if (ep && ep_matches(gadget, ep, desc, ep_comp))
+			return ep;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* Second, look at endpoints until an unclaimed one looks usable */
 	list_for_each_entry (ep, &gadget->ep_list, ep_list) {
+<<<<<<< HEAD
 		if (ep_matches (gadget, ep, desc))
+=======
+		if (ep_matches(gadget, ep, desc, ep_comp))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return ep;
 	}
 
@@ -357,6 +477,49 @@ struct usb_ep *usb_ep_autoconfig (
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * usb_ep_autoconfig() - choose an endpoint matching the
+ * descriptor
+ * @gadget: The device to which the endpoint must belong.
+ * @desc: Endpoint descriptor, with endpoint direction and transfer mode
+ *	initialized.  For periodic transfers, the maximum packet
+ *	size must also be initialized.  This is modified on success.
+ *
+ * By choosing an endpoint to use with the specified descriptor, this
+ * routine simplifies writing gadget drivers that work with multiple
+ * USB device controllers.  The endpoint would be passed later to
+ * usb_ep_enable(), along with some descriptor.
+ *
+ * That second descriptor won't always be the same as the first one.
+ * For example, isochronous endpoints can be autoconfigured for high
+ * bandwidth, and then used in several lower bandwidth altsettings.
+ * Also, high and full speed descriptors will be different.
+ *
+ * Be sure to examine and test the results of autoconfiguration on your
+ * hardware.  This code may not make the best choices about how to use the
+ * USB controller, and it can't know all the restrictions that may apply.
+ * Some combinations of driver and hardware won't be able to autoconfigure.
+ *
+ * On success, this returns an un-claimed usb_ep, and modifies the endpoint
+ * descriptor bEndpointAddress.  For bulk endpoints, the wMaxPacket value
+ * is initialized as if the endpoint were used at full speed.  To prevent
+ * the endpoint from being returned by a later autoconfig call, claim it
+ * by assigning ep->driver_data to some non-null value.
+ *
+ * On failure, this returns a null endpoint descriptor.
+ */
+struct usb_ep *usb_ep_autoconfig(
+	struct usb_gadget		*gadget,
+	struct usb_endpoint_descriptor	*desc
+)
+{
+	return usb_ep_autoconfig_ss(gadget, desc, NULL);
+}
+
+
+/**
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * usb_ep_autoconfig_reset - reset endpoint autoconfig state
  * @gadget: device for which autoconfig state will be reset
  *

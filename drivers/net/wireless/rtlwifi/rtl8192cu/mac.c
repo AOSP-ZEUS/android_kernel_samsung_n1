@@ -26,6 +26,12 @@
  * Larry Finger <Larry.Finger@lwfinger.net>
  *
 ****************************************************************************/
+<<<<<<< HEAD
+=======
+
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 
 #include "../wifi.h"
@@ -213,14 +219,22 @@ bool rtl92c_init_llt_table(struct ieee80211_hw *hw, u32 boundary)
 	for (i = 0; i < (boundary - 1); i++) {
 		rst = rtl92c_llt_write(hw, i , i + 1);
 		if (true != rst) {
+<<<<<<< HEAD
 			printk(KERN_ERR "===> %s #1 fail\n", __func__);
+=======
+			pr_err("===> %s #1 fail\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return rst;
 		}
 	}
 	/* end of list */
 	rst = rtl92c_llt_write(hw, (boundary - 1), 0xFF);
 	if (true != rst) {
+<<<<<<< HEAD
 		printk(KERN_ERR "===> %s #2 fail\n", __func__);
+=======
+		pr_err("===> %s #2 fail\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return rst;
 	}
 	/* Make the other pages as ring buffer
@@ -231,14 +245,22 @@ bool rtl92c_init_llt_table(struct ieee80211_hw *hw, u32 boundary)
 	for (i = boundary; i < LLT_LAST_ENTRY_OF_TX_PKT_BUFFER; i++) {
 		rst = rtl92c_llt_write(hw, i, (i + 1));
 		if (true != rst) {
+<<<<<<< HEAD
 			printk(KERN_ERR "===> %s #3 fail\n", __func__);
+=======
+			pr_err("===> %s #3 fail\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return rst;
 		}
 	}
 	/* Let last entry point to the start entry of ring buffer */
 	rst = rtl92c_llt_write(hw, LLT_LAST_ENTRY_OF_TX_PKT_BUFFER, boundary);
 	if (true != rst) {
+<<<<<<< HEAD
 		printk(KERN_ERR "===> %s #4 fail\n", __func__);
+=======
+		pr_err("===> %s #4 fail\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return rst;
 	}
 	return rst;
@@ -380,13 +402,19 @@ void rtl92c_enable_interrupt(struct ieee80211_hw *hw)
 				0xFFFFFFFF);
 		rtl_write_dword(rtlpriv, REG_HIMRE, rtlpci->irq_mask[1] &
 				0xFFFFFFFF);
+<<<<<<< HEAD
 		rtlpci->irq_enabled = true;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		rtl_write_dword(rtlpriv, REG_HIMR, rtlusb->irq_mask[0] &
 				0xFFFFFFFF);
 		rtl_write_dword(rtlpriv, REG_HIMRE, rtlusb->irq_mask[1] &
 				0xFFFFFFFF);
+<<<<<<< HEAD
 		rtlusb->irq_enabled = true;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -398,6 +426,7 @@ void rtl92c_init_interrupt(struct ieee80211_hw *hw)
 void rtl92c_disable_interrupt(struct ieee80211_hw *hw)
 {
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
+<<<<<<< HEAD
 	struct rtl_hal *rtlhal = rtl_hal(rtl_priv(hw));
 	struct rtl_pci *rtlpci = rtl_pcidev(rtl_pcipriv(hw));
 	struct rtl_usb *rtlusb = rtl_usbdev(rtl_usbpriv(hw));
@@ -408,6 +437,11 @@ void rtl92c_disable_interrupt(struct ieee80211_hw *hw)
 		rtlpci->irq_enabled = false;
 	else if (IS_HARDWARE_TYPE_8192CU(rtlhal))
 		rtlusb->irq_enabled = false;
+=======
+
+	rtl_write_dword(rtlpriv, REG_HIMR, IMR8190_DISABLED);
+	rtl_write_dword(rtlpriv, REG_HIMRE, IMR8190_DISABLED);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void rtl92c_set_qos(struct ieee80211_hw *hw, int aci)
@@ -1113,7 +1147,10 @@ void rtl92c_translate_rx_signal_stuff(struct ieee80211_hw *hw,
 	struct ieee80211_hdr *hdr;
 	u8 *tmp_buf;
 	u8 *praddr;
+<<<<<<< HEAD
 	u8 *psaddr;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__le16 fc;
 	u16 type, cpu_fc;
 	bool packet_matchbssid, packet_toself, packet_beacon;
@@ -1124,7 +1161,10 @@ void rtl92c_translate_rx_signal_stuff(struct ieee80211_hw *hw,
 	cpu_fc = le16_to_cpu(fc);
 	type = WLAN_FC_GET_TYPE(fc);
 	praddr = hdr->addr1;
+<<<<<<< HEAD
 	psaddr = hdr->addr2;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	packet_matchbssid =
 	    ((IEEE80211_FTYPE_CTL != type) &&
 	     (!compare_ether_addr(mac->bssid,

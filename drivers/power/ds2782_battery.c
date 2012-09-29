@@ -3,7 +3,11 @@
  *
  * Copyright (C) 2009 Bluewater Systems Ltd
  *
+<<<<<<< HEAD
  * Author: Ryan Mallon <ryan@bluewatersys.com>
+=======
+ * Author: Ryan Mallon
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * DS2786 added by Yulia Vilensky <vilensky@compulab.co.il>
  *
@@ -416,6 +420,10 @@ static void __exit ds278x_exit(void)
 }
 module_exit(ds278x_exit);
 
+<<<<<<< HEAD
 MODULE_AUTHOR("Ryan Mallon <ryan@bluewatersys.com>");
+=======
+MODULE_AUTHOR("Ryan Mallon");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_DESCRIPTION("Maxim/Dallas DS2782 Stand-Alone Fuel Gauage IC driver");
 MODULE_LICENSE("GPL");

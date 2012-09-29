@@ -1740,6 +1740,10 @@ struct mac_iveiv_entry {
 /*
  * BBP 3: RX Antenna
  */
+<<<<<<< HEAD
+=======
+#define BBP3_RX_ADC				FIELD8(0x03)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define BBP3_RX_ANTENNA			FIELD8(0x18)
 #define BBP3_HT40_MINUS			FIELD8(0x20)
 
@@ -1783,6 +1787,11 @@ struct mac_iveiv_entry {
 #define RFCSR1_TX0_PD			FIELD8(0x08)
 #define RFCSR1_RX1_PD			FIELD8(0x10)
 #define RFCSR1_TX1_PD			FIELD8(0x20)
+<<<<<<< HEAD
+=======
+#define RFCSR1_RX2_PD			FIELD8(0x40)
+#define RFCSR1_TX2_PD			FIELD8(0x80)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * RFCSR 2:
@@ -1790,15 +1799,34 @@ struct mac_iveiv_entry {
 #define RFCSR2_RESCAL_EN		FIELD8(0x80)
 
 /*
+<<<<<<< HEAD
+=======
+ * FRCSR 5:
+ */
+#define RFCSR5_R1			FIELD8(0x0c)
+
+/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * RFCSR 6:
  */
 #define RFCSR6_R1			FIELD8(0x03)
 #define RFCSR6_R2			FIELD8(0x40)
+<<<<<<< HEAD
+=======
+#define RFCSR6_TXDIV		FIELD8(0x0c)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * RFCSR 7:
  */
 #define RFCSR7_RF_TUNING		FIELD8(0x01)
+<<<<<<< HEAD
+=======
+#define RFCSR7_R02				FIELD8(0x07)
+#define RFCSR7_R3				FIELD8(0x08)
+#define RFCSR7_R45				FIELD8(0x30)
+#define RFCSR7_R67				FIELD8(0xc0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * RFCSR 11:
@@ -1809,11 +1837,19 @@ struct mac_iveiv_entry {
  * RFCSR 12:
  */
 #define RFCSR12_TX_POWER		FIELD8(0x1f)
+<<<<<<< HEAD
+=======
+#define RFCSR12_DR0				FIELD8(0xe0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * RFCSR 13:
  */
 #define RFCSR13_TX_POWER		FIELD8(0x1f)
+<<<<<<< HEAD
+=======
+#define RFCSR13_DR0				FIELD8(0xe0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * RFCSR 15:
@@ -2256,6 +2292,10 @@ struct mac_iveiv_entry {
 #define MCU_ANT_SELECT			0X73
 #define MCU_BBP_SIGNAL			0x80
 #define MCU_POWER_SAVE			0x83
+<<<<<<< HEAD
+=======
+#define MCU_BAND_SELECT		0x91
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * MCU mailbox tokens

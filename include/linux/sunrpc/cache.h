@@ -15,7 +15,11 @@
 
 #include <linux/kref.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/proc_fs.h>
 
 /*
@@ -256,6 +260,7 @@ static inline time_t get_expiry(char **bpp)
 	return rv - boot.tv_sec;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 static inline void sunrpc_invalidate(struct cache_head *h,
 				     struct cache_detail *detail)
@@ -265,4 +270,6 @@ static inline void sunrpc_invalidate(struct cache_head *h,
 }
 #endif /* CONFIG_NFSD_DEPRECATED */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /*  _LINUX_SUNRPC_CACHE_H_ */

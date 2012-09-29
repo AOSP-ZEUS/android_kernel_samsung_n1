@@ -683,6 +683,7 @@ static int get_skb_hdr(struct sk_buff *skb, void **iphdr,
 static void ehea_proc_skb(struct ehea_port_res *pr, struct ehea_cqe *cqe,
 			  struct sk_buff *skb)
 {
+<<<<<<< HEAD
 	int vlan_extracted = ((cqe->status & EHEA_CQE_VLAN_TAG_XTRACT) &&
 			      pr->port->vgrp);
 
@@ -701,6 +702,15 @@ static void ehea_proc_skb(struct ehea_port_res *pr, struct ehea_cqe *cqe,
 		else
 			netif_receive_skb(skb);
 	}
+=======
+	if (cqe->status & EHEA_CQE_VLAN_TAG_XTRACT)
+		__vlan_hwaccel_put_tag(skb, cqe->vlan_tag);
+
+	if (skb->dev->features & NETIF_F_LRO)
+		lro_receive_skb(&pr->lro_mgr, skb, cqe);
+	else
+		netif_receive_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int ehea_proc_rwqes(struct net_device *dev,
@@ -2339,6 +2349,7 @@ static int ehea_start_xmit(struct sk_buff *skb, struct net_device *dev)
 	return NETDEV_TX_OK;
 }
 
+<<<<<<< HEAD
 static void ehea_vlan_rx_register(struct net_device *dev,
 				  struct vlan_group *grp)
 {
@@ -2365,6 +2376,8 @@ out:
 	return;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void ehea_vlan_rx_add_vid(struct net_device *dev, unsigned short vid)
 {
 	struct ehea_port *port = netdev_priv(dev);
@@ -2406,8 +2419,11 @@ static void ehea_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 	int index;
 	u64 hret;
 
+<<<<<<< HEAD
 	vlan_group_set_device(port->vgrp, vid, NULL);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cb1 = (void *)get_zeroed_page(GFP_KERNEL);
 	if (!cb1) {
 		pr_err("no mem for cb1\n");
@@ -3202,7 +3218,10 @@ static const struct net_device_ops ehea_netdev_ops = {
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_set_multicast_list	= ehea_set_multicast_list,
 	.ndo_change_mtu		= ehea_change_mtu,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register	= ehea_vlan_rx_register,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ndo_vlan_rx_add_vid	= ehea_vlan_rx_add_vid,
 	.ndo_vlan_rx_kill_vid	= ehea_vlan_rx_kill_vid,
 	.ndo_tx_timeout		= ehea_tx_watchdog,

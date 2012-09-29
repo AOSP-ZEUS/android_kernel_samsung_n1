@@ -333,6 +333,7 @@ ENTRY(arm1026_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(arm1026_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(arm1026_cache_fns)
 	.long	arm1026_flush_icache_all
 	.long	arm1026_flush_kern_cache_all
@@ -344,6 +345,10 @@ ENTRY(arm1026_cache_fns)
 	.long	arm1026_dma_map_area
 	.long	arm1026_dma_unmap_area
 	.long	arm1026_dma_flush_range
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions arm1026
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align	5
 ENTRY(cpu_arm1026_dcache_clean_area)
@@ -436,6 +441,7 @@ arm1026_crval:
 	crval	clear=0x00007f3f, mmuset=0x00003935, ucset=0x00001934
 
 	__INITDATA
+<<<<<<< HEAD
 
 /*
  * Purpose : Function pointers used to access above functions - all calls
@@ -475,6 +481,17 @@ cpu_arm1026_name:
 	.asciz	"ARM1026EJ-S"
 	.size	cpu_arm1026_name, . - cpu_arm1026_name
 
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions arm1026, dabort=v5t_early_abort, pabort=legacy_pabort
+
+	.section .rodata
+
+	string	cpu_arch_name, "armv5tej"
+	string	cpu_elf_name, "v5"
+	.align
+	string	cpu_arm1026_name, "ARM1026EJ-S"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.align
 
 	.section ".proc.info.init", #alloc, #execinstr

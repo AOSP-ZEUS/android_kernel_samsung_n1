@@ -81,7 +81,10 @@ struct ad5791_chip_info {
 
 /**
  * struct ad5791_state - driver instance specific data
+<<<<<<< HEAD
  * @indio_dev:		the industrial I/O device
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @us:			spi_device
  * @reg_vdd:		positive supply regulator
  * @reg_vss:		negative supply regulator
@@ -91,7 +94,10 @@ struct ad5791_chip_info {
  */
 
 struct ad5791_state {
+<<<<<<< HEAD
 	struct iio_dev			*indio_dev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct spi_device		*spi;
 	struct regulator		*reg_vdd;
 	struct regulator		*reg_vss;

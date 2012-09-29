@@ -227,9 +227,15 @@ int ata_sff_busy_sleep(struct ata_port *ap,
 	}
 
 	if (status != 0xff && (status & ATA_BUSY))
+<<<<<<< HEAD
 		ata_port_printk(ap, KERN_WARNING,
 				"port is slow to respond, please be patient "
 				"(Status 0x%x)\n", status);
+=======
+		ata_port_warn(ap,
+			      "port is slow to respond, please be patient (Status 0x%x)\n",
+			      status);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	timeout = ata_deadline(timer_start, tmout);
 	while (status != 0xff && (status & ATA_BUSY) &&
@@ -242,9 +248,15 @@ int ata_sff_busy_sleep(struct ata_port *ap,
 		return -ENODEV;
 
 	if (status & ATA_BUSY) {
+<<<<<<< HEAD
 		ata_port_printk(ap, KERN_ERR, "port failed to respond "
 				"(%lu secs, Status 0x%x)\n",
 				DIV_ROUND_UP(tmout, 1000), status);
+=======
+		ata_port_err(ap,
+			     "port failed to respond (%lu secs, Status 0x%x)\n",
+			     DIV_ROUND_UP(tmout, 1000), status);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EBUSY;
 	}
 
@@ -350,8 +362,13 @@ static void ata_dev_select(struct ata_port *ap, unsigned int device,
 			   unsigned int wait, unsigned int can_sleep)
 {
 	if (ata_msg_probe(ap))
+<<<<<<< HEAD
 		ata_port_printk(ap, KERN_INFO, "ata_dev_select: ENTER, "
 				"device %u, wait %u\n", device, wait);
+=======
+		ata_port_info(ap, "ata_dev_select: ENTER, device %u, wait %u\n",
+			      device, wait);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (wait)
 		ata_wait_idle(ap);
@@ -1333,9 +1350,16 @@ void ata_sff_flush_pio_task(struct ata_port *ap)
 
 	cancel_delayed_work_sync(&ap->sff_pio_task);
 	ap->hsm_task_state = HSM_ST_IDLE;
+<<<<<<< HEAD
 
 	if (ata_msg_ctl(ap))
 		ata_port_printk(ap, KERN_DEBUG, "%s: EXIT\n", __func__);
+=======
+	ap->sff_pio_task_link = NULL;
+
+	if (ata_msg_ctl(ap))
+		ata_port_dbg(ap, "%s: EXIT\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void ata_sff_pio_task(struct work_struct *work)
@@ -1513,7 +1537,11 @@ static unsigned int ata_sff_idle_irq(struct ata_port *ap)
 		ap->ops->sff_check_status(ap);
 		if (ap->ops->sff_irq_clear)
 			ap->ops->sff_irq_clear(ap);
+<<<<<<< HEAD
 		ata_port_printk(ap, KERN_WARNING, "irq trap\n");
+=======
+		ata_port_warn(ap, "irq trap\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 1;
 	}
 #endif
@@ -1711,7 +1739,11 @@ void ata_sff_lost_interrupt(struct ata_port *ap)
 
 	/* There was a command running, we are no longer busy and we have
 	   no interrupt. */
+<<<<<<< HEAD
 	ata_port_printk(ap, KERN_WARNING, "lost interrupt (Status 0x%x)\n",
+=======
+	ata_port_warn(ap, "lost interrupt (Status 0x%x)\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 								status);
 	/* Run the host interrupt logic as if the interrupt had not been
 	   lost */
@@ -1798,8 +1830,14 @@ int ata_sff_prereset(struct ata_link *link, unsigned long deadline)
 	if (!ata_link_offline(link)) {
 		rc = ata_sff_wait_ready(link, deadline);
 		if (rc && rc != -ENODEV) {
+<<<<<<< HEAD
 			ata_link_printk(link, KERN_WARNING, "device not ready "
 					"(errno=%d), forcing hardreset\n", rc);
+=======
+			ata_link_warn(link,
+				      "device not ready (errno=%d), forcing hardreset\n",
+				      rc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ehc->i.action |= ATA_EH_HARDRESET;
 		}
 	}
@@ -2056,7 +2094,11 @@ int ata_sff_softreset(struct ata_link *link, unsigned int *classes,
 	rc = ata_bus_softreset(ap, devmask, deadline);
 	/* if link is occupied, -ENODEV too is an error */
 	if (rc && (rc != -ENODEV || sata_scr_valid(link))) {
+<<<<<<< HEAD
 		ata_link_printk(link, KERN_ERR, "SRST failed (errno=%d)\n", rc);
+=======
+		ata_link_err(link, "SRST failed (errno=%d)\n", rc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return rc;
 	}
 
@@ -2170,8 +2212,12 @@ void ata_sff_drain_fifo(struct ata_queued_cmd *qc)
 
 	/* Can become DEBUG later */
 	if (count)
+<<<<<<< HEAD
 		ata_port_printk(ap, KERN_DEBUG,
 			"drained %d bytes to clear DRQ.\n", count);
+=======
+		ata_port_dbg(ap, "drained %d bytes to clear DRQ\n", count);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 }
 EXPORT_SYMBOL_GPL(ata_sff_drain_fifo);
@@ -2316,9 +2362,15 @@ int ata_pci_sff_init_host(struct ata_host *host)
 		rc = pcim_iomap_regions(pdev, 0x3 << base,
 					dev_driver_string(gdev));
 		if (rc) {
+<<<<<<< HEAD
 			dev_printk(KERN_WARNING, gdev,
 				   "failed to request/iomap BARs for port %d "
 				   "(errno=%d)\n", i, rc);
+=======
+			dev_warn(gdev,
+				 "failed to request/iomap BARs for port %d (errno=%d)\n",
+				 i, rc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (rc == -EBUSY)
 				pcim_pin_device(pdev);
 			ap->ops = &ata_dummy_port_ops;
@@ -2340,7 +2392,11 @@ int ata_pci_sff_init_host(struct ata_host *host)
 	}
 
 	if (!mask) {
+<<<<<<< HEAD
 		dev_printk(KERN_ERR, gdev, "no available native port\n");
+=======
+		dev_err(gdev, "no available native port\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENODEV;
 	}
 
@@ -2375,8 +2431,12 @@ int ata_pci_sff_prepare_host(struct pci_dev *pdev,
 
 	host = ata_host_alloc_pinfo(&pdev->dev, ppi, 2);
 	if (!host) {
+<<<<<<< HEAD
 		dev_printk(KERN_ERR, &pdev->dev,
 			   "failed to allocate ATA host\n");
+=======
+		dev_err(&pdev->dev, "failed to allocate ATA host\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rc = -ENOMEM;
 		goto err_out;
 	}
@@ -2542,8 +2602,12 @@ int ata_pci_sff_init_one(struct pci_dev *pdev,
 
 	pi = ata_sff_find_valid_pi(ppi);
 	if (!pi) {
+<<<<<<< HEAD
 		dev_printk(KERN_ERR, &pdev->dev,
 			   "no valid port_info specified\n");
+=======
+		dev_err(&pdev->dev, "no valid port_info specified\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 	}
 
@@ -3164,8 +3228,12 @@ static void ata_bmdma_nodma(struct ata_host *host, const char *reason)
 {
 	int i;
 
+<<<<<<< HEAD
 	dev_printk(KERN_ERR, host->dev, "BMDMA: %s, falling back to PIO\n",
 		   reason);
+=======
+	dev_err(host->dev, "BMDMA: %s, falling back to PIO\n", reason);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	for (i = 0; i < 2; i++) {
 		host->ports[i]->mwdma_mask = 0;
@@ -3297,8 +3365,12 @@ int ata_pci_bmdma_init_one(struct pci_dev *pdev,
 
 	pi = ata_sff_find_valid_pi(ppi);
 	if (!pi) {
+<<<<<<< HEAD
 		dev_printk(KERN_ERR, &pdev->dev,
 			   "no valid port_info specified\n");
+=======
+		dev_err(&pdev->dev, "no valid port_info specified\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 	}
 

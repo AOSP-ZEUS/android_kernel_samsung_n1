@@ -5,7 +5,10 @@
 #include <linux/timer.h>
 #include <linux/acpi_pmtmr.h>
 #include <linux/cpufreq.h>
+<<<<<<< HEAD
 #include <linux/dmi.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/delay.h>
 #include <linux/clocksource.h>
 #include <linux/percpu.h>
@@ -623,8 +626,12 @@ static void set_cyc2ns_scale(unsigned long cpu_khz, int cpu)
 
 	if (cpu_khz) {
 		*scale = (NSEC_PER_MSEC << CYC2NS_SCALE_FACTOR)/cpu_khz;
+<<<<<<< HEAD
 		*offset = ns_now - mult_frac(tsc_now, *scale,
 					     (1UL << CYC2NS_SCALE_FACTOR));
+=======
+		*offset = ns_now - (tsc_now * *scale >> CYC2NS_SCALE_FACTOR);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	sched_clock_idle_wakeup_event(0);
@@ -778,7 +785,11 @@ static struct clocksource clocksource_tsc = {
 	.flags                  = CLOCK_SOURCE_IS_CONTINUOUS |
 				  CLOCK_SOURCE_MUST_VERIFY,
 #ifdef CONFIG_X86_64
+<<<<<<< HEAD
 	.vread                  = vread_tsc,
+=======
+	.archdata               = { .vclock_mode = VCLOCK_TSC },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 };
 
@@ -801,6 +812,7 @@ void mark_tsc_unstable(char *reason)
 
 EXPORT_SYMBOL_GPL(mark_tsc_unstable);
 
+<<<<<<< HEAD
 static int __init dmi_mark_tsc_unstable(const struct dmi_system_id *d)
 {
 	printk(KERN_NOTICE "%s detected: marking TSC unstable.\n",
@@ -822,6 +834,8 @@ static struct dmi_system_id __initdata bad_tsc_dmi_table[] = {
 	{}
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init check_system_tsc_reliable(void)
 {
 #ifdef CONFIG_MGEODE_LX
@@ -957,6 +971,7 @@ static int __init init_tsc_clocksource(void)
 		clocksource_tsc.rating = 0;
 		clocksource_tsc.flags &= ~CLOCK_SOURCE_IS_CONTINUOUS;
 	}
+<<<<<<< HEAD
 
 	/*
 	 * Trust the results of the earlier calibration on systems
@@ -967,6 +982,8 @@ static int __init init_tsc_clocksource(void)
 		return 0;
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	schedule_delayed_work(&tsc_irqwork, 0);
 	return 0;
 }
@@ -1021,8 +1038,11 @@ void __init tsc_init(void)
 	lpj_fine = lpj;
 
 	use_tsc_delay();
+<<<<<<< HEAD
 	/* Check and install the TSC clocksource */
 	dmi_check_system(bad_tsc_dmi_table);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (unsynchronized_tsc())
 		mark_tsc_unstable("TSCs unsynchronized");

@@ -14,6 +14,7 @@
 #include "mem_user.h"
 #include <kern_constants.h>
 
+<<<<<<< HEAD
 /* Use the one from the kernel - the host may miss it, if having old headers. */
 #if UM_ELF_CLASS == UM_ELFCLASS32
 typedef Elf32_auxv_t elf_auxv_t;
@@ -24,6 +25,13 @@ typedef Elf64_auxv_t elf_auxv_t;
 /* These are initialized very early in boot and never changed */
 char * elf_aux_platform;
 long elf_aux_hwcap;
+=======
+typedef Elf32_auxv_t elf_auxv_t;
+
+/* These are initialized very early in boot and never changed */
+char * elf_aux_platform;
+extern long elf_aux_hwcap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 unsigned long vsyscall_ehdr;
 unsigned long vsyscall_end;
 unsigned long __kernel_vsyscall;

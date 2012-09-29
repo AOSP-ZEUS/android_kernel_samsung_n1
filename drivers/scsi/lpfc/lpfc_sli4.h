@@ -159,6 +159,28 @@ struct lpfc_fcf_rec {
 #define RECORD_VALID	0x02
 };
 
+<<<<<<< HEAD
+=======
+struct lpfc_fcf_pri_rec {
+	uint16_t fcf_index;
+#define LPFC_FCF_ON_PRI_LIST 0x0001
+#define LPFC_FCF_FLOGI_FAILED 0x0002
+	uint16_t flag;
+	uint32_t priority;
+};
+
+struct lpfc_fcf_pri {
+	struct list_head list;
+	struct lpfc_fcf_pri_rec fcf_rec;
+};
+
+/*
+ * Maximum FCF table index, it is for driver internal book keeping, it
+ * just needs to be no less than the supported HBA's FCF table size.
+ */
+#define LPFC_SLI4_FCF_TBL_INDX_MAX	32
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct lpfc_fcf {
 	uint16_t fcfi;
 	uint32_t fcf_flag;
@@ -178,15 +200,24 @@ struct lpfc_fcf {
 	uint32_t eligible_fcf_cnt;
 	struct lpfc_fcf_rec current_rec;
 	struct lpfc_fcf_rec failover_rec;
+<<<<<<< HEAD
+=======
+	struct list_head fcf_pri_list;
+	struct lpfc_fcf_pri fcf_pri[LPFC_SLI4_FCF_TBL_INDX_MAX];
+	uint32_t current_fcf_scan_pri;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct timer_list redisc_wait;
 	unsigned long *fcf_rr_bmask; /* Eligible FCF indexes for RR failover */
 };
 
+<<<<<<< HEAD
 /*
  * Maximum FCF table index, it is for driver internal book keeping, it
  * just needs to be no less than the supported HBA's FCF table size.
  */
 #define LPFC_SLI4_FCF_TBL_INDX_MAX	32
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define LPFC_REGION23_SIGNATURE "RG23"
 #define LPFC_REGION23_VERSION	1

@@ -323,6 +323,7 @@ exit:
 	return ret;
 }
 
+<<<<<<< HEAD
 static int netvsc_destroy_send_buf(struct netvsc_device *net_device)
 {
 	struct nvsp_message *revoke_packet;
@@ -479,6 +480,8 @@ exit:
 	return ret;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int netvsc_connect_vsp(struct hv_device *device)
 {
@@ -556,8 +559,11 @@ static int netvsc_connect_vsp(struct hv_device *device)
 
 	/* Post the big receive buffer to NetVSP */
 	ret = netvsc_init_recv_buf(device);
+<<<<<<< HEAD
 	if (ret == 0)
 		ret = netvsc_init_send_buf(device);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 cleanup:
 	put_net_device(device);
@@ -567,7 +573,10 @@ cleanup:
 static void netvsc_disconnect_vsp(struct netvsc_device *net_device)
 {
 	netvsc_destroy_recv_buf(net_device);
+<<<<<<< HEAD
 	netvsc_destroy_send_buf(net_device);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -698,10 +707,17 @@ int netvsc_send(struct hv_device *device,
 						  (unsigned long)packet);
 	} else {
 		ret = vmbus_sendpacket(device->channel, &sendMessage,
+<<<<<<< HEAD
 				       sizeof(struct nvsp_message),
 				       (unsigned long)packet,
 				       VM_PKT_DATA_INBAND,
 				       VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
+=======
+				sizeof(struct nvsp_message),
+				(unsigned long)packet,
+				VM_PKT_DATA_INBAND,
+				VMBUS_DATA_PACKET_FLAG_COMPLETION_REQUESTED);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	}
 
@@ -1099,8 +1115,11 @@ int netvsc_device_add(struct hv_device *device, void *additional_info)
 	net_device->recv_buf_size = NETVSC_RECEIVE_BUFFER_SIZE;
 	spin_lock_init(&net_device->recv_pkt_list_lock);
 
+<<<<<<< HEAD
 	net_device->send_buf_size = NETVSC_SEND_BUFFER_SIZE;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	INIT_LIST_HEAD(&net_device->recv_pkt_list);
 
 	for (i = 0; i < NETVSC_RECEIVE_PACKETLIST_COUNT; i++) {

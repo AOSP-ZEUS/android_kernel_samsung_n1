@@ -3,6 +3,7 @@
  *
  */
 #include <linux/clockchips.h>
+<<<<<<< HEAD
 #include <linux/init.h>
 #include <linux/interrupt.h>
 #include <linux/jiffies.h>
@@ -93,6 +94,18 @@ static struct clock_event_device pit_clockevent = {
 static irqreturn_t timer_interrupt(int irq, void *dev_id)
 {
 	pit_clockevent.event_handler(&pit_clockevent);
+=======
+#include <linux/i8253.h>
+#include <linux/module.h>
+#include <linux/smp.h>
+#include <linux/irq.h>
+
+#include <asm/time.h>
+
+static irqreturn_t timer_interrupt(int irq, void *dev_id)
+{
+	i8253_clockevent.event_handler(&i8253_clockevent);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return IRQ_HANDLED;
 }
@@ -103,6 +116,7 @@ static struct irqaction irq0  = {
 	.name = "timer"
 };
 
+<<<<<<< HEAD
 /*
  * Initialize the conversion factor and the min/max deltas of the clock event
  * structure and register the clock event source with the framework.
@@ -122,6 +136,11 @@ void __init setup_pit_timer(void)
 	cd->min_delta_ns = clockevent_delta2ns(0xF, cd);
 	clockevents_register_device(cd);
 
+=======
+void __init setup_pit_timer(void)
+{
+	clockevent_i8253_init(true);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	setup_irq(0, &irq0);
 }
 

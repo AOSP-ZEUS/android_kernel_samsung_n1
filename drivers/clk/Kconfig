@@ -2,3 +2,9 @@
 config CLKDEV_LOOKUP
 	bool
 	select HAVE_CLK
+<<<<<<< HEAD
+=======
+
+config HAVE_MACH_CLKDEV
+	bool
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

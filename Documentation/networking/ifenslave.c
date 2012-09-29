@@ -260,7 +260,11 @@ int main(int argc, char *argv[])
 		case 'V': opt_V++; exclusive++; break;
 
 		case '?':
+<<<<<<< HEAD
 			fprintf(stderr, usage_msg);
+=======
+			fprintf(stderr, "%s", usage_msg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			res = 2;
 			goto out;
 		}
@@ -268,13 +272,21 @@ int main(int argc, char *argv[])
 
 	/* options check */
 	if (exclusive > 1) {
+<<<<<<< HEAD
 		fprintf(stderr, usage_msg);
+=======
+		fprintf(stderr, "%s", usage_msg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		res = 2;
 		goto out;
 	}
 
 	if (opt_v || opt_V) {
+<<<<<<< HEAD
 		printf(version);
+=======
+		printf("%s", version);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (opt_V) {
 			res = 0;
 			goto out;
@@ -282,14 +294,23 @@ int main(int argc, char *argv[])
 	}
 
 	if (opt_u) {
+<<<<<<< HEAD
 		printf(usage_msg);
+=======
+		printf("%s", usage_msg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		res = 0;
 		goto out;
 	}
 
 	if (opt_h) {
+<<<<<<< HEAD
 		printf(usage_msg);
 		printf(help_msg);
+=======
+		printf("%s", usage_msg);
+		printf("%s", help_msg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		res = 0;
 		goto out;
 	}
@@ -309,7 +330,11 @@ int main(int argc, char *argv[])
 			goto out;
 		} else {
 			/* Just show usage */
+<<<<<<< HEAD
 			fprintf(stderr, usage_msg);
+=======
+			fprintf(stderr, "%s", usage_msg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			res = 2;
 			goto out;
 		}
@@ -320,7 +345,11 @@ int main(int argc, char *argv[])
 	master_ifname = *spp++;
 
 	if (master_ifname == NULL) {
+<<<<<<< HEAD
 		fprintf(stderr, usage_msg);
+=======
+		fprintf(stderr, "%s", usage_msg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		res = 2;
 		goto out;
 	}
@@ -339,7 +368,11 @@ int main(int argc, char *argv[])
 
 	if (slave_ifname == NULL) {
 		if (opt_d || opt_c) {
+<<<<<<< HEAD
 			fprintf(stderr, usage_msg);
+=======
+			fprintf(stderr, "%s", usage_msg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			res = 2;
 			goto out;
 		}

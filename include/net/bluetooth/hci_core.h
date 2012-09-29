@@ -21,10 +21,19 @@
    COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS, RELATING TO USE OF THIS
    SOFTWARE IS DISCLAIMED.
 */
+<<<<<<< HEAD
 
 #ifndef __HCI_CORE_H
 #define __HCI_CORE_H
 
+=======
+#ifdef CONFIG_BT_MGMT
+#include "hci_core_mgmt.h"
+#else
+#ifndef __HCI_CORE_H
+#define __HCI_CORE_H
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <net/bluetooth/hci.h>
 
 /* HCI upper protocols */
@@ -234,6 +243,13 @@ struct hci_dev {
 	void (*destruct)(struct hci_dev *hdev);
 	void (*notify)(struct hci_dev *hdev, unsigned int evt);
 	int (*ioctl)(struct hci_dev *hdev, unsigned int cmd, unsigned long arg);
+<<<<<<< HEAD
+=======
+/* Samsung Bluetooth Feature.2012.01.19
+ * Add wake_peer uart operation which is called before starting UART TX
+ */
+	void (*wake_peer)(struct hci_dev *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct hci_conn {
@@ -460,6 +476,15 @@ int hci_conn_security(struct hci_conn *conn, __u8 sec_level, __u8 auth_type);
 int hci_conn_change_link_key(struct hci_conn *conn);
 int hci_conn_switch_role(struct hci_conn *conn, __u8 role);
 
+<<<<<<< HEAD
+=======
+/* BEGIN SS_BLUEZ_BT +kjh 2011.06.23 : */
+/* workaround for a2dp chopping in multi connection. */
+int hci_conn_change_policy(struct hci_conn *conn, __u8 policy);
+int hci_conn_set_encrypt(struct hci_conn *conn, __u8 enable);
+/* END SS_BLUEZ_BT */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void hci_conn_enter_active_mode(struct hci_conn *conn, __u8 force_active);
 void hci_conn_enter_sniff_mode(struct hci_conn *conn);
 
@@ -898,3 +923,8 @@ void hci_le_ltk_reply(struct hci_conn *conn, u8 ltk[16]);
 void hci_le_ltk_neg_reply(struct hci_conn *conn);
 
 #endif /* __HCI_CORE_H */
+<<<<<<< HEAD
+=======
+
+#endif /* BT_MGMT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -84,6 +84,7 @@ enum dma_ch {
 	DMACH_SLIMBUS4_TX,
 	DMACH_SLIMBUS5_RX,
 	DMACH_SLIMBUS5_TX,
+<<<<<<< HEAD
 	DMACH_MTOM_0,
 	DMACH_MTOM_1,
 	DMACH_MTOM_2,
@@ -92,6 +93,8 @@ enum dma_ch {
 	DMACH_MTOM_5,
 	DMACH_MTOM_6,
 	DMACH_MTOM_7,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* END Marker, also used to denote a reserved channel */
 	DMACH_MAX,
 };

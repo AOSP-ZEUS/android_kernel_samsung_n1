@@ -28,6 +28,7 @@ config NFSD
 
 	  If unsure, say N.
 
+<<<<<<< HEAD
 config NFSD_DEPRECATED
 	bool "Include support for deprecated syscall interface to NFSD"
 	depends on NFSD
@@ -40,6 +41,8 @@ config NFSD_DEPRECATED
 
 	  In unsure, say Y.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config NFSD_V2_ACL
 	bool
 	depends on NFSD

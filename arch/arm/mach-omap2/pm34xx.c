@@ -31,6 +31,11 @@
 #include <linux/console.h>
 #include <trace/events/power.h>
 
+<<<<<<< HEAD
+=======
+#include <asm/suspend.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <plat/sram.h>
 #include "clockdomain.h"
 #include "powerdomain.h"
@@ -40,8 +45,11 @@
 #include <plat/gpmc.h>
 #include <plat/dma.h>
 
+<<<<<<< HEAD
 #include <asm/tlbflush.h>
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "cm2xxx_3xxx.h"
 #include "cm-regbits-34xx.h"
 #include "prm-regbits-34xx.h"
@@ -64,11 +72,14 @@ static inline bool is_suspending(void)
 }
 #endif
 
+<<<<<<< HEAD
 /* Scratchpad offsets */
 #define OMAP343X_TABLE_ADDRESS_OFFSET	   0xc4
 #define OMAP343X_TABLE_VALUE_OFFSET	   0xc0
 #define OMAP343X_CONTROL_REG_VALUE_OFFSET  0xc8
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* pm34xx errata defined in pm.h */
 u16 pm34xx_errata;
 
@@ -83,9 +94,14 @@ struct power_state {
 
 static LIST_HEAD(pwrst_list);
 
+<<<<<<< HEAD
 static void (*_omap_sram_idle)(u32 *addr, int save_state);
 
 static int (*_omap_save_secure_sram)(u32 *addr);
+=======
+static int (*_omap_save_secure_sram)(u32 *addr);
+void (*omap3_do_wfi_sram)(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct powerdomain *mpu_pwrdm, *neon_pwrdm;
 static struct powerdomain *core_pwrdm, *per_pwrdm;
@@ -312,6 +328,7 @@ static irqreturn_t prcm_interrupt_handler (int irq, void *dev_id)
 	return IRQ_HANDLED;
 }
 
+<<<<<<< HEAD
 /* Function to restore the table entry that was modified for enabling MMU */
 static void restore_table_entry(void)
 {
@@ -334,6 +351,27 @@ static void restore_table_entry(void)
 					+ OMAP343X_CONTROL_REG_VALUE_OFFSET);
 	/* This will enable caches and prediction */
 	set_cr(control_reg_value);
+=======
+static void omap34xx_save_context(u32 *save)
+{
+	u32 val;
+
+	/* Read Auxiliary Control Register */
+	asm("mrc p15, 0, %0, c1, c0, 1" : "=r" (val));
+	*save++ = 1;
+	*save++ = val;
+
+	/* Read L2 AUX ctrl register */
+	asm("mrc p15, 1, %0, c9, c0, 2" : "=r" (val));
+	*save++ = 1;
+	*save++ = val;
+}
+
+static int omap34xx_do_sram_idle(unsigned long save_state)
+{
+	omap34xx_cpu_suspend(save_state);
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void omap_sram_idle(void)
@@ -352,9 +390,12 @@ void omap_sram_idle(void)
 	int core_prev_state, per_prev_state;
 	u32 sdrc_pwr = 0;
 
+<<<<<<< HEAD
 	if (!_omap_sram_idle)
 		return;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pwrdm_clear_all_prev_pwrst(mpu_pwrdm);
 	pwrdm_clear_all_prev_pwrst(neon_pwrdm);
 	pwrdm_clear_all_prev_pwrst(core_pwrdm);
@@ -432,12 +473,25 @@ void omap_sram_idle(void)
 		sdrc_pwr = sdrc_read_reg(SDRC_POWER);
 
 	/*
+<<<<<<< HEAD
 	 * omap3_arm_context is the location where ARM registers
 	 * get saved. The restore path then reads from this
 	 * location and restores them back.
 	 */
 	_omap_sram_idle(omap3_arm_context, save_state);
 	cpu_init();
+=======
+	 * omap3_arm_context is the location where some ARM context
+	 * get saved. The rest is placed on the stack, and restored
+	 * from there before resuming.
+	 */
+	if (save_state)
+		omap34xx_save_context(omap3_arm_context);
+	if (save_state == 1 || save_state == 3)
+		cpu_suspend(save_state, omap34xx_do_sram_idle);
+	else
+		omap34xx_do_sram_idle(save_state);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Restore normal SDRC POWER settings */
 	if (omap_rev() >= OMAP3430_REV_ES3_0 &&
@@ -445,10 +499,13 @@ void omap_sram_idle(void)
 	    core_next_state == PWRDM_POWER_OFF)
 		sdrc_write_reg(sdrc_pwr, SDRC_POWER);
 
+<<<<<<< HEAD
 	/* Restore table entry modified during MMU restoration */
 	if (pwrdm_read_prev_pwrst(mpu_pwrdm) == PWRDM_POWER_OFF)
 		restore_table_entry();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* CORE */
 	if (core_next_state < PWRDM_POWER_ON) {
 		core_prev_state = pwrdm_read_prev_pwrst(core_pwrdm);
@@ -497,8 +554,11 @@ console_still_active:
 
 int omap3_can_sleep(void)
 {
+<<<<<<< HEAD
 	if (!sleep_while_idle)
 		return 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!omap_uart_can_sleep())
 		return 0;
 	return 1;
@@ -534,10 +594,13 @@ static int omap3_pm_suspend(void)
 	struct power_state *pwrst;
 	int state, ret = 0;
 
+<<<<<<< HEAD
 	if (wakeup_timer_seconds || wakeup_timer_milliseconds)
 		omap2_pm_wakeup_on_timer(wakeup_timer_seconds,
 					 wakeup_timer_milliseconds);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Read current next_pwrsts */
 	list_for_each_entry(pwrst, &pwrst_list, node)
 		pwrst->saved_state = pwrdm_read_next_pwrst(pwrst->pwrdm);
@@ -852,10 +915,24 @@ static int __init clkdms_setup(struct clockdomain *clkdm, void *unused)
 	return 0;
 }
 
+<<<<<<< HEAD
 void omap_push_sram_idle(void)
 {
 	_omap_sram_idle = omap_sram_push(omap34xx_cpu_suspend,
 					omap34xx_cpu_suspend_sz);
+=======
+/*
+ * Push functions to SRAM
+ *
+ * The minimum set of functions is pushed to SRAM for execution:
+ * - omap3_do_wfi for erratum i581 WA,
+ * - save_secure_ram_context for security extensions.
+ */
+void omap_push_sram_idle(void)
+{
+	omap3_do_wfi_sram = omap_sram_push(omap3_do_wfi, omap3_do_wfi_sz);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (omap_type() != OMAP2_DEVICE_TYPE_GP)
 		_omap_save_secure_sram = omap_sram_push(save_secure_ram_context,
 				save_secure_ram_context_sz);
@@ -920,7 +997,10 @@ static int __init omap3_pm_init(void)
 	per_clkdm = clkdm_lookup("per_clkdm");
 	core_clkdm = clkdm_lookup("core_clkdm");
 
+<<<<<<< HEAD
 	omap_push_sram_idle();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_SUSPEND
 	suspend_set_ops(&omap_pm_ops);
 #endif /* CONFIG_SUSPEND */

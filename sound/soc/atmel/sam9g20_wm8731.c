@@ -92,6 +92,10 @@ static struct snd_soc_ops at91sam9g20ek_ops = {
 };
 
 static int at91sam9g20ek_set_bias_level(struct snd_soc_card *card,
+<<<<<<< HEAD
+=======
+					struct snd_soc_dapm_context *dapm,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					enum snd_soc_bias_level level)
 {
 	static int mclk_on;

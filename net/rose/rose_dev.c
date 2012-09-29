@@ -96,11 +96,19 @@ static int rose_set_mac_address(struct net_device *dev, void *addr)
 	struct sockaddr *sa = addr;
 	int err;
 
+<<<<<<< HEAD
 	if (!memcmp(dev->dev_addr, sa->sa_data, dev->addr_len))
 		return 0;
 
 	if (dev->flags & IFF_UP) {
 		err = rose_add_loopback_node((rose_address *)sa->sa_data);
+=======
+	if (!memcpy(dev->dev_addr, sa->sa_data, dev->addr_len))
+		return 0;
+
+	if (dev->flags & IFF_UP) {
+		err = rose_add_loopback_node((rose_address *)dev->dev_addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (err)
 			return err;
 

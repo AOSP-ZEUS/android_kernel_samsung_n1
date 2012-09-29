@@ -303,7 +303,11 @@ static int __devinit cobalt_lcdfb_probe(struct platform_device *dev)
 		return -EBUSY;
 	}
 
+<<<<<<< HEAD
 	info->screen_size = res->end - res->start + 1;
+=======
+	info->screen_size = resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	info->screen_base = ioremap(res->start, info->screen_size);
 	info->fbops = &cobalt_lcd_fbops;
 	info->fix = cobalt_lcdfb_fix;

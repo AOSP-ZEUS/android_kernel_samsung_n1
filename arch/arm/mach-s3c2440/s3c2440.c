@@ -55,7 +55,13 @@ int __init s3c2440_init(void)
 
 	/* register suspend/resume handlers */
 
+<<<<<<< HEAD
 	register_syscore_ops(&s3c2410_pm_syscore_ops);
+=======
+#ifdef CONFIG_PM
+	register_syscore_ops(&s3c2410_pm_syscore_ops);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	register_syscore_ops(&s3c244x_pm_syscore_ops);
 	register_syscore_ops(&s3c24xx_irq_syscore_ops);
 

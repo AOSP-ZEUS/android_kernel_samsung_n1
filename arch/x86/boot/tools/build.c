@@ -130,7 +130,11 @@ static void die(const char * str, ...)
 
 static void usage(void)
 {
+<<<<<<< HEAD
 	die("Usage: build setup system [rootdev] [> image]");
+=======
+	die("Usage: build setup system [> image]");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int main(int argc, char ** argv)
@@ -138,13 +142,17 @@ int main(int argc, char ** argv)
 	unsigned int i, sz, setup_sectors;
 	int c;
 	u32 sys_size;
+<<<<<<< HEAD
 	u8 major_root, minor_root;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct stat sb;
 	FILE *file;
 	int fd;
 	void *kernel;
 	u32 crc = 0xffffffffUL;
 
+<<<<<<< HEAD
 	if ((argc < 3) || (argc > 4))
 		usage();
 	if (argc > 3) {
@@ -171,6 +179,10 @@ int main(int argc, char ** argv)
 		minor_root = DEFAULT_MINOR_ROOT;
 	}
 	fprintf(stderr, "Root device is (%d, %d)\n", major_root, minor_root);
+=======
+	if (argc != 3)
+		usage();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Copy the setup code */
 	file = fopen(argv[1], "r");
@@ -193,8 +205,13 @@ int main(int argc, char ** argv)
 	memset(buf+c, 0, i-c);
 
 	/* Set the default root device */
+<<<<<<< HEAD
 	buf[508] = minor_root;
 	buf[509] = major_root;
+=======
+	buf[508] = DEFAULT_MINOR_ROOT;
+	buf[509] = DEFAULT_MAJOR_ROOT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	fprintf(stderr, "Setup is %d bytes (padded to %d bytes).\n", c, i);
 

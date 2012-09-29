@@ -24,13 +24,18 @@ struct ad2s90_state {
 	struct mutex lock;
 	struct iio_dev *idev;
 	struct spi_device *sdev;
+<<<<<<< HEAD
 	u8 rx[2];
 	u8 tx[2];
+=======
+	u8 rx[2] ____cacheline_aligned;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static ssize_t ad2s90_show_angular(struct device *dev,
 			struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	struct spi_message msg;
 	struct spi_transfer xfer;
 	int ret;
@@ -47,6 +52,15 @@ static ssize_t ad2s90_show_angular(struct device *dev,
 	spi_message_init(&msg);
 	spi_message_add_tail(&xfer, &msg);
 	ret = spi_sync(st->sdev, &msg);
+=======
+	int ret;
+	ssize_t len = 0;
+	u16 val;
+	struct ad2s90_state *st = iio_priv(dev_get_drvdata(dev));
+
+	mutex_lock(&st->lock);
+	ret = spi_read(st->sdev, st->rx, 2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_ret;
 	val = (((u16)(st->rx[0])) << 4) | ((st->rx[1] & 0xF0) >> 4);
@@ -60,12 +74,18 @@ error_ret:
 #define IIO_DEV_ATTR_SIMPLE_RESOLVER(_show) \
 	IIO_DEVICE_ATTR(angular, S_IRUGO, _show, NULL, 0)
 
+<<<<<<< HEAD
 static IIO_CONST_ATTR(description,
 	"Low Cost, Complete 12-Bit Resolver-to-Digital Converter");
 static IIO_DEV_ATTR_SIMPLE_RESOLVER(ad2s90_show_angular);
 
 static struct attribute *ad2s90_attributes[] = {
 	&iio_const_attr_description.dev_attr.attr,
+=======
+static IIO_DEV_ATTR_SIMPLE_RESOLVER(ad2s90_show_angular);
+
+static struct attribute *ad2s90_attributes[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	&iio_dev_attr_angular.dev_attr.attr,
 	NULL,
 };
@@ -82,6 +102,7 @@ static const struct iio_info ad2s90_info = {
 
 static int __devinit ad2s90_probe(struct spi_device *spi)
 {
+<<<<<<< HEAD
 	struct ad2s90_state *st;
 	int ret = 0;
 
@@ -105,6 +126,25 @@ static int __devinit ad2s90_probe(struct spi_device *spi)
 	st->idev->info = &ad2s90_info;
 	st->idev->dev_data = (void *)(st);
 	st->idev->modes = INDIO_DIRECT_MODE;
+=======
+	struct iio_dev *indio_dev;
+	struct ad2s90_state *st;
+	int ret = 0;
+
+	indio_dev = iio_allocate_device(sizeof(*st));
+	if (indio_dev == NULL) {
+		ret = -ENOMEM;
+		goto error_ret;
+	}
+	st = iio_priv(indio_dev);
+	spi_set_drvdata(spi, indio_dev);
+
+	mutex_init(&st->lock);
+	st->sdev = spi;
+	indio_dev->dev.parent = &spi->dev;
+	indio_dev->info = &ad2s90_info;
+	indio_dev->modes = INDIO_DIRECT_MODE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = iio_device_register(st->idev);
 	if (ret)
@@ -119,18 +159,25 @@ static int __devinit ad2s90_probe(struct spi_device *spi)
 
 error_free_dev:
 	iio_free_device(st->idev);
+<<<<<<< HEAD
 error_free_st:
 	kfree(st);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_ret:
 	return ret;
 }
 
 static int __devexit ad2s90_remove(struct spi_device *spi)
 {
+<<<<<<< HEAD
 	struct ad2s90_state *st = spi_get_drvdata(spi);
 
 	iio_device_unregister(st->idev);
 	kfree(st);
+=======
+	iio_device_unregister(spi_get_drvdata(spi));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

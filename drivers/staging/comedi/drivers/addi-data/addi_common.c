@@ -58,8 +58,13 @@ You should also find the complete GPL in the COPYING file accompanying this sour
 #include <linux/timer.h>
 #include <linux/pci.h>
 #include <linux/gfp.h>
+<<<<<<< HEAD
 #include "../../comedidev.h"
 #include <asm/io.h>
+=======
+#include <linux/io.h>
+#include "../../comedidev.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_APCI_1710) || defined(CONFIG_APCI_3200) || defined(CONFIG_APCI_3300)
 #include <asm/i387.h>
 #endif

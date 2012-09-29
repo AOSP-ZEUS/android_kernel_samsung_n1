@@ -12,6 +12,11 @@
  * published by the Free Software Foundation.
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/io.h>
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/platform_device.h>
 #include <linux/slab.h>
@@ -511,7 +516,11 @@ static void sh_sir_tx(struct sh_sir_self *self, int phase)
 
 static int sh_sir_read_data(struct sh_sir_self *self)
 {
+<<<<<<< HEAD
 	u16 val;
+=======
+	u16 val = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int timeout = 1024;
 
 	while (timeout--) {

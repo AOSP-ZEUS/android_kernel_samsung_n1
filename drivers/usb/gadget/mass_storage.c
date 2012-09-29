@@ -169,6 +169,10 @@ static struct usb_composite_driver msg_driver = {
 	.name		= "g_mass_storage",
 	.dev		= &msg_device_desc,
 	.iProduct	= DRIVER_DESC,
+<<<<<<< HEAD
+=======
+	.max_speed	= USB_SPEED_HIGH,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.needs_serial	= 1,
 };
 

@@ -812,7 +812,11 @@ acpi_thermal_unbind_cooling_device(struct thermal_zone_device *thermal,
 				thermal_zone_unbind_cooling_device);
 }
 
+<<<<<<< HEAD
 static struct thermal_zone_device_ops acpi_thermal_zone_ops = {
+=======
+static const struct thermal_zone_device_ops acpi_thermal_zone_ops = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.bind = acpi_thermal_bind_cooling_device,
 	.unbind	= acpi_thermal_unbind_cooling_device,
 	.get_temp = thermal_get_temp,

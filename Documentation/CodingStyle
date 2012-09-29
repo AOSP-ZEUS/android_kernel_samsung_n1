@@ -80,6 +80,7 @@ available tools.
 The limit on the length of lines is 80 columns and this is a strongly
 preferred limit.
 
+<<<<<<< HEAD
 Statements longer than 80 columns will be broken into sensible chunks.
 Descendants are always substantially shorter than the parent and are placed
 substantially to the right. The same applies to function headers with a long
@@ -96,6 +97,15 @@ void fun(int a, int b, int c)
 	else
 		next_statement;
 }
+=======
+Statements longer than 80 columns will be broken into sensible chunks, unless
+exceeding 80 columns significantly increases readability and does not hide
+information. Descendants are always substantially shorter than the parent and
+are placed substantially to the right. The same applies to function headers
+with a long argument list. However, never break user-visible strings such as
+printk messages, because that breaks the ability to grep for them.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		Chapter 3: Placing Braces and Spaces
 

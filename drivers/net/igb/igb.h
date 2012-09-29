@@ -1,7 +1,11 @@
 /*******************************************************************************
 
   Intel(R) Gigabit Ethernet Linux driver
+<<<<<<< HEAD
   Copyright(c) 2007-2009 Intel Corporation.
+=======
+  Copyright(c) 2007-2011 Intel Corporation.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
   This program is free software; you can redistribute it and/or modify it
   under the terms and conditions of the GNU General Public License,
@@ -37,6 +41,11 @@
 #include <linux/clocksource.h>
 #include <linux/timecompare.h>
 #include <linux/net_tstamp.h>
+<<<<<<< HEAD
+=======
+#include <linux/bitops.h>
+#include <linux/if_vlan.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct igb_adapter;
 
@@ -252,7 +261,11 @@ static inline int igb_desc_unused(struct igb_ring *ring)
 struct igb_adapter {
 	struct timer_list watchdog_timer;
 	struct timer_list phy_info_timer;
+<<<<<<< HEAD
 	struct vlan_group *vlgrp;
+=======
+	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16 mng_vlan_id;
 	u32 bd_number;
 	u32 wol;

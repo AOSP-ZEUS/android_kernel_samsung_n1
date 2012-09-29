@@ -14,7 +14,11 @@
  *  Copyright (C) 2004-2005 Trusted Computer Solutions, Inc.
  *			    <dgoeddel@trustedcs.com>
  *  Copyright (C) 2006, 2007, 2009 Hewlett-Packard Development Company, L.P.
+<<<<<<< HEAD
  *	Paul Moore <paul.moore@hp.com>
+=======
+ *	Paul Moore <paul@paul-moore.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *  Copyright (C) 2007 Hitachi Software Engineering Co., Ltd.
  *		       Yuichi Nakamura <ynakam@hitachisoft.jp>
  *
@@ -57,7 +61,11 @@
 #include <net/netlabel.h>
 #include <linux/uaccess.h>
 #include <asm/ioctls.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/bitops.h>
 #include <linux/interrupt.h>
 #include <linux/netdevice.h>	/* for network interface checks */
@@ -2053,7 +2061,11 @@ static int selinux_bprm_set_creds(struct linux_binprm *bprm)
 			u32 ptsid = 0;
 
 			rcu_read_lock();
+<<<<<<< HEAD
 			tracer = tracehook_tracer_task(current);
+=======
+			tracer = ptrace_parent(current);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (likely(tracer != NULL)) {
 				sec = __task_cred(tracer)->security;
 				ptsid = sec->sid;
@@ -2659,12 +2671,20 @@ static int selinux_inode_follow_link(struct dentry *dentry, struct nameidata *na
 	return dentry_has_perm(cred, dentry, FILE__READ);
 }
 
+<<<<<<< HEAD
 static int selinux_inode_permission(struct inode *inode, int mask, unsigned flags)
+=======
+static int selinux_inode_permission(struct inode *inode, int mask)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	const struct cred *cred = current_cred();
 	struct common_audit_data ad;
 	u32 perms;
 	bool from_access;
+<<<<<<< HEAD
+=======
+	unsigned flags = mask & MAY_NOT_BLOCK;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	from_access = mask & MAY_ACCESS;
 	mask &= (MAY_READ|MAY_WRITE|MAY_EXEC|MAY_APPEND);
@@ -5319,7 +5339,11 @@ static int selinux_setprocattr(struct task_struct *p,
 		   Otherwise, leave SID unchanged and fail. */
 		ptsid = 0;
 		task_lock(p);
+<<<<<<< HEAD
 		tracer = tracehook_tracer_task(p);
+=======
+		tracer = ptrace_parent(p);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (tracer)
 			ptsid = task_sid(tracer);
 		task_unlock(p);

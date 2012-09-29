@@ -1533,7 +1533,11 @@ out:
 	/* Case 3 starts here */
 	truncate_inode_pages(&inode->i_data, 0);
 	end_writeback(inode);
+<<<<<<< HEAD
 
+=======
+	gfs2_dir_hash_inval(ip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ip->i_gl->gl_object = NULL;
 	gfs2_glock_add_to_lru(ip->i_gl);
 	gfs2_glock_put(ip->i_gl);

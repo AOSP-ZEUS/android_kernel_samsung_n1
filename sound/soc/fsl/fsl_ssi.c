@@ -678,7 +678,16 @@ static int __devinit fsl_ssi_probe(struct platform_device *pdev)
 		kfree(ssi_private);
 		return ret;
 	}
+<<<<<<< HEAD
 	ssi_private->ssi = ioremap(res.start, 1 + res.end - res.start);
+=======
+	ssi_private->ssi = of_iomap(np, 0);
+	if (!ssi_private->ssi) {
+		dev_err(&pdev->dev, "could not map device resources\n");
+		kfree(ssi_private);
+		return -ENOMEM;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ssi_private->ssi_phys = res.start;
 	ssi_private->irq = irq_of_parse_and_map(np, 0);
 
@@ -691,7 +700,11 @@ static int __devinit fsl_ssi_probe(struct platform_device *pdev)
 	/* Determine the FIFO depth. */
 	iprop = of_get_property(np, "fsl,fifo-depth", NULL);
 	if (iprop)
+<<<<<<< HEAD
 		ssi_private->fifo_depth = *iprop;
+=======
+		ssi_private->fifo_depth = be32_to_cpup(iprop);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	else
                 /* Older 8610 DTs didn't have the fifo-depth property */
 		ssi_private->fifo_depth = 8;

@@ -109,12 +109,23 @@ static int __devinit ce4100_i2c_probe(struct pci_dev *dev,
 		return -EINVAL;
 	}
 	sds = kzalloc(sizeof(*sds), GFP_KERNEL);
+<<<<<<< HEAD
 	if (!sds)
 		goto err_mem;
+=======
+	if (!sds) {
+		ret = -ENOMEM;
+		goto err_mem;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	for (i = 0; i < ARRAY_SIZE(sds->pdev); i++) {
 		sds->pdev[i] = add_i2c_device(dev, i);
 		if (IS_ERR(sds->pdev[i])) {
+<<<<<<< HEAD
+=======
+			ret = PTR_ERR(sds->pdev[i]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			while (--i >= 0)
 				platform_device_unregister(sds->pdev[i]);
 			goto err_dev_add;

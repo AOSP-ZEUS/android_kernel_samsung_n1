@@ -27,6 +27,7 @@ struct platform_device s3c_device_hwmon = {
 
 void __init s3c_hwmon_set_platdata(struct s3c_hwmon_pdata *pd)
 {
+<<<<<<< HEAD
 	struct s3c_hwmon_pdata *npd;
 
 	if (!pd) {
@@ -39,4 +40,8 @@ void __init s3c_hwmon_set_platdata(struct s3c_hwmon_pdata *pd)
 		printk(KERN_ERR "%s: no memory for platform data\n", __func__);
 
 	s3c_device_hwmon.dev.platform_data = npd;
+=======
+	s3c_set_platdata(pd, sizeof(struct s3c_hwmon_pdata),
+			 &s3c_device_hwmon);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

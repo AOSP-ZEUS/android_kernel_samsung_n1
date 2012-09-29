@@ -301,11 +301,15 @@ static int io_submit_init(struct ext4_io_submit *io,
 	io_end = ext4_init_io_end(inode, GFP_NOFS);
 	if (!io_end)
 		return -ENOMEM;
+<<<<<<< HEAD
 	do {
 		bio = bio_alloc(GFP_NOIO, nvecs);
 		nvecs >>= 1;
 	} while (bio == NULL);
 
+=======
+	bio = bio_alloc(GFP_NOIO, min(nvecs, BIO_MAX_PAGES));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bio->bi_sector = bh->b_blocknr * (bh->b_size >> 9);
 	bio->bi_bdev = bh->b_bdev;
 	bio->bi_private = io->io_end = io_end;

@@ -667,7 +667,11 @@ void lru_add_page_tail(struct zone* zone,
 	VM_BUG_ON(!PageHead(page));
 	VM_BUG_ON(PageCompound(page_tail));
 	VM_BUG_ON(PageLRU(page_tail));
+<<<<<<< HEAD
 	VM_BUG_ON(NR_CPUS != 1 && !spin_is_locked(&zone->lru_lock));
+=======
+	VM_BUG_ON(!spin_is_locked(&zone->lru_lock));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	SetPageLRU(page_tail);
 

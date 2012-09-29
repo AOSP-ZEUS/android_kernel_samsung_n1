@@ -222,6 +222,7 @@ static const struct driver_info	blob_info = {
 
 #endif	/* CONFIG_USB_ARMLINUX */
 
+<<<<<<< HEAD
 
 /*-------------------------------------------------------------------------*/
 
@@ -229,6 +230,10 @@ static const struct driver_info	blob_info = {
 #warning You need to configure some hardware for this driver
 #endif
 
+=======
+/*-------------------------------------------------------------------------*/
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * chip vendor names won't normally be on the cables, and
  * may not be on the device.

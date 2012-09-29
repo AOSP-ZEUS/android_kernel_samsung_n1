@@ -1281,6 +1281,10 @@ qlcnic_handle_linkevent(struct qlcnic_adapter *adapter,
 	u16 cable_len;
 	u16 link_speed;
 	u8  link_status, module, duplex, autoneg;
+<<<<<<< HEAD
+=======
+	u8 lb_status = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct net_device *netdev = adapter->netdev;
 
 	adapter->has_link_events = 1;
@@ -1292,6 +1296,10 @@ qlcnic_handle_linkevent(struct qlcnic_adapter *adapter,
 	link_status = msg->body[2] & 0xff;
 	duplex = (msg->body[2] >> 16) & 0xff;
 	autoneg = (msg->body[2] >> 24) & 0xff;
+<<<<<<< HEAD
+=======
+	lb_status = (msg->body[2] >> 32) & 0x3;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	module = (msg->body[2] >> 8) & 0xff;
 	if (module == LINKEVENT_MODULE_TWINAX_UNSUPPORTED_CABLE)
@@ -1301,6 +1309,13 @@ qlcnic_handle_linkevent(struct qlcnic_adapter *adapter,
 		dev_info(&netdev->dev, "unsupported cable length %d\n",
 				cable_len);
 
+<<<<<<< HEAD
+=======
+	if (!link_status && (lb_status == QLCNIC_ILB_MODE ||
+	    lb_status == QLCNIC_ELB_MODE))
+		adapter->ahw->loopback_state |= QLCNIC_LINKEVENT;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	qlcnic_advert_link_change(adapter, link_status);
 
 	if (duplex == LINKEVENT_FULL_DUPLEX)
@@ -1319,7 +1334,13 @@ qlcnic_handle_fw_message(int desc_cnt, int index,
 {
 	struct qlcnic_fw_msg msg;
 	struct status_desc *desc;
+<<<<<<< HEAD
 	int i = 0, opcode;
+=======
+	struct qlcnic_adapter *adapter;
+	struct device *dev;
+	int i = 0, opcode, ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	while (desc_cnt > 0 && i < 8) {
 		desc = &sds_ring->desc_head[index];
@@ -1330,10 +1351,41 @@ qlcnic_handle_fw_message(int desc_cnt, int index,
 		desc_cnt--;
 	}
 
+<<<<<<< HEAD
 	opcode = qlcnic_get_nic_msg_opcode(msg.body[0]);
 	switch (opcode) {
 	case QLCNIC_C2H_OPCODE_GET_LINKEVENT_RESPONSE:
 		qlcnic_handle_linkevent(sds_ring->adapter, &msg);
+=======
+	adapter = sds_ring->adapter;
+	dev = &adapter->pdev->dev;
+	opcode = qlcnic_get_nic_msg_opcode(msg.body[0]);
+
+	switch (opcode) {
+	case QLCNIC_C2H_OPCODE_GET_LINKEVENT_RESPONSE:
+		qlcnic_handle_linkevent(adapter, &msg);
+		break;
+	case QLCNIC_C2H_OPCODE_CONFIG_LOOPBACK:
+		ret = (u32)(msg.body[1]);
+		switch (ret) {
+		case 0:
+			adapter->ahw->loopback_state |= QLCNIC_LB_RESPONSE;
+			break;
+		case 1:
+			dev_info(dev, "loopback already in progress\n");
+			adapter->diag_cnt = -QLCNIC_TEST_IN_PROGRESS;
+			break;
+		case 2:
+			dev_info(dev, "loopback cable is not connected\n");
+			adapter->diag_cnt = -QLCNIC_LB_CABLE_NOT_CONN;
+			break;
+		default:
+			dev_info(dev, "loopback configure request failed,"
+					" ret %x\n", ret);
+			adapter->diag_cnt = -QLCNIC_UNDEFINED_ERROR;
+			break;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		break;
@@ -1746,6 +1798,106 @@ qlcnic_post_rx_buffers_nodb(struct qlcnic_adapter *adapter,
 	spin_unlock(&rds_ring->lock);
 }
 
+<<<<<<< HEAD
+=======
+static void dump_skb(struct sk_buff *skb)
+{
+	int i;
+	unsigned char *data = skb->data;
+
+	printk(KERN_INFO "\n");
+	for (i = 0; i < skb->len; i++) {
+		printk(KERN_INFO "%02x ", data[i]);
+		if ((i & 0x0f) == 8)
+			printk(KERN_INFO "\n");
+	}
+}
+
+void qlcnic_process_rcv_diag(struct qlcnic_adapter *adapter,
+		struct qlcnic_host_sds_ring *sds_ring,
+		int ring, u64 sts_data0)
+{
+	struct qlcnic_recv_context *recv_ctx = adapter->recv_ctx;
+	struct sk_buff *skb;
+	struct qlcnic_host_rds_ring *rds_ring;
+	int index, length, cksum, pkt_offset;
+
+	if (unlikely(ring >= adapter->max_rds_rings))
+		return;
+
+	rds_ring = &recv_ctx->rds_rings[ring];
+
+	index = qlcnic_get_sts_refhandle(sts_data0);
+	length = qlcnic_get_sts_totallength(sts_data0);
+	if (unlikely(index >= rds_ring->num_desc))
+		return;
+
+	cksum  = qlcnic_get_sts_status(sts_data0);
+	pkt_offset = qlcnic_get_sts_pkt_offset(sts_data0);
+
+	skb = qlcnic_process_rxbuf(adapter, rds_ring, index, cksum);
+	if (!skb)
+		return;
+
+	if (length > rds_ring->skb_size)
+		skb_put(skb, rds_ring->skb_size);
+	else
+		skb_put(skb, length);
+
+	if (pkt_offset)
+		skb_pull(skb, pkt_offset);
+
+	if (!qlcnic_check_loopback_buff(skb->data, adapter->mac_addr))
+		adapter->diag_cnt++;
+	else
+		dump_skb(skb);
+
+	dev_kfree_skb_any(skb);
+	adapter->stats.rx_pkts++;
+	adapter->stats.rxbytes += length;
+
+	return;
+}
+
+void
+qlcnic_process_rcv_ring_diag(struct qlcnic_host_sds_ring *sds_ring)
+{
+	struct qlcnic_adapter *adapter = sds_ring->adapter;
+	struct status_desc *desc;
+	u64 sts_data0;
+	int ring, opcode, desc_cnt;
+
+	u32 consumer = sds_ring->consumer;
+
+	desc = &sds_ring->desc_head[consumer];
+	sts_data0 = le64_to_cpu(desc->status_desc_data[0]);
+
+	if (!(sts_data0 & STATUS_OWNER_HOST))
+		return;
+
+	desc_cnt = qlcnic_get_sts_desc_cnt(sts_data0);
+	opcode = qlcnic_get_sts_opcode(sts_data0);
+	switch (opcode) {
+	case QLCNIC_RESPONSE_DESC:
+		qlcnic_handle_fw_message(desc_cnt, consumer, sds_ring);
+		break;
+	default:
+		ring = qlcnic_get_sts_type(sts_data0);
+		qlcnic_process_rcv_diag(adapter, sds_ring, ring, sts_data0);
+		break;
+	}
+
+	for (; desc_cnt > 0; desc_cnt--) {
+		desc = &sds_ring->desc_head[consumer];
+		desc->status_desc_data[0] = cpu_to_le64(STATUS_OWNER_PHANTOM);
+		consumer = get_next_index(consumer, sds_ring->num_desc);
+	}
+
+	sds_ring->consumer = consumer;
+	writel(consumer, sds_ring->crb_sts_consumer);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void
 qlcnic_fetch_mac(struct qlcnic_adapter *adapter, u32 off1, u32 off2,
 			u8 alt_mac, u8 *mac)

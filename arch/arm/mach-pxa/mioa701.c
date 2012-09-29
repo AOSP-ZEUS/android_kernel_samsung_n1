@@ -177,6 +177,7 @@ static unsigned long mioa701_pin_config[] = {
 	MFP_CFG_OUT(GPIO116, AF0, DRIVE_HIGH),
 };
 
+<<<<<<< HEAD
 #define MIO_GPIO_IN(num, _desc) \
 	{ .gpio = (num), .dir = 0, .desc = (_desc) }
 #define MIO_GPIO_OUT(num, _init, _desc) \
@@ -221,6 +222,8 @@ static void mio_gpio_free(struct gpio_ress *gpios, int size)
 		gpio_free(gpios[i].gpio);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* LCD Screen and Backlight */
 static struct platform_pwm_backlight_data mioa701_backlight_data = {
 	.pwm_id		= 0,
@@ -346,16 +349,26 @@ irqreturn_t gsm_on_irq(int irq, void *p)
 	return IRQ_HANDLED;
 }
 
+<<<<<<< HEAD
 struct gpio_ress gsm_gpios[] = {
 	MIO_GPIO_IN(GPIO25_GSM_MOD_ON_STATE, "GSM state"),
 	MIO_GPIO_IN(GPIO113_GSM_EVENT, "GSM event"),
+=======
+static struct gpio gsm_gpios[] = {
+	{ GPIO25_GSM_MOD_ON_STATE, GPIOF_IN, "GSM state" },
+	{ GPIO113_GSM_EVENT, GPIOF_IN, "GSM event" },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __init gsm_init(void)
 {
 	int rc;
 
+<<<<<<< HEAD
 	rc = mio_gpio_request(ARRAY_AND_SIZE(gsm_gpios));
+=======
+	rc = gpio_request_array(ARRAY_AND_SIZE(gsm_gpios));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (rc)
 		goto err_gpio;
 	rc = request_irq(gpio_to_irq(GPIO25_GSM_MOD_ON_STATE), gsm_on_irq,
@@ -369,7 +382,11 @@ static int __init gsm_init(void)
 
 err_irq:
 	printk(KERN_ERR "Mioa701: Can't request GSM_ON irq\n");
+<<<<<<< HEAD
 	mio_gpio_free(ARRAY_AND_SIZE(gsm_gpios));
+=======
+	gpio_free_array(ARRAY_AND_SIZE(gsm_gpios));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_gpio:
 	printk(KERN_ERR "Mioa701: gsm not available\n");
 	return rc;
@@ -378,7 +395,11 @@ err_gpio:
 static void gsm_exit(void)
 {
 	free_irq(gpio_to_irq(GPIO25_GSM_MOD_ON_STATE), NULL);
+<<<<<<< HEAD
 	mio_gpio_free(ARRAY_AND_SIZE(gsm_gpios));
+=======
+	gpio_free_array(ARRAY_AND_SIZE(gsm_gpios));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -749,14 +770,26 @@ static void mioa701_restart(char c, const char *cmd)
 	arm_machine_restart('s', cmd);
 }
 
+<<<<<<< HEAD
 static struct gpio_ress global_gpios[] = {
 	MIO_GPIO_OUT(GPIO9_CHARGE_EN, 1, "Charger enable"),
 	MIO_GPIO_OUT(GPIO18_POWEROFF, 0, "Power Off"),
 	MIO_GPIO_OUT(GPIO87_LCD_POWER, 0, "LCD Power"),
+=======
+static struct gpio global_gpios[] = {
+	{ GPIO9_CHARGE_EN, GPIOF_OUT_INIT_HIGH, "Charger enable" },
+	{ GPIO18_POWEROFF, GPIOF_OUT_INIT_LOW, "Power Off" },
+	{ GPIO87_LCD_POWER, GPIOF_OUT_INIT_LOW, "LCD Power" },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void __init mioa701_machine_init(void)
 {
+<<<<<<< HEAD
+=======
+	int rc;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PSLR  = 0xff100000; /* SYSDEL=125ms, PWRDEL=125ms, PSLR_SL_ROD=1 */
 	PCFR = PCFR_DC_EN | PCFR_GPR_EN | PCFR_OPDE;
 	RTTR = 32768 - 1; /* Reset crazy WinCE value */
@@ -766,7 +799,13 @@ static void __init mioa701_machine_init(void)
 	pxa_set_ffuart_info(NULL);
 	pxa_set_btuart_info(NULL);
 	pxa_set_stuart_info(NULL);
+<<<<<<< HEAD
 	mio_gpio_request(ARRAY_AND_SIZE(global_gpios));
+=======
+	rc = gpio_request_array(ARRAY_AND_SIZE(global_gpios));
+	if (rc)
+		pr_err("MioA701: Failed to request GPIOs: %d", rc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bootstrap_init();
 	pxa_set_fb_info(NULL, &mioa701_pxafb_info);
 	pxa_set_mci_info(&mioa701_mci_info);
@@ -794,6 +833,10 @@ MACHINE_START(MIOA701, "MIO A701")
 	.boot_params	= 0xa0000100,
 	.map_io		= &pxa27x_map_io,
 	.init_irq	= &pxa27x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= &pxa27x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine	= mioa701_machine_init,
 	.timer		= &pxa_timer,
 MACHINE_END

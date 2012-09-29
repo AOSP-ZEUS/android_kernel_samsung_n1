@@ -210,7 +210,11 @@ int __ps2_command(struct ps2dev *ps2dev, unsigned char *param, int command)
 	/*
 	 * Some devices (Synaptics) peform the reset before
 	 * ACKing the reset command, and so it can take a long
+<<<<<<< HEAD
 	 * time before the ACK arrrives.
+=======
+	 * time before the ACK arrives.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 */
 	if (ps2_sendbyte(ps2dev, command & 0xff,
 			 command == PS2_CMD_RESET_BAT ? 1000 : 200))

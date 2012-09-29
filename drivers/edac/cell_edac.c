@@ -140,7 +140,11 @@ static void __devinit cell_edac_init_csrows(struct mem_ctl_info *mci)
 		if (of_node_to_nid(np) != priv->node)
 			continue;
 		csrow->first_page = r.start >> PAGE_SHIFT;
+<<<<<<< HEAD
 		csrow->nr_pages = (r.end - r.start + 1) >> PAGE_SHIFT;
+=======
+		csrow->nr_pages = resource_size(&r) >> PAGE_SHIFT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		csrow->last_page = csrow->first_page + csrow->nr_pages - 1;
 		csrow->mtype = MEM_XDR;
 		csrow->edac_mode = EDAC_SECDED;

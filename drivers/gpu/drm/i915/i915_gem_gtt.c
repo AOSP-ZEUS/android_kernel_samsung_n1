@@ -59,6 +59,7 @@ void i915_gem_restore_gtt_mappings(struct drm_device *dev)
 			      (dev_priv->mm.gtt_end - dev_priv->mm.gtt_start) / PAGE_SIZE);
 
 	list_for_each_entry(obj, &dev_priv->mm.gtt_list, gtt_list) {
+<<<<<<< HEAD
 		unsigned int agp_type =
 			cache_level_to_agp_type(dev, obj->cache_level);
 
@@ -77,6 +78,10 @@ void i915_gem_restore_gtt_mappings(struct drm_device *dev)
 					       obj->base.size >> PAGE_SHIFT,
 					       obj->pages,
 					       agp_type);
+=======
+		i915_gem_clflush_object(obj);
+		i915_gem_gtt_rebind_object(obj, obj->cache_level);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	intel_gtt_chipset_flush();
@@ -110,6 +115,30 @@ int i915_gem_gtt_bind_object(struct drm_i915_gem_object *obj)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+void i915_gem_gtt_rebind_object(struct drm_i915_gem_object *obj,
+				enum i915_cache_level cache_level)
+{
+	struct drm_device *dev = obj->base.dev;
+	struct drm_i915_private *dev_priv = dev->dev_private;
+	unsigned int agp_type = cache_level_to_agp_type(dev, cache_level);
+
+	if (dev_priv->mm.gtt->needs_dmar) {
+		BUG_ON(!obj->sg_list);
+
+		intel_gtt_insert_sg_entries(obj->sg_list,
+					    obj->num_sg,
+					    obj->gtt_space->start >> PAGE_SHIFT,
+					    agp_type);
+	} else
+		intel_gtt_insert_pages(obj->gtt_space->start >> PAGE_SHIFT,
+				       obj->base.size >> PAGE_SHIFT,
+				       obj->pages,
+				       agp_type);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void i915_gem_gtt_unbind_object(struct drm_i915_gem_object *obj)
 {
 	intel_gtt_clear_range(obj->gtt_space->start >> PAGE_SHIFT,

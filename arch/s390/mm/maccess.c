@@ -85,3 +85,22 @@ int memcpy_real(void *dest, void *src, size_t count)
 	arch_local_irq_restore(flags);
 	return rc;
 }
+<<<<<<< HEAD
+=======
+
+/*
+ * Copy memory to absolute zero
+ */
+void copy_to_absolute_zero(void *dest, void *src, size_t count)
+{
+	unsigned long cr0;
+
+	BUG_ON((unsigned long) dest + count >= sizeof(struct _lowcore));
+	preempt_disable();
+	__ctl_store(cr0, 0, 0);
+	__ctl_clear_bit(0, 28); /* disable lowcore protection */
+	memcpy_real(dest + store_prefix(), src, count);
+	__ctl_load(cr0, 0, 0);
+	preempt_enable();
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

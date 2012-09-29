@@ -44,6 +44,7 @@ p9pdu_writef(struct p9_fcall *pdu, int proto_version, const char *fmt, ...);
 void
 p9pdu_dump(int way, struct p9_fcall *pdu)
 {
+<<<<<<< HEAD
 	int i, n;
 	u8 *data = pdu->sdata;
 	int datalen = pdu->size;
@@ -68,6 +69,26 @@ p9pdu_dump(int way, struct p9_fcall *pdu)
 		P9_DPRINTK(P9_DEBUG_PKT, "[[[(%d) %s\n", datalen, buf);
 	else
 		P9_DPRINTK(P9_DEBUG_PKT, "]]](%d) %s\n", datalen, buf);
+=======
+	int len = pdu->size;
+
+	if ((p9_debug_level & P9_DEBUG_VPKT) != P9_DEBUG_VPKT) {
+		if ((p9_debug_level & P9_DEBUG_PKT) == P9_DEBUG_PKT) {
+			if (len > 32)
+				len = 32;
+		} else {
+			/* shouldn't happen */
+			return;
+		}
+	}
+
+	if (way)
+		print_hex_dump_bytes("[9P] ", DUMP_PREFIX_OFFSET, pdu->sdata,
+									len);
+	else
+		print_hex_dump_bytes("]9P[ ", DUMP_PREFIX_OFFSET, pdu->sdata,
+									len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 #else
 void
@@ -610,7 +631,11 @@ int p9stat_read(char *buf, int len, struct p9_wstat *st, int proto_version)
 	ret = p9pdu_readf(&fake_pdu, proto_version, "S", st);
 	if (ret) {
 		P9_DPRINTK(P9_DEBUG_9P, "<<< p9stat_read failed: %d\n", ret);
+<<<<<<< HEAD
 		p9pdu_dump(1, &fake_pdu);
+=======
+		P9_DUMP_PKT(0, &fake_pdu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return ret;
@@ -632,11 +657,15 @@ int p9pdu_finalize(struct p9_fcall *pdu)
 	err = p9pdu_writef(pdu, 0, "d", size);
 	pdu->size = size;
 
+<<<<<<< HEAD
 #ifdef CONFIG_NET_9P_DEBUG
 	if ((p9_debug_level & P9_DEBUG_PKT) == P9_DEBUG_PKT)
 		p9pdu_dump(0, pdu);
 #endif
 
+=======
+	P9_DUMP_PKT(0, pdu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	P9_DPRINTK(P9_DEBUG_9P, ">>> size=%d type: %d tag: %d\n", pdu->size,
 							pdu->id, pdu->tag);
 
@@ -669,7 +698,11 @@ int p9dirent_read(char *buf, int len, struct p9_dirent *dirent,
 			&dirent->d_off, &dirent->d_type, &nameptr);
 	if (ret) {
 		P9_DPRINTK(P9_DEBUG_9P, "<<< p9dirent_read failed: %d\n", ret);
+<<<<<<< HEAD
 		p9pdu_dump(1, &fake_pdu);
+=======
+		P9_DUMP_PKT(1, &fake_pdu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto out;
 	}
 

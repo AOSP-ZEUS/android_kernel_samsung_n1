@@ -77,7 +77,12 @@
 
 #include <mach/board.h>
 #include <mach/cpu.h>
+<<<<<<< HEAD
 #include <mach/at91_mci.h>
+=======
+
+#include "at91_mci.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define DRIVER_NAME "at91_mci"
 

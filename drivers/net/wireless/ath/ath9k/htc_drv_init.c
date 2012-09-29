@@ -754,6 +754,10 @@ static void ath9k_set_hw_capab(struct ath9k_htc_priv *priv,
 		IEEE80211_HW_RX_INCLUDES_FCS |
 		IEEE80211_HW_SUPPORTS_PS |
 		IEEE80211_HW_PS_NULLFUNC_STACK |
+<<<<<<< HEAD
+=======
+		IEEE80211_HW_REPORTS_TX_ACK_STATUS |
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		IEEE80211_HW_HOST_BROADCAST_PS_BUFFERING;
 
 	hw->wiphy->interface_modes =

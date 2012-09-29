@@ -30,7 +30,10 @@
 #include <linux/ip.h>
 #include <linux/netfilter.h>
 #include <linux/netfilter_ipv4.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/rcupdate.h>
 #include <linux/spinlock.h>
 
@@ -286,8 +289,15 @@ static int pptp_xmit(struct ppp_channel *chan, struct sk_buff *skb)
 	ip_send_check(iph);
 
 	ip_local_out(skb);
+<<<<<<< HEAD
 
 tx_error:
+=======
+	return 1;
+
+tx_error:
+	kfree_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 1;
 }
 
@@ -306,11 +316,26 @@ static int pptp_rcv_core(struct sock *sk, struct sk_buff *skb)
 	}
 
 	header = (struct pptp_gre_header *)(skb->data);
+<<<<<<< HEAD
 
 	/* test if acknowledgement present */
 	if (PPTP_GRE_IS_A(header->ver)) {
 		__u32 ack = (PPTP_GRE_IS_S(header->flags)) ?
 				header->ack : header->seq; /* ack in different place if S = 0 */
+=======
+	headersize  = sizeof(*header);
+
+	/* test if acknowledgement present */
+	if (PPTP_GRE_IS_A(header->ver)) {
+		__u32 ack;
+
+		if (!pskb_may_pull(skb, headersize))
+			goto drop;
+		header = (struct pptp_gre_header *)(skb->data);
+
+		/* ack in different place if S = 0 */
+		ack = PPTP_GRE_IS_S(header->flags) ? header->ack : header->seq;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		ack = ntohl(ack);
 
@@ -319,12 +344,19 @@ static int pptp_rcv_core(struct sock *sk, struct sk_buff *skb)
 		/* also handle sequence number wrap-around  */
 		if (WRAPPED(ack, opt->ack_recv))
 			opt->ack_recv = ack;
+<<<<<<< HEAD
 	}
 
+=======
+	} else {
+		headersize -= sizeof(header->ack);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* test if payload present */
 	if (!PPTP_GRE_IS_S(header->flags))
 		goto drop;
 
+<<<<<<< HEAD
 	headersize  = sizeof(*header);
 	payload_len = ntohs(header->payload_len);
 	seq         = ntohl(header->seq);
@@ -334,6 +366,13 @@ static int pptp_rcv_core(struct sock *sk, struct sk_buff *skb)
 		headersize -= sizeof(header->ack);
 	/* check for incomplete packet (length smaller than expected) */
 	if (skb->len - headersize < payload_len)
+=======
+	payload_len = ntohs(header->payload_len);
+	seq         = ntohl(header->seq);
+
+	/* check for incomplete packet (length smaller than expected) */
+	if (!pskb_may_pull(skb, headersize + payload_len))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto drop;
 
 	payload = skb->data + headersize;

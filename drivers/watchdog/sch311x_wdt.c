@@ -472,15 +472,21 @@ static void sch311x_wdt_shutdown(struct platform_device *dev)
 	sch311x_wdt_stop();
 }
 
+<<<<<<< HEAD
 #define sch311x_wdt_suspend NULL
 #define sch311x_wdt_resume  NULL
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct platform_driver sch311x_wdt_driver = {
 	.probe		= sch311x_wdt_probe,
 	.remove		= __devexit_p(sch311x_wdt_remove),
 	.shutdown	= sch311x_wdt_shutdown,
+<<<<<<< HEAD
 	.suspend	= sch311x_wdt_suspend,
 	.resume		= sch311x_wdt_resume,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.driver		= {
 		.owner = THIS_MODULE,
 		.name = DRV_NAME,

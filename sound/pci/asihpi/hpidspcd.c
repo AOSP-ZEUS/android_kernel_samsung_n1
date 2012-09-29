@@ -1,8 +1,15 @@
 /***********************************************************************/
+<<<<<<< HEAD
 /*!
 
     AudioScience HPI driver
     Copyright (C) 1997-2010  AudioScience Inc. <support@audioscience.com>
+=======
+/**
+
+    AudioScience HPI driver
+    Copyright (C) 1997-2011  AudioScience Inc. <support@audioscience.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of version 2 of the GNU General Public License as
@@ -18,6 +25,7 @@
     Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 \file
+<<<<<<< HEAD
 Functions for reading DSP code to load into DSP
 
 (Linux only:) If DSPCODE_FIRMWARE_LOADER is defined, code is read using
@@ -30,11 +38,17 @@ HPI_INCLUDE_**** must be defined
 and the appropriate hzz?????.c or hex?????.c linked in
 
  */
+=======
+Functions for reading DSP code using
+hotplug firmware loader from individual dsp code files
+*/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /***********************************************************************/
 #define SOURCEFILE_NAME "hpidspcd.c"
 #include "hpidspcd.h"
 #include "hpidebug.h"
 
+<<<<<<< HEAD
 /**
  Header structure for binary dsp code file (see asidsp.doc)
  This structure must match that used in s2bin.c for generation of asidsp.bin
@@ -68,19 +82,47 @@ short hpi_dsp_code_open(u32 adapter, struct dsp_code *ps_dsp_code,
 	const struct firmware *ps_firmware = ps_dsp_code->ps_firmware;
 	struct code_header header;
 	char fw_name[20];
+=======
+struct dsp_code_private {
+	/**  Firmware descriptor */
+	const struct firmware *firmware;
+	struct pci_dev *dev;
+};
+
+#define HPI_VER_DECIMAL ((int)(HPI_VER_MAJOR(HPI_VER) * 10000 + \
+	    HPI_VER_MINOR(HPI_VER) * 100 + HPI_VER_RELEASE(HPI_VER)))
+
+/*-------------------------------------------------------------------*/
+short hpi_dsp_code_open(u32 adapter, void *os_data, struct dsp_code *dsp_code,
+	u32 *os_error_code)
+{
+	const struct firmware *firmware;
+	struct pci_dev *dev = os_data;
+	struct code_header header;
+	char fw_name[20];
+	short err_ret = HPI_ERROR_DSP_FILE_NOT_FOUND;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int err;
 
 	sprintf(fw_name, "asihpi/dsp%04x.bin", adapter);
 
+<<<<<<< HEAD
 	err = request_firmware(&ps_firmware, fw_name,
 		&ps_dsp_code->ps_dev->dev);
 
 	if (err != 0) {
 		dev_printk(KERN_ERR, &ps_dsp_code->ps_dev->dev,
+=======
+	err = request_firmware(&firmware, fw_name, &dev->dev);
+
+	if (err || !firmware) {
+		dev_printk(KERN_ERR, &dev->dev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			"%d, request_firmware failed for  %s\n", err,
 			fw_name);
 		goto error1;
 	}
+<<<<<<< HEAD
 	if (ps_firmware->size < sizeof(header)) {
 		dev_printk(KERN_ERR, &ps_dsp_code->ps_dev->dev,
 			"Header size too small %s\n", fw_name);
@@ -102,6 +144,24 @@ short hpi_dsp_code_open(u32 adapter, struct dsp_code *ps_dsp_code,
 
 	if (header.version / 100 != HPI_VER_DECIMAL / 100) {
 		dev_printk(KERN_ERR, &ps_dsp_code->ps_dev->dev,
+=======
+	if (firmware->size < sizeof(header)) {
+		dev_printk(KERN_ERR, &dev->dev, "Header size too small %s\n",
+			fw_name);
+		goto error2;
+	}
+	memcpy(&header, firmware->data, sizeof(header));
+
+	if ((header.type != 0x45444F43) ||	/* "CODE" */
+		(header.adapter != adapter)
+		|| (header.size != firmware->size)) {
+		dev_printk(KERN_ERR, &dev->dev, "Invalid firmware file\n");
+		goto error2;
+	}
+
+	if ((header.version / 100 & ~1) != (HPI_VER_DECIMAL / 100 & ~1)) {
+		dev_printk(KERN_ERR, &dev->dev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			"Incompatible firmware version "
 			"DSP image %d != Driver %d\n", header.version,
 			HPI_VER_DECIMAL);
@@ -109,12 +169,17 @@ short hpi_dsp_code_open(u32 adapter, struct dsp_code *ps_dsp_code,
 	}
 
 	if (header.version != HPI_VER_DECIMAL) {
+<<<<<<< HEAD
 		dev_printk(KERN_WARNING, &ps_dsp_code->ps_dev->dev,
+=======
+		dev_printk(KERN_WARNING, &dev->dev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			"Firmware: release version mismatch  DSP image %d != Driver %d\n",
 			header.version, HPI_VER_DECIMAL);
 	}
 
 	HPI_DEBUG_LOG(DEBUG, "dsp code %s opened\n", fw_name);
+<<<<<<< HEAD
 	ps_dsp_code->ps_firmware = ps_firmware;
 	ps_dsp_code->block_length = header.size / sizeof(u32);
 	ps_dsp_code->word_count = sizeof(header) / sizeof(u32);
@@ -156,11 +221,61 @@ short hpi_dsp_code_read_word(struct dsp_code *ps_dsp_code, u32 *pword)
 	*pword = ((u32 *)(ps_dsp_code->ps_firmware->data))[ps_dsp_code->
 		word_count];
 	ps_dsp_code->word_count++;
+=======
+	dsp_code->pvt = kmalloc(sizeof(*dsp_code->pvt), GFP_KERNEL);
+	if (!dsp_code->pvt) {
+		err_ret = HPI_ERROR_MEMORY_ALLOC;
+		goto error2;
+	}
+
+	dsp_code->pvt->dev = dev;
+	dsp_code->pvt->firmware = firmware;
+	dsp_code->header = header;
+	dsp_code->block_length = header.size / sizeof(u32);
+	dsp_code->word_count = sizeof(header) / sizeof(u32);
+	return 0;
+
+error2:
+	release_firmware(firmware);
+error1:
+	dsp_code->block_length = 0;
+	return err_ret;
+}
+
+/*-------------------------------------------------------------------*/
+void hpi_dsp_code_close(struct dsp_code *dsp_code)
+{
+	if (dsp_code->pvt->firmware) {
+		HPI_DEBUG_LOG(DEBUG, "dsp code closed\n");
+		release_firmware(dsp_code->pvt->firmware);
+		dsp_code->pvt->firmware = NULL;
+	}
+	kfree(dsp_code->pvt);
+}
+
+/*-------------------------------------------------------------------*/
+void hpi_dsp_code_rewind(struct dsp_code *dsp_code)
+{
+	/* Go back to start of  data, after header */
+	dsp_code->word_count = sizeof(struct code_header) / sizeof(u32);
+}
+
+/*-------------------------------------------------------------------*/
+short hpi_dsp_code_read_word(struct dsp_code *dsp_code, u32 *pword)
+{
+	if (dsp_code->word_count + 1 > dsp_code->block_length)
+		return HPI_ERROR_DSP_FILE_FORMAT;
+
+	*pword = ((u32 *)(dsp_code->pvt->firmware->data))[dsp_code->
+		word_count];
+	dsp_code->word_count++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
 /*-------------------------------------------------------------------*/
 short hpi_dsp_code_read_block(size_t words_requested,
+<<<<<<< HEAD
 	struct dsp_code *ps_dsp_code, u32 **ppblock)
 {
 	if (ps_dsp_code->word_count + words_requested >
@@ -171,5 +286,16 @@ short hpi_dsp_code_read_block(size_t words_requested,
 		((u32 *)(ps_dsp_code->ps_firmware->data)) +
 		ps_dsp_code->word_count;
 	ps_dsp_code->word_count += words_requested;
+=======
+	struct dsp_code *dsp_code, u32 **ppblock)
+{
+	if (dsp_code->word_count + words_requested > dsp_code->block_length)
+		return HPI_ERROR_DSP_FILE_FORMAT;
+
+	*ppblock =
+		((u32 *)(dsp_code->pvt->firmware->data)) +
+		dsp_code->word_count;
+	dsp_code->word_count += words_requested;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }

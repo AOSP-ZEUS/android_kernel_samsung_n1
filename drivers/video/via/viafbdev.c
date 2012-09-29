@@ -2022,7 +2022,11 @@ static int __init viafb_setup(void)
 int __init viafb_init(void)
 {
 	u32 dummy_x, dummy_y;
+<<<<<<< HEAD
 	int r;
+=======
+	int r = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (machine_is_olpc())
 		/* Apply XO-1.5-specific configuration. */
@@ -2045,7 +2049,11 @@ int __init viafb_init(void)
 	printk(KERN_INFO
        "VIA Graphics Integration Chipset framebuffer %d.%d initializing\n",
 	       VERSION_MAJOR, VERSION_MINOR);
+<<<<<<< HEAD
 	return 0;
+=======
+	return r;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void __exit viafb_exit(void)

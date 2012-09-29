@@ -4,6 +4,11 @@ snd-soc-ad1836-objs := ad1836.o
 snd-soc-ad193x-objs := ad193x.o
 snd-soc-ad1980-objs := ad1980.o
 snd-soc-ad73311-objs := ad73311.o
+<<<<<<< HEAD
+=======
+snd-soc-adau1701-objs := adau1701.o
+snd-soc-adav80x-objs := adav80x.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 snd-soc-ads117x-objs := ads117x.o
 snd-soc-ak4104-objs := ak4104.o
 snd-soc-ak4535-objs := ak4535.o
@@ -28,10 +33,19 @@ snd-soc-alc5623-objs := alc5623.o
 snd-soc-sn95031-objs := sn95031.o
 snd-soc-spdif-objs := spdif_transciever.o
 snd-soc-ssm2602-objs := ssm2602.o
+<<<<<<< HEAD
+=======
+snd-soc-sta32x-objs := sta32x.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 snd-soc-stac9766-objs := stac9766.o
 snd-soc-tlv320aic23-objs := tlv320aic23.o
 snd-soc-tlv320aic26-objs := tlv320aic26.o
 snd-soc-tlv320aic3x-objs := tlv320aic3x.o
+<<<<<<< HEAD
+=======
+snd-soc-tlv320aic326x-objs := tlv320aic326x.o tlv320aic326x_minidsp_config.o
+snd-soc-tlv320aic326x-objs += tlv320aic326x_mini-dsp.o aic326x_tiload.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 snd-soc-tlv320aic32x4-objs := tlv320aic32x4.o
 snd-soc-tlv320dac33-objs := tlv320dac33.o
 snd-soc-twl4030-objs := twl4030.o
@@ -55,11 +69,19 @@ snd-soc-wm8750-objs := wm8750.o
 snd-soc-wm8753-objs := wm8753.o
 snd-soc-wm8770-objs := wm8770.o
 snd-soc-wm8776-objs := wm8776.o
+<<<<<<< HEAD
+=======
+snd-soc-wm8782-objs := wm8782.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 snd-soc-wm8804-objs := wm8804.o
 snd-soc-wm8900-objs := wm8900.o
 snd-soc-wm8903-objs := wm8903.o
 snd-soc-wm8904-objs := wm8904.o
+<<<<<<< HEAD
 snd-soc-wm8915-objs := wm8915.o
+=======
+snd-soc-wm8996-objs := wm8996.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 snd-soc-wm8940-objs := wm8940.o
 snd-soc-wm8955-objs := wm8955.o
 snd-soc-wm8960-objs := wm8960.o
@@ -68,13 +90,29 @@ snd-soc-wm8962-objs := wm8962.o
 snd-soc-wm8971-objs := wm8971.o
 snd-soc-wm8974-objs := wm8974.o
 snd-soc-wm8978-objs := wm8978.o
+<<<<<<< HEAD
+=======
+snd-soc-wm8983-objs := wm8983.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 snd-soc-wm8985-objs := wm8985.o
 snd-soc-wm8988-objs := wm8988.o
 snd-soc-wm8990-objs := wm8990.o
 snd-soc-wm8991-objs := wm8991.o
 snd-soc-wm8993-objs := wm8993.o
+<<<<<<< HEAD
 snd-soc-wm8994-objs := wm8994.o wm8994-tables.o wm8958-dsp2.o
 snd-soc-wm8994-samsung-objs := wm8994_samsung.o wm8994_herring.o
+=======
+ifeq ($(CONFIG_MACH_BOSE_ATT),y)
+snd-soc-wm8994-objs := wm8994_samsung.o wm8994_bose.o
+else
+ifeq ($(CONFIG_MACH_N1),y)
+snd-soc-wm8994-objs := wm8994_samsung.o wm8994_n1.o
+else
+snd-soc-wm8994-objs := wm8994.o wm8994-tables.o wm8958-dsp2.o
+endif
+endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 snd-soc-wm8995-objs := wm8995.o
 snd-soc-wm9081-objs := wm9081.o
 snd-soc-wm9705-objs := wm9705.o
@@ -82,6 +120,11 @@ snd-soc-wm9712-objs := wm9712.o
 snd-soc-wm9713-objs := wm9713.o
 snd-soc-wm-hubs-objs := wm_hubs.o
 snd-soc-jz4740-codec-objs := jz4740.o
+<<<<<<< HEAD
+=======
+snd-soc-rt5639-objs := rt5639.o
+snd-soc-rt5640-objs := rt5640.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 # Amp
 snd-soc-lm4857-objs := lm4857.o
@@ -96,6 +139,11 @@ obj-$(CONFIG_SND_SOC_AD1836)	+= snd-soc-ad1836.o
 obj-$(CONFIG_SND_SOC_AD193X)	+= snd-soc-ad193x.o
 obj-$(CONFIG_SND_SOC_AD1980)	+= snd-soc-ad1980.o
 obj-$(CONFIG_SND_SOC_AD73311) += snd-soc-ad73311.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SND_SOC_ADAU1701)  += snd-soc-adau1701.o
+obj-$(CONFIG_SND_SOC_ADAV80X)  += snd-soc-adav80x.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SND_SOC_ADS117X)	+= snd-soc-ads117x.o
 obj-$(CONFIG_SND_SOC_AK4104)	+= snd-soc-ak4104.o
 obj-$(CONFIG_SND_SOC_AK4535)	+= snd-soc-ak4535.o
@@ -121,11 +169,19 @@ obj-$(CONFIG_SND_SOC_SGTL5000)  += snd-soc-sgtl5000.o
 obj-$(CONFIG_SND_SOC_SN95031)	+=snd-soc-sn95031.o
 obj-$(CONFIG_SND_SOC_SPDIF)	+= snd-soc-spdif.o
 obj-$(CONFIG_SND_SOC_SSM2602)	+= snd-soc-ssm2602.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SND_SOC_STA32X)   += snd-soc-sta32x.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SND_SOC_STAC9766)	+= snd-soc-stac9766.o
 obj-$(CONFIG_SND_SOC_TLV320AIC23)	+= snd-soc-tlv320aic23.o
 obj-$(CONFIG_SND_SOC_TLV320AIC26)	+= snd-soc-tlv320aic26.o
 obj-$(CONFIG_SND_SOC_TLV320AIC3X)	+= snd-soc-tlv320aic3x.o
 obj-$(CONFIG_SND_SOC_TVL320AIC32X4)     += snd-soc-tlv320aic32x4.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SND_SOC_TLV320AIC326X)	+= snd-soc-tlv320aic326x.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SND_SOC_TLV320DAC33)	+= snd-soc-tlv320dac33.o
 obj-$(CONFIG_SND_SOC_TWL4030)	+= snd-soc-twl4030.o
 obj-$(CONFIG_SND_SOC_TWL6040)	+= snd-soc-twl6040.o
@@ -148,11 +204,19 @@ obj-$(CONFIG_SND_SOC_WM8750)	+= snd-soc-wm8750.o
 obj-$(CONFIG_SND_SOC_WM8753)	+= snd-soc-wm8753.o
 obj-$(CONFIG_SND_SOC_WM8770)	+= snd-soc-wm8770.o
 obj-$(CONFIG_SND_SOC_WM8776)	+= snd-soc-wm8776.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SND_SOC_WM8782)	+= snd-soc-wm8782.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SND_SOC_WM8804)	+= snd-soc-wm8804.o
 obj-$(CONFIG_SND_SOC_WM8900)	+= snd-soc-wm8900.o
 obj-$(CONFIG_SND_SOC_WM8903)	+= snd-soc-wm8903.o
 obj-$(CONFIG_SND_SOC_WM8904)	+= snd-soc-wm8904.o
+<<<<<<< HEAD
 obj-$(CONFIG_SND_SOC_WM8915)	+= snd-soc-wm8915.o
+=======
+obj-$(CONFIG_SND_SOC_WM8996)	+= snd-soc-wm8996.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SND_SOC_WM8940)	+= snd-soc-wm8940.o
 obj-$(CONFIG_SND_SOC_WM8955)	+= snd-soc-wm8955.o
 obj-$(CONFIG_SND_SOC_WM8960)	+= snd-soc-wm8960.o
@@ -161,19 +225,31 @@ obj-$(CONFIG_SND_SOC_WM8962)	+= snd-soc-wm8962.o
 obj-$(CONFIG_SND_SOC_WM8971)	+= snd-soc-wm8971.o
 obj-$(CONFIG_SND_SOC_WM8974)	+= snd-soc-wm8974.o
 obj-$(CONFIG_SND_SOC_WM8978)	+= snd-soc-wm8978.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SND_SOC_WM8983)	+= snd-soc-wm8983.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SND_SOC_WM8985)	+= snd-soc-wm8985.o
 obj-$(CONFIG_SND_SOC_WM8988)	+= snd-soc-wm8988.o
 obj-$(CONFIG_SND_SOC_WM8990)	+= snd-soc-wm8990.o
 obj-$(CONFIG_SND_SOC_WM8991)	+= snd-soc-wm8991.o
 obj-$(CONFIG_SND_SOC_WM8993)	+= snd-soc-wm8993.o
 obj-$(CONFIG_SND_SOC_WM8994)	+= snd-soc-wm8994.o
+<<<<<<< HEAD
 obj-$(CONFIG_SND_SOC_WM8994_SAMSUNG)	+= snd-soc-wm8994-samsung.o
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SND_SOC_WM8995)	+= snd-soc-wm8995.o
 obj-$(CONFIG_SND_SOC_WM9081)	+= snd-soc-wm9081.o
 obj-$(CONFIG_SND_SOC_WM9705)	+= snd-soc-wm9705.o
 obj-$(CONFIG_SND_SOC_WM9712)	+= snd-soc-wm9712.o
 obj-$(CONFIG_SND_SOC_WM9713)	+= snd-soc-wm9713.o
 obj-$(CONFIG_SND_SOC_WM_HUBS)	+= snd-soc-wm-hubs.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SND_SOC_RT5639)	+= snd-soc-rt5639.o
+obj-$(CONFIG_SND_SOC_RT5640)	+= snd-soc-rt5640.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 # Amp
 obj-$(CONFIG_SND_SOC_LM4857)	+= snd-soc-lm4857.o

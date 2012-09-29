@@ -1133,7 +1133,11 @@ static irqreturn_t s3c_hsudc_irq(int irq, void *_dev)
 	return IRQ_HANDLED;
 }
 
+<<<<<<< HEAD
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int s3c_hsudc_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	struct s3c_hsudc *hsudc = the_controller;
@@ -1181,9 +1185,14 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
 
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
 
 int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
+=======
+
+static int s3c_hsudc_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct s3c_hsudc *hsudc = the_controller;
 	unsigned long flags;
@@ -1210,7 +1219,10 @@ int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
 			driver->driver.name);
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_unregister_driver);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline u32 s3c_hsudc_read_frameno(struct s3c_hsudc *hsudc)
 {
@@ -1224,6 +1236,11 @@ static int s3c_hsudc_gadget_getframe(struct usb_gadget *gadget)
 
 static struct usb_gadget_ops s3c_hsudc_gadget_ops = {
 	.get_frame	= s3c_hsudc_gadget_getframe,
+<<<<<<< HEAD
+=======
+	.start		= s3c_hsudc_start,
+	.stop		= s3c_hsudc_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int s3c_hsudc_probe(struct platform_device *pdev)
@@ -1311,7 +1328,19 @@ static int s3c_hsudc_probe(struct platform_device *pdev)
 
 	disable_irq(hsudc->irq);
 	local_irq_enable();
+<<<<<<< HEAD
 	return 0;
+=======
+
+	ret = usb_add_gadget_udc(&pdev->dev, &hsudc->gadget);
+	if (ret)
+		goto err_add_udc;
+
+	return 0;
+err_add_udc:
+	clk_disable(hsudc->uclk);
+	clk_put(hsudc->uclk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_clk:
 	free_irq(hsudc->irq, hsudc);
 err_irq:
@@ -1333,6 +1362,10 @@ static struct platform_driver s3c_hsudc_driver = {
 	},
 	.probe		= s3c_hsudc_probe,
 };
+<<<<<<< HEAD
+=======
+MODULE_ALIAS("platform:s3c-hsudc");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int __init s3c_hsudc_modinit(void)
 {

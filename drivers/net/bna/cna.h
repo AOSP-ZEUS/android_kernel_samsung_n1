@@ -19,7 +19,10 @@
 #ifndef __CNA_H__
 #define __CNA_H__
 
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/kernel.h>
 #include <linux/types.h>
 #include <linux/pci.h>
@@ -34,7 +37,11 @@
 
 #include <linux/list.h>
 
+<<<<<<< HEAD
 #define bfa_sm_fault(__mod, __event)    do {                            \
+=======
+#define bfa_sm_fault(__event)    do {                            \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pr_err("SM Assertion failure: %s: %d: event = %d", __FILE__, __LINE__, \
 		__event); \
 } while (0)
@@ -74,7 +81,11 @@ typedef struct mac { u8 mac[MAC_ADDRLEN]; } mac_t;
 		bfa_q_next(_q) = bfa_q_next(*((struct list_head **) _qe)); \
 		bfa_q_qe_init(*((struct list_head **) _qe));		\
 	} else {							\
+<<<<<<< HEAD
 		*((struct list_head **) (_qe)) = (struct list_head *) NULL; \
+=======
+		*((struct list_head **)(_qe)) = NULL;			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}								\
 }
 

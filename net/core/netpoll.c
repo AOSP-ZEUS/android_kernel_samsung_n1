@@ -177,7 +177,11 @@ static void service_arp_queue(struct netpoll_info *npi)
 	}
 }
 
+<<<<<<< HEAD
 void netpoll_poll_dev(struct net_device *dev)
+=======
+static void netpoll_poll_dev(struct net_device *dev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	const struct net_device_ops *ops;
 
@@ -193,7 +197,11 @@ void netpoll_poll_dev(struct net_device *dev)
 
 	poll_napi(dev);
 
+<<<<<<< HEAD
 	if (dev->flags & IFF_SLAVE) {
+=======
+	if (dev->priv_flags & IFF_SLAVE) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (dev->npinfo) {
 			struct net_device *bond_dev = dev->master;
 			struct sk_buff *skb;
@@ -208,6 +216,7 @@ void netpoll_poll_dev(struct net_device *dev)
 
 	zap_completion_queue();
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(netpoll_poll_dev);
 
 void netpoll_poll(struct netpoll *np)
@@ -215,6 +224,8 @@ void netpoll_poll(struct netpoll *np)
 	netpoll_poll_dev(np->dev);
 }
 EXPORT_SYMBOL(netpoll_poll);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static void refill_skbs(void)
 {
@@ -275,7 +286,11 @@ repeat:
 
 	if (!skb) {
 		if (++count < 10) {
+<<<<<<< HEAD
 			netpoll_poll(np);
+=======
+			netpoll_poll_dev(np->dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto repeat;
 		}
 		return NULL;
@@ -336,7 +351,11 @@ void netpoll_send_skb_on_dev(struct netpoll *np, struct sk_buff *skb,
 			}
 
 			/* tickle device maybe there is some cleanup */
+<<<<<<< HEAD
 			netpoll_poll(np);
+=======
+			netpoll_poll_dev(np->dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			udelay(USEC_PER_POLL);
 		}
@@ -565,13 +584,23 @@ int __netpoll_rx(struct sk_buff *skb)
 	if (skb_shared(skb))
 		goto out;
 
+<<<<<<< HEAD
 	iph = (struct iphdr *)skb->data;
 	if (!pskb_may_pull(skb, sizeof(struct iphdr)))
 		goto out;
+=======
+	if (!pskb_may_pull(skb, sizeof(struct iphdr)))
+		goto out;
+	iph = (struct iphdr *)skb->data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (iph->ihl < 5 || iph->version != 4)
 		goto out;
 	if (!pskb_may_pull(skb, iph->ihl*4))
 		goto out;
+<<<<<<< HEAD
+=======
+	iph = (struct iphdr *)skb->data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ip_fast_csum((u8 *)iph, iph->ihl) != 0)
 		goto out;
 
@@ -586,6 +615,10 @@ int __netpoll_rx(struct sk_buff *skb)
 	if (pskb_trim_rcsum(skb, len))
 		goto out;
 
+<<<<<<< HEAD
+=======
+	iph = (struct iphdr *)skb->data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (iph->protocol != IPPROTO_UDP)
 		goto out;
 

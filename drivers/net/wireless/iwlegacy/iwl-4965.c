@@ -496,7 +496,11 @@ static s32 iwl4965_get_tx_atten_grp(u16 channel)
 	    channel <= CALIB_IWL_TX_ATTEN_GR4_LCH)
 		return CALIB_CH_GROUP_4;
 
+<<<<<<< HEAD
 	return -1;
+=======
+	return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static u32 iwl4965_get_sub_band(const struct iwl_priv *priv, u32 channel)
@@ -915,7 +919,11 @@ static int iwl4965_fill_txpower_tbl(struct iwl_priv *priv, u8 band, u16 channel,
 	if (txatten_grp < 0) {
 		IWL_ERR(priv, "Can't find txatten group for channel %d.\n",
 			  channel);
+<<<<<<< HEAD
 		return -EINVAL;
+=======
+		return txatten_grp;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	IWL_DEBUG_TXPOWER(priv, "channel %d belongs to txatten group %d\n",
@@ -1185,8 +1193,11 @@ static int iwl4965_send_rxon_assoc(struct iwl_priv *priv,
 
 	ret = iwl_legacy_send_cmd_pdu_async(priv, REPLY_RXON_ASSOC,
 				     sizeof(rxon_assoc), &rxon_assoc, NULL);
+<<<<<<< HEAD
 	if (ret)
 		return ret;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return ret;
 }
@@ -2075,7 +2086,10 @@ static struct iwl_lib_ops iwl4965_lib = {
 	.is_valid_rtc_data_addr = iwl4965_hw_valid_rtc_data_addr,
 	.init_alive_start = iwl4965_init_alive_start,
 	.load_ucode = iwl4965_load_bsm,
+<<<<<<< HEAD
 	.dump_nic_event_log = iwl4965_dump_nic_event_log,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.dump_nic_error_log = iwl4965_dump_nic_error_log,
 	.dump_fh = iwl4965_dump_fh,
 	.set_channel_switch = iwl4965_hw_channel_switch,
@@ -2106,7 +2120,10 @@ static struct iwl_lib_ops iwl4965_lib = {
 		.tx_stats_read = iwl4965_ucode_tx_stats_read,
 		.general_stats_read = iwl4965_ucode_general_stats_read,
 	},
+<<<<<<< HEAD
 	.check_plcp_health = iwl4965_good_plcp_health,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const struct iwl_legacy_ops iwl4965_legacy_ops = {
@@ -2156,10 +2173,15 @@ static struct iwl_base_params iwl4965_base_params = {
 	.use_bsm = true,
 	.led_compensation = 61,
 	.chain_noise_num_beacons = IWL4965_CAL_NUM_BEACONS,
+<<<<<<< HEAD
 	.plcp_delta_threshold = IWL_MAX_PLCP_ERR_THRESHOLD_DEF,
 	.wd_timeout = IWL_DEF_WD_TIMEOUT,
 	.temperature_kelvin = true,
 	.max_event_log_size = 512,
+=======
+	.wd_timeout = IWL_DEF_WD_TIMEOUT,
+	.temperature_kelvin = true,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ucode_tracing = true,
 	.sensitivity_calib_by_driver = true,
 	.chain_noise_calib_by_driver = true,

@@ -1,7 +1,11 @@
 /*
  *	dscore.c
  *
+<<<<<<< HEAD
  * Copyright (c) 2004 Evgeniy Polyakov <johnpol@2ka.mipt.ru>
+=======
+ * Copyright (c) 2004 Evgeniy Polyakov <zbr@ioremap.net>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -1024,5 +1028,9 @@ module_init(ds_init);
 module_exit(ds_fini);
 
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
 MODULE_AUTHOR("Evgeniy Polyakov <johnpol@2ka.mipt.ru>");
+=======
+MODULE_AUTHOR("Evgeniy Polyakov <zbr@ioremap.net>");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_DESCRIPTION("DS2490 USB <-> W1 bus master driver (DS9490*)");

@@ -551,7 +551,11 @@ static int __devinit nuc900fb_probe(struct platform_device *pdev)
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 
+<<<<<<< HEAD
 	size = (res->end - res->start) + 1;
+=======
+	size = resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	fbi->mem = request_mem_region(res->start, size, pdev->name);
 	if (fbi->mem == NULL) {
 		dev_err(&pdev->dev, "failed to alloc memory region\n");

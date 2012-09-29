@@ -1245,7 +1245,11 @@ static int cxgb3i_ddp_init(struct cxgbi_device *cdev)
 	struct cxgbi_ddp_info *ddp = tdev->ulp_iscsi;
 	struct ulp_iscsi_info uinfo;
 	unsigned int pgsz_factor[4];
+<<<<<<< HEAD
 	int err;
+=======
+	int i, err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ddp) {
 		kref_get(&ddp->refcnt);
@@ -1271,6 +1275,11 @@ static int cxgb3i_ddp_init(struct cxgbi_device *cdev)
 
 	uinfo.tagmask = ddp->idx_mask << PPOD_IDX_SHIFT;
 	cxgbi_ddp_page_size_factor(pgsz_factor);
+<<<<<<< HEAD
+=======
+	for (i = 0; i < 4; i++)
+		uinfo.pgsz_factor[i] = pgsz_factor[i];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	uinfo.ulimit = uinfo.llimit + (ddp->nppods << PPOD_SIZE_SHIFT);
 
 	err = tdev->ctl(tdev, ULP_ISCSI_SET_PARAMS, &uinfo);

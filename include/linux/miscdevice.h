@@ -40,6 +40,10 @@
 #define BTRFS_MINOR		234
 #define AUTOFS_MINOR		235
 #define MAPPER_CTRL_MINOR	236
+<<<<<<< HEAD
+=======
+#define LOOP_CTRL_MINOR		237
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define MISC_DYNAMIC_MINOR	255
 
 struct device;

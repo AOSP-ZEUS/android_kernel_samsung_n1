@@ -135,6 +135,7 @@ static unsigned long hx4700_pin_config[] __initdata = {
 	GPIO66_GPIO,	/* nSDIO_IRQ */
 };
 
+<<<<<<< HEAD
 #define HX4700_GPIO_IN(num, _desc) \
 	{ .gpio = (num), .dir = 0, .desc = (_desc) }
 #define HX4700_GPIO_OUT(num, _init, _desc) \
@@ -171,6 +172,8 @@ static int hx4700_gpio_request(struct gpio_ress *gpios, int size)
 	return rc;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * IRDA
  */
@@ -829,6 +832,7 @@ static struct platform_device *devices[] __initdata = {
 	&pcmcia,
 };
 
+<<<<<<< HEAD
 static struct gpio_ress global_gpios[] = {
 	HX4700_GPIO_IN(GPIO12_HX4700_ASIC3_IRQ, "ASIC3_IRQ"),
 	HX4700_GPIO_IN(GPIO13_HX4700_W3220_IRQ, "W3220_IRQ"),
@@ -843,12 +847,37 @@ static struct gpio_ress global_gpios[] = {
 	HX4700_GPIO_OUT(GPIO71_HX4700_ASIC3_nRESET,     1, "ASIC3_nRESET"),
 	HX4700_GPIO_OUT(GPIO82_HX4700_EUART_RESET,      1, "EUART_RESET"),
 	HX4700_GPIO_OUT(GPIO105_HX4700_nIR_ON,          1, "nIR_EN"),
+=======
+static struct gpio global_gpios[] = {
+	{ GPIO12_HX4700_ASIC3_IRQ, GPIOF_IN, "ASIC3_IRQ" },
+	{ GPIO13_HX4700_W3220_IRQ, GPIOF_IN, "W3220_IRQ" },
+	{ GPIO14_HX4700_nWLAN_IRQ, GPIOF_IN, "WLAN_IRQ" },
+	{ GPIO59_HX4700_LCD_PC1,          GPIOF_OUT_INIT_HIGH, "LCD_PC1" },
+	{ GPIO62_HX4700_LCD_nRESET,       GPIOF_OUT_INIT_HIGH, "LCD_RESET" },
+	{ GPIO70_HX4700_LCD_SLIN1,        GPIOF_OUT_INIT_HIGH, "LCD_SLIN1" },
+	{ GPIO84_HX4700_LCD_SQN,          GPIOF_OUT_INIT_HIGH, "LCD_SQN" },
+	{ GPIO110_HX4700_LCD_LVDD_3V3_ON, GPIOF_OUT_INIT_HIGH, "LCD_LVDD" },
+	{ GPIO111_HX4700_LCD_AVDD_3V3_ON, GPIOF_OUT_INIT_HIGH, "LCD_AVDD" },
+	{ GPIO32_HX4700_RS232_ON,         GPIOF_OUT_INIT_HIGH, "RS232_ON" },
+	{ GPIO71_HX4700_ASIC3_nRESET,     GPIOF_OUT_INIT_HIGH, "ASIC3_nRESET" },
+	{ GPIO82_HX4700_EUART_RESET,      GPIOF_OUT_INIT_HIGH, "EUART_RESET" },
+	{ GPIO105_HX4700_nIR_ON,          GPIOF_OUT_INIT_HIGH, "nIR_EN" },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void __init hx4700_init(void)
 {
+<<<<<<< HEAD
 	pxa2xx_mfp_config(ARRAY_AND_SIZE(hx4700_pin_config));
 	hx4700_gpio_request(ARRAY_AND_SIZE(global_gpios));
+=======
+	int ret;
+
+	pxa2xx_mfp_config(ARRAY_AND_SIZE(hx4700_pin_config));
+	ret = gpio_request_array(ARRAY_AND_SIZE(global_gpios));
+	if (ret)
+		pr_err ("hx4700: Failed to request GPIOs.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pxa_set_ffuart_info(NULL);
 	pxa_set_btuart_info(NULL);
@@ -874,6 +903,10 @@ MACHINE_START(H4700, "HP iPAQ HX4700")
 	.map_io       = pxa27x_map_io,
 	.nr_irqs      = HX4700_NR_IRQS,
 	.init_irq     = pxa27x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq     = pxa27x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine = hx4700_init,
 	.timer        = &pxa_timer,
 MACHINE_END

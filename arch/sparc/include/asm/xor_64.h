@@ -66,6 +66,12 @@ static struct xor_block_template xor_block_niagara = {
 	((tlb_type == hypervisor && \
 	  (sun4v_chip_type == SUN4V_CHIP_NIAGARA1 || \
 	   sun4v_chip_type == SUN4V_CHIP_NIAGARA2 || \
+<<<<<<< HEAD
 	   sun4v_chip_type == SUN4V_CHIP_NIAGARA3)) ? \
+=======
+	   sun4v_chip_type == SUN4V_CHIP_NIAGARA3 || \
+	   sun4v_chip_type == SUN4V_CHIP_NIAGARA4 || \
+	   sun4v_chip_type == SUN4V_CHIP_NIAGARA5)) ? \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 &xor_block_niagara : \
 	 &xor_block_VIS)

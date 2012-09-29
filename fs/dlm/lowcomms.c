@@ -512,12 +512,19 @@ static void process_sctp_notification(struct connection *con,
 			}
 			make_sockaddr(&prim.ssp_addr, 0, &addr_len);
 			if (dlm_addr_to_nodeid(&prim.ssp_addr, &nodeid)) {
+<<<<<<< HEAD
 				int i;
 				unsigned char *b=(unsigned char *)&prim.ssp_addr;
 				log_print("reject connect from unknown addr");
 				for (i=0; i<sizeof(struct sockaddr_storage);i++)
 					printk("%02x ", b[i]);
 				printk("\n");
+=======
+				unsigned char *b=(unsigned char *)&prim.ssp_addr;
+				log_print("reject connect from unknown addr");
+				print_hex_dump_bytes("ss: ", DUMP_PREFIX_NONE, 
+						     b, sizeof(struct sockaddr_storage));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				sctp_send_shutdown(prim.ssp_assoc_id);
 				return;
 			}
@@ -748,7 +755,14 @@ static int tcp_accept_from_sock(struct connection *con)
 	/* Get the new node's NODEID */
 	make_sockaddr(&peeraddr, 0, &len);
 	if (dlm_addr_to_nodeid(&peeraddr, &nodeid)) {
+<<<<<<< HEAD
 		log_print("connect from non cluster node");
+=======
+		unsigned char *b=(unsigned char *)&peeraddr;
+		log_print("connect from non cluster node");
+		print_hex_dump_bytes("ss: ", DUMP_PREFIX_NONE, 
+				     b, sizeof(struct sockaddr_storage));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		sock_release(newsock);
 		mutex_unlock(&con->sock_mutex);
 		return -1;

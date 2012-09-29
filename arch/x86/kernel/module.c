@@ -45,6 +45,7 @@ void *module_alloc(unsigned long size)
 				-1, __builtin_return_address(0));
 }
 
+<<<<<<< HEAD
 /* Free memory returned from module_alloc */
 void module_free(struct module *mod, void *module_region)
 {
@@ -60,6 +61,8 @@ int module_frob_arch_sections(Elf_Ehdr *hdr,
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_X86_32
 int apply_relocate(Elf32_Shdr *sechdrs,
 		   const char *strtab,
@@ -100,6 +103,7 @@ int apply_relocate(Elf32_Shdr *sechdrs,
 	}
 	return 0;
 }
+<<<<<<< HEAD
 
 int apply_relocate_add(Elf32_Shdr *sechdrs,
 		       const char *strtab,
@@ -111,6 +115,8 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
 	       me->name);
 	return -ENOEXEC;
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #else /*X86_64*/
 int apply_relocate_add(Elf64_Shdr *sechdrs,
 		   const char *strtab,
@@ -181,6 +187,7 @@ overflow:
 	       me->name);
 	return -ENOEXEC;
 }
+<<<<<<< HEAD
 
 int apply_relocate(Elf_Shdr *sechdrs,
 		   const char *strtab,
@@ -192,6 +199,8 @@ int apply_relocate(Elf_Shdr *sechdrs,
 	return -ENOSYS;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 int module_finalize(const Elf_Ehdr *hdr,

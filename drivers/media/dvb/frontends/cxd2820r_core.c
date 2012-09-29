@@ -314,6 +314,11 @@ static int cxd2820r_set_frontend(struct dvb_frontend *fe,
 			} else if (c->delivery_system == SYS_DVBT2) {
 				/* DVB-T => DVB-T2 */
 				ret = cxd2820r_sleep_t(fe);
+<<<<<<< HEAD
+=======
+				if (ret)
+					break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				ret = cxd2820r_set_frontend_t2(fe, p);
 			}
 			break;
@@ -324,6 +329,11 @@ static int cxd2820r_set_frontend(struct dvb_frontend *fe,
 			} else if (c->delivery_system == SYS_DVBT) {
 				/* DVB-T2 => DVB-T */
 				ret = cxd2820r_sleep_t2(fe);
+<<<<<<< HEAD
+=======
+				if (ret)
+					break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				ret = cxd2820r_set_frontend_t(fe, p);
 			}
 			break;
@@ -740,12 +750,21 @@ static int cxd2820r_tuner_i2c_xfer(struct i2c_adapter *i2c_adap,
 	struct i2c_msg msg[], int num)
 {
 	struct cxd2820r_priv *priv = i2c_get_adapdata(i2c_adap);
+<<<<<<< HEAD
 	u8 obuf[msg[0].len + 2];
+=======
+	int ret;
+	u8 *obuf = kmalloc(msg[0].len + 2, GFP_KERNEL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct i2c_msg msg2[2] = {
 		{
 			.addr = priv->cfg.i2c_address,
 			.flags = 0,
+<<<<<<< HEAD
 			.len = sizeof(obuf),
+=======
+			.len = msg[0].len + 2,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			.buf = obuf,
 		}, {
 			.addr = priv->cfg.i2c_address,
@@ -755,15 +774,35 @@ static int cxd2820r_tuner_i2c_xfer(struct i2c_adapter *i2c_adap,
 		}
 	};
 
+<<<<<<< HEAD
+=======
+	if (!obuf)
+		return -ENOMEM;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	obuf[0] = 0x09;
 	obuf[1] = (msg[0].addr << 1);
 	if (num == 2) { /* I2C read */
 		obuf[1] = (msg[0].addr << 1) | I2C_M_RD; /* I2C RD flag */
+<<<<<<< HEAD
 		msg2[0].len = sizeof(obuf) - 1; /* maybe HW bug ? */
 	}
 	memcpy(&obuf[2], msg[0].buf, msg[0].len);
 
 	return i2c_transfer(priv->i2c, msg2, num);
+=======
+		msg2[0].len = msg[0].len + 2 - 1; /* '-1' maybe HW bug ? */
+	}
+	memcpy(&obuf[2], msg[0].buf, msg[0].len);
+
+	ret = i2c_transfer(priv->i2c, msg2, num);
+	if (ret < 0)
+		warn("tuner i2c failed ret:%d", ret);
+
+	kfree(obuf);
+
+	return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct i2c_algorithm cxd2820r_tuner_i2c_algo = {

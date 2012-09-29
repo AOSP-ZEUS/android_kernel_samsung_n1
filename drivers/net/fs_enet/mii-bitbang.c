@@ -120,7 +120,11 @@ static int __devinit fs_mii_bitbang_init(struct mii_bus *bus,
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
 	if (res.end - res.start < 13)
+=======
+	if (resource_size(&res) <= 13)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENODEV;
 
 	/* This should really encode the pin number as well, but all
@@ -139,7 +143,11 @@ static int __devinit fs_mii_bitbang_init(struct mii_bus *bus,
 		return -ENODEV;
 	mdc_pin = *data;
 
+<<<<<<< HEAD
 	bitbang->dir = ioremap(res.start, res.end - res.start + 1);
+=======
+	bitbang->dir = ioremap(res.start, resource_size(&res));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!bitbang->dir)
 		return -ENOMEM;
 

@@ -518,6 +518,7 @@ int security_inode_permission(struct inode *inode, int mask)
 {
 	if (unlikely(IS_PRIVATE(inode)))
 		return 0;
+<<<<<<< HEAD
 	return security_ops->inode_permission(inode, mask, 0);
 }
 
@@ -526,6 +527,9 @@ int security_inode_exec_permission(struct inode *inode, unsigned int flags)
 	if (unlikely(IS_PRIVATE(inode)))
 		return 0;
 	return security_ops->inode_permission(inode, MAY_EXEC, flags);
+=======
+	return security_ops->inode_permission(inode, mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int security_inode_setattr(struct dentry *dentry, struct iattr *attr)
@@ -1104,6 +1108,10 @@ void security_sk_clone(const struct sock *sk, struct sock *newsk)
 {
 	security_ops->sk_clone_security(sk, newsk);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(security_sk_clone);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void security_sk_classify_flow(struct sock *sk, struct flowi *fl)
 {

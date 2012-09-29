@@ -1004,6 +1004,10 @@ static void qh_link_async (struct ehci_hcd *ehci, struct ehci_qh *qh)
 	qh_get(qh);
 	qh->xacterrs = 0;
 	qh->qh_state = QH_STATE_LINKED;
+<<<<<<< HEAD
+=======
+	wmb();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* qtd completions reported later by interrupt */
 }
 

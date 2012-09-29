@@ -60,10 +60,13 @@ static char const * const vec_names[] = {
 	"MMU CONFIGURATION ERROR"
 };
 
+<<<<<<< HEAD
 void __init trap_init(void)
 {
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void die_if_kernel(char *str, struct pt_regs *fp, int nr)
 {
 	if (!(fp->sr & PS_S))

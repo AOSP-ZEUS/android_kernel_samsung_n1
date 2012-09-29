@@ -275,6 +275,7 @@ int pciehp_check_link_status(struct controller *ctrl)
          * hot-plug capable downstream port. But old controller might
          * not implement it. In this case, we wait for 1000 ms.
          */
+<<<<<<< HEAD
         if (ctrl->link_active_reporting){
                 /* Wait for Data Link Layer Link Active bit to be set */
                 pcie_wait_link_active(ctrl);
@@ -285,6 +286,11 @@ int pciehp_check_link_status(struct controller *ctrl)
                  */
                 msleep(100);
         } else
+=======
+        if (ctrl->link_active_reporting)
+                pcie_wait_link_active(ctrl);
+        else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
                 msleep(1000);
 
 	retval = pciehp_readw(ctrl, PCI_EXP_LNKSTA, &lnk_status);

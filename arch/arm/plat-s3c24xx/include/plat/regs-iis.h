@@ -64,6 +64,7 @@
 #define S3C2410_IISFCON_RXMASK	  (0x3f)
 #define S3C2410_IISFCON_RXSHIFT	  (0)
 
+<<<<<<< HEAD
 #define S3C2400_IISFCON_TXDMA     (1<<11)
 #define S3C2400_IISFCON_RXDMA     (1<<10)
 #define S3C2400_IISFCON_TXENABLE  (1<<9)
@@ -73,5 +74,7 @@
 #define S3C2400_IISFCON_RXMASK	  (0x07)
 #define S3C2400_IISFCON_RXSHIFT	  (0)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define S3C2410_IISFIFO  (0x10)
 #endif /* __ASM_ARCH_REGS_IIS_H */

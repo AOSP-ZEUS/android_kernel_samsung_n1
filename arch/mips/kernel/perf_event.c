@@ -192,8 +192,11 @@ again:
 
 	local64_add(delta, &event->count);
 	local64_sub(delta, &hwc->period_left);
+<<<<<<< HEAD
 
 	return;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void mipspmu_start(struct perf_event *event, int flags)
@@ -527,7 +530,11 @@ handle_associated_event(struct cpu_hw_events *cpuc,
 	if (!mipspmu_event_set_period(event, hwc, idx))
 		return;
 
+<<<<<<< HEAD
 	if (perf_event_overflow(event, 0, data, regs))
+=======
+	if (perf_event_overflow(event, data, regs))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		mipspmu->disable_event(idx);
 }
 

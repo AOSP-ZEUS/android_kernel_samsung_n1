@@ -40,6 +40,9 @@ extern unsigned long hw_timer_offset(void);
 extern irqreturn_t arch_timer_interrupt(int irq, void *dummy);
 
 extern void config_BSP(char *command, int len);
+<<<<<<< HEAD
 extern void do_IRQ(int irq, struct pt_regs *fp);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _M68K_MACHDEP_H */

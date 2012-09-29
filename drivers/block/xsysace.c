@@ -1155,12 +1155,26 @@ static int __devinit ace_probe(struct platform_device *dev)
 {
 	resource_size_t physaddr = 0;
 	int bus_width = ACE_BUS_WIDTH_16; /* FIXME: should not be hard coded */
+<<<<<<< HEAD
 	int id = dev->id;
+=======
+	u32 id = dev->id;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int irq = NO_IRQ;
 	int i;
 
 	dev_dbg(&dev->dev, "ace_probe(%p)\n", dev);
 
+<<<<<<< HEAD
+=======
+	/* device id and bus width */
+	of_property_read_u32(dev->dev.of_node, "port-number", &id);
+	if (id < 0)
+		id = 0;
+	if (of_find_property(dev->dev.of_node, "8-bit", NULL))
+		bus_width = ACE_BUS_WIDTH_8;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (i = 0; i < dev->num_resources; i++) {
 		if (dev->resource[i].flags & IORESOURCE_MEM)
 			physaddr = dev->resource[i].start;
@@ -1181,6 +1195,7 @@ static int __devexit ace_remove(struct platform_device *dev)
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct platform_driver ace_platform_driver = {
 	.probe = ace_probe,
 	.remove = __devexit_p(ace_remove),
@@ -1232,6 +1247,9 @@ static int __devexit ace_of_remove(struct platform_device *op)
 	return 0;
 }
 
+=======
+#if defined(CONFIG_OF)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Match table for of_platform binding */
 static const struct of_device_id ace_of_match[] __devinitconst = {
 	{ .compatible = "xlnx,opb-sysace-1.00.b", },
@@ -1241,6 +1259,7 @@ static const struct of_device_id ace_of_match[] __devinitconst = {
 	{},
 };
 MODULE_DEVICE_TABLE(of, ace_of_match);
+<<<<<<< HEAD
 
 static struct platform_driver ace_of_driver = {
 	.probe = ace_of_probe,
@@ -1248,10 +1267,23 @@ static struct platform_driver ace_of_driver = {
 	.driver = {
 		.name = "xsysace",
 		.owner = THIS_MODULE,
+=======
+#else /* CONFIG_OF */
+#define ace_of_match NULL
+#endif /* CONFIG_OF */
+
+static struct platform_driver ace_platform_driver = {
+	.probe = ace_probe,
+	.remove = __devexit_p(ace_remove),
+	.driver = {
+		.owner = THIS_MODULE,
+		.name = "xsysace",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.of_match_table = ace_of_match,
 	},
 };
 
+<<<<<<< HEAD
 /* Registration helpers to keep the number of #ifdefs to a minimum */
 static inline int __init ace_of_register(void)
 {
@@ -1269,6 +1301,8 @@ static inline int __init ace_of_register(void) { return 0; }
 static inline void __exit ace_of_unregister(void) { }
 #endif /* CONFIG_OF */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* ---------------------------------------------------------------------
  * Module init/exit routines
  */
@@ -1282,11 +1316,14 @@ static int __init ace_init(void)
 		goto err_blk;
 	}
 
+<<<<<<< HEAD
 	rc = ace_of_register();
 	if (rc)
 		goto err_of;
 
 	pr_debug("xsysace: registering platform binding\n");
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	rc = platform_driver_register(&ace_platform_driver);
 	if (rc)
 		goto err_plat;
@@ -1295,21 +1332,33 @@ static int __init ace_init(void)
 	return 0;
 
 err_plat:
+<<<<<<< HEAD
 	ace_of_unregister();
 err_of:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unregister_blkdev(ace_major, "xsysace");
 err_blk:
 	printk(KERN_ERR "xsysace: registration failed; err=%i\n", rc);
 	return rc;
 }
+<<<<<<< HEAD
+=======
+module_init(ace_init);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static void __exit ace_exit(void)
 {
 	pr_debug("Unregistering Xilinx SystemACE driver\n");
 	platform_driver_unregister(&ace_platform_driver);
+<<<<<<< HEAD
 	ace_of_unregister();
 	unregister_blkdev(ace_major, "xsysace");
 }
 
 module_init(ace_init);
+=======
+	unregister_blkdev(ace_major, "xsysace");
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 module_exit(ace_exit);

@@ -641,7 +641,11 @@ void nfs4_put_open_state(struct nfs4_state *state)
 /*
  * Close the current file.
  */
+<<<<<<< HEAD
 static void __nfs4_close(struct path *path, struct nfs4_state *state,
+=======
+static void __nfs4_close(struct nfs4_state *state,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		fmode_t fmode, gfp_t gfp_mask, int wait)
 {
 	struct nfs4_state_owner *owner = state->owner;
@@ -685,6 +689,7 @@ static void __nfs4_close(struct path *path, struct nfs4_state *state,
 	} else {
 		bool roc = pnfs_roc(state->inode);
 
+<<<<<<< HEAD
 		nfs4_do_close(path, state, gfp_mask, wait, roc);
 	}
 }
@@ -697,6 +702,20 @@ void nfs4_close_state(struct path *path, struct nfs4_state *state, fmode_t fmode
 void nfs4_close_sync(struct path *path, struct nfs4_state *state, fmode_t fmode)
 {
 	__nfs4_close(path, state, fmode, GFP_KERNEL, 1);
+=======
+		nfs4_do_close(state, gfp_mask, wait, roc);
+	}
+}
+
+void nfs4_close_state(struct nfs4_state *state, fmode_t fmode)
+{
+	__nfs4_close(state, fmode, GFP_NOFS, 0);
+}
+
+void nfs4_close_sync(struct nfs4_state *state, fmode_t fmode)
+{
+	__nfs4_close(state, fmode, GFP_KERNEL, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -1038,6 +1057,15 @@ void nfs4_schedule_lease_recovery(struct nfs_client *clp)
 	nfs4_schedule_state_manager(clp);
 }
 
+<<<<<<< HEAD
+=======
+void nfs4_schedule_path_down_recovery(struct nfs_client *clp)
+{
+	nfs_handle_cb_pathdown(clp);
+	nfs4_schedule_state_manager(clp);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int nfs4_state_mark_reclaim_reboot(struct nfs_client *clp, struct nfs4_state *state)
 {
 
@@ -1069,6 +1097,7 @@ void nfs4_schedule_stateid_recovery(const struct nfs_server *server, struct nfs4
 	nfs4_schedule_state_manager(clp);
 }
 
+<<<<<<< HEAD
 void nfs_inode_find_state_and_recover(struct inode *inode,
 		const nfs4_stateid *stateid)
 {
@@ -1096,6 +1125,8 @@ void nfs_inode_find_state_and_recover(struct inode *inode,
 }
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int nfs4_reclaim_locks(struct nfs4_state *state, const struct nfs4_state_recovery_ops *ops)
 {
 	struct inode *inode = state->inode;
@@ -1670,7 +1701,18 @@ static void nfs4_state_manager(struct nfs_client *clp)
 				goto out_error;
 			}
 			clear_bit(NFS4CLNT_CHECK_LEASE, &clp->cl_state);
+<<<<<<< HEAD
 			set_bit(NFS4CLNT_RECLAIM_REBOOT, &clp->cl_state);
+=======
+
+			if (test_and_clear_bit(NFS4CLNT_SERVER_SCOPE_MISMATCH,
+					       &clp->cl_state))
+				nfs4_state_start_reclaim_nograce(clp);
+			else
+				set_bit(NFS4CLNT_RECLAIM_REBOOT,
+					&clp->cl_state);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			pnfs_destroy_all_layouts(clp);
 		}
 

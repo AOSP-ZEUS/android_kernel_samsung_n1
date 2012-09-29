@@ -1,11 +1,21 @@
 /* linux/arch/arm/plat-s3c/dev-i2c2.c
  *
+<<<<<<< HEAD
  * Copyright 2008-2009 Simtec Electronics
  *	Ben Dooks <ben@simtec.co.uk>
  *	http://armlinux.simtec.co.uk/
  *
  * S3C series device definition for i2c device 2
  *
+=======
+ * Copyright (c) 2010 Samsung Electronics Co., Ltd.
+ *		http://www.samsung.com/
+ *
+ * S3C series device definition for i2c device 2
+ *
+ * Based on plat-samsung/dev-i2c0.c
+ *
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
@@ -15,8 +25,11 @@
 #include <linux/kernel.h>
 #include <linux/string.h>
 #include <linux/platform_device.h>
+<<<<<<< HEAD
 #include <linux/clk.h>
 #include <linux/err.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <mach/irqs.h>
 #include <mach/map.h>
@@ -26,8 +39,11 @@
 #include <plat/devs.h>
 #include <plat/cpu.h>
 
+<<<<<<< HEAD
 #include <asm/io.h>
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct resource s3c_i2c_resource[] = {
 	[0] = {
 		.start = S3C_PA_IIC2,
@@ -48,6 +64,7 @@ struct platform_device s3c_device_i2c2 = {
 	.resource	  = s3c_i2c_resource,
 };
 
+<<<<<<< HEAD
 static struct s3c2410_platform_i2c default_i2c_data2 __initdata = {
 	.flags		= 0,
 	.bus_num	= 2,
@@ -56,10 +73,13 @@ static struct s3c2410_platform_i2c default_i2c_data2 __initdata = {
 	.sda_delay	= S3C2410_IICLC_SDA_DELAY5 | S3C2410_IICLC_FILTER_ON,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init s3c_i2c2_set_platdata(struct s3c2410_platform_i2c *pd)
 {
 	struct s3c2410_platform_i2c *npd;
 
+<<<<<<< HEAD
 	if (!pd)
 		pd = &default_i2c_data2;
 
@@ -99,3 +119,16 @@ void s3c_i2c2_force_stop()
 }
 EXPORT_SYMBOL(s3c_i2c2_force_stop);
 
+=======
+	if (!pd) {
+		pd = &default_i2c_data;
+		pd->bus_num = 2;
+	}
+
+	npd = s3c_set_platdata(pd, sizeof(struct s3c2410_platform_i2c),
+			       &s3c_device_i2c2);
+
+	if (!npd->cfg_gpio)
+		npd->cfg_gpio = s3c_i2c2_cfg_gpio;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

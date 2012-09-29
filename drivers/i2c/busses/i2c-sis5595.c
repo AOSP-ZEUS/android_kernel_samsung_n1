@@ -147,7 +147,11 @@ static int __devinit sis5595_setup(struct pci_dev *SIS5595_dev)
 	u16 a;
 	u8 val;
 	int *i;
+<<<<<<< HEAD
 	int retval;
+=======
+	int retval = -ENODEV;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Look for imposters */
 	for (i = blacklist; *i != 0; i++) {
@@ -223,7 +227,11 @@ static int __devinit sis5595_setup(struct pci_dev *SIS5595_dev)
 
 error:
 	release_region(sis5595_base + SMB_INDEX, 2);
+<<<<<<< HEAD
 	return -ENODEV;
+=======
+	return retval;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int sis5595_transaction(struct i2c_adapter *adap)

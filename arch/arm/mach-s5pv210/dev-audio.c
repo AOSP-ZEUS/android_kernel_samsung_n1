@@ -18,6 +18,10 @@
 #include <mach/map.h>
 #include <mach/dma.h>
 #include <mach/irqs.h>
+<<<<<<< HEAD
+=======
+#include <mach/regs-audss.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static const char *rclksrc[] = {
 	[0] = "busclk",
@@ -52,6 +56,10 @@ static struct s3c_audio_pdata i2sv5_pdata = {
 			.quirks = QUIRK_PRI_6CHAN | QUIRK_SEC_DAI
 					 | QUIRK_NEED_RSTCLR,
 			.src_clk = rclksrc,
+<<<<<<< HEAD
+=======
+			.idma_addr = S5PV210_AUDSS_INT_MEM,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		},
 	},
 };
@@ -80,8 +88,13 @@ static struct resource s5pv210_iis0_resource[] = {
 };
 
 struct platform_device s5pv210_device_iis0 = {
+<<<<<<< HEAD
 	.name		  = "samsung-i2s",
 	.id		  = 0,
+=======
+	.name = "samsung-i2s",
+	.id = 0,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.num_resources	  = ARRAY_SIZE(s5pv210_iis0_resource),
 	.resource	  = s5pv210_iis0_resource,
 	.dev = {

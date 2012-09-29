@@ -18,7 +18,11 @@
 #include <linux/kernel.h>
 #include <linux/string.h>
 #include <linux/errno.h>
+<<<<<<< HEAD
 #include <linux/tracehook.h>
+=======
+#include <linux/ptrace.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/timer.h>
 #include <linux/mm.h>
 #include <linux/smp.h>
@@ -36,13 +40,18 @@
 #include <asm/system.h>
 #include <asm/uaccess.h>
 #include <asm/io.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/mathemu.h>
 #include <asm/cpcmd.h>
 #include <asm/lowcore.h>
 #include <asm/debug.h>
 #include "entry.h"
 
+<<<<<<< HEAD
 pgm_check_handler_t *pgm_check_table[128];
 
 int show_unhandled_signals;
@@ -51,6 +60,12 @@ extern pgm_check_handler_t do_protection_exception;
 extern pgm_check_handler_t do_dat_exception;
 extern pgm_check_handler_t do_asce_exception;
 
+=======
+void (*pgm_check_table[128])(struct pt_regs *, long, unsigned long);
+
+int show_unhandled_signals;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define stack_pointer ({ void **sp; asm("la %0,0(15)" : "=&d" (sp)); sp; })
 
 #ifndef CONFIG_64BIT
@@ -329,10 +344,24 @@ static inline void __user *get_psw_address(struct pt_regs *regs,
 
 void __kprobes do_per_trap(struct pt_regs *regs)
 {
+<<<<<<< HEAD
 	if (notify_die(DIE_SSTEP, "sstep", regs, 0, 0, SIGTRAP) == NOTIFY_STOP)
 		return;
 	if (tracehook_consider_fatal_signal(current, SIGTRAP))
 		force_sig(SIGTRAP, current);
+=======
+	siginfo_t info;
+
+	if (notify_die(DIE_SSTEP, "sstep", regs, 0, 0, SIGTRAP) == NOTIFY_STOP)
+		return;
+	if (!current->ptrace)
+		return;
+	info.si_signo = SIGTRAP;
+	info.si_errno = 0;
+	info.si_code = TRAP_HWBKPT;
+	info.si_addr = (void *) current->thread.per_event.address;
+	force_sig_info(SIGTRAP, &info, current);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void default_trap_handler(struct pt_regs *regs, long pgm_int_code,
@@ -425,9 +454,19 @@ static void __kprobes illegal_op(struct pt_regs *regs, long pgm_int_code,
 		if (get_user(*((__u16 *) opcode), (__u16 __user *) location))
 			return;
 		if (*((__u16 *) opcode) == S390_BREAKPOINT_U16) {
+<<<<<<< HEAD
 			if (tracehook_consider_fatal_signal(current, SIGTRAP))
 				force_sig(SIGTRAP, current);
 			else
+=======
+			if (current->ptrace) {
+				info.si_signo = SIGTRAP;
+				info.si_errno = 0;
+				info.si_code = TRAP_BRKPT;
+				info.si_addr = location;
+				force_sig_info(SIGTRAP, &info, current);
+			} else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				signal = SIGILL;
 #ifdef CONFIG_MATHEMU
 		} else if (opcode[0] == 0xb3) {
@@ -489,9 +528,14 @@ static void __kprobes illegal_op(struct pt_regs *regs, long pgm_int_code,
 
 
 #ifdef CONFIG_MATHEMU
+<<<<<<< HEAD
 asmlinkage void specification_exception(struct pt_regs *regs,
 					long pgm_int_code,
 					unsigned long trans_exc_code)
+=======
+void specification_exception(struct pt_regs *regs, long pgm_int_code,
+			     unsigned long trans_exc_code)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
         __u8 opcode[6];
 	__u16 __user *location = NULL;
@@ -648,7 +692,11 @@ static void space_switch_exception(struct pt_regs *regs, long pgm_int_code,
 	do_trap(pgm_int_code, SIGILL, "space switch event", regs, &info);
 }
 
+<<<<<<< HEAD
 asmlinkage void __kprobes kernel_stack_overflow(struct pt_regs * regs)
+=======
+void __kprobes kernel_stack_overflow(struct pt_regs * regs)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	bust_spinlocks(1);
 	printk("Kernel stack overflow.\n");

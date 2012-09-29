@@ -21,8 +21,14 @@
 #include <linux/slab.h>
 
 /**
+<<<<<<< HEAD
  * of_get_gpio_flags - Get a GPIO number and flags to use with GPIO API
  * @np:		device node to get GPIO from
+=======
+ * of_get_named_gpio_flags() - Get a GPIO number and flags to use with GPIO API
+ * @np:		device node to get GPIO from
+ * @propname:	property name containing gpio specifier(s)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @index:	index of the GPIO
  * @flags:	a flags pointer to fill in
  *
@@ -30,8 +36,13 @@
  * value on the error condition. If @flags is not NULL the function also fills
  * in flags for the GPIO.
  */
+<<<<<<< HEAD
 int of_get_gpio_flags(struct device_node *np, int index,
 		      enum of_gpio_flags *flags)
+=======
+int of_get_named_gpio_flags(struct device_node *np, const char *propname,
+                           int index, enum of_gpio_flags *flags)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int ret;
 	struct device_node *gpio_np;
@@ -40,7 +51,11 @@ int of_get_gpio_flags(struct device_node *np, int index,
 	const void *gpio_spec;
 	const __be32 *gpio_cells;
 
+<<<<<<< HEAD
 	ret = of_parse_phandles_with_args(np, "gpios", "#gpio-cells", index,
+=======
+	ret = of_parse_phandles_with_args(np, propname, "#gpio-cells", index,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					  &gpio_np, &gpio_spec);
 	if (ret) {
 		pr_debug("%s: can't parse gpios property\n", __func__);
@@ -79,7 +94,11 @@ err0:
 	pr_debug("%s exited with status %d\n", __func__, ret);
 	return ret;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(of_get_gpio_flags);
+=======
+EXPORT_SYMBOL(of_get_named_gpio_flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * of_gpio_count - Count GPIOs for a device
@@ -126,8 +145,13 @@ EXPORT_SYMBOL(of_gpio_count);
  * gpio chips. This function performs only one sanity check: whether gpio
  * is less than ngpios (that is specified in the gpio_chip).
  */
+<<<<<<< HEAD
 static int of_gpio_simple_xlate(struct gpio_chip *gc, struct device_node *np,
 				const void *gpio_spec, u32 *flags)
+=======
+int of_gpio_simple_xlate(struct gpio_chip *gc, struct device_node *np,
+			 const void *gpio_spec, u32 *flags)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	const __be32 *gpio = gpio_spec;
 	const u32 n = be32_to_cpup(gpio);
@@ -151,6 +175,10 @@ static int of_gpio_simple_xlate(struct gpio_chip *gc, struct device_node *np,
 
 	return n;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL(of_gpio_simple_xlate);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * of_mm_gpiochip_add - Add memory mapped GPIO chip (bank)

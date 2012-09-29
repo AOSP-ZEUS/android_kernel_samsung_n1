@@ -664,7 +664,11 @@ static int gntdev_mmap(struct file *flip, struct vm_area_struct *vma)
 	vma->vm_flags |= VM_RESERVED|VM_DONTEXPAND;
 
 	if (use_ptemod)
+<<<<<<< HEAD
 		vma->vm_flags |= VM_DONTCOPY;
+=======
+		vma->vm_flags |= VM_DONTCOPY|VM_PFNMAP;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	vma->vm_private_data = map;
 

@@ -22,6 +22,7 @@
    along with this program; if not, write to the Free Software
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
+<<<<<<< HEAD
 
 
 
@@ -48,3 +49,21 @@ int pwc_dec1_alloc(struct pwc_device *pwc)
 	return 0;
 }
 
+=======
+#include "pwc-dec1.h"
+
+int pwc_dec1_init(struct pwc_device *pwc, int type, int release, void *buffer)
+{
+	struct pwc_dec1_private *pdec;
+
+	if (pwc->decompress_data == NULL) {
+		pdec = kmalloc(sizeof(struct pwc_dec1_private), GFP_KERNEL);
+		if (pdec == NULL)
+			return -ENOMEM;
+		pwc->decompress_data = pdec;
+	}
+	pdec = pwc->decompress_data;
+
+	return 0;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

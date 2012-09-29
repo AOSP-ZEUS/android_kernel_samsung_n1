@@ -202,8 +202,14 @@ setversion_out:
 		struct super_block *sb = inode->i_sb;
 		int err, err2=0;
 
+<<<<<<< HEAD
 		if (!capable(CAP_SYS_RESOURCE))
 			return -EPERM;
+=======
+		err = ext4_resize_begin(sb);
+		if (err)
+			return err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (get_user(n_blocks_count, (__u32 __user *)arg))
 			return -EFAULT;
@@ -221,6 +227,10 @@ setversion_out:
 		if (err == 0)
 			err = err2;
 		mnt_drop_write(filp->f_path.mnt);
+<<<<<<< HEAD
+=======
+		ext4_resize_end(sb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		return err;
 	}
@@ -271,8 +281,14 @@ mext_out:
 		struct super_block *sb = inode->i_sb;
 		int err, err2=0;
 
+<<<<<<< HEAD
 		if (!capable(CAP_SYS_RESOURCE))
 			return -EPERM;
+=======
+		err = ext4_resize_begin(sb);
+		if (err)
+			return err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (copy_from_user(&input, (struct ext4_new_group_input __user *)arg,
 				sizeof(input)))
@@ -291,6 +307,10 @@ mext_out:
 		if (err == 0)
 			err = err2;
 		mnt_drop_write(filp->f_path.mnt);
+<<<<<<< HEAD
+=======
+		ext4_resize_end(sb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		return err;
 	}

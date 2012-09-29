@@ -40,6 +40,10 @@ extern void udbg_adb_init_early(void);
 
 extern void __init udbg_early_init(void);
 extern void __init udbg_init_debug_lpar(void);
+<<<<<<< HEAD
+=======
+extern void __init udbg_init_debug_lpar_hvsi(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void __init udbg_init_pmac_realmode(void);
 extern void __init udbg_init_maple_realmode(void);
 extern void __init udbg_init_pas_realmode(void);

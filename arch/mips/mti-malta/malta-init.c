@@ -28,6 +28,10 @@
 #include <asm/io.h>
 #include <asm/system.h>
 #include <asm/cacheflush.h>
+<<<<<<< HEAD
+=======
+#include <asm/smp-ops.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/traps.h>
 
 #include <asm/gcmpregs.h>
@@ -358,6 +362,7 @@ void __init prom_init(void)
 #ifdef CONFIG_SERIAL_8250_CONSOLE
 	console_config();
 #endif
+<<<<<<< HEAD
 #ifdef CONFIG_MIPS_CMP
 	/* Early detection of CMP support */
 	if (gcmp_probe(GCMP_BASE_ADDR, GCMP_ADDRSPACE_SZ))
@@ -367,6 +372,16 @@ void __init prom_init(void)
 #ifdef CONFIG_MIPS_MT_SMP
 		register_smp_ops(&vsmp_smp_ops);
 #endif
+=======
+	/* Early detection of CMP support */
+	if (gcmp_probe(GCMP_BASE_ADDR, GCMP_ADDRSPACE_SZ))
+		if (!register_cmp_smp_ops())
+			return;
+
+	if (!register_vsmp_smp_ops())
+		return;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_MIPS_MT_SMTC
 	register_smp_ops(&msmtc_smp_ops);
 #endif

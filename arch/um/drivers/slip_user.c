@@ -102,7 +102,11 @@ static int slip_tramp(char **argv, int fd)
 		       "buffer\n");
 		os_kill_process(pid, 1);
 		err = -ENOMEM;
+<<<<<<< HEAD
 		goto out_free;
+=======
+		goto out_close;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	close(fds[1]);
@@ -112,7 +116,10 @@ static int slip_tramp(char **argv, int fd)
 	err = helper_wait(pid);
 	close(fds[0]);
 
+<<<<<<< HEAD
 out_free:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(output);
 	return err;
 

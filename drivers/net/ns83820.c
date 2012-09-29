@@ -106,6 +106,10 @@
 #include <linux/delay.h>
 #include <linux/workqueue.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/ip.h>	/* for iph */
 #include <linux/in.h>	/* for IPPROTO_... */
 #include <linux/compiler.h>
@@ -429,10 +433,13 @@ struct ns83820 {
 	struct pci_dev		*pci_dev;
 	struct net_device	*ndev;
 
+<<<<<<< HEAD
 #ifdef NS83820_VLAN_ACCEL_SUPPORT
 	struct vlan_group	*vlgrp;
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct rx_info		rx_info;
 	struct tasklet_struct	rx_tasklet;
 
@@ -493,6 +500,7 @@ static inline void kick_rx(struct net_device *ndev)
 #define start_tx_okay(dev)	\
 	(((NR_TX_DESC-2 + dev->tx_done_idx - dev->tx_free_idx) % NR_TX_DESC) > MIN_TX_DESC_FREE)
 
+<<<<<<< HEAD
 
 #ifdef NS83820_VLAN_ACCEL_SUPPORT
 static void ns83820_vlan_rx_register(struct net_device *ndev, struct vlan_group *grp)
@@ -509,6 +517,8 @@ static void ns83820_vlan_rx_register(struct net_device *ndev, struct vlan_group 
 }
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Packet Receiver
  *
  * The hardware supports linked lists of receive descriptors for
@@ -929,6 +939,7 @@ static void rx_irq(struct net_device *ndev)
 #ifdef NS83820_VLAN_ACCEL_SUPPORT
 			if(extsts & EXTSTS_VPKT) {
 				unsigned short tag;
+<<<<<<< HEAD
 				tag = ntohs(extsts & EXTSTS_VTG_MASK);
 				rx_rc = vlan_hwaccel_rx(skb,dev->vlgrp,tag);
 			} else {
@@ -937,6 +948,14 @@ static void rx_irq(struct net_device *ndev)
 #else
 			rx_rc = netif_rx(skb);
 #endif
+=======
+
+				tag = ntohs(extsts & EXTSTS_VTG_MASK);
+				__vlan_hwaccel_put_tag(skb, tag);
+			}
+#endif
+			rx_rc = netif_rx(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (NET_RX_DROP == rx_rc) {
 netdev_mangle_me_harder_failed:
 				ndev->stats.rx_dropped++;
@@ -1960,11 +1979,16 @@ static const struct net_device_ops netdev_ops = {
 	.ndo_change_mtu		= ns83820_change_mtu,
 	.ndo_set_multicast_list = ns83820_set_multicast,
 	.ndo_validate_addr	= eth_validate_addr,
+<<<<<<< HEAD
 	.ndo_set_mac_address 	= eth_mac_addr,
 	.ndo_tx_timeout		= ns83820_tx_timeout,
 #ifdef NS83820_VLAN_ACCEL_SUPPORT
 	.ndo_vlan_rx_register	= ns83820_vlan_rx_register,
 #endif
+=======
+	.ndo_set_mac_address	= eth_mac_addr,
+	.ndo_tx_timeout		= ns83820_tx_timeout,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __devinit ns83820_init_one(struct pci_dev *pci_dev,

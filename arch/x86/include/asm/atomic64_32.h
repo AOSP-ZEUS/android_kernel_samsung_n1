@@ -263,7 +263,11 @@ static inline int atomic64_add_negative(long long i, atomic64_t *v)
  * @u: ...unless v is equal to u.
  *
  * Atomically adds @a to @v, so long as it was not @u.
+<<<<<<< HEAD
  * Returns non-zero if @v was not @u, and zero otherwise.
+=======
+ * Returns the old value of @v.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 static inline int atomic64_add_unless(atomic64_t *v, long long a, long long u)
 {

@@ -162,7 +162,11 @@ static inline __attribute_const__ int __virt_to_node_shift(void)
 	pgdat->node_mem_map + (__pfn - pgdat->node_start_pfn);		\
 })
 #define page_to_pfn(_page) ({						\
+<<<<<<< HEAD
 	struct page *__p = (_page);					\
+=======
+	const struct page *__p = (_page);				\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct pglist_data *pgdat;					\
 	pgdat = &pg_data_map[page_to_nid(__p)];				\
 	((__p) - pgdat->node_mem_map) + pgdat->node_start_pfn;		\

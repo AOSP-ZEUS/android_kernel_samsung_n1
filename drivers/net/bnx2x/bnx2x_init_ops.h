@@ -15,6 +15,7 @@
 #ifndef BNX2X_INIT_OPS_H
 #define BNX2X_INIT_OPS_H
 
+<<<<<<< HEAD
 static int bnx2x_gunzip(struct bnx2x *bp, const u8 *zbuf, int len);
 static void bnx2x_reg_wr_ind(struct bnx2x *bp, u32 addr, u32 val);
 static void bnx2x_write_dmae_phys_len(struct bnx2x *bp, dma_addr_t phys_addr,
@@ -22,6 +23,41 @@ static void bnx2x_write_dmae_phys_len(struct bnx2x *bp, dma_addr_t phys_addr,
 
 static void bnx2x_init_str_wr(struct bnx2x *bp, u32 addr, const u32 *data,
 			      u32 len)
+=======
+
+#ifndef BP_ILT
+#define BP_ILT(bp)	NULL
+#endif
+
+#ifndef BP_FUNC
+#define BP_FUNC(bp)	0
+#endif
+
+#ifndef BP_PORT
+#define BP_PORT(bp)	0
+#endif
+
+#ifndef BNX2X_ILT_FREE
+#define BNX2X_ILT_FREE(x, y, sz)
+#endif
+
+#ifndef BNX2X_ILT_ZALLOC
+#define BNX2X_ILT_ZALLOC(x, y, sz)
+#endif
+
+#ifndef ILOG2
+#define ILOG2(x)	x
+#endif
+
+static int bnx2x_gunzip(struct bnx2x *bp, const u8 *zbuf, int len);
+static void bnx2x_reg_wr_ind(struct bnx2x *bp, u32 addr, u32 val);
+static void bnx2x_write_dmae_phys_len(struct bnx2x *bp,
+				      dma_addr_t phys_addr, u32 addr,
+				      u32 len);
+
+static void bnx2x_init_str_wr(struct bnx2x *bp, u32 addr,
+			      const u32 *data, u32 len)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u32 i;
 
@@ -29,12 +65,18 @@ static void bnx2x_init_str_wr(struct bnx2x *bp, u32 addr, const u32 *data,
 		REG_WR(bp, addr + i*4, data[i]);
 }
 
+<<<<<<< HEAD
 static void bnx2x_init_ind_wr(struct bnx2x *bp, u32 addr, const u32 *data,
 			      u32 len)
+=======
+static void bnx2x_init_ind_wr(struct bnx2x *bp, u32 addr,
+			      const u32 *data, u32 len)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u32 i;
 
 	for (i = 0; i < len; i++)
+<<<<<<< HEAD
 		REG_WR_IND(bp, addr + i*4, data[i]);
 }
 
@@ -42,11 +84,32 @@ static void bnx2x_write_big_buf(struct bnx2x *bp, u32 addr, u32 len)
 {
 	if (bp->dmae_ready)
 		bnx2x_write_dmae_phys_len(bp, GUNZIP_PHYS(bp), addr, len);
+=======
+		bnx2x_reg_wr_ind(bp, addr + i*4, data[i]);
+}
+
+static void bnx2x_write_big_buf(struct bnx2x *bp, u32 addr, u32 len,
+				u8 wb)
+{
+	if (bp->dmae_ready)
+		bnx2x_write_dmae_phys_len(bp, GUNZIP_PHYS(bp), addr, len);
+	else if (wb)
+		/*
+		 * Wide bus registers with no dmae need to be written
+		 * using indirect write.
+		 */
+		bnx2x_init_ind_wr(bp, addr, GUNZIP_BUF(bp), len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	else
 		bnx2x_init_str_wr(bp, addr, GUNZIP_BUF(bp), len);
 }
 
+<<<<<<< HEAD
 static void bnx2x_init_fill(struct bnx2x *bp, u32 addr, int fill, u32 len)
+=======
+static void bnx2x_init_fill(struct bnx2x *bp, u32 addr, int fill,
+			    u32 len, u8 wb)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u32 buf_len = (((len*4) > FW_BUF_SIZE) ? FW_BUF_SIZE : (len*4));
 	u32 buf_len32 = buf_len/4;
@@ -57,12 +120,29 @@ static void bnx2x_init_fill(struct bnx2x *bp, u32 addr, int fill, u32 len)
 	for (i = 0; i < len; i += buf_len32) {
 		u32 cur_len = min(buf_len32, len - i);
 
+<<<<<<< HEAD
 		bnx2x_write_big_buf(bp, addr + i*4, cur_len);
 	}
 }
 
 static void bnx2x_init_wr_64(struct bnx2x *bp, u32 addr, const u32 *data,
 			     u32 len64)
+=======
+		bnx2x_write_big_buf(bp, addr + i*4, cur_len, wb);
+	}
+}
+
+static void bnx2x_write_big_buf_wb(struct bnx2x *bp, u32 addr, u32 len)
+{
+	if (bp->dmae_ready)
+		bnx2x_write_dmae_phys_len(bp, GUNZIP_PHYS(bp), addr, len);
+	else
+		bnx2x_init_ind_wr(bp, addr, GUNZIP_BUF(bp), len);
+}
+
+static void bnx2x_init_wr_64(struct bnx2x *bp, u32 addr,
+			     const u32 *data, u32 len64)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u32 buf_len32 = FW_BUF_SIZE/4;
 	u32 len = len64*2;
@@ -82,7 +162,11 @@ static void bnx2x_init_wr_64(struct bnx2x *bp, u32 addr, const u32 *data,
 	for (i = 0; i < len; i += buf_len32) {
 		u32 cur_len = min(buf_len32, len - i);
 
+<<<<<<< HEAD
 		bnx2x_write_big_buf(bp, addr + i*4, cur_len);
+=======
+		bnx2x_write_big_buf_wb(bp, addr + i*4, cur_len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -100,7 +184,12 @@ static void bnx2x_init_wr_64(struct bnx2x *bp, u32 addr, const u32 *data,
 #define IF_IS_PRAM_ADDR(base, addr) \
 			if (((base) <= (addr)) && ((base) + 0x40000 >= (addr)))
 
+<<<<<<< HEAD
 static const u8 *bnx2x_sel_blob(struct bnx2x *bp, u32 addr, const u8 *data)
+=======
+static const u8 *bnx2x_sel_blob(struct bnx2x *bp, u32 addr,
+				const u8 *data)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	IF_IS_INT_TABLE_ADDR(TSEM_REG_INT_TABLE, addr)
 		data = INIT_TSEM_INT_TABLE_DATA(bp);
@@ -129,6 +218,7 @@ static const u8 *bnx2x_sel_blob(struct bnx2x *bp, u32 addr, const u8 *data)
 	return data;
 }
 
+<<<<<<< HEAD
 static void bnx2x_write_big_buf_wb(struct bnx2x *bp, u32 addr, u32 len)
 {
 	if (bp->dmae_ready)
@@ -154,6 +244,19 @@ static void bnx2x_init_wr_wb(struct bnx2x *bp, u32 addr, const u32 *data,
 }
 
 static void bnx2x_wr_64(struct bnx2x *bp, u32 reg, u32 val_lo, u32 val_hi)
+=======
+static void bnx2x_init_wr_wb(struct bnx2x *bp, u32 addr,
+			     const u32 *data, u32 len)
+{
+	if (bp->dmae_ready)
+		VIRT_WR_DMAE_LEN(bp, data, addr, len, 0);
+	else
+		bnx2x_init_ind_wr(bp, addr, data, len);
+}
+
+static void bnx2x_wr_64(struct bnx2x *bp, u32 reg, u32 val_lo,
+			u32 val_hi)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u32 wb_write[2];
 
@@ -161,8 +264,13 @@ static void bnx2x_wr_64(struct bnx2x *bp, u32 reg, u32 val_lo, u32 val_hi)
 	wb_write[1] = val_hi;
 	REG_WR_DMAE_LEN(bp, reg, wb_write, 2);
 }
+<<<<<<< HEAD
 
 static void bnx2x_init_wr_zp(struct bnx2x *bp, u32 addr, u32 len, u32 blob_off)
+=======
+static void bnx2x_init_wr_zp(struct bnx2x *bp, u32 addr, u32 len,
+			     u32 blob_off)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	const u8 *data = NULL;
 	int rc;
@@ -186,18 +294,29 @@ static void bnx2x_init_wr_zp(struct bnx2x *bp, u32 addr, u32 len, u32 blob_off)
 static void bnx2x_init_block(struct bnx2x *bp, u32 block, u32 stage)
 {
 	u16 op_start =
+<<<<<<< HEAD
 		INIT_OPS_OFFSETS(bp)[BLOCK_OPS_IDX(block, stage, STAGE_START)];
 	u16 op_end =
 		INIT_OPS_OFFSETS(bp)[BLOCK_OPS_IDX(block, stage, STAGE_END)];
 	union init_op *op;
 	int hw_wr;
 	u32 i, op_type, addr, len;
+=======
+		INIT_OPS_OFFSETS(bp)[BLOCK_OPS_IDX(block, stage,
+						     STAGE_START)];
+	u16 op_end =
+		INIT_OPS_OFFSETS(bp)[BLOCK_OPS_IDX(block, stage,
+						     STAGE_END)];
+	union init_op *op;
+	u32 op_idx, op_type, addr, len;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	const u32 *data, *data_base;
 
 	/* If empty block */
 	if (op_start == op_end)
 		return;
 
+<<<<<<< HEAD
 	if (CHIP_REV_IS_FPGA(bp))
 		hw_wr = OP_WR_FPGA;
 	else if (CHIP_REV_IS_EMUL(bp))
@@ -219,6 +338,22 @@ static void bnx2x_init_block(struct bnx2x *bp, u32 block, u32 stage)
 		/* HW/EMUL specific */
 		if ((op_type > OP_WB) && (op_type == hw_wr))
 			op_type = OP_WR;
+=======
+	data_base = INIT_DATA(bp);
+
+	for (op_idx = op_start; op_idx < op_end; op_idx++) {
+
+		op = (union init_op *)&(INIT_OPS(bp)[op_idx]);
+		/* Get generic data */
+		op_type = op->raw.op;
+		addr = op->raw.offset;
+		/* Get data that's used for OP_SW, OP_WB, OP_FW, OP_ZP and
+		 * OP_WR64 (we assume that op_arr_write and op_write have the
+		 * same structure).
+		 */
+		len = op->arr_wr.data_len;
+		data = data_base + op->arr_wr.data_off;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		switch (op_type) {
 		case OP_RD:
@@ -233,6 +368,7 @@ static void bnx2x_init_block(struct bnx2x *bp, u32 block, u32 stage)
 		case OP_WB:
 			bnx2x_init_wr_wb(bp, addr, data, len);
 			break;
+<<<<<<< HEAD
 		case OP_SI:
 			bnx2x_init_ind_wr(bp, addr, data, len);
 			break;
@@ -242,12 +378,46 @@ static void bnx2x_init_block(struct bnx2x *bp, u32 block, u32 stage)
 		case OP_ZP:
 			bnx2x_init_wr_zp(bp, addr, len,
 					 op->str_wr.data_off);
+=======
+		case OP_ZR:
+			bnx2x_init_fill(bp, addr, 0, op->zero.len, 0);
+			break;
+		case OP_WB_ZR:
+			bnx2x_init_fill(bp, addr, 0, op->zero.len, 1);
+			break;
+		case OP_ZP:
+			bnx2x_init_wr_zp(bp, addr, len,
+					 op->arr_wr.data_off);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		case OP_WR_64:
 			bnx2x_init_wr_64(bp, addr, data, len);
 			break;
+<<<<<<< HEAD
 		default:
 			/* happens whenever an op is of a diff HW */
+=======
+		case OP_IF_MODE_AND:
+			/* if any of the flags doesn't match, skip the
+			 * conditional block.
+			 */
+			if ((INIT_MODE_FLAGS(bp) &
+				op->if_mode.mode_bit_map) !=
+				op->if_mode.mode_bit_map)
+				op_idx += op->if_mode.cmd_offset;
+			break;
+		case OP_IF_MODE_OR:
+			/* if all the flags don't match, skip the conditional
+			 * block.
+			 */
+			if ((INIT_MODE_FLAGS(bp) &
+				op->if_mode.mode_bit_map) == 0)
+				op_idx += op->if_mode.cmd_offset;
+			break;
+		default:
+			/* Should never get here! */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		}
 	}
@@ -417,7 +587,12 @@ static const struct arb_line write_arb_addr[NUM_WR_Q-1] = {
 		PXP2_REG_RQ_BW_WR_UBOUND30}
 };
 
+<<<<<<< HEAD
 static void bnx2x_init_pxp_arb(struct bnx2x *bp, int r_order, int w_order)
+=======
+static void bnx2x_init_pxp_arb(struct bnx2x *bp, int r_order,
+			       int w_order)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u32 val, i;
 
@@ -491,19 +666,33 @@ static void bnx2x_init_pxp_arb(struct bnx2x *bp, int r_order, int w_order)
 	if ((CHIP_IS_E1(bp) || CHIP_IS_E1H(bp)) && (r_order == MAX_RD_ORD))
 		REG_WR(bp, PXP2_REG_RQ_PDR_LIMIT, 0xe00);
 
+<<<<<<< HEAD
 	if (CHIP_IS_E2(bp))
+=======
+	if (CHIP_IS_E3(bp))
+		REG_WR(bp, PXP2_REG_WR_USDMDP_TH, (0x4 << w_order));
+	else if (CHIP_IS_E2(bp))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		REG_WR(bp, PXP2_REG_WR_USDMDP_TH, (0x8 << w_order));
 	else
 		REG_WR(bp, PXP2_REG_WR_USDMDP_TH, (0x18 << w_order));
 
+<<<<<<< HEAD
 	if (CHIP_IS_E1H(bp) || CHIP_IS_E2(bp)) {
+=======
+	if (!CHIP_IS_E1(bp)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*    MPS      w_order     optimal TH      presently TH
 		 *    128         0             0               2
 		 *    256         1             1               3
 		 *    >=512       2             2               3
 		 */
 		/* DMAE is special */
+<<<<<<< HEAD
 		if (CHIP_IS_E2(bp)) {
+=======
+		if (!CHIP_IS_E1H(bp)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* E2 can use optimal TH */
 			val = w_order;
 			REG_WR(bp, PXP2_REG_WR_DMAE_MPS, val);
@@ -557,8 +746,13 @@ static void bnx2x_init_pxp_arb(struct bnx2x *bp, int r_order, int w_order)
 #define ILT_ADDR2(x)		((u32)((1 << 20) | ((u64)x >> 44)))
 #define ILT_RANGE(f, l)		(((l) << 10) | f)
 
+<<<<<<< HEAD
 static int bnx2x_ilt_line_mem_op(struct bnx2x *bp, struct ilt_line *line,
 				 u32 size, u8 memop)
+=======
+static int bnx2x_ilt_line_mem_op(struct bnx2x *bp,
+				 struct ilt_line *line, u32 size, u8 memop)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	if (memop == ILT_MEMOP_FREE) {
 		BNX2X_ILT_FREE(line->page, line->page_mapping, line->size);
@@ -572,7 +766,12 @@ static int bnx2x_ilt_line_mem_op(struct bnx2x *bp, struct ilt_line *line,
 }
 
 
+<<<<<<< HEAD
 static int bnx2x_ilt_client_mem_op(struct bnx2x *bp, int cli_num, u8 memop)
+=======
+static int bnx2x_ilt_client_mem_op(struct bnx2x *bp, int cli_num,
+				   u8 memop)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int i, rc;
 	struct bnx2x_ilt *ilt = BP_ILT(bp);
@@ -617,8 +816,13 @@ static void bnx2x_ilt_line_wr(struct bnx2x *bp, int abs_idx,
 	bnx2x_wr_64(bp, reg, ILT_ADDR1(page_mapping), ILT_ADDR2(page_mapping));
 }
 
+<<<<<<< HEAD
 static void bnx2x_ilt_line_init_op(struct bnx2x *bp, struct bnx2x_ilt *ilt,
 				   int idx, u8 initop)
+=======
+static void bnx2x_ilt_line_init_op(struct bnx2x *bp,
+				   struct bnx2x_ilt *ilt, int idx, u8 initop)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	dma_addr_t	null_mapping;
 	int abs_idx = ilt->start_line + idx;
@@ -733,7 +937,11 @@ static void bnx2x_ilt_init_op(struct bnx2x *bp, u8 initop)
 }
 
 static void bnx2x_ilt_init_client_psz(struct bnx2x *bp, int cli_num,
+<<<<<<< HEAD
 					    u32 psz_reg, u8 initop)
+=======
+				      u32 psz_reg, u8 initop)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct bnx2x_ilt *ilt = BP_ILT(bp);
 	struct ilt_client_info *ilt_cli = &ilt->clients[cli_num];
@@ -848,7 +1056,12 @@ static void bnx2x_src_init_t2(struct bnx2x *bp, struct src_ent *t2,
 
 	/* Initialize T2 */
 	for (i = 0; i < src_cid_count-1; i++)
+<<<<<<< HEAD
 		t2[i].next = (u64)(t2_mapping + (i+1)*sizeof(struct src_ent));
+=======
+		t2[i].next = (u64)(t2_mapping +
+			     (i+1)*sizeof(struct src_ent));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* tell the searcher where the T2 table is */
 	REG_WR(bp, SRC_REG_COUNTFREE0 + port*4, src_cid_count);

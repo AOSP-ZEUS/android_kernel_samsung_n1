@@ -331,7 +331,11 @@ struct ehea_eqe *ehea_poll_eq(struct ehea_eq *eq)
 	unsigned long flags;
 
 	spin_lock_irqsave(&eq->spinlock, flags);
+<<<<<<< HEAD
 	eqe = (struct ehea_eqe *)hw_eqit_eq_get_inc_valid(&eq->hw_queue);
+=======
+	eqe = hw_eqit_eq_get_inc_valid(&eq->hw_queue);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock_irqrestore(&eq->spinlock, flags);
 
 	return eqe;

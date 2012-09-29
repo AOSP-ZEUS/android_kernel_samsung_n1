@@ -186,7 +186,15 @@ static int absolutize(char *to, int size, char *from)
 		strcat(to, "/");
 		strcat(to, from);
 	}
+<<<<<<< HEAD
 	chdir(save_cwd);
+=======
+	if (chdir(save_cwd)) {
+		cow_printf("absolutize : Can't cd to '%s' - "
+			   "errno = %d\n", save_cwd, errno);
+		return -1;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

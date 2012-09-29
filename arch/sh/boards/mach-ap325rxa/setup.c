@@ -188,7 +188,11 @@ static void ap320_wvga_power_off(void *board_data)
 	__raw_writew(0, FPGA_LCDREG);
 }
 
+<<<<<<< HEAD
 const static struct fb_videomode ap325rxa_lcdc_modes[] = {
+=======
+static const struct fb_videomode ap325rxa_lcdc_modes[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		.name = "LB070WV1",
 		.xres = 800,
@@ -332,8 +336,13 @@ static int camera_set_capture(struct soc_camera_platform_info *info,
 	return ret;
 }
 
+<<<<<<< HEAD
 static int ap325rxa_camera_add(struct soc_camera_link *icl, struct device *dev);
 static void ap325rxa_camera_del(struct soc_camera_link *icl);
+=======
+static int ap325rxa_camera_add(struct soc_camera_device *icd);
+static void ap325rxa_camera_del(struct soc_camera_device *icd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct soc_camera_platform_info camera_info = {
 	.format_name = "UYVY",
@@ -366,24 +375,40 @@ static void ap325rxa_camera_release(struct device *dev)
 	soc_camera_platform_release(&camera_device);
 }
 
+<<<<<<< HEAD
 static int ap325rxa_camera_add(struct soc_camera_link *icl,
 			       struct device *dev)
 {
 	int ret = soc_camera_platform_add(icl, dev, &camera_device, &camera_link,
+=======
+static int ap325rxa_camera_add(struct soc_camera_device *icd)
+{
+	int ret = soc_camera_platform_add(icd, &camera_device, &camera_link,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					  ap325rxa_camera_release, 0);
 	if (ret < 0)
 		return ret;
 
 	ret = camera_probe();
 	if (ret < 0)
+<<<<<<< HEAD
 		soc_camera_platform_del(icl, camera_device, &camera_link);
+=======
+		soc_camera_platform_del(icd, camera_device, &camera_link);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return ret;
 }
 
+<<<<<<< HEAD
 static void ap325rxa_camera_del(struct soc_camera_link *icl)
 {
 	soc_camera_platform_del(icl, camera_device, &camera_link);
+=======
+static void ap325rxa_camera_del(struct soc_camera_device *icd)
+{
+	soc_camera_platform_del(icd, camera_device, &camera_link);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 #endif /* CONFIG_I2C */
 

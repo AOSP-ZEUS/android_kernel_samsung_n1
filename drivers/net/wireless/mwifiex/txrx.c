@@ -71,7 +71,11 @@ int mwifiex_process_tx(struct mwifiex_private *priv, struct sk_buff *skb,
 	u8 *head_ptr;
 	struct txpd *local_tx_pd = NULL;
 
+<<<<<<< HEAD
 	head_ptr = (u8 *) mwifiex_process_sta_txpd(priv, skb);
+=======
+	head_ptr = mwifiex_process_sta_txpd(priv, skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (head_ptr) {
 		if (GET_BSS_ROLE(priv) == MWIFIEX_BSS_ROLE_STA)
 			local_tx_pd =

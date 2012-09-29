@@ -373,7 +373,11 @@ static int w1_f29_add_slave(struct w1_slave *sl)
 static void w1_f29_remove_slave(struct w1_slave *sl)
 {
 	int i;
+<<<<<<< HEAD
 	for (i = NB_SYSFS_BIN_FILES; i <= 0; --i)
+=======
+	for (i = NB_SYSFS_BIN_FILES - 1; i >= 0; --i)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		sysfs_remove_bin_file(&sl->dev.kobj,
 			&(w1_f29_sysfs_bin_files[i]));
 }

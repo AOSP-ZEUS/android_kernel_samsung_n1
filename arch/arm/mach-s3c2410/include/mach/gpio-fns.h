@@ -52,12 +52,15 @@ extern unsigned int s3c2410_gpio_getcfg(unsigned int pin);
 
 extern int s3c2410_gpio_getirq(unsigned int pin);
 
+<<<<<<< HEAD
 #ifdef CONFIG_CPU_S3C2400
 
 extern int s3c2400_gpio_getirq(unsigned int pin);
 
 #endif /* CONFIG_CPU_S3C2400 */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* s3c2410_gpio_irqfilter
  *
  * set the irq filtering on the given pin

@@ -18,6 +18,10 @@
 
 #include <asm/hardware/gic.h>
 #include <asm/cacheflush.h>
+<<<<<<< HEAD
+=======
+#include <asm/cputype.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/mach-types.h>
 
 #include <mach/msm_iomap.h>
@@ -40,6 +44,15 @@ volatile int pen_release = -1;
 
 static DEFINE_SPINLOCK(boot_lock);
 
+<<<<<<< HEAD
+=======
+static inline int get_core_count(void)
+{
+	/* 1 + the PART[1:0] field of MIDR */
+	return ((read_cpuid_id() >> 4) & 3) + 1;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __cpuinit platform_secondary_init(unsigned int cpu)
 {
 	/* Configure edge-triggered PPIs */
@@ -147,9 +160,21 @@ int __cpuinit boot_secondary(unsigned int cpu, struct task_struct *idle)
  */
 void __init smp_init_cpus(void)
 {
+<<<<<<< HEAD
 	unsigned int i;
 
 	for (i = 0; i < NR_CPUS; i++)
+=======
+	unsigned int i, ncores = get_core_count();
+
+	if (ncores > nr_cpu_ids) {
+		pr_warn("SMP: %u cores greater than maximum (%u), clipping\n",
+			ncores, nr_cpu_ids);
+		ncores = nr_cpu_ids;
+	}
+
+	for (i = 0; i < ncores; i++)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		set_cpu_possible(i, true);
 
         set_smp_cross_call(gic_raise_softirq);
@@ -157,6 +182,7 @@ void __init smp_init_cpus(void)
 
 void __init platform_smp_prepare_cpus(unsigned int max_cpus)
 {
+<<<<<<< HEAD
 	int i;
 
 	/*
@@ -165,4 +191,6 @@ void __init platform_smp_prepare_cpus(unsigned int max_cpus)
 	 */
 	for (i = 0; i < max_cpus; i++)
 		set_cpu_present(i, true);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

@@ -62,14 +62,21 @@ static bool ath9k_has_pending_frames(struct ath_softc *sc, struct ath_txq *txq)
 
 	if (txq->axq_depth || !list_empty(&txq->axq_acq))
 		pending = true;
+<<<<<<< HEAD
 	else if (sc->sc_ah->caps.hw_caps & ATH9K_HW_CAP_EDMA)
 		pending = !list_empty(&txq->txq_fifo_pending);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_unlock_bh(&txq->axq_lock);
 	return pending;
 }
 
+<<<<<<< HEAD
 bool ath9k_setpower(struct ath_softc *sc, enum ath9k_power_mode mode)
+=======
+static bool ath9k_setpower(struct ath_softc *sc, enum ath9k_power_mode mode)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	unsigned long flags;
 	bool ret;
@@ -136,7 +143,11 @@ void ath9k_ps_restore(struct ath_softc *sc)
 	spin_unlock_irqrestore(&sc->sc_pm_lock, flags);
 }
 
+<<<<<<< HEAD
 static void ath_start_ani(struct ath_common *common)
+=======
+void ath_start_ani(struct ath_common *common)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct ath_hw *ah = common->ah;
 	unsigned long timestamp = jiffies_to_msecs(jiffies);
@@ -219,7 +230,11 @@ static int ath_update_survey_stats(struct ath_softc *sc)
  * by reseting the chip.  To accomplish this we must first cleanup any pending
  * DMA, then restart stuff.
 */
+<<<<<<< HEAD
 int ath_set_channel(struct ath_softc *sc, struct ieee80211_hw *hw,
+=======
+static int ath_set_channel(struct ath_softc *sc, struct ieee80211_hw *hw,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		    struct ath9k_channel *hchan)
 {
 	struct ath_hw *ah = sc->sc_ah;
@@ -302,7 +317,12 @@ int ath_set_channel(struct ath_softc *sc, struct ieee80211_hw *hw,
 			ath_set_beacon(sc);
 		ieee80211_queue_delayed_work(sc->hw, &sc->tx_complete_work, 0);
 		ieee80211_queue_delayed_work(sc->hw, &sc->hw_pll_work, HZ/2);
+<<<<<<< HEAD
 		ath_start_ani(common);
+=======
+		if (!common->disable_ani)
+			ath_start_ani(common);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
  ps_restore:
@@ -361,7 +381,11 @@ static bool ath_paprd_send_frame(struct ath_softc *sc, struct sk_buff *skb, int 
 	txctl.paprd = BIT(chain);
 
 	if (ath_tx_start(hw, skb, &txctl) != 0) {
+<<<<<<< HEAD
 		ath_dbg(common, ATH_DBG_XMIT, "PAPRD TX failed\n");
+=======
+		ath_dbg(common, ATH_DBG_CALIBRATE, "PAPRD TX failed\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dev_kfree_skb_any(skb);
 		return false;
 	}
@@ -370,7 +394,11 @@ static bool ath_paprd_send_frame(struct ath_softc *sc, struct sk_buff *skb, int 
 			msecs_to_jiffies(ATH_PAPRD_TIMEOUT));
 
 	if (!time_left)
+<<<<<<< HEAD
 		ath_dbg(ath9k_hw_common(sc->sc_ah), ATH_DBG_CALIBRATE,
+=======
+		ath_dbg(common, ATH_DBG_CALIBRATE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			"Timeout waiting for paprd training on TX chain %d\n",
 			chain);
 
@@ -394,12 +422,23 @@ void ath_paprd_calibrate(struct work_struct *work)
 	if (!caldata)
 		return;
 
+<<<<<<< HEAD
 	if (ar9003_paprd_init_table(ah) < 0)
 		return;
 
 	skb = alloc_skb(len, GFP_KERNEL);
 	if (!skb)
 		return;
+=======
+	ath9k_ps_wakeup(sc);
+
+	if (ar9003_paprd_init_table(ah) < 0)
+		goto fail_paprd;
+
+	skb = alloc_skb(len, GFP_KERNEL);
+	if (!skb)
+		goto fail_paprd;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	skb_put(skb, len);
 	memset(skb->data, 0, len);
@@ -411,7 +450,10 @@ void ath_paprd_calibrate(struct work_struct *work)
 	memcpy(hdr->addr2, hw->wiphy->perm_addr, ETH_ALEN);
 	memcpy(hdr->addr3, hw->wiphy->perm_addr, ETH_ALEN);
 
+<<<<<<< HEAD
 	ath9k_ps_wakeup(sc);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (chain = 0; chain < AR9300_MAX_CHAINS; chain++) {
 		if (!(common->tx_chainmask & BIT(chain)))
 			continue;
@@ -431,11 +473,26 @@ void ath_paprd_calibrate(struct work_struct *work)
 		if (!ath_paprd_send_frame(sc, skb, chain))
 			goto fail_paprd;
 
+<<<<<<< HEAD
 		if (!ar9003_paprd_is_done(ah))
 			break;
 
 		if (ar9003_paprd_create_curve(ah, caldata, chain) != 0)
 			break;
+=======
+		if (!ar9003_paprd_is_done(ah)) {
+			ath_dbg(common, ATH_DBG_CALIBRATE,
+				"PAPRD not yet done on chain %d\n", chain);
+			break;
+		}
+
+		if (ar9003_paprd_create_curve(ah, caldata, chain)) {
+			ath_dbg(common, ATH_DBG_CALIBRATE,
+				"PAPRD create curve failed on chain %d\n",
+								   chain);
+			break;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		chain_ok = 1;
 	}
@@ -515,6 +572,7 @@ void ath_ani_calibrate(unsigned long data)
 		common->ani.checkani_timer = timestamp;
 	}
 
+<<<<<<< HEAD
 	/* Skip all processing if there's nothing to do. */
 	if (longcal || shortcal || aniflag) {
 		/* Call ANI routine if necessary */
@@ -533,6 +591,21 @@ void ath_ani_calibrate(unsigned long data)
 						   common->rx_chainmask,
 						   longcal);
 		}
+=======
+	/* Call ANI routine if necessary */
+	if (aniflag) {
+		spin_lock_irqsave(&common->cc_lock, flags);
+		ath9k_hw_ani_monitor(ah, ah->curchan);
+		ath_update_survey_stats(sc);
+		spin_unlock_irqrestore(&common->cc_lock, flags);
+	}
+
+	/* Perform calibration if necessary */
+	if (longcal || shortcal) {
+		common->ani.caldone =
+			ath9k_hw_calibrate(ah, ah->curchan,
+						common->rx_chainmask, longcal);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	ath9k_ps_restore(sc);
@@ -615,8 +688,16 @@ void ath_hw_check(struct work_struct *work)
 	ath_dbg(common, ATH_DBG_RESET, "Possible baseband hang, "
 		"busy=%d (try %d)\n", busy, sc->hw_busy_count + 1);
 	if (busy >= 99) {
+<<<<<<< HEAD
 		if (++sc->hw_busy_count >= 3)
 			ath_reset(sc, true);
+=======
+		if (++sc->hw_busy_count >= 3) {
+			spin_lock_bh(&sc->sc_pcu_lock);
+			ath_reset(sc, true);
+			spin_unlock_bh(&sc->sc_pcu_lock);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else if (busy >= 0)
 		sc->hw_busy_count = 0;
 
@@ -635,7 +716,13 @@ static void ath_hw_pll_rx_hang_check(struct ath_softc *sc, u32 pll_sqsum)
 			/* Rx is hung for more than 500ms. Reset it */
 			ath_dbg(common, ATH_DBG_RESET,
 				"Possible RX hang, resetting");
+<<<<<<< HEAD
 			ath_reset(sc, true);
+=======
+			spin_lock_bh(&sc->sc_pcu_lock);
+			ath_reset(sc, true);
+			spin_unlock_bh(&sc->sc_pcu_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			count = 0;
 		}
 	} else
@@ -672,7 +759,13 @@ void ath9k_tasklet(unsigned long data)
 
 	if ((status & ATH9K_INT_FATAL) ||
 	    (status & ATH9K_INT_BB_WATCHDOG)) {
+<<<<<<< HEAD
 		ath_reset(sc, true);
+=======
+		spin_lock(&sc->sc_pcu_lock);
+		ath_reset(sc, true);
+		spin_unlock(&sc->sc_pcu_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	}
 
@@ -868,7 +961,11 @@ chip_reset:
 #undef SCHED_INTR
 }
 
+<<<<<<< HEAD
 void ath_radio_enable(struct ath_softc *sc, struct ieee80211_hw *hw)
+=======
+static void ath_radio_enable(struct ath_softc *sc, struct ieee80211_hw *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct ath_hw *ah = sc->sc_ah;
 	struct ath_common *common = ath9k_hw_common(ah);
@@ -974,10 +1071,17 @@ int ath_reset(struct ath_softc *sc, bool retry_tx)
 	sc->hw_busy_count = 0;
 
 	/* Stop ANI */
+<<<<<<< HEAD
 	del_timer_sync(&common->ani.timer);
 
 	ath9k_ps_wakeup(sc);
 	spin_lock_bh(&sc->sc_pcu_lock);
+=======
+
+	del_timer_sync(&common->ani.timer);
+
+	ath9k_ps_wakeup(sc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ieee80211_stop_queues(hw);
 
@@ -1020,10 +1124,18 @@ int ath_reset(struct ath_softc *sc, bool retry_tx)
 	}
 
 	ieee80211_wake_queues(hw);
+<<<<<<< HEAD
 	spin_unlock_bh(&sc->sc_pcu_lock);
 
 	/* Start ANI */
 	ath_start_ani(common);
+=======
+
+	/* Start ANI */
+	if (!common->disable_ani)
+		ath_start_ani(common);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ath9k_ps_restore(sc);
 
 	return r;
@@ -1261,7 +1373,10 @@ static void ath9k_stop(struct ieee80211_hw *hw)
 
 	/* disable HAL and put h/w to sleep */
 	ath9k_hw_disable(ah);
+<<<<<<< HEAD
 	ath9k_hw_configpcipowersave(ah, 1, 1);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_unlock_bh(&sc->sc_pcu_lock);
 
@@ -1412,10 +1527,21 @@ static void ath9k_calculate_summary_state(struct ieee80211_hw *hw,
 	ath9k_hw_set_interrupts(ah, ah->imask);
 
 	/* Set up ANI */
+<<<<<<< HEAD
 	if ((iter_data.naps + iter_data.nadhocs) > 0) {
 		sc->sc_ah->stats.avgbrssi = ATH_RSSI_DUMMY_MARKER;
 		sc->sc_flags |= SC_OP_ANI_RUN;
 		ath_start_ani(common);
+=======
+	if (iter_data.naps > 0) {
+		sc->sc_ah->stats.avgbrssi = ATH_RSSI_DUMMY_MARKER;
+
+		if (!common->disable_ani) {
+			sc->sc_flags |= SC_OP_ANI_RUN;
+			ath_start_ani(common);
+		}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		sc->sc_flags &= ~SC_OP_ANI_RUN;
 		del_timer_sync(&common->ani.timer);
@@ -1955,6 +2081,7 @@ static void ath9k_bss_iter(void *data, u8 *mac, struct ieee80211_vif *vif)
 	struct ieee80211_bss_conf *bss_conf = &vif->bss_conf;
 	struct ath_vif *avp = (void *)vif->drv_priv;
 
+<<<<<<< HEAD
 	switch (sc->sc_ah->opmode) {
 	case NL80211_IFTYPE_ADHOC:
 		/* There can be only one vif available */
@@ -1999,6 +2126,40 @@ static void ath9k_bss_iter(void *data, u8 *mac, struct ieee80211_vif *vif)
 		break;
 	default:
 		break;
+=======
+	/*
+	 * Skip iteration if primary station vif's bss info
+	 * was not changed
+	 */
+	if (sc->sc_flags & SC_OP_PRIM_STA_VIF)
+		return;
+
+	if (bss_conf->assoc) {
+		sc->sc_flags |= SC_OP_PRIM_STA_VIF;
+		avp->primary_sta_vif = true;
+		memcpy(common->curbssid, bss_conf->bssid, ETH_ALEN);
+		common->curaid = bss_conf->aid;
+		ath9k_hw_write_associd(sc->sc_ah);
+		ath_dbg(common, ATH_DBG_CONFIG,
+				"Bss Info ASSOC %d, bssid: %pM\n",
+				bss_conf->aid, common->curbssid);
+		ath_beacon_config(sc, vif);
+		/*
+		 * Request a re-configuration of Beacon related timers
+		 * on the receipt of the first Beacon frame (i.e.,
+		 * after time sync with the AP).
+		 */
+		sc->ps_flags |= PS_BEACON_SYNC | PS_WAIT_FOR_BEACON;
+		/* Reset rssi stats */
+		sc->last_rssi = ATH_RSSI_DUMMY_MARKER;
+		sc->sc_ah->stats.avgbrssi = ATH_RSSI_DUMMY_MARKER;
+
+		if (!common->disable_ani) {
+			sc->sc_flags |= SC_OP_ANI_RUN;
+			ath_start_ani(common);
+		}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -2008,6 +2169,12 @@ static void ath9k_config_bss(struct ath_softc *sc, struct ieee80211_vif *vif)
 	struct ieee80211_bss_conf *bss_conf = &vif->bss_conf;
 	struct ath_vif *avp = (void *)vif->drv_priv;
 
+<<<<<<< HEAD
+=======
+	if (sc->sc_ah->opmode != NL80211_IFTYPE_STATION)
+		return;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Reconfigure bss info */
 	if (avp->primary_sta_vif && !bss_conf->assoc) {
 		ath_dbg(common, ATH_DBG_CONFIG,
@@ -2026,8 +2193,12 @@ static void ath9k_config_bss(struct ath_softc *sc, struct ieee80211_vif *vif)
 	 * None of station vifs are associated.
 	 * Clear bssid & aid
 	 */
+<<<<<<< HEAD
 	if ((sc->sc_ah->opmode == NL80211_IFTYPE_STATION) &&
 	    !(sc->sc_flags & SC_OP_PRIM_STA_VIF)) {
+=======
+	if (!(sc->sc_flags & SC_OP_PRIM_STA_VIF)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ath9k_hw_write_associd(sc->sc_ah);
 		/* Stop ANI */
 		sc->sc_flags &= ~SC_OP_ANI_RUN;
@@ -2057,6 +2228,29 @@ static void ath9k_bss_info_changed(struct ieee80211_hw *hw,
 			common->curbssid, common->curaid);
 	}
 
+<<<<<<< HEAD
+=======
+	if (changed & BSS_CHANGED_IBSS) {
+		/* There can be only one vif available */
+		memcpy(common->curbssid, bss_conf->bssid, ETH_ALEN);
+		common->curaid = bss_conf->aid;
+		ath9k_hw_write_associd(sc->sc_ah);
+
+		if (bss_conf->ibss_joined) {
+			sc->sc_ah->stats.avgbrssi = ATH_RSSI_DUMMY_MARKER;
+
+			if (!common->disable_ani) {
+				sc->sc_flags |= SC_OP_ANI_RUN;
+				ath_start_ani(common);
+			}
+
+		} else {
+			sc->sc_flags &= ~SC_OP_ANI_RUN;
+			del_timer_sync(&common->ani.timer);
+		}
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Enable transmission of beacons (AP, IBSS, MESH) */
 	if ((changed & BSS_CHANGED_BEACON) ||
 	    ((changed & BSS_CHANGED_BEACON_ENABLED) && bss_conf->enable_beacon)) {
@@ -2283,6 +2477,15 @@ static void ath9k_flush(struct ieee80211_hw *hw, bool drop)
 	mutex_lock(&sc->mutex);
 	cancel_delayed_work_sync(&sc->tx_complete_work);
 
+<<<<<<< HEAD
+=======
+	if (ah->ah_flags & AH_UNPLUGGED) {
+		ath_dbg(common, ATH_DBG_ANY, "Device has been unplugged!\n");
+		mutex_unlock(&sc->mutex);
+		return;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (sc->sc_flags & SC_OP_INVALID) {
 		ath_dbg(common, ATH_DBG_ANY, "Device not present\n");
 		mutex_unlock(&sc->mutex);
@@ -2315,9 +2518,15 @@ static void ath9k_flush(struct ieee80211_hw *hw, bool drop)
 	ath9k_ps_wakeup(sc);
 	spin_lock_bh(&sc->sc_pcu_lock);
 	drain_txq = ath_drain_all_txq(sc, false);
+<<<<<<< HEAD
 	spin_unlock_bh(&sc->sc_pcu_lock);
 	if (!drain_txq)
 		ath_reset(sc, false);
+=======
+	if (!drain_txq)
+		ath_reset(sc, false);
+	spin_unlock_bh(&sc->sc_pcu_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ath9k_ps_restore(sc);
 	ieee80211_wake_queues(hw);
 
@@ -2341,7 +2550,11 @@ static bool ath9k_tx_frames_pending(struct ieee80211_hw *hw)
 	return false;
 }
 
+<<<<<<< HEAD
 int ath9k_tx_last_beacon(struct ieee80211_hw *hw)
+=======
+static int ath9k_tx_last_beacon(struct ieee80211_hw *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct ath_softc *sc = hw->priv;
 	struct ath_hw *ah = sc->sc_ah;

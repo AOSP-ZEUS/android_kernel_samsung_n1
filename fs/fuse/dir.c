@@ -382,7 +382,11 @@ static int fuse_create_open(struct inode *dir, struct dentry *entry, int mode,
 	struct fuse_entry_out outentry;
 	struct fuse_file *ff;
 	struct file *file;
+<<<<<<< HEAD
 	int flags = nd->intent.open.flags - 1;
+=======
+	int flags = nd->intent.open.flags;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (fc->no_create)
 		return -ENOSYS;
@@ -576,7 +580,11 @@ static int fuse_mknod(struct inode *dir, struct dentry *entry, int mode,
 static int fuse_create(struct inode *dir, struct dentry *entry, int mode,
 		       struct nameidata *nd)
 {
+<<<<<<< HEAD
 	if (nd && (nd->flags & LOOKUP_OPEN)) {
+=======
+	if (nd) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int err = fuse_create_open(dir, entry, mode, nd);
 		if (err != -ENOSYS)
 			return err;
@@ -971,9 +979,15 @@ static int fuse_access(struct inode *inode, int mask)
 	return err;
 }
 
+<<<<<<< HEAD
 static int fuse_perm_getattr(struct inode *inode, int flags)
 {
 	if (flags & IPERM_FLAG_RCU)
+=======
+static int fuse_perm_getattr(struct inode *inode, int mask)
+{
+	if (mask & MAY_NOT_BLOCK)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ECHILD;
 
 	return fuse_do_getattr(inode, NULL, NULL);
@@ -992,7 +1006,11 @@ static int fuse_perm_getattr(struct inode *inode, int flags)
  * access request is sent.  Execute permission is still checked
  * locally based on file mode.
  */
+<<<<<<< HEAD
 static int fuse_permission(struct inode *inode, int mask, unsigned int flags)
+=======
+static int fuse_permission(struct inode *inode, int mask)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct fuse_conn *fc = get_fuse_conn(inode);
 	bool refreshed = false;
@@ -1011,23 +1029,37 @@ static int fuse_permission(struct inode *inode, int mask, unsigned int flags)
 		if (fi->i_time < get_jiffies_64()) {
 			refreshed = true;
 
+<<<<<<< HEAD
 			err = fuse_perm_getattr(inode, flags);
+=======
+			err = fuse_perm_getattr(inode, mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (err)
 				return err;
 		}
 	}
 
 	if (fc->flags & FUSE_DEFAULT_PERMISSIONS) {
+<<<<<<< HEAD
 		err = generic_permission(inode, mask, flags, NULL);
+=======
+		err = generic_permission(inode, mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* If permission is denied, try to refresh file
 		   attributes.  This is also needed, because the root
 		   node will at first have no permissions */
 		if (err == -EACCES && !refreshed) {
+<<<<<<< HEAD
 			err = fuse_perm_getattr(inode, flags);
 			if (!err)
 				err = generic_permission(inode, mask,
 							flags, NULL);
+=======
+			err = fuse_perm_getattr(inode, mask);
+			if (!err)
+				err = generic_permission(inode, mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 		/* Note: the opposite of the above test does not
@@ -1035,7 +1067,11 @@ static int fuse_permission(struct inode *inode, int mask, unsigned int flags)
 		   noticed immediately, only after the attribute
 		   timeout has expired */
 	} else if (mask & (MAY_ACCESS | MAY_CHDIR)) {
+<<<<<<< HEAD
 		if (flags & IPERM_FLAG_RCU)
+=======
+		if (mask & MAY_NOT_BLOCK)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return -ECHILD;
 
 		err = fuse_access(inode, mask);
@@ -1044,7 +1080,11 @@ static int fuse_permission(struct inode *inode, int mask, unsigned int flags)
 			if (refreshed)
 				return -EACCES;
 
+<<<<<<< HEAD
 			err = fuse_perm_getattr(inode, flags);
+=======
+			err = fuse_perm_getattr(inode, mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (!err && !(inode->i_mode & S_IXUGO))
 				return -EACCES;
 		}
@@ -1177,9 +1217,16 @@ static int fuse_dir_release(struct inode *inode, struct file *file)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int fuse_dir_fsync(struct file *file, int datasync)
 {
 	return fuse_fsync_common(file, datasync, 1);
+=======
+static int fuse_dir_fsync(struct file *file, loff_t start, loff_t end,
+			  int datasync)
+{
+	return fuse_fsync_common(file, start, end, datasync, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static bool update_mtime(unsigned ivalid)

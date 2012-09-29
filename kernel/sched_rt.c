@@ -185,11 +185,31 @@ static inline u64 sched_rt_period(struct rt_rq *rt_rq)
 
 typedef struct task_group *rt_rq_iter_t;
 
+<<<<<<< HEAD
 #define for_each_rt_rq(rt_rq, iter, rq) \
 	for (iter = list_entry_rcu(task_groups.next, typeof(*iter), list); \
 	     (&iter->list != &task_groups) && \
 	     (rt_rq = iter->rt_rq[cpu_of(rq)]); \
 	     iter = list_entry_rcu(iter->list.next, typeof(*iter), list))
+=======
+static inline struct task_group *next_task_group(struct task_group *tg)
+{
+	do {
+		tg = list_entry_rcu(tg->list.next,
+			typeof(struct task_group), list);
+	} while (&tg->list != &task_groups && task_group_is_autogroup(tg));
+
+	if (&tg->list == &task_groups)
+		tg = NULL;
+
+	return tg;
+}
+
+#define for_each_rt_rq(rt_rq, iter, rq)					\
+	for (iter = container_of(&task_groups, typeof(*iter), list);	\
+		(iter = next_task_group(iter)) &&			\
+		(rt_rq = iter->rt_rq[cpu_of(rq)]);)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline void list_add_leaf_rt_rq(struct rt_rq *rt_rq)
 {
@@ -1126,7 +1146,11 @@ static struct task_struct *_pick_next_task_rt(struct rq *rq)
 
 	rt_rq = &rq->rt;
 
+<<<<<<< HEAD
 	if (unlikely(!rt_rq->rt_nr_running))
+=======
+	if (!rt_rq->rt_nr_running)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return NULL;
 
 	if (rt_rq_throttled(rt_rq))
@@ -1390,11 +1414,14 @@ static int push_rt_task(struct rq *rq)
 	if (!next_task)
 		return 0;
 
+<<<<<<< HEAD
 #ifdef __ARCH_WANT_INTERRUPTS_ON_CTXSW
        if (unlikely(task_running(rq, next_task)))
                return 0;
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 retry:
 	if (unlikely(next_task == rq->curr)) {
 		WARN_ON(1);
@@ -1553,7 +1580,11 @@ skip:
 static void pre_schedule_rt(struct rq *rq, struct task_struct *prev)
 {
 	/* Try to pull RT tasks here if we lower this rq's prio */
+<<<<<<< HEAD
 	if (unlikely(rt_task(prev)) && rq->rt.highest_prio.curr > prev->prio)
+=======
+	if (rq->rt.highest_prio.curr > prev->prio)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pull_rt_task(rq);
 }
 

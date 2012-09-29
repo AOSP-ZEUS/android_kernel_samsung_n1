@@ -46,10 +46,14 @@
 #include <asm/mach-types.h>
 #include <asm/mach/arch.h>
 
+<<<<<<< HEAD
 #include <mach/hardware.h>
 #include <mach/pxa3xx-regs.h>
 #include <mach/mfp-pxa3xx.h>
 #include <mach/mfp-pxa300.h>
+=======
+#include <mach/pxa300.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/ohci.h>
 #include <mach/pxafb.h>
 #include <mach/mmc.h>
@@ -1093,6 +1097,10 @@ MACHINE_START(RAUMFELD_RC, "Raumfeld Controller")
 	.init_machine	= raumfeld_controller_init,
 	.map_io		= pxa3xx_map_io,
 	.init_irq	= pxa3xx_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa3xx_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 MACHINE_END
 #endif
@@ -1103,6 +1111,10 @@ MACHINE_START(RAUMFELD_CONNECTOR, "Raumfeld Connector")
 	.init_machine	= raumfeld_connector_init,
 	.map_io		= pxa3xx_map_io,
 	.init_irq	= pxa3xx_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa3xx_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 MACHINE_END
 #endif
@@ -1113,6 +1125,10 @@ MACHINE_START(RAUMFELD_SPEAKER, "Raumfeld Speaker")
 	.init_machine	= raumfeld_speaker_init,
 	.map_io		= pxa3xx_map_io,
 	.init_irq	= pxa3xx_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa3xx_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 MACHINE_END
 #endif

@@ -212,7 +212,11 @@ static int bsr_add_node(struct device_node *bn)
 
 		cur->bsr_minor  = i + total_bsr_devs;
 		cur->bsr_addr   = res.start;
+<<<<<<< HEAD
 		cur->bsr_len    = res.end - res.start + 1;
+=======
+		cur->bsr_len    = resource_size(&res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cur->bsr_bytes  = bsr_bytes[i];
 		cur->bsr_stride = bsr_stride[i];
 		cur->bsr_dev    = MKDEV(bsr_major, i + total_bsr_devs);

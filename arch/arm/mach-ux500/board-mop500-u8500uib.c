@@ -12,13 +12,17 @@
 #include <linux/interrupt.h>
 #include <linux/mfd/tc3589x.h>
 #include <linux/input/matrix_keypad.h>
+<<<<<<< HEAD
 #include <../drivers/staging/ste_rmi4/synaptics_i2c_rmi4.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <mach/gpio.h>
 #include <mach/irqs.h>
 
 #include "board-mop500.h"
 
+<<<<<<< HEAD
 /*
  * Synaptics RMI4 touchscreen interface on the U8500 UIB
  */
@@ -40,6 +44,10 @@ static struct i2c_board_info __initdata mop500_i2c3_devices_u8500[] = {
 		I2C_BOARD_INFO("synaptics_rmi4_i2c", 0x4B),
 		.platform_data = &rmi4_i2c_dev_platformdata,
 	},
+=======
+/* Dummy data that can be overridden by staging driver */
+struct i2c_board_info __initdata __weak mop500_i2c3_devices_u8500[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*

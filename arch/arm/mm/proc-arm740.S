@@ -17,6 +17,11 @@
 #include <asm/pgtable.h>
 #include <asm/ptrace.h>
 
+<<<<<<< HEAD
+=======
+#include "proc-macros.S"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.text
 /*
  * cpu_arm740_proc_init()
@@ -115,6 +120,7 @@ __arm740_setup:
 
 	__INITDATA
 
+<<<<<<< HEAD
 /*
  * Purpose : Function pointers used to access above functions - all calls
  *	     come through these
@@ -151,6 +157,16 @@ cpu_elf_name:
 cpu_arm740_name:
 	.ascii	"ARM740T"
 	.size	cpu_arm740_name, . - cpu_arm740_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions arm740, dabort=v4t_late_abort, pabort=legacy_pabort, nommu=1
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv4"
+	string	cpu_elf_name, "v4"
+	string	cpu_arm740_name, "ARM740T"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 
@@ -170,5 +186,8 @@ __arm740_proc_info:
 	.long	0
 	.long	v3_cache_fns			@ cache model
 	.size	__arm740_proc_info, . - __arm740_proc_info
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

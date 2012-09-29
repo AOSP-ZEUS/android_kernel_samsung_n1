@@ -312,6 +312,12 @@ config X86_CMPXCHG
 config CMPXCHG_LOCAL
 	def_bool X86_64 || (X86_32 && !M386)
 
+<<<<<<< HEAD
+=======
+config CMPXCHG_DOUBLE
+	def_bool y
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config X86_L1_CACHE_SHIFT
 	int
 	default "7" if MPENTIUM4 || MPSC

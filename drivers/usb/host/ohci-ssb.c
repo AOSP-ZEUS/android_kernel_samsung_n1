@@ -2,7 +2,11 @@
  * Sonics Silicon Backplane
  * Broadcom USB-core OHCI driver
  *
+<<<<<<< HEAD
  * Copyright 2007 Michael Buesch <mb@bu3sch.de>
+=======
+ * Copyright 2007 Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Derived from the OHCI-PCI driver
  * Copyright 1999 Roman Weissgaerber

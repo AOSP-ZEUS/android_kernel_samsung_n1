@@ -34,7 +34,11 @@
 #include <linux/slab.h>
 #include <net/neighbour.h>
 #include <linux/notifier.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/proc_fs.h>
 #include <linux/if_vlan.h>
 #include <net/netevent.h>
@@ -176,6 +180,7 @@ static struct net_device *get_iff_from_mac(struct adapter *adapter,
 	int i;
 
 	for_each_port(adapter, i) {
+<<<<<<< HEAD
 		struct vlan_group *grp;
 		struct net_device *dev = adapter->port[i];
 		const struct port_info *p = netdev_priv(dev);
@@ -186,6 +191,15 @@ static struct net_device *get_iff_from_mac(struct adapter *adapter,
 				dev = NULL;
 				if (grp)
 					dev = vlan_group_get_device(grp, vlan);
+=======
+		struct net_device *dev = adapter->port[i];
+
+		if (!memcmp(dev->dev_addr, mac, ETH_ALEN)) {
+			if (vlan && vlan != VLAN_VID_MASK) {
+				rcu_read_lock();
+				dev = __vlan_find_dev_deep(dev, vlan);
+				rcu_read_unlock();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			} else if (netif_is_bond_slave(dev)) {
 				while (dev->master)
 					dev = dev->master;
@@ -567,7 +581,11 @@ static void t3_process_tid_release_list(struct work_struct *work)
 	while (td->tid_release_list) {
 		struct t3c_tid_entry *p = td->tid_release_list;
 
+<<<<<<< HEAD
 		td->tid_release_list = (struct t3c_tid_entry *)p->ctx;
+=======
+		td->tid_release_list = p->ctx;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_unlock_bh(&td->tid_release_lock);
 
 		skb = alloc_skb(sizeof(struct cpl_tid_release),

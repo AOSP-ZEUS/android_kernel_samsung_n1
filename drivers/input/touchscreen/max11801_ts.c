@@ -9,7 +9,12 @@
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
+<<<<<<< HEAD
  * the Free Software Foundation; either version 2 of the License.
+=======
+ * the Free Software Foundation; either version 2 of the License, or
+ * (at your option) any later version.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 
 /*

@@ -830,12 +830,17 @@ int netlink_attachskb(struct sock *sk, struct sk_buff *skb,
 	return 0;
 }
 
+<<<<<<< HEAD
 static int __netlink_sendskb(struct sock *sk, struct sk_buff *skb)
+=======
+int netlink_sendskb(struct sock *sk, struct sk_buff *skb)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int len = skb->len;
 
 	skb_queue_tail(&sk->sk_receive_queue, skb);
 	sk->sk_data_ready(sk, len);
+<<<<<<< HEAD
 	return len;
 }
 
@@ -843,6 +848,8 @@ int netlink_sendskb(struct sock *sk, struct sk_buff *skb)
 {
 	int len = __netlink_sendskb(sk, skb);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sock_put(sk);
 	return len;
 }
@@ -967,7 +974,12 @@ static inline int netlink_broadcast_deliver(struct sock *sk,
 	if (atomic_read(&sk->sk_rmem_alloc) <= sk->sk_rcvbuf &&
 	    !test_bit(0, &nlk->state)) {
 		skb_set_owner_r(skb, sk);
+<<<<<<< HEAD
 		__netlink_sendskb(sk, skb);
+=======
+		skb_queue_tail(&sk->sk_receive_queue, skb);
+		sk->sk_data_ready(sk, skb->len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return atomic_read(&sk->sk_rmem_alloc) > sk->sk_rcvbuf;
 	}
 	return -1;
@@ -1665,6 +1677,7 @@ static int netlink_dump(struct sock *sk)
 {
 	struct netlink_sock *nlk = nlk_sk(sk);
 	struct netlink_callback *cb;
+<<<<<<< HEAD
 	struct sk_buff *skb;
 	struct nlmsghdr *nlh;
 	int len, err = -ENOBUFS;
@@ -1672,6 +1685,12 @@ static int netlink_dump(struct sock *sk)
 	skb = sock_rmalloc(sk, NLMSG_GOODSIZE, 0, GFP_KERNEL);
 	if (!skb)
 		goto errout;
+=======
+	struct sk_buff *skb = NULL;
+	struct nlmsghdr *nlh;
+	int len, err = -ENOBUFS;
+	int alloc_size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(nlk->cb_mutex);
 
@@ -1681,6 +1700,15 @@ static int netlink_dump(struct sock *sk)
 		goto errout_skb;
 	}
 
+<<<<<<< HEAD
+=======
+	alloc_size = max_t(int, cb->min_dump_alloc, NLMSG_GOODSIZE);
+
+	skb = sock_rmalloc(sk, alloc_size, 0, GFP_KERNEL);
+	if (!skb)
+		goto errout_skb;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	len = cb->dump(skb, cb);
 
 	if (len > 0) {
@@ -1688,8 +1716,15 @@ static int netlink_dump(struct sock *sk)
 
 		if (sk_filter(sk, skb))
 			kfree_skb(skb);
+<<<<<<< HEAD
 		else
 			__netlink_sendskb(sk, skb);
+=======
+		else {
+			skb_queue_tail(&sk->sk_receive_queue, skb);
+			sk->sk_data_ready(sk, skb->len);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 	}
 
@@ -1697,12 +1732,24 @@ static int netlink_dump(struct sock *sk)
 	if (!nlh)
 		goto errout_skb;
 
+<<<<<<< HEAD
+=======
+	nl_dump_check_consistent(cb, nlh);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	memcpy(nlmsg_data(nlh), &len, sizeof(len));
 
 	if (sk_filter(sk, skb))
 		kfree_skb(skb);
+<<<<<<< HEAD
 	else
 		__netlink_sendskb(sk, skb);
+=======
+	else {
+		skb_queue_tail(&sk->sk_receive_queue, skb);
+		sk->sk_data_ready(sk, skb->len);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (cb->done)
 		cb->done(cb);
@@ -1715,7 +1762,10 @@ static int netlink_dump(struct sock *sk)
 errout_skb:
 	mutex_unlock(nlk->cb_mutex);
 	kfree_skb(skb);
+<<<<<<< HEAD
 errout:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return err;
 }
 
@@ -1723,7 +1773,12 @@ int netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
 		       const struct nlmsghdr *nlh,
 		       int (*dump)(struct sk_buff *skb,
 				   struct netlink_callback *),
+<<<<<<< HEAD
 		       int (*done)(struct netlink_callback *))
+=======
+		       int (*done)(struct netlink_callback *),
+		       u16 min_dump_alloc)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct netlink_callback *cb;
 	struct sock *sk;
@@ -1737,6 +1792,10 @@ int netlink_dump_start(struct sock *ssk, struct sk_buff *skb,
 	cb->dump = dump;
 	cb->done = done;
 	cb->nlh = nlh;
+<<<<<<< HEAD
+=======
+	cb->min_dump_alloc = min_dump_alloc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	atomic_inc(&skb->users);
 	cb->skb = skb;
 

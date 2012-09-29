@@ -1005,7 +1005,11 @@ static int mpoa_event_listener(struct notifier_block *mpoa_notifier,
 	struct mpoa_client *mpc;
 	struct lec_priv *priv;
 
+<<<<<<< HEAD
 	dev = (struct net_device *)dev_ptr;
+=======
+	dev = dev_ptr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!net_eq(dev_net(dev), &init_net))
 		return NOTIFY_DONE;

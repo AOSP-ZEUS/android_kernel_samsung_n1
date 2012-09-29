@@ -335,6 +335,7 @@ ENTRY(arm926_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(arm926_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(arm926_cache_fns)
 	.long	arm926_flush_icache_all
 	.long	arm926_flush_kern_cache_all
@@ -346,6 +347,10 @@ ENTRY(arm926_cache_fns)
 	.long	arm926_dma_map_area
 	.long	arm926_dma_unmap_area
 	.long	arm926_dma_flush_range
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions arm926
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 ENTRY(cpu_arm926_dcache_clean_area)
 #ifndef CONFIG_CPU_DCACHE_WRITETHROUGH
@@ -403,7 +408,11 @@ ENTRY(cpu_arm926_set_pte_ext)
 
 /* Suspend/resume support: taken from arch/arm/plat-s3c24xx/sleep.S */
 .globl	cpu_arm926_suspend_size
+<<<<<<< HEAD
 .equ	cpu_arm926_suspend_size, 4 * 3
+=======
+.equ	cpu_arm926_suspend_size, 4 * 4
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_PM_SLEEP
 ENTRY(cpu_arm926_do_suspend)
 	stmfd	sp!, {r4 - r7, lr}
@@ -430,9 +439,12 @@ ENTRY(cpu_arm926_do_resume)
 		     PMD_SECT_CACHEABLE | PMD_BIT4 | PMD_SECT_AP_WRITE
 	b	cpu_resume_mmu
 ENDPROC(cpu_arm926_do_resume)
+<<<<<<< HEAD
 #else
 #define cpu_arm926_do_suspend	0
 #define cpu_arm926_do_resume	0
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 	__CPUINIT
@@ -475,6 +487,7 @@ arm926_crval:
 
 	__INITDATA
 
+<<<<<<< HEAD
 /*
  * Purpose : Function pointers used to access above functions - all calls
  *	     come through these
@@ -511,6 +524,16 @@ cpu_elf_name:
 cpu_arm926_name:
 	.asciz	"ARM926EJ-S"
 	.size	cpu_arm926_name, . - cpu_arm926_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions arm926, dabort=v5tj_early_abort, pabort=legacy_pabort, suspend=1
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv5tej"
+	string	cpu_elf_name, "v5"
+	string	cpu_arm926_name, "ARM926EJ-S"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 

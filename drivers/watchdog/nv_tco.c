@@ -458,7 +458,19 @@ static int __devexit nv_tco_remove(struct platform_device *dev)
 
 static void nv_tco_shutdown(struct platform_device *dev)
 {
+<<<<<<< HEAD
 	tco_timer_stop();
+=======
+	u32 val;
+
+	tco_timer_stop();
+
+	/* Some BIOSes fail the POST (once) if the NO_REBOOT flag is not
+	 * unset during shutdown. */
+	pci_read_config_dword(tco_pci, MCP51_SMBUS_SETUP_B, &val);
+	val &= ~MCP51_SMBUS_SETUP_B_TCO_REBOOT;
+	pci_write_config_dword(tco_pci, MCP51_SMBUS_SETUP_B, val);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct platform_driver nv_tco_driver = {

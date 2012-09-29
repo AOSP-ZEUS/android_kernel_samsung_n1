@@ -62,6 +62,7 @@ struct ixgbe_fcoe_ddp {
 	struct scatterlist *sgl;
 	dma_addr_t udp;
 	u64 *udl;
+<<<<<<< HEAD
 };
 
 struct ixgbe_fcoe {
@@ -76,6 +77,22 @@ struct ixgbe_fcoe {
 	struct ixgbe_fcoe_ddp ddp[IXGBE_FCOE_DDP_MAX];
 	unsigned char *extra_ddp_buffer;
 	dma_addr_t extra_ddp_buffer_dma;
+=======
+	struct pci_pool *pool;
+};
+
+struct ixgbe_fcoe {
+	struct pci_pool **pool;
+	atomic_t refcnt;
+	spinlock_t lock;
+	struct ixgbe_fcoe_ddp ddp[IXGBE_FCOE_DDP_MAX];
+	unsigned char *extra_ddp_buffer;
+	dma_addr_t extra_ddp_buffer_dma;
+	unsigned long mode;
+#ifdef CONFIG_IXGBE_DCB
+	u8 up;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif /* _IXGBE_FCOE_H */

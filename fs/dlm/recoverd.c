@@ -58,6 +58,7 @@ static int ls_recover(struct dlm_ls *ls, struct dlm_recover *rv)
 
 	mutex_lock(&ls->ls_recoverd_active);
 
+<<<<<<< HEAD
 	/*
 	 * Suspending and resuming dlm_astd ensures that no lkb's from this ls
 	 * will be processed by dlm_astd during recovery.
@@ -65,6 +66,9 @@ static int ls_recover(struct dlm_ls *ls, struct dlm_recover *rv)
 
 	dlm_astd_suspend();
 	dlm_astd_resume();
+=======
+	dlm_callback_suspend(ls);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Free non-master tossed rsb's.  Master rsb's are kept on toss
@@ -202,6 +206,11 @@ static int ls_recover(struct dlm_ls *ls, struct dlm_recover *rv)
 
 	dlm_adjust_timeouts(ls);
 
+<<<<<<< HEAD
+=======
+	dlm_callback_resume(ls);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	error = enable_locking(ls, rv->seq);
 	if (error) {
 		log_debug(ls, "enable_locking failed %d", error);
@@ -222,8 +231,11 @@ static int ls_recover(struct dlm_ls *ls, struct dlm_recover *rv)
 
 	dlm_grant_after_purge(ls);
 
+<<<<<<< HEAD
 	dlm_astd_wake();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	log_debug(ls, "recover %llx done: %u ms",
 		  (unsigned long long)rv->seq,
 		  jiffies_to_msecs(jiffies - start));

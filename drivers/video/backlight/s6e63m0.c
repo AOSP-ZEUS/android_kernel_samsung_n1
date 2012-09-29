@@ -738,6 +738,10 @@ static int __devinit s6e63m0_probe(struct spi_device *spi)
 	struct s6e63m0 *lcd = NULL;
 	struct lcd_device *ld = NULL;
 	struct backlight_device *bd = NULL;
+<<<<<<< HEAD
+=======
+	struct backlight_properties props;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	lcd = kzalloc(sizeof(struct s6e63m0), GFP_KERNEL);
 	if (!lcd)
@@ -769,16 +773,29 @@ static int __devinit s6e63m0_probe(struct spi_device *spi)
 
 	lcd->ld = ld;
 
+<<<<<<< HEAD
 	bd = backlight_device_register("s6e63m0bl-bl", &spi->dev, lcd,
 		&s6e63m0_backlight_ops, NULL);
+=======
+	memset(&props, 0, sizeof(struct backlight_properties));
+	props.type = BACKLIGHT_RAW;
+	props.max_brightness = MAX_BRIGHTNESS;
+
+	bd = backlight_device_register("s6e63m0bl-bl", &spi->dev, lcd,
+		&s6e63m0_backlight_ops, &props);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (IS_ERR(bd)) {
 		ret =  PTR_ERR(bd);
 		goto out_lcd_unregister;
 	}
 
+<<<<<<< HEAD
 	bd->props.max_brightness = MAX_BRIGHTNESS;
 	bd->props.brightness = MAX_BRIGHTNESS;
 	bd->props.type = BACKLIGHT_RAW;
+=======
+	bd->props.brightness = MAX_BRIGHTNESS;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	lcd->bd = bd;
 
 	/*
@@ -840,7 +857,11 @@ static int __devexit s6e63m0_remove(struct spi_device *spi)
 }
 
 #if defined(CONFIG_PM)
+<<<<<<< HEAD
 unsigned int before_power;
+=======
+static unsigned int before_power;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int s6e63m0_suspend(struct spi_device *spi, pm_message_t mesg)
 {

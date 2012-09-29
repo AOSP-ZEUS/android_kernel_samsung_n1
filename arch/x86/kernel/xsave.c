@@ -47,7 +47,11 @@ void __sanitize_i387_state(struct task_struct *tsk)
 	if (!fx)
 		return;
 
+<<<<<<< HEAD
 	BUG_ON(__thread_has_fpu(tsk));
+=======
+	BUG_ON(task_thread_info(tsk)->status & TS_USEDFPU);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	xstate_bv = tsk->thread.fpu.state->xsave.xsave_hdr.xstate_bv;
 
@@ -168,7 +172,11 @@ int save_i387_xstate(void __user *buf)
 	if (!used_math())
 		return 0;
 
+<<<<<<< HEAD
 	if (user_has_fpu()) {
+=======
+	if (task_thread_info(tsk)->status & TS_USEDFPU) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (use_xsave())
 			err = xsave_user(buf);
 		else
@@ -176,7 +184,12 @@ int save_i387_xstate(void __user *buf)
 
 		if (err)
 			return err;
+<<<<<<< HEAD
 		user_fpu_end();
+=======
+		task_thread_info(tsk)->status &= ~TS_USEDFPU;
+		stts();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		sanitize_i387_state(tsk);
 		if (__copy_to_user(buf, &tsk->thread.fpu.state->fxsave,
@@ -291,7 +304,14 @@ int restore_i387_xstate(void __user *buf)
 			return err;
 	}
 
+<<<<<<< HEAD
 	user_fpu_begin();
+=======
+	if (!(task_thread_info(current)->status & TS_USEDFPU)) {
+		clts();
+		task_thread_info(current)->status |= TS_USEDFPU;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (use_xsave())
 		err = restore_user_xstate(buf);
 	else

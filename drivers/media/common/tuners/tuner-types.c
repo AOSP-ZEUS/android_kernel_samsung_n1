@@ -1805,6 +1805,13 @@ struct tunertype tuners[] = {
 		.name   = "Xceive 5000 tuner",
 		/* see xc5000.c for details */
 	},
+<<<<<<< HEAD
+=======
+	[TUNER_XC4000] = { /* Xceive 4000 */
+		.name   = "Xceive 4000 tuner",
+		/* see xc4000.c for details */
+	},
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	[TUNER_TCL_MF02GIP_5N] = { /* TCL tuner MF02GIP-5N-E */
 		.name   = "TCL tuner MF02GIP-5N-E",
 		.params = tuner_tcl_mf02gip_5n_params,

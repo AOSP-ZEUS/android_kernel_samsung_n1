@@ -4,7 +4,11 @@
 asflags-y := -ansi
 ccflags-y := -Werror
 
+<<<<<<< HEAD
 obj-$(CONFIG_SPARC64)   += ultra.o tlb.o tsb.o
+=======
+obj-$(CONFIG_SPARC64)   += ultra.o tlb.o tsb.o gup.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-y                   += fault_$(BITS).o
 obj-y                   += init_$(BITS).o
 obj-$(CONFIG_SPARC32)   += loadmmu.o

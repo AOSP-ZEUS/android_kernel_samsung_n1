@@ -36,9 +36,12 @@
  #define Tuner_Power_OFF                  0
 
 #define GET_USB_SPEED                     0x07
+<<<<<<< HEAD
  #define USB_SPEED_LOW                    0
  #define USB_SPEED_FULL                   1
  #define USB_SPEED_HIGH                   2
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define LOCK_TUNER_COMMAND                0x09
 

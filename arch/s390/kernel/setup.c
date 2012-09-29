@@ -42,7 +42,10 @@
 #include <linux/reboot.h>
 #include <linux/topology.h>
 #include <linux/ftrace.h>
+<<<<<<< HEAD
 #include <linux/compat.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/ipl.h>
 #include <asm/uaccess.h>
@@ -347,7 +350,11 @@ setup_lowcore(void)
 	lc = __alloc_bootmem_low(LC_PAGES * PAGE_SIZE, LC_PAGES * PAGE_SIZE, 0);
 	lc->restart_psw.mask = PSW_BASE_BITS | PSW_DEFAULT_KEY;
 	lc->restart_psw.addr =
+<<<<<<< HEAD
 		PSW_ADDR_AMODE | (unsigned long) restart_int_handler;
+=======
+		PSW_ADDR_AMODE | (unsigned long) psw_restart_int_handler;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (user_mode != HOME_SPACE_MODE)
 		lc->restart_psw.mask |= PSW_ASC_HOME;
 	lc->external_new_psw.mask = psw_kernel_bits;
@@ -530,6 +537,30 @@ static void __init setup_memory_end(void)
 		memory_end = memory_size;
 }
 
+<<<<<<< HEAD
+=======
+void *restart_stack __attribute__((__section__(".data")));
+
+/*
+ * Setup new PSW and allocate stack for PSW restart interrupt
+ */
+static void __init setup_restart_psw(void)
+{
+	psw_t psw;
+
+	restart_stack = __alloc_bootmem(ASYNC_SIZE, ASYNC_SIZE, 0);
+	restart_stack += ASYNC_SIZE;
+
+	/*
+	 * Setup restart PSW for absolute zero lowcore. This is necesary
+	 * if PSW restart is done on an offline CPU that has lowcore zero
+	 */
+	psw.mask = PSW_BASE_BITS | PSW_DEFAULT_KEY;
+	psw.addr = PSW_ADDR_AMODE | (unsigned long) psw_restart_int_handler;
+	copy_to_absolute_zero(&S390_lowcore.restart_psw, &psw, sizeof(psw));
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init
 setup_memory(void)
 {
@@ -732,6 +763,10 @@ static void __init setup_hwcaps(void)
 		strcpy(elf_platform, "z10");
 		break;
 	case 0x2817:
+<<<<<<< HEAD
+=======
+	case 0x2818:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		strcpy(elf_platform, "z196");
 		break;
 	}
@@ -793,6 +828,10 @@ setup_arch(char **cmdline_p)
 	setup_addressing_mode();
 	setup_memory();
 	setup_resources();
+<<<<<<< HEAD
+=======
+	setup_restart_psw();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	setup_lowcore();
 
         cpu_init();

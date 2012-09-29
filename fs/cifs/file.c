@@ -314,6 +314,11 @@ void cifsFileInfo_put(struct cifsFileInfo *cifs_file)
 	}
 	spin_unlock(&cifs_file_list_lock);
 
+<<<<<<< HEAD
+=======
+	cancel_work_sync(&cifs_file->oplock_break);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!tcon->need_reconnect && !cifs_file->invalidHandle) {
 		int xid, rc;
 
@@ -1401,7 +1406,12 @@ static int cifs_write_end(struct file *file, struct address_space *mapping,
 	return rc;
 }
 
+<<<<<<< HEAD
 int cifs_strict_fsync(struct file *file, int datasync)
+=======
+int cifs_strict_fsync(struct file *file, loff_t start, loff_t end,
+		      int datasync)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int xid;
 	int rc = 0;
@@ -1410,6 +1420,14 @@ int cifs_strict_fsync(struct file *file, int datasync)
 	struct inode *inode = file->f_path.dentry->d_inode;
 	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
 
+<<<<<<< HEAD
+=======
+	rc = filemap_write_and_wait_range(inode->i_mapping, start, end);
+	if (rc)
+		return rc;
+	mutex_lock(&inode->i_mutex);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	xid = GetXid();
 
 	cFYI(1, "Sync file - name: %s datasync: 0x%x",
@@ -1428,16 +1446,33 @@ int cifs_strict_fsync(struct file *file, int datasync)
 		rc = CIFSSMBFlush(xid, tcon, smbfile->netfid);
 
 	FreeXid(xid);
+<<<<<<< HEAD
 	return rc;
 }
 
 int cifs_fsync(struct file *file, int datasync)
+=======
+	mutex_unlock(&inode->i_mutex);
+	return rc;
+}
+
+int cifs_fsync(struct file *file, loff_t start, loff_t end, int datasync)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int xid;
 	int rc = 0;
 	struct cifs_tcon *tcon;
 	struct cifsFileInfo *smbfile = file->private_data;
 	struct cifs_sb_info *cifs_sb = CIFS_SB(file->f_path.dentry->d_sb);
+<<<<<<< HEAD
+=======
+	struct inode *inode = file->f_mapping->host;
+
+	rc = filemap_write_and_wait_range(inode->i_mapping, start, end);
+	if (rc)
+		return rc;
+	mutex_lock(&inode->i_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	xid = GetXid();
 
@@ -1449,6 +1484,10 @@ int cifs_fsync(struct file *file, int datasync)
 		rc = CIFSSMBFlush(xid, tcon, smbfile->netfid);
 
 	FreeXid(xid);
+<<<<<<< HEAD
+=======
+	mutex_unlock(&inode->i_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return rc;
 }
 
@@ -2404,6 +2443,7 @@ void cifs_oplock_break(struct work_struct *work)
 				 cinode->clientCanCacheRead ? 1 : 0);
 		cFYI(1, "Oplock release rc = %d", rc);
 	}
+<<<<<<< HEAD
 
 	/*
 	 * We might have kicked in before is_valid_oplock_break()
@@ -2429,6 +2469,8 @@ void cifs_oplock_break_put(struct cifsFileInfo *cfile)
 
 	cifsFileInfo_put(cfile);
 	cifs_sb_deactive(sb);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 const struct address_space_operations cifs_addr_ops = {

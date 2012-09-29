@@ -240,8 +240,11 @@ struct adapter {
 	struct work_struct ext_intr_handler_task;
 	struct adapter_params params;
 
+<<<<<<< HEAD
 	struct vlan_group *vlan_grp;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Terminator modules. */
 	struct sge    *sge;
 	struct peespi *espi;

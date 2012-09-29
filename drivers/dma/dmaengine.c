@@ -45,6 +45,10 @@
  * See Documentation/dmaengine.txt for more details
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/dma-mapping.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/init.h>
 #include <linux/module.h>
 #include <linux/mm.h>
@@ -61,9 +65,15 @@
 #include <linux/slab.h>
 
 static DEFINE_MUTEX(dma_list_mutex);
+<<<<<<< HEAD
 static LIST_HEAD(dma_device_list);
 static long dmaengine_ref_count;
 static struct idr dma_idr;
+=======
+static DEFINE_IDR(dma_idr);
+static LIST_HEAD(dma_device_list);
+static long dmaengine_ref_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* --- sysfs implementation --- */
 
@@ -509,8 +519,13 @@ struct dma_chan *__dma_request_channel(dma_cap_mask_t *mask, dma_filter_fn fn, v
 					 dma_chan_name(chan));
 				list_del_rcu(&device->global_node);
 			} else if (err)
+<<<<<<< HEAD
 				pr_err("dmaengine: failed to get %s: (%d)\n",
 				       dma_chan_name(chan), err);
+=======
+				pr_debug("dmaengine: failed to get %s: (%d)\n",
+					 dma_chan_name(chan), err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			else
 				break;
 			if (--device->privatecnt == 0)
@@ -1049,8 +1064,11 @@ EXPORT_SYMBOL_GPL(dma_run_dependencies);
 
 static int __init dma_bus_init(void)
 {
+<<<<<<< HEAD
 	idr_init(&dma_idr);
 	mutex_init(&dma_list_mutex);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return class_register(&dma_devclass);
 }
 arch_initcall(dma_bus_init);

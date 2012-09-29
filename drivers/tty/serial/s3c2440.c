@@ -159,8 +159,11 @@ static struct platform_driver s3c2440_serial_driver = {
 	},
 };
 
+<<<<<<< HEAD
 s3c24xx_console_init(&s3c2440_serial_driver, &s3c2440_uart_inf);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __init s3c2440_serial_init(void)
 {
 	return s3c24xx_serial_init(&s3c2440_serial_driver, &s3c2440_uart_inf);

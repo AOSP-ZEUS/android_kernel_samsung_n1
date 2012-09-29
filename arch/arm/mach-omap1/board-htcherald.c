@@ -605,7 +605,11 @@ static void __init htcherald_init_irq(void)
 {
 	printk(KERN_INFO "htcherald_init_irq.\n");
 	omap1_init_common_hw();
+<<<<<<< HEAD
 	omap_init_irq();
+=======
+	omap1_init_irq();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 MACHINE_START(HERALD, "HTC Herald")
@@ -616,5 +620,9 @@ MACHINE_START(HERALD, "HTC Herald")
 	.reserve	= omap_reserve,
 	.init_irq       = htcherald_init_irq,
 	.init_machine   = htcherald_init,
+<<<<<<< HEAD
 	.timer          = &omap_timer,
+=======
+	.timer          = &omap1_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

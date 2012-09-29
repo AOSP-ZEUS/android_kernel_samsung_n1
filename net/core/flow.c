@@ -22,7 +22,11 @@
 #include <linux/cpumask.h>
 #include <linux/mutex.h>
 #include <net/flow.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/security.h>
 
 struct flow_cache_entry {
@@ -30,6 +34,10 @@ struct flow_cache_entry {
 		struct hlist_node	hlist;
 		struct list_head	gc_list;
 	} u;
+<<<<<<< HEAD
+=======
+	struct net			*net;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16				family;
 	u8				dir;
 	u32				genid;
@@ -235,7 +243,12 @@ flow_cache_lookup(struct net *net, const struct flowi *key, u16 family, u8 dir,
 
 	hash = flow_hash_code(fc, fcp, key, keysize);
 	hlist_for_each_entry(tfle, entry, &fcp->hash_table[hash], u.hlist) {
+<<<<<<< HEAD
 		if (tfle->family == family &&
+=======
+		if (tfle->net == net &&
+		    tfle->family == family &&
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		    tfle->dir == dir &&
 		    flow_key_compare(key, &tfle->key, keysize) == 0) {
 			fle = tfle;
@@ -249,6 +262,10 @@ flow_cache_lookup(struct net *net, const struct flowi *key, u16 family, u8 dir,
 
 		fle = kmem_cache_alloc(flow_cachep, GFP_ATOMIC);
 		if (fle) {
+<<<<<<< HEAD
+=======
+			fle->net = net;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			fle->family = family;
 			fle->dir = dir;
 			memcpy(&fle->key, key, keysize * sizeof(flow_compare_t));
@@ -355,6 +372,21 @@ void flow_cache_flush(void)
 	put_online_cpus();
 }
 
+<<<<<<< HEAD
+=======
+static void flow_cache_flush_task(struct work_struct *work)
+{
+	flow_cache_flush();
+}
+
+static DECLARE_WORK(flow_cache_flush_work, flow_cache_flush_task);
+
+void flow_cache_flush_deferred(void)
+{
+	schedule_work(&flow_cache_flush_work);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __cpuinit flow_cache_cpu_prepare(struct flow_cache *fc, int cpu)
 {
 	struct flow_cache_percpu *fcp = per_cpu_ptr(fc->percpu, cpu);

@@ -16,7 +16,11 @@
 #include <linux/init.h>
 #include <linux/key.h>
 #include <linux/selinux.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct user_struct;
 struct cred;
@@ -265,10 +269,18 @@ static inline void put_cred(const struct cred *_cred)
 /**
  * current_cred - Access the current task's subjective credentials
  *
+<<<<<<< HEAD
  * Access the subjective credentials of the current task.
  */
 #define current_cred() \
 	(current->cred)
+=======
+ * Access the subjective credentials of the current task.  RCU-safe,
+ * since nobody else can modify it.
+ */
+#define current_cred() \
+	rcu_dereference_protected(current->cred, 1)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * __task_cred - Access a task's objective credentials
@@ -284,7 +296,10 @@ static inline void put_cred(const struct cred *_cred)
 	({								\
 		const struct task_struct *__t = (task);			\
 		rcu_dereference_check(__t->real_cred,			\
+<<<<<<< HEAD
 				      rcu_read_lock_held() ||		\
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				      task_is_dead(__t));		\
 	})
 
@@ -307,8 +322,13 @@ static inline void put_cred(const struct cred *_cred)
 #define get_current_user()				\
 ({							\
 	struct user_struct *__u;			\
+<<<<<<< HEAD
 	struct cred *__cred;				\
 	__cred = (struct cred *) current_cred();	\
+=======
+	const struct cred *__cred;			\
+	__cred = current_cred();			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__u = get_uid(__cred->user);			\
 	__u;						\
 })
@@ -322,8 +342,13 @@ static inline void put_cred(const struct cred *_cred)
 #define get_current_groups()				\
 ({							\
 	struct group_info *__groups;			\
+<<<<<<< HEAD
 	struct cred *__cred;				\
 	__cred = (struct cred *) current_cred();	\
+=======
+	const struct cred *__cred;			\
+	__cred = current_cred();			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__groups = get_group_info(__cred->group_info);	\
 	__groups;					\
 })
@@ -342,7 +367,11 @@ static inline void put_cred(const struct cred *_cred)
 
 #define current_cred_xxx(xxx)			\
 ({						\
+<<<<<<< HEAD
 	current->cred->xxx;			\
+=======
+	current_cred()->xxx;			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 })
 
 #define current_uid()		(current_cred_xxx(uid))

@@ -42,6 +42,7 @@
 #include "iwl-sta.h"
 #include "iwl-helpers.h"
 #include "iwl-agn.h"
+<<<<<<< HEAD
 
 
 /*
@@ -63,6 +64,9 @@
 bool bt_coex_active = true;
 module_param(bt_coex_active, bool, S_IRUGO);
 MODULE_PARM_DESC(bt_coex_active, "enable wifi/bluetooth co-exist");
+=======
+#include "iwl-trans.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 u32 iwl_debug_level;
 
@@ -164,7 +168,11 @@ int iwlcore_init_geos(struct iwl_priv *priv)
 	sband->bitrates = &rates[IWL_FIRST_OFDM_RATE];
 	sband->n_bitrates = IWL_RATE_COUNT_LEGACY - IWL_FIRST_OFDM_RATE;
 
+<<<<<<< HEAD
 	if (priv->cfg->sku & IWL_SKU_N)
+=======
+	if (priv->cfg->sku & EEPROM_SKU_CAP_11N_ENABLE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		iwlcore_init_ht_hw_capab(priv, &sband->ht_cap,
 					 IEEE80211_BAND_5GHZ);
 
@@ -174,7 +182,11 @@ int iwlcore_init_geos(struct iwl_priv *priv)
 	sband->bitrates = rates;
 	sband->n_bitrates = IWL_RATE_COUNT_LEGACY;
 
+<<<<<<< HEAD
 	if (priv->cfg->sku & IWL_SKU_N)
+=======
+	if (priv->cfg->sku & EEPROM_SKU_CAP_11N_ENABLE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		iwlcore_init_ht_hw_capab(priv, &sband->ht_cap,
 					 IEEE80211_BAND_2GHZ);
 
@@ -229,12 +241,21 @@ int iwlcore_init_geos(struct iwl_priv *priv)
 	priv->tx_power_next = max_tx_power;
 
 	if ((priv->bands[IEEE80211_BAND_5GHZ].n_channels == 0) &&
+<<<<<<< HEAD
 	     priv->cfg->sku & IWL_SKU_A) {
 		IWL_INFO(priv, "Incorrectly detected BG card as ABG. "
 			"Please send your PCI ID 0x%04X:0x%04X to maintainer.\n",
 			   priv->pci_dev->device,
 			   priv->pci_dev->subsystem_device);
 		priv->cfg->sku &= ~IWL_SKU_A;
+=======
+	     priv->cfg->sku & EEPROM_SKU_CAP_BAND_52GHZ) {
+		char buf[32];
+		bus_get_hw_id(priv->bus, buf, sizeof(buf));
+		IWL_INFO(priv, "Incorrectly detected BG card as ABG. "
+			"Please send your %s to maintainer.\n", buf);
+		priv->cfg->sku &= ~EEPROM_SKU_CAP_BAND_52GHZ;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	IWL_INFO(priv, "Tunable channels: %d 802.11bg, %d 802.11a channels\n",
@@ -383,6 +404,11 @@ int iwl_send_rxon_timing(struct iwl_priv *priv, struct iwl_rxon_context *ctx)
 		ctx->timing.beacon_interval = cpu_to_le16(beacon_int);
 	}
 
+<<<<<<< HEAD
+=======
+	ctx->beacon_int = beacon_int;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tsf = priv->timestamp; /* tsf is modifed by do_div: copy it */
 	interval_tm = beacon_int * TIME_UNIT;
 	rem = do_div(tsf, interval_tm);
@@ -396,8 +422,13 @@ int iwl_send_rxon_timing(struct iwl_priv *priv, struct iwl_rxon_context *ctx)
 			le32_to_cpu(ctx->timing.beacon_init_val),
 			le16_to_cpu(ctx->timing.atim_window));
 
+<<<<<<< HEAD
 	return iwl_send_cmd_pdu(priv, ctx->rxon_timing_cmd,
 				sizeof(ctx->timing), &ctx->timing);
+=======
+	return trans_send_cmd_pdu(&priv->trans, ctx->rxon_timing_cmd,
+				CMD_SYNC, sizeof(ctx->timing), &ctx->timing);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void iwl_set_rxon_hwcrypto(struct iwl_priv *priv, struct iwl_rxon_context *ctx,
@@ -547,6 +578,7 @@ int iwl_full_rxon_required(struct iwl_priv *priv,
 	return 0;
 }
 
+<<<<<<< HEAD
 u8 iwl_rate_get_lowest_plcp(struct iwl_priv *priv,
 			    struct iwl_rxon_context *ctx)
 {
@@ -560,6 +592,8 @@ u8 iwl_rate_get_lowest_plcp(struct iwl_priv *priv,
 		return IWL_RATE_6M_PLCP;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void _iwl_set_rxon_ht(struct iwl_priv *priv,
 			     struct iwl_ht_config *ht_conf,
 			     struct iwl_rxon_context *ctx)
@@ -619,8 +653,12 @@ static void _iwl_set_rxon_ht(struct iwl_priv *priv,
 		rxon->flags |= RXON_FLG_CHANNEL_MODE_LEGACY;
 	}
 
+<<<<<<< HEAD
 	if (priv->cfg->ops->hcmd->set_rxon_chain)
 		priv->cfg->ops->hcmd->set_rxon_chain(priv, ctx);
+=======
+	iwlagn_set_rxon_chain(priv, ctx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	IWL_DEBUG_ASSOC(priv, "rxon flags 0x%X operation mode :0x%X "
 			"extension channel offset 0x%x\n",
@@ -874,12 +912,21 @@ static void iwlagn_abort_notification_waits(struct iwl_priv *priv)
 	unsigned long flags;
 	struct iwl_notification_wait *wait_entry;
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&priv->_agn.notif_wait_lock, flags);
 	list_for_each_entry(wait_entry, &priv->_agn.notif_waits, list)
 		wait_entry->aborted = true;
 	spin_unlock_irqrestore(&priv->_agn.notif_wait_lock, flags);
 
 	wake_up_all(&priv->_agn.notif_waitq);
+=======
+	spin_lock_irqsave(&priv->notif_wait_lock, flags);
+	list_for_each_entry(wait_entry, &priv->notif_waits, list)
+		wait_entry->aborted = true;
+	spin_unlock_irqrestore(&priv->notif_wait_lock, flags);
+
+	wake_up_all(&priv->notif_waitq);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void iwlagn_fw_error(struct iwl_priv *priv, bool ondemand)
@@ -1018,8 +1065,11 @@ void iwl_apm_stop(struct iwl_priv *priv)
 int iwl_apm_init(struct iwl_priv *priv)
 {
 	int ret = 0;
+<<<<<<< HEAD
 	u16 lctl;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	IWL_DEBUG_INFO(priv, "Init card's basic functions\n");
 
 	/*
@@ -1048,6 +1098,7 @@ int iwl_apm_init(struct iwl_priv *priv)
 	iwl_set_bit(priv, CSR_HW_IF_CONFIG_REG,
 				    CSR_HW_IF_CONFIG_REG_BIT_HAP_WAKE_L1A);
 
+<<<<<<< HEAD
 	/*
 	 * HW bug W/A for instability in PCIe bus L0->L0S->L1 transition.
 	 * Check if BIOS (or OS) enabled L1-ASPM on this device.
@@ -1069,6 +1120,9 @@ int iwl_apm_init(struct iwl_priv *priv)
 				CSR_GIO_REG_VAL_L0S_ENABLED);
 		IWL_DEBUG_POWER(priv, "L1 Disabled; Enabling L0S\n");
 	}
+=======
+	bus_apm_config(priv->bus);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Configure analog phase-lock-loop before activating to D0A */
 	if (priv->cfg->base_params->pll_cfg_val)
@@ -1127,9 +1181,12 @@ int iwl_set_tx_power(struct iwl_priv *priv, s8 tx_power, bool force)
 	if (priv->tx_power_user_lmt == tx_power && !force)
 		return 0;
 
+<<<<<<< HEAD
 	if (!priv->cfg->ops->lib->send_tx_power)
 		return -EOPNOTSUPP;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (tx_power < IWLAGN_TX_POWER_TARGET_POWER_MIN) {
 		IWL_WARN(priv,
 			 "Requested user TXPOWER %d below lower limit %d.\n",
@@ -1163,7 +1220,11 @@ int iwl_set_tx_power(struct iwl_priv *priv, s8 tx_power, bool force)
 	prev_tx_power = priv->tx_power_user_lmt;
 	priv->tx_power_user_lmt = tx_power;
 
+<<<<<<< HEAD
 	ret = priv->cfg->ops->lib->send_tx_power(priv);
+=======
+	ret = iwlagn_send_tx_power(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* if fail to set tx_power, restore the orig. tx power */
 	if (ret) {
@@ -1182,7 +1243,11 @@ void iwl_send_bt_config(struct iwl_priv *priv)
 		.kill_cts_mask = 0,
 	};
 
+<<<<<<< HEAD
 	if (!bt_coex_active)
+=======
+	if (!iwlagn_mod_params.bt_coex_active)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		bt_cmd.flags = BT_COEX_DISABLE;
 	else
 		bt_cmd.flags = BT_COEX_ENABLE;
@@ -1191,8 +1256,13 @@ void iwl_send_bt_config(struct iwl_priv *priv)
 	IWL_DEBUG_INFO(priv, "BT coex %s\n",
 		(bt_cmd.flags == BT_COEX_DISABLE) ? "disable" : "active");
 
+<<<<<<< HEAD
 	if (iwl_send_cmd_pdu(priv, REPLY_BT_CONFIG,
 			     sizeof(struct iwl_bt_cmd), &bt_cmd))
+=======
+	if (trans_send_cmd_pdu(&priv->trans, REPLY_BT_CONFIG,
+			     CMD_SYNC, sizeof(struct iwl_bt_cmd), &bt_cmd))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		IWL_ERR(priv, "failed to send BT Coex Config\n");
 }
 
@@ -1204,11 +1274,21 @@ int iwl_send_statistics_request(struct iwl_priv *priv, u8 flags, bool clear)
 	};
 
 	if (flags & CMD_ASYNC)
+<<<<<<< HEAD
 		return iwl_send_cmd_pdu_async(priv, REPLY_STATISTICS_CMD,
 					       sizeof(struct iwl_statistics_cmd),
 					       &statistics_cmd, NULL);
 	else
 		return iwl_send_cmd_pdu(priv, REPLY_STATISTICS_CMD,
+=======
+		return trans_send_cmd_pdu(&priv->trans, REPLY_STATISTICS_CMD,
+					      CMD_ASYNC,
+					       sizeof(struct iwl_statistics_cmd),
+					       &statistics_cmd);
+	else
+		return trans_send_cmd_pdu(&priv->trans, REPLY_STATISTICS_CMD,
+					CMD_SYNC,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					sizeof(struct iwl_statistics_cmd),
 					&statistics_cmd);
 }
@@ -1275,10 +1355,16 @@ static int iwl_set_mode(struct iwl_priv *priv, struct iwl_rxon_context *ctx)
 {
 	iwl_connection_init_rx_config(priv, ctx);
 
+<<<<<<< HEAD
 	if (priv->cfg->ops->hcmd->set_rxon_chain)
 		priv->cfg->ops->hcmd->set_rxon_chain(priv, ctx);
 
 	return iwlcore_commit_rxon(priv, ctx);
+=======
+	iwlagn_set_rxon_chain(priv, ctx);
+
+	return iwlagn_commit_rxon(priv, ctx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int iwl_setup_interface(struct iwl_priv *priv,
@@ -1431,6 +1517,7 @@ void iwl_mac_remove_interface(struct ieee80211_hw *hw,
 
 }
 
+<<<<<<< HEAD
 int iwl_alloc_txq_mem(struct iwl_priv *priv)
 {
 	if (!priv->txq)
@@ -1451,6 +1538,8 @@ void iwl_free_txq_mem(struct iwl_priv *priv)
 	priv->txq = NULL;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_IWLWIFI_DEBUGFS
 
 #define IWL_TRAFFIC_DUMP_SIZE	(IWL_TRAFFIC_ENTRY_SIZE * IWL_TRAFFIC_ENTRIES)
@@ -1912,7 +2001,11 @@ void iwl_setup_watchdog(struct iwl_priv *priv)
 {
 	unsigned int timeout = priv->cfg->base_params->wd_timeout;
 
+<<<<<<< HEAD
 	if (timeout)
+=======
+	if (timeout && !iwlagn_mod_params.wd_disable)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		mod_timer(&priv->watchdog,
 			  jiffies + msecs_to_jiffies(IWL_WD_TICK(timeout)));
 	else
@@ -1973,23 +2066,38 @@ __le32 iwl_add_beacon_time(struct iwl_priv *priv, u32 base,
 
 #ifdef CONFIG_PM
 
+<<<<<<< HEAD
 int iwl_pci_suspend(struct device *device)
 {
 	struct pci_dev *pdev = to_pci_dev(device);
 	struct iwl_priv *priv = pci_get_drvdata(pdev);
 
+=======
+int iwl_suspend(struct iwl_priv *priv)
+{
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * This function is called when system goes into suspend state
 	 * mac80211 will call iwl_mac_stop() from the mac80211 suspend function
 	 * first but since iwl_mac_stop() has no knowledge of who the caller is,
 	 * it will not call apm_ops.stop() to stop the DMA operation.
 	 * Calling apm_ops.stop here to make sure we stop the DMA.
+<<<<<<< HEAD
 	 */
 	iwl_apm_stop(priv);
+=======
+	 *
+	 * But of course ... if we have configured WoWLAN then we did other
+	 * things already :-)
+	 */
+	if (!priv->wowlan)
+		iwl_apm_stop(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
 
+<<<<<<< HEAD
 int iwl_pci_resume(struct device *device)
 {
 	struct pci_dev *pdev = to_pci_dev(device);
@@ -2002,6 +2110,12 @@ int iwl_pci_resume(struct device *device)
 	 */
 	pci_write_config_byte(pdev, PCI_CFG_RETRY_TIMEOUT, 0x00);
 
+=======
+int iwl_resume(struct iwl_priv *priv)
+{
+	bool hw_rfkill = false;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	iwl_enable_interrupts(priv);
 
 	if (!(iwl_read32(priv, CSR_GP_CNTRL) &
@@ -2018,6 +2132,7 @@ int iwl_pci_resume(struct device *device)
 	return 0;
 }
 
+<<<<<<< HEAD
 const struct dev_pm_ops iwl_pm_ops = {
 	.suspend = iwl_pci_suspend,
 	.resume = iwl_pci_resume,
@@ -2027,4 +2142,6 @@ const struct dev_pm_ops iwl_pm_ops = {
 	.restore = iwl_pci_resume,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* CONFIG_PM */

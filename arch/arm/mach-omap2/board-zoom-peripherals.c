@@ -105,6 +105,7 @@ static struct twl4030_keypad_data zoom_kp_twl4030_data = {
 	.rep		= 1,
 };
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply zoom_vmmc1_supply = {
 	.supply		= "vmmc",
 };
@@ -120,6 +121,22 @@ static struct regulator_consumer_supply zoom_vmmc2_supply = {
 static struct regulator_consumer_supply zoom_vmmc3_supply = {
 	.supply		= "vmmc",
 	.dev_name	= "omap_hsmmc.2",
+=======
+static struct regulator_consumer_supply zoom_vmmc1_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.0"),
+};
+
+static struct regulator_consumer_supply zoom_vsim_supply[] = {
+	REGULATOR_SUPPLY("vmmc_aux", "omap_hsmmc.0"),
+};
+
+static struct regulator_consumer_supply zoom_vmmc2_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.1"),
+};
+
+static struct regulator_consumer_supply zoom_vmmc3_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.2"),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* VMMC1 for OMAP VDD_MMC1 (i/o) and MMC1 card */
@@ -133,8 +150,13 @@ static struct regulator_init_data zoom_vmmc1 = {
 					| REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies  = 1,
 	.consumer_supplies      = &zoom_vmmc1_supply,
+=======
+	.num_consumer_supplies  = ARRAY_SIZE(zoom_vmmc1_supply),
+	.consumer_supplies      = zoom_vmmc1_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* VMMC2 for MMC2 card */
@@ -148,8 +170,13 @@ static struct regulator_init_data zoom_vmmc2 = {
 		.valid_ops_mask		= REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies  = 1,
 	.consumer_supplies      = &zoom_vmmc2_supply,
+=======
+	.num_consumer_supplies  = ARRAY_SIZE(zoom_vmmc2_supply),
+	.consumer_supplies      = zoom_vmmc2_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* VSIM for OMAP VDD_MMC1A (i/o for DAT4..DAT7) */
@@ -163,16 +190,26 @@ static struct regulator_init_data zoom_vsim = {
 					| REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies  = 1,
 	.consumer_supplies      = &zoom_vsim_supply,
+=======
+	.num_consumer_supplies  = ARRAY_SIZE(zoom_vsim_supply),
+	.consumer_supplies      = zoom_vsim_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct regulator_init_data zoom_vmmc3 = {
 	.constraints = {
 		.valid_ops_mask	= REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies	= 1,
 	.consumer_supplies = &zoom_vmmc3_supply,
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(zoom_vmmc3_supply),
+	.consumer_supplies	= zoom_vmmc3_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct fixed_voltage_config zoom_vwlan = {
@@ -227,6 +264,7 @@ static struct omap2_hsmmc_info mmc[] = {
 	{}      /* Terminator */
 };
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply zoom_vpll2_supplies[] = {
 	REGULATOR_SUPPLY("vdds_dsi", "omapdss"),
 	REGULATOR_SUPPLY("vdds_dsi", "omapdss_dsi1"),
@@ -261,6 +299,8 @@ static struct regulator_init_data zoom_vdac = {
 	.consumer_supplies		= &zoom_vdda_dac_supply,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int zoom_twl_gpio_setup(struct device *dev,
 		unsigned gpio, unsigned ngpio)
 {
@@ -270,6 +310,7 @@ static int zoom_twl_gpio_setup(struct device *dev,
 	mmc[0].gpio_cd = gpio + 0;
 	omap2_hsmmc_init(mmc);
 
+<<<<<<< HEAD
 	/* link regulators to MMC adapters ... we "know" the
 	 * regulators will be set up only *after* we return.
 	*/
@@ -277,6 +318,8 @@ static int zoom_twl_gpio_setup(struct device *dev,
 	zoom_vsim_supply.dev = mmc[0].dev;
 	zoom_vmmc2_supply.dev = mmc[1].dev;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = gpio_request_one(LCD_PANEL_ENABLE_GPIO, GPIOF_OUT_INIT_LOW,
 			       "lcd enable");
 	if (ret)
@@ -292,6 +335,7 @@ static void zoom2_set_hs_extmute(int mute)
 	gpio_set_value(ZOOM2_HEADSET_EXTMUTE_GPIO, mute);
 }
 
+<<<<<<< HEAD
 static int zoom_batt_table[] = {
 /* 0 C*/
 30800, 29500, 28300, 27100,
@@ -312,6 +356,8 @@ static struct twl4030_usb_data zoom_usb_data = {
 	.usb_mode	= T2_USB_MODE_ULPI,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct twl4030_gpio_platform_data zoom_gpio_data = {
 	.gpio_base	= OMAP_MAX_GPIO_LINES,
 	.irq_base	= TWL4030_GPIO_IRQ_BASE,
@@ -319,6 +365,7 @@ static struct twl4030_gpio_platform_data zoom_gpio_data = {
 	.setup		= zoom_twl_gpio_setup,
 };
 
+<<<<<<< HEAD
 static struct twl4030_madc_platform_data zoom_madc_data = {
 	.irq_line	= 1,
 };
@@ -346,14 +393,38 @@ static struct twl4030_platform_data zoom_twldata = {
 	.vsim           = &zoom_vsim,
 	.vpll2		= &zoom_vpll2,
 	.vdac		= &zoom_vdac,
+=======
+static struct twl4030_platform_data zoom_twldata = {
+	/* platform_data for children goes here */
+	.gpio		= &zoom_gpio_data,
+	.keypad		= &zoom_kp_twl4030_data,
+	.vmmc1          = &zoom_vmmc1,
+	.vmmc2          = &zoom_vmmc2,
+	.vsim           = &zoom_vsim,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __init omap_i2c_init(void)
 {
+<<<<<<< HEAD
 	if (machine_is_omap_zoom2()) {
 		zoom_audio_data.ramp_delay_value = 3;	/* 161 ms */
 		zoom_audio_data.hs_extmute = 1;
 		zoom_audio_data.set_hs_extmute = zoom2_set_hs_extmute;
+=======
+	omap3_pmic_get_config(&zoom_twldata,
+			TWL_COMMON_PDATA_USB | TWL_COMMON_PDATA_BCI |
+			TWL_COMMON_PDATA_MADC | TWL_COMMON_PDATA_AUDIO,
+			TWL_COMMON_REGULATOR_VDAC | TWL_COMMON_REGULATOR_VPLL2);
+
+	if (machine_is_omap_zoom2()) {
+		struct twl4030_codec_data *codec_data;
+		codec_data = zoom_twldata.audio->codec;
+
+		codec_data->ramp_delay_value = 3;	/* 161 ms */
+		codec_data->hs_extmute = 1;
+		codec_data->set_hs_extmute = zoom2_set_hs_extmute;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	omap_pmic_init(1, 2400, "twl5030", INT_34XX_SYS_NIRQ, &zoom_twldata);
 	omap_register_i2c_bus(2, 400, NULL, 0);

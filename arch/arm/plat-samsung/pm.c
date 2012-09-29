@@ -20,23 +20,34 @@
 #include <linux/io.h>
 
 #include <asm/cacheflush.h>
+<<<<<<< HEAD
+=======
+#include <asm/suspend.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/hardware.h>
 #include <mach/map.h>
 
 #include <plat/regs-serial.h>
 #include <mach/regs-clock.h>
 #include <mach/regs-irq.h>
+<<<<<<< HEAD
 #include <asm/fiq_glue.h>
 #include <asm/irq.h>
 
 #include <plat/pm.h>
 #include <plat/irq-eint-group.h>
+=======
+#include <asm/irq.h>
+
+#include <plat/pm.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/pm-core.h>
 
 /* for external use */
 
 unsigned long s3c_pm_flags;
 
+<<<<<<< HEAD
 /* ---------------------------------------------- */
 extern unsigned int pm_debug_scratchpad;
 #include <linux/slab.h>
@@ -107,6 +118,8 @@ void __init pmstats_init(void)
 }
 /* ---------------------------------------------- */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Debug code:
  *
  * This code supports debug output to the low level UARTs for use on
@@ -257,8 +270,17 @@ void s3c_pm_do_save(struct sleep_save *ptr, int count)
 
 void s3c_pm_do_restore(struct sleep_save *ptr, int count)
 {
+<<<<<<< HEAD
 	for (; count > 0; count--, ptr++)
 		__raw_writel(ptr->val, ptr->reg);
+=======
+	for (; count > 0; count--, ptr++) {
+		printk(KERN_DEBUG "restore %p (restore %08lx, was %08x)\n",
+		       ptr->reg, ptr->val, __raw_readl(ptr->reg));
+
+		__raw_writel(ptr->val, ptr->reg);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -299,8 +321,12 @@ static void __maybe_unused s3c_pm_show_resume_irqs(int start,
 
 
 void (*pm_cpu_prep)(void);
+<<<<<<< HEAD
 void (*pm_cpu_sleep)(void);
 void (*pm_cpu_restore)(void);
+=======
+int (*pm_cpu_sleep)(unsigned long);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define any_allowed(mask, allow) (((mask) & (allow)) != (allow))
 
@@ -337,10 +363,17 @@ static int s3c_pm_enter(suspend_state_t state)
 	/* save all necessary core registers not covered by the drivers */
 
 	s3c_pm_save_gpios();
+<<<<<<< HEAD
 	s3c_pm_save_uarts();
 	s3c_pm_save_core();
 
 
+=======
+	s3c_pm_saved_gpios();
+	s3c_pm_save_uarts();
+	s3c_pm_save_core();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* set the irq configuration for wake */
 
 	s3c_pm_configure_extint();
@@ -360,13 +393,17 @@ static int s3c_pm_enter(suspend_state_t state)
 
 	s3c_pm_check_store();
 
+<<<<<<< HEAD
 	/* clear wakeup_stat register for next wakeup reason */
 	__raw_writel(__raw_readl(S5P_WAKEUP_STAT), S5P_WAKEUP_STAT);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* send the cpu to sleep... */
 
 	s3c_pm_arch_stop_clocks();
 
+<<<<<<< HEAD
 	/* s3c_cpu_save will also act as our return point from when
 	 * we resume as it saves its own register state and restores it
 	 * during the resume.  */
@@ -376,17 +413,29 @@ static int s3c_pm_enter(suspend_state_t state)
 	s3c_cpu_save(0, PLAT_PHYS_OFFSET - PAGE_OFFSET);
 	pmstats->wake_count++;
 	pmstats->wake_freq = __raw_readl(S5P_CLK_DIV0);
+=======
+	/* this will also act as our return point from when
+	 * we resume as it saves its own register state and restores it
+	 * during the resume.  */
+
+	cpu_suspend(0, pm_cpu_sleep);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* restore the cpu state using the kernel's cpu init code. */
 
 	cpu_init();
 
+<<<<<<< HEAD
 	fiq_glue_resume();
 	local_fiq_enable();
+=======
+	/* restore the system state */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	s3c_pm_restore_core();
 	s3c_pm_restore_uarts();
 	s3c_pm_restore_gpios();
+<<<<<<< HEAD
 	s5pv210_restore_eint_group();
 
 	s3c_pm_debug_init();
@@ -396,6 +445,12 @@ static int s3c_pm_enter(suspend_state_t state)
 	if (pm_cpu_restore)
 		pm_cpu_restore();
 
+=======
+	s3c_pm_restored_gpios();
+
+	s3c_pm_debug_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* check what irq (if any) restored the system */
 
 	s3c_pm_arch_show_resume_irqs();
@@ -443,7 +498,10 @@ static const struct platform_suspend_ops s3c_pm_ops = {
 int __init s3c_pm_init(void)
 {
 	printk("S3C Power Management, Copyright 2004 Simtec Electronics\n");
+<<<<<<< HEAD
 	pmstats_init();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	suspend_set_ops(&s3c_pm_ops);
 	return 0;

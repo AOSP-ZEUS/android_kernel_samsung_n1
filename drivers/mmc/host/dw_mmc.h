@@ -118,7 +118,10 @@
 #define SDMMC_CMD_INDX(n)		((n) & 0x1F)
 /* Status register defines */
 #define SDMMC_GET_FCNT(x)		(((x)>>17) & 0x1FF)
+<<<<<<< HEAD
 #define SDMMC_FIFO_SZ			32
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Internal DMAC interrupt defines */
 #define SDMMC_IDMAC_INT_AI		BIT(9)
 #define SDMMC_IDMAC_INT_NI		BIT(8)
@@ -134,6 +137,7 @@
 
 /* Register access macros */
 #define mci_readl(dev, reg)			\
+<<<<<<< HEAD
 	__raw_readl(dev->regs + SDMMC_##reg)
 #define mci_writel(dev, reg, value)			\
 	__raw_writel((value), dev->regs + SDMMC_##reg)
@@ -143,13 +147,30 @@
 	__raw_readw(dev->regs + SDMMC_##reg)
 #define mci_writew(dev, reg, value)			\
 	__raw_writew((value), dev->regs + SDMMC_##reg)
+=======
+	__raw_readl((dev)->regs + SDMMC_##reg)
+#define mci_writel(dev, reg, value)			\
+	__raw_writel((value), (dev)->regs + SDMMC_##reg)
+
+/* 16-bit FIFO access macros */
+#define mci_readw(dev, reg)			\
+	__raw_readw((dev)->regs + SDMMC_##reg)
+#define mci_writew(dev, reg, value)			\
+	__raw_writew((value), (dev)->regs + SDMMC_##reg)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* 64-bit FIFO access macros */
 #ifdef readq
 #define mci_readq(dev, reg)			\
+<<<<<<< HEAD
 	__raw_readq(dev->regs + SDMMC_##reg)
 #define mci_writeq(dev, reg, value)			\
 	__raw_writeq((value), dev->regs + SDMMC_##reg)
+=======
+	__raw_readq((dev)->regs + SDMMC_##reg)
+#define mci_writeq(dev, reg, value)			\
+	__raw_writeq((value), (dev)->regs + SDMMC_##reg)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #else
 /*
  * Dummy readq implementation for architectures that don't define it.
@@ -160,9 +181,15 @@
  * rest of the code free from ifdefs.
  */
 #define mci_readq(dev, reg)			\
+<<<<<<< HEAD
 	(*(volatile u64 __force *)(dev->regs + SDMMC_##reg))
 #define mci_writeq(dev, reg, value)			\
 	(*(volatile u64 __force *)(dev->regs + SDMMC_##reg) = value)
+=======
+	(*(volatile u64 __force *)((dev)->regs + SDMMC_##reg))
+#define mci_writeq(dev, reg, value)			\
+	(*(volatile u64 __force *)((dev)->regs + SDMMC_##reg) = (value))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 #endif /* _DW_MMC_H_ */

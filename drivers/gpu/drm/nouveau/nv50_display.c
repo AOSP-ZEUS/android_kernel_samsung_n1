@@ -415,8 +415,11 @@ nv50_display_flip_next(struct drm_crtc *crtc, struct drm_framebuffer *fb,
 
 	/* synchronise with the rendering channel, if necessary */
 	if (likely(chan)) {
+<<<<<<< HEAD
 		u64 offset = dispc->sem.bo->vma.offset + dispc->sem.offset;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = RING_SPACE(chan, 10);
 		if (ret) {
 			WIND_RING(evo);
@@ -438,6 +441,11 @@ nv50_display_flip_next(struct drm_crtc *crtc, struct drm_framebuffer *fb,
 			else
 				OUT_RING  (chan, chan->vram_handle);
 		} else {
+<<<<<<< HEAD
+=======
+			u64 offset = chan->dispc_vma[nv_crtc->index].offset;
+			offset += dispc->sem.offset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			BEGIN_NVC0(chan, 2, NvSubM2MF, 0x0010, 4);
 			OUT_RING  (chan, upper_32_bits(offset));
 			OUT_RING  (chan, lower_32_bits(offset));
@@ -484,7 +492,11 @@ nv50_display_flip_next(struct drm_crtc *crtc, struct drm_framebuffer *fb,
 	OUT_RING  (evo, 0x00000000);
 	OUT_RING  (evo, 0x00000000);
 	BEGIN_RING(evo, 0, 0x0800, 5);
+<<<<<<< HEAD
 	OUT_RING  (evo, (nv_fb->nvbo->bo.mem.start << PAGE_SHIFT) >> 8);
+=======
+	OUT_RING  (evo, nv_fb->nvbo->bo.offset >> 8);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	OUT_RING  (evo, 0);
 	OUT_RING  (evo, (fb->height << 16) | fb->width);
 	OUT_RING  (evo, nv_fb->r_pitch);

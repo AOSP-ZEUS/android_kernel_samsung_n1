@@ -103,19 +103,32 @@ static ssize_t ir_lirc_transmit_ir(struct file *file, const char *buf,
 {
 	struct lirc_codec *lirc;
 	struct rc_dev *dev;
+<<<<<<< HEAD
 	int *txbuf; /* buffer with values to transmit */
 	int ret = 0;
+=======
+	unsigned int *txbuf; /* buffer with values to transmit */
+	ssize_t ret = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	size_t count;
 
 	lirc = lirc_get_pdata(file);
 	if (!lirc)
 		return -EFAULT;
 
+<<<<<<< HEAD
 	if (n % sizeof(int))
 		return -EINVAL;
 
 	count = n / sizeof(int);
 	if (count > LIRCBUF_SIZE || count % 2 == 0 || n % sizeof(int) != 0)
+=======
+	if (n < sizeof(unsigned) || n % sizeof(unsigned))
+		return -EINVAL;
+
+	count = n / sizeof(unsigned);
+	if (count > LIRCBUF_SIZE || count % 2 == 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 
 	txbuf = memdup_user(buf, n);
@@ -129,7 +142,14 @@ static ssize_t ir_lirc_transmit_ir(struct file *file, const char *buf,
 	}
 
 	if (dev->tx_ir)
+<<<<<<< HEAD
 		ret = dev->tx_ir(dev, txbuf, (u32)n);
+=======
+		ret = dev->tx_ir(dev, txbuf, count);
+
+	if (ret > 0)
+		ret *= sizeof(unsigned);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 out:
 	kfree(txbuf);

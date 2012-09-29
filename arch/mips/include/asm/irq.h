@@ -18,7 +18,10 @@
 
 static inline void irq_dispose_mapping(unsigned int virq)
 {
+<<<<<<< HEAD
 	return;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #ifdef CONFIG_I8259

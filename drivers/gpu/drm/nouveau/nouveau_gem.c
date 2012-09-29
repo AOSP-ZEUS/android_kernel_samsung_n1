@@ -60,9 +60,77 @@ nouveau_gem_object_del(struct drm_gem_object *gem)
 }
 
 int
+<<<<<<< HEAD
 nouveau_gem_new(struct drm_device *dev, struct nouveau_channel *chan,
 		int size, int align, uint32_t domain, uint32_t tile_mode,
 		uint32_t tile_flags, struct nouveau_bo **pnvbo)
+=======
+nouveau_gem_object_open(struct drm_gem_object *gem, struct drm_file *file_priv)
+{
+	struct nouveau_fpriv *fpriv = nouveau_fpriv(file_priv);
+	struct nouveau_bo *nvbo = nouveau_gem_object(gem);
+	struct nouveau_vma *vma;
+	int ret;
+
+	if (!fpriv->vm)
+		return 0;
+
+	ret = ttm_bo_reserve(&nvbo->bo, false, false, false, 0);
+	if (ret)
+		return ret;
+
+	vma = nouveau_bo_vma_find(nvbo, fpriv->vm);
+	if (!vma) {
+		vma = kzalloc(sizeof(*vma), GFP_KERNEL);
+		if (!vma) {
+			ret = -ENOMEM;
+			goto out;
+		}
+
+		ret = nouveau_bo_vma_add(nvbo, fpriv->vm, vma);
+		if (ret) {
+			kfree(vma);
+			goto out;
+		}
+	} else {
+		vma->refcount++;
+	}
+
+out:
+	ttm_bo_unreserve(&nvbo->bo);
+	return ret;
+}
+
+void
+nouveau_gem_object_close(struct drm_gem_object *gem, struct drm_file *file_priv)
+{
+	struct nouveau_fpriv *fpriv = nouveau_fpriv(file_priv);
+	struct nouveau_bo *nvbo = nouveau_gem_object(gem);
+	struct nouveau_vma *vma;
+	int ret;
+
+	if (!fpriv->vm)
+		return;
+
+	ret = ttm_bo_reserve(&nvbo->bo, false, false, false, 0);
+	if (ret)
+		return;
+
+	vma = nouveau_bo_vma_find(nvbo, fpriv->vm);
+	if (vma) {
+		if (--vma->refcount == 0) {
+			nouveau_bo_vma_del(nvbo, vma);
+			kfree(vma);
+		}
+	}
+	ttm_bo_unreserve(&nvbo->bo);
+}
+
+int
+nouveau_gem_new(struct drm_device *dev, int size, int align, uint32_t domain,
+		uint32_t tile_mode, uint32_t tile_flags,
+		struct nouveau_bo **pnvbo)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct drm_nouveau_private *dev_priv = dev->dev_private;
 	struct nouveau_bo *nvbo;
@@ -76,7 +144,11 @@ nouveau_gem_new(struct drm_device *dev, struct nouveau_channel *chan,
 	if (!flags || domain & NOUVEAU_GEM_DOMAIN_CPU)
 		flags |= TTM_PL_FLAG_SYSTEM;
 
+<<<<<<< HEAD
 	ret = nouveau_bo_new(dev, chan, size, align, flags, tile_mode,
+=======
+	ret = nouveau_bo_new(dev, size, align, flags, tile_mode,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			     tile_flags, pnvbo);
 	if (ret)
 		return ret;
@@ -103,17 +175,39 @@ nouveau_gem_new(struct drm_device *dev, struct nouveau_channel *chan,
 }
 
 static int
+<<<<<<< HEAD
 nouveau_gem_info(struct drm_gem_object *gem, struct drm_nouveau_gem_info *rep)
 {
 	struct nouveau_bo *nvbo = nouveau_gem_object(gem);
+=======
+nouveau_gem_info(struct drm_file *file_priv, struct drm_gem_object *gem,
+		 struct drm_nouveau_gem_info *rep)
+{
+	struct nouveau_fpriv *fpriv = nouveau_fpriv(file_priv);
+	struct nouveau_bo *nvbo = nouveau_gem_object(gem);
+	struct nouveau_vma *vma;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (nvbo->bo.mem.mem_type == TTM_PL_TT)
 		rep->domain = NOUVEAU_GEM_DOMAIN_GART;
 	else
 		rep->domain = NOUVEAU_GEM_DOMAIN_VRAM;
 
+<<<<<<< HEAD
 	rep->size = nvbo->bo.mem.num_pages << PAGE_SHIFT;
 	rep->offset = nvbo->bo.offset;
+=======
+	rep->offset = nvbo->bo.offset;
+	if (fpriv->vm) {
+		vma = nouveau_bo_vma_find(nvbo, fpriv->vm);
+		if (!vma)
+			return -EINVAL;
+
+		rep->offset = vma->offset;
+	}
+
+	rep->size = nvbo->bo.mem.num_pages << PAGE_SHIFT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	rep->map_handle = nvbo->bo.addr_space_offset;
 	rep->tile_mode = nvbo->tile_mode;
 	rep->tile_flags = nvbo->tile_flags;
@@ -127,7 +221,10 @@ nouveau_gem_ioctl_new(struct drm_device *dev, void *data,
 	struct drm_nouveau_private *dev_priv = dev->dev_private;
 	struct drm_nouveau_gem_new *req = data;
 	struct nouveau_bo *nvbo = NULL;
+<<<<<<< HEAD
 	struct nouveau_channel *chan = NULL;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret = 0;
 
 	if (unlikely(dev_priv->ttm.bdev.dev_mapping == NULL))
@@ -138,6 +235,7 @@ nouveau_gem_ioctl_new(struct drm_device *dev, void *data,
 		return -EINVAL;
 	}
 
+<<<<<<< HEAD
 	if (req->channel_hint) {
 		chan = nouveau_channel_get(dev, file_priv, req->channel_hint);
 		if (IS_ERR(chan))
@@ -160,6 +258,23 @@ nouveau_gem_ioctl_new(struct drm_device *dev, void *data,
 	/* drop reference from allocate - handle holds it now */
 	drm_gem_object_unreference_unlocked(nvbo->gem);
 out:
+=======
+	ret = nouveau_gem_new(dev, req->info.size, req->align,
+			      req->info.domain, req->info.tile_mode,
+			      req->info.tile_flags, &nvbo);
+	if (ret)
+		return ret;
+
+	ret = drm_gem_handle_create(file_priv, nvbo->gem, &req->info.handle);
+	if (ret == 0) {
+		ret = nouveau_gem_info(file_priv, nvbo->gem, &req->info);
+		if (ret)
+			drm_gem_handle_delete(file_priv, req->info.handle);
+	}
+
+	/* drop reference from allocate - handle holds it now */
+	drm_gem_object_unreference_unlocked(nvbo->gem);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
@@ -315,6 +430,7 @@ retry:
 }
 
 static int
+<<<<<<< HEAD
 validate_sync(struct nouveau_channel *chan, struct nouveau_bo *nvbo)
 {
 	struct nouveau_fence *fence = NULL;
@@ -337,6 +453,12 @@ static int
 validate_list(struct nouveau_channel *chan, struct list_head *list,
 	      struct drm_nouveau_gem_pushbuf_bo *pbbo, uint64_t user_pbbo_ptr)
 {
+=======
+validate_list(struct nouveau_channel *chan, struct list_head *list,
+	      struct drm_nouveau_gem_pushbuf_bo *pbbo, uint64_t user_pbbo_ptr)
+{
+	struct drm_nouveau_private *dev_priv = chan->dev->dev_private;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct drm_nouveau_gem_pushbuf_bo __user *upbbo =
 				(void __force __user *)(uintptr_t)user_pbbo_ptr;
 	struct drm_device *dev = chan->dev;
@@ -346,7 +468,11 @@ validate_list(struct nouveau_channel *chan, struct list_head *list,
 	list_for_each_entry(nvbo, list, entry) {
 		struct drm_nouveau_gem_pushbuf_bo *b = &pbbo[nvbo->pbbo_index];
 
+<<<<<<< HEAD
 		ret = validate_sync(chan, nvbo);
+=======
+		ret = nouveau_fence_sync(nvbo->bo.sync_obj, chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (unlikely(ret)) {
 			NV_ERROR(dev, "fail pre-validate sync\n");
 			return ret;
@@ -369,12 +495,17 @@ validate_list(struct nouveau_channel *chan, struct list_head *list,
 			return ret;
 		}
 
+<<<<<<< HEAD
 		ret = validate_sync(chan, nvbo);
+=======
+		ret = nouveau_fence_sync(nvbo->bo.sync_obj, chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (unlikely(ret)) {
 			NV_ERROR(dev, "fail post-validate sync\n");
 			return ret;
 		}
 
+<<<<<<< HEAD
 		if (nvbo->bo.offset == b->presumed.offset &&
 		    ((nvbo->bo.mem.mem_type == TTM_PL_VRAM &&
 		      b->presumed.domain & NOUVEAU_GEM_DOMAIN_VRAM) ||
@@ -393,6 +524,28 @@ validate_list(struct nouveau_channel *chan, struct list_head *list,
 		if (DRM_COPY_TO_USER(&upbbo[nvbo->pbbo_index].presumed,
 				     &b->presumed, sizeof(b->presumed)))
 			return -EFAULT;
+=======
+		if (dev_priv->card_type < NV_50) {
+			if (nvbo->bo.offset == b->presumed.offset &&
+			    ((nvbo->bo.mem.mem_type == TTM_PL_VRAM &&
+			      b->presumed.domain & NOUVEAU_GEM_DOMAIN_VRAM) ||
+			     (nvbo->bo.mem.mem_type == TTM_PL_TT &&
+			      b->presumed.domain & NOUVEAU_GEM_DOMAIN_GART)))
+				continue;
+
+			if (nvbo->bo.mem.mem_type == TTM_PL_TT)
+				b->presumed.domain = NOUVEAU_GEM_DOMAIN_GART;
+			else
+				b->presumed.domain = NOUVEAU_GEM_DOMAIN_VRAM;
+			b->presumed.offset = nvbo->bo.offset;
+			b->presumed.valid = 0;
+			relocs++;
+
+			if (DRM_COPY_TO_USER(&upbbo[nvbo->pbbo_index].presumed,
+					     &b->presumed, sizeof(b->presumed)))
+				return -EFAULT;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return relocs;
@@ -567,7 +720,11 @@ nouveau_gem_ioctl_pushbuf(struct drm_device *dev, void *data,
 	struct nouveau_fence *fence = NULL;
 	int i, j, ret = 0, do_reloc = 0;
 
+<<<<<<< HEAD
 	chan = nouveau_channel_get(dev, file_priv, req->channel);
+=======
+	chan = nouveau_channel_get(file_priv, req->channel);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (IS_ERR(chan))
 		return PTR_ERR(chan);
 
@@ -801,7 +958,11 @@ nouveau_gem_ioctl_info(struct drm_device *dev, void *data,
 	if (!gem)
 		return -ENOENT;
 
+<<<<<<< HEAD
 	ret = nouveau_gem_info(gem, req);
+=======
+	ret = nouveau_gem_info(file_priv, gem, req);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	drm_gem_object_unreference_unlocked(gem);
 	return ret;
 }

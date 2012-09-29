@@ -58,8 +58,16 @@ EXPORT_SYMBOL_GPL(vrtc_cmos_write);
 unsigned long vrtc_get_time(void)
 {
 	u8 sec, min, hour, mday, mon;
+<<<<<<< HEAD
 	u32 year;
 
+=======
+	unsigned long flags;
+	u32 year;
+
+	spin_lock_irqsave(&rtc_lock, flags);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	while ((vrtc_cmos_read(RTC_FREQ_SELECT) & RTC_UIP))
 		cpu_relax();
 
@@ -70,6 +78,11 @@ unsigned long vrtc_get_time(void)
 	mon = vrtc_cmos_read(RTC_MONTH);
 	year = vrtc_cmos_read(RTC_YEAR);
 
+<<<<<<< HEAD
+=======
+	spin_unlock_irqrestore(&rtc_lock, flags);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* vRTC YEAR reg contains the offset to 1960 */
 	year += 1960;
 
@@ -83,8 +96,15 @@ unsigned long vrtc_get_time(void)
 int vrtc_set_mmss(unsigned long nowtime)
 {
 	int real_sec, real_min;
+<<<<<<< HEAD
 	int vrtc_min;
 
+=======
+	unsigned long flags;
+	int vrtc_min;
+
+	spin_lock_irqsave(&rtc_lock, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	vrtc_min = vrtc_cmos_read(RTC_MINUTES);
 
 	real_sec = nowtime % 60;
@@ -95,6 +115,11 @@ int vrtc_set_mmss(unsigned long nowtime)
 
 	vrtc_cmos_write(real_sec, RTC_SECONDS);
 	vrtc_cmos_write(real_min, RTC_MINUTES);
+<<<<<<< HEAD
+=======
+	spin_unlock_irqrestore(&rtc_lock, flags);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

@@ -313,6 +313,10 @@ source "net/ax25/Kconfig"
 source "net/can/Kconfig"
 source "net/irda/Kconfig"
 source "net/bluetooth/Kconfig"
+<<<<<<< HEAD
+=======
+source "net/bluetooth_mgmt/Kconfig"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "net/rxrpc/Kconfig"
 
 config FIB_RULES
@@ -336,6 +340,10 @@ source "net/rfkill/Kconfig"
 source "net/9p/Kconfig"
 source "net/caif/Kconfig"
 source "net/ceph/Kconfig"
+<<<<<<< HEAD
+=======
+source "net/nfc/Kconfig"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 endif   # if NET

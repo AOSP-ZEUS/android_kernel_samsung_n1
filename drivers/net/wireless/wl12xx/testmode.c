@@ -36,7 +36,11 @@ enum wl1271_tm_commands {
 	WL1271_TM_CMD_TEST,
 	WL1271_TM_CMD_INTERROGATE,
 	WL1271_TM_CMD_CONFIGURE,
+<<<<<<< HEAD
 	WL1271_TM_CMD_NVS_PUSH,
+=======
+	WL1271_TM_CMD_NVS_PUSH,		/* Not in use. Keep to not break ABI */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	WL1271_TM_CMD_SET_PLT_MODE,
 	WL1271_TM_CMD_RECOVER,
 
@@ -139,12 +143,23 @@ static int wl1271_tm_cmd_interrogate(struct wl1271 *wl, struct nlattr *tb[])
 
 	if (ret < 0) {
 		wl1271_warning("testmode cmd interrogate failed: %d", ret);
+<<<<<<< HEAD
+=======
+		kfree(cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return ret;
 	}
 
 	skb = cfg80211_testmode_alloc_reply_skb(wl->hw->wiphy, sizeof(*cmd));
+<<<<<<< HEAD
 	if (!skb)
 		return -ENOMEM;
+=======
+	if (!skb) {
+		kfree(cmd);
+		return -ENOMEM;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	NLA_PUT(skb, WL1271_TM_ATTR_DATA, sizeof(*cmd), cmd);
 
@@ -187,6 +202,7 @@ static int wl1271_tm_cmd_configure(struct wl1271 *wl, struct nlattr *tb[])
 	return 0;
 }
 
+<<<<<<< HEAD
 static int wl1271_tm_cmd_nvs_push(struct wl1271 *wl, struct nlattr *tb[])
 {
 	int ret = 0;
@@ -229,6 +245,8 @@ out:
 	return ret;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int wl1271_tm_cmd_set_plt_mode(struct wl1271 *wl, struct nlattr *tb[])
 {
 	u32 val;
@@ -260,7 +278,11 @@ static int wl1271_tm_cmd_recover(struct wl1271 *wl, struct nlattr *tb[])
 {
 	wl1271_debug(DEBUG_TESTMODE, "testmode cmd recover");
 
+<<<<<<< HEAD
 	ieee80211_queue_work(wl->hw, &wl->recovery_work);
+=======
+	wl12xx_queue_recovery_work(wl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -285,8 +307,11 @@ int wl1271_tm_cmd(struct ieee80211_hw *hw, void *data, int len)
 		return wl1271_tm_cmd_interrogate(wl, tb);
 	case WL1271_TM_CMD_CONFIGURE:
 		return wl1271_tm_cmd_configure(wl, tb);
+<<<<<<< HEAD
 	case WL1271_TM_CMD_NVS_PUSH:
 		return wl1271_tm_cmd_nvs_push(wl, tb);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case WL1271_TM_CMD_SET_PLT_MODE:
 		return wl1271_tm_cmd_set_plt_mode(wl, tb);
 	case WL1271_TM_CMD_RECOVER:

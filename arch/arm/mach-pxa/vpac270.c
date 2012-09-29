@@ -719,6 +719,10 @@ MACHINE_START(VPAC270, "Voipac PXA270")
 	.boot_params	= 0xa0000100,
 	.map_io		= pxa27x_map_io,
 	.init_irq	= pxa27x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa27x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 	.init_machine	= vpac270_init
 MACHINE_END

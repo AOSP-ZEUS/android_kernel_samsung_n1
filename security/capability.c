@@ -181,7 +181,11 @@ static int cap_inode_follow_link(struct dentry *dentry,
 	return 0;
 }
 
+<<<<<<< HEAD
 static int cap_inode_permission(struct inode *inode, int mask, unsigned flags)
+=======
+static int cap_inode_permission(struct inode *inode, int mask)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return 0;
 }

@@ -892,7 +892,11 @@ static int __devinit dvb_bt8xx_probe(struct bttv_sub_device *sub)
 	if (!(bttv_pci_dev = bttv_get_pcidev(card->bttv_nr))) {
 		printk("dvb_bt8xx: no pci device for card %d\n", card->bttv_nr);
 		kfree(card);
+<<<<<<< HEAD
 		return -EFAULT;
+=======
+		return -ENODEV;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (!(card->bt = dvb_bt8xx_878_match(card->bttv_nr, bttv_pci_dev))) {
@@ -902,7 +906,11 @@ static int __devinit dvb_bt8xx_probe(struct bttv_sub_device *sub)
 		       "installed, try removing it.\n");
 
 		kfree(card);
+<<<<<<< HEAD
 		return -EFAULT;
+=======
+		return -ENODEV;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	mutex_init(&card->bt->gpio_lock);

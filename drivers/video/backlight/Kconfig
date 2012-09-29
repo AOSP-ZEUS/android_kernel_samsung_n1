@@ -117,6 +117,17 @@ config LCD_LD9040
 	  If you have an LD9040 Panel, say Y to enable its
 	  control driver.
 
+<<<<<<< HEAD
+=======
+config LCD_AMS369FG06
+	tristate "AMS369FG06 AMOLED LCD Driver"
+	depends on SPI && BACKLIGHT_CLASS_DEVICE
+	default n
+	help
+	  If you have an AMS369FG06 AMOLED Panel, say Y to enable its
+	  LCD control driver.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endif # LCD_CLASS_DEVICE
 
 #
@@ -230,6 +241,18 @@ config BACKLIGHT_PWM
 	  If you have a LCD backlight adjustable by PWM, say Y to enable
 	  this driver.
 
+<<<<<<< HEAD
+=======
+config BACKLIGHT_TEGRA_PWM
+	bool "Tegra PMx based PWM Backlight Driver"
+	depends on TEGRA_DC
+	help
+	  Enable support for Tegra2 DC pwm backlight.
+
+	  If you have a pwm backlight adjustable by the DC PM0 or PM1 signal
+	  control on tegra, say Y to enable this driver.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config BACKLIGHT_DA903X
 	tristate "Backlight Driver for DA9030/DA9034 using WLED"
 	depends on PMIC_DA903X
@@ -327,6 +350,24 @@ config BACKLIGHT_PCF50633
 	  If you have a backlight driven by a NXP PCF50633 MFD, say Y here to
 	  enable its driver.
 
+<<<<<<< HEAD
+=======
+config BACKLIGHT_AAT2870
+	tristate "AnalogicTech AAT2870 Backlight"
+	depends on BACKLIGHT_CLASS_DEVICE && MFD_AAT2870_CORE
+	default n
+	help
+	  If you have a AnalogicTech AAT2870 say Y to enable the
+	  backlight driver.
+
+config BACKLIGHT_CMC623_PWM
+        bool "CMC623 PWM Backlight Driver"
+        depends on BACKLIGHT_CLASS_DEVICE
+        default y
+        help
+          Say Y to enalbe the backlight driven by CMC623
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endif # BACKLIGHT_CLASS_DEVICE
 
 endif # BACKLIGHT_LCD_SUPPORT

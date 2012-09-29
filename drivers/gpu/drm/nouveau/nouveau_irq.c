@@ -79,7 +79,11 @@ nouveau_irq_handler(DRM_IRQ_ARGS)
 	int i;
 
 	stat = nv_rd32(dev, NV03_PMC_INTR_0);
+<<<<<<< HEAD
 	if (!stat)
+=======
+	if (stat == 0 || stat == ~0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return IRQ_NONE;
 
 	spin_lock_irqsave(&dev_priv->context_switch_lock, flags);

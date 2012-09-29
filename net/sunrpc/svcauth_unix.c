@@ -30,12 +30,19 @@
 
 struct unix_domain {
 	struct auth_domain	h;
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 	int	addr_changes;
 #endif /* CONFIG_NFSD_DEPRECATED */
 	/* other stuff later */
 };
 
+=======
+	/* other stuff later */
+};
+
+extern struct auth_ops svcauth_null;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern struct auth_ops svcauth_unix;
 
 static void svcauth_unix_domain_release(struct auth_domain *dom)
@@ -74,9 +81,12 @@ struct auth_domain *unix_domain_find(char *name)
 			return NULL;
 		}
 		new->h.flavour = &svcauth_unix;
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 		new->addr_changes = 0;
 #endif /* CONFIG_NFSD_DEPRECATED */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rv = auth_domain_lookup(name, &new->h);
 	}
 }
@@ -95,9 +105,12 @@ struct ip_map {
 	char			m_class[8]; /* e.g. "nfsd" */
 	struct in6_addr		m_addr;
 	struct unix_domain	*m_client;
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 	int			m_add_change;
 #endif /* CONFIG_NFSD_DEPRECATED */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void ip_map_put(struct kref *kref)
@@ -151,9 +164,12 @@ static void update(struct cache_head *cnew, struct cache_head *citem)
 
 	kref_get(&item->m_client->h.ref);
 	new->m_client = item->m_client;
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 	new->m_add_change = item->m_add_change;
 #endif /* CONFIG_NFSD_DEPRECATED */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 static struct cache_head *ip_map_alloc(void)
 {
@@ -338,6 +354,7 @@ static int __ip_map_update(struct cache_detail *cd, struct ip_map *ipm,
 	ip.h.flags = 0;
 	if (!udom)
 		set_bit(CACHE_NEGATIVE, &ip.h.flags);
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 	else {
 		ip.m_add_change = udom->addr_changes;
@@ -348,6 +365,8 @@ static int __ip_map_update(struct cache_detail *cd, struct ip_map *ipm,
 			ip.m_add_change++;
 	}
 #endif /* CONFIG_NFSD_DEPRECATED */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ip.h.expiry_time = expiry;
 	ch = sunrpc_cache_update(cd, &ip.h, &ipm->h,
 				 hash_str(ipm->m_class, IP_HASHBITS) ^
@@ -367,6 +386,7 @@ static inline int ip_map_update(struct net *net, struct ip_map *ipm,
 	return __ip_map_update(sn->ip_map_cache, ipm, udom, expiry);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 int auth_unix_add_addr(struct net *net, struct in6_addr *addr, struct auth_domain *dom)
 {
@@ -423,6 +443,8 @@ struct auth_domain *auth_unix_lookup(struct net *net, struct in6_addr *addr)
 }
 EXPORT_SYMBOL_GPL(auth_unix_lookup);
 #endif /* CONFIG_NFSD_DEPRECATED */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void svcauth_unix_purge(void)
 {

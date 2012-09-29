@@ -420,6 +420,11 @@ struct intel_sst_drv {
 	unsigned int		max_streams;
 	unsigned int		*fw_cntx;
 	unsigned int		fw_cntx_size;
+<<<<<<< HEAD
+=======
+
+	unsigned int		fw_downloaded;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 extern struct intel_sst_drv *sst_drv_ctx;

@@ -1,7 +1,11 @@
 /*
  *	w1_therm.c
  *
+<<<<<<< HEAD
  * Copyright (c) 2004 Evgeniy Polyakov <johnpol@2ka.mipt.ru>
+=======
+ * Copyright (c) 2004 Evgeniy Polyakov <zbr@ioremap.net>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  *
  * This program is free software; you can redistribute it and/or modify
@@ -34,7 +38,11 @@
 #include "../w1_family.h"
 
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
 MODULE_AUTHOR("Evgeniy Polyakov <johnpol@2ka.mipt.ru>");
+=======
+MODULE_AUTHOR("Evgeniy Polyakov <zbr@ioremap.net>");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_DESCRIPTION("Driver for 1-wire Dallas network protocol, temperature family.");
 
 /* Allow the strong pullup to be disabled, but default to enabled.
@@ -86,6 +94,14 @@ static struct w1_family w1_therm_family_DS1822 = {
 	.fops = &w1_therm_fops,
 };
 
+<<<<<<< HEAD
+=======
+static struct w1_family w1_therm_family_DS28EA00 = {
+	.fid = W1_THERM_DS28EA00,
+	.fops = &w1_therm_fops,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct w1_therm_family_converter
 {
 	u8			broken;
@@ -111,6 +127,13 @@ static struct w1_therm_family_converter w1_therm_families[] = {
 		.f		= &w1_therm_family_DS18B20,
 		.convert 	= w1_DS18B20_convert_temp
 	},
+<<<<<<< HEAD
+=======
+	{
+		.f		= &w1_therm_family_DS28EA00,
+		.convert	= w1_DS18B20_convert_temp
+	},
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static inline int w1_DS18B20_convert_temp(u8 rom[9])

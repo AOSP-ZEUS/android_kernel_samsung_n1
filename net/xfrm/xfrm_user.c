@@ -2299,7 +2299,12 @@ static int xfrm_user_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 		if (link->dump == NULL)
 			return -EINVAL;
 
+<<<<<<< HEAD
 		return netlink_dump_start(net->xfrm.nlsk, skb, nlh, link->dump, link->done);
+=======
+		return netlink_dump_start(net->xfrm.nlsk, skb, nlh,
+					  link->dump, link->done, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	err = nlmsg_parse(nlh, xfrm_msg_min[type], attrs, XFRMA_MAX,

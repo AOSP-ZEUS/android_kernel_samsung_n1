@@ -134,6 +134,11 @@ enum efx_loopback_mode {
  * other valuesspecify reasons, which efx_schedule_reset() will choose
  * a method for.
  *
+<<<<<<< HEAD
+=======
+ * Reset methods are numbered in order of increasing scope.
+ *
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @RESET_TYPE_INVISIBLE: don't reset the PHYs or interrupts
  * @RESET_TYPE_ALL: reset everything but PCI core blocks
  * @RESET_TYPE_WORLD: reset everything, save & restore PCI config
@@ -147,7 +152,10 @@ enum efx_loopback_mode {
  * @RESET_TYPE_MC_FAILURE: MC reboot/assertion
  */
 enum reset_type {
+<<<<<<< HEAD
 	RESET_TYPE_NONE = -1,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	RESET_TYPE_INVISIBLE = 0,
 	RESET_TYPE_ALL = 1,
 	RESET_TYPE_WORLD = 2,

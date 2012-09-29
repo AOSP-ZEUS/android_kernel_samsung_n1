@@ -98,7 +98,12 @@ static struct irq_chip ar7_sec_irq_type = {
 
 static struct irqaction ar7_cascade_action = {
 	.handler = no_action,
+<<<<<<< HEAD
 	.name = "AR7 cascade interrupt"
+=======
+	.name = "AR7 cascade interrupt",
+	.flags = IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void __init ar7_irq_init(int base)

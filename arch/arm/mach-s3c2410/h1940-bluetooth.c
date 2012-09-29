@@ -18,7 +18,10 @@
 #include <linux/leds.h>
 #include <linux/gpio.h>
 #include <linux/rfkill.h>
+<<<<<<< HEAD
 #include <linux/leds.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <mach/regs-gpio.h>
 #include <mach/hardware.h>

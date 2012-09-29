@@ -60,3 +60,7 @@ obj-$(CONFIG_MTD_GPIO_ADDR)	+= gpio-addr-flash.o
 obj-$(CONFIG_MTD_BCM963XX)	+= bcm963xx-flash.o
 obj-$(CONFIG_MTD_LATCH_ADDR)	+= latch-addr-flash.o
 obj-$(CONFIG_MTD_LANTIQ)	+= lantiq-flash.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_MTD_NOR_TEGRA)	+= tegra_nor.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

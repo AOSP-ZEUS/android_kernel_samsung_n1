@@ -424,7 +424,11 @@ static void pl2303_set_termios(struct tty_struct *tty,
 	control = priv->line_control;
 	if ((cflag & CBAUD) == B0)
 		priv->line_control &= ~(CONTROL_DTR | CONTROL_RTS);
+<<<<<<< HEAD
 	else if ((old_termios->c_cflag & CBAUD) == B0)
+=======
+	else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		priv->line_control |= (CONTROL_DTR | CONTROL_RTS);
 	if (control != priv->line_control) {
 		control = priv->line_control;

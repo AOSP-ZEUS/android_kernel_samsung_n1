@@ -117,6 +117,10 @@ void ioport_unmap(void __iomem *addr)
 EXPORT_SYMBOL(ioport_map);
 EXPORT_SYMBOL(ioport_unmap);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_PCI
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __iomem *pci_iomap(struct pci_dev *dev, int bar, unsigned long max)
 {
 	resource_size_t start = pci_resource_start(dev, bar);
@@ -146,3 +150,7 @@ void pci_iounmap(struct pci_dev *dev, void __iomem *addr)
 
 EXPORT_SYMBOL(pci_iomap);
 EXPORT_SYMBOL(pci_iounmap);
+<<<<<<< HEAD
+=======
+#endif /* CONFIG_PCI */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -160,6 +160,7 @@ EXPORT_SYMBOL_GPL(unlock_flocks);
 
 static struct kmem_cache *filelock_cache __read_mostly;
 
+<<<<<<< HEAD
 static void locks_init_lock_always(struct file_lock *fl)
 {
 	fl->fl_next = NULL;
@@ -171,15 +172,29 @@ static void locks_init_lock_always(struct file_lock *fl)
 	fl->fl_flags = 0;
 	fl->fl_type = 0;
 	fl->fl_start = fl->fl_end = 0;
+=======
+static void locks_init_lock_heads(struct file_lock *fl)
+{
+	INIT_LIST_HEAD(&fl->fl_link);
+	INIT_LIST_HEAD(&fl->fl_block);
+	init_waitqueue_head(&fl->fl_wait);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Allocate an empty lock structure. */
 struct file_lock *locks_alloc_lock(void)
 {
+<<<<<<< HEAD
 	struct file_lock *fl = kmem_cache_alloc(filelock_cache, GFP_KERNEL);
 
 	if (fl)
 		locks_init_lock_always(fl);
+=======
+	struct file_lock *fl = kmem_cache_zalloc(filelock_cache, GFP_KERNEL);
+
+	if (fl)
+		locks_init_lock_heads(fl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return fl;
 }
@@ -193,8 +208,13 @@ void locks_release_private(struct file_lock *fl)
 		fl->fl_ops = NULL;
 	}
 	if (fl->fl_lmops) {
+<<<<<<< HEAD
 		if (fl->fl_lmops->fl_release_private)
 			fl->fl_lmops->fl_release_private(fl);
+=======
+		if (fl->fl_lmops->lm_release_private)
+			fl->fl_lmops->lm_release_private(fl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		fl->fl_lmops = NULL;
 	}
 
@@ -215,16 +235,22 @@ EXPORT_SYMBOL(locks_free_lock);
 
 void locks_init_lock(struct file_lock *fl)
 {
+<<<<<<< HEAD
 	INIT_LIST_HEAD(&fl->fl_link);
 	INIT_LIST_HEAD(&fl->fl_block);
 	init_waitqueue_head(&fl->fl_wait);
 	fl->fl_ops = NULL;
 	fl->fl_lmops = NULL;
 	locks_init_lock_always(fl);
+=======
+	memset(fl, 0, sizeof(struct file_lock));
+	locks_init_lock_heads(fl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 EXPORT_SYMBOL(locks_init_lock);
 
+<<<<<<< HEAD
 /*
  * Initialises the fields of the file lock which are invariant for
  * free file_locks.
@@ -236,6 +262,8 @@ static void init_once(void *foo)
 	locks_init_lock(lock);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void locks_copy_private(struct file_lock *new, struct file_lock *fl)
 {
 	if (fl->fl_ops) {
@@ -444,9 +472,15 @@ static void lease_release_private_callback(struct file_lock *fl)
 }
 
 static const struct lock_manager_operations lease_manager_ops = {
+<<<<<<< HEAD
 	.fl_break = lease_break_callback,
 	.fl_release_private = lease_release_private_callback,
 	.fl_change = lease_modify,
+=======
+	.lm_break = lease_break_callback,
+	.lm_release_private = lease_release_private_callback,
+	.lm_change = lease_modify,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*
@@ -499,9 +533,15 @@ static inline int locks_overlap(struct file_lock *fl1, struct file_lock *fl2)
  */
 static int posix_same_owner(struct file_lock *fl1, struct file_lock *fl2)
 {
+<<<<<<< HEAD
 	if (fl1->fl_lmops && fl1->fl_lmops->fl_compare_owner)
 		return fl2->fl_lmops == fl1->fl_lmops &&
 			fl1->fl_lmops->fl_compare_owner(fl1, fl2);
+=======
+	if (fl1->fl_lmops && fl1->fl_lmops->lm_compare_owner)
+		return fl2->fl_lmops == fl1->fl_lmops &&
+			fl1->fl_lmops->lm_compare_owner(fl1, fl2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return fl1->fl_owner == fl2->fl_owner;
 }
 
@@ -551,8 +591,13 @@ static void locks_wake_up_blocks(struct file_lock *blocker)
 		waiter = list_first_entry(&blocker->fl_block,
 				struct file_lock, fl_block);
 		__locks_delete_block(waiter);
+<<<<<<< HEAD
 		if (waiter->fl_lmops && waiter->fl_lmops->fl_notify)
 			waiter->fl_lmops->fl_notify(waiter);
+=======
+		if (waiter->fl_lmops && waiter->fl_lmops->lm_notify)
+			waiter->fl_lmops->lm_notify(waiter);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		else
 			wake_up(&waiter->fl_wait);
 	}
@@ -1239,7 +1284,11 @@ int __break_lease(struct inode *inode, unsigned int mode)
 			fl->fl_type = future;
 			fl->fl_break_time = break_time;
 			/* lease must have lmops break callback */
+<<<<<<< HEAD
 			fl->fl_lmops->fl_break(fl);
+=======
+			fl->fl_lmops->lm_break(fl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -1349,7 +1398,11 @@ int fcntl_getlease(struct file *filp)
  *	@arg: type of lease to obtain
  *	@flp: input - file_lock to use, output - file_lock inserted
  *
+<<<<<<< HEAD
  *	The (input) flp->fl_lmops->fl_break function is required
+=======
+ *	The (input) flp->fl_lmops->lm_break function is required
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *	by break_lease().
  *
  *	Called with file_lock_lock held.
@@ -1375,7 +1428,11 @@ int generic_setlease(struct file *filp, long arg, struct file_lock **flp)
 
 	time_out_leases(inode);
 
+<<<<<<< HEAD
 	BUG_ON(!(*flp)->fl_lmops->fl_break);
+=======
+	BUG_ON(!(*flp)->fl_lmops->lm_break);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (arg != F_UNLCK) {
 		error = -EAGAIN;
@@ -1417,7 +1474,11 @@ int generic_setlease(struct file *filp, long arg, struct file_lock **flp)
 		goto out;
 
 	if (my_before != NULL) {
+<<<<<<< HEAD
 		error = lease->fl_lmops->fl_change(my_before, arg);
+=======
+		error = lease->fl_lmops->lm_change(my_before, arg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!error)
 			*flp = *my_before;
 		goto out;
@@ -1453,7 +1514,11 @@ static int __vfs_setlease(struct file *filp, long arg, struct file_lock **lease)
  *	@lease: file_lock to use
  *
  *	Call this to establish a lease on the file.
+<<<<<<< HEAD
  *	The (*lease)->fl_lmops->fl_break operation must be set; if not,
+=======
+ *	The (*lease)->fl_lmops->lm_break operation must be set; if not,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *	break_lease will oops!
  *
  *	This will call the filesystem's setlease file method, if
@@ -1751,10 +1816,17 @@ out:
  * To avoid blocking kernel daemons, such as lockd, that need to acquire POSIX
  * locks, the ->lock() interface may return asynchronously, before the lock has
  * been granted or denied by the underlying filesystem, if (and only if)
+<<<<<<< HEAD
  * fl_grant is set. Callers expecting ->lock() to return asynchronously
  * will only use F_SETLK, not F_SETLKW; they will set FL_SLEEP if (and only if)
  * the request is for a blocking lock. When ->lock() does return asynchronously,
  * it must return FILE_LOCK_DEFERRED, and call ->fl_grant() when the lock
+=======
+ * lm_grant is set. Callers expecting ->lock() to return asynchronously
+ * will only use F_SETLK, not F_SETLKW; they will set FL_SLEEP if (and only if)
+ * the request is for a blocking lock. When ->lock() does return asynchronously,
+ * it must return FILE_LOCK_DEFERRED, and call ->lm_grant() when the lock
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * request completes.
  * If the request is for non-blocking lock the file system should return
  * FILE_LOCK_DEFERRED then try to get the lock and call the callback routine
@@ -1764,7 +1836,11 @@ out:
  * grants a lock so the VFS can find out which locks are locally held and do
  * the correct lock cleanup when required.
  * The underlying filesystem must not drop the kernel lock or call
+<<<<<<< HEAD
  * ->fl_grant() before returning to the caller with a FILE_LOCK_DEFERRED
+=======
+ * ->lm_grant() before returning to the caller with a FILE_LOCK_DEFERRED
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * return code.
  */
 int vfs_lock_file(struct file *filp, unsigned int cmd, struct file_lock *fl, struct file_lock *conf)
@@ -2333,8 +2409,13 @@ EXPORT_SYMBOL(lock_may_write);
 static int __init filelock_init(void)
 {
 	filelock_cache = kmem_cache_create("file_lock_cache",
+<<<<<<< HEAD
 			sizeof(struct file_lock), 0, SLAB_PANIC,
 			init_once);
+=======
+			sizeof(struct file_lock), 0, SLAB_PANIC, NULL);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

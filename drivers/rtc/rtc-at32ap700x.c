@@ -223,7 +223,11 @@ static int __init at32_rtc_probe(struct platform_device *pdev)
 	}
 
 	rtc->irq = irq;
+<<<<<<< HEAD
 	rtc->regs = ioremap(regs->start, regs->end - regs->start + 1);
+=======
+	rtc->regs = ioremap(regs->start, resource_size(regs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!rtc->regs) {
 		ret = -ENOMEM;
 		dev_dbg(&pdev->dev, "could not map I/O memory\n");

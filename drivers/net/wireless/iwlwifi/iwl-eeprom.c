@@ -407,11 +407,14 @@ static int iwl_find_otp_image(struct iwl_priv *priv,
 	return -EINVAL;
 }
 
+<<<<<<< HEAD
 const u8 *iwl_eeprom_query_addr(const struct iwl_priv *priv, size_t offset)
 {
 	return priv->cfg->ops->lib->eeprom_ops.query_addr(priv, offset);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 u16 iwl_eeprom_query16(const struct iwl_priv *priv, size_t offset)
 {
 	if (!priv->eeprom)
@@ -449,7 +452,11 @@ int iwl_eeprom_init(struct iwl_priv *priv, u32 hw_rev)
 	}
 	e = (__le16 *)priv->eeprom;
 
+<<<<<<< HEAD
 	priv->cfg->ops->lib->apm_ops.init(priv);
+=======
+	iwl_apm_init(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = iwl_eeprom_verify_signature(priv);
 	if (ret < 0) {
@@ -548,7 +555,11 @@ static void iwl_init_band_reference(const struct iwl_priv *priv,
 			const struct iwl_eeprom_channel **eeprom_ch_info,
 			const u8 **eeprom_ch_index)
 {
+<<<<<<< HEAD
 	u32 offset = priv->cfg->ops->lib->
+=======
+	u32 offset = priv->cfg->lib->
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			eeprom_ops.regulatory_bands[eep_band - 1];
 	switch (eep_band) {
 	case 1:		/* 2.4GHz band */
@@ -754,9 +765,15 @@ int iwl_init_channel_map(struct iwl_priv *priv)
 	}
 
 	/* Check if we do have HT40 channels */
+<<<<<<< HEAD
 	if (priv->cfg->ops->lib->eeprom_ops.regulatory_bands[5] ==
 	    EEPROM_REGULATORY_BAND_NO_HT40 &&
 	    priv->cfg->ops->lib->eeprom_ops.regulatory_bands[6] ==
+=======
+	if (priv->cfg->lib->eeprom_ops.regulatory_bands[5] ==
+	    EEPROM_REGULATORY_BAND_NO_HT40 &&
+	    priv->cfg->lib->eeprom_ops.regulatory_bands[6] ==
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    EEPROM_REGULATORY_BAND_NO_HT40)
 		return 0;
 
@@ -792,8 +809,13 @@ int iwl_init_channel_map(struct iwl_priv *priv)
 	 * driver need to process addition information
 	 * to determine the max channel tx power limits
 	 */
+<<<<<<< HEAD
 	if (priv->cfg->ops->lib->eeprom_ops.update_enhanced_txpower)
 		priv->cfg->ops->lib->eeprom_ops.update_enhanced_txpower(priv);
+=======
+	if (priv->cfg->lib->eeprom_ops.update_enhanced_txpower)
+		priv->cfg->lib->eeprom_ops.update_enhanced_txpower(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -834,3 +856,31 @@ const struct iwl_channel_info *iwl_get_channel_info(const struct iwl_priv *priv,
 
 	return NULL;
 }
+<<<<<<< HEAD
+=======
+
+void iwl_rf_config(struct iwl_priv *priv)
+{
+	u16 radio_cfg;
+
+	radio_cfg = iwl_eeprom_query16(priv, EEPROM_RADIO_CONFIG);
+
+	/* write radio config values to register */
+	if (EEPROM_RF_CFG_TYPE_MSK(radio_cfg) <= EEPROM_RF_CONFIG_TYPE_MAX) {
+		iwl_set_bit(priv, CSR_HW_IF_CONFIG_REG,
+			    EEPROM_RF_CFG_TYPE_MSK(radio_cfg) |
+			    EEPROM_RF_CFG_STEP_MSK(radio_cfg) |
+			    EEPROM_RF_CFG_DASH_MSK(radio_cfg));
+		IWL_INFO(priv, "Radio type=0x%x-0x%x-0x%x\n",
+			 EEPROM_RF_CFG_TYPE_MSK(radio_cfg),
+			 EEPROM_RF_CFG_STEP_MSK(radio_cfg),
+			 EEPROM_RF_CFG_DASH_MSK(radio_cfg));
+	} else
+		WARN_ON(1);
+
+	/* set CSR_HW_CONFIG_REG for uCode use */
+	iwl_set_bit(priv, CSR_HW_IF_CONFIG_REG,
+		    CSR_HW_IF_CONFIG_REG_BIT_RADIO_SI |
+		    CSR_HW_IF_CONFIG_REG_BIT_MAC_SI);
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

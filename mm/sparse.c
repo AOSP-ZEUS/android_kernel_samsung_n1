@@ -40,7 +40,11 @@ static u8 section_to_node_table[NR_MEM_SECTIONS] __cacheline_aligned;
 static u16 section_to_node_table[NR_MEM_SECTIONS] __cacheline_aligned;
 #endif
 
+<<<<<<< HEAD
 int page_to_nid(struct page *page)
+=======
+int page_to_nid(const struct page *page)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return section_to_node_table[page_to_section(page)];
 }
@@ -353,6 +357,7 @@ static void __init sparse_early_usemaps_alloc_node(unsigned long**usemap_map,
 
 	usemap = sparse_early_usemaps_alloc_pgdat_section(NODE_DATA(nodeid),
 								 usemap_count);
+<<<<<<< HEAD
 	if (!usemap) {
 		usemap = alloc_bootmem_node(NODE_DATA(nodeid), size * usemap_count);
 		if (!usemap) {
@@ -368,6 +373,31 @@ static void __init sparse_early_usemaps_alloc_node(unsigned long**usemap_map,
 		usemap += size;
 		check_usemap_section_nr(nodeid, usemap_map[pnum]);
 	}
+=======
+	if (usemap) {
+		for (pnum = pnum_begin; pnum < pnum_end; pnum++) {
+			if (!present_section_nr(pnum))
+				continue;
+			usemap_map[pnum] = usemap;
+			usemap += size;
+		}
+		return;
+	}
+
+	usemap = alloc_bootmem_node(NODE_DATA(nodeid), size * usemap_count);
+	if (usemap) {
+		for (pnum = pnum_begin; pnum < pnum_end; pnum++) {
+			if (!present_section_nr(pnum))
+				continue;
+			usemap_map[pnum] = usemap;
+			usemap += size;
+			check_usemap_section_nr(nodeid, usemap_map[pnum]);
+		}
+		return;
+	}
+
+	printk(KERN_WARNING "%s: allocation failed\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #ifndef CONFIG_SPARSEMEM_VMEMMAP

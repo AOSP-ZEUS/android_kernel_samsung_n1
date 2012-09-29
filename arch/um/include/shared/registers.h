@@ -16,7 +16,11 @@ extern int restore_fpx_registers(int pid, unsigned long *fp_regs);
 extern int save_registers(int pid, struct uml_pt_regs *regs);
 extern int restore_registers(int pid, struct uml_pt_regs *regs);
 extern int init_registers(int pid);
+<<<<<<< HEAD
 extern void get_safe_registers(unsigned long *regs);
+=======
+extern void get_safe_registers(unsigned long *regs, unsigned long *fp_regs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern unsigned long get_thread_reg(int reg, jmp_buf *buf);
 extern int get_fp_registers(int pid, unsigned long *regs);
 extern int put_fp_registers(int pid, unsigned long *regs);

@@ -16,6 +16,10 @@
 #include <linux/mutex.h>
 #include <linux/gfp.h>
 #include <linux/suspend.h>
+<<<<<<< HEAD
+=======
+#include <trace/events/power.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_SMP
 /* Serializes the updates to cpu_online_mask, cpu_present_mask */
@@ -219,13 +223,23 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen)
 		.hcpu = hcpu,
 	};
 
+<<<<<<< HEAD
+=======
+	printk(KERN_INFO "%s 1 .. cpu = %d\n", __func__, cpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (num_online_cpus() == 1)
 		return -EBUSY;
 
 	if (!cpu_online(cpu))
 		return -EINVAL;
 
+<<<<<<< HEAD
 	cpu_hotplug_begin();
+=======
+	printk(KERN_INFO "%s: LINE(%d)\n", __func__, __LINE__);
+	cpu_hotplug_begin();
+	printk(KERN_INFO "%s 3 .. cpu = %d\n", __func__, cpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	err = __cpu_notify(CPU_DOWN_PREPARE | mod, hcpu, -1, &nr_calls);
 	if (err) {
@@ -235,6 +249,10 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen)
 				__func__, cpu);
 		goto out_release;
 	}
+<<<<<<< HEAD
+=======
+	printk(KERN_INFO "%s 4 .. cpu = %d\n", __func__, cpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	err = __stop_machine(take_cpu_down, &tcd_param, cpumask_of(cpu));
 	if (err) {
@@ -245,6 +263,10 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen)
 	}
 	BUG_ON(cpu_online(cpu));
 
+<<<<<<< HEAD
+=======
+	printk(KERN_INFO "%s 5 .. cpu = %d\n", __func__, cpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * The migration_call() CPU_DYING callback will have removed all
 	 * runnable tasks from the cpu, there's only the idle task left now
@@ -252,18 +274,35 @@ static int __ref _cpu_down(unsigned int cpu, int tasks_frozen)
 	 *
 	 * Wait for the stop thread to go away.
 	 */
+<<<<<<< HEAD
 	while (!idle_cpu(cpu))
 		cpu_relax();
 
 	/* This actually kills the CPU. */
 	__cpu_die(cpu);
 
+=======
+	printk(KERN_INFO "%s: LINE(%d)\n", __func__, __LINE__);
+	while (!idle_cpu(cpu))
+		cpu_relax();
+
+	printk(KERN_INFO "%s 6 .. cpu = %d\n", __func__, cpu);
+
+	/* This actually kills the CPU. */
+	__cpu_die(cpu);
+
+	printk(KERN_INFO "%s 7 .. cpu = %d\n", __func__, cpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* CPU is completely dead: tell everyone.  Too late to complain. */
 	cpu_notify_nofail(CPU_DEAD | mod, hcpu);
 
 	check_for_tasks(cpu);
 
 out_release:
+<<<<<<< HEAD
+=======
+	printk(KERN_INFO "%s: LINE(%d)\n", __func__, __LINE__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cpu_hotplug_done();
 	if (!err)
 		cpu_notify_nofail(CPU_POST_DEAD | mod, hcpu);
@@ -274,6 +313,11 @@ int __ref cpu_down(unsigned int cpu)
 {
 	int err;
 
+<<<<<<< HEAD
+=======
+	trace_cpu_hotplug(cpu, POWER_CPU_DOWN_START);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cpu_maps_update_begin();
 
 	if (cpu_hotplug_disabled) {
@@ -285,6 +329,10 @@ int __ref cpu_down(unsigned int cpu)
 
 out:
 	cpu_maps_update_done();
+<<<<<<< HEAD
+=======
+	trace_cpu_hotplug(cpu, POWER_CPU_DOWN_DONE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return err;
 }
 EXPORT_SYMBOL(cpu_down);
@@ -335,6 +383,11 @@ int __cpuinit cpu_up(unsigned int cpu)
 	pg_data_t	*pgdat;
 #endif
 
+<<<<<<< HEAD
+=======
+	trace_cpu_hotplug(cpu, POWER_CPU_UP_START);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!cpu_possible(cpu)) {
 		printk(KERN_ERR "can't online cpu %d because it is not "
 			"configured as may-hotadd at boot time\n", cpu);
@@ -378,6 +431,10 @@ int __cpuinit cpu_up(unsigned int cpu)
 
 out:
 	cpu_maps_update_done();
+<<<<<<< HEAD
+=======
+	trace_cpu_hotplug(cpu, POWER_CPU_UP_DONE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return err;
 }
 
@@ -407,6 +464,10 @@ int disable_nonboot_cpus(void)
 
 	printk("Disabling non-boot CPUs ...\n");
 	for_each_online_cpu(cpu) {
+<<<<<<< HEAD
+=======
+		printk(KERN_INFO "%s: cpu%d\n", __func__, cpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (cpu == first_cpu)
 			continue;
 		error = _cpu_down(cpu, 1);

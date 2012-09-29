@@ -483,6 +483,7 @@ void ceph_mdsc_release_request(struct kref *kref)
 		destroy_reply_info(&req->r_reply_info);
 	}
 	if (req->r_inode) {
+<<<<<<< HEAD
 		ceph_put_cap_refs(ceph_inode(req->r_inode),
 				  CEPH_CAP_PIN);
 		iput(req->r_inode);
@@ -490,15 +491,35 @@ void ceph_mdsc_release_request(struct kref *kref)
 	if (req->r_locked_dir)
 		ceph_put_cap_refs(ceph_inode(req->r_locked_dir),
 				  CEPH_CAP_PIN);
+=======
+		ceph_put_cap_refs(ceph_inode(req->r_inode), CEPH_CAP_PIN);
+		iput(req->r_inode);
+	}
+	if (req->r_locked_dir)
+		ceph_put_cap_refs(ceph_inode(req->r_locked_dir), CEPH_CAP_PIN);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (req->r_target_inode)
 		iput(req->r_target_inode);
 	if (req->r_dentry)
 		dput(req->r_dentry);
 	if (req->r_old_dentry) {
+<<<<<<< HEAD
 		ceph_put_cap_refs(
 			ceph_inode(req->r_old_dentry->d_parent->d_inode),
 			CEPH_CAP_PIN);
 		dput(req->r_old_dentry);
+=======
+		/*
+		 * track (and drop pins for) r_old_dentry_dir
+		 * separately, since r_old_dentry's d_parent may have
+		 * changed between the dir mutex being dropped and
+		 * this request being freed.
+		 */
+		ceph_put_cap_refs(ceph_inode(req->r_old_dentry_dir),
+				  CEPH_CAP_PIN);
+		dput(req->r_old_dentry);
+		iput(req->r_old_dentry_dir);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	kfree(req->r_path1);
 	kfree(req->r_path2);
@@ -617,6 +638,15 @@ static void __unregister_request(struct ceph_mds_client *mdsc,
  */
 struct dentry *get_nonsnap_parent(struct dentry *dentry)
 {
+<<<<<<< HEAD
+=======
+	/*
+	 * we don't need to worry about protecting the d_parent access
+	 * here because we never renaming inside the snapped namespace
+	 * except to resplice to another snapdir, and either the old or new
+	 * result is a valid result.
+	 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	while (!IS_ROOT(dentry) && ceph_snap(dentry->d_inode) != CEPH_NOSNAP)
 		dentry = dentry->d_parent;
 	return dentry;
@@ -652,7 +682,13 @@ static int __choose_mds(struct ceph_mds_client *mdsc,
 	if (req->r_inode) {
 		inode = req->r_inode;
 	} else if (req->r_dentry) {
+<<<<<<< HEAD
 		struct inode *dir = req->r_dentry->d_parent->d_inode;
+=======
+		/* ignore race with rename; old or new d_parent is okay */
+		struct dentry *parent = req->r_dentry->d_parent;
+		struct inode *dir = parent->d_inode;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (dir->i_sb != mdsc->fsc->sb) {
 			/* not this fs! */
@@ -660,8 +696,12 @@ static int __choose_mds(struct ceph_mds_client *mdsc,
 		} else if (ceph_snap(dir) != CEPH_NOSNAP) {
 			/* direct snapped/virtual snapdir requests
 			 * based on parent dir inode */
+<<<<<<< HEAD
 			struct dentry *dn =
 				get_nonsnap_parent(req->r_dentry->d_parent);
+=======
+			struct dentry *dn = get_nonsnap_parent(parent);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			inode = dn->d_inode;
 			dout("__choose_mds using nonsnap parent %p\n", inode);
 		} else if (req->r_dentry->d_inode) {
@@ -670,7 +710,11 @@ static int __choose_mds(struct ceph_mds_client *mdsc,
 		} else {
 			/* dir + name */
 			inode = dir;
+<<<<<<< HEAD
 			hash = ceph_dentry_hash(req->r_dentry);
+=======
+			hash = ceph_dentry_hash(dir, req->r_dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			is_hash = true;
 		}
 	}
@@ -1584,7 +1628,11 @@ static int set_request_path_attr(struct inode *rinode, struct dentry *rdentry,
 		r = build_dentry_path(rdentry, ppath, pathlen, ino, freepath);
 		dout(" dentry %p %llx/%.*s\n", rdentry, *ino, *pathlen,
 		     *ppath);
+<<<<<<< HEAD
 	} else if (rpath) {
+=======
+	} else if (rpath || rino) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		*ino = rino;
 		*ppath = rpath;
 		*pathlen = strlen(rpath);
@@ -1931,9 +1979,14 @@ int ceph_mdsc_do_request(struct ceph_mds_client *mdsc,
 	if (req->r_locked_dir)
 		ceph_get_cap_refs(ceph_inode(req->r_locked_dir), CEPH_CAP_PIN);
 	if (req->r_old_dentry)
+<<<<<<< HEAD
 		ceph_get_cap_refs(
 			ceph_inode(req->r_old_dentry->d_parent->d_inode),
 			CEPH_CAP_PIN);
+=======
+		ceph_get_cap_refs(ceph_inode(req->r_old_dentry_dir),
+				  CEPH_CAP_PIN);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* issue */
 	mutex_lock(&mdsc->mutex);
@@ -2714,7 +2767,10 @@ static void handle_lease(struct ceph_mds_client *mdsc,
 	struct ceph_mds_lease *h = msg->front.iov_base;
 	u32 seq;
 	struct ceph_vino vino;
+<<<<<<< HEAD
 	int mask;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct qstr dname;
 	int release = 0;
 
@@ -2725,7 +2781,10 @@ static void handle_lease(struct ceph_mds_client *mdsc,
 		goto bad;
 	vino.ino = le64_to_cpu(h->ino);
 	vino.snap = CEPH_NOSNAP;
+<<<<<<< HEAD
 	mask = le16_to_cpu(h->mask);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	seq = le32_to_cpu(h->seq);
 	dname.name = (void *)h + sizeof(*h) + sizeof(u32);
 	dname.len = msg->front.iov_len - sizeof(*h) - sizeof(u32);
@@ -2737,8 +2796,13 @@ static void handle_lease(struct ceph_mds_client *mdsc,
 
 	/* lookup inode */
 	inode = ceph_find_inode(sb, vino);
+<<<<<<< HEAD
 	dout("handle_lease %s, mask %d, ino %llx %p %.*s\n",
 	     ceph_lease_op_name(h->action), mask, vino.ino, inode,
+=======
+	dout("handle_lease %s, ino %llx %p %.*s\n",
+	     ceph_lease_op_name(h->action), vino.ino, inode,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	     dname.len, dname.name);
 	if (inode == NULL) {
 		dout("handle_lease no inode %llx\n", vino.ino);
@@ -2828,7 +2892,10 @@ void ceph_mdsc_lease_send_msg(struct ceph_mds_session *session,
 		return;
 	lease = msg->front.iov_base;
 	lease->action = action;
+<<<<<<< HEAD
 	lease->mask = cpu_to_le16(1);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	lease->ino = cpu_to_le64(ceph_vino(inode).ino);
 	lease->first = lease->last = cpu_to_le64(ceph_vino(inode).snap);
 	lease->seq = cpu_to_le32(seq);
@@ -2850,7 +2917,11 @@ void ceph_mdsc_lease_send_msg(struct ceph_mds_session *session,
  * Pass @inode always, @dentry is optional.
  */
 void ceph_mdsc_lease_release(struct ceph_mds_client *mdsc, struct inode *inode,
+<<<<<<< HEAD
 			     struct dentry *dentry, int mask)
+=======
+			     struct dentry *dentry)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct ceph_dentry_info *di;
 	struct ceph_mds_session *session;
@@ -2858,7 +2929,10 @@ void ceph_mdsc_lease_release(struct ceph_mds_client *mdsc, struct inode *inode,
 
 	BUG_ON(inode == NULL);
 	BUG_ON(dentry == NULL);
+<<<<<<< HEAD
 	BUG_ON(mask == 0);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* is dentry lease valid? */
 	spin_lock(&dentry->d_lock);
@@ -2868,8 +2942,13 @@ void ceph_mdsc_lease_release(struct ceph_mds_client *mdsc, struct inode *inode,
 	    di->lease_gen != di->lease_session->s_cap_gen ||
 	    !time_before(jiffies, dentry->d_time)) {
 		dout("lease_release inode %p dentry %p -- "
+<<<<<<< HEAD
 		     "no lease on %d\n",
 		     inode, dentry, mask);
+=======
+		     "no lease\n",
+		     inode, dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_unlock(&dentry->d_lock);
 		return;
 	}
@@ -2880,8 +2959,13 @@ void ceph_mdsc_lease_release(struct ceph_mds_client *mdsc, struct inode *inode,
 	__ceph_mdsc_drop_dentry_lease(dentry);
 	spin_unlock(&dentry->d_lock);
 
+<<<<<<< HEAD
 	dout("lease_release inode %p dentry %p mask %d to mds%d\n",
 	     inode, dentry, mask, session->s_mds);
+=======
+	dout("lease_release inode %p dentry %p to mds%d\n",
+	     inode, dentry, session->s_mds);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ceph_mdsc_lease_send_msg(session, inode, dentry,
 				 CEPH_MDS_LEASE_RELEASE, seq);
 	ceph_put_mds_session(session);

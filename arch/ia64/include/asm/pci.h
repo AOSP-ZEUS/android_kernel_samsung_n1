@@ -139,7 +139,11 @@ static inline int pci_get_legacy_ide_irq(struct pci_dev *dev, int channel)
 	return channel ? isa_irq_to_vector(15) : isa_irq_to_vector(14);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_DMAR
+=======
+#ifdef CONFIG_INTEL_IOMMU
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void pci_iommu_alloc(void);
 #endif
 #endif /* _ASM_IA64_PCI_H */

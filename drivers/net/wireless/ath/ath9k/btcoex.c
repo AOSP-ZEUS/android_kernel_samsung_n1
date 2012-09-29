@@ -50,7 +50,11 @@ void ath9k_hw_init_btcoex_hw(struct ath_hw *ah, int qnum)
 		.bt_first_slot_time = 5,
 		.bt_hold_rx_clear = true,
 	};
+<<<<<<< HEAD
 	u32 i;
+=======
+	u32 i, idx;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bool rxclear_polarity = ath_bt_config.bt_rxclear_polarity;
 
 	if (AR_SREV_9300_20_OR_LATER(ah))
@@ -73,8 +77,15 @@ void ath9k_hw_init_btcoex_hw(struct ath_hw *ah, int qnum)
 		SM(ATH_BTCOEX_BMISS_THRESH, AR_BT_BCN_MISS_THRESH) |
 		AR_BT_DISABLE_BT_ANT;
 
+<<<<<<< HEAD
 	for (i = 0; i < 32; i++)
 		ah->hw_gen_timers.gen_timer_index[(debruijn32 << i) >> 27] = i;
+=======
+	for (i = 0; i < 32; i++) {
+		idx = (debruijn32 << i) >> 27;
+		ah->hw_gen_timers.gen_timer_index[idx] = i;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL(ath9k_hw_init_btcoex_hw);
 

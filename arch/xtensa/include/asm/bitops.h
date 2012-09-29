@@ -108,6 +108,7 @@ static inline unsigned long __fls(unsigned long word)
 #include <asm-generic/bitops/find.h>
 #include <asm-generic/bitops/le.h>
 
+<<<<<<< HEAD
 #ifdef __XTENSA_EL__
 # define ext2_set_bit_atomic(lock,nr,addr)				\
 	test_and_set_bit((nr), (unsigned long*)(addr))
@@ -121,6 +122,9 @@ static inline unsigned long __fls(unsigned long word)
 #else
 # error processor byte order undefined!
 #endif
+=======
+#include <asm-generic/bitops/ext2-atomic-setbit.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm-generic/bitops/hweight.h>
 #include <asm-generic/bitops/lock.h>

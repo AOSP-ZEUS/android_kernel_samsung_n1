@@ -446,7 +446,11 @@ ispmmu_vmap(struct isp_device *isp, const struct scatterlist *sglist, int sglen)
 	sgt->nents = sglen;
 	sgt->orig_nents = sglen;
 
+<<<<<<< HEAD
 	da = iommu_vmap(isp->iommu, 0, sgt, IOMMU_FLAG);
+=======
+	da = omap_iommu_vmap(isp->domain, isp->dev, 0, sgt, IOMMU_FLAG);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (IS_ERR_VALUE(da))
 		kfree(sgt);
 
@@ -462,7 +466,11 @@ static void ispmmu_vunmap(struct isp_device *isp, dma_addr_t da)
 {
 	struct sg_table *sgt;
 
+<<<<<<< HEAD
 	sgt = iommu_vunmap(isp->iommu, (u32)da);
+=======
+	sgt = omap_iommu_vunmap(isp->domain, isp->dev, (u32)da);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(sgt);
 }
 
@@ -695,7 +703,10 @@ isp_video_querycap(struct file *file, void *fh, struct v4l2_capability *cap)
 	strlcpy(cap->driver, ISP_VIDEO_DRIVER_NAME, sizeof(cap->driver));
 	strlcpy(cap->card, video->video.name, sizeof(cap->card));
 	strlcpy(cap->bus_info, "media", sizeof(cap->bus_info));
+<<<<<<< HEAD
 	cap->version = ISP_VIDEO_DRIVER_VERSION;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (video->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
 		cap->capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;

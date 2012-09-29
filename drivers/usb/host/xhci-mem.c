@@ -89,8 +89,13 @@ static void xhci_link_segments(struct xhci_hcd *xhci, struct xhci_segment *prev,
 		return;
 	prev->next = next;
 	if (link_trbs) {
+<<<<<<< HEAD
 		prev->trbs[TRBS_PER_SEGMENT-1].link.
 			segment_ptr = cpu_to_le64(next->dma);
+=======
+		prev->trbs[TRBS_PER_SEGMENT-1].link.segment_ptr =
+			cpu_to_le64(next->dma);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* Set the last TRB in the segment to have a TRB type ID of Link TRB */
 		val = le32_to_cpu(prev->trbs[TRBS_PER_SEGMENT-1].link.control);
@@ -191,8 +196,13 @@ static struct xhci_ring *xhci_ring_alloc(struct xhci_hcd *xhci,
 
 	if (link_trbs) {
 		/* See section 4.9.2.1 and 6.4.4.1 */
+<<<<<<< HEAD
 		prev->trbs[TRBS_PER_SEGMENT-1].link.
 			control |= cpu_to_le32(LINK_TOGGLE);
+=======
+		prev->trbs[TRBS_PER_SEGMENT-1].link.control |=
+			cpu_to_le32(LINK_TOGGLE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		xhci_dbg(xhci, "Wrote link toggle flag to"
 				" segment %p (virtual), 0x%llx (DMA)\n",
 				prev, (unsigned long long)prev->dma);
@@ -553,8 +563,13 @@ struct xhci_stream_info *xhci_alloc_stream_info(struct xhci_hcd *xhci,
 		addr = cur_ring->first_seg->dma |
 			SCT_FOR_CTX(SCT_PRI_TR) |
 			cur_ring->cycle_state;
+<<<<<<< HEAD
 		stream_info->stream_ctx_array[cur_stream].
 			stream_ring = cpu_to_le64(addr);
+=======
+		stream_info->stream_ctx_array[cur_stream].stream_ring =
+			cpu_to_le64(addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		xhci_dbg(xhci, "Setting stream %d ring ptr to 0x%08llx\n",
 				cur_stream, (unsigned long long) addr);
 
@@ -790,7 +805,11 @@ int xhci_alloc_virt_device(struct xhci_hcd *xhci, int slot_id,
 	xhci_dbg(xhci, "Set slot id %d dcbaa entry %p to 0x%llx\n",
 		 slot_id,
 		 &xhci->dcbaa->dev_context_ptrs[slot_id],
+<<<<<<< HEAD
 		 (unsigned long long) le64_to_cpu(xhci->dcbaa->dev_context_ptrs[slot_id]));
+=======
+		 le64_to_cpu(xhci->dcbaa->dev_context_ptrs[slot_id]));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 1;
 fail:
@@ -889,6 +908,7 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
 	slot_ctx = xhci_get_slot_ctx(xhci, dev->in_ctx);
 
 	/* 3) Only the control endpoint is valid - one endpoint context */
+<<<<<<< HEAD
 	slot_ctx->dev_info |= cpu_to_le32(LAST_CTX(1) | (u32) udev->route);
 	switch (udev->speed) {
 	case USB_SPEED_SUPER:
@@ -902,6 +922,21 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
 		break;
 	case USB_SPEED_LOW:
 		slot_ctx->dev_info |= cpu_to_le32((u32) SLOT_SPEED_LS);
+=======
+	slot_ctx->dev_info |= cpu_to_le32(LAST_CTX(1) | udev->route);
+	switch (udev->speed) {
+	case USB_SPEED_SUPER:
+		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_SS);
+		break;
+	case USB_SPEED_HIGH:
+		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_HS);
+		break;
+	case USB_SPEED_FULL:
+		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_FS);
+		break;
+	case USB_SPEED_LOW:
+		slot_ctx->dev_info |= cpu_to_le32(SLOT_SPEED_LS);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case USB_SPEED_WIRELESS:
 		xhci_dbg(xhci, "FIXME xHCI doesn't support wireless speeds\n");
@@ -915,7 +950,11 @@ int xhci_setup_addressable_virt_dev(struct xhci_hcd *xhci, struct usb_device *ud
 	port_num = xhci_find_real_port_number(xhci, udev);
 	if (!port_num)
 		return -EINVAL;
+<<<<<<< HEAD
 	slot_ctx->dev_info2 |= cpu_to_le32((u32) ROOT_HUB_PORT(port_num));
+=======
+	slot_ctx->dev_info2 |= cpu_to_le32(ROOT_HUB_PORT(port_num));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Set the port number in the virtual_device to the faked port number */
 	for (top_dev = udev; top_dev->parent && top_dev->parent->parent;
 			top_dev = top_dev->parent)
@@ -1002,6 +1041,7 @@ static unsigned int xhci_parse_exponent_interval(struct usb_device *udev,
 }
 
 /*
+<<<<<<< HEAD
  * Convert bInterval expressed in microframes (in 1-255 range) to exponent of
  * microframes, rounded down to nearest power of 2.
  */
@@ -1014,15 +1054,33 @@ static unsigned int xhci_microframes_to_exponent(struct usb_device *udev,
 	interval = fls(desc_interval) - 1;
 	interval = clamp_val(interval, min_exponent, max_exponent);
 	if ((1 << interval) != desc_interval)
+=======
+ * Convert bInterval expressed in frames (in 1-255 range) to exponent of
+ * microframes, rounded down to nearest power of 2.
+ */
+static unsigned int xhci_parse_frame_interval(struct usb_device *udev,
+		struct usb_host_endpoint *ep)
+{
+	unsigned int interval;
+
+	interval = fls(8 * ep->desc.bInterval) - 1;
+	interval = clamp_val(interval, 3, 10);
+	if ((1 << interval) != 8 * ep->desc.bInterval)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dev_warn(&udev->dev,
 			 "ep %#x - rounding interval to %d microframes, ep desc says %d microframes\n",
 			 ep->desc.bEndpointAddress,
 			 1 << interval,
+<<<<<<< HEAD
 			 desc_interval);
+=======
+			 8 * ep->desc.bInterval);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return interval;
 }
 
+<<<<<<< HEAD
 static unsigned int xhci_parse_microframe_interval(struct usb_device *udev,
 		struct usb_host_endpoint *ep)
 {
@@ -1038,6 +1096,8 @@ static unsigned int xhci_parse_frame_interval(struct usb_device *udev,
 			ep->desc.bInterval * 8, 3, 10);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Return the polling or NAK interval.
  *
  * The polling interval is expressed in "microframes".  If xHCI's Interval field
@@ -1056,7 +1116,11 @@ static unsigned int xhci_get_endpoint_interval(struct usb_device *udev,
 		/* Max NAK rate */
 		if (usb_endpoint_xfer_control(&ep->desc) ||
 		    usb_endpoint_xfer_bulk(&ep->desc)) {
+<<<<<<< HEAD
 			interval = xhci_parse_microframe_interval(udev, ep);
+=======
+			interval = ep->desc.bInterval;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		}
 		/* Fall through - SS and HS isoc/int have same decoding */
@@ -1509,6 +1573,14 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
 	int i;
 
 	/* Free the Event Ring Segment Table and the actual Event Ring */
+<<<<<<< HEAD
+=======
+	if (xhci->ir_set) {
+		xhci_writel(xhci, 0, &xhci->ir_set->erst_size);
+		xhci_write_64(xhci, 0, &xhci->ir_set->erst_base);
+		xhci_write_64(xhci, 0, &xhci->ir_set->erst_dequeue);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	size = sizeof(struct xhci_erst_entry)*(xhci->erst.num_entries);
 	if (xhci->erst.entries)
 		pci_free_consistent(pdev, size,
@@ -1520,6 +1592,10 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
 	xhci->event_ring = NULL;
 	xhci_dbg(xhci, "Freed event ring\n");
 
+<<<<<<< HEAD
+=======
+	xhci_write_64(xhci, 0, &xhci->op_regs->cmd_ring);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (xhci->cmd_ring)
 		xhci_ring_free(xhci, xhci->cmd_ring);
 	xhci->cmd_ring = NULL;
@@ -1548,6 +1624,10 @@ void xhci_mem_cleanup(struct xhci_hcd *xhci)
 	xhci->medium_streams_pool = NULL;
 	xhci_dbg(xhci, "Freed medium stream array pool\n");
 
+<<<<<<< HEAD
+=======
+	xhci_write_64(xhci, 0, &xhci->op_regs->dcbaa_ptr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (xhci->dcbaa)
 		pci_free_consistent(pdev, sizeof(*xhci->dcbaa),
 				xhci->dcbaa, xhci->dcbaa->dma);
@@ -2116,8 +2196,11 @@ int xhci_mem_init(struct xhci_hcd *xhci, gfp_t flags)
 
 fail:
 	xhci_warn(xhci, "Couldn't initialize memory\n");
+<<<<<<< HEAD
 	xhci_halt(xhci);
 	xhci_reset(xhci);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	xhci_mem_cleanup(xhci);
 	return -ENOMEM;
 }

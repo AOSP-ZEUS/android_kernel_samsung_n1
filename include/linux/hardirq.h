@@ -93,7 +93,11 @@
  */
 #define in_nmi()	(preempt_count() & NMI_MASK)
 
+<<<<<<< HEAD
 #if defined(CONFIG_PREEMPT)
+=======
+#if defined(CONFIG_PREEMPT_COUNT)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 # define PREEMPT_CHECK_OFFSET 1
 #else
 # define PREEMPT_CHECK_OFFSET 0
@@ -115,7 +119,11 @@
 #define in_atomic_preempt_off() \
 		((preempt_count() & ~PREEMPT_ACTIVE) != PREEMPT_CHECK_OFFSET)
 
+<<<<<<< HEAD
 #ifdef CONFIG_PREEMPT
+=======
+#ifdef CONFIG_PREEMPT_COUNT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 # define preemptible()	(preempt_count() == 0 && !irqs_disabled())
 # define IRQ_EXIT_OFFSET (HARDIRQ_OFFSET-1)
 #else

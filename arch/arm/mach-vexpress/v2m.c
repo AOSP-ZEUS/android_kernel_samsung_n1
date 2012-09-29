@@ -318,6 +318,13 @@ static struct clk v2m_sp804_clk = {
 	.rate	= 1000000,
 };
 
+<<<<<<< HEAD
+=======
+static struct clk v2m_ref_clk = {
+	.rate   = 32768,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct clk dummy_apb_pclk;
 
 static struct clk_lookup v2m_lookups[] = {
@@ -348,6 +355,12 @@ static struct clk_lookup v2m_lookups[] = {
 	}, {	/* CLCD */
 		.dev_id		= "mb:clcd",
 		.clk		= &osc1_clk,
+<<<<<<< HEAD
+=======
+	}, {	/* SP805 WDT */
+		.dev_id		= "mb:wdt",
+		.clk		= &v2m_ref_clk,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}, {	/* SP804 timers */
 		.dev_id		= "sp804",
 		.con_id		= "v2m-timer0",

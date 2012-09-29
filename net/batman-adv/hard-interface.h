@@ -22,6 +22,7 @@
 #ifndef _NET_BATMAN_ADV_HARD_INTERFACE_H_
 #define _NET_BATMAN_ADV_HARD_INTERFACE_H_
 
+<<<<<<< HEAD
 #define IF_NOT_IN_USE 0
 #define IF_TO_BE_REMOVED 1
 #define IF_INACTIVE 2
@@ -33,6 +34,23 @@ extern struct notifier_block hard_if_notifier;
 
 struct hard_iface *hardif_get_by_netdev(struct net_device *net_dev);
 int hardif_enable_interface(struct hard_iface *hard_iface, char *iface_name);
+=======
+enum hard_if_state {
+	IF_NOT_IN_USE,
+	IF_TO_BE_REMOVED,
+	IF_INACTIVE,
+	IF_ACTIVE,
+	IF_TO_BE_ACTIVATED,
+	IF_I_WANT_YOU
+};
+
+extern struct notifier_block hard_if_notifier;
+
+struct hard_iface*
+hardif_get_by_netdev(const struct net_device *net_dev);
+int hardif_enable_interface(struct hard_iface *hard_iface,
+			    const char *iface_name);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void hardif_disable_interface(struct hard_iface *hard_iface);
 void hardif_remove_interfaces(void);
 int hardif_min_mtu(struct net_device *soft_iface);

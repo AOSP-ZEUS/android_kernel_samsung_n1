@@ -31,6 +31,14 @@ static inline u64 Maj(u64 x, u64 y, u64 z)
         return (x & y) | (z & (x | y));
 }
 
+<<<<<<< HEAD
+=======
+static inline u64 RORu64(u64 x, u64 y)
+{
+        return (x >> y) | (x << (64 - y));
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const u64 sha512_K[80] = {
         0x428a2f98d728ae22ULL, 0x7137449123ef65cdULL, 0xb5c0fbcfec4d3b2fULL,
         0xe9b5dba58189dbbcULL, 0x3956c25bf348b538ULL, 0x59f111f1b605d019ULL,
@@ -61,10 +69,17 @@ static const u64 sha512_K[80] = {
         0x5fcb6fab3ad6faecULL, 0x6c44198c4a475817ULL,
 };
 
+<<<<<<< HEAD
 #define e0(x)       (ror64(x,28) ^ ror64(x,34) ^ ror64(x,39))
 #define e1(x)       (ror64(x,14) ^ ror64(x,18) ^ ror64(x,41))
 #define s0(x)       (ror64(x, 1) ^ ror64(x, 8) ^ (x >> 7))
 #define s1(x)       (ror64(x,19) ^ ror64(x,61) ^ (x >> 6))
+=======
+#define e0(x)       (RORu64(x,28) ^ RORu64(x,34) ^ RORu64(x,39))
+#define e1(x)       (RORu64(x,14) ^ RORu64(x,18) ^ RORu64(x,41))
+#define s0(x)       (RORu64(x, 1) ^ RORu64(x, 8) ^ (x >> 7))
+#define s1(x)       (RORu64(x,19) ^ RORu64(x,61) ^ (x >> 6))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline void LOAD_OP(int I, u64 *W, const u8 *input)
 {
@@ -73,7 +88,11 @@ static inline void LOAD_OP(int I, u64 *W, const u8 *input)
 
 static inline void BLEND_OP(int I, u64 *W)
 {
+<<<<<<< HEAD
 	W[I & 15] += s1(W[(I-2) & 15]) + W[(I-7) & 15] + s0(W[(I-15) & 15]);
+=======
+	W[I % 16] += s1(W[(I-2) % 16]) + W[(I-7) % 16] + s0(W[(I-15) % 16]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void
@@ -84,10 +103,18 @@ sha512_transform(u64 *state, const u8 *input)
 	int i;
 	u64 W[16];
 
+<<<<<<< HEAD
+=======
+	/* load the input */
+        for (i = 0; i < 16; i++)
+                LOAD_OP(i, W, input);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* load the state into our registers */
 	a=state[0];   b=state[1];   c=state[2];   d=state[3];
 	e=state[4];   f=state[5];   g=state[6];   h=state[7];
 
+<<<<<<< HEAD
 	/* now iterate */
 	for (i=0; i<80; i+=8) {
 		if (!(i & 8)) {
@@ -120,6 +147,40 @@ sha512_transform(u64 *state, const u8 *input)
 		t2 = e0(c) + Maj(c,d,e);    f+=t1;    b=t1+t2;
 		t1 = a + e1(f) + Ch(f,g,h) + sha512_K[i+7] + W[(i & 15) + 7];
 		t2 = e0(b) + Maj(b,c,d);    e+=t1;    a=t1+t2;
+=======
+#define SHA512_0_15(i, a, b, c, d, e, f, g, h)			\
+	t1 = h + e1(e) + Ch(e, f, g) + sha512_K[i] + W[i];	\
+	t2 = e0(a) + Maj(a, b, c);				\
+	d += t1;						\
+	h = t1 + t2
+
+#define SHA512_16_79(i, a, b, c, d, e, f, g, h)			\
+	BLEND_OP(i, W);						\
+	t1 = h + e1(e) + Ch(e, f, g) + sha512_K[i] + W[(i)%16];	\
+	t2 = e0(a) + Maj(a, b, c);				\
+	d += t1;						\
+	h = t1 + t2
+
+	for (i = 0; i < 16; i += 8) {
+		SHA512_0_15(i, a, b, c, d, e, f, g, h);
+		SHA512_0_15(i + 1, h, a, b, c, d, e, f, g);
+		SHA512_0_15(i + 2, g, h, a, b, c, d, e, f);
+		SHA512_0_15(i + 3, f, g, h, a, b, c, d, e);
+		SHA512_0_15(i + 4, e, f, g, h, a, b, c, d);
+		SHA512_0_15(i + 5, d, e, f, g, h, a, b, c);
+		SHA512_0_15(i + 6, c, d, e, f, g, h, a, b);
+		SHA512_0_15(i + 7, b, c, d, e, f, g, h, a);
+	}
+	for (i = 16; i < 80; i += 8) {
+		SHA512_16_79(i, a, b, c, d, e, f, g, h);
+		SHA512_16_79(i + 1, h, a, b, c, d, e, f, g);
+		SHA512_16_79(i + 2, g, h, a, b, c, d, e, f);
+		SHA512_16_79(i + 3, f, g, h, a, b, c, d, e);
+		SHA512_16_79(i + 4, e, f, g, h, a, b, c, d);
+		SHA512_16_79(i + 5, d, e, f, g, h, a, b, c);
+		SHA512_16_79(i + 6, c, d, e, f, g, h, a, b);
+		SHA512_16_79(i + 7, b, c, d, e, f, g, h, a);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	state[0] += a; state[1] += b; state[2] += c; state[3] += d;
@@ -174,7 +235,11 @@ sha512_update(struct shash_desc *desc, const u8 *data, unsigned int len)
 	index = sctx->count[0] & 0x7f;
 
 	/* Update number of bytes */
+<<<<<<< HEAD
 	if ((sctx->count[0] += len) < len)
+=======
+	if (!(sctx->count[0] += len))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		sctx->count[1]++;
 
         part_len = 128 - index;

@@ -24,6 +24,10 @@
 #include <linux/usb/ulpi.h>
 #include <linux/slab.h>
 
+<<<<<<< HEAD
+=======
+#include <mach/hardware.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/mxc_ehci.h>
 
 #include <asm/mach-types.h>

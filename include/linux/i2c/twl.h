@@ -82,6 +82,13 @@
 #define TWL_MODULE_RTC		TWL4030_MODULE_RTC
 #define TWL_MODULE_PWM		TWL4030_MODULE_PWM0
 
+<<<<<<< HEAD
+=======
+#define TWL6030_MODULE_CHARGER	TWL4030_MODULE_MAIN_CHARGE
+#define TWL6025_MODULE_CHARGER	0x18
+
+#define TWL6030_MODULE_GASGAUGE 0x0B
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define TWL6030_MODULE_ID0	0x0D
 #define TWL6030_MODULE_ID1	0x0E
 #define TWL6030_MODULE_ID2	0x0F
@@ -108,6 +115,10 @@
 #define GASGAUGE_INTR_OFFSET	17
 #define USBOTG_INTR_OFFSET	4
 #define CHARGER_INTR_OFFSET	2
+<<<<<<< HEAD
+=======
+#define GPADCSW_INTR_OFFSET	1
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define RSV_INTR_OFFSET		0
 
 /* INT register offsets */
@@ -172,6 +183,17 @@ TWL_CLASS_IS(4030, TWL4030_CLASS_ID)
 TWL_CLASS_IS(6030, TWL6030_CLASS_ID)
 
 #define TWL6025_SUBCLASS	BIT(4)  /* TWL6025 has changed registers */
+<<<<<<< HEAD
+=======
+#define MPU80031_SUBCLASS	BIT(5)  /* MPU80031 has changed registers */
+
+/* So we can recover the features in other parts of twl stack */
+unsigned int twl_features(void);
+
+/* so we can get at the EPROM SMPS OFFSET/MULT stuff */
+u8 twl_get_smps_offset(void);
+u8 twl_get_smps_mult(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Read and write single 8-bit registers
@@ -179,6 +201,11 @@ TWL_CLASS_IS(6030, TWL6030_CLASS_ID)
 int twl_i2c_write_u8(u8 mod_no, u8 val, u8 reg);
 int twl_i2c_read_u8(u8 mod_no, u8 *val, u8 reg);
 
+<<<<<<< HEAD
+=======
+void twl_reg_dump(int module, int start, int end);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Read and write several 8-bit registers at once.
  *
@@ -215,6 +242,13 @@ static inline int twl6030_mmc_card_detect(struct device *dev, int slot)
 	return -EIO;
 }
 #endif
+<<<<<<< HEAD
+=======
+
+int twl6030_set_usb_charge_enable(int enable);
+int twl6030_set_usb_in_current(int currentmA);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*----------------------------------------------------------------------*/
 
 /*
@@ -552,11 +586,34 @@ static inline int twl6030_mmc_card_detect(struct device *dev, int slot)
 
 struct twl4030_clock_init_data {
 	bool ck32k_lowpwr_enable;
+<<<<<<< HEAD
+=======
+	bool clk32_active_state_on;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct twl4030_bci_platform_data {
 	int *battery_tmp_tbl;
+<<<<<<< HEAD
 	unsigned int tblsize;
+=======
+	unsigned int battery_tmp_tblsize;
+	int *battery_volt_tbl;
+	unsigned int battery_volt_tblsize;
+	unsigned int monitoring_interval;
+
+	unsigned int max_charger_currentmA;
+	unsigned int max_charger_voltagemV;
+	unsigned int termination_currentmA;
+
+	unsigned int max_bat_voltagemV;
+	unsigned int low_bat_voltagemV;
+
+	/* twl6025 */
+	unsigned int use_hw_charger;
+	unsigned int use_eeprom_config;
+	unsigned int power_path;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* TWL4030_GPIO_MAX (18) GPIOs, with interrupts */
@@ -621,6 +678,10 @@ struct twl4030_usb_data {
 	int		(*phy_set_clock)(struct device *dev, int on);
 	/* suspend/resume of phy */
 	int		(*phy_suspend)(struct device *dev, int suspend);
+<<<<<<< HEAD
+=======
+	int		(*board_control_power)(struct device *dev, int on);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct twl4030_ins {
@@ -657,13 +718,18 @@ struct twl4030_power_data {
 extern void twl4030_power_init(struct twl4030_power_data *triton2_scripts);
 extern int twl4030_remove_script(u8 flags);
 
+<<<<<<< HEAD
 struct twl4030_codec_audio_data {
+=======
+struct twl4030_codec_data {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned int digimic_delay; /* in ms */
 	unsigned int ramp_delay_value;
 	unsigned int offset_cncl_path;
 	unsigned int check_defaults:1;
 	unsigned int reset_registers:1;
 	unsigned int hs_extmute:1;
+<<<<<<< HEAD
 	void (*set_hs_extmute)(int mute);
 };
 
@@ -675,14 +741,50 @@ struct twl4030_codec_data {
 	unsigned int	audio_mclk;
 	struct twl4030_codec_audio_data		*audio;
 	struct twl4030_codec_vibra_data		*vibra;
+=======
+	u16 hs_left_step;
+	u16 hs_right_step;
+	u16 hf_left_step;
+	u16 hf_right_step;
+	void (*set_hs_extmute)(int mute);
+};
+
+struct twl4030_vibra_data {
+	unsigned int	coexist;
+
+	/* twl6040 */
+	unsigned int vibldrv_res;	/* left driver resistance */
+	unsigned int vibrdrv_res;	/* right driver resistance */
+	unsigned int viblmotor_res;	/* left motor resistance */
+	unsigned int vibrmotor_res;	/* right motor resistance */
+	int vddvibl_uV;			/* VDDVIBL volt, set 0 for fixed reg */
+	int vddvibr_uV;			/* VDDVIBR volt, set 0 for fixed reg */
+};
+
+struct twl4030_audio_data {
+	unsigned int	audio_mclk;
+	struct twl4030_codec_data *codec;
+	struct twl4030_vibra_data *vibra;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* twl6040 */
 	int audpwron_gpio;	/* audio power-on gpio */
 	int naudint_irq;	/* audio interrupt */
+<<<<<<< HEAD
+=======
+	unsigned int irq_base;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct twl4030_platform_data {
 	unsigned				irq_base, irq_end;
+<<<<<<< HEAD
+=======
+
+	/* Callback for boar regulator initialisation */
+	int (*init)(void);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct twl4030_clock_init_data		*clock;
 	struct twl4030_bci_platform_data	*bci;
 	struct twl4030_gpio_platform_data	*gpio;
@@ -690,7 +792,11 @@ struct twl4030_platform_data {
 	struct twl4030_keypad_data		*keypad;
 	struct twl4030_usb_data			*usb;
 	struct twl4030_power_data		*power;
+<<<<<<< HEAD
 	struct twl4030_codec_data		*codec;
+=======
+	struct twl4030_audio_data		*audio;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Common LDO regulators for TWL4030/TWL6030 */
 	struct regulator_init_data		*vdac;

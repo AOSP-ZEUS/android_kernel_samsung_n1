@@ -2241,7 +2241,11 @@ static int __devinit snd_korg1212_create(struct snd_card *card, struct pci_dev *
 
         err = request_irq(pci->irq, snd_korg1212_interrupt,
                           IRQF_SHARED,
+<<<<<<< HEAD
                           "korg1212", korg1212);
+=======
+                          KBUILD_MODNAME, korg1212);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
         if (err) {
 		snd_printk(KERN_ERR "korg1212: unable to grab IRQ %d\n", pci->irq);
@@ -2477,7 +2481,11 @@ static void __devexit snd_korg1212_remove(struct pci_dev *pci)
 }
 
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name = "korg1212",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_korg1212_ids,
 	.probe = snd_korg1212_probe,
 	.remove = __devexit_p(snd_korg1212_remove),

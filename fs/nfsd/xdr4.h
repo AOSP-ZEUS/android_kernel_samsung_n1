@@ -342,6 +342,28 @@ struct nfsd4_setclientid_confirm {
 	nfs4_verifier	sc_confirm;
 };
 
+<<<<<<< HEAD
+=======
+struct nfsd4_saved_compoundargs {
+	__be32 *p;
+	__be32 *end;
+	int pagelen;
+	struct page **pagelist;
+};
+
+struct nfsd4_test_stateid {
+	__be32		ts_num_ids;
+	__be32		ts_has_session;
+	struct nfsd4_compoundargs *ts_saved_args;
+	struct nfsd4_saved_compoundargs ts_savedp;
+};
+
+struct nfsd4_free_stateid {
+	stateid_t	fr_stateid;         /* request */
+	__be32		fr_status;          /* response */
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* also used for NVERIFY */
 struct nfsd4_verify {
 	u32		ve_bmval[3];        /* request */
@@ -432,10 +454,20 @@ struct nfsd4_op {
 		struct nfsd4_destroy_session	destroy_session;
 		struct nfsd4_sequence		sequence;
 		struct nfsd4_reclaim_complete	reclaim_complete;
+<<<<<<< HEAD
+=======
+		struct nfsd4_test_stateid	test_stateid;
+		struct nfsd4_free_stateid	free_stateid;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} u;
 	struct nfs4_replay *			replay;
 };
 
+<<<<<<< HEAD
+=======
+bool nfsd4_cache_this_op(struct nfsd4_op *);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct nfsd4_compoundargs {
 	/* scratch variables for XDR decode */
 	__be32 *			p;
@@ -458,6 +490,10 @@ struct nfsd4_compoundargs {
 	u32				opcnt;
 	struct nfsd4_op			*ops;
 	struct nfsd4_op			iops[8];
+<<<<<<< HEAD
+=======
+	int				cachetype;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct nfsd4_compoundres {
@@ -559,11 +595,22 @@ extern __be32
 nfsd4_release_lockowner(struct svc_rqst *rqstp,
 		struct nfsd4_compound_state *,
 		struct nfsd4_release_lockowner *rlockowner);
+<<<<<<< HEAD
 extern void nfsd4_release_compoundargs(struct nfsd4_compoundargs *);
+=======
+extern int nfsd4_release_compoundargs(void *rq, __be32 *p, void *resp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern __be32 nfsd4_delegreturn(struct svc_rqst *rqstp,
 		struct nfsd4_compound_state *, struct nfsd4_delegreturn *dr);
 extern __be32 nfsd4_renew(struct svc_rqst *rqstp,
 			  struct nfsd4_compound_state *, clientid_t *clid);
+<<<<<<< HEAD
+=======
+extern __be32 nfsd4_test_stateid(struct svc_rqst *rqstp,
+		struct nfsd4_compound_state *, struct nfsd4_test_stateid *test_stateid);
+extern __be32 nfsd4_free_stateid(struct svc_rqst *rqstp,
+		struct nfsd4_compound_state *, struct nfsd4_free_stateid *free_stateid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 /*

@@ -422,7 +422,11 @@ static int __init vpif_probe(struct platform_device *pdev)
 	if (!res)
 		return -ENOENT;
 
+<<<<<<< HEAD
 	res_len = res->end - res->start + 1;
+=======
+	res_len = resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	res = request_mem_region(res->start, res_len, res->name);
 	if (!res)

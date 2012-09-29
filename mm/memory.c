@@ -1228,6 +1228,7 @@ static inline unsigned long zap_pmd_range(struct mmu_gather *tlb,
 	do {
 		next = pmd_addr_end(addr, end);
 		if (pmd_trans_huge(*pmd)) {
+<<<<<<< HEAD
 			if (next - addr != HPAGE_PMD_SIZE) {
 				VM_BUG_ON(!rwsem_is_locked(&tlb->mm->mmap_sem));
 				split_huge_page_pmd(vma->vm_mm, pmd);
@@ -1246,6 +1247,18 @@ static inline unsigned long zap_pmd_range(struct mmu_gather *tlb,
 			goto next;
 		next = zap_pte_range(tlb, vma, pmd, addr, next, details);
 next:
+=======
+			if (next-addr != HPAGE_PMD_SIZE) {
+				VM_BUG_ON(!rwsem_is_locked(&tlb->mm->mmap_sem));
+				split_huge_page_pmd(vma->vm_mm, pmd);
+			} else if (zap_huge_pmd(tlb, vma, pmd))
+				continue;
+			/* fall through */
+		}
+		if (pmd_none_or_clear_bad(pmd))
+			continue;
+		next = zap_pte_range(tlb, vma, pmd, addr, next, details);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cond_resched();
 	} while (pmd++, addr = next, addr != end);
 
@@ -1298,6 +1311,7 @@ static unsigned long unmap_page_range(struct mmu_gather *tlb,
 	return addr;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PREEMPT
 # define ZAP_BLOCK_SIZE	(8 * PAGE_SIZE)
 #else
@@ -1305,6 +1319,8 @@ static unsigned long unmap_page_range(struct mmu_gather *tlb,
 # define ZAP_BLOCK_SIZE	(1024 * PAGE_SIZE)
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * unmap_vmas - unmap a range of memory covered by a list of vma's
  * @tlb: address of the caller's struct mmu_gather
@@ -1318,10 +1334,13 @@ static unsigned long unmap_page_range(struct mmu_gather *tlb,
  *
  * Unmap all pages in the vma list.
  *
+<<<<<<< HEAD
  * We aim to not hold locks for too long (for scheduling latency reasons).
  * So zap pages in ZAP_BLOCK_SIZE bytecounts.  This means we need to
  * return the ending mmu_gather to the caller.
  *
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Only addresses between `start' and `end' will be unmapped.
  *
  * The VMA list must be sorted in ascending virtual address order.
@@ -3168,14 +3187,43 @@ static int __do_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 	pte_t *page_table;
 	spinlock_t *ptl;
 	struct page *page;
+<<<<<<< HEAD
 	pte_t entry;
 	int anon = 0;
 	int charged = 0;
+=======
+	struct page *cow_page;
+	pte_t entry;
+	int anon = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct page *dirty_page = NULL;
 	struct vm_fault vmf;
 	int ret;
 	int page_mkwrite = 0;
 
+<<<<<<< HEAD
+=======
+	/*
+	 * If we do COW later, allocate page befor taking lock_page()
+	 * on the file cache page. This will reduce lock holding time.
+	 */
+	if ((flags & FAULT_FLAG_WRITE) && !(vma->vm_flags & VM_SHARED)) {
+
+		if (unlikely(anon_vma_prepare(vma)))
+			return VM_FAULT_OOM;
+
+		cow_page = alloc_page_vma(GFP_HIGHUSER_MOVABLE, vma, address);
+		if (!cow_page)
+			return VM_FAULT_OOM;
+
+		if (mem_cgroup_newpage_charge(cow_page, mm, GFP_KERNEL)) {
+			page_cache_release(cow_page);
+			return VM_FAULT_OOM;
+		}
+	} else
+		cow_page = NULL;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	vmf.virtual_address = (void __user *)(address & PAGE_MASK);
 	vmf.pgoff = pgoff;
 	vmf.flags = flags;
@@ -3184,12 +3232,21 @@ static int __do_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 	ret = vma->vm_ops->fault(vma, &vmf);
 	if (unlikely(ret & (VM_FAULT_ERROR | VM_FAULT_NOPAGE |
 			    VM_FAULT_RETRY)))
+<<<<<<< HEAD
 		return ret;
+=======
+		goto uncharge_out;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (unlikely(PageHWPoison(vmf.page))) {
 		if (ret & VM_FAULT_LOCKED)
 			unlock_page(vmf.page);
+<<<<<<< HEAD
 		return VM_FAULT_HWPOISON;
+=======
+		ret = VM_FAULT_HWPOISON;
+		goto uncharge_out;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/*
@@ -3207,6 +3264,7 @@ static int __do_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 	page = vmf.page;
 	if (flags & FAULT_FLAG_WRITE) {
 		if (!(vma->vm_flags & VM_SHARED)) {
+<<<<<<< HEAD
 			anon = 1;
 			if (unlikely(anon_vma_prepare(vma))) {
 				ret = VM_FAULT_OOM;
@@ -3224,6 +3282,10 @@ static int __do_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 				goto out;
 			}
 			charged = 1;
+=======
+			page = cow_page;
+			anon = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			copy_user_highpage(page, vmf.page, address, vma);
 			__SetPageUptodate(page);
 		} else {
@@ -3292,8 +3354,13 @@ static int __do_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 		/* no need to invalidate: a not-present page won't be cached */
 		update_mmu_cache(vma, address, page_table);
 	} else {
+<<<<<<< HEAD
 		if (charged)
 			mem_cgroup_uncharge_page(page);
+=======
+		if (cow_page)
+			mem_cgroup_uncharge_page(cow_page);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (anon)
 			page_cache_release(page);
 		else
@@ -3302,7 +3369,10 @@ static int __do_fault(struct mm_struct *mm, struct vm_area_struct *vma,
 
 	pte_unmap_unlock(page_table, ptl);
 
+<<<<<<< HEAD
 out:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (dirty_page) {
 		struct address_space *mapping = page->mapping;
 
@@ -3332,6 +3402,16 @@ out:
 unwritable_page:
 	page_cache_release(page);
 	return ret;
+<<<<<<< HEAD
+=======
+uncharge_out:
+	/* fs's fault handler get error */
+	if (cow_page) {
+		mem_cgroup_uncharge_page(cow_page);
+		page_cache_release(cow_page);
+	}
+	return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int do_linear_fault(struct mm_struct *mm, struct vm_area_struct *vma,

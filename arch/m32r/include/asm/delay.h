@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 #ifndef _ASM_M32R_DELAY_H
 #define _ASM_M32R_DELAY_H
 
@@ -24,3 +25,6 @@ extern void __delay(unsigned long loops);
 	__ndelay(n))
 
 #endif /* _ASM_M32R_DELAY_H */
+=======
+#include <asm-generic/delay.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

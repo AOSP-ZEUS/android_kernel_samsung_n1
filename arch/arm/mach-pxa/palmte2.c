@@ -31,11 +31,18 @@
 #include <asm/mach/arch.h>
 #include <asm/mach/map.h>
 
+<<<<<<< HEAD
+=======
+#include <mach/pxa25x.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/audio.h>
 #include <mach/palmte2.h>
 #include <mach/mmc.h>
 #include <mach/pxafb.h>
+<<<<<<< HEAD
 #include <mach/mfp-pxa25x.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/irda.h>
 #include <mach/udc.h>
 #include <mach/palmasoc.h>
@@ -359,6 +366,10 @@ MACHINE_START(PALMTE2, "Palm Tungsten|E2")
 	.boot_params	= 0xa0000100,
 	.map_io		= pxa25x_map_io,
 	.init_irq	= pxa25x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa25x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 	.init_machine	= palmte2_init
 MACHINE_END

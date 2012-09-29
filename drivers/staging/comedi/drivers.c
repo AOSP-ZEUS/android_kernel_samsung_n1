@@ -502,7 +502,15 @@ int comedi_buf_alloc(struct comedi_device *dev, struct comedi_subdevice *s,
 		}
 		if (i == n_pages) {
 			async->prealloc_buf =
+<<<<<<< HEAD
 			    vmap(pages, n_pages, VM_MAP, PAGE_KERNEL_NOCACHE);
+=======
+#ifdef PAGE_KERNEL_NOCACHE
+			    vmap(pages, n_pages, VM_MAP, PAGE_KERNEL_NOCACHE);
+#else
+			    vmap(pages, n_pages, VM_MAP, PAGE_KERNEL);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		vfree(pages);
 

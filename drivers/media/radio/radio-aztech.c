@@ -30,7 +30,10 @@
 #include <linux/ioport.h>	/* request_region		*/
 #include <linux/delay.h>	/* udelay			*/
 #include <linux/videodev2.h>	/* kernel radio structs		*/
+<<<<<<< HEAD
 #include <linux/version.h>      /* for KERNEL_VERSION MACRO     */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/io.h>		/* outb, outb_p			*/
 #include <media/v4l2-device.h>
 #include <media/v4l2-ioctl.h>
@@ -38,6 +41,10 @@
 MODULE_AUTHOR("Russell Kroll, Quay Lu, Donald Song, Jason Lewis, Scott McGrath, William McGrath");
 MODULE_DESCRIPTION("A driver for the Aztech radio card.");
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_VERSION("0.0.3");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* acceptable ports: 0x350 (JP3 shorted), 0x358 (JP3 open) */
 
@@ -53,8 +60,11 @@ module_param(io, int, 0);
 module_param(radio_nr, int, 0);
 MODULE_PARM_DESC(io, "I/O address of the Aztech card (0x350 or 0x358)");
 
+<<<<<<< HEAD
 #define RADIO_VERSION KERNEL_VERSION(0, 0, 2)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct aztech
 {
 	struct v4l2_device v4l2_dev;
@@ -188,7 +198,10 @@ static int vidioc_querycap(struct file *file, void  *priv,
 	strlcpy(v->driver, "radio-aztech", sizeof(v->driver));
 	strlcpy(v->card, "Aztech Radio", sizeof(v->card));
 	strlcpy(v->bus_info, "ISA", sizeof(v->bus_info));
+<<<<<<< HEAD
 	v->version = RADIO_VERSION;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	v->capabilities = V4L2_CAP_TUNER | V4L2_CAP_RADIO;
 	return 0;
 }

@@ -20,3 +20,7 @@ obj-$(CONFIG_HW_RANDOM_MXC_RNGA) += mxc-rnga.o
 obj-$(CONFIG_HW_RANDOM_OCTEON) += octeon-rng.o
 obj-$(CONFIG_HW_RANDOM_NOMADIK) += nomadik-rng.o
 obj-$(CONFIG_HW_RANDOM_PICOXCELL) += picoxcell-rng.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_HW_RANDOM_PPC4XX) += ppc4xx-rng.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

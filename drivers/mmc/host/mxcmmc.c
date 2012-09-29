@@ -249,8 +249,13 @@ static int mxcmci_setup_data(struct mxcmci_host *host, struct mmc_data *data)
 	if (nents != data->sg_len)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	host->desc = host->dma->device->device_prep_slave_sg(host->dma,
 		data->sg, data->sg_len, host->dma_dir,
+=======
+	host->desc = dmaengine_prep_slave_sg(host->dma,
+		data->sg, data->sg_len, slave_dirn,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
 
 	if (!host->desc) {
@@ -715,6 +720,7 @@ static void mxcmci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 	int burstlen, ret;
 
 	/*
+<<<<<<< HEAD
 	 * use burstlen of 64 in 4 bit mode (--> reg value  0)
 	 * use burstlen of 16 in 1 bit mode (--> reg value 16)
 	 */
@@ -722,6 +728,15 @@ static void mxcmci_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 		burstlen = 64;
 	else
 		burstlen = 16;
+=======
+	 * use burstlen of 64 (16 words) in 4 bit mode (--> reg value  0)
+	 * use burstlen of 16 (4 words) in 1 bit mode (--> reg value 16)
+	 */
+	if (ios->bus_width == MMC_BUS_WIDTH_4)
+		burstlen = 16;
+	else
+		burstlen = 4;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (mxcmci_use_dma(host) && burstlen != host->burstlen) {
 		host->burstlen = burstlen;

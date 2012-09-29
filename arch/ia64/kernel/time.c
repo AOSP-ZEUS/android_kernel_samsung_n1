@@ -468,7 +468,11 @@ void update_vsyscall(struct timespec *wall, struct timespec *wtm,
         fsyscall_gtod_data.clk_mask = c->mask;
         fsyscall_gtod_data.clk_mult = mult;
         fsyscall_gtod_data.clk_shift = c->shift;
+<<<<<<< HEAD
         fsyscall_gtod_data.clk_fsys_mmio = c->fsys_mmio;
+=======
+        fsyscall_gtod_data.clk_fsys_mmio = c->archdata.fsys_mmio;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
         fsyscall_gtod_data.clk_cycle_last = c->cycle_last;
 
 	/* copy kernel time structures */

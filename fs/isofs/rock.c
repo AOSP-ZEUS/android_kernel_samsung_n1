@@ -678,7 +678,10 @@ static int rock_ridge_symlink_readpage(struct file *file, struct page *page)
 
 	init_rock_state(&rs, inode);
 	block = ei->i_iget5_block;
+<<<<<<< HEAD
 	mutex_lock(&sbi->s_mutex);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bh = sb_bread(inode->i_sb, block);
 	if (!bh)
 		goto out_noread;
@@ -748,7 +751,10 @@ repeat:
 		goto fail;
 	brelse(bh);
 	*rpnt = '\0';
+<<<<<<< HEAD
 	mutex_unlock(&sbi->s_mutex);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	SetPageUptodate(page);
 	kunmap(page);
 	unlock_page(page);
@@ -765,7 +771,10 @@ out_bad_span:
 	printk("symlink spans iso9660 blocks\n");
 fail:
 	brelse(bh);
+<<<<<<< HEAD
 	mutex_unlock(&sbi->s_mutex);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error:
 	SetPageError(page);
 	kunmap(page);

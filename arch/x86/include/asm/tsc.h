@@ -51,10 +51,13 @@ extern int unsynchronized_tsc(void);
 extern int check_tsc_unstable(void);
 extern unsigned long native_calibrate_tsc(void);
 
+<<<<<<< HEAD
 #ifdef CONFIG_X86_64
 extern cycles_t vread_tsc(void);
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Boot-time check whether the TSCs are synchronized across
  * all CPUs/cores:

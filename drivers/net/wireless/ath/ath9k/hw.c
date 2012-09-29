@@ -87,7 +87,14 @@ static void ath9k_hw_set_clockrate(struct ath_hw *ah)
 	struct ath_common *common = ath9k_hw_common(ah);
 	unsigned int clockrate;
 
+<<<<<<< HEAD
 	if (!ah->curchan) /* should really check for CCK instead */
+=======
+	/* AR9287 v1.3+ uses async FIFO and runs the MAC at 117 MHz */
+	if (AR_SREV_9287(ah) && AR_SREV_9287_13_OR_LATER(ah))
+		clockrate = 117;
+	else if (!ah->curchan) /* should really check for CCK instead */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		clockrate = ATH9K_CLOCK_RATE_CCK;
 	else if (conf->channel->band == IEEE80211_BAND_2GHZ)
 		clockrate = ATH9K_CLOCK_RATE_2GHZ_OFDM;
@@ -99,6 +106,16 @@ static void ath9k_hw_set_clockrate(struct ath_hw *ah)
 	if (conf_is_ht40(conf))
 		clockrate *= 2;
 
+<<<<<<< HEAD
+=======
+	if (ah->curchan) {
+		if (IS_CHAN_HALF_RATE(ah->curchan))
+			clockrate /= 2;
+		if (IS_CHAN_QUARTER_RATE(ah->curchan))
+			clockrate /= 4;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	common->clockrate = clockrate;
 }
 
@@ -251,6 +268,18 @@ static void ath9k_hw_read_revisions(struct ath_hw *ah)
 	case AR5416_AR9100_DEVID:
 		ah->hw_version.macVersion = AR_SREV_VERSION_9100;
 		break;
+<<<<<<< HEAD
+=======
+	case AR9300_DEVID_AR9330:
+		ah->hw_version.macVersion = AR_SREV_VERSION_9330;
+		if (ah->get_mac_revision) {
+			ah->hw_version.macRev = ah->get_mac_revision();
+		} else {
+			val = REG_READ(ah, AR_SREV);
+			ah->hw_version.macRev = MS(val, AR_SREV_REVISION2);
+		}
+		return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case AR9300_DEVID_AR9340:
 		ah->hw_version.macVersion = AR_SREV_VERSION_9340;
 		val = REG_READ(ah, AR_SREV);
@@ -558,6 +587,10 @@ static int __ath9k_hw_init(struct ath_hw *ah)
 	case AR_SREV_VERSION_9287:
 	case AR_SREV_VERSION_9271:
 	case AR_SREV_VERSION_9300:
+<<<<<<< HEAD
+=======
+	case AR_SREV_VERSION_9330:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case AR_SREV_VERSION_9485:
 	case AR_SREV_VERSION_9340:
 		break;
@@ -568,7 +601,12 @@ static int __ath9k_hw_init(struct ath_hw *ah)
 		return -EOPNOTSUPP;
 	}
 
+<<<<<<< HEAD
 	if (AR_SREV_9271(ah) || AR_SREV_9100(ah) || AR_SREV_9340(ah))
+=======
+	if (AR_SREV_9271(ah) || AR_SREV_9100(ah) || AR_SREV_9340(ah) ||
+	    AR_SREV_9330(ah))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ah->is_pciexpress = false;
 
 	ah->hw_version.phyRev = REG_READ(ah, AR_PHY_CHIP_ID);
@@ -611,7 +649,14 @@ static int __ath9k_hw_init(struct ath_hw *ah)
 	else
 		ah->tx_trig_level = (AR_FTRIG_512B >> AR_FTRIG_S);
 
+<<<<<<< HEAD
 	ah->bb_watchdog_timeout_ms = 25;
+=======
+	if (AR_SREV_9330(ah))
+		ah->bb_watchdog_timeout_ms = 85;
+	else
+		ah->bb_watchdog_timeout_ms = 25;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	common->state = ATH_HW_INITIALIZED;
 
@@ -637,6 +682,10 @@ int ath9k_hw_init(struct ath_hw *ah)
 	case AR2427_DEVID_PCIE:
 	case AR9300_DEVID_PCIE:
 	case AR9300_DEVID_AR9485_PCIE:
+<<<<<<< HEAD
+=======
+	case AR9300_DEVID_AR9330:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case AR9300_DEVID_AR9340:
 		break;
 	default:
@@ -729,6 +778,42 @@ static void ath9k_hw_init_pll(struct ath_hw *ah,
 		REG_RMW_FIELD(ah, AR_CH0_BB_DPLL2,
 			      AR_CH0_BB_DPLL2_PLL_PWD, 0x0);
 		udelay(1000);
+<<<<<<< HEAD
+=======
+	} else if (AR_SREV_9330(ah)) {
+		u32 ddr_dpll2, pll_control2, kd;
+
+		if (ah->is_clk_25mhz) {
+			ddr_dpll2 = 0x18e82f01;
+			pll_control2 = 0xe04a3d;
+			kd = 0x1d;
+		} else {
+			ddr_dpll2 = 0x19e82f01;
+			pll_control2 = 0x886666;
+			kd = 0x3d;
+		}
+
+		/* program DDR PLL ki and kd value */
+		REG_WRITE(ah, AR_CH0_DDR_DPLL2, ddr_dpll2);
+
+		/* program DDR PLL phase_shift */
+		REG_RMW_FIELD(ah, AR_CH0_DDR_DPLL3,
+			      AR_CH0_DPLL3_PHASE_SHIFT, 0x1);
+
+		REG_WRITE(ah, AR_RTC_PLL_CONTROL, 0x1142c);
+		udelay(1000);
+
+		/* program refdiv, nint, frac to RTC register */
+		REG_WRITE(ah, AR_RTC_PLL_CONTROL2, pll_control2);
+
+		/* program BB PLL kd and ki value */
+		REG_RMW_FIELD(ah, AR_CH0_BB_DPLL2, AR_CH0_DPLL2_KD, kd);
+		REG_RMW_FIELD(ah, AR_CH0_BB_DPLL2, AR_CH0_DPLL2_KI, 0x06);
+
+		/* program BB PLL phase_shift */
+		REG_RMW_FIELD(ah, AR_CH0_BB_DPLL3,
+			      AR_CH0_BB_DPLL3_PHASE_SHIFT, 0x1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else if (AR_SREV_9340(ah)) {
 		u32 regval, pll2_divint, pll2_divfrac, refdiv;
 
@@ -770,7 +855,11 @@ static void ath9k_hw_init_pll(struct ath_hw *ah,
 
 	REG_WRITE(ah, AR_RTC_PLL_CONTROL, pll);
 
+<<<<<<< HEAD
 	if (AR_SREV_9485(ah) || AR_SREV_9340(ah))
+=======
+	if (AR_SREV_9485(ah) || AR_SREV_9340(ah) || AR_SREV_9330(ah))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		udelay(1000);
 
 	/* Switch the core clock for ar9271 to 117Mhz */
@@ -854,6 +943,16 @@ static void ath9k_hw_init_interrupt_masks(struct ath_hw *ah,
 	}
 }
 
+<<<<<<< HEAD
+=======
+static void ath9k_hw_set_sifs_time(struct ath_hw *ah, u32 us)
+{
+	u32 val = ath9k_hw_mac_to_clks(ah, us - 2);
+	val = min(val, (u32) 0xFFFF);
+	REG_WRITE(ah, AR_D_GBL_IFS_SIFS, val);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void ath9k_hw_setslottime(struct ath_hw *ah, u32 us)
 {
 	u32 val = ath9k_hw_mac_to_clks(ah, us);
@@ -891,14 +990,26 @@ static bool ath9k_hw_set_global_txtimeout(struct ath_hw *ah, u32 tu)
 
 void ath9k_hw_init_global_settings(struct ath_hw *ah)
 {
+<<<<<<< HEAD
 	struct ieee80211_conf *conf = &ath9k_hw_common(ah)->hw->conf;
 	int acktimeout;
 	int slottime;
 	int sifstime;
+=======
+	struct ath_common *common = ath9k_hw_common(ah);
+	struct ieee80211_conf *conf = &common->hw->conf;
+	const struct ath9k_channel *chan = ah->curchan;
+	int acktimeout;
+	int slottime;
+	int sifstime;
+	int rx_lat = 0, tx_lat = 0, eifs = 0;
+	u32 reg;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ath_dbg(ath9k_hw_common(ah), ATH_DBG_RESET, "ah->misc_mode 0x%x\n",
 		ah->misc_mode);
 
+<<<<<<< HEAD
 	if (ah->misc_mode != 0)
 		REG_SET_BIT(ah, AR_PCU_MISC, ah->misc_mode);
 
@@ -910,6 +1021,50 @@ void ath9k_hw_init_global_settings(struct ath_hw *ah)
 	/* As defined by IEEE 802.11-2007 17.3.8.6 */
 	slottime = ah->slottime + 3 * ah->coverage_class;
 	acktimeout = slottime + sifstime;
+=======
+	if (!chan)
+		return;
+
+	if (ah->misc_mode != 0)
+		REG_SET_BIT(ah, AR_PCU_MISC, ah->misc_mode);
+
+	rx_lat = 37;
+	tx_lat = 54;
+
+	if (IS_CHAN_HALF_RATE(chan)) {
+		eifs = 175;
+		rx_lat *= 2;
+		tx_lat *= 2;
+		if (IS_CHAN_A_FAST_CLOCK(ah, chan))
+		    tx_lat += 11;
+
+		slottime = 13;
+		sifstime = 32;
+	} else if (IS_CHAN_QUARTER_RATE(chan)) {
+		eifs = 340;
+		rx_lat *= 4;
+		tx_lat *= 4;
+		if (IS_CHAN_A_FAST_CLOCK(ah, chan))
+		    tx_lat += 22;
+
+		slottime = 21;
+		sifstime = 64;
+	} else {
+		eifs = REG_READ(ah, AR_D_GBL_IFS_EIFS);
+		reg = REG_READ(ah, AR_USEC);
+		rx_lat = MS(reg, AR_USEC_RX_LAT);
+		tx_lat = MS(reg, AR_USEC_TX_LAT);
+
+		slottime = ah->slottime;
+		if (IS_CHAN_5GHZ(chan))
+			sifstime = 16;
+		else
+			sifstime = 10;
+	}
+
+	/* As defined by IEEE 802.11-2007 17.3.8.6 */
+	acktimeout = slottime + sifstime + 3 * ah->coverage_class;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Workaround for early ACK timeouts, add an offset to match the
@@ -921,11 +1076,27 @@ void ath9k_hw_init_global_settings(struct ath_hw *ah)
 	if (conf->channel && conf->channel->band == IEEE80211_BAND_2GHZ)
 		acktimeout += 64 - sifstime - ah->slottime;
 
+<<<<<<< HEAD
 	ath9k_hw_setslottime(ah, ah->slottime);
+=======
+	ath9k_hw_set_sifs_time(ah, sifstime);
+	ath9k_hw_setslottime(ah, slottime);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ath9k_hw_set_ack_timeout(ah, acktimeout);
 	ath9k_hw_set_cts_timeout(ah, acktimeout);
 	if (ah->globaltxtimeout != (u32) -1)
 		ath9k_hw_set_global_txtimeout(ah, ah->globaltxtimeout);
+<<<<<<< HEAD
+=======
+
+	REG_WRITE(ah, AR_D_GBL_IFS_EIFS, ath9k_hw_mac_to_clks(ah, eifs));
+	REG_RMW(ah, AR_USEC,
+		(common->clockrate - 1) |
+		SM(rx_lat, AR_USEC_RX_LAT) |
+		SM(tx_lat, AR_USEC_TX_LAT),
+		AR_USEC_TX_LAT | AR_USEC_RX_LAT | AR_USEC_USEC);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL(ath9k_hw_init_global_settings);
 
@@ -1121,6 +1292,44 @@ static bool ath9k_hw_set_reset(struct ath_hw *ah, int type)
 			rst_flags |= AR_RTC_RC_MAC_COLD;
 	}
 
+<<<<<<< HEAD
+=======
+	if (AR_SREV_9330(ah)) {
+		int npend = 0;
+		int i;
+
+		/* AR9330 WAR:
+		 * call external reset function to reset WMAC if:
+		 * - doing a cold reset
+		 * - we have pending frames in the TX queues
+		 */
+
+		for (i = 0; i < AR_NUM_QCU; i++) {
+			npend = ath9k_hw_numtxpending(ah, i);
+			if (npend)
+				break;
+		}
+
+		if (ah->external_reset &&
+		    (npend || type == ATH9K_RESET_COLD)) {
+			int reset_err = 0;
+
+			ath_dbg(ath9k_hw_common(ah), ATH_DBG_RESET,
+				"reset MAC via external reset\n");
+
+			reset_err = ah->external_reset();
+			if (reset_err) {
+				ath_err(ath9k_hw_common(ah),
+					"External reset failed, err=%d\n",
+					reset_err);
+				return false;
+			}
+
+			REG_WRITE(ah, AR_RTC_RESET, 1);
+		}
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	REG_WRITE(ah, AR_RTC_RC, rst_flags);
 
 	REGWRITE_BUFFER_FLUSH(ah);
@@ -1494,9 +1703,19 @@ int ath9k_hw_reset(struct ath_hw *ah, struct ath9k_channel *chan,
 
 	ath9k_hw_init_global_settings(ah);
 
+<<<<<<< HEAD
 	if (!AR_SREV_9300_20_OR_LATER(ah)) {
 		ar9002_hw_update_async_fifo(ah);
 		ar9002_hw_enable_wep_aggregation(ah);
+=======
+	if (AR_SREV_9287(ah) && AR_SREV_9287_13_OR_LATER(ah)) {
+		REG_SET_BIT(ah, AR_MAC_PCU_LOGIC_ANALYZER,
+			    AR_MAC_PCU_LOGIC_ANALYZER_DISBUG20768);
+		REG_RMW_FIELD(ah, AR_AHB_MODE, AR_AHB_CUSTOM_BURST_EN,
+			      AR_AHB_CUSTOM_BURST_ASYNC_FIFO_VAL);
+		REG_SET_BIT(ah, AR_PCU_MISC_MODE2,
+			    AR_PCU_MISC_MODE2_ENABLE_AGGWEP);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	REG_SET_BIT(ah, AR_STA_ID1, AR_STA_ID1_PRESERVE_SEQNUM);
@@ -1552,7 +1771,11 @@ int ath9k_hw_reset(struct ath_hw *ah, struct ath9k_channel *chan,
 				REG_WRITE(ah, AR_CFG, AR_CFG_SWTD | AR_CFG_SWRD);
 		}
 #ifdef __BIG_ENDIAN
+<<<<<<< HEAD
 		else if (AR_SREV_9340(ah))
+=======
+		else if (AR_SREV_9330(ah) || AR_SREV_9340(ah))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			REG_RMW(ah, AR_CFG, AR_CFG_SWRB | AR_CFG_SWTB, 0);
 		else
 			REG_WRITE(ah, AR_CFG, AR_CFG_SWTD | AR_CFG_SWRD);
@@ -1792,16 +2015,26 @@ void ath9k_hw_set_sta_beacon_timers(struct ath_hw *ah,
 	REG_WRITE(ah, AR_NEXT_TBTT_TIMER, TU_TO_USEC(bs->bs_nexttbtt));
 
 	REG_WRITE(ah, AR_BEACON_PERIOD,
+<<<<<<< HEAD
 		  TU_TO_USEC(bs->bs_intval & ATH9K_BEACON_PERIOD));
 	REG_WRITE(ah, AR_DMA_BEACON_PERIOD,
 		  TU_TO_USEC(bs->bs_intval & ATH9K_BEACON_PERIOD));
+=======
+		  TU_TO_USEC(bs->bs_intval));
+	REG_WRITE(ah, AR_DMA_BEACON_PERIOD,
+		  TU_TO_USEC(bs->bs_intval));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	REGWRITE_BUFFER_FLUSH(ah);
 
 	REG_RMW_FIELD(ah, AR_RSSI_THR,
 		      AR_RSSI_THR_BM_THR, bs->bs_bmissthreshold);
 
+<<<<<<< HEAD
 	beaconintval = bs->bs_intval & ATH9K_BEACON_PERIOD;
+=======
+	beaconintval = bs->bs_intval;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (bs->bs_sleepduration > beaconintval)
 		beaconintval = bs->bs_sleepduration;
@@ -1856,12 +2089,28 @@ EXPORT_SYMBOL(ath9k_hw_set_sta_beacon_timers);
 /* HW Capabilities */
 /*******************/
 
+<<<<<<< HEAD
+=======
+static u8 fixup_chainmask(u8 chip_chainmask, u8 eeprom_chainmask)
+{
+	eeprom_chainmask &= chip_chainmask;
+	if (eeprom_chainmask)
+		return eeprom_chainmask;
+	else
+		return chip_chainmask;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int ath9k_hw_fill_cap_info(struct ath_hw *ah)
 {
 	struct ath9k_hw_capabilities *pCap = &ah->caps;
 	struct ath_regulatory *regulatory = ath9k_hw_regulatory(ah);
 	struct ath_common *common = ath9k_hw_common(ah);
 	struct ath_btcoex_hw *btcoex_hw = &ah->btcoex_hw;
+<<<<<<< HEAD
+=======
+	unsigned int chip_chainmask;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u16 eeval;
 	u8 ant_div_ctl1, tx_chainmask, rx_chainmask;
@@ -1898,6 +2147,18 @@ int ath9k_hw_fill_cap_info(struct ath_hw *ah)
 	if (eeval & AR5416_OPFLAGS_11G)
 		pCap->hw_caps |= ATH9K_HW_CAP_2GHZ;
 
+<<<<<<< HEAD
+=======
+	if (AR_SREV_9485(ah) || AR_SREV_9285(ah) || AR_SREV_9330(ah))
+		chip_chainmask = 1;
+	else if (!AR_SREV_9280_20_OR_LATER(ah))
+		chip_chainmask = 7;
+	else if (!AR_SREV_9300_20_OR_LATER(ah) || AR_SREV_9340(ah))
+		chip_chainmask = 3;
+	else
+		chip_chainmask = 7;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pCap->tx_chainmask = ah->eep_ops->get_eeprom(ah, EEP_TX_MASK);
 	/*
 	 * For AR9271 we will temporarilly uses the rx chainmax as read from
@@ -1914,6 +2175,12 @@ int ath9k_hw_fill_cap_info(struct ath_hw *ah)
 		/* Use rx_chainmask from EEPROM. */
 		pCap->rx_chainmask = ah->eep_ops->get_eeprom(ah, EEP_RX_MASK);
 
+<<<<<<< HEAD
+=======
+	pCap->tx_chainmask = fixup_chainmask(chip_chainmask, pCap->tx_chainmask);
+	pCap->rx_chainmask = fixup_chainmask(chip_chainmask, pCap->rx_chainmask);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ah->misc_mode |= AR_PCU_MIC_NEW_LOC_ENA;
 
 	/* enable key search for every frame in an aggregate */
@@ -1994,7 +2261,11 @@ int ath9k_hw_fill_cap_info(struct ath_hw *ah)
 
 	if (AR_SREV_9300_20_OR_LATER(ah)) {
 		pCap->hw_caps |= ATH9K_HW_CAP_EDMA | ATH9K_HW_CAP_FASTCLOCK;
+<<<<<<< HEAD
 		if (!AR_SREV_9485(ah))
+=======
+		if (!AR_SREV_9330(ah) && !AR_SREV_9485(ah))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			pCap->hw_caps |= ATH9K_HW_CAP_LDPC;
 
 		pCap->rx_hp_qdepth = ATH9K_HW_RX_HP_QDEPTH;
@@ -2007,10 +2278,14 @@ int ath9k_hw_fill_cap_info(struct ath_hw *ah)
 			pCap->hw_caps |= ATH9K_HW_CAP_PAPRD;
 	} else {
 		pCap->tx_desc_len = sizeof(struct ath_desc);
+<<<<<<< HEAD
 		if (AR_SREV_9280_20(ah) &&
 		    ((ah->eep_ops->get_eeprom(ah, EEP_MINOR_REV) <=
 		      AR5416_EEP_MINOR_VER_16) ||
 		     ah->eep_ops->get_eeprom(ah, EEP_FSTCLK_5G)))
+=======
+		if (AR_SREV_9280_20(ah))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			pCap->hw_caps |= ATH9K_HW_CAP_FASTCLOCK;
 	}
 
@@ -2036,7 +2311,11 @@ int ath9k_hw_fill_cap_info(struct ath_hw *ah)
 	}
 
 
+<<<<<<< HEAD
 	if (AR_SREV_9485(ah)) {
+=======
+	if (AR_SREV_9330(ah) || AR_SREV_9485(ah)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ant_div_ctl1 = ah->eep_ops->get_eeprom(ah, EEP_ANT_DIV_CTL1);
 		/*
 		 * enable the diversity-combining algorithm only when
@@ -2585,6 +2864,10 @@ static struct {
 	{ AR_SREV_VERSION_9287,         "9287" },
 	{ AR_SREV_VERSION_9271,         "9271" },
 	{ AR_SREV_VERSION_9300,         "9300" },
+<<<<<<< HEAD
+=======
+	{ AR_SREV_VERSION_9330,         "9330" },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ AR_SREV_VERSION_9485,         "9485" },
 };
 

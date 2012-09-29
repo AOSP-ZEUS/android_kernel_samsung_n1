@@ -121,6 +121,10 @@ mwifiex_wmm_allocate_ralist_node(struct mwifiex_adapter *adapter, u8 *ra)
 	memcpy(ra_list->ra, ra, ETH_ALEN);
 
 	ra_list->total_pkts_size = 0;
+<<<<<<< HEAD
+=======
+	ra_list->total_pkts = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	dev_dbg(adapter->dev, "info: allocated ra_list %p\n", ra_list);
 
@@ -633,6 +637,11 @@ mwifiex_wmm_add_buf_txqueue(struct mwifiex_adapter *adapter,
 			ra_list = NULL;
 	} else {
 		memcpy(ra, skb->data, ETH_ALEN);
+<<<<<<< HEAD
+=======
+		if (ra[0] & 0x01)
+			memset(ra, 0xff, ETH_ALEN);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ra_list = mwifiex_wmm_get_queue_raptr(priv, tid_down, ra);
 	}
 
@@ -645,6 +654,10 @@ mwifiex_wmm_add_buf_txqueue(struct mwifiex_adapter *adapter,
 	skb_queue_tail(&ra_list->skb_head, skb);
 
 	ra_list->total_pkts_size += skb->len;
+<<<<<<< HEAD
+=======
+	ra_list->total_pkts++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	atomic_inc(&priv->wmm.tx_pkts_queued);
 
@@ -971,6 +984,7 @@ mwifiex_wmm_get_highest_priolist_ptr(struct mwifiex_adapter *adapter,
 }
 
 /*
+<<<<<<< HEAD
  * This function gets the number of packets in the Tx queue of a
  * particular RA list.
  */
@@ -993,6 +1007,8 @@ mwifiex_num_pkts_in_txq(struct mwifiex_private *priv,
 }
 
 /*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * This function sends a single packet to firmware for transmission.
  */
 static void
@@ -1019,6 +1035,10 @@ mwifiex_send_single_packet(struct mwifiex_private *priv,
 	dev_dbg(adapter->dev, "data: dequeuing the packet %p %p\n", ptr, skb);
 
 	ptr->total_pkts_size -= skb->len;
+<<<<<<< HEAD
+=======
+	ptr->total_pkts--;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!skb_queue_empty(&ptr->skb_head))
 		skb_next = skb_peek(&ptr->skb_head);
@@ -1044,6 +1064,10 @@ mwifiex_send_single_packet(struct mwifiex_private *priv,
 		skb_queue_tail(&ptr->skb_head, skb);
 
 		ptr->total_pkts_size += skb->len;
+<<<<<<< HEAD
+=======
+		ptr->total_pkts++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tx_info->flags |= MWIFIEX_BUF_FLAG_REQUEUED_PKT;
 		spin_unlock_irqrestore(&priv->wmm.ra_list_spinlock,
 				       ra_list_flags);
@@ -1231,9 +1255,15 @@ mwifiex_dequeue_tx_packet(struct mwifiex_adapter *adapter)
 		}
 /* Minimum number of AMSDU */
 #define MIN_NUM_AMSDU 2
+<<<<<<< HEAD
 		if (mwifiex_is_amsdu_allowed(priv, tid) &&
 		    (mwifiex_num_pkts_in_txq(priv, ptr, adapter->tx_buf_size) >=
 		     MIN_NUM_AMSDU))
+=======
+
+		if (mwifiex_is_amsdu_allowed(priv, tid) &&
+				(ptr->total_pkts >= MIN_NUM_AMSDU))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			mwifiex_11n_aggregate_pkt(priv, ptr, INTF_HEADER_LEN,
 						  ptr_index, flags);
 			/* ra_list_spinlock has been freed in

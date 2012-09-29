@@ -28,7 +28,11 @@
 #include <linux/of_device.h>
 
 #include <asm/system.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/time.h>
 #include <asm/io.h>
 #include <asm/machdep.h>
@@ -101,7 +105,11 @@ static void __init mpc83xx_km_setup_arch(void)
 					__func__);
 				return;
 			}
+<<<<<<< HEAD
 			base = ioremap(res.start, res.end - res.start + 1);
+=======
+			base = ioremap(res.start, resource_size(&res));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			/*
 			 * IMMR + 0x14A8[4:5] = 11 (clk delay for UCC 2)

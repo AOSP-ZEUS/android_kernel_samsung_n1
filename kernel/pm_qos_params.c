@@ -104,11 +104,66 @@ static struct pm_qos_object network_throughput_pm_qos = {
 };
 
 
+<<<<<<< HEAD
+=======
+static BLOCKING_NOTIFIER_HEAD(min_online_cpus_notifier);
+static struct pm_qos_object min_online_cpus_pm_qos = {
+	.requests = PLIST_HEAD_INIT(min_online_cpus_pm_qos.requests),
+	.notifiers = &min_online_cpus_notifier,
+	.name = "min_online_cpus",
+	.target_value = PM_QOS_MIN_ONLINE_CPUS_DEFAULT_VALUE,
+	.default_value = PM_QOS_MIN_ONLINE_CPUS_DEFAULT_VALUE,
+	.type = PM_QOS_MAX,
+};
+
+
+static BLOCKING_NOTIFIER_HEAD(max_online_cpus_notifier);
+static struct pm_qos_object max_online_cpus_pm_qos = {
+	.requests = PLIST_HEAD_INIT(max_online_cpus_pm_qos.requests),
+	.notifiers = &max_online_cpus_notifier,
+	.name = "max_online_cpus",
+	.target_value = PM_QOS_MAX_ONLINE_CPUS_DEFAULT_VALUE,
+	.default_value = PM_QOS_MAX_ONLINE_CPUS_DEFAULT_VALUE,
+	.type = PM_QOS_MIN,
+};
+
+
+static BLOCKING_NOTIFIER_HEAD(cpu_freq_min_notifier);
+static struct pm_qos_object cpu_freq_min_pm_qos = {
+	.requests = PLIST_HEAD_INIT(cpu_freq_min_pm_qos.requests),
+	.notifiers = &cpu_freq_min_notifier,
+	.name = "cpu_freq_min",
+	.target_value = PM_QOS_CPU_FREQ_MIN_DEFAULT_VALUE,
+	.default_value = PM_QOS_CPU_FREQ_MIN_DEFAULT_VALUE,
+	.type = PM_QOS_MAX,
+};
+
+
+static BLOCKING_NOTIFIER_HEAD(cpu_freq_max_notifier);
+static struct pm_qos_object cpu_freq_max_pm_qos = {
+	.requests = PLIST_HEAD_INIT(cpu_freq_max_pm_qos.requests),
+	.notifiers = &cpu_freq_max_notifier,
+	.name = "cpu_freq_max",
+	.target_value = PM_QOS_CPU_FREQ_MAX_DEFAULT_VALUE,
+	.default_value = PM_QOS_CPU_FREQ_MAX_DEFAULT_VALUE,
+	.type = PM_QOS_MIN,
+};
+
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct pm_qos_object *pm_qos_array[] = {
 	&null_pm_qos,
 	&cpu_dma_pm_qos,
 	&network_lat_pm_qos,
+<<<<<<< HEAD
 	&network_throughput_pm_qos
+=======
+	&network_throughput_pm_qos,
+	&min_online_cpus_pm_qos,
+	&max_online_cpus_pm_qos,
+	&cpu_freq_min_pm_qos,
+	&cpu_freq_max_pm_qos
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static ssize_t pm_qos_power_write(struct file *filp, const char __user *buf,
@@ -459,6 +514,7 @@ static ssize_t pm_qos_power_write(struct file *filp, const char __user *buf,
 static int __init pm_qos_power_init(void)
 {
 	int ret = 0;
+<<<<<<< HEAD
 
 	ret = register_pm_qos_misc(&cpu_dma_pm_qos);
 	if (ret < 0) {
@@ -474,6 +530,20 @@ static int __init pm_qos_power_init(void)
 	if (ret < 0)
 		printk(KERN_ERR
 			"pm_qos_param: network_throughput setup failed\n");
+=======
+	int i;
+
+	BUILD_BUG_ON(ARRAY_SIZE(pm_qos_array) != PM_QOS_NUM_CLASSES);
+
+	for (i = 1; i < PM_QOS_NUM_CLASSES; i++) {
+		ret = register_pm_qos_misc(pm_qos_array[i]);
+		if (ret < 0) {
+			printk(KERN_ERR "pm_qos_param: %s setup failed\n",
+			       pm_qos_array[i]->name);
+			return ret;
+		}
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return ret;
 }

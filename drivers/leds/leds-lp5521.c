@@ -744,7 +744,11 @@ fail1:
 	return ret;
 }
 
+<<<<<<< HEAD
 static int lp5521_remove(struct i2c_client *client)
+=======
+static int __devexit lp5521_remove(struct i2c_client *client)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct lp5521_chip *chip = i2c_get_clientdata(client);
 	int i;
@@ -775,7 +779,11 @@ static struct i2c_driver lp5521_driver = {
 		.name	= "lp5521",
 	},
 	.probe		= lp5521_probe,
+<<<<<<< HEAD
 	.remove		= lp5521_remove,
+=======
+	.remove		= __devexit_p(lp5521_remove),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table	= lp5521_id,
 };
 

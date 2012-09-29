@@ -472,7 +472,11 @@ static struct sk_buff *carl9170_rx_copy_data(u8 *buf, int len)
 		u8 *qc = ieee80211_get_qos_ctl(hdr);
 		reserved += NET_IP_ALIGN;
 
+<<<<<<< HEAD
 		if (*qc & IEEE80211_QOS_CONTROL_A_MSDU_PRESENT)
+=======
+		if (*qc & IEEE80211_QOS_CTL_A_MSDU_PRESENT)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			reserved += NET_IP_ALIGN;
 	}
 

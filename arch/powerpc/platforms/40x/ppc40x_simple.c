@@ -61,7 +61,11 @@ static const char *board[] __initdata = {
 static int __init ppc40x_probe(void)
 {
 	if (of_flat_dt_match(of_get_flat_dt_root(), board)) {
+<<<<<<< HEAD
 		ppc_pci_set_flags(PPC_PCI_REASSIGN_ALL_RSRC);
+=======
+		pci_set_flags(PCI_REASSIGN_ALL_RSRC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 1;
 	}
 

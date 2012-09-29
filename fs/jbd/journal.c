@@ -38,6 +38,12 @@
 #include <linux/debugfs.h>
 #include <linux/ratelimit.h>
 
+<<<<<<< HEAD
+=======
+#define CREATE_TRACE_POINTS
+#include <trace/events/jbd.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/uaccess.h>
 #include <asm/page.h>
 
@@ -1065,6 +1071,10 @@ void journal_update_superblock(journal_t *journal, int wait)
 	} else
 		write_dirty_buffer(bh, WRITE);
 
+<<<<<<< HEAD
+=======
+	trace_jbd_update_superblock_end(journal, wait);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out:
 	/* If we have just flushed the log (by marking s_start==0), then
 	 * any future commit will have to be careful to update the
@@ -1807,10 +1817,16 @@ static void journal_free_journal_head(struct journal_head *jh)
  * When a buffer has its BH_JBD bit set it is immune from being released by
  * core kernel code, mainly via ->b_count.
  *
+<<<<<<< HEAD
  * A journal_head may be detached from its buffer_head when the journal_head's
  * b_transaction, b_cp_transaction and b_next_transaction pointers are NULL.
  * Various places in JBD call journal_remove_journal_head() to indicate that the
  * journal_head can be dropped if needed.
+=======
+ * A journal_head is detached from its buffer_head when the journal_head's
+ * b_jcount reaches zero. Running transaction (b_transaction) and checkpoint
+ * transaction (b_cp_transaction) hold their references to b_jcount.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Various places in the kernel want to attach a journal_head to a buffer_head
  * _before_ attaching the journal_head to a transaction.  To protect the
@@ -1823,17 +1839,28 @@ static void journal_free_journal_head(struct journal_head *jh)
  *	(Attach a journal_head if needed.  Increments b_jcount)
  *	struct journal_head *jh = journal_add_journal_head(bh);
  *	...
+<<<<<<< HEAD
  *	jh->b_transaction = xxx;
  *	journal_put_journal_head(jh);
  *
  * Now, the journal_head's b_jcount is zero, but it is safe from being released
  * because it has a non-zero b_transaction.
+=======
+ *      (Get another reference for transaction)
+ *      journal_grab_journal_head(bh);
+ *      jh->b_transaction = xxx;
+ *      (Put original reference)
+ *      journal_put_journal_head(jh);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 
 /*
  * Give a buffer_head a journal_head.
  *
+<<<<<<< HEAD
  * Doesn't need the journal lock.
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * May sleep.
  */
 struct journal_head *journal_add_journal_head(struct buffer_head *bh)
@@ -1897,6 +1924,7 @@ static void __journal_remove_journal_head(struct buffer_head *bh)
 	struct journal_head *jh = bh2jh(bh);
 
 	J_ASSERT_JH(jh, jh->b_jcount >= 0);
+<<<<<<< HEAD
 
 	get_bh(bh);
 	if (jh->b_jcount == 0) {
@@ -1952,6 +1980,31 @@ void journal_remove_journal_head(struct buffer_head *bh)
 
 /*
  * Drop a reference on the passed journal_head.  If it fell to zero then try to
+=======
+	J_ASSERT_JH(jh, jh->b_transaction == NULL);
+	J_ASSERT_JH(jh, jh->b_next_transaction == NULL);
+	J_ASSERT_JH(jh, jh->b_cp_transaction == NULL);
+	J_ASSERT_JH(jh, jh->b_jlist == BJ_None);
+	J_ASSERT_BH(bh, buffer_jbd(bh));
+	J_ASSERT_BH(bh, jh2bh(jh) == bh);
+	BUFFER_TRACE(bh, "remove journal_head");
+	if (jh->b_frozen_data) {
+		printk(KERN_WARNING "%s: freeing b_frozen_data\n", __func__);
+		jbd_free(jh->b_frozen_data, bh->b_size);
+	}
+	if (jh->b_committed_data) {
+		printk(KERN_WARNING "%s: freeing b_committed_data\n", __func__);
+		jbd_free(jh->b_committed_data, bh->b_size);
+	}
+	bh->b_private = NULL;
+	jh->b_bh = NULL;	/* debug, really */
+	clear_buffer_jbd(bh);
+	journal_free_journal_head(jh);
+}
+
+/*
+ * Drop a reference on the passed journal_head.  If it fell to zero then
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * release the journal_head from the buffer_head.
  */
 void journal_put_journal_head(struct journal_head *jh)
@@ -1961,11 +2014,20 @@ void journal_put_journal_head(struct journal_head *jh)
 	jbd_lock_bh_journal_head(bh);
 	J_ASSERT_JH(jh, jh->b_jcount > 0);
 	--jh->b_jcount;
+<<<<<<< HEAD
 	if (!jh->b_jcount && !jh->b_transaction) {
 		__journal_remove_journal_head(bh);
 		__brelse(bh);
 	}
 	jbd_unlock_bh_journal_head(bh);
+=======
+	if (!jh->b_jcount) {
+		__journal_remove_journal_head(bh);
+		jbd_unlock_bh_journal_head(bh);
+		__brelse(bh);
+	} else
+		jbd_unlock_bh_journal_head(bh);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*

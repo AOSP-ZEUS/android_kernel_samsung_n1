@@ -28,7 +28,12 @@
  * /config/dlm/<cluster>/spaces/<space>/nodes/<node>/weight
  * /config/dlm/<cluster>/comms/<comm>/nodeid
  * /config/dlm/<cluster>/comms/<comm>/local
+<<<<<<< HEAD
  * /config/dlm/<cluster>/comms/<comm>/addr
+=======
+ * /config/dlm/<cluster>/comms/<comm>/addr      (write only)
+ * /config/dlm/<cluster>/comms/<comm>/addr_list (read only)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * The <cluster> level is useless, but I haven't figured out how to avoid it.
  */
 
@@ -80,6 +85,10 @@ static ssize_t comm_local_write(struct dlm_comm *cm, const char *buf,
 				size_t len);
 static ssize_t comm_addr_write(struct dlm_comm *cm, const char *buf,
 				size_t len);
+<<<<<<< HEAD
+=======
+static ssize_t comm_addr_list_read(struct dlm_comm *cm, char *buf);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static ssize_t node_nodeid_read(struct dlm_node *nd, char *buf);
 static ssize_t node_nodeid_write(struct dlm_node *nd, const char *buf,
 				size_t len);
@@ -92,7 +101,10 @@ struct dlm_cluster {
 	unsigned int cl_tcp_port;
 	unsigned int cl_buffer_size;
 	unsigned int cl_rsbtbl_size;
+<<<<<<< HEAD
 	unsigned int cl_lkbtbl_size;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned int cl_dirtbl_size;
 	unsigned int cl_recover_timer;
 	unsigned int cl_toss_secs;
@@ -101,13 +113,20 @@ struct dlm_cluster {
 	unsigned int cl_protocol;
 	unsigned int cl_timewarn_cs;
 	unsigned int cl_waitwarn_us;
+<<<<<<< HEAD
+=======
+	unsigned int cl_new_rsb_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 enum {
 	CLUSTER_ATTR_TCP_PORT = 0,
 	CLUSTER_ATTR_BUFFER_SIZE,
 	CLUSTER_ATTR_RSBTBL_SIZE,
+<<<<<<< HEAD
 	CLUSTER_ATTR_LKBTBL_SIZE,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	CLUSTER_ATTR_DIRTBL_SIZE,
 	CLUSTER_ATTR_RECOVER_TIMER,
 	CLUSTER_ATTR_TOSS_SECS,
@@ -116,6 +135,10 @@ enum {
 	CLUSTER_ATTR_PROTOCOL,
 	CLUSTER_ATTR_TIMEWARN_CS,
 	CLUSTER_ATTR_WAITWARN_US,
+<<<<<<< HEAD
+=======
+	CLUSTER_ATTR_NEW_RSB_COUNT,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct cluster_attribute {
@@ -160,7 +183,10 @@ __CONFIGFS_ATTR(name, 0644, name##_read, name##_write)
 CLUSTER_ATTR(tcp_port, 1);
 CLUSTER_ATTR(buffer_size, 1);
 CLUSTER_ATTR(rsbtbl_size, 1);
+<<<<<<< HEAD
 CLUSTER_ATTR(lkbtbl_size, 1);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 CLUSTER_ATTR(dirtbl_size, 1);
 CLUSTER_ATTR(recover_timer, 1);
 CLUSTER_ATTR(toss_secs, 1);
@@ -169,12 +195,19 @@ CLUSTER_ATTR(log_debug, 0);
 CLUSTER_ATTR(protocol, 0);
 CLUSTER_ATTR(timewarn_cs, 1);
 CLUSTER_ATTR(waitwarn_us, 0);
+<<<<<<< HEAD
+=======
+CLUSTER_ATTR(new_rsb_count, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct configfs_attribute *cluster_attrs[] = {
 	[CLUSTER_ATTR_TCP_PORT] = &cluster_attr_tcp_port.attr,
 	[CLUSTER_ATTR_BUFFER_SIZE] = &cluster_attr_buffer_size.attr,
 	[CLUSTER_ATTR_RSBTBL_SIZE] = &cluster_attr_rsbtbl_size.attr,
+<<<<<<< HEAD
 	[CLUSTER_ATTR_LKBTBL_SIZE] = &cluster_attr_lkbtbl_size.attr,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	[CLUSTER_ATTR_DIRTBL_SIZE] = &cluster_attr_dirtbl_size.attr,
 	[CLUSTER_ATTR_RECOVER_TIMER] = &cluster_attr_recover_timer.attr,
 	[CLUSTER_ATTR_TOSS_SECS] = &cluster_attr_toss_secs.attr,
@@ -183,6 +216,10 @@ static struct configfs_attribute *cluster_attrs[] = {
 	[CLUSTER_ATTR_PROTOCOL] = &cluster_attr_protocol.attr,
 	[CLUSTER_ATTR_TIMEWARN_CS] = &cluster_attr_timewarn_cs.attr,
 	[CLUSTER_ATTR_WAITWARN_US] = &cluster_attr_waitwarn_us.attr,
+<<<<<<< HEAD
+=======
+	[CLUSTER_ATTR_NEW_RSB_COUNT] = &cluster_attr_new_rsb_count.attr,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	NULL,
 };
 
@@ -190,6 +227,10 @@ enum {
 	COMM_ATTR_NODEID = 0,
 	COMM_ATTR_LOCAL,
 	COMM_ATTR_ADDR,
+<<<<<<< HEAD
+=======
+	COMM_ATTR_ADDR_LIST,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct comm_attribute {
@@ -217,14 +258,32 @@ static struct comm_attribute comm_attr_local = {
 static struct comm_attribute comm_attr_addr = {
 	.attr   = { .ca_owner = THIS_MODULE,
                     .ca_name = "addr",
+<<<<<<< HEAD
                     .ca_mode = S_IRUGO | S_IWUSR },
 	.store  = comm_addr_write,
 };
 
+=======
+                    .ca_mode = S_IWUSR },
+	.store  = comm_addr_write,
+};
+
+static struct comm_attribute comm_attr_addr_list = {
+	.attr   = { .ca_owner = THIS_MODULE,
+                    .ca_name = "addr_list",
+                    .ca_mode = S_IRUGO },
+	.show   = comm_addr_list_read,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct configfs_attribute *comm_attrs[] = {
 	[COMM_ATTR_NODEID] = &comm_attr_nodeid.attr,
 	[COMM_ATTR_LOCAL] = &comm_attr_local.attr,
 	[COMM_ATTR_ADDR] = &comm_attr_addr.attr,
+<<<<<<< HEAD
+=======
+	[COMM_ATTR_ADDR_LIST] = &comm_attr_addr_list.attr,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	NULL,
 };
 
@@ -435,7 +494,10 @@ static struct config_group *make_cluster(struct config_group *g,
 	cl->cl_tcp_port = dlm_config.ci_tcp_port;
 	cl->cl_buffer_size = dlm_config.ci_buffer_size;
 	cl->cl_rsbtbl_size = dlm_config.ci_rsbtbl_size;
+<<<<<<< HEAD
 	cl->cl_lkbtbl_size = dlm_config.ci_lkbtbl_size;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cl->cl_dirtbl_size = dlm_config.ci_dirtbl_size;
 	cl->cl_recover_timer = dlm_config.ci_recover_timer;
 	cl->cl_toss_secs = dlm_config.ci_toss_secs;
@@ -444,6 +506,10 @@ static struct config_group *make_cluster(struct config_group *g,
 	cl->cl_protocol = dlm_config.ci_protocol;
 	cl->cl_timewarn_cs = dlm_config.ci_timewarn_cs;
 	cl->cl_waitwarn_us = dlm_config.ci_waitwarn_us;
+<<<<<<< HEAD
+=======
+	cl->cl_new_rsb_count = dlm_config.ci_new_rsb_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	space_list = &sps->ss_group;
 	comm_list = &cms->cs_group;
@@ -720,6 +786,53 @@ static ssize_t comm_addr_write(struct dlm_comm *cm, const char *buf, size_t len)
 	return len;
 }
 
+<<<<<<< HEAD
+=======
+static ssize_t comm_addr_list_read(struct dlm_comm *cm, char *buf)
+{
+	ssize_t s;
+	ssize_t allowance;
+	int i;
+	struct sockaddr_storage *addr;
+	struct sockaddr_in *addr_in;
+	struct sockaddr_in6 *addr_in6;
+	
+	/* Taken from ip6_addr_string() defined in lib/vsprintf.c */
+	char buf0[sizeof("AF_INET6	xxxx:xxxx:xxxx:xxxx:xxxx:xxxx:255.255.255.255\n")];
+	
+
+	/* Derived from SIMPLE_ATTR_SIZE of fs/configfs/file.c */
+	allowance = 4096;
+	buf[0] = '\0';
+
+	for (i = 0; i < cm->addr_count; i++) {
+		addr = cm->addr[i];
+
+		switch(addr->ss_family) {
+		case AF_INET:
+			addr_in = (struct sockaddr_in *)addr;
+			s = sprintf(buf0, "AF_INET	%pI4\n", &addr_in->sin_addr.s_addr);
+			break;
+		case AF_INET6:
+			addr_in6 = (struct sockaddr_in6 *)addr;
+			s = sprintf(buf0, "AF_INET6	%pI6\n", &addr_in6->sin6_addr);
+			break;
+		default:
+			s = sprintf(buf0, "%s\n", "<UNKNOWN>");
+			break;
+		}
+		allowance -= s;
+		if (allowance >= 0)
+			strcat(buf, buf0);
+		else {
+			allowance += s;
+			break;
+		}
+	}
+	return 4096 - allowance;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static ssize_t show_node(struct config_item *i, struct configfs_attribute *a,
 			 char *buf)
 {
@@ -983,7 +1096,10 @@ int dlm_our_addr(struct sockaddr_storage *addr, int num)
 #define DEFAULT_TCP_PORT       21064
 #define DEFAULT_BUFFER_SIZE     4096
 #define DEFAULT_RSBTBL_SIZE     1024
+<<<<<<< HEAD
 #define DEFAULT_LKBTBL_SIZE     1024
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define DEFAULT_DIRTBL_SIZE     1024
 #define DEFAULT_RECOVER_TIMER      5
 #define DEFAULT_TOSS_SECS         10
@@ -992,12 +1108,19 @@ int dlm_our_addr(struct sockaddr_storage *addr, int num)
 #define DEFAULT_PROTOCOL           0
 #define DEFAULT_TIMEWARN_CS      500 /* 5 sec = 500 centiseconds */
 #define DEFAULT_WAITWARN_US	   0
+<<<<<<< HEAD
+=======
+#define DEFAULT_NEW_RSB_COUNT    128
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct dlm_config_info dlm_config = {
 	.ci_tcp_port = DEFAULT_TCP_PORT,
 	.ci_buffer_size = DEFAULT_BUFFER_SIZE,
 	.ci_rsbtbl_size = DEFAULT_RSBTBL_SIZE,
+<<<<<<< HEAD
 	.ci_lkbtbl_size = DEFAULT_LKBTBL_SIZE,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ci_dirtbl_size = DEFAULT_DIRTBL_SIZE,
 	.ci_recover_timer = DEFAULT_RECOVER_TIMER,
 	.ci_toss_secs = DEFAULT_TOSS_SECS,
@@ -1005,6 +1128,11 @@ struct dlm_config_info dlm_config = {
 	.ci_log_debug = DEFAULT_LOG_DEBUG,
 	.ci_protocol = DEFAULT_PROTOCOL,
 	.ci_timewarn_cs = DEFAULT_TIMEWARN_CS,
+<<<<<<< HEAD
 	.ci_waitwarn_us = DEFAULT_WAITWARN_US
+=======
+	.ci_waitwarn_us = DEFAULT_WAITWARN_US,
+	.ci_new_rsb_count = DEFAULT_NEW_RSB_COUNT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 

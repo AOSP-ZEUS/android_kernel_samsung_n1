@@ -46,7 +46,10 @@ ENTRY(fa_flush_user_tlb_range)
 	add	r0, r0, #PAGE_SZ
 	cmp	r0, r1
 	blo	1b
+<<<<<<< HEAD
 	mcr	p15, 0, r3, c7, c5, 6		@ invalidate BTB
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mcr	p15, 0, r3, c7, c10, 4		@ data write barrier
 	mov	pc, lr
 
@@ -60,16 +63,26 @@ ENTRY(fa_flush_kern_tlb_range)
 	add	r0, r0, #PAGE_SZ
 	cmp	r0, r1
 	blo	1b
+<<<<<<< HEAD
 	mcr	p15, 0, r3, c7, c5, 6		@ invalidate BTB
 	mcr	p15, 0, r3, c7, c10, 4		@ data write barrier
 	mcr	p15, 0, r3, c7, c5, 4		@ prefetch flush
+=======
+	mcr	p15, 0, r3, c7, c10, 4		@ data write barrier
+	mcr	p15, 0, r3, c7, c5, 4		@ prefetch flush (isb)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mov	pc, lr
 
 	__INITDATA
 
+<<<<<<< HEAD
 	.type	fa_tlb_fns, #object
 ENTRY(fa_tlb_fns)
 	.long	fa_flush_user_tlb_range
 	.long	fa_flush_kern_tlb_range
 	.long	fa_tlb_flags
 	.size	fa_tlb_fns, . - fa_tlb_fns
+=======
+	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
+	define_tlb_functions fa, fa_tlb_flags
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

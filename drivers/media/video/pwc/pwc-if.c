@@ -2,6 +2,10 @@
    USB and Video4Linux interface part.
    (C) 1999-2004 Nemosoft Unv.
    (C) 2004-2006 Luc Saillard (luc@saillard.org)
+<<<<<<< HEAD
+=======
+   (C) 2011 Hans de Goede <hdegoede@redhat.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
    NOTE: this version of pwc is an unofficial (modified) release of pwc & pcwx
    driver and thus may have bugs that are not present in the original version.
@@ -74,7 +78,10 @@
 #include "pwc-timon.h"
 #include "pwc-dec23.h"
 #include "pwc-dec1.h"
+<<<<<<< HEAD
 #include "pwc-uncompress.h"
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Function prototypes and driver templates */
 
@@ -116,6 +123,10 @@ MODULE_DEVICE_TABLE(usb, pwc_device_table);
 
 static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id *id);
 static void usb_pwc_disconnect(struct usb_interface *intf);
+<<<<<<< HEAD
+=======
+static void pwc_isoc_cleanup(struct pwc_device *pdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct usb_driver pwc_driver = {
 	.name =			"Philips webcam",	/* name */
@@ -127,6 +138,7 @@ static struct usb_driver pwc_driver = {
 #define MAX_DEV_HINTS	20
 #define MAX_ISOC_ERRORS	20
 
+<<<<<<< HEAD
 static int default_size = PSZ_QCIF;
 static int default_fps = 10;
 static int default_fbufs = 3;   /* Default number of frame buffers */
@@ -135,6 +147,13 @@ static int default_fbufs = 3;   /* Default number of frame buffers */
 	int pwc_trace = PWC_DEBUG_LEVEL;
 #endif
 static int power_save;
+=======
+static int default_fps = 10;
+#ifdef CONFIG_USB_PWC_DEBUG
+	int pwc_trace = PWC_DEBUG_LEVEL;
+#endif
+static int power_save = -1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int led_on = 100, led_off; /* defaults to LED that is on while in use */
 static int pwc_preferred_compression = 1; /* 0..3 = uncompressed..high */
 static struct {
@@ -173,6 +192,7 @@ static struct video_device pwc_template = {
 /***************************************************************************/
 /* Private functions */
 
+<<<<<<< HEAD
 /* Here we want the physical address of the memory.
  * This is used when initializing the contents of the area.
  */
@@ -556,6 +576,22 @@ static void pwc_frame_dumped(struct pwc_device *pdev)
 	else if (pdev->vframes_dumped == 20)
 		PWC_DEBUG_FLOW("Dumping frame %d (last message)\n",
 				pdev->vframe_count);
+=======
+struct pwc_frame_buf *pwc_get_next_fill_buf(struct pwc_device *pdev)
+{
+	unsigned long flags = 0;
+	struct pwc_frame_buf *buf = NULL;
+
+	spin_lock_irqsave(&pdev->queued_bufs_lock, flags);
+	if (list_empty(&pdev->queued_bufs))
+		goto leave;
+
+	buf = list_entry(pdev->queued_bufs.next, struct pwc_frame_buf, list);
+	list_del(&buf->list);
+leave:
+	spin_unlock_irqrestore(&pdev->queued_bufs_lock, flags);
+	return buf;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void pwc_snapshot_button(struct pwc_device *pdev, int down)
@@ -575,9 +611,15 @@ static void pwc_snapshot_button(struct pwc_device *pdev, int down)
 #endif
 }
 
+<<<<<<< HEAD
 static int pwc_rcv_short_packet(struct pwc_device *pdev, const struct pwc_frame_buf *fbuf)
 {
 	int awake = 0;
+=======
+static void pwc_frame_complete(struct pwc_device *pdev)
+{
+	struct pwc_frame_buf *fbuf = pdev->fill_buf;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* The ToUCam Fun CMOS sensor causes the firmware to send 2 or 3 bogus
 	   frames on the USB wire after an exposure change. This conditition is
@@ -589,7 +631,10 @@ static int pwc_rcv_short_packet(struct pwc_device *pdev, const struct pwc_frame_
 		if (ptr[1] == 1 && ptr[0] & 0x10) {
 			PWC_TRACE("Hyundai CMOS sensor bug. Dropping frame.\n");
 			pdev->drop_frames += 2;
+<<<<<<< HEAD
 			pdev->vframes_error++;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		if ((ptr[0] ^ pdev->vmirror) & 0x01) {
 			pwc_snapshot_button(pdev, ptr[0] & 0x01);
@@ -612,8 +657,12 @@ static int pwc_rcv_short_packet(struct pwc_device *pdev, const struct pwc_frame_
 		   */
 		if (fbuf->filled == 4)
 			pdev->drop_frames++;
+<<<<<<< HEAD
 	}
 	else if (pdev->type == 740 || pdev->type == 720) {
+=======
+	} else if (pdev->type == 740 || pdev->type == 720) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		unsigned char *ptr = (unsigned char *)fbuf->data;
 		if ((ptr[0] ^ pdev->vmirror) & 0x01) {
 			pwc_snapshot_button(pdev, ptr[0] & 0x01);
@@ -621,16 +670,24 @@ static int pwc_rcv_short_packet(struct pwc_device *pdev, const struct pwc_frame_
 		pdev->vmirror = ptr[0] & 0x03;
 	}
 
+<<<<<<< HEAD
 	/* In case we were instructed to drop the frame, do so silently.
 	   The buffer pointers are not updated either (but the counters are reset below).
 	   */
 	if (pdev->drop_frames > 0)
 		pdev->drop_frames--;
 	else {
+=======
+	/* In case we were instructed to drop the frame, do so silently. */
+	if (pdev->drop_frames > 0) {
+		pdev->drop_frames--;
+	} else {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Check for underflow first */
 		if (fbuf->filled < pdev->frame_total_size) {
 			PWC_DEBUG_FLOW("Frame buffer underflow (%d bytes);"
 				       " discarded.\n", fbuf->filled);
+<<<<<<< HEAD
 			pdev->vframes_error++;
 		}
 		else {
@@ -648,6 +705,17 @@ static int pwc_rcv_short_packet(struct pwc_device *pdev, const struct pwc_frame_
 	} /* !drop_frames */
 	pdev->vframe_count++;
 	return awake;
+=======
+		} else {
+			fbuf->vb.v4l2_buf.field = V4L2_FIELD_NONE;
+			fbuf->vb.v4l2_buf.sequence = pdev->vframe_count;
+			vb2_buffer_done(&fbuf->vb, VB2_BUF_STATE_DONE);
+			pdev->fill_buf = NULL;
+			pdev->vsync = 0;
+		}
+	} /* !drop_frames */
+	pdev->vframe_count++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* This gets called for the Isochronous pipe (video). This is done in
@@ -655,6 +723,7 @@ static int pwc_rcv_short_packet(struct pwc_device *pdev, const struct pwc_frame_
  */
 static void pwc_isoc_handler(struct urb *urb)
 {
+<<<<<<< HEAD
 	struct pwc_device *pdev;
 	int i, fst, flen;
 	int awake;
@@ -673,6 +742,22 @@ static void pwc_isoc_handler(struct urb *urb)
 		return;
 	}
 	if (urb->status != -EINPROGRESS && urb->status != 0) {
+=======
+	struct pwc_device *pdev = (struct pwc_device *)urb->context;
+	int i, fst, flen;
+	unsigned char *iso_buf = NULL;
+
+	if (urb->status == -ENOENT || urb->status == -ECONNRESET ||
+	    urb->status == -ESHUTDOWN) {
+		PWC_DEBUG_OPEN("URB (%p) unlinked %ssynchronuously.\n", urb, urb->status == -ENOENT ? "" : "a");
+		return;
+	}
+
+	if (pdev->fill_buf == NULL)
+		pdev->fill_buf = pwc_get_next_fill_buf(pdev);
+
+	if (urb->status != 0) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		const char *errmsg;
 
 		errmsg = "Unknown";
@@ -684,6 +769,7 @@ static void pwc_isoc_handler(struct urb *urb)
 			case -EILSEQ:		errmsg = "CRC/Timeout (could be anything)"; break;
 			case -ETIME:		errmsg = "Device does not respond"; break;
 		}
+<<<<<<< HEAD
 		PWC_DEBUG_FLOW("pwc_isoc_handler() called with status %d [%s].\n", urb->status, errmsg);
 		/* Give up after a number of contiguous errors on the USB bus.
 		   Appearantly something is wrong so we simulate an unplug event.
@@ -707,6 +793,23 @@ static void pwc_isoc_handler(struct urb *urb)
 	else {
 		fillptr = fbuf->data + fbuf->filled;
 	}
+=======
+		PWC_ERROR("pwc_isoc_handler() called with status %d [%s].\n",
+			  urb->status, errmsg);
+		/* Give up after a number of contiguous errors */
+		if (++pdev->visoc_errors > MAX_ISOC_ERRORS)
+		{
+			PWC_ERROR("Too many ISOC errors, bailing out.\n");
+			if (pdev->fill_buf) {
+				vb2_buffer_done(&pdev->fill_buf->vb,
+						VB2_BUF_STATE_ERROR);
+				pdev->fill_buf = NULL;
+			}
+		}
+		pdev->vsync = 0; /* Drop the current frame */
+		goto handler_end;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Reset ISOC error counter. We did get here, after all. */
 	pdev->visoc_errors = 0;
@@ -720,6 +823,7 @@ static void pwc_isoc_handler(struct urb *urb)
 		fst  = urb->iso_frame_desc[i].status;
 		flen = urb->iso_frame_desc[i].actual_length;
 		iso_buf = urb->transfer_buffer + urb->iso_frame_desc[i].offset;
+<<<<<<< HEAD
 		if (fst == 0) {
 			if (flen > 0) { /* if valid data... */
 				if (pdev->vsync > 0) { /* ...and we are not sync-hunting... */
@@ -772,17 +876,62 @@ handler_end:
 		wake_up_interruptible(&pdev->frameq);
 
 	urb->dev = pdev->udev;
+=======
+		if (fst != 0) {
+			PWC_ERROR("Iso frame %d has error %d\n", i, fst);
+			continue;
+		}
+		if (flen > 0 && pdev->vsync) {
+			struct pwc_frame_buf *fbuf = pdev->fill_buf;
+
+			if (pdev->vsync == 1) {
+				do_gettimeofday(&fbuf->vb.v4l2_buf.timestamp);
+				pdev->vsync = 2;
+			}
+
+			if (flen + fbuf->filled > pdev->frame_total_size) {
+				PWC_ERROR("Frame overflow (%d > %d)\n",
+					  flen + fbuf->filled,
+					  pdev->frame_total_size);
+				pdev->vsync = 0; /* Let's wait for an EOF */
+			} else {
+				memcpy(fbuf->data + fbuf->filled, iso_buf,
+				       flen);
+				fbuf->filled += flen;
+			}
+		}
+		if (flen < pdev->vlast_packet_size) {
+			/* Shorter packet... end of frame */
+			if (pdev->vsync == 2)
+				pwc_frame_complete(pdev);
+			if (pdev->fill_buf == NULL)
+				pdev->fill_buf = pwc_get_next_fill_buf(pdev);
+			if (pdev->fill_buf) {
+				pdev->fill_buf->filled = 0;
+				pdev->vsync = 1;
+			}
+		}
+		pdev->vlast_packet_size = flen;
+	}
+
+handler_end:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	i = usb_submit_urb(urb, GFP_ATOMIC);
 	if (i != 0)
 		PWC_ERROR("Error (%d) re-submitting urb in pwc_isoc_handler.\n", i);
 }
 
+<<<<<<< HEAD
 
 int pwc_isoc_init(struct pwc_device *pdev)
+=======
+static int pwc_isoc_init(struct pwc_device *pdev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct usb_device *udev;
 	struct urb *urb;
 	int i, j, ret;
+<<<<<<< HEAD
 
 	struct usb_interface *intf;
 	struct usb_host_interface *idesc = NULL;
@@ -803,6 +952,27 @@ int pwc_isoc_init(struct pwc_device *pdev)
 
 	if (!idesc)
 		return -EFAULT;
+=======
+	struct usb_interface *intf;
+	struct usb_host_interface *idesc = NULL;
+
+	if (pdev->iso_init)
+		return 0;
+
+	pdev->vsync = 0;
+	pdev->vlast_packet_size = 0;
+	pdev->fill_buf = NULL;
+	pdev->vframe_count = 0;
+	pdev->visoc_errors = 0;
+	udev = pdev->udev;
+
+	/* Get the current alternate interface, adjust packet size */
+	intf = usb_ifnum_to_if(udev, 0);
+	if (intf)
+		idesc = usb_altnum_to_altsetting(intf, pdev->valternate);
+	if (!idesc)
+		return -EIO;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Search video endpoint */
 	pdev->vmax_packet_size = -1;
@@ -825,10 +995,15 @@ int pwc_isoc_init(struct pwc_device *pdev)
 	if (ret < 0)
 		return ret;
 
+<<<<<<< HEAD
+=======
+	/* Allocate and init Isochronuous urbs */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (i = 0; i < MAX_ISO_BUFS; i++) {
 		urb = usb_alloc_urb(ISO_FRAMES_PER_DESC, GFP_KERNEL);
 		if (urb == NULL) {
 			PWC_ERROR("Failed to allocate urb %d\n", i);
+<<<<<<< HEAD
 			ret = -ENOMEM;
 			break;
 		}
@@ -847,12 +1022,34 @@ int pwc_isoc_init(struct pwc_device *pdev)
 	/* init URB structure */
 	for (i = 0; i < MAX_ISO_BUFS; i++) {
 		urb = pdev->sbuf[i].urb;
+=======
+			pdev->iso_init = 1;
+			pwc_isoc_cleanup(pdev);
+			return -ENOMEM;
+		}
+		pdev->urbs[i] = urb;
+		PWC_DEBUG_MEMORY("Allocated URB at 0x%p\n", urb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		urb->interval = 1; // devik
 		urb->dev = udev;
 		urb->pipe = usb_rcvisocpipe(udev, pdev->vendpoint);
+<<<<<<< HEAD
 		urb->transfer_flags = URB_ISO_ASAP;
 		urb->transfer_buffer = pdev->sbuf[i].data;
+=======
+		urb->transfer_flags = URB_ISO_ASAP | URB_NO_TRANSFER_DMA_MAP;
+		urb->transfer_buffer = usb_alloc_coherent(udev,
+							  ISO_BUFFER_SIZE,
+							  GFP_KERNEL,
+							  &urb->transfer_dma);
+		if (urb->transfer_buffer == NULL) {
+			PWC_ERROR("Failed to allocate urb buffer %d\n", i);
+			pdev->iso_init = 1;
+			pwc_isoc_cleanup(pdev);
+			return -ENOMEM;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		urb->transfer_buffer_length = ISO_BUFFER_SIZE;
 		urb->complete = pwc_isoc_handler;
 		urb->context = pdev;
@@ -866,14 +1063,22 @@ int pwc_isoc_init(struct pwc_device *pdev)
 
 	/* link */
 	for (i = 0; i < MAX_ISO_BUFS; i++) {
+<<<<<<< HEAD
 		ret = usb_submit_urb(pdev->sbuf[i].urb, GFP_KERNEL);
+=======
+		ret = usb_submit_urb(pdev->urbs[i], GFP_KERNEL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret) {
 			PWC_ERROR("isoc_init() submit_urb %d failed with error %d\n", i, ret);
 			pdev->iso_init = 1;
 			pwc_isoc_cleanup(pdev);
 			return ret;
 		}
+<<<<<<< HEAD
 		PWC_DEBUG_MEMORY("URB 0x%p submitted.\n", pdev->sbuf[i].urb);
+=======
+		PWC_DEBUG_MEMORY("URB 0x%p submitted.\n", pdev->urbs[i]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* All is done... */
@@ -888,12 +1093,18 @@ static void pwc_iso_stop(struct pwc_device *pdev)
 
 	/* Unlinking ISOC buffers one by one */
 	for (i = 0; i < MAX_ISO_BUFS; i++) {
+<<<<<<< HEAD
 		struct urb *urb;
 
 		urb = pdev->sbuf[i].urb;
 		if (urb) {
 			PWC_DEBUG_MEMORY("Unlinking URB %p\n", urb);
 			usb_kill_urb(urb);
+=======
+		if (pdev->urbs[i]) {
+			PWC_DEBUG_MEMORY("Unlinking URB %p\n", pdev->urbs[i]);
+			usb_kill_urb(pdev->urbs[i]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 }
@@ -904,6 +1115,7 @@ static void pwc_iso_free(struct pwc_device *pdev)
 
 	/* Freeing ISOC buffers one by one */
 	for (i = 0; i < MAX_ISO_BUFS; i++) {
+<<<<<<< HEAD
 		struct urb *urb;
 
 		urb = pdev->sbuf[i].urb;
@@ -911,20 +1123,40 @@ static void pwc_iso_free(struct pwc_device *pdev)
 			PWC_DEBUG_MEMORY("Freeing URB\n");
 			usb_free_urb(urb);
 			pdev->sbuf[i].urb = NULL;
+=======
+		if (pdev->urbs[i]) {
+			PWC_DEBUG_MEMORY("Freeing URB\n");
+			if (pdev->urbs[i]->transfer_buffer) {
+				usb_free_coherent(pdev->udev,
+					pdev->urbs[i]->transfer_buffer_length,
+					pdev->urbs[i]->transfer_buffer,
+					pdev->urbs[i]->transfer_dma);
+			}
+			usb_free_urb(pdev->urbs[i]);
+			pdev->urbs[i] = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 }
 
+<<<<<<< HEAD
 void pwc_isoc_cleanup(struct pwc_device *pdev)
 {
 	PWC_DEBUG_OPEN(">> pwc_isoc_cleanup()\n");
 	if (pdev == NULL)
 		return;
+=======
+static void pwc_isoc_cleanup(struct pwc_device *pdev)
+{
+	PWC_DEBUG_OPEN(">> pwc_isoc_cleanup()\n");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (pdev->iso_init == 0)
 		return;
 
 	pwc_iso_stop(pdev);
 	pwc_iso_free(pdev);
+<<<<<<< HEAD
 
 	/* Stop camera, but only if we are sure the camera is still there (unplug
 	   is signalled by EPIPE)
@@ -933,11 +1165,33 @@ void pwc_isoc_cleanup(struct pwc_device *pdev)
 		PWC_DEBUG_OPEN("Setting alternate interface 0.\n");
 		usb_set_interface(pdev->udev, 0, 0);
 	}
+=======
+	usb_set_interface(pdev->udev, 0, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pdev->iso_init = 0;
 	PWC_DEBUG_OPEN("<< pwc_isoc_cleanup()\n");
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * Release all queued buffers, no need to take queued_bufs_lock, since all
+ * iso urbs have been killed when we're called so pwc_isoc_handler won't run.
+ */
+static void pwc_cleanup_queued_bufs(struct pwc_device *pdev)
+{
+	while (!list_empty(&pdev->queued_bufs)) {
+		struct pwc_frame_buf *buf;
+
+		buf = list_entry(pdev->queued_bufs.next, struct pwc_frame_buf,
+				 list);
+		list_del(&buf->list);
+		vb2_buffer_done(&buf->vb, VB2_BUF_STATE_ERROR);
+	}
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*********
  * sysfs
  *********/
@@ -1051,13 +1305,17 @@ static const char *pwc_sensor_type_to_string(unsigned int sensor_type)
 
 static int pwc_video_open(struct file *file)
 {
+<<<<<<< HEAD
 	int i, ret;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct video_device *vdev = video_devdata(file);
 	struct pwc_device *pdev;
 
 	PWC_DEBUG_OPEN(">> video_open called(vdev = 0x%p).\n", vdev);
 
 	pdev = video_get_drvdata(vdev);
+<<<<<<< HEAD
 	BUG_ON(!pdev);
 	if (pdev->vopen) {
 		PWC_DEBUG_OPEN("I'm busy, someone is using the device.\n");
@@ -1143,6 +1401,11 @@ static int pwc_video_open(struct file *file)
 	pwc_set_agc(pdev, 1, 0);
 
 	pdev->vopen++;
+=======
+	if (!pdev->udev)
+		return -ENODEV;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	file->private_data = vdev;
 	PWC_DEBUG_OPEN("<< video_open() returns 0.\n");
 	return 0;
@@ -1158,19 +1421,39 @@ static void pwc_video_release(struct video_device *vfd)
 		if (device_hint[hint].pdev == pdev)
 			device_hint[hint].pdev = NULL;
 
+<<<<<<< HEAD
 	kfree(pdev);
 }
 
 /* Note that all cleanup is done in the reverse order as in _open */
+=======
+	/* Free intermediate decompression buffer & tables */
+	if (pdev->decompress_data != NULL) {
+		PWC_DEBUG_MEMORY("Freeing decompression buffer at %p.\n",
+				 pdev->decompress_data);
+		kfree(pdev->decompress_data);
+		pdev->decompress_data = NULL;
+	}
+
+	v4l2_ctrl_handler_free(&pdev->ctrl_handler);
+
+	kfree(pdev);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int pwc_video_close(struct file *file)
 {
 	struct video_device *vdev = file->private_data;
 	struct pwc_device *pdev;
+<<<<<<< HEAD
 	int i;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	PWC_DEBUG_OPEN(">> video_close called(vdev = 0x%p).\n", vdev);
 
 	pdev = video_get_drvdata(vdev);
+<<<<<<< HEAD
 	if (pdev->vopen == 0)
 		PWC_DEBUG_MODULE("video_close() called on closed device?\n");
 
@@ -1309,11 +1592,40 @@ static ssize_t pwc_video_read(struct file *file, char __user *buf,
 	return count;
 err_out:
 	return rv;
+=======
+	if (pdev->capt_file == file) {
+		vb2_queue_release(&pdev->vb_queue);
+		pdev->capt_file = NULL;
+	}
+
+	PWC_DEBUG_OPEN("<< video_close()\n");
+	return 0;
+}
+
+static ssize_t pwc_video_read(struct file *file, char __user *buf,
+			      size_t count, loff_t *ppos)
+{
+	struct video_device *vdev = file->private_data;
+	struct pwc_device *pdev = video_get_drvdata(vdev);
+
+	if (!pdev->udev)
+		return -ENODEV;
+
+	if (pdev->capt_file != NULL &&
+	    pdev->capt_file != file)
+		return -EBUSY;
+
+	pdev->capt_file = file;
+
+	return vb2_read(&pdev->vb_queue, buf, count, ppos,
+			file->f_flags & O_NONBLOCK);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static unsigned int pwc_video_poll(struct file *file, poll_table *wait)
 {
 	struct video_device *vdev = file->private_data;
+<<<<<<< HEAD
 	struct pwc_device *pdev;
 	int ret;
 
@@ -1333,10 +1645,49 @@ static unsigned int pwc_video_poll(struct file *file, poll_table *wait)
 		return POLLERR;
 	if (pdev->full_frames != NULL) /* we have frames waiting */
 		return (POLLIN | POLLRDNORM);
+=======
+	struct pwc_device *pdev = video_get_drvdata(vdev);
+
+	if (!pdev->udev)
+		return POLL_ERR;
+
+	return vb2_poll(&pdev->vb_queue, file, wait);
+}
+
+static int pwc_video_mmap(struct file *file, struct vm_area_struct *vma)
+{
+	struct video_device *vdev = file->private_data;
+	struct pwc_device *pdev = video_get_drvdata(vdev);
+
+	if (pdev->capt_file != file)
+		return -EBUSY;
+
+	return vb2_mmap(&pdev->vb_queue, vma);
+}
+
+/***************************************************************************/
+/* Videobuf2 operations */
+
+static int queue_setup(struct vb2_queue *vq, unsigned int *nbuffers,
+				unsigned int *nplanes, unsigned long sizes[],
+				void *alloc_ctxs[])
+{
+	struct pwc_device *pdev = vb2_get_drv_priv(vq);
+
+	if (*nbuffers < MIN_FRAMES)
+		*nbuffers = MIN_FRAMES;
+	else if (*nbuffers > MAX_FRAMES)
+		*nbuffers = MAX_FRAMES;
+
+	*nplanes = 1;
+
+	sizes[0] = PAGE_ALIGN((pdev->abs_max.x * pdev->abs_max.y * 3) / 2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
 
+<<<<<<< HEAD
 static int pwc_video_mmap(struct file *file, struct vm_area_struct *vma)
 {
 	struct video_device *vdev = file->private_data;
@@ -1391,6 +1742,121 @@ static int pwc_video_mmap(struct file *file, struct vm_area_struct *vma)
 	return 0;
 }
 
+=======
+static int buffer_init(struct vb2_buffer *vb)
+{
+	struct pwc_frame_buf *buf = container_of(vb, struct pwc_frame_buf, vb);
+
+	/* need vmalloc since frame buffer > 128K */
+	buf->data = vzalloc(PWC_FRAME_SIZE);
+	if (buf->data == NULL)
+		return -ENOMEM;
+
+	return 0;
+}
+
+static int buffer_prepare(struct vb2_buffer *vb)
+{
+	struct pwc_device *pdev = vb2_get_drv_priv(vb->vb2_queue);
+
+	/* Don't allow queing new buffers after device disconnection */
+	if (!pdev->udev)
+		return -ENODEV;
+
+	return 0;
+}
+
+static int buffer_finish(struct vb2_buffer *vb)
+{
+	struct pwc_device *pdev = vb2_get_drv_priv(vb->vb2_queue);
+	struct pwc_frame_buf *buf = container_of(vb, struct pwc_frame_buf, vb);
+
+	/*
+	 * Application has called dqbuf and is getting back a buffer we've
+	 * filled, take the pwc data we've stored in buf->data and decompress
+	 * it into a usable format, storing the result in the vb2_buffer
+	 */
+	return pwc_decompress(pdev, buf);
+}
+
+static void buffer_cleanup(struct vb2_buffer *vb)
+{
+	struct pwc_frame_buf *buf = container_of(vb, struct pwc_frame_buf, vb);
+
+	vfree(buf->data);
+}
+
+static void buffer_queue(struct vb2_buffer *vb)
+{
+	struct pwc_device *pdev = vb2_get_drv_priv(vb->vb2_queue);
+	struct pwc_frame_buf *buf = container_of(vb, struct pwc_frame_buf, vb);
+	unsigned long flags = 0;
+
+	spin_lock_irqsave(&pdev->queued_bufs_lock, flags);
+	list_add_tail(&buf->list, &pdev->queued_bufs);
+	spin_unlock_irqrestore(&pdev->queued_bufs_lock, flags);
+}
+
+static int start_streaming(struct vb2_queue *vq)
+{
+	struct pwc_device *pdev = vb2_get_drv_priv(vq);
+
+	if (!pdev->udev)
+		return -ENODEV;
+
+	/* Turn on camera and set LEDS on */
+	pwc_camera_power(pdev, 1);
+	if (pdev->power_save) {
+		/* Restore video mode */
+		pwc_set_video_mode(pdev, pdev->view.x, pdev->view.y,
+				   pdev->vframes, pdev->vcompression,
+				   pdev->vsnapshot);
+	}
+	pwc_set_leds(pdev, led_on, led_off);
+
+	return pwc_isoc_init(pdev);
+}
+
+static int stop_streaming(struct vb2_queue *vq)
+{
+	struct pwc_device *pdev = vb2_get_drv_priv(vq);
+
+	if (pdev->udev) {
+		pwc_set_leds(pdev, 0, 0);
+		pwc_camera_power(pdev, 0);
+		pwc_isoc_cleanup(pdev);
+	}
+	pwc_cleanup_queued_bufs(pdev);
+
+	return 0;
+}
+
+static void pwc_lock(struct vb2_queue *vq)
+{
+	struct pwc_device *pdev = vb2_get_drv_priv(vq);
+	mutex_lock(&pdev->modlock);
+}
+
+static void pwc_unlock(struct vb2_queue *vq)
+{
+	struct pwc_device *pdev = vb2_get_drv_priv(vq);
+	mutex_unlock(&pdev->modlock);
+}
+
+static struct vb2_ops pwc_vb_queue_ops = {
+	.queue_setup		= queue_setup,
+	.buf_init		= buffer_init,
+	.buf_prepare		= buffer_prepare,
+	.buf_finish		= buffer_finish,
+	.buf_cleanup		= buffer_cleanup,
+	.buf_queue		= buffer_queue,
+	.start_streaming	= start_streaming,
+	.stop_streaming		= stop_streaming,
+	.wait_prepare		= pwc_unlock,
+	.wait_finish		= pwc_lock,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /***************************************************************************/
 /* USB functions */
 
@@ -1406,6 +1872,10 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 	int hint, rc;
 	int features = 0;
 	int video_nr = -1; /* default: use next available device */
+<<<<<<< HEAD
+=======
+	int my_power_save = power_save;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char serial_number[30], *name;
 
 	vendor_id = le16_to_cpu(udev->descriptor.idVendor);
@@ -1513,6 +1983,11 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 			PWC_INFO("Logitech QuickCam 4000 Pro USB webcam detected.\n");
 			name = "Logitech QuickCam Pro 4000";
 			type_id = 740; /* CCD sensor */
+<<<<<<< HEAD
+=======
+			if (my_power_save == -1)
+				my_power_save = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		case 0x08b3:
 			PWC_INFO("Logitech QuickCam Zoom USB webcam detected.\n");
@@ -1523,12 +1998,22 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 			PWC_INFO("Logitech QuickCam Zoom (new model) USB webcam detected.\n");
 			name = "Logitech QuickCam Zoom";
 			type_id = 740; /* CCD sensor */
+<<<<<<< HEAD
 			power_save = 1;
+=======
+			if (my_power_save == -1)
+				my_power_save = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		case 0x08b5:
 			PWC_INFO("Logitech QuickCam Orbit/Sphere USB webcam detected.\n");
 			name = "Logitech QuickCam Orbit";
 			type_id = 740; /* CCD sensor */
+<<<<<<< HEAD
+=======
+			if (my_power_save == -1)
+				my_power_save = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			features |= FEATURE_MOTOR_PANTILT;
 			break;
 		case 0x08b6:
@@ -1583,6 +2068,11 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 			PWC_INFO("Creative Labs Webcam 5 detected.\n");
 			name = "Creative Labs Webcam 5";
 			type_id = 730;
+<<<<<<< HEAD
+=======
+			if (my_power_save == -1)
+				my_power_save = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		case 0x4011:
 			PWC_INFO("Creative Labs Webcam Pro Ex detected.\n");
@@ -1640,6 +2130,12 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 	else
 		return -ENODEV; /* Not any of the know types; but the list keeps growing. */
 
+<<<<<<< HEAD
+=======
+	if (my_power_save == -1)
+		my_power_save = 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	memset(serial_number, 0, 30);
 	usb_string(udev, udev->descriptor.iSerialNumber, serial_number, 29);
 	PWC_DEBUG_PROBE("Device serial number is %s\n", serial_number);
@@ -1654,7 +2150,10 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 		return -ENOMEM;
 	}
 	pdev->type = type_id;
+<<<<<<< HEAD
 	pdev->vsize = default_size;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pdev->vframes = default_fps;
 	strcpy(pdev->serial, serial_number);
 	pdev->features = features;
@@ -1668,6 +2167,7 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 		pdev->angle_range.tilt_min = -3000;
 		pdev->angle_range.tilt_max =  2500;
 	}
+<<<<<<< HEAD
 
 	mutex_init(&pdev->modlock);
 	spin_lock_init(&pdev->ptrlock);
@@ -1675,6 +2175,28 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 	pdev->udev = udev;
 	init_waitqueue_head(&pdev->frameq);
 	pdev->vcompression = pwc_preferred_compression;
+=======
+	pwc_construct(pdev); /* set min/max sizes correct */
+
+	mutex_init(&pdev->modlock);
+	mutex_init(&pdev->udevlock);
+	spin_lock_init(&pdev->queued_bufs_lock);
+	INIT_LIST_HEAD(&pdev->queued_bufs);
+
+	pdev->udev = udev;
+	pdev->vcompression = pwc_preferred_compression;
+	pdev->power_save = my_power_save;
+
+	/* Init videobuf2 queue structure */
+	memset(&pdev->vb_queue, 0, sizeof(pdev->vb_queue));
+	pdev->vb_queue.type = V4L2_BUF_TYPE_VIDEO_CAPTURE;
+	pdev->vb_queue.io_modes = VB2_MMAP | VB2_USERPTR | VB2_READ;
+	pdev->vb_queue.drv_priv = pdev;
+	pdev->vb_queue.buf_struct_size = sizeof(struct pwc_frame_buf);
+	pdev->vb_queue.ops = &pwc_vb_queue_ops;
+	pdev->vb_queue.mem_ops = &vb2_vmalloc_memops;
+	vb2_queue_init(&pdev->vb_queue);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Init video_device structure */
 	memcpy(&pdev->vdev, &pwc_template, sizeof(pwc_template));
@@ -1707,14 +2229,49 @@ static int usb_pwc_probe(struct usb_interface *intf, const struct usb_device_id 
 	PWC_DEBUG_PROBE("probe() function returning struct at 0x%p.\n", pdev);
 	usb_set_intfdata(intf, pdev);
 
+<<<<<<< HEAD
 	/* Set the leds off */
 	pwc_set_leds(pdev, 0, 0);
+=======
+#ifdef CONFIG_USB_PWC_DEBUG
+	/* Query sensor type */
+	if (pwc_get_cmos_sensor(pdev, &rc) >= 0) {
+		PWC_DEBUG_OPEN("This %s camera is equipped with a %s (%d).\n",
+				pdev->vdev.name,
+				pwc_sensor_type_to_string(rc), rc);
+	}
+#endif
+
+	/* Set the leds off */
+	pwc_set_leds(pdev, 0, 0);
+
+	/* Setup intial videomode */
+	rc = pwc_set_video_mode(pdev, pdev->view_max.x, pdev->view_max.y,
+				pdev->vframes, pdev->vcompression, 0);
+	if (rc)
+		goto err_free_mem;
+
+	/* Register controls (and read default values from camera */
+	rc = pwc_init_controls(pdev);
+	if (rc) {
+		PWC_ERROR("Failed to register v4l2 controls (%d).\n", rc);
+		goto err_free_mem;
+	}
+
+	pdev->vdev.ctrl_handler = &pdev->ctrl_handler;
+
+	/* And powerdown the camera until streaming starts */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pwc_camera_power(pdev, 0);
 
 	rc = video_register_device(&pdev->vdev, VFL_TYPE_GRABBER, video_nr);
 	if (rc < 0) {
 		PWC_ERROR("Failed to register as video device (%d).\n", rc);
+<<<<<<< HEAD
 		goto err_free_mem;
+=======
+		goto err_free_controls;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	rc = pwc_create_sysfs_files(pdev);
 	if (rc)
@@ -1757,7 +2314,14 @@ err_video_unreg:
 	if (hint < MAX_DEV_HINTS)
 		device_hint[hint].pdev = NULL;
 	video_unregister_device(&pdev->vdev);
+<<<<<<< HEAD
 err_free_mem:
+=======
+err_free_controls:
+	v4l2_ctrl_handler_free(&pdev->ctrl_handler);
+err_free_mem:
+	usb_set_intfdata(intf, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(pdev);
 	return rc;
 }
@@ -1767,6 +2331,7 @@ static void usb_pwc_disconnect(struct usb_interface *intf)
 {
 	struct pwc_device *pdev  = usb_get_intfdata(intf);
 
+<<<<<<< HEAD
 	mutex_lock(&pdev->modlock);
 	usb_set_intfdata (intf, NULL);
 	if (pdev == NULL) {
@@ -1794,6 +2359,19 @@ static void usb_pwc_disconnect(struct usb_interface *intf)
 
 disconnect_out:
 	mutex_unlock(&pdev->modlock);
+=======
+	mutex_lock(&pdev->udevlock);
+	mutex_lock(&pdev->modlock);
+
+	usb_set_intfdata(intf, NULL);
+	/* No need to keep the urbs around after disconnection */
+	pwc_isoc_cleanup(pdev);
+	pwc_cleanup_queued_bufs(pdev);
+	pdev->udev = NULL;
+
+	mutex_unlock(&pdev->modlock);
+	mutex_unlock(&pdev->udevlock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pwc_remove_sysfs_files(pdev);
 	video_unregister_device(&pdev->vdev);
@@ -1809,16 +2387,21 @@ disconnect_out:
  * Initialization code & module stuff
  */
 
+<<<<<<< HEAD
 static char *size;
 static int fps;
 static int fbufs;
 static int mbufs;
+=======
+static int fps;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int compression = -1;
 static int leds[2] = { -1, -1 };
 static unsigned int leds_nargs;
 static char *dev_hint[MAX_DEV_HINTS];
 static unsigned int dev_hint_nargs;
 
+<<<<<<< HEAD
 module_param(size, charp, 0444);
 module_param(fps, int, 0444);
 module_param(fbufs, int, 0444);
@@ -1827,10 +2410,18 @@ module_param(mbufs, int, 0444);
 module_param_named(trace, pwc_trace, int, 0644);
 #endif
 module_param(power_save, int, 0444);
+=======
+module_param(fps, int, 0444);
+#ifdef CONFIG_USB_PWC_DEBUG
+module_param_named(trace, pwc_trace, int, 0644);
+#endif
+module_param(power_save, int, 0644);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 module_param(compression, int, 0444);
 module_param_array(leds, int, &leds_nargs, 0444);
 module_param_array(dev_hint, charp, &dev_hint_nargs, 0444);
 
+<<<<<<< HEAD
 MODULE_PARM_DESC(size, "Initial image size. One of sqcif, qsif, qcif, sif, cif, vga");
 MODULE_PARM_DESC(fps, "Initial frames per second. Varies with model, useful range 5-30");
 MODULE_PARM_DESC(fbufs, "Number of internal frame buffers to reserve");
@@ -1839,6 +2430,13 @@ MODULE_PARM_DESC(mbufs, "Number of external (mmap()ed) image buffers");
 MODULE_PARM_DESC(trace, "For debugging purposes");
 #endif
 MODULE_PARM_DESC(power_save, "Turn power save feature in camera on or off");
+=======
+MODULE_PARM_DESC(fps, "Initial frames per second. Varies with model, useful range 5-30");
+#ifdef CONFIG_USB_PWC_DEBUG
+MODULE_PARM_DESC(trace, "For debugging purposes");
+#endif
+MODULE_PARM_DESC(power_save, "Turn power saving for new cameras on or off");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_PARM_DESC(compression, "Preferred compression quality. Range 0 (uncompressed) to 3 (high compression)");
 MODULE_PARM_DESC(leds, "LED on,off time in milliseconds");
 MODULE_PARM_DESC(dev_hint, "Device node hints");
@@ -1851,14 +2449,28 @@ MODULE_VERSION( PWC_VERSION );
 
 static int __init usb_pwc_init(void)
 {
+<<<<<<< HEAD
 	int i, sz;
 	char *sizenames[PSZ_MAX] = { "sqcif", "qsif", "qcif", "sif", "cif", "vga" };
 
+=======
+	int i;
+
+#ifdef CONFIG_USB_PWC_DEBUG
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PWC_INFO("Philips webcam module version " PWC_VERSION " loaded.\n");
 	PWC_INFO("Supports Philips PCA645/646, PCVC675/680/690, PCVC720[40]/730/740/750 & PCVC830/840.\n");
 	PWC_INFO("Also supports the Askey VC010, various Logitech Quickcams, Samsung MPC-C10 and MPC-C30,\n");
 	PWC_INFO("the Creative WebCam 5 & Pro Ex, SOTEC Afina Eye and Visionite VCS-UC300 and VCS-UM100.\n");
 
+<<<<<<< HEAD
+=======
+	if (pwc_trace >= 0) {
+		PWC_DEBUG_MODULE("Trace options: 0x%04x\n", pwc_trace);
+	}
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (fps) {
 		if (fps < 4 || fps > 30) {
 			PWC_ERROR("Framerate out of bounds (4-30).\n");
@@ -1868,6 +2480,7 @@ static int __init usb_pwc_init(void)
 		PWC_DEBUG_MODULE("Default framerate set to %d.\n", default_fps);
 	}
 
+<<<<<<< HEAD
 	if (size) {
 		/* string; try matching with array */
 		for (sz = 0; sz < PSZ_MAX; sz++) {
@@ -1903,6 +2516,8 @@ static int __init usb_pwc_init(void)
 		PWC_DEBUG_MODULE("Trace options: 0x%04x\n", pwc_trace);
 	}
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (compression >= 0) {
 		if (compression > 3) {
 			PWC_ERROR("Invalid compression setting; use a number between 0 (uncompressed) and 3 (high).\n");
@@ -1911,8 +2526,11 @@ static int __init usb_pwc_init(void)
 		pwc_preferred_compression = compression;
 		PWC_DEBUG_MODULE("Preferred compression set to %d.\n", pwc_preferred_compression);
 	}
+<<<<<<< HEAD
 	if (power_save)
 		PWC_DEBUG_MODULE("Enabling power save on open/close.\n");
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (leds[0] >= 0)
 		led_on = leds[0];
 	if (leds[1] >= 0)

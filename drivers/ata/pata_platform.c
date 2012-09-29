@@ -39,7 +39,11 @@ static int pata_platform_set_mode(struct ata_link *link, struct ata_device **unu
 		dev->pio_mode = dev->xfer_mode = XFER_PIO_0;
 		dev->xfer_shift = ATA_SHIFT_PIO;
 		dev->flags |= ATA_DFLAG_PIO;
+<<<<<<< HEAD
 		ata_dev_printk(dev, KERN_INFO, "configured for PIO\n");
+=======
+		ata_dev_info(dev, "configured for PIO\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return 0;
 }

@@ -36,7 +36,10 @@
 #include <linux/slab.h>
 #include <linux/mm.h>
 #include <linux/time.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/kmod.h>
 
 #include <linux/i2c.h>
@@ -61,8 +64,12 @@
 // #define VINO_DEBUG
 // #define VINO_DEBUG_INT
 
+<<<<<<< HEAD
 #define VINO_MODULE_VERSION "0.0.6"
 #define VINO_VERSION_CODE KERNEL_VERSION(0, 0, 6)
+=======
+#define VINO_MODULE_VERSION "0.0.7"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 MODULE_DESCRIPTION("SGI VINO Video4Linux2 driver");
 MODULE_VERSION(VINO_MODULE_VERSION);
@@ -2934,7 +2941,10 @@ static int vino_querycap(struct file *file, void *__fh,
 	strcpy(cap->driver, vino_driver_name);
 	strcpy(cap->card, vino_driver_description);
 	strcpy(cap->bus_info, vino_bus_name);
+<<<<<<< HEAD
 	cap->version = VINO_VERSION_CODE;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cap->capabilities =
 		V4L2_CAP_VIDEO_CAPTURE |
 		V4L2_CAP_STREAMING;

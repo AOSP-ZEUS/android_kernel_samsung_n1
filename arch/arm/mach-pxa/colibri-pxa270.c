@@ -310,6 +310,10 @@ MACHINE_START(COLIBRI, "Toradex Colibri PXA270")
 	.init_machine	= colibri_pxa270_init,
 	.map_io		= pxa27x_map_io,
 	.init_irq	= pxa27x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa27x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 MACHINE_END
 
@@ -318,6 +322,10 @@ MACHINE_START(INCOME, "Income s.r.o. SH-Dmaster PXA270 SBC")
 	.init_machine	= colibri_pxa270_income_init,
 	.map_io		= pxa27x_map_io,
 	.init_irq	= pxa27x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa27x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 MACHINE_END
 

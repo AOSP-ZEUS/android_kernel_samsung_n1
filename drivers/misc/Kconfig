@@ -146,6 +146,10 @@ config PHANTOM
 
 config INTEL_MID_PTI
 	tristate "Parallel Trace Interface for MIPI P1149.7 cJTAG standard"
+<<<<<<< HEAD
+=======
+	depends on PCI
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default n
 	help
 	  The PTI (Parallel Trace Interface) driver directs
@@ -391,6 +395,7 @@ config HMC6352
 	  This driver provides support for the Honeywell HMC6352 compass,
 	  providing configuration and heading data via sysfs.
 
+<<<<<<< HEAD
 config SENSORS_AK8973
 	tristate "AK8973 magnetometer support"
 	default n
@@ -413,6 +418,15 @@ config SENSORS_KR3DM
 	default n
 	help
 	  Driver for STMicro KR3DM accelerometer - digital motion sensor.
+=======
+config SENSORS_NCT1008
+	tristate "ON Semiconductor Temperature Sensor"
+	default n
+	depends on I2C
+	help
+	 Say yes here if you wish to include the ON Semiconductor
+	 NCT1008 Temperature sensor.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 config EP93XX_PWM
 	tristate "EP93xx PWM support"
@@ -517,6 +531,18 @@ config PCH_PHUB
 	  To compile this driver as a module, choose M here: the module will
 	  be called pch_phub.
 
+<<<<<<< HEAD
+=======
+config USB_SWITCH_FSA9480
+	tristate "FSA9480 USB Switch"
+	depends on I2C
+	help
+	  The FSA9480 is a USB port accessory detector and switch.
+	  The FSA9480 is fully controlled using I2C and enables USB data,
+	  stereo and mono audio, video, microphone and UART data to use
+	  a common connector port.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config WL127X_RFKILL
 	tristate "Bluetooth power control driver for TI wl127x"
 	depends on RFKILL
@@ -540,6 +566,7 @@ config APANIC_PLABEL
 	 If your platform uses a different flash partition label for storing
  	 crashdumps, enter it here.
 
+<<<<<<< HEAD
 config SAMSUNG_JACK
 	bool "3.5MM ear jack driver for Samsung devices"
 	depends on INPUT
@@ -557,6 +584,72 @@ config USB_SWITCH_FSA9480
 	  The FSA9480 is fully controlled using I2C and enables USB data,
 	  stereo and mono audio, video, microphone and UART data to use
 	  a common connector port.
+=======
+config BCM4329_RFKILL
+	bool "Enable BCM4329 RFKILL driver"
+	default n
+	---help---
+	Adds BCM4329 RFKILL driver for Broadcom BCM4329 chipset
+
+config TEGRA_CRYPTO_DEV
+	bool "Device node to access tegra aes hardware"
+	---help---
+	Dev node /dev/tegra-crypto in order to get access to tegra aes
+	hardware from user space
+
+config BCM4330_RFKILL
+    bool "Enable BCM4330 RFKILL driver"
+    default n
+    ---help---
+    Adds BCM4330 RFKILL driver for Broadcom BCM4330 chipset
+
+config SEC_MODEM
+    bool "SAMSUNG MODEM DRIVER"
+    default n
+
+config SAMSUNG_JACK
+    bool "3.5MM ear jack driver for Samsung devices"
+    depends on INPUT
+    default n
+    ---help---
+     This is 3.5MM ear jack driver for Samsung devices.
+     If unsure, say N.
+
+config SAMSUNG_FM_SI4709
+	tristate "Si4709 FM radio"
+	depends on I2C
+	default n
+	help
+	  Say Y to enable Si4709 FM radio support.
+
+config FSA9480
+    tristate "FSA9480 USB Switch"
+    depends on I2C
+    help
+      The FSA9480 is a USB port accessory detector and switch.
+      The FSA9480 is fully controlled using I2C and enables USB data,
+      stereo and mono audio, video, microphone and UART data to use
+      a common connector port.
+
+config SEC_MISC
+    bool "driver for miscellaneous functions for Samsung boards"
+    default n
+    help
+      Enable this to be able to support Samsung boards
+
+config VIBTONZ
+    tristate "Vibtonz"
+    default n
+    help
+      Say Y to enable Vibtonz support.
+
+config MAX1749_VIBRATOR
+	bool "MAX1749 vibrator device driver"
+	depends on ANDROID_TIMED_OUTPUT
+	default n
+	---help---
+	Adds a timed output vibrator device node for MAX1749 vibrator motor
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 source "drivers/misc/c2port/Kconfig"
 source "drivers/misc/eeprom/Kconfig"
@@ -565,6 +658,7 @@ source "drivers/misc/iwmc3200top/Kconfig"
 source "drivers/misc/ti-st/Kconfig"
 source "drivers/misc/lis3lv02d/Kconfig"
 source "drivers/misc/carma/Kconfig"
+<<<<<<< HEAD
 
 config SAMSUNG_MODEMCTL
 	bool "Samsung Modem Control/IO Driver"
@@ -574,5 +668,9 @@ config PN544
 	default n
 	help
 	  NXP PN544 Near Field Communication controller support.
+=======
+source "drivers/misc/tegra-baseband/Kconfig"
+source "drivers/misc/modem_if/Kconfig"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 endif # MISC_DEVICES

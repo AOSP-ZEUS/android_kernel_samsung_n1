@@ -55,7 +55,11 @@ static int nmk_rng_probe(struct amba_device *dev, const struct amba_id *id)
 
 	ret = amba_request_regions(dev, dev->dev.init_name);
 	if (ret)
+<<<<<<< HEAD
 		return ret;
+=======
+		goto out_clk;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = -ENOMEM;
 	base = ioremap(dev->res.start, resource_size(&dev->res));
 	if (!base)
@@ -70,6 +74,10 @@ out_unmap:
 	iounmap(base);
 out_release:
 	amba_release_regions(dev);
+<<<<<<< HEAD
+=======
+out_clk:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	clk_disable(rng_clk);
 	clk_put(rng_clk);
 	return ret;

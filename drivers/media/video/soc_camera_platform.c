@@ -146,7 +146,11 @@ static int soc_camera_platform_probe(struct platform_device *pdev)
 	if (!p)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	if (!p->dev) {
+=======
+	if (!p->icd) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dev_err(&pdev->dev,
 			"Platform has not set soc_camera_device pointer!\n");
 		return -EINVAL;
@@ -156,16 +160,28 @@ static int soc_camera_platform_probe(struct platform_device *pdev)
 	if (!priv)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	icd = to_soc_camera_dev(p->dev);
+=======
+	icd = p->icd;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* soc-camera convention: control's drvdata points to the subdev */
 	platform_set_drvdata(pdev, &priv->subdev);
 	/* Set the control device reference */
+<<<<<<< HEAD
 	dev_set_drvdata(&icd->dev, &pdev->dev);
 
 	icd->ops = &soc_camera_platform_ops;
 
 	ici = to_soc_camera_host(icd->dev.parent);
+=======
+	icd->control = &pdev->dev;
+
+	icd->ops = &soc_camera_platform_ops;
+
+	ici = to_soc_camera_host(icd->parent);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	v4l2_subdev_init(&priv->subdev, &platform_subdev_ops);
 	v4l2_set_subdevdata(&priv->subdev, p);
@@ -188,7 +204,11 @@ static int soc_camera_platform_remove(struct platform_device *pdev)
 {
 	struct soc_camera_platform_priv *priv = get_priv(pdev);
 	struct soc_camera_platform_info *p = pdev->dev.platform_data;
+<<<<<<< HEAD
 	struct soc_camera_device *icd = to_soc_camera_dev(p->dev);
+=======
+	struct soc_camera_device *icd = p->icd;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	v4l2_device_unregister_subdev(&priv->subdev);
 	icd->ops = NULL;

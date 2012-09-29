@@ -467,7 +467,11 @@ static struct socket *sock_alloc(void)
 	struct inode *inode;
 	struct socket *sock;
 
+<<<<<<< HEAD
 	inode = new_inode(sock_mnt->mnt_sb);
+=======
+	inode = new_inode_pseudo(sock_mnt->mnt_sb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!inode)
 		return NULL;
 
@@ -580,7 +584,11 @@ int sock_sendmsg(struct socket *sock, struct msghdr *msg, size_t size)
 }
 EXPORT_SYMBOL(sock_sendmsg);
 
+<<<<<<< HEAD
 int sock_sendmsg_nosec(struct socket *sock, struct msghdr *msg, size_t size)
+=======
+static int sock_sendmsg_nosec(struct socket *sock, struct msghdr *msg, size_t size)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct kiocb iocb;
 	struct sock_iocb siocb;
@@ -791,9 +799,15 @@ static ssize_t sock_sendpage(struct file *file, struct page *page,
 
 	sock = file->private_data;
 
+<<<<<<< HEAD
 	flags = (file->f_flags & O_NONBLOCK) ? MSG_DONTWAIT : 0;
 	/* more is a combination of MSG_MORE and MSG_SENDPAGE_NOTLAST */
 	flags |= more;
+=======
+	flags = !(file->f_flags & O_NONBLOCK) ? 0 : MSG_DONTWAIT;
+	if (more)
+		flags |= MSG_MORE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return kernel_sendpage(sock, page, offset, size, flags);
 }

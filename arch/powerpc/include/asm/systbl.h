@@ -171,7 +171,11 @@ SYSCALL_SPU(setresuid)
 SYSCALL_SPU(getresuid)
 SYSCALL(ni_syscall)
 SYSCALL_SPU(poll)
+<<<<<<< HEAD
 COMPAT_SYS(nfsservctl)
+=======
+SYSCALL(ni_syscall)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 SYSCALL_SPU(setresgid)
 SYSCALL_SPU(getresgid)
 COMPAT_SYS_SPU(prctl)

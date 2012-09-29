@@ -139,6 +139,9 @@ void __init plat_mem_setup(void)
 			PNX8XXX_UART_LCR_8BIT;
 		ip3106_baud(UART_BASE, pnx8550_console_port) = 5;
 	}
+<<<<<<< HEAD
 
 	return;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

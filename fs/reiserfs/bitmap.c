@@ -214,7 +214,11 @@ static int scan_bitmap_block(struct reiserfs_transaction_handle *th,
 					}
 					/* otherwise we clear all bit were set ... */
 					while (--i >= *beg)
+<<<<<<< HEAD
 						reiserfs_test_and_clear_le_bit
+=======
+						reiserfs_clear_le_bit
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 						    (i, bh->b_data);
 					reiserfs_restore_prepared_buffer(s, bh);
 					*beg = org;
@@ -1222,15 +1226,22 @@ void reiserfs_cache_bitmap_metadata(struct super_block *sb,
 	info->free_count = 0;
 
 	while (--cur >= (unsigned long *)bh->b_data) {
+<<<<<<< HEAD
 		int i;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* 0 and ~0 are special, we can optimize for them */
 		if (*cur == 0)
 			info->free_count += BITS_PER_LONG;
 		else if (*cur != ~0L)	/* A mix, investigate */
+<<<<<<< HEAD
 			for (i = BITS_PER_LONG - 1; i >= 0; i--)
 				if (!reiserfs_test_le_bit(i, cur))
 					info->free_count++;
+=======
+			info->free_count += BITS_PER_LONG - hweight_long(*cur);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 

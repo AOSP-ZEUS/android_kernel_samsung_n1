@@ -543,11 +543,18 @@ int parse_chan_pair(char *str, struct line *line, int device,
 		    const struct chan_opts *opts, char **error_out)
 {
 	struct list_head *chans = &line->chan_list;
+<<<<<<< HEAD
 	struct chan *new, *chan;
 	char *in, *out;
 
 	if (!list_empty(chans)) {
 		chan = list_entry(chans->next, struct chan, list);
+=======
+	struct chan *new;
+	char *in, *out;
+
+	if (!list_empty(chans)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		free_chan(chans, 0);
 		INIT_LIST_HEAD(chans);
 	}

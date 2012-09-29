@@ -882,7 +882,11 @@ void user_disable_single_step(struct task_struct *task)
 }
 
 #ifdef CONFIG_HAVE_HW_BREAKPOINT
+<<<<<<< HEAD
 void ptrace_triggered(struct perf_event *bp, int nmi,
+=======
+void ptrace_triggered(struct perf_event *bp,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		      struct perf_sample_data *data, struct pt_regs *regs)
 {
 	struct perf_event_attr attr;
@@ -973,7 +977,11 @@ int ptrace_set_debugreg(struct task_struct *task, unsigned long addr,
 								&attr.bp_type);
 
 	thread->ptrace_bps[0] = bp = register_user_hw_breakpoint(&attr,
+<<<<<<< HEAD
 							ptrace_triggered, task);
+=======
+					       ptrace_triggered, NULL, task);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (IS_ERR(bp)) {
 		thread->ptrace_bps[0] = NULL;
 		ptrace_put_breakpoints(task);

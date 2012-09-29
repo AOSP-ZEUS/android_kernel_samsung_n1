@@ -52,6 +52,10 @@ int  nouveau_mm_get(struct nouveau_mm *, int type, u32 size, u32 size_nc,
 void nouveau_mm_put(struct nouveau_mm *, struct nouveau_mm_node *);
 
 int  nv50_vram_init(struct drm_device *);
+<<<<<<< HEAD
+=======
+void nv50_vram_fini(struct drm_device *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int  nv50_vram_new(struct drm_device *, u64 size, u32 align, u32 size_nc,
 		    u32 memtype, struct nouveau_mem **);
 void nv50_vram_del(struct drm_device *, struct nouveau_mem **);

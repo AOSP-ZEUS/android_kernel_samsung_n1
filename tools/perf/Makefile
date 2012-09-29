@@ -30,6 +30,11 @@ endif
 # Define EXTRA_CFLAGS=-m64 or EXTRA_CFLAGS=-m32 as appropriate for cross-builds.
 #
 # Define NO_DWARF if you do not want debug-info analysis feature at all.
+<<<<<<< HEAD
+=======
+#
+# Define WERROR=0 to disable treating any warnings as errors.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 $(OUTPUT)PERF-VERSION-FILE: .FORCE-PERF-VERSION-FILE
 	@$(SHELL_PATH) util/PERF-VERSION-GEN $(OUTPUT)
@@ -63,6 +68,14 @@ ifeq ($(ARCH),x86_64)
 	endif
 endif
 
+<<<<<<< HEAD
+=======
+# Treat warnings as errors unless directed not to
+ifneq ($(WERROR),0)
+	CFLAGS_WERROR := -Werror
+endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #
 # Include saner warnings here, which can catch bugs:
 #
@@ -95,7 +108,11 @@ ifndef PERF_DEBUG
   CFLAGS_OPTIMIZE = -O6
 endif
 
+<<<<<<< HEAD
 CFLAGS = -fno-omit-frame-pointer -ggdb3 -Wall -Wextra -std=gnu99 -Werror $(CFLAGS_OPTIMIZE) -D_FORTIFY_SOURCE=2 $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
+=======
+CFLAGS = -fno-omit-frame-pointer -ggdb3 -Wall -Wextra -std=gnu99 $(CFLAGS_WERROR) $(CFLAGS_OPTIMIZE) -D_FORTIFY_SOURCE=2 $(EXTRA_WARNINGS) $(EXTRA_CFLAGS)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 EXTLIBS = -lpthread -lrt -lelf -lm
 ALL_CFLAGS = $(CFLAGS) -D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=64
 ALL_LDFLAGS = $(LDFLAGS)
@@ -181,9 +198,15 @@ strip-libs = $(filter-out -l%,$(1))
 
 $(OUTPUT)python/perf.so: $(PYRF_OBJS)
 	$(QUIET_GEN)CFLAGS='$(BASIC_CFLAGS)' $(PYTHON_WORD) util/setup.py \
+<<<<<<< HEAD
 	  --quiet build_ext \
 	  --build-lib='$(OUTPUT)python' \
 	  --build-temp='$(OUTPUT)python/temp'
+=======
+	  --quiet build_ext; \
+	mkdir -p $(OUTPUT)python && \
+	cp $(PYTHON_EXTBUILD_LIB)perf.so $(OUTPUT)python/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #
 # No Perl scripts right now:
 #
@@ -282,6 +305,10 @@ LIB_H += util/thread.h
 LIB_H += util/thread_map.h
 LIB_H += util/trace-event.h
 LIB_H += util/probe-finder.h
+<<<<<<< HEAD
+=======
+LIB_H += util/dwarf-aux.h
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 LIB_H += util/probe-event.h
 LIB_H += util/pstack.h
 LIB_H += util/cpumap.h
@@ -438,6 +465,10 @@ else
 	BASIC_CFLAGS += -DDWARF_SUPPORT
 	EXTLIBS += -lelf -ldw
 	LIB_OBJS += $(OUTPUT)util/probe-finder.o
+<<<<<<< HEAD
+=======
+	LIB_OBJS += $(OUTPUT)util/dwarf-aux.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endif # PERF_HAVE_DWARF_REGS
 endif # NO_DWARF
 
@@ -507,9 +538,19 @@ else
 
   PYTHON_WORD := $(call shell-wordify,$(PYTHON))
 
+<<<<<<< HEAD
   python-clean := $(PYTHON_WORD) util/setup.py clean \
     --build-lib='$(OUTPUT)python' \
     --build-temp='$(OUTPUT)python/temp'
+=======
+  # python extension build directories
+  PYTHON_EXTBUILD     := $(OUTPUT)python_ext_build/
+  PYTHON_EXTBUILD_LIB := $(PYTHON_EXTBUILD)lib/
+  PYTHON_EXTBUILD_TMP := $(PYTHON_EXTBUILD)tmp/
+  export PYTHON_EXTBUILD_LIB PYTHON_EXTBUILD_TMP
+
+  python-clean := rm -rf $(PYTHON_EXTBUILD) $(OUTPUT)python/perf.so
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
   ifdef NO_LIBPYTHON
     $(call disable-python)
@@ -866,6 +907,12 @@ install: all
 	$(INSTALL) scripts/python/*.py -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/scripts/python'
 	$(INSTALL) scripts/python/bin/* -t '$(DESTDIR_SQ)$(perfexec_instdir_SQ)/scripts/python/bin'
 
+<<<<<<< HEAD
+=======
+install-python_ext:
+	$(PYTHON_WORD) util/setup.py --quiet install --root='/$(DESTDIR_SQ)'
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 install-doc:
 	$(MAKE) -C Documentation install
 
@@ -893,7 +940,11 @@ quick-install-html:
 ### Cleaning rules
 
 clean:
+<<<<<<< HEAD
 	$(RM) $(OUTPUT){*.o,*/*.o,*/*/*.o,*/*/*/*.o,$(LIB_FILE),perf-archive}
+=======
+	$(RM) $(LIB_OBJS) $(BUILTIN_OBJS) $(LIB_FILE) $(OUTPUT)perf-archive $(OUTPUT)perf.o $(LANG_BINDINGS)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	$(RM) $(ALL_PROGRAMS) perf
 	$(RM) *.spec *.pyc *.pyo */*.pyc */*.pyo $(OUTPUT)common-cmds.h TAGS tags cscope*
 	$(MAKE) -C Documentation/ clean

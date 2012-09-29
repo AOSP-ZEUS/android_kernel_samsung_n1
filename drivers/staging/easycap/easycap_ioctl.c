@@ -25,6 +25,10 @@
 */
 /*****************************************************************************/
 
+<<<<<<< HEAD
+=======
+#include <linux/version.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "easycap.h"
 
 /*--------------------------------------------------------------------------*/
@@ -966,10 +970,13 @@ long easycap_unlocked_ioctl(struct file *file,
 		SAY("ERROR:  peasycap is NULL\n");
 		return -1;
 	}
+<<<<<<< HEAD
 	if (memcmp(&peasycap->telltale[0], TELLTALE, strlen(TELLTALE))) {
 		SAY("ERROR: bad peasycap\n");
 		return -EFAULT;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	p = peasycap->pusb_device;
 	if (!p) {
 		SAM("ERROR: peasycap->pusb_device is NULL\n");
@@ -1003,12 +1010,15 @@ long easycap_unlocked_ioctl(struct file *file,
 			mutex_unlock(&easycapdc60_dongle[kd].mutex_video);
 			return -ERESTARTSYS;
 		}
+<<<<<<< HEAD
 		if (memcmp(&peasycap->telltale[0], TELLTALE, strlen(TELLTALE))) {
 			SAY("ERROR: bad peasycap\n");
 			mutex_unlock(&easycapdc60_dongle[kd].mutex_video);
 			return -EFAULT;
 		}
 		p = peasycap->pusb_device;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!peasycap->pusb_device) {
 			SAM("ERROR: peasycap->pusb_device is NULL\n");
 			mutex_unlock(&easycapdc60_dongle[kd].mutex_video);
@@ -2356,6 +2366,7 @@ long easycap_unlocked_ioctl(struct file *file,
 /*---------------------------------------------------------------------------*/
 		JOM(8, "calling wake_up on wq_video and wq_audio\n");
 		wake_up_interruptible(&(peasycap->wq_video));
+<<<<<<< HEAD
 #ifdef CONFIG_EASYCAP_OSS
 		wake_up_interruptible(&(peasycap->wq_audio));
 
@@ -2364,6 +2375,10 @@ long easycap_unlocked_ioctl(struct file *file,
 			snd_pcm_period_elapsed(peasycap->psubstream);
 #endif /* CONFIG_EASYCAP_OSS */
 /*---------------------------------------------------------------------------*/
+=======
+		if (peasycap->psubstream)
+			snd_pcm_period_elapsed(peasycap->psubstream);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 /* - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - */

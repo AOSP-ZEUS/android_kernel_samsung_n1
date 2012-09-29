@@ -483,8 +483,18 @@ int inet_bind(struct socket *sock, struct sockaddr *uaddr, int addr_len)
 		goto out;
 
 	if (addr->sin_family != AF_INET) {
+<<<<<<< HEAD
 		err = -EAFNOSUPPORT;
 		goto out;
+=======
+		/* Compatibility games : accept AF_UNSPEC (mapped to AF_INET)
+		 * only if s_addr is INADDR_ANY.
+		 */
+		err = -EAFNOSUPPORT;
+		if (addr->sin_family != AF_UNSPEC ||
+		    addr->sin_addr.s_addr != htonl(INADDR_ANY))
+			goto out;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	chk_addr_ret = inet_addr_type(sock_net(sk), addr->sin_addr.s_addr);
@@ -1458,11 +1468,19 @@ EXPORT_SYMBOL_GPL(inet_ctl_sock_create);
 unsigned long snmp_fold_field(void __percpu *mib[], int offt)
 {
 	unsigned long res = 0;
+<<<<<<< HEAD
 	int i;
 
 	for_each_possible_cpu(i) {
 		res += *(((unsigned long *) per_cpu_ptr(mib[0], i)) + offt);
 		res += *(((unsigned long *) per_cpu_ptr(mib[1], i)) + offt);
+=======
+	int i, j;
+
+	for_each_possible_cpu(i) {
+		for (j = 0; j < SNMP_ARRAY_SZ; j++)
+			res += *(((unsigned long *) per_cpu_ptr(mib[j], i)) + offt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return res;
 }
@@ -1476,6 +1494,7 @@ u64 snmp_fold_field64(void __percpu *mib[], int offt, size_t syncp_offset)
 	int cpu;
 
 	for_each_possible_cpu(cpu) {
+<<<<<<< HEAD
 		void *bhptr, *userptr;
 		struct u64_stats_sync *syncp;
 		u64 v_bh, v_user;
@@ -1498,6 +1517,21 @@ u64 snmp_fold_field64(void __percpu *mib[], int offt, size_t syncp_offset)
 		} while (u64_stats_fetch_retry(syncp, start));
 
 		res += v_bh + v_user;
+=======
+		void *bhptr;
+		struct u64_stats_sync *syncp;
+		u64 v;
+		unsigned int start;
+
+		bhptr = per_cpu_ptr(mib[0], cpu);
+		syncp = (struct u64_stats_sync *)(bhptr + syncp_offset);
+		do {
+			start = u64_stats_fetch_begin_bh(syncp);
+			v = *(((u64 *) bhptr) + offt);
+		} while (u64_stats_fetch_retry_bh(syncp, start));
+
+		res += v;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return res;
 }
@@ -1509,6 +1543,7 @@ int snmp_mib_init(void __percpu *ptr[2], size_t mibsize, size_t align)
 	BUG_ON(ptr == NULL);
 	ptr[0] = __alloc_percpu(mibsize, align);
 	if (!ptr[0])
+<<<<<<< HEAD
 		goto err0;
 	ptr[1] = __alloc_percpu(mibsize, align);
 	if (!ptr[1])
@@ -1528,6 +1563,30 @@ void snmp_mib_free(void __percpu *ptr[2])
 	free_percpu(ptr[0]);
 	free_percpu(ptr[1]);
 	ptr[0] = ptr[1] = NULL;
+=======
+		return -ENOMEM;
+#if SNMP_ARRAY_SZ == 2
+	ptr[1] = __alloc_percpu(mibsize, align);
+	if (!ptr[1]) {
+		free_percpu(ptr[0]);
+		ptr[0] = NULL;
+		return -ENOMEM;
+	}
+#endif
+	return 0;
+}
+EXPORT_SYMBOL_GPL(snmp_mib_init);
+
+void snmp_mib_free(void __percpu *ptr[SNMP_ARRAY_SZ])
+{
+	int i;
+
+	BUG_ON(ptr == NULL);
+	for (i = 0; i < SNMP_ARRAY_SZ; i++) {
+		free_percpu(ptr[i]);
+		ptr[i] = NULL;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(snmp_mib_free);
 

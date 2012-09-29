@@ -16,7 +16,11 @@
 #include <linux/gfs2_ondisk.h>
 #include <linux/rcupdate.h>
 #include <linux/rculist_bl.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "gfs2.h"
 #include "incore.h"
@@ -41,6 +45,10 @@ static void gfs2_init_inode_once(void *foo)
 	init_rwsem(&ip->i_rw_mutex);
 	INIT_LIST_HEAD(&ip->i_trunc_list);
 	ip->i_alloc = NULL;
+<<<<<<< HEAD
+=======
+	ip->i_hash_cache = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void gfs2_init_glock_once(void *foo)

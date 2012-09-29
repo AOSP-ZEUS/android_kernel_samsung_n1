@@ -2,6 +2,7 @@
 # Near Field Communication (NFC) devices
 #
 
+<<<<<<< HEAD
 menuconfig NFC_DEVICES
 	bool "Near Field Communication (NFC) devices"
 	default n
@@ -13,6 +14,10 @@ menuconfig NFC_DEVICES
 	  devices connected to your computer.
 
 if NFC_DEVICES
+=======
+menu "Near Field Communication (NFC) devices"
+	depends on NFC
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 config PN544_NFC
 	tristate "PN544 NFC driver"
@@ -26,5 +31,19 @@ config PN544_NFC
 	  To compile this driver as a module, choose m here. The module will
 	  be called pn544.
 
+<<<<<<< HEAD
 
 endif # NFC_DEVICES
+=======
+config NFC_PN533
+	tristate "NXP PN533 USB driver"
+	depends on USB
+	help
+	  NXP PN533 USB driver.
+	  This driver provides support for NFC NXP PN533 devices.
+
+	  Say Y here to compile support for PN533 devices into the
+	  kernel or say M to compile it as module (pn533).
+
+endmenu
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

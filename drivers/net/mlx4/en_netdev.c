@@ -45,6 +45,7 @@
 #include "mlx4_en.h"
 #include "en_port.h"
 
+<<<<<<< HEAD
 
 static void mlx4_en_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 {
@@ -64,6 +65,8 @@ static void mlx4_en_vlan_rx_register(struct net_device *dev, struct vlan_group *
 	mutex_unlock(&mdev->state_lock);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void mlx4_en_vlan_rx_add_vid(struct net_device *dev, unsigned short vid)
 {
 	struct mlx4_en_priv *priv = netdev_priv(dev);
@@ -71,16 +74,26 @@ static void mlx4_en_vlan_rx_add_vid(struct net_device *dev, unsigned short vid)
 	int err;
 	int idx;
 
+<<<<<<< HEAD
 	if (!priv->vlgrp)
 		return;
 
 	en_dbg(HW, priv, "adding VLAN:%d (vlgrp entry:%p)\n",
 	       vid, vlan_group_get_device(priv->vlgrp, vid));
+=======
+	en_dbg(HW, priv, "adding VLAN:%d\n", vid);
+
+	set_bit(vid, priv->active_vlans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Add VID to port VLAN filter */
 	mutex_lock(&mdev->state_lock);
 	if (mdev->device_up && priv->port_up) {
+<<<<<<< HEAD
 		err = mlx4_SET_VLAN_FLTR(mdev->dev, priv->port, priv->vlgrp);
+=======
+		err = mlx4_SET_VLAN_FLTR(mdev->dev, priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (err)
 			en_err(priv, "Failed configuring VLAN filter\n");
 	}
@@ -97,12 +110,18 @@ static void mlx4_en_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 	int err;
 	int idx;
 
+<<<<<<< HEAD
 	if (!priv->vlgrp)
 		return;
 
 	en_dbg(HW, priv, "Killing VID:%d (vlgrp:%p vlgrp entry:%p)\n",
 	       vid, priv->vlgrp, vlan_group_get_device(priv->vlgrp, vid));
 	vlan_group_set_device(priv->vlgrp, vid, NULL);
+=======
+	en_dbg(HW, priv, "Killing VID:%d\n", vid);
+
+	clear_bit(vid, priv->active_vlans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Remove VID from port VLAN filter */
 	mutex_lock(&mdev->state_lock);
@@ -112,7 +131,11 @@ static void mlx4_en_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 		en_err(priv, "could not find vid %d in cache\n", vid);
 
 	if (mdev->device_up && priv->port_up) {
+<<<<<<< HEAD
 		err = mlx4_SET_VLAN_FLTR(mdev->dev, priv->port, priv->vlgrp);
+=======
+		err = mlx4_SET_VLAN_FLTR(mdev->dev, priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (err)
 			en_err(priv, "Failed configuring VLAN filter\n");
 	}
@@ -239,7 +262,12 @@ static void mlx4_en_do_set_multicast(struct work_struct *work)
 			priv->flags |= MLX4_EN_FLAG_PROMISC;
 
 			/* Enable promiscouos mode */
+<<<<<<< HEAD
 			if (!mdev->dev->caps.vep_uc_steering)
+=======
+			if (!(mdev->dev->caps.flags &
+						MLX4_DEV_CAP_FLAG_VEP_UC_STEER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				err = mlx4_SET_PORT_qpn_calc(mdev->dev, priv->port,
 							     priv->base_qpn, 1);
 			else
@@ -265,12 +293,19 @@ static void mlx4_en_do_set_multicast(struct work_struct *work)
 				priv->flags |= MLX4_EN_FLAG_MC_PROMISC;
 			}
 
+<<<<<<< HEAD
 			if (priv->vlgrp) {
 				/* Disable port VLAN filter */
 				err = mlx4_SET_VLAN_FLTR(mdev->dev, priv->port, NULL);
 				if (err)
 					en_err(priv, "Failed disabling VLAN filter\n");
 			}
+=======
+			/* Disable port VLAN filter */
+			err = mlx4_SET_VLAN_FLTR(mdev->dev, priv);
+			if (err)
+				en_err(priv, "Failed disabling VLAN filter\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		goto out;
 	}
@@ -285,7 +320,11 @@ static void mlx4_en_do_set_multicast(struct work_struct *work)
 		priv->flags &= ~MLX4_EN_FLAG_PROMISC;
 
 		/* Disable promiscouos mode */
+<<<<<<< HEAD
 		if (!mdev->dev->caps.vep_uc_steering)
+=======
+		if (!(mdev->dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_UC_STEER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			err = mlx4_SET_PORT_qpn_calc(mdev->dev, priv->port,
 						     priv->base_qpn, 0);
 		else
@@ -304,7 +343,11 @@ static void mlx4_en_do_set_multicast(struct work_struct *work)
 		}
 
 		/* Enable port VLAN filter */
+<<<<<<< HEAD
 		err = mlx4_SET_VLAN_FLTR(mdev->dev, priv->port, priv->vlgrp);
+=======
+		err = mlx4_SET_VLAN_FLTR(mdev->dev, priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (err)
 			en_err(priv, "Failed enabling VLAN filter\n");
 	}
@@ -1046,7 +1089,10 @@ static const struct net_device_ops mlx4_netdev_ops = {
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_change_mtu		= mlx4_en_change_mtu,
 	.ndo_tx_timeout		= mlx4_en_tx_timeout,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register	= mlx4_en_vlan_rx_register,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ndo_vlan_rx_add_vid	= mlx4_en_vlan_rx_add_vid,
 	.ndo_vlan_rx_kill_vid	= mlx4_en_vlan_rx_kill_vid,
 #ifdef CONFIG_NET_POLL_CONTROLLER

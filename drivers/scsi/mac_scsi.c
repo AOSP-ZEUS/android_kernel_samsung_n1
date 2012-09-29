@@ -215,6 +215,7 @@ static int __init mac_scsi_setup(char *str) {
 __setup("mac5380=", mac_scsi_setup);
 
 /*
+<<<<<<< HEAD
  * If you want to find the instance with (k)gdb ...
  */
 #if NDEBUG
@@ -222,6 +223,8 @@ static struct Scsi_Host *default_instance;
 #endif
 
 /*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Function : int macscsi_detect(struct scsi_host_template * tpnt)
  *
  * Purpose : initializes mac NCR5380 driver based on the
@@ -233,7 +236,11 @@ static struct Scsi_Host *default_instance;
  *
  */
  
+<<<<<<< HEAD
 int macscsi_detect(struct scsi_host_template * tpnt)
+=======
+int __init macscsi_detect(struct scsi_host_template * tpnt)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
     static int called = 0;
     int flags = 0;
@@ -268,10 +275,14 @@ int macscsi_detect(struct scsi_host_template * tpnt)
     /* Once we support multiple 5380s (e.g. DuoDock) we'll do
        something different here */
     instance = scsi_register (tpnt, sizeof(struct NCR5380_hostdata));
+<<<<<<< HEAD
 #if NDEBUG
     default_instance = instance;
 #endif
     
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
     if (macintosh_config->ident == MAC_MODEL_IIFX) {
 	mac_scsi_regp  = via1+0x8000;
 	mac_scsi_drq   = via1+0xE000;

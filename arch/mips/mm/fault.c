@@ -145,7 +145,11 @@ good_area:
 	 * the fault.
 	 */
 	fault = handle_mm_fault(mm, vma, address, write ? FAULT_FLAG_WRITE : 0);
+<<<<<<< HEAD
 	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, 0, regs, address);
+=======
+	perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS, 1, regs, address);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (unlikely(fault & VM_FAULT_ERROR)) {
 		if (fault & VM_FAULT_OOM)
 			goto out_of_memory;
@@ -154,12 +158,19 @@ good_area:
 		BUG();
 	}
 	if (fault & VM_FAULT_MAJOR) {
+<<<<<<< HEAD
 		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ,
 				1, 0, regs, address);
 		tsk->maj_flt++;
 	} else {
 		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN,
 				1, 0, regs, address);
+=======
+		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MAJ, 1, regs, address);
+		tsk->maj_flt++;
+	} else {
+		perf_sw_event(PERF_COUNT_SW_PAGE_FAULTS_MIN, 1, regs, address);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tsk->min_flt++;
 	}
 

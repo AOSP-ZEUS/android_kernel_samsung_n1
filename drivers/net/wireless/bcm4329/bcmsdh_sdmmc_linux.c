@@ -141,11 +141,64 @@ static const struct sdio_device_id bcmsdh_sdmmc_ids[] = {
 
 MODULE_DEVICE_TABLE(sdio, bcmsdh_sdmmc_ids);
 
+<<<<<<< HEAD
+=======
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39)) && defined(CONFIG_PM)
+static int bcmsdh_sdmmc_suspend(struct device *pdev)
+{
+	struct sdio_func *func = dev_to_sdio_func(pdev);
+	mmc_pm_flag_t sdio_flags;
+	int ret = 0;
+
+	if (func->num != 2)
+		return 0;
+
+	sdio_flags = sdio_get_host_pm_caps(func);
+
+	if (!(sdio_flags & MMC_PM_KEEP_POWER)) {
+		sd_err(("can't keep power while host "
+				"is suspended\n", __FUNCTION__));
+		ret = -EINVAL;
+		goto out;
+	}
+
+	/* keep power while host suspended */
+	ret = sdio_set_host_pm_flags(func, MMC_PM_KEEP_POWER);
+	if (ret) {
+		sd_err(("error while trying to keep power\n", __FUNCTION__));
+		goto out;
+	}
+
+out:
+	return ret;
+}
+
+static int bcmsdh_sdmmc_resume(struct device *pdev)
+{
+	/* nothing to do since MMC_PM_KEEP_POWER is cleared by MMC stack */
+	return 0;
+}
+
+static const struct dev_pm_ops bcmsdh_sdmmc_pm_ops = {
+	.suspend	= bcmsdh_sdmmc_suspend,
+	.resume		= bcmsdh_sdmmc_resume,
+};
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct sdio_driver bcmsdh_sdmmc_driver = {
 	.probe		= bcmsdh_sdmmc_probe,
 	.remove		= bcmsdh_sdmmc_remove,
 	.name		= "bcmsdh_sdmmc",
 	.id_table	= bcmsdh_sdmmc_ids,
+<<<<<<< HEAD
+=======
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2, 6, 39)) && defined(CONFIG_PM)
+	.drv = {
+		.pm     = &bcmsdh_sdmmc_pm_ops,
+	},
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	};
 
 struct sdos_info {

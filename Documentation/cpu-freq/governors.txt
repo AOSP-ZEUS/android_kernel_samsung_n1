@@ -225,6 +225,7 @@ frequency before ramping down. This is to ensure that the governor has
 seen enough historic cpu load data to determine the appropriate
 workload.  Default is 80000 uS.
 
+<<<<<<< HEAD
 hispeed_freq: An intermediate "hi speed" at which to initially ramp
 when CPU load hits the value specified in go_hispeed_load.  If load
 stays high for the amount of time specified in above_hispeed_delay,
@@ -251,6 +252,13 @@ boostpulse: Immediately boost speed of all CPUs to hispeed_freq for
 min_sample_time, after which speeds are allowed to drop below
 hispeed_freq according to load as usual.
 
+=======
+go_maxspeed_load: The CPU load at which to ramp to max speed.  Default
+is 85.
+
+timer_rate: Sample rate for reevaluating cpu load when the system is
+not idle.  Default is 30000 uS.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 3. The Governor Interface in the CPUfreq Core
 =============================================

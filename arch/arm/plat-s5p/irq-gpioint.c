@@ -23,6 +23,11 @@
 #include <plat/gpio-core.h>
 #include <plat/gpio-cfg.h>
 
+<<<<<<< HEAD
+=======
+#include <asm/mach/irq.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define GPIO_BASE(chip)		(((unsigned long)(chip)->base) & 0xFFFFF000u)
 
 #define CON_OFFSET		0x700
@@ -81,6 +86,12 @@ static void s5p_gpioint_handler(unsigned int irq, struct irq_desc *desc)
 	int group, pend_offset, mask_offset;
 	unsigned int pend, mask;
 
+<<<<<<< HEAD
+=======
+	struct irq_chip *chip = irq_get_chip(irq);
+	chained_irq_enter(chip, desc);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (group = 0; group < bank->nr_groups; group++) {
 		struct s3c_gpio_chip *chip = bank->chips[group];
 		if (!chip)
@@ -102,23 +113,39 @@ static void s5p_gpioint_handler(unsigned int irq, struct irq_desc *desc)
 			pend &= ~BIT(offset);
 		}
 	}
+<<<<<<< HEAD
+=======
+	chained_irq_exit(chip, desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static __init int s5p_gpioint_add(struct s3c_gpio_chip *chip)
 {
 	static int used_gpioint_groups = 0;
 	int group = chip->group;
+<<<<<<< HEAD
 	struct s5p_gpioint_bank *bank = NULL;
+=======
+	struct s5p_gpioint_bank *b, *bank = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct irq_chip_generic *gc;
 	struct irq_chip_type *ct;
 
 	if (used_gpioint_groups >= S5P_GPIOINT_GROUP_COUNT)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	list_for_each_entry(bank, &banks, list) {
 		if (group >= bank->start &&
 		    group < bank->start + bank->nr_groups)
 			break;
+=======
+	list_for_each_entry(b, &banks, list) {
+		if (group >= b->start && group < b->start + b->nr_groups) {
+			bank = b;
+			break;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (!bank)
 		return -EINVAL;
@@ -156,9 +183,15 @@ static __init int s5p_gpioint_add(struct s3c_gpio_chip *chip)
 	ct->chip.irq_mask = irq_gc_mask_set_bit;
 	ct->chip.irq_unmask = irq_gc_mask_clr_bit;
 	ct->chip.irq_set_type = s5p_gpioint_set_type,
+<<<<<<< HEAD
 	ct->regs.ack = PEND_OFFSET + REG_OFFSET(chip->group);
 	ct->regs.mask = MASK_OFFSET + REG_OFFSET(chip->group);
 	ct->regs.type = CON_OFFSET + REG_OFFSET(chip->group);
+=======
+	ct->regs.ack = PEND_OFFSET + REG_OFFSET(group - bank->start);
+	ct->regs.mask = MASK_OFFSET + REG_OFFSET(group - bank->start);
+	ct->regs.type = CON_OFFSET + REG_OFFSET(group - bank->start);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	irq_setup_generic_chip(gc, IRQ_MSK(chip->chip.ngpio),
 			       IRQ_GC_INIT_MASK_CACHE,
 			       IRQ_NOREQUEST | IRQ_NOPROBE, 0);

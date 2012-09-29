@@ -361,15 +361,24 @@ static unsigned long via_mode_filter(struct ata_device *dev, unsigned long mask)
 	if (config->id == PCI_DEVICE_ID_VIA_82C586_0) {
 		ata_id_c_string(dev->id, model_num, ATA_ID_PROD, sizeof(model_num));
 		if (strcmp(model_num, "TS64GSSD25-M") == 0) {
+<<<<<<< HEAD
 			ata_dev_printk(dev, KERN_WARNING,
 	"disabling UDMA mode due to reported lockups with this device.\n");
+=======
+			ata_dev_warn(dev,
+	"disabling UDMA mode due to reported lockups with this device\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			mask &= ~ ATA_MASK_UDMA;
 		}
 	}
 
 	if (dev->class == ATA_DEV_ATAPI &&
 	    dmi_check_system(no_atapi_dma_dmi_table)) {
+<<<<<<< HEAD
 		ata_dev_printk(dev, KERN_WARNING, "controller locks up on ATAPI DMA, forcing PIO\n");
+=======
+		ata_dev_warn(dev, "controller locks up on ATAPI DMA, forcing PIO\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		mask &= ATA_MASK_PIO;
 	}
 
@@ -569,14 +578,21 @@ static int via_init_one(struct pci_dev *pdev, const struct pci_device_id *id)
 	const struct ata_port_info *ppi[] = { NULL, NULL };
 	struct pci_dev *isa;
 	const struct via_isa_bridge *config;
+<<<<<<< HEAD
 	static int printed_version;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 enable;
 	u32 timing;
 	unsigned long flags = id->driver_data;
 	int rc;
 
+<<<<<<< HEAD
 	if (!printed_version++)
 		dev_printk(KERN_DEBUG, &pdev->dev, "version " DRV_VERSION "\n");
+=======
+	ata_print_version_once(&pdev->dev, DRV_VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	rc = pcim_enable_device(pdev);
 	if (rc)

@@ -373,7 +373,11 @@ static struct xenbus_driver xenkbd_driver = {
 
 static int __init xenkbd_init(void)
 {
+<<<<<<< HEAD
 	if (!xen_pv_domain())
+=======
+	if (!xen_domain())
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENODEV;
 
 	/* Nothing to do if running in dom0. */

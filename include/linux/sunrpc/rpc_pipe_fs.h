@@ -44,6 +44,11 @@ RPC_I(struct inode *inode)
 	return container_of(inode, struct rpc_inode, vfs_inode);
 }
 
+<<<<<<< HEAD
+=======
+extern ssize_t rpc_pipe_generic_upcall(struct file *, struct rpc_pipe_msg *,
+				       char __user *, size_t);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern int rpc_queue_upcall(struct inode *, struct rpc_pipe_msg *);
 
 struct rpc_clnt;

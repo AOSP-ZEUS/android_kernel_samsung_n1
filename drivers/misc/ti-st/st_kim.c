@@ -35,6 +35,10 @@
 
 #include <linux/skbuff.h>
 #include <linux/ti_wilink_st.h>
+<<<<<<< HEAD
+=======
+#include <linux/serial_core.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 #define MAX_ST_DEVICES	3	/* Imagine 1 on each UART for now */
@@ -68,6 +72,10 @@ void validate_firmware_response(struct kim_data_s *kim_gdata)
 	if (unlikely(skb->data[5] != 0)) {
 		pr_err("no proper response during fw download");
 		pr_err("data6 %x", skb->data[5]);
+<<<<<<< HEAD
+=======
+		kfree_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;		/* keep waiting for the proper response */
 	}
 	/* becos of all the script being downloaded */
@@ -210,6 +218,10 @@ static long read_local_version(struct kim_data_s *kim_gdata, char *bts_scr_name)
 		pr_err(" waiting for ver info- timed out ");
 		return -ETIMEDOUT;
 	}
+<<<<<<< HEAD
+=======
+	INIT_COMPLETION(kim_gdata->kim_rcvd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	version =
 		MAKEWORD(kim_gdata->resp_buffer[13],
@@ -298,6 +310,10 @@ static long download_firmware(struct kim_data_s *kim_gdata)
 
 		switch (((struct bts_action *)ptr)->type) {
 		case ACTION_SEND_COMMAND:	/* action send */
+<<<<<<< HEAD
+=======
+			pr_debug("S");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			action_ptr = &(((struct bts_action *)ptr)->data[0]);
 			if (unlikely
 			    (((struct hci_command *)action_ptr)->opcode ==
@@ -335,6 +351,13 @@ static long download_firmware(struct kim_data_s *kim_gdata)
 				release_firmware(kim_gdata->fw_entry);
 				return -ETIMEDOUT;
 			}
+<<<<<<< HEAD
+=======
+			/* reinit completion before sending for the
+			 * relevant wait
+			 */
+			INIT_COMPLETION(kim_gdata->kim_rcvd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			/*
 			 * Free space found in uart buffer, call st_int_write
@@ -361,6 +384,10 @@ static long download_firmware(struct kim_data_s *kim_gdata)
 			}
 			break;
 		case ACTION_WAIT_EVENT:  /* wait */
+<<<<<<< HEAD
+=======
+			pr_debug("W");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (!wait_for_completion_timeout
 					(&kim_gdata->kim_rcvd,
 					 msecs_to_jiffies(CMD_RESP_TIME))) {
@@ -434,11 +461,23 @@ long st_kim_start(void *kim_data)
 {
 	long err = 0;
 	long retry = POR_RETRY_COUNT;
+<<<<<<< HEAD
 	struct kim_data_s	*kim_gdata = (struct kim_data_s *)kim_data;
 
 	pr_info(" %s", __func__);
 
 	do {
+=======
+	struct ti_st_plat_data	*pdata;
+	struct kim_data_s	*kim_gdata = (struct kim_data_s *)kim_data;
+
+	pr_info(" %s", __func__);
+	pdata = kim_gdata->kim_pdev->dev.platform_data;
+
+	do {
+		/* platform specific enabling code here */
+		wake_lock(&kim_gdata->core_data->st_wk_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Configure BT nShutdown to HIGH state */
 		gpio_set_value(kim_gdata->nshutdown, GPIO_LOW);
 		mdelay(5);	/* FIXME: a proper toggle */
@@ -460,6 +499,15 @@ long st_kim_start(void *kim_data)
 			pr_info("ldisc_install = 0");
 			sysfs_notify(&kim_gdata->kim_pdev->dev.kobj,
 					NULL, "install");
+<<<<<<< HEAD
+=======
+			/* the following wait is never going to be completed,
+			 * since the ldisc was never installed, hence serving
+			 * as a mdelay of LDISC_TIME msecs */
+			err = wait_for_completion_timeout
+				(&kim_gdata->ldisc_installed,
+				 msecs_to_jiffies(LDISC_TIME));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			err = -ETIMEDOUT;
 			continue;
 		} else {
@@ -472,6 +520,16 @@ long st_kim_start(void *kim_data)
 				pr_info("ldisc_install = 0");
 				sysfs_notify(&kim_gdata->kim_pdev->dev.kobj,
 						NULL, "install");
+<<<<<<< HEAD
+=======
+				/* this wait might be completed, though in the
+				 * tty_close() since the ldisc is already
+				 * installed */
+				err = wait_for_completion_timeout
+					(&kim_gdata->ldisc_installed,
+					 msecs_to_jiffies(LDISC_TIME));
+				err = -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				continue;
 			} else {	/* on success don't retry */
 				break;
@@ -515,6 +573,12 @@ long st_kim_stop(void *kim_data)
 	gpio_set_value(kim_gdata->nshutdown, GPIO_HIGH);
 	mdelay(1);
 	gpio_set_value(kim_gdata->nshutdown, GPIO_LOW);
+<<<<<<< HEAD
+=======
+
+	/* platform specific disable */
+	wake_unlock(&kim_gdata->core_data->st_wk_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return err;
 }
 
@@ -673,6 +737,11 @@ static int kim_probe(struct platform_device *pdev)
 	/* refer to itself */
 	kim_gdata->core_data->kim_data = kim_gdata;
 
+<<<<<<< HEAD
+=======
+	wake_lock_init(&kim_gdata->core_data->st_wk_lock, WAKE_LOCK_SUSPEND,
+				"st_wake_lock");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Claim the chip enable nShutdown gpio from the system */
 	kim_gdata->nshutdown = pdata->nshutdown_gpio;
 	status = gpio_request(kim_gdata->nshutdown, "kim");
@@ -738,32 +807,65 @@ static int kim_remove(struct platform_device *pdev)
 	sysfs_remove_group(&pdev->dev.kobj, &uim_attr_grp);
 	pr_info("sysfs entries removed");
 
+<<<<<<< HEAD
+=======
+	wake_lock_destroy(&kim_gdata->core_data->st_wk_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kim_gdata->kim_pdev = NULL;
 	st_core_exit(kim_gdata->core_data);
 
 	kfree(kim_gdata);
 	kim_gdata = NULL;
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
 int kim_suspend(struct platform_device *pdev, pm_message_t state)
 {
+<<<<<<< HEAD
 	struct ti_st_plat_data	*pdata = pdev->dev.platform_data;
 
 	if (pdata->suspend)
 		return pdata->suspend(pdev, state);
 
 	return -EOPNOTSUPP;
+=======
+	struct kim_data_s *kim_gdata;
+	struct st_data_s *core_data;
+	struct uart_state *uart_state;
+	struct uart_port *uport;
+
+	kim_gdata = dev_get_drvdata(&pdev->dev);
+	core_data = kim_gdata->core_data;
+
+	if (st_ll_getstate(core_data) != ST_LL_INVALID) {
+		uart_state = core_data->tty->driver_data;
+		uport = uart_state->uart_port;
+#ifdef CONFIG_BT_TIBLUESLEEP
+		pr_info(" Bluesleep Start");
+		bluesleep_start(uport);
+#endif
+	}
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int kim_resume(struct platform_device *pdev)
 {
+<<<<<<< HEAD
 	struct ti_st_plat_data	*pdata = pdev->dev.platform_data;
 
 	if (pdata->resume)
 		return pdata->resume(pdev);
 
 	return -EOPNOTSUPP;
+=======
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**********************************************************************/

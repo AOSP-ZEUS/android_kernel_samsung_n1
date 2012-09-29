@@ -1,7 +1,11 @@
 /*
  * cxd2099.c: Driver for the CXD2099AR Common Interface Controller
  *
+<<<<<<< HEAD
  * Copyright (C) 2010 DigitalDevices UG
+=======
+ * Copyright (C) 2010-2011 Digital Devices GmbH
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -22,7 +26,10 @@
  * Or, point your browser to http://www.gnu.org/copyleft/gpl.html
  */
 
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h>
 #include <linux/kernel.h>
 #include <linux/module.h>
@@ -42,13 +49,21 @@ struct cxd {
 	struct dvb_ca_en50221 en;
 
 	struct i2c_adapter *i2c;
+<<<<<<< HEAD
 	u8     adr;
+=======
+	struct cxd2099_cfg cfg;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8     regs[0x23];
 	u8     lastaddress;
 	u8     clk_reg_f;
 	u8     clk_reg_b;
 	int    mode;
+<<<<<<< HEAD
 	u32    bitrate;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int    ready;
 	int    dr;
 	int    slot_stat;
@@ -90,9 +105,15 @@ static int i2c_read_reg(struct i2c_adapter *adapter, u8 adr,
 			u8 reg, u8 *val)
 {
 	struct i2c_msg msgs[2] = {{.addr = adr, .flags = 0,
+<<<<<<< HEAD
 				   .buf = &reg, .len = 1 },
 				  {.addr = adr, .flags = I2C_M_RD,
 				   .buf = val, .len = 1 } };
+=======
+				   .buf = &reg, .len = 1},
+				  {.addr = adr, .flags = I2C_M_RD,
+				   .buf = val, .len = 1} };
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (i2c_transfer(adapter, msgs, 2) != 2) {
 		printk(KERN_ERR "error in i2c_read_reg\n");
@@ -105,9 +126,15 @@ static int i2c_read(struct i2c_adapter *adapter, u8 adr,
 		    u8 reg, u8 *data, u8 n)
 {
 	struct i2c_msg msgs[2] = {{.addr = adr, .flags = 0,
+<<<<<<< HEAD
 				   .buf = &reg, .len = 1 },
 				  {.addr = adr, .flags = I2C_M_RD,
 				   .buf = data, .len = n } };
+=======
+				 .buf = &reg, .len = 1},
+				{.addr = adr, .flags = I2C_M_RD,
+				 .buf = data, .len = n} };
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (i2c_transfer(adapter, msgs, 2) != 2) {
 		printk(KERN_ERR "error in i2c_read\n");
@@ -120,10 +147,17 @@ static int read_block(struct cxd *ci, u8 adr, u8 *data, u8 n)
 {
 	int status;
 
+<<<<<<< HEAD
 	status = i2c_write_reg(ci->i2c, ci->adr, 0, adr);
 	if (!status) {
 		ci->lastaddress = adr;
 		status = i2c_read(ci->i2c, ci->adr, 1, data, n);
+=======
+	status = i2c_write_reg(ci->i2c, ci->cfg.adr, 0, adr);
+	if (!status) {
+		ci->lastaddress = adr;
+		status = i2c_read(ci->i2c, ci->cfg.adr, 1, data, n);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return status;
 }
@@ -137,17 +171,26 @@ static int read_reg(struct cxd *ci, u8 reg, u8 *val)
 static int read_pccard(struct cxd *ci, u16 address, u8 *data, u8 n)
 {
 	int status;
+<<<<<<< HEAD
 	u8 addr[3] = { 2, address&0xff, address>>8 };
 
 	status = i2c_write(ci->i2c, ci->adr, addr, 3);
 	if (!status)
 		status = i2c_read(ci->i2c, ci->adr, 3, data, n);
+=======
+	u8 addr[3] = {2, address & 0xff, address >> 8};
+
+	status = i2c_write(ci->i2c, ci->cfg.adr, addr, 3);
+	if (!status)
+		status = i2c_read(ci->i2c, ci->cfg.adr, 3, data, n);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return status;
 }
 
 static int write_pccard(struct cxd *ci, u16 address, u8 *data, u8 n)
 {
 	int status;
+<<<<<<< HEAD
 	u8 addr[3] = { 2, address&0xff, address>>8 };
 
 	status = i2c_write(ci->i2c, ci->adr, addr, 3);
@@ -155,6 +198,15 @@ static int write_pccard(struct cxd *ci, u16 address, u8 *data, u8 n)
 		u8 buf[256] = {3};
 		memcpy(buf+1, data, n);
 		status = i2c_write(ci->i2c, ci->adr, buf, n+1);
+=======
+	u8 addr[3] = {2, address & 0xff, address >> 8};
+
+	status = i2c_write(ci->i2c, ci->cfg.adr, addr, 3);
+	if (!status) {
+		u8 buf[256] = {3};
+		memcpy(buf+1, data, n);
+		status = i2c_write(ci->i2c, ci->cfg.adr, buf, n+1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return status;
 }
@@ -162,17 +214,26 @@ static int write_pccard(struct cxd *ci, u16 address, u8 *data, u8 n)
 static int read_io(struct cxd *ci, u16 address, u8 *val)
 {
 	int status;
+<<<<<<< HEAD
 	u8 addr[3] = { 2, address&0xff, address>>8 };
 
 	status = i2c_write(ci->i2c, ci->adr, addr, 3);
 	if (!status)
 		status = i2c_read(ci->i2c, ci->adr, 3, val, 1);
+=======
+	u8 addr[3] = {2, address & 0xff, address >> 8};
+
+	status = i2c_write(ci->i2c, ci->cfg.adr, addr, 3);
+	if (!status)
+		status = i2c_read(ci->i2c, ci->cfg.adr, 3, val, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return status;
 }
 
 static int write_io(struct cxd *ci, u16 address, u8 val)
 {
 	int status;
+<<<<<<< HEAD
 	u8 addr[3] = { 2, address&0xff, address>>8 };
 	u8 buf[2] = { 3, val };
 
@@ -183,11 +244,49 @@ static int write_io(struct cxd *ci, u16 address, u8 val)
 	return status;
 }
 
+=======
+	u8 addr[3] = {2, address & 0xff, address >> 8};
+	u8 buf[2] = {3, val};
+
+	status = i2c_write(ci->i2c, ci->cfg.adr, addr, 3);
+	if (!status)
+		status = i2c_write(ci->i2c, ci->cfg.adr, buf, 2);
+	return status;
+}
+
+#if 0
+static int read_io_data(struct cxd *ci, u8 *data, u8 n)
+{
+	int status;
+	u8 addr[3] = { 2, 0, 0 };
+
+	status = i2c_write(ci->i2c, ci->cfg.adr, addr, 3);
+	if (!status)
+		status = i2c_read(ci->i2c, ci->cfg.adr, 3, data, n);
+	return 0;
+}
+
+static int write_io_data(struct cxd *ci, u8 *data, u8 n)
+{
+	int status;
+	u8 addr[3] = {2, 0, 0};
+
+	status = i2c_write(ci->i2c, ci->cfg.adr, addr, 3);
+	if (!status) {
+		u8 buf[256] = {3};
+		memcpy(buf+1, data, n);
+		status = i2c_write(ci->i2c, ci->cfg.adr, buf, n + 1);
+	}
+	return 0;
+}
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int write_regm(struct cxd *ci, u8 reg, u8 val, u8 mask)
 {
 	int status;
 
+<<<<<<< HEAD
 	status = i2c_write_reg(ci->i2c, ci->adr, 0, reg);
 	if (!status && reg >= 6 && reg <= 8 && mask != 0xff)
 		status = i2c_read_reg(ci->i2c, ci->adr, 1, &ci->regs[reg]);
@@ -195,6 +294,15 @@ static int write_regm(struct cxd *ci, u8 reg, u8 val, u8 mask)
 	if (!status) {
 		ci->lastaddress = reg;
 		status = i2c_write_reg(ci->i2c, ci->adr, 1, ci->regs[reg]);
+=======
+	status = i2c_write_reg(ci->i2c, ci->cfg.adr, 0, reg);
+	if (!status && reg >= 6 && reg <= 8 && mask != 0xff)
+		status = i2c_read_reg(ci->i2c, ci->cfg.adr, 1, &ci->regs[reg]);
+	ci->regs[reg] = (ci->regs[reg] & (~mask)) | val;
+	if (!status) {
+		ci->lastaddress = reg;
+		status = i2c_write_reg(ci->i2c, ci->cfg.adr, 1, ci->regs[reg]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (reg == 0x20)
 		ci->regs[reg] &= 0x7f;
@@ -212,11 +320,19 @@ static int write_block(struct cxd *ci, u8 adr, u8 *data, int n)
 	int status;
 	u8 buf[256] = {1};
 
+<<<<<<< HEAD
 	status = i2c_write_reg(ci->i2c, ci->adr, 0, adr);
 	if (!status) {
 		ci->lastaddress = adr;
 		memcpy(buf+1, data, n);
 		status = i2c_write(ci->i2c, ci->adr, buf, n+1);
+=======
+	status = i2c_write_reg(ci->i2c, ci->cfg.adr, 0, adr);
+	if (!status) {
+		ci->lastaddress = adr;
+		memcpy(buf + 1, data, n);
+		status = i2c_write(ci->i2c, ci->cfg.adr, buf, n + 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return status;
 }
@@ -250,12 +366,22 @@ static void cam_mode(struct cxd *ci, int mode)
 		write_regm(ci, 0x20, 0x80, 0x80);
 		break;
 	case 0x01:
+<<<<<<< HEAD
+=======
+#ifdef BUFFER_MODE
+		if (!ci->en.read_data)
+			return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		printk(KERN_INFO "enable cam buffer mode\n");
 		/* write_reg(ci, 0x0d, 0x00); */
 		/* write_reg(ci, 0x0e, 0x01); */
 		write_regm(ci, 0x08, 0x40, 0x40);
 		/* read_reg(ci, 0x12, &dummy); */
 		write_regm(ci, 0x08, 0x80, 0x80);
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		break;
@@ -265,8 +391,11 @@ static void cam_mode(struct cxd *ci, int mode)
 
 
 
+<<<<<<< HEAD
 #define CHK_ERROR(s) if ((status = s)) break
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int init(struct cxd *ci)
 {
 	int status;
@@ -274,6 +403,7 @@ static int init(struct cxd *ci)
 	mutex_lock(&ci->lock);
 	ci->mode = -1;
 	do {
+<<<<<<< HEAD
 		CHK_ERROR(write_reg(ci, 0x00, 0x00));
 		CHK_ERROR(write_reg(ci, 0x01, 0x00));
 		CHK_ERROR(write_reg(ci, 0x02, 0x10));
@@ -311,26 +441,176 @@ static int init(struct cxd *ci)
 #ifdef BUFFER_MODE
 		cam_mode(ci, 0);
 #endif
+=======
+		status = write_reg(ci, 0x00, 0x00);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x01, 0x00);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x02, 0x10);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x03, 0x00);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x05, 0xFF);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x06, 0x1F);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x07, 0x1F);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x08, 0x28);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x14, 0x20);
+		if (status < 0)
+			break;
+
+#if 0
+		status = write_reg(ci, 0x09, 0x4D); /* Input Mode C, BYPass Serial, TIVAL = low, MSB */
+		if (status < 0)
+			break;
+#endif
+		status = write_reg(ci, 0x0A, 0xA7); /* TOSTRT = 8, Mode B (gated clock), falling Edge, Serial, POL=HIGH, MSB */
+		if (status < 0)
+			break;
+
+		status = write_reg(ci, 0x0B, 0x33);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x0C, 0x33);
+		if (status < 0)
+			break;
+
+		status = write_regm(ci, 0x14, 0x00, 0x0F);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x15, ci->clk_reg_b);
+		if (status < 0)
+			break;
+		status = write_regm(ci, 0x16, 0x00, 0x0F);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x17, ci->clk_reg_f);
+		if (status < 0)
+			break;
+
+		if (ci->cfg.clock_mode) {
+			if (ci->cfg.polarity) {
+				status = write_reg(ci, 0x09, 0x6f);
+				if (status < 0)
+					break;
+			} else {
+				status = write_reg(ci, 0x09, 0x6d);
+				if (status < 0)
+					break;
+			}
+			status = write_reg(ci, 0x20, 0x68);
+			if (status < 0)
+				break;
+			status = write_reg(ci, 0x21, 0x00);
+			if (status < 0)
+				break;
+			status = write_reg(ci, 0x22, 0x02);
+			if (status < 0)
+				break;
+		} else {
+			if (ci->cfg.polarity) {
+				status = write_reg(ci, 0x09, 0x4f);
+				if (status < 0)
+					break;
+			} else {
+				status = write_reg(ci, 0x09, 0x4d);
+				if (status < 0)
+					break;
+			}
+
+			status = write_reg(ci, 0x20, 0x28);
+			if (status < 0)
+				break;
+			status = write_reg(ci, 0x21, 0x00);
+			if (status < 0)
+				break;
+			status = write_reg(ci, 0x22, 0x07);
+			if (status < 0)
+				break;
+		}
+
+		status = write_regm(ci, 0x20, 0x80, 0x80);
+		if (status < 0)
+			break;
+		status = write_regm(ci, 0x03, 0x02, 0x02);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x01, 0x04);
+		if (status < 0)
+			break;
+		status = write_reg(ci, 0x00, 0x31);
+		if (status < 0)
+			break;
+
+		/* Put TS in bypass */
+		status = write_regm(ci, 0x09, 0x08, 0x08);
+		if (status < 0)
+			break;
+		ci->cammode = -1;
+		cam_mode(ci, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} while (0);
 	mutex_unlock(&ci->lock);
 
 	return 0;
 }
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int read_attribute_mem(struct dvb_ca_en50221 *ca,
 			      int slot, int address)
 {
 	struct cxd *ci = ca->data;
+<<<<<<< HEAD
+=======
+#if 0
+	if (ci->amem_read) {
+		if (address <= 0 || address > 1024)
+			return -EIO;
+		return ci->amem[address];
+	}
+
+	mutex_lock(&ci->lock);
+	write_regm(ci, 0x06, 0x00, 0x05);
+	read_pccard(ci, 0, &ci->amem[0], 128);
+	read_pccard(ci, 128, &ci->amem[0], 128);
+	read_pccard(ci, 256, &ci->amem[0], 128);
+	read_pccard(ci, 384, &ci->amem[0], 128);
+	write_regm(ci, 0x06, 0x05, 0x05);
+	mutex_unlock(&ci->lock);
+	return ci->amem[address];
+#else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 val;
 	mutex_lock(&ci->lock);
 	set_mode(ci, 1);
 	read_pccard(ci, address, &val, 1);
 	mutex_unlock(&ci->lock);
+<<<<<<< HEAD
 	return val;
 }
 
 
+=======
+	/* printk(KERN_INFO "%02x:%02x\n", address,val); */
+	return val;
+#endif
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int write_attribute_mem(struct dvb_ca_en50221 *ca, int slot,
 			       int address, u8 value)
 {
@@ -373,6 +653,18 @@ static int slot_reset(struct dvb_ca_en50221 *ca, int slot)
 	struct cxd *ci = ca->data;
 
 	mutex_lock(&ci->lock);
+<<<<<<< HEAD
+=======
+#if 0
+	write_reg(ci, 0x00, 0x21);
+	write_reg(ci, 0x06, 0x1F);
+	write_reg(ci, 0x00, 0x31);
+#else
+#if 0
+	write_reg(ci, 0x06, 0x1F);
+	write_reg(ci, 0x06, 0x2F);
+#else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cam_mode(ci, 0);
 	write_reg(ci, 0x00, 0x21);
 	write_reg(ci, 0x06, 0x1F);
@@ -380,6 +672,7 @@ static int slot_reset(struct dvb_ca_en50221 *ca, int slot)
 	write_regm(ci, 0x20, 0x80, 0x80);
 	write_reg(ci, 0x03, 0x02);
 	ci->ready = 0;
+<<<<<<< HEAD
 	ci->mode = -1;
 	{
 		int i;
@@ -387,6 +680,27 @@ static int slot_reset(struct dvb_ca_en50221 *ca, int slot)
 			msleep(10);
 			if (ci->ready)
 				break;
+=======
+#endif
+#endif
+	ci->mode = -1;
+	{
+		int i;
+#if 0
+		u8 val;
+#endif
+		for (i = 0; i < 100; i++) {
+			msleep(10);
+#if 0
+			read_reg(ci, 0x06, &val);
+			printk(KERN_INFO "%d:%02x\n", i, val);
+			if (!(val&0x10))
+				break;
+#else
+			if (ci->ready)
+				break;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 	mutex_unlock(&ci->lock);
@@ -400,12 +714,21 @@ static int slot_shutdown(struct dvb_ca_en50221 *ca, int slot)
 
 	printk(KERN_INFO "slot_shutdown\n");
 	mutex_lock(&ci->lock);
+<<<<<<< HEAD
 	/* write_regm(ci, 0x09, 0x08, 0x08); */
 	write_regm(ci, 0x20, 0x80, 0x80);
 	write_regm(ci, 0x06, 0x07, 0x07);
 	ci->mode = -1;
 	mutex_unlock(&ci->lock);
 	return 0; /* shutdown(ci); */
+=======
+	write_regm(ci, 0x09, 0x08, 0x08);
+	write_regm(ci, 0x20, 0x80, 0x80); /* Reset CAM Mode */
+	write_regm(ci, 0x06, 0x07, 0x07); /* Clear IO Mode */
+	ci->mode = -1;
+	mutex_unlock(&ci->lock);
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int slot_ts_enable(struct dvb_ca_en50221 *ca, int slot)
@@ -460,7 +783,10 @@ static int campoll(struct cxd *ci)
 		if (istat&8 && ci->slot_stat == DVB_CA_EN50221_POLL_CAM_PRESENT) {
 			ci->ready = 1;
 			ci->slot_stat |= DVB_CA_EN50221_POLL_CAM_READY;
+<<<<<<< HEAD
 			printk(KERN_INFO "READY\n");
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 	return 0;
@@ -511,7 +837,11 @@ static int write_data(struct dvb_ca_en50221 *ca, int slot, u8 *ebuf, int ecount)
 	struct cxd *ci = ca->data;
 
 	mutex_lock(&ci->lock);
+<<<<<<< HEAD
 	printk(KERN_INFO "write_data %d\n", ecount);
+=======
+	printk(kern_INFO "write_data %d\n", ecount);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	write_reg(ci, 0x0d, ecount>>8);
 	write_reg(ci, 0x0e, ecount&0xff);
 	write_block(ci, 0x11, ebuf, ecount);
@@ -536,6 +866,7 @@ static struct dvb_ca_en50221 en_templ = {
 
 };
 
+<<<<<<< HEAD
 struct dvb_ca_en50221 *cxd2099_attach(u8 adr, void *priv,
 				      struct i2c_adapter *i2c)
 {
@@ -545,6 +876,17 @@ struct dvb_ca_en50221 *cxd2099_attach(u8 adr, void *priv,
 
 	if (i2c_read_reg(i2c, adr, 0, &val) < 0) {
 		printk(KERN_ERR "No CXD2099 detected at %02x\n", adr);
+=======
+struct dvb_ca_en50221 *cxd2099_attach(struct cxd2099_cfg *cfg,
+				      void *priv,
+				      struct i2c_adapter *i2c)
+{
+	struct cxd *ci = 0;
+	u8 val;
+
+	if (i2c_read_reg(i2c, cfg->adr, 0, &val) < 0) {
+		printk(KERN_INFO "No CXD2099 detected at %02x\n", cfg->adr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 	}
 
@@ -554,21 +896,37 @@ struct dvb_ca_en50221 *cxd2099_attach(u8 adr, void *priv,
 	memset(ci, 0, sizeof(*ci));
 
 	mutex_init(&ci->lock);
+<<<<<<< HEAD
 	ci->i2c = i2c;
 	ci->adr = adr;
 	ci->lastaddress = 0xff;
 	ci->clk_reg_b = 0x4a;
 	ci->clk_reg_f = 0x1b;
 	ci->bitrate = bitrate;
+=======
+	memcpy(&ci->cfg, cfg, sizeof(struct cxd2099_cfg));
+	ci->i2c = i2c;
+	ci->lastaddress = 0xff;
+	ci->clk_reg_b = 0x4a;
+	ci->clk_reg_f = 0x1b;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	memcpy(&ci->en, &en_templ, sizeof(en_templ));
 	ci->en.data = ci;
 	init(ci);
+<<<<<<< HEAD
 	printk(KERN_INFO "Attached CXD2099AR at %02x\n", ci->adr);
+=======
+	printk(KERN_INFO "Attached CXD2099AR at %02x\n", ci->cfg.adr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return &ci->en;
 }
 EXPORT_SYMBOL(cxd2099_attach);
 
 MODULE_DESCRIPTION("cxd2099");
+<<<<<<< HEAD
 MODULE_AUTHOR("Ralph Metzler <rjkm@metzlerbros.de>");
+=======
+MODULE_AUTHOR("Ralph Metzler");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_LICENSE("GPL");

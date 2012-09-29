@@ -638,7 +638,11 @@ static void print_codec_info(struct snd_info_entry *entry,
 			wid_caps |= AC_WCAP_CONN_LIST;
 
 		if (wid_caps & AC_WCAP_CONN_LIST)
+<<<<<<< HEAD
 			conn_len = snd_hda_get_connections(codec, nid, conn,
+=======
+			conn_len = snd_hda_get_raw_connections(codec, nid, conn,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 							   HDA_MAX_CONNECTIONS);
 
 		if (wid_caps & AC_WCAP_IN_AMP) {

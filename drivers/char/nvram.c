@@ -224,6 +224,11 @@ static loff_t nvram_llseek(struct file *file, loff_t offset, int origin)
 	case 2:
 		offset += NVRAM_BYTES;
 		break;
+<<<<<<< HEAD
+=======
+	default:
+		return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return (offset >= 0) ? (file->f_pos = offset) : -EINVAL;

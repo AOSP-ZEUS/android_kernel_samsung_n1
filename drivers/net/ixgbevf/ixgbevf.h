@@ -29,9 +29,17 @@
 #define _IXGBEVF_H_
 
 #include <linux/types.h>
+<<<<<<< HEAD
 #include <linux/timer.h>
 #include <linux/io.h>
 #include <linux/netdevice.h>
+=======
+#include <linux/bitops.h>
+#include <linux/timer.h>
+#include <linux/io.h>
+#include <linux/netdevice.h>
+#include <linux/if_vlan.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "vf.h"
 
@@ -185,9 +193,13 @@ struct ixgbevf_q_vector {
 /* board specific private data structure */
 struct ixgbevf_adapter {
 	struct timer_list watchdog_timer;
+<<<<<<< HEAD
 #ifdef NETIF_F_HW_VLAN_TX
 	struct vlan_group *vlgrp;
 #endif
+=======
+	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16 bd_number;
 	struct work_struct reset_task;
 	struct ixgbevf_q_vector *q_vector[MAX_MSIX_Q_VECTORS];
@@ -279,7 +291,11 @@ enum ixgbevf_boards {
 
 extern struct ixgbevf_info ixgbevf_82599_vf_info;
 extern struct ixgbevf_info ixgbevf_X540_vf_info;
+<<<<<<< HEAD
 extern struct ixgbe_mac_operations ixgbevf_mbx_ops;
+=======
+extern struct ixgbe_mbx_operations ixgbevf_mbx_ops;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* needed by ethtool.c */
 extern char ixgbevf_driver_name[];

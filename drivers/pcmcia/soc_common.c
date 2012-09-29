@@ -186,8 +186,13 @@ static int soc_common_pcmcia_sock_init(struct pcmcia_socket *sock)
 	struct soc_pcmcia_socket *skt = to_soc_pcmcia_socket(sock);
 
 	debug(skt, 2, "initializing socket\n");
+<<<<<<< HEAD
 
 	skt->ops->socket_init(skt);
+=======
+	if (skt->ops->socket_init)
+		skt->ops->socket_init(skt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -207,7 +212,12 @@ static int soc_common_pcmcia_suspend(struct pcmcia_socket *sock)
 
 	debug(skt, 2, "suspending socket\n");
 
+<<<<<<< HEAD
 	skt->ops->socket_suspend(skt);
+=======
+	if (skt->ops->socket_suspend)
+		skt->ops->socket_suspend(skt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

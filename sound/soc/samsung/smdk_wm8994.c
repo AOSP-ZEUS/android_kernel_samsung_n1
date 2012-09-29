@@ -8,6 +8,10 @@
  */
 
 #include "../codecs/wm8994.h"
+<<<<<<< HEAD
+=======
+#include <sound/pcm_params.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
  /*
   * Default CFG switch settings to use this driver:
@@ -44,7 +48,13 @@ static int smdk_hw_params(struct snd_pcm_substream *substream,
 	int ret;
 
 	/* AIF1CLK should be >=3MHz for optimal performance */
+<<<<<<< HEAD
 	if (params_rate(params) == 8000 || params_rate(params) == 11025)
+=======
+	if (params_format(params) == SNDRV_PCM_FORMAT_S24_LE)
+		pll_out = params_rate(params) * 384;
+	else if (params_rate(params) == 8000 || params_rate(params) == 11025)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pll_out = params_rate(params) * 512;
 	else
 		pll_out = params_rate(params) * 256;

@@ -3,7 +3,11 @@
  *
  * Copyright (C) 2006-2007 Renesas Solutions Corp.
  *
+<<<<<<< HEAD
  * Author : Yoshihiro Shimoda <shimoda.yoshihiro@renesas.com>
+=======
+ * Author : Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -561,11 +565,34 @@ static inline void m66592_write(struct m66592 *m66592, u16 val,
 	iowrite16(val, m66592->reg + offset);
 }
 
+<<<<<<< HEAD
 static inline void m66592_write_fifo(struct m66592 *m66592,
 		unsigned long offset,
 		void *buf, unsigned long len)
 {
 	void __iomem *fifoaddr = m66592->reg + offset;
+=======
+static inline void m66592_mdfy(struct m66592 *m66592, u16 val, u16 pat,
+		unsigned long offset)
+{
+	u16 tmp;
+	tmp = m66592_read(m66592, offset);
+	tmp = tmp & (~pat);
+	tmp = tmp | val;
+	m66592_write(m66592, tmp, offset);
+}
+
+#define m66592_bclr(m66592, val, offset)	\
+			m66592_mdfy(m66592, 0, val, offset)
+#define m66592_bset(m66592, val, offset)	\
+			m66592_mdfy(m66592, val, 0, offset)
+
+static inline void m66592_write_fifo(struct m66592 *m66592,
+		struct m66592_ep *ep,
+		void *buf, unsigned long len)
+{
+	void __iomem *fifoaddr = m66592->reg + ep->fifoaddr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (m66592->pdata->on_chip) {
 		unsigned long count;
@@ -591,11 +618,20 @@ static inline void m66592_write_fifo(struct m66592 *m66592,
 		iowrite16_rep(fifoaddr, buf, len);
 		if (odd) {
 			unsigned char *p = buf + len*2;
+<<<<<<< HEAD
 			iowrite8(*p, fifoaddr);
+=======
+			if (m66592->pdata->wr0_shorted_to_wr1)
+				m66592_bclr(m66592, M66592_MBW_16, ep->fifosel);
+			iowrite8(*p, fifoaddr);
+			if (m66592->pdata->wr0_shorted_to_wr1)
+				m66592_bset(m66592, M66592_MBW_16, ep->fifosel);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 }
 
+<<<<<<< HEAD
 static inline void m66592_mdfy(struct m66592 *m66592, u16 val, u16 pat,
 		unsigned long offset)
 {
@@ -611,6 +647,8 @@ static inline void m66592_mdfy(struct m66592 *m66592, u16 val, u16 pat,
 #define m66592_bset(m66592, val, offset)	\
 			m66592_mdfy(m66592, val, 0, offset)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif	/* ifndef __M66592_UDC_H__ */
 
 

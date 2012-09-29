@@ -27,11 +27,14 @@ struct ad193x_priv {
 	int sysclk;
 };
 
+<<<<<<< HEAD
 /* ad193x register cache & default register settings */
 static const u8 ad193x_reg[AD193X_NUM_REGS] = {
 	0, 0, 0, 0, 0, 0, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0, 0, 0,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * AD193X volume/mute/de-emphasis etc. controls
  */
@@ -390,9 +393,12 @@ static int ad193x_probe(struct snd_soc_codec *codec)
 
 static struct snd_soc_codec_driver soc_codec_dev_ad193x = {
 	.probe = 	ad193x_probe,
+<<<<<<< HEAD
 	.reg_cache_default = ad193x_reg,
 	.reg_cache_size = AD193X_NUM_REGS,
 	.reg_word_size = sizeof(u16),
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #if defined(CONFIG_SPI_MASTER)

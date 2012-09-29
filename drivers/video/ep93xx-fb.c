@@ -4,7 +4,11 @@
  * Framebuffer support for the EP93xx series.
  *
  * Copyright (C) 2007 Bluewater Systems Ltd
+<<<<<<< HEAD
  * Author: Ryan Mallon <ryan@bluewatersys.com>
+=======
+ * Author: Ryan Mallon
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Copyright (c) 2009 H Hartley Sweeten <hsweeten@visionengravers.com>
  *
@@ -644,6 +648,10 @@ module_exit(ep93xxfb_exit);
 
 MODULE_DESCRIPTION("EP93XX Framebuffer Driver");
 MODULE_ALIAS("platform:ep93xx-fb");
+<<<<<<< HEAD
 MODULE_AUTHOR("Ryan Mallon <ryan&bluewatersys.com>, "
+=======
+MODULE_AUTHOR("Ryan Mallon, "
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	      "H Hartley Sweeten <hsweeten@visionengravers.com");
 MODULE_LICENSE("GPL");

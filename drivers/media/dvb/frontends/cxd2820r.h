@@ -55,13 +55,21 @@ struct cxd2820r_config {
 	 * Default: 0
 	 * Values: 0, 1
 	 */
+<<<<<<< HEAD
 	int if_agc_polarity:1;
+=======
+	bool if_agc_polarity;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Spectrum inversion.
 	 * Default: 0
 	 * Values: 0, 1
 	 */
+<<<<<<< HEAD
 	int spec_inv:1;
+=======
+	bool spec_inv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* IFs for all used modes.
 	 * Default: none, must set

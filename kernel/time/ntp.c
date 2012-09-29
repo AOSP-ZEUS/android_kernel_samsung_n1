@@ -275,7 +275,11 @@ static inline s64 ntp_update_offset_fll(s64 offset64, long secs)
 
 	time_status |= STA_MODE;
 
+<<<<<<< HEAD
 	return div64_long(offset64 << (NTP_SCALE_SHIFT - SHIFT_FLL), secs);
+=======
+	return div_s64(offset64 << (NTP_SCALE_SHIFT - SHIFT_FLL), secs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void ntp_update_offset(long offset)

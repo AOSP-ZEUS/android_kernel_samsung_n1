@@ -823,7 +823,11 @@ static int serial_pxa_probe(struct platform_device *dev)
 		break;
 	}
 
+<<<<<<< HEAD
 	sport->port.membase = ioremap(mmres->start, mmres->end - mmres->start + 1);
+=======
+	sport->port.membase = ioremap(mmres->start, resource_size(mmres));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!sport->port.membase) {
 		ret = -ENOMEM;
 		goto err_clk;

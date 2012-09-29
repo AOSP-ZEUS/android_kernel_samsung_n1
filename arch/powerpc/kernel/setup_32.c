@@ -48,8 +48,13 @@ extern void bootx_init(unsigned long r4, unsigned long phys);
 
 int boot_cpuid = -1;
 EXPORT_SYMBOL_GPL(boot_cpuid);
+<<<<<<< HEAD
 int __initdata boot_cpu_count;
 int boot_cpuid_phys;
+=======
+int boot_cpuid_phys;
+EXPORT_SYMBOL_GPL(boot_cpuid_phys);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 int smp_hw_index[NR_CPUS];
 
@@ -129,6 +134,11 @@ notrace void __init machine_init(unsigned long dt_ptr)
 	/* Do some early initialization based on the flat device tree */
 	early_init_devtree(__va(dt_ptr));
 
+<<<<<<< HEAD
+=======
+	early_init_mmu();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	probe_machine();
 
 	setup_kdump_trampoline();

@@ -504,14 +504,28 @@ static int taal_exit_ulps(struct omap_dss_device *dssdev)
 		return 0;
 
 	r = omapdss_dsi_display_enable(dssdev);
+<<<<<<< HEAD
 	if (r)
 		goto err;
+=======
+	if (r) {
+		dev_err(&dssdev->dev, "failed to enable DSI\n");
+		goto err1;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	omapdss_dsi_vc_enable_hs(dssdev, td->channel, true);
 
 	r = _taal_enable_te(dssdev, true);
+<<<<<<< HEAD
 	if (r)
 		goto err;
+=======
+	if (r) {
+		dev_err(&dssdev->dev, "failed to re-enable TE");
+		goto err2;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	enable_irq(gpio_to_irq(panel_data->ext_te_gpio));
 
@@ -521,6 +535,7 @@ static int taal_exit_ulps(struct omap_dss_device *dssdev)
 
 	return 0;
 
+<<<<<<< HEAD
 err:
 	dev_err(&dssdev->dev, "exit ULPS failed");
 	r = taal_panel_reset(dssdev);
@@ -528,6 +543,17 @@ err:
 	enable_irq(gpio_to_irq(panel_data->ext_te_gpio));
 	td->ulps_enabled = false;
 
+=======
+err2:
+	dev_err(&dssdev->dev, "failed to exit ULPS");
+
+	r = taal_panel_reset(dssdev);
+	if (!r) {
+		enable_irq(gpio_to_irq(panel_data->ext_te_gpio));
+		td->ulps_enabled = false;
+	}
+err1:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	taal_queue_ulps_work(dssdev);
 
 	return r;
@@ -1241,11 +1267,16 @@ static void taal_power_off(struct omap_dss_device *dssdev)
 	int r;
 
 	r = taal_dcs_write_0(td, DCS_DISPLAY_OFF);
+<<<<<<< HEAD
 	if (!r) {
 		r = taal_sleep_in(td);
 		/* HACK: wait a bit so that the message goes through */
 		msleep(10);
 	}
+=======
+	if (!r)
+		r = taal_sleep_in(td);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (r) {
 		dev_err(&dssdev->dev,
@@ -1317,8 +1348,16 @@ static void taal_disable(struct omap_dss_device *dssdev)
 	dsi_bus_lock(dssdev);
 
 	if (dssdev->state == OMAP_DSS_DISPLAY_ACTIVE) {
+<<<<<<< HEAD
 		taal_wake_up(dssdev);
 		taal_power_off(dssdev);
+=======
+		int r;
+
+		r = taal_wake_up(dssdev);
+		if (!r)
+			taal_power_off(dssdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	dsi_bus_unlock(dssdev);
@@ -1897,6 +1936,7 @@ err:
 	mutex_unlock(&td->lock);
 }
 
+<<<<<<< HEAD
 static int taal_set_update_mode(struct omap_dss_device *dssdev,
 		enum omap_dss_update_mode mode)
 {
@@ -1911,6 +1951,8 @@ static enum omap_dss_update_mode taal_get_update_mode(
 	return OMAP_DSS_UPDATE_MANUAL;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct omap_dss_driver taal_driver = {
 	.probe		= taal_probe,
 	.remove		= __exit_p(taal_remove),
@@ -1920,9 +1962,12 @@ static struct omap_dss_driver taal_driver = {
 	.suspend	= taal_suspend,
 	.resume		= taal_resume,
 
+<<<<<<< HEAD
 	.set_update_mode = taal_set_update_mode,
 	.get_update_mode = taal_get_update_mode,
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.update		= taal_update,
 	.sync		= taal_sync,
 

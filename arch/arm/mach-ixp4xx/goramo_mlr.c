@@ -462,7 +462,11 @@ static void __init gmlr_pci_postinit(void)
 	}
 }
 
+<<<<<<< HEAD
 static int __init gmlr_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int __init gmlr_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	switch(slot) {
 	case SLOT_ETHA:	return IXP4XX_GPIO_IRQ(GPIO_IRQ_ETHA);
@@ -501,4 +505,10 @@ MACHINE_START(GORAMO_MLR, "MultiLink")
 	.timer		= &ixp4xx_timer,
 	.boot_params	= 0x0100,
 	.init_machine	= gmlr_init,
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_PCI)
+	.dma_zone_size	= SZ_64M,
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

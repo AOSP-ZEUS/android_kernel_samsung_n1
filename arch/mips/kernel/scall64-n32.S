@@ -294,7 +294,11 @@ EXPORT(sysn32_call_table)
 	PTR	sys_ni_syscall			/* 6170, was get_kernel_syms */
 	PTR	sys_ni_syscall			/* was query_module */
 	PTR	sys_quotactl
+<<<<<<< HEAD
 	PTR	compat_sys_nfsservctl
+=======
+	PTR	sys_ni_syscall			/* was nfsservctl */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PTR	sys_ni_syscall			/* res. for getpmsg */
 	PTR	sys_ni_syscall			/* 6175  for putpmsg */
 	PTR	sys_ni_syscall			/* res. for afs_syscall */
@@ -315,7 +319,11 @@ EXPORT(sysn32_call_table)
 	PTR	sys_fremovexattr
 	PTR	sys_tkill
 	PTR	sys_ni_syscall
+<<<<<<< HEAD
 	PTR	compat_sys_futex
+=======
+	PTR	sys_32_futex
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PTR	compat_sys_sched_setaffinity	/* 6195 */
 	PTR	compat_sys_sched_getaffinity
 	PTR	sys_cacheflush
@@ -428,5 +436,9 @@ EXPORT(sysn32_call_table)
 	PTR	sys_open_by_handle_at
 	PTR	compat_sys_clock_adjtime	/* 6305 */
 	PTR	sys_syncfs
+<<<<<<< HEAD
+=======
+	PTR	compat_sys_sendmmsg
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PTR	sys_setns
 	.size	sysn32_call_table,.-sysn32_call_table

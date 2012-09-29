@@ -16,7 +16,11 @@
 /* cats host-specific stuff */
 static int irqmap_cats[] __initdata = { IRQ_PCI, IRQ_IN0, IRQ_IN1, IRQ_IN3 };
 
+<<<<<<< HEAD
 static int __init cats_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int __init cats_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	if (dev->irq >= 255)
 		return -1;	/* not a valid interrupt. */

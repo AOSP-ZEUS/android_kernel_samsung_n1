@@ -186,6 +186,12 @@ static unsigned char intc_irq_sense_table[IRQ_TYPE_SENSE_MASK + 1] = {
     !defined(CONFIG_CPU_SUBTYPE_SH7709)
 	[IRQ_TYPE_LEVEL_HIGH] = VALID(3),
 #endif
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_ARCH_SH7372)
+	[IRQ_TYPE_EDGE_BOTH] = VALID(4),
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int intc_set_type(struct irq_data *data, unsigned int type)

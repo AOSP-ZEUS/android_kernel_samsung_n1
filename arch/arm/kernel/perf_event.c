@@ -435,7 +435,11 @@ armpmu_reserve_hardware(void)
 			if (irq >= 0)
 				free_irq(irq, NULL);
 		}
+<<<<<<< HEAD
 		release_pmu(pmu_device);
+=======
+		release_pmu(ARM_PMU_DEVICE_CPU);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pmu_device = NULL;
 	}
 
@@ -454,7 +458,11 @@ armpmu_release_hardware(void)
 	}
 	armpmu->stop();
 
+<<<<<<< HEAD
 	release_pmu(pmu_device);
+=======
+	release_pmu(ARM_PMU_DEVICE_CPU);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pmu_device = NULL;
 }
 
@@ -662,6 +670,15 @@ init_hw_perf_events(void)
 		case 0xC090:	/* Cortex-A9 */
 			armpmu = armv7_a9_pmu_init();
 			break;
+<<<<<<< HEAD
+=======
+		case 0xC050:	/* Cortex-A5 */
+			armpmu = armv7_a5_pmu_init();
+			break;
+		case 0xC0F0:	/* Cortex-A15 */
+			armpmu = armv7_a15_pmu_init();
+			break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	/* Intel CPUs [xscale]. */
 	} else if (0x69 == implementor) {

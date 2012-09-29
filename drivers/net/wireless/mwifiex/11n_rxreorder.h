@@ -52,8 +52,14 @@ int mwifiex_ret_11n_addba_resp(struct mwifiex_private *priv,
 int mwifiex_cmd_11n_delba(struct host_cmd_ds_command *cmd,
 			  void *data_buf);
 int mwifiex_cmd_11n_addba_rsp_gen(struct mwifiex_private *priv,
+<<<<<<< HEAD
 				  struct host_cmd_ds_command
 				  *cmd, void *data_buf);
+=======
+				  struct host_cmd_ds_command *cmd,
+				  struct host_cmd_ds_11n_addba_req
+				  *cmd_addba_req);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int mwifiex_cmd_11n_addba_req(struct host_cmd_ds_command *cmd,
 			      void *data_buf);
 void mwifiex_11n_cleanup_reorder_tbl(struct mwifiex_private *priv);

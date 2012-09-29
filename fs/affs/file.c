@@ -923,14 +923,30 @@ affs_truncate(struct inode *inode)
 	affs_free_prealloc(inode);
 }
 
+<<<<<<< HEAD
 int affs_file_fsync(struct file *filp, int datasync)
+=======
+int affs_file_fsync(struct file *filp, loff_t start, loff_t end, int datasync)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct inode *inode = filp->f_mapping->host;
 	int ret, err;
 
+<<<<<<< HEAD
+=======
+	err = filemap_write_and_wait_range(inode->i_mapping, start, end);
+	if (err)
+		return err;
+
+	mutex_lock(&inode->i_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = write_inode_now(inode, 0);
 	err = sync_blockdev(inode->i_sb->s_bdev);
 	if (!ret)
 		ret = err;
+<<<<<<< HEAD
+=======
+	mutex_unlock(&inode->i_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }

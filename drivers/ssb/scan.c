@@ -2,7 +2,11 @@
  * Sonics Silicon Backplane
  * Bus scanning
  *
+<<<<<<< HEAD
  * Copyright (C) 2005-2007 Michael Buesch <mb@bu3sch.de>
+=======
+ * Copyright (C) 2005-2007 Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Copyright (C) 2005 Martin Langer <martin-langer@gmx.de>
  * Copyright (C) 2005 Stefano Brivio <st3@riseup.net>
  * Copyright (C) 2005 Danny van Dyk <kugelfang@gentoo.org>
@@ -310,8 +314,12 @@ int ssb_bus_scan(struct ssb_bus *bus,
 	} else {
 		if (bus->bustype == SSB_BUSTYPE_PCI) {
 			bus->chip_id = pcidev_to_chipid(bus->host_pci);
+<<<<<<< HEAD
 			pci_read_config_byte(bus->host_pci, PCI_REVISION_ID,
 					     &bus->chip_rev);
+=======
+			bus->chip_rev = bus->host_pci->revision;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			bus->chip_package = 0;
 		} else {
 			bus->chip_id = 0x4710;

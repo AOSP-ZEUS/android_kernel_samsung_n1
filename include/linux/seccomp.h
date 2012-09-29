@@ -19,6 +19,14 @@ static inline void secure_computing(int this_syscall)
 extern long prctl_get_seccomp(void);
 extern long prctl_set_seccomp(unsigned long);
 
+<<<<<<< HEAD
+=======
+static inline int seccomp_mode(seccomp_t *s)
+{
+	return s->mode;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #else /* CONFIG_SECCOMP */
 
 #include <linux/errno.h>
@@ -37,6 +45,14 @@ static inline long prctl_set_seccomp(unsigned long arg2)
 	return -EINVAL;
 }
 
+<<<<<<< HEAD
+=======
+static inline int seccomp_mode(seccomp_t *s)
+{
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* CONFIG_SECCOMP */
 
 #endif /* _LINUX_SECCOMP_H */

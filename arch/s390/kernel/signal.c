@@ -57,6 +57,7 @@ typedef struct
  */
 SYSCALL_DEFINE3(sigsuspend, int, history0, int, history1, old_sigset_t, mask)
 {
+<<<<<<< HEAD
 	mask &= _BLOCKABLE;
 	spin_lock_irq(&current->sighand->siglock);
 	current->saved_sigmask = current->blocked;
@@ -68,6 +69,17 @@ SYSCALL_DEFINE3(sigsuspend, int, history0, int, history1, old_sigset_t, mask)
 	schedule();
 	set_thread_flag(TIF_RESTORE_SIGMASK);
 
+=======
+	sigset_t blocked;
+
+	current->saved_sigmask = current->blocked;
+	mask &= _BLOCKABLE;
+	siginitset(&blocked, mask);
+	set_current_blocked(&blocked);
+	set_current_state(TASK_INTERRUPTIBLE);
+	schedule();
+	set_restore_sigmask();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return -ERESTARTNOHAND;
 }
 
@@ -172,6 +184,7 @@ SYSCALL_DEFINE0(sigreturn)
 		goto badframe;
 	if (__copy_from_user(&set.sig, &frame->sc.oldmask, _SIGMASK_COPY_SIZE))
 		goto badframe;
+<<<<<<< HEAD
 
 	sigdelsetmask(&set, ~_BLOCKABLE);
 	spin_lock_irq(&current->sighand->siglock);
@@ -184,6 +197,13 @@ SYSCALL_DEFINE0(sigreturn)
 
 	return regs->gprs[2];
 
+=======
+	sigdelsetmask(&set, ~_BLOCKABLE);
+	set_current_blocked(&set);
+	if (restore_sigregs(regs, &frame->sregs))
+		goto badframe;
+	return regs->gprs[2];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 badframe:
 	force_sig(SIGSEGV, current);
 	return 0;
@@ -199,6 +219,7 @@ SYSCALL_DEFINE0(rt_sigreturn)
 		goto badframe;
 	if (__copy_from_user(&set.sig, &frame->uc.uc_sigmask, sizeof(set)))
 		goto badframe;
+<<<<<<< HEAD
 
 	sigdelsetmask(&set, ~_BLOCKABLE);
 	spin_lock_irq(&current->sighand->siglock);
@@ -209,11 +230,20 @@ SYSCALL_DEFINE0(rt_sigreturn)
 	if (restore_sigregs(regs, &frame->uc.uc_mcontext))
 		goto badframe;
 
+=======
+	sigdelsetmask(&set, ~_BLOCKABLE);
+	set_current_blocked(&set);
+	if (restore_sigregs(regs, &frame->uc.uc_mcontext))
+		goto badframe;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (do_sigaltstack(&frame->uc.uc_stack, NULL,
 			   regs->gprs[15]) == -EFAULT)
 		goto badframe;
 	return regs->gprs[2];
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 badframe:
 	force_sig(SIGSEGV, current);
 	return 0;
@@ -385,6 +415,7 @@ give_sigsegv:
 	return -EFAULT;
 }
 
+<<<<<<< HEAD
 /*
  * OK, we're invoking a handler
  */	
@@ -393,6 +424,13 @@ static int
 handle_signal(unsigned long sig, struct k_sigaction *ka,
 	      siginfo_t *info, sigset_t *oldset, struct pt_regs * regs)
 {
+=======
+static int handle_signal(unsigned long sig, struct k_sigaction *ka,
+			 siginfo_t *info, sigset_t *oldset,
+			 struct pt_regs *regs)
+{
+	sigset_t blocked;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 
 	/* Set up the stack frame */
@@ -400,6 +438,7 @@ handle_signal(unsigned long sig, struct k_sigaction *ka,
 		ret = setup_rt_frame(sig, ka, info, oldset, regs);
 	else
 		ret = setup_frame(sig, ka, oldset, regs);
+<<<<<<< HEAD
 
 	if (ret == 0) {
 		spin_lock_irq(&current->sighand->siglock);
@@ -411,6 +450,15 @@ handle_signal(unsigned long sig, struct k_sigaction *ka,
 	}
 
 	return ret;
+=======
+	if (ret)
+		return ret;
+	sigorsets(&blocked, &current->blocked, &ka->sa.sa_mask);
+	if (!(ka->sa.sa_flags & SA_NODEFER))
+		sigaddset(&blocked, sig);
+	set_current_blocked(&blocked);
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*

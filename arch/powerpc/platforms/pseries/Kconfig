@@ -1,6 +1,10 @@
 config PPC_PSERIES
 	depends on PPC64 && PPC_BOOK3S
 	bool "IBM pSeries & new (POWER5-based) iSeries"
+<<<<<<< HEAD
+=======
+	select HAVE_PCSPKR_PLATFORM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select MPIC
 	select PCI_MSI
 	select PPC_XICS

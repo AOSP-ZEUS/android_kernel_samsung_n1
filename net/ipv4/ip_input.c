@@ -165,7 +165,11 @@ int ip_call_ra_chain(struct sk_buff *skb)
 		    (!sk->sk_bound_dev_if ||
 		     sk->sk_bound_dev_if == dev->ifindex) &&
 		    net_eq(sock_net(sk), dev_net(dev))) {
+<<<<<<< HEAD
 			if (ip_hdr(skb)->frag_off & htons(IP_MF | IP_OFFSET)) {
+=======
+			if (ip_is_fragment(ip_hdr(skb))) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				if (ip_defrag(skb, IP_DEFRAG_CALL_RA_CHAIN))
 					return 1;
 			}
@@ -256,7 +260,11 @@ int ip_local_deliver(struct sk_buff *skb)
 	 *	Reassemble IP fragments.
 	 */
 
+<<<<<<< HEAD
 	if (ip_hdr(skb)->frag_off & htons(IP_MF | IP_OFFSET)) {
+=======
+	if (ip_is_fragment(ip_hdr(skb))) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ip_defrag(skb, IP_DEFRAG_LOCAL_DELIVER))
 			return 0;
 	}

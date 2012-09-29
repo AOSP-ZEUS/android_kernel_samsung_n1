@@ -12,7 +12,11 @@ struct leon_pci_info {
 	struct pci_ops *ops;
 	struct resource	io_space;
 	struct resource	mem_space;
+<<<<<<< HEAD
 	int (*map_irq)(struct pci_dev *dev, u8 slot, u8 pin);
+=======
+	int (*map_irq)(const struct pci_dev *dev, u8 slot, u8 pin);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 extern void leon_pci_init(struct platform_device *ofdev,

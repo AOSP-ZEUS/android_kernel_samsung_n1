@@ -815,6 +815,7 @@ static int __devinit uvesafb_vbe_init(struct fb_info *info)
 	par->pmi_setpal = pmi_setpal;
 	par->ypan = ypan;
 
+<<<<<<< HEAD
 	if (par->pmi_setpal || par->ypan) {
 		if (__supported_pte_mask & _PAGE_NX) {
 			par->pmi_setpal = par->ypan = 0;
@@ -824,6 +825,10 @@ static int __devinit uvesafb_vbe_init(struct fb_info *info)
 			uvesafb_vbe_getpmi(task, par);
 		}
 	}
+=======
+	if (par->pmi_setpal || par->ypan)
+		uvesafb_vbe_getpmi(task, par);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #else
 	/* The protected mode interface is not available on non-x86. */
 	par->pmi_setpal = par->ypan = 0;

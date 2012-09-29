@@ -157,9 +157,15 @@ static int wm97xx_acc_pen_down(struct wm97xx *wm)
 			x, y, p);
 
 		/* are samples valid */
+<<<<<<< HEAD
 		if ((x & WM97XX_ADCSRC_MASK) != WM97XX_ADCSEL_X ||
 		    (y & WM97XX_ADCSRC_MASK) != WM97XX_ADCSEL_Y ||
 		    (p & WM97XX_ADCSRC_MASK) != WM97XX_ADCSEL_PRES)
+=======
+		if ((x & WM97XX_ADCSEL_MASK) != WM97XX_ADCSEL_X ||
+		    (y & WM97XX_ADCSEL_MASK) != WM97XX_ADCSEL_Y ||
+		    (p & WM97XX_ADCSEL_MASK) != WM97XX_ADCSEL_PRES)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto up;
 
 		/* coordinate is good */

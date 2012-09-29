@@ -21,7 +21,11 @@
 #include <linux/topology.h>
 #include <linux/cpumask.h>
 #include <asm/pgtable.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/proto.h>
 #include <asm/setup.h>
 #include <asm/apic.h>

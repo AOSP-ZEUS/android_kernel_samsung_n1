@@ -6,7 +6,11 @@ obj-y				:= dma-mapping.o extable.o fault.o init.o \
 				   iomap.o
 
 obj-$(CONFIG_MMU)		+= fault-armv.o flush.o idmap.o ioremap.o \
+<<<<<<< HEAD
 				   mmap.o pgd.o mmu.o vmregion.o
+=======
+				   mmap.o pgd.o mmu.o vmregion.o pageattr.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 ifneq ($(CONFIG_MMU),y)
 obj-y				+= nommu.o

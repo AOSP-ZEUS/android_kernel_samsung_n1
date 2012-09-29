@@ -30,11 +30,19 @@
 #include <linux/input.h>
 #include <linux/gpio.h>
 #include <linux/delay.h>
+<<<<<<< HEAD
+=======
+#include <sound/tlv320aic32x4.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/mach-types.h>
 #include <asm/mach/arch.h>
 #include <asm/mach/time.h>
 #include <mach/common.h>
+<<<<<<< HEAD
 #include <mach/iomux.h>
+=======
+#include <mach/iomux-mx27.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "devices-imx27.h"
 
@@ -196,6 +204,20 @@ static struct pca953x_platform_data visstrim_m10_pca9555_pdata = {
 	.invert = 0,
 };
 
+<<<<<<< HEAD
+=======
+static struct aic32x4_pdata visstrim_m10_aic32x4_pdata = {
+	.power_cfg = AIC32X4_PWR_MICBIAS_2075_LDOIN |
+		     AIC32X4_PWR_AVDD_DVDD_WEAK_DISABLE |
+		     AIC32X4_PWR_AIC32X4_LDO_ENABLE |
+		     AIC32X4_PWR_CMMODE_LDOIN_RANGE_18_36 |
+		     AIC32X4_PWR_CMMODE_HP_LDOIN_POWERED,
+	.micpga_routing = AIC32X4_MICPGA_ROUTE_LMIC_IN2R_10K |
+			 AIC32X4_MICPGA_ROUTE_RMIC_IN1L_10K,
+	.swapdacs = false,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct i2c_board_info visstrim_m10_i2c_devices[] = {
 	{
 		I2C_BOARD_INFO("pca9555", 0x20),
@@ -203,6 +225,10 @@ static struct i2c_board_info visstrim_m10_i2c_devices[] = {
 	},
 	{
 		I2C_BOARD_INFO("tlv320aic32x4", 0x18),
+<<<<<<< HEAD
+=======
+		.platform_data = &visstrim_m10_aic32x4_pdata,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 };
 
@@ -231,6 +257,11 @@ static void __init visstrim_m10_board_init(void)
 {
 	int ret;
 
+<<<<<<< HEAD
+=======
+	imx27_soc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = mxc_gpio_setup_multiple_pins(visstrim_m10_pins,
 			ARRAY_SIZE(visstrim_m10_pins), "VISSTRIM_M10");
 	if (ret)

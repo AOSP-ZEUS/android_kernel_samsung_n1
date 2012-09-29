@@ -594,7 +594,10 @@ static void lance_load_multicast (struct net_device *dev)
         volatile struct lance_init_block *ib = lp->init_block;
         volatile u16 *mcast_table = (u16 *)&ib->filter;
 	struct netdev_hw_addr *ha;
+<<<<<<< HEAD
         char *addrs;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
         u32 crc;
 
         /* set all multicast bits */
@@ -609,6 +612,7 @@ static void lance_load_multicast (struct net_device *dev)
 
         /* Add addresses */
 	netdev_for_each_mc_addr(ha, dev) {
+<<<<<<< HEAD
 		addrs = ha->addr;
 
                 /* multicast address? */
@@ -616,6 +620,9 @@ static void lance_load_multicast (struct net_device *dev)
                         continue;
 
 		crc = ether_crc_le(6, addrs);
+=======
+		crc = ether_crc_le(6, ha->addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
                 crc = crc >> 26;
                 mcast_table [crc >> 4] |= 1 << (crc & 0xf);
         }

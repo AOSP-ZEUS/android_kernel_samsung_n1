@@ -1,5 +1,9 @@
 config DRM_PSB
+<<<<<<< HEAD
 	tristate "Intel GMA500 KMS Framebuffer"
+=======
+	tristate "Intel GMA5/600 KMS Framebuffer"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	depends on DRM && PCI && X86
 	select FB_CFB_COPYAREA
         select FB_CFB_FILLRECT
@@ -7,6 +11,33 @@ config DRM_PSB
         select DRM_KMS_HELPER
         select DRM_TTM
 	help
+<<<<<<< HEAD
 	  Say yes for an experimental KMS framebuffer driver for the
 	  Intel GMA500 ('Poulsbo') graphics support.
 
+=======
+	  Say yes for an experimental 2D KMS framebuffer driver for the
+	  Intel GMA500 ('Poulsbo') and other Intel IMG based graphics
+	  devices.
+
+config DRM_PSB_MRST
+	bool "Intel GMA600 support (Experimental)"
+	depends on DRM_PSB
+	help
+	  Say yes to include support for GMA600 (Intel Moorestown/Oaktrail)
+	  platforms with LVDS ports. HDMI and MIPI are not currently
+	  supported.
+
+config DRM_PSB_MFLD
+	bool "Intel Medfield support (Experimental)"
+	depends on DRM_PSB
+	help
+	  Say yes to include support for Intel Medfield platforms with MIPI
+	  interfaces.
+	
+config DRM_PSB_CDV
+	bool "Intel Cedarview support (Experimental)"
+	depends on DRM_PSB
+	help
+	  Say yes to include support for Intel Cedarview platforms
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -43,7 +43,11 @@ static int wm8994_ldo_enable(struct regulator_dev *rdev)
 	if (!ldo->enable)
 		return 0;
 
+<<<<<<< HEAD
 	gpio_set_value(ldo->enable, 1);
+=======
+	gpio_set_value_cansleep(ldo->enable, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ldo->is_enabled = true;
 
 	return 0;
@@ -57,7 +61,11 @@ static int wm8994_ldo_disable(struct regulator_dev *rdev)
 	if (!ldo->enable)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	gpio_set_value(ldo->enable, 0);
+=======
+	gpio_set_value_cansleep(ldo->enable, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ldo->is_enabled = false;
 
 	return 0;

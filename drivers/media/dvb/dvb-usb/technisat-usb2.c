@@ -765,10 +765,15 @@ static void technisat_usb2_disconnect(struct usb_interface *intf)
 	/* work and stuff was only created when the device is is hot-state */
 	if (dev != NULL) {
 		struct technisat_usb2_state *state = dev->priv;
+<<<<<<< HEAD
 		if (state != NULL) {
 			cancel_delayed_work_sync(&state->green_led_work);
 			flush_scheduled_work();
 		}
+=======
+		if (state != NULL)
+			cancel_delayed_work_sync(&state->green_led_work);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	dvb_usb_device_exit(intf);

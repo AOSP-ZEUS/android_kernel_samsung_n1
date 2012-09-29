@@ -59,7 +59,10 @@
 #include <linux/magic.h>
 #include <linux/pid.h>
 #include <linux/nsproxy.h>
+<<<<<<< HEAD
 #include <linux/ptrace.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/futex.h>
 
@@ -2444,11 +2447,16 @@ SYSCALL_DEFINE3(get_robust_list, int, pid,
 {
 	struct robust_list_head __user *head;
 	unsigned long ret;
+<<<<<<< HEAD
 	struct task_struct *p;
+=======
+	const struct cred *cred = current_cred(), *pcred;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!futex_cmpxchg_enabled)
 		return -ENOSYS;
 
+<<<<<<< HEAD
 	rcu_read_lock();
 
 	ret = -ESRCH;
@@ -2467,6 +2475,37 @@ SYSCALL_DEFINE3(get_robust_list, int, pid,
 	head = p->robust_list;
 	rcu_read_unlock();
 
+=======
+	if (!pid)
+		head = current->robust_list;
+	else {
+		struct task_struct *p;
+
+		ret = -ESRCH;
+		rcu_read_lock();
+		p = find_task_by_vpid(pid);
+		if (!p)
+			goto err_unlock;
+		ret = -EPERM;
+		pcred = __task_cred(p);
+		/* If victim is in different user_ns, then uids are not
+		   comparable, so we must have CAP_SYS_PTRACE */
+		if (cred->user->user_ns != pcred->user->user_ns) {
+			if (!ns_capable(pcred->user->user_ns, CAP_SYS_PTRACE))
+				goto err_unlock;
+			goto ok;
+		}
+		/* If victim is in same user_ns, then uids are comparable */
+		if (cred->euid != pcred->euid &&
+		    cred->euid != pcred->uid &&
+		    !ns_capable(pcred->user->user_ns, CAP_SYS_PTRACE))
+			goto err_unlock;
+ok:
+		head = p->robust_list;
+		rcu_read_unlock();
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (put_user(sizeof(*head), len_ptr))
 		return -EFAULT;
 	return put_user(head, head_ptr);
@@ -2631,6 +2670,7 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
 	}
 
 	switch (cmd) {
+<<<<<<< HEAD
 	case FUTEX_LOCK_PI:
 	case FUTEX_UNLOCK_PI:
 	case FUTEX_TRYLOCK_PI:
@@ -2641,6 +2681,8 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
 	}
 
 	switch (cmd) {
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case FUTEX_WAIT:
 		val3 = FUTEX_BITSET_MATCH_ANY;
 	case FUTEX_WAIT_BITSET:
@@ -2661,6 +2703,7 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
 		ret = futex_wake_op(uaddr, flags, uaddr2, val, val2, val3);
 		break;
 	case FUTEX_LOCK_PI:
+<<<<<<< HEAD
 		ret = futex_lock_pi(uaddr, flags, val, timeout, 0);
 		break;
 	case FUTEX_UNLOCK_PI:
@@ -2668,6 +2711,18 @@ long do_futex(u32 __user *uaddr, int op, u32 val, ktime_t *timeout,
 		break;
 	case FUTEX_TRYLOCK_PI:
 		ret = futex_lock_pi(uaddr, flags, 0, timeout, 1);
+=======
+		if (futex_cmpxchg_enabled)
+			ret = futex_lock_pi(uaddr, flags, val, timeout, 0);
+		break;
+	case FUTEX_UNLOCK_PI:
+		if (futex_cmpxchg_enabled)
+			ret = futex_unlock_pi(uaddr, flags);
+		break;
+	case FUTEX_TRYLOCK_PI:
+		if (futex_cmpxchg_enabled)
+			ret = futex_lock_pi(uaddr, flags, 0, timeout, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case FUTEX_WAIT_REQUEUE_PI:
 		val3 = FUTEX_BITSET_MATCH_ANY;

@@ -70,11 +70,18 @@ MODULE_LICENSE("GPL");
  * WAPF defines the behavior of the Fn+Fx wlan key
  * The significance of values is yet to be found, but
  * most of the time:
+<<<<<<< HEAD
  * 0x0 will do nothing
  * 0x1 will allow to control the device with Fn+Fx key.
  * 0x4 will send an ACPI event (0x88) while pressing the Fn+Fx key
  * 0x5 like 0x1 or 0x4
  * So, if something doesn't work as you want, just try other values =)
+=======
+ * Bit | Bluetooth | WLAN
+ *  0  | Hardware  | Hardware
+ *  1  | Hardware  | Software
+ *  4  | Software  | Software
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 static uint wapf = 1;
 module_param(wapf, uint, 0444);

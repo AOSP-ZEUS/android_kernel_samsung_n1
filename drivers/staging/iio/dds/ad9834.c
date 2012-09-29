@@ -66,7 +66,11 @@ static ssize_t ad9834_write(struct device *dev,
 		size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad9834_state *st = dev_info->dev_data;
+=======
+	struct ad9834_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
 	int ret;
 	long val;
@@ -145,7 +149,11 @@ static ssize_t ad9834_store_wavetype(struct device *dev,
 				 size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad9834_state *st = dev_info->dev_data;
+=======
+	struct ad9834_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
 	int ret = 0;
 	bool is_ad9833_7 = (st->devid == ID_AD9833) || (st->devid == ID_AD9837);
@@ -203,7 +211,11 @@ static ssize_t ad9834_show_out0_wavetype_available(struct device *dev,
 						char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad9834_state *st = iio_dev_get_devdata(dev_info);
+=======
+	struct ad9834_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char *str;
 
 	if ((st->devid == ID_AD9833) || (st->devid == ID_AD9837))
@@ -225,7 +237,11 @@ static ssize_t ad9834_show_out1_wavetype_available(struct device *dev,
 						char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad9834_state *st = iio_dev_get_devdata(dev_info);
+=======
+	struct ad9834_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char *str;
 
 	if (st->control & AD9834_MODE)
@@ -285,7 +301,11 @@ static mode_t ad9834_attr_is_visible(struct kobject *kobj,
 {
 	struct device *dev = container_of(kobj, struct device, kobj);
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad9834_state *st = iio_dev_get_devdata(dev_info);
+=======
+	struct ad9834_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mode_t mode = attr->mode;
 
@@ -314,6 +334,11 @@ static int __devinit ad9834_probe(struct spi_device *spi)
 {
 	struct ad9834_platform_data *pdata = spi->dev.platform_data;
 	struct ad9834_state *st;
+<<<<<<< HEAD
+=======
+	struct iio_dev *indio_dev;
+	struct regulator *reg;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 
 	if (!pdata) {
@@ -321,6 +346,7 @@ static int __devinit ad9834_probe(struct spi_device *spi)
 		return -ENODEV;
 	}
 
+<<<<<<< HEAD
 	st = kzalloc(sizeof(*st), GFP_KERNEL);
 	if (st == NULL) {
 		ret = -ENOMEM;
@@ -330,10 +356,16 @@ static int __devinit ad9834_probe(struct spi_device *spi)
 	st->reg = regulator_get(&spi->dev, "vcc");
 	if (!IS_ERR(st->reg)) {
 		ret = regulator_enable(st->reg);
+=======
+	reg = regulator_get(&spi->dev, "vcc");
+	if (!IS_ERR(reg)) {
+		ret = regulator_enable(reg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret)
 			goto error_put_reg;
 	}
 
+<<<<<<< HEAD
 	st->mclk = pdata->mclk;
 
 	spi_set_drvdata(spi, st);
@@ -352,6 +384,23 @@ static int __devinit ad9834_probe(struct spi_device *spi)
 	st->indio_dev->info = &ad9834_info;
 	st->indio_dev->dev_data = (void *) st;
 	st->indio_dev->modes = INDIO_DIRECT_MODE;
+=======
+	indio_dev = iio_allocate_device(sizeof(*st));
+	if (indio_dev == NULL) {
+		ret = -ENOMEM;
+		goto error_disable_reg;
+	}
+	spi_set_drvdata(spi, indio_dev);
+	st = iio_priv(indio_dev);
+	st->mclk = pdata->mclk;
+	st->spi = spi;
+	st->devid = spi_get_device_id(spi)->driver_data;
+	st->reg = reg;
+	indio_dev->dev.parent = &spi->dev;
+	indio_dev->name = spi_get_device_id(spi)->name;
+	indio_dev->info = &ad9834_info;
+	indio_dev->modes = INDIO_DIRECT_MODE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Setup default messages */
 
@@ -402,13 +451,18 @@ static int __devinit ad9834_probe(struct spi_device *spi)
 	if (ret)
 		goto error_free_device;
 
+<<<<<<< HEAD
 	ret = iio_device_register(st->indio_dev);
+=======
+	ret = iio_device_register(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_free_device;
 
 	return 0;
 
 error_free_device:
+<<<<<<< HEAD
 	iio_free_device(st->indio_dev);
 error_disable_reg:
 	if (!IS_ERR(st->reg))
@@ -418,11 +472,21 @@ error_put_reg:
 		regulator_put(st->reg);
 	kfree(st);
 error_ret:
+=======
+	iio_free_device(indio_dev);
+error_disable_reg:
+	if (!IS_ERR(reg))
+		regulator_disable(reg);
+error_put_reg:
+	if (!IS_ERR(reg))
+		regulator_put(reg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
 static int __devexit ad9834_remove(struct spi_device *spi)
 {
+<<<<<<< HEAD
 	struct ad9834_state *st = spi_get_drvdata(spi);
 
 	iio_device_unregister(st->indio_dev);
@@ -431,6 +495,18 @@ static int __devexit ad9834_remove(struct spi_device *spi)
 		regulator_put(st->reg);
 	}
 	kfree(st);
+=======
+	struct iio_dev *indio_dev = spi_get_drvdata(spi);
+	struct ad9834_state *st = iio_priv(indio_dev);
+	struct regulator *reg = st->reg;
+
+	iio_device_unregister(indio_dev);
+	if (!IS_ERR(reg)) {
+		regulator_disable(reg);
+		regulator_put(reg);
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

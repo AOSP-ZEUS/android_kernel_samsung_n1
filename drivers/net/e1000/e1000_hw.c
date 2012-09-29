@@ -446,6 +446,10 @@ s32 e1000_reset_hw(struct e1000_hw *hw)
 	/* Must reset the PHY before resetting the MAC */
 	if ((hw->mac_type == e1000_82541) || (hw->mac_type == e1000_82547)) {
 		ew32(CTRL, (ctrl | E1000_CTRL_PHY_RST));
+<<<<<<< HEAD
+=======
+		E1000_WRITE_FLUSH();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		msleep(5);
 	}
 
@@ -3080,7 +3084,10 @@ s32 e1000_phy_hw_reset(struct e1000_hw *hw)
 {
 	u32 ctrl, ctrl_ext;
 	u32 led_ctrl;
+<<<<<<< HEAD
 	s32 ret_val;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	e_dbg("e1000_phy_hw_reset");
 
@@ -3126,11 +3133,15 @@ s32 e1000_phy_hw_reset(struct e1000_hw *hw)
 	}
 
 	/* Wait for FW to finish PHY configuration. */
+<<<<<<< HEAD
 	ret_val = e1000_get_phy_cfg_done(hw);
 	if (ret_val != E1000_SUCCESS)
 		return ret_val;
 
 	return ret_val;
+=======
+	return e1000_get_phy_cfg_done(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -3757,6 +3768,10 @@ static s32 e1000_acquire_eeprom(struct e1000_hw *hw)
 		/* Clear SK and CS */
 		eecd &= ~(E1000_EECD_CS | E1000_EECD_SK);
 		ew32(EECD, eecd);
+<<<<<<< HEAD
+=======
+		E1000_WRITE_FLUSH();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		udelay(1);
 	}
 
@@ -3829,6 +3844,10 @@ static void e1000_release_eeprom(struct e1000_hw *hw)
 		eecd &= ~E1000_EECD_SK;	/* Lower SCK */
 
 		ew32(EECD, eecd);
+<<<<<<< HEAD
+=======
+		E1000_WRITE_FLUSH();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		udelay(hw->eeprom.delay_usec);
 	} else if (hw->eeprom.type == e1000_eeprom_microwire) {

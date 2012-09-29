@@ -40,6 +40,11 @@
 #include "registers.h"
 #include "hw.h"
 
+<<<<<<< HEAD
+=======
+#include "../dmaengine.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int ioat_pending_level = 4;
 module_param(ioat_pending_level, int, 0644);
 MODULE_PARM_DESC(ioat_pending_level,
@@ -235,12 +240,16 @@ static dma_cookie_t ioat1_tx_submit(struct dma_async_tx_descriptor *tx)
 
 	spin_lock_bh(&ioat->desc_lock);
 	/* cookie incr and addition to used_list must be atomic */
+<<<<<<< HEAD
 	cookie = c->cookie;
 	cookie++;
 	if (cookie < 0)
 		cookie = 1;
 	c->cookie = cookie;
 	tx->cookie = cookie;
+=======
+	cookie = dma_cookie_assign(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev_dbg(to_dev(&ioat->base), "%s: cookie: %d\n", __func__, cookie);
 
 	/* write address into NextDescriptor field of last desc in chain */
@@ -603,8 +612,12 @@ static void __cleanup(struct ioat_dma_chan *ioat, unsigned long phys_complete)
 		 */
 		dump_desc_dbg(ioat, desc);
 		if (tx->cookie) {
+<<<<<<< HEAD
 			chan->completed_cookie = tx->cookie;
 			tx->cookie = 0;
+=======
+			dma_cookie_complete(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ioat_dma_unmap(chan, tx->flags, desc->len, desc->hw);
 			ioat->active -= desc->hw->tx_cnt;
 			if (tx->callback) {
@@ -733,6 +746,7 @@ ioat_dma_tx_status(struct dma_chan *c, dma_cookie_t cookie,
 {
 	struct ioat_chan_common *chan = to_chan_common(c);
 	struct ioatdma_device *device = chan->device;
+<<<<<<< HEAD
 
 	if (ioat_tx_status(c, cookie, txstate) == DMA_SUCCESS)
 		return DMA_SUCCESS;
@@ -740,6 +754,17 @@ ioat_dma_tx_status(struct dma_chan *c, dma_cookie_t cookie,
 	device->cleanup_fn((unsigned long) c);
 
 	return ioat_tx_status(c, cookie, txstate);
+=======
+	enum dma_status ret;
+
+	ret = dma_cookie_status(c, cookie, txstate);
+	if (ret == DMA_SUCCESS)
+		return ret;
+
+	device->cleanup_fn((unsigned long) c);
+
+	return dma_cookie_status(c, cookie, txstate);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void ioat1_dma_start_null_desc(struct ioat_dma_chan *ioat)

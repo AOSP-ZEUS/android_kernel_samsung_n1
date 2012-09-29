@@ -373,6 +373,12 @@ void userspace(struct uml_pt_regs *regs)
 		if (ptrace(PTRACE_SETREGS, pid, 0, regs->gp))
 			fatal_sigsegv();
 
+<<<<<<< HEAD
+=======
+		if (put_fp_registers(pid, regs->fp))
+			fatal_sigsegv();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Now we set local_using_sysemu to be used for one loop */
 		local_using_sysemu = get_using_sysemu();
 
@@ -399,6 +405,15 @@ void userspace(struct uml_pt_regs *regs)
 			fatal_sigsegv();
 		}
 
+<<<<<<< HEAD
+=======
+		if (get_fp_registers(pid, regs->fp)) {
+			printk(UM_KERN_ERR "userspace -  get_fp_registers failed, "
+			       "errno = %d\n", errno);
+			fatal_sigsegv();
+		}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		UPT_SYSCALL_NR(regs) = -1; /* Assume: It's not a syscall */
 
 		if (WIFSTOPPED(status)) {
@@ -457,10 +472,18 @@ void userspace(struct uml_pt_regs *regs)
 }
 
 static unsigned long thread_regs[MAX_REG_NR];
+<<<<<<< HEAD
 
 static int __init init_thread_regs(void)
 {
 	get_safe_registers(thread_regs);
+=======
+static unsigned long thread_fp_regs[FP_SIZE];
+
+static int __init init_thread_regs(void)
+{
+	get_safe_registers(thread_regs, thread_fp_regs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Set parent's instruction pointer to start of clone-stub */
 	thread_regs[REGS_IP_INDEX] = STUB_CODE +
 				(unsigned long) stub_clone_handler -
@@ -503,6 +526,16 @@ int copy_context_skas0(unsigned long new_stack, int pid)
 		return err;
 	}
 
+<<<<<<< HEAD
+=======
+	err = put_fp_registers(pid, thread_fp_regs);
+	if (err < 0) {
+		printk(UM_KERN_ERR "copy_context_skas0 : put_fp_registers "
+		       "failed, pid = %d, err = %d\n", pid, err);
+		return err;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* set a well known return code for detection of child write failure */
 	child_data->err = 12345678;
 

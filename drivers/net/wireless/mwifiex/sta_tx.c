@@ -47,6 +47,10 @@ void *mwifiex_process_sta_txpd(struct mwifiex_private *priv,
 	struct mwifiex_adapter *adapter = priv->adapter;
 	struct txpd *local_tx_pd;
 	struct mwifiex_txinfo *tx_info = MWIFIEX_SKB_TXCB(skb);
+<<<<<<< HEAD
+=======
+	u8 pad;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!skb->len) {
 		dev_err(adapter->dev, "Tx: bad packet length: %d\n",
@@ -55,15 +59,28 @@ void *mwifiex_process_sta_txpd(struct mwifiex_private *priv,
 		return skb->data;
 	}
 
+<<<<<<< HEAD
 	BUG_ON(skb_headroom(skb) < (sizeof(*local_tx_pd) + INTF_HEADER_LEN));
 	skb_push(skb, sizeof(*local_tx_pd));
+=======
+	/* If skb->data is not aligned; add padding */
+	pad = (4 - (((void *)skb->data - NULL) & 0x3)) % 4;
+
+	BUG_ON(skb_headroom(skb) < (sizeof(*local_tx_pd) + INTF_HEADER_LEN
+								+ pad));
+	skb_push(skb, sizeof(*local_tx_pd) + pad);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	local_tx_pd = (struct txpd *) skb->data;
 	memset(local_tx_pd, 0, sizeof(struct txpd));
 	local_tx_pd->bss_num = priv->bss_num;
 	local_tx_pd->bss_type = priv->bss_type;
 	local_tx_pd->tx_pkt_length = cpu_to_le16((u16) (skb->len -
+<<<<<<< HEAD
 							sizeof(struct txpd)));
+=======
+						(sizeof(struct txpd) + pad)));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	local_tx_pd->priority = (u8) skb->priority;
 	local_tx_pd->pkt_delay_2ms =
@@ -88,7 +105,11 @@ void *mwifiex_process_sta_txpd(struct mwifiex_private *priv,
 	}
 
 	/* Offset of actual data */
+<<<<<<< HEAD
 	local_tx_pd->tx_pkt_offset = cpu_to_le16(sizeof(struct txpd));
+=======
+	local_tx_pd->tx_pkt_offset = cpu_to_le16(sizeof(struct txpd) + pad);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* make space for INTF_HEADER_LEN */
 	skb_push(skb, INTF_HEADER_LEN);

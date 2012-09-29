@@ -38,6 +38,7 @@
 #include "prm2xxx_3xxx.h"
 #include "pm.h"
 
+<<<<<<< HEAD
 int omap2_pm_debug;
 u32 enable_off_mode;
 u32 sleep_while_idle;
@@ -178,15 +179,21 @@ void omap2_pm_wakeup_on_timer(u32 seconds, u32 milliseconds)
 		" (%d ticks at %d ticks/sec.)\n",
 		seconds, milliseconds, cycles, tick_rate);
 }
+=======
+u32 enable_off_mode;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_DEBUG_FS
 #include <linux/debugfs.h>
 #include <linux/seq_file.h>
 
+<<<<<<< HEAD
 static void pm_dbg_regset_store(u32 *ptr);
 
 static struct dentry *pm_dbg_dir;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int pm_dbg_init_done;
 
 static int pm_dbg_init(void);
@@ -196,6 +203,7 @@ enum {
 	DEBUG_FILE_TIMERS,
 };
 
+<<<<<<< HEAD
 struct pm_module_def {
 	char name[8]; /* Name of the module */
 	short type; /* CM or PRM */
@@ -350,6 +358,8 @@ int pm_dbg_regset_save(int reg_set)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const char pwrdm_state_names[][PWRDM_MAX_PWRSTS] = {
 	"OFF",
 	"RET",
@@ -469,11 +479,14 @@ static int pm_dbg_open(struct inode *inode, struct file *file)
 	};
 }
 
+<<<<<<< HEAD
 static int pm_dbg_reg_open(struct inode *inode, struct file *file)
 {
 	return single_open(file, pm_dbg_show_regs, inode->i_private);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct file_operations debug_fops = {
 	.open           = pm_dbg_open,
 	.read           = seq_read,
@@ -481,6 +494,7 @@ static const struct file_operations debug_fops = {
 	.release        = single_release,
 };
 
+<<<<<<< HEAD
 static const struct file_operations debug_reg_fops = {
 	.open           = pm_dbg_reg_open,
 	.read           = seq_read,
@@ -515,6 +529,8 @@ int pm_dbg_regset_init(int reg_set)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int pwrdm_suspend_get(void *data, u64 *val)
 {
 	int ret = -EINVAL;
@@ -576,9 +592,12 @@ static int option_set(void *data, u64 val)
 {
 	u32 *option = data;
 
+<<<<<<< HEAD
 	if (option == &wakeup_timer_milliseconds && val >= 1000)
 		return -EINVAL;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	*option = val;
 
 	if (option == &enable_off_mode) {
@@ -595,15 +614,22 @@ static int option_set(void *data, u64 val)
 
 DEFINE_SIMPLE_ATTRIBUTE(pm_dbg_option_fops, option_get, option_set, "%llu\n");
 
+<<<<<<< HEAD
 static int pm_dbg_init(void)
 {
 	int i;
 	struct dentry *d;
 	char name[2];
+=======
+static int __init pm_dbg_init(void)
+{
+	struct dentry *d;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (pm_dbg_init_done)
 		return 0;
 
+<<<<<<< HEAD
 	if (cpu_is_omap34xx())
 		pm_dbg_reg_modules = omap3_pm_reg_modules;
 	else {
@@ -611,6 +637,8 @@ static int pm_dbg_init(void)
 		return -ENODEV;
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	d = debugfs_create_dir("pm_debug", NULL);
 	if (IS_ERR(d))
 		return PTR_ERR(d);
@@ -622,6 +650,7 @@ static int pm_dbg_init(void)
 
 	pwrdm_for_each(pwrdms_setup, (void *)d);
 
+<<<<<<< HEAD
 	pm_dbg_dir = debugfs_create_dir("registers", d);
 	if (IS_ERR(pm_dbg_dir))
 		return PTR_ERR(pm_dbg_dir);
@@ -646,6 +675,10 @@ static int pm_dbg_init(void)
 	(void) debugfs_create_file("wakeup_timer_milliseconds",
 			S_IRUGO | S_IWUSR, d, &wakeup_timer_milliseconds,
 			&pm_dbg_option_fops);
+=======
+	(void) debugfs_create_file("enable_off_mode", S_IRUGO | S_IWUSR, d,
+				   &enable_off_mode, &pm_dbg_option_fops);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pm_dbg_init_done = 1;
 
 	return 0;

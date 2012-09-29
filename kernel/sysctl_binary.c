@@ -1,6 +1,10 @@
 #include <linux/stat.h>
 #include <linux/sysctl.h>
+<<<<<<< HEAD
 #include "../fs/xfs/linux-2.6/xfs_sysctl.h"
+=======
+#include "../fs/xfs/xfs_sysctl.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/sunrpc/debug.h>
 #include <linux/string.h>
 #include <net/ip_vs.h>

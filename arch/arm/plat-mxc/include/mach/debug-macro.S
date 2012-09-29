@@ -12,38 +12,69 @@
  */
 #include <mach/hardware.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MX1
 #define UART_PADDR	MX1_UART1_BASE_ADDR
 #endif
 
 #ifdef CONFIG_ARCH_MX25
+=======
+#ifdef CONFIG_SOC_IMX1
+#define UART_PADDR	MX1_UART1_BASE_ADDR
+#endif
+
+#ifdef CONFIG_SOC_IMX25
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef UART_PADDR
 #error "CONFIG_DEBUG_LL is incompatible with multiple archs"
 #endif
 #define UART_PADDR	MX25_UART1_BASE_ADDR
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MX2
+=======
+#if defined(CONFIG_SOC_IMX21) || defined (CONFIG_SOC_IMX27)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef UART_PADDR
 #error "CONFIG_DEBUG_LL is incompatible with multiple archs"
 #endif
 #define UART_PADDR	MX2x_UART1_BASE_ADDR
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MX3
+=======
+#if defined(CONFIG_SOC_IMX31) || defined(CONFIG_SOC_IMX35)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef UART_PADDR
 #error "CONFIG_DEBUG_LL is incompatible with multiple archs"
 #endif
 #define UART_PADDR	MX3x_UART1_BASE_ADDR
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MX5
+=======
+#ifdef CONFIG_SOC_IMX51
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef UART_PADDR
 #error "CONFIG_DEBUG_LL is incompatible with multiple archs"
 #endif
 #define UART_PADDR	MX51_UART1_BASE_ADDR
 #endif
 
+<<<<<<< HEAD
+=======
+/* iMX50/53 have same addresses, but not iMX51 */
+#if defined(CONFIG_SOC_IMX50) || defined(CONFIG_SOC_IMX53)
+#ifdef UART_PADDR
+#error "CONFIG_DEBUG_LL is incompatible with multiple archs"
+#endif
+#define UART_PADDR	MX53_UART1_BASE_ADDR
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define UART_VADDR	IMX_IO_ADDRESS(UART_PADDR)
 
 		.macro	addruart, rp, rv

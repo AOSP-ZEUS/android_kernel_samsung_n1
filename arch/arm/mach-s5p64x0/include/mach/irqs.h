@@ -85,6 +85,11 @@
 #define IRQ_S3CUART_RX4		IRQ_S5P_UART_RX4
 #define IRQ_S3CUART_RX5		IRQ_S5P_UART_RX5
 
+<<<<<<< HEAD
+=======
+#define IRQ_I2S0		IRQ_I2SV40
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* S5P6450 EINT feature will be added */
 
 /*

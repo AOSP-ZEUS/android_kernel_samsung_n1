@@ -20,11 +20,16 @@
  */
 
 #include "main.h"
+<<<<<<< HEAD
+=======
+#include "translation-table.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "aggregation.h"
 #include "send.h"
 #include "routing.h"
 #include "hard-interface.h"
 
+<<<<<<< HEAD
 /* calculate the size of the tt information for a given packet */
 static int tt_len(struct batman_packet *batman_packet)
 {
@@ -38,10 +43,25 @@ static bool can_aggregate_with(struct batman_packet *new_batman_packet,
 			       bool directlink,
 			       struct hard_iface *if_incoming,
 			       struct forw_packet *forw_packet)
+=======
+/* return true if new_packet can be aggregated with forw_packet */
+static bool can_aggregate_with(const struct batman_packet *new_batman_packet,
+			       struct bat_priv *bat_priv,
+			       int packet_len,
+			       unsigned long send_time,
+			       bool directlink,
+			       const struct hard_iface *if_incoming,
+			       const struct forw_packet *forw_packet)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct batman_packet *batman_packet =
 		(struct batman_packet *)forw_packet->skb->data;
 	int aggregated_bytes = forw_packet->packet_len + packet_len;
+<<<<<<< HEAD
+=======
+	struct hard_iface *primary_if = NULL;
+	bool res = false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/**
 	 * we can aggregate the current packet to this aggregated packet
@@ -66,6 +86,13 @@ static bool can_aggregate_with(struct batman_packet *new_batman_packet,
 		 *    packet
 		 */
 
+<<<<<<< HEAD
+=======
+		primary_if = primary_if_get_selected(bat_priv);
+		if (!primary_if)
+			goto out;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* packets without direct link flag and high TTL
 		 * are flooded through the net  */
 		if ((!directlink) &&
@@ -75,8 +102,15 @@ static bool can_aggregate_with(struct batman_packet *new_batman_packet,
 		    /* own packets originating non-primary
 		     * interfaces leave only that interface */
 		    ((!forw_packet->own) ||
+<<<<<<< HEAD
 		     (forw_packet->if_incoming->if_num == 0)))
 			return true;
+=======
+		     (forw_packet->if_incoming == primary_if))) {
+			res = true;
+			goto out;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* if the incoming packet is sent via this one
 		 * interface only - we still can aggregate */
@@ -89,6 +123,7 @@ static bool can_aggregate_with(struct batman_packet *new_batman_packet,
 		     * (= secondary interface packets in general) */
 		    (batman_packet->flags & DIRECTLINK ||
 		     (forw_packet->own &&
+<<<<<<< HEAD
 		      forw_packet->if_incoming->if_num != 0)))
 			return true;
 	}
@@ -99,6 +134,24 @@ static bool can_aggregate_with(struct batman_packet *new_batman_packet,
 /* create a new aggregated packet and add this packet to it */
 static void new_aggregated_packet(unsigned char *packet_buff, int packet_len,
 				  unsigned long send_time, bool direct_link,
+=======
+		      forw_packet->if_incoming != primary_if))) {
+			res = true;
+			goto out;
+		}
+	}
+
+out:
+	if (primary_if)
+		hardif_free_ref(primary_if);
+	return res;
+}
+
+/* create a new aggregated packet and add this packet to it */
+static void new_aggregated_packet(const unsigned char *packet_buff,
+				  int packet_len, unsigned long send_time,
+				  bool direct_link,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				  struct hard_iface *if_incoming,
 				  int own_packet)
 {
@@ -118,7 +171,11 @@ static void new_aggregated_packet(unsigned char *packet_buff, int packet_len,
 		}
 	}
 
+<<<<<<< HEAD
 	forw_packet_aggr = kmalloc(sizeof(struct forw_packet), GFP_ATOMIC);
+=======
+	forw_packet_aggr = kmalloc(sizeof(*forw_packet_aggr), GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!forw_packet_aggr) {
 		if (!own_packet)
 			atomic_inc(&bat_priv->batman_queue_left);
@@ -150,7 +207,11 @@ static void new_aggregated_packet(unsigned char *packet_buff, int packet_len,
 	forw_packet_aggr->own = own_packet;
 	forw_packet_aggr->if_incoming = if_incoming;
 	forw_packet_aggr->num_packets = 0;
+<<<<<<< HEAD
 	forw_packet_aggr->direct_link_flags = 0;
+=======
+	forw_packet_aggr->direct_link_flags = NO_FLAGS;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	forw_packet_aggr->send_time = send_time;
 
 	/* save packet direct link flag status */
@@ -176,8 +237,12 @@ out:
 
 /* aggregate a new packet into the existing aggregation */
 static void aggregate(struct forw_packet *forw_packet_aggr,
+<<<<<<< HEAD
 		      unsigned char *packet_buff,
 		      int packet_len,
+=======
+		      const unsigned char *packet_buff, int packet_len,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		      bool direct_link)
 {
 	unsigned char *skb_buff;
@@ -195,7 +260,11 @@ static void aggregate(struct forw_packet *forw_packet_aggr,
 
 void add_bat_packet_to_list(struct bat_priv *bat_priv,
 			    unsigned char *packet_buff, int packet_len,
+<<<<<<< HEAD
 			    struct hard_iface *if_incoming, char own_packet,
+=======
+			    struct hard_iface *if_incoming, int own_packet,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			    unsigned long send_time)
 {
 	/**
@@ -215,6 +284,10 @@ void add_bat_packet_to_list(struct bat_priv *bat_priv,
 		hlist_for_each_entry(forw_packet_pos, tmp_node,
 				     &bat_priv->forw_bat_list, list) {
 			if (can_aggregate_with(batman_packet,
+<<<<<<< HEAD
+=======
+					       bat_priv,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					       packet_len,
 					       send_time,
 					       direct_link,
@@ -253,8 +326,14 @@ void add_bat_packet_to_list(struct bat_priv *bat_priv,
 }
 
 /* unpack the aggregated packets and process them one by one */
+<<<<<<< HEAD
 void receive_aggr_bat_packet(struct ethhdr *ethhdr, unsigned char *packet_buff,
 			     int packet_len, struct hard_iface *if_incoming)
+=======
+void receive_aggr_bat_packet(const struct ethhdr *ethhdr,
+			     unsigned char *packet_buff, int packet_len,
+			     struct hard_iface *if_incoming)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct batman_packet *batman_packet;
 	int buff_pos = 0;
@@ -263,6 +342,7 @@ void receive_aggr_bat_packet(struct ethhdr *ethhdr, unsigned char *packet_buff,
 	batman_packet = (struct batman_packet *)packet_buff;
 
 	do {
+<<<<<<< HEAD
 		/* network to host order for our 32bit seqno, and the
 		   orig_interval. */
 		batman_packet->seqno = ntohl(batman_packet->seqno);
@@ -277,4 +357,22 @@ void receive_aggr_bat_packet(struct ethhdr *ethhdr, unsigned char *packet_buff,
 			(packet_buff + buff_pos);
 	} while (aggregated_packet(buff_pos, packet_len,
 				   batman_packet->num_tt));
+=======
+		/* network to host order for our 32bit seqno and the
+		   orig_interval */
+		batman_packet->seqno = ntohl(batman_packet->seqno);
+		batman_packet->tt_crc = ntohs(batman_packet->tt_crc);
+
+		tt_buff = packet_buff + buff_pos + BAT_PACKET_LEN;
+
+		receive_bat_packet(ethhdr, batman_packet, tt_buff, if_incoming);
+
+		buff_pos += BAT_PACKET_LEN +
+			tt_len(batman_packet->tt_num_changes);
+
+		batman_packet = (struct batman_packet *)
+			(packet_buff + buff_pos);
+	} while (aggregated_packet(buff_pos, packet_len,
+				   batman_packet->tt_num_changes));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

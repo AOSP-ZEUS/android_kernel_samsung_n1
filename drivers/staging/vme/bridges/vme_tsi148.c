@@ -44,7 +44,11 @@ static void __exit tsi148_exit(void);
 static int err_chk;
 static int geoid;
 
+<<<<<<< HEAD
 static char driver_name[] = "vme_tsi148";
+=======
+static const char driver_name[] = "vme_tsi148";
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static DEFINE_PCI_DEVICE_TABLE(tsi148_ids) = {
 	{ PCI_DEVICE(PCI_VENDOR_ID_TUNDRA, PCI_DEVICE_ID_TUNDRA_TSI148) },

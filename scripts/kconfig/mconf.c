@@ -18,7 +18,10 @@
 #include <unistd.h>
 #include <locale.h>
 
+<<<<<<< HEAD
 #define LKC_DIRECT_LINK
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "lkc.h"
 #include "lxdialog/dialog.h"
 
@@ -845,6 +848,10 @@ int main(int ac, char **av)
 				"\n\n"));
 			return 1;
 		}
+<<<<<<< HEAD
+=======
+		/* fall through */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case -1:
 		printf(_("\n\n"
 			"*** End of the configuration.\n"

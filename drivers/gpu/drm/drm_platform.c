@@ -123,14 +123,23 @@ static int drm_platform_set_busid(struct drm_device *dev, struct drm_master *mas
 {
 	int len, ret;
 
+<<<<<<< HEAD
 	master->unique_len = 10 + strlen(dev->platformdev->name);
+=======
+	master->unique_len = 13 + strlen(dev->platformdev->name);
+	master->unique_size = master->unique_len;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	master->unique = kmalloc(master->unique_len + 1, GFP_KERNEL);
 
 	if (master->unique == NULL)
 		return -ENOMEM;
 
 	len = snprintf(master->unique, master->unique_len,
+<<<<<<< HEAD
 		       "platform:%s", dev->platformdev->name);
+=======
+			"platform:%s:%02d", dev->platformdev->name, dev->platformdev->id);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (len > master->unique_len) {
 		DRM_ERROR("Unique buffer overflowed\n");

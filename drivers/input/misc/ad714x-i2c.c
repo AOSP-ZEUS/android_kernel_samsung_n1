@@ -1,7 +1,11 @@
 /*
  * AD714X CapTouch Programmable Controller driver (I2C bus)
  *
+<<<<<<< HEAD
  * Copyright 2009 Analog Devices Inc.
+=======
+ * Copyright 2009-2011 Analog Devices Inc.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Licensed under the GPL-2 or later.
  */
@@ -27,6 +31,7 @@ static int ad714x_i2c_resume(struct device *dev)
 
 static SIMPLE_DEV_PM_OPS(ad714x_i2c_pm, ad714x_i2c_suspend, ad714x_i2c_resume);
 
+<<<<<<< HEAD
 static int ad714x_i2c_write(struct device *dev, unsigned short reg,
 				unsigned short data)
 {
@@ -75,6 +80,51 @@ static int ad714x_i2c_read(struct device *dev, unsigned short reg,
 	}
 
 	return ret;
+=======
+static int ad714x_i2c_write(struct ad714x_chip *chip,
+			    unsigned short reg, unsigned short data)
+{
+	struct i2c_client *client = to_i2c_client(chip->dev);
+	int error;
+
+	chip->xfer_buf[0] = cpu_to_be16(reg);
+	chip->xfer_buf[1] = cpu_to_be16(data);
+
+	error = i2c_master_send(client, (u8 *)chip->xfer_buf,
+				2 * sizeof(*chip->xfer_buf));
+	if (unlikely(error < 0)) {
+		dev_err(&client->dev, "I2C write error: %d\n", error);
+		return error;
+	}
+
+	return 0;
+}
+
+static int ad714x_i2c_read(struct ad714x_chip *chip,
+			   unsigned short reg, unsigned short *data, size_t len)
+{
+	struct i2c_client *client = to_i2c_client(chip->dev);
+	int i;
+	int error;
+
+	chip->xfer_buf[0] = cpu_to_be16(reg);
+
+	error = i2c_master_send(client, (u8 *)chip->xfer_buf,
+				sizeof(*chip->xfer_buf));
+	if (error >= 0)
+		error = i2c_master_recv(client, (u8 *)chip->xfer_buf,
+					len * sizeof(*chip->xfer_buf));
+
+	if (unlikely(error < 0)) {
+		dev_err(&client->dev, "I2C read error: %d\n", error);
+		return error;
+	}
+
+	for (i = 0; i < len; i++)
+		data[i] = be16_to_cpu(chip->xfer_buf[i]);
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int __devinit ad714x_i2c_probe(struct i2c_client *client,

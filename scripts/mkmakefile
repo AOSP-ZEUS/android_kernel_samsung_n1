@@ -30,6 +30,16 @@ PATCHLEVEL = $4
 lastword = \$(word \$(words \$(1)),\$(1))
 makedir := \$(dir \$(call lastword,\$(MAKEFILE_LIST)))
 
+<<<<<<< HEAD
+=======
+ifeq ("\$(origin V)", "command line")
+VERBOSE := \$(V)
+endif
+ifneq (\$(VERBOSE),1)
+Q := @
+endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MAKEARGS := -C $1
 MAKEARGS += O=\$(if \$(patsubst /%,,\$(makedir)),\$(CURDIR)/)\$(patsubst %/,%,\$(makedir))
 
@@ -40,7 +50,11 @@ MAKEFLAGS += --no-print-directory
 all	:= \$(filter-out all Makefile,\$(MAKECMDGOALS))
 
 all:
+<<<<<<< HEAD
 	\$(MAKE) \$(MAKEARGS) \$(all)
+=======
+	\$(Q)\$(MAKE) \$(MAKEARGS) \$(all)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 Makefile:;
 

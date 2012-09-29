@@ -326,7 +326,11 @@
 #define FH_TCSR_UPPER_BOUND  (FH_MEM_LOWER_BOUND + 0xE60)
 
 /* Find Control/Status reg for given Tx DMA/FIFO channel */
+<<<<<<< HEAD
 #define FH50_TCSR_CHNL_NUM                            (8)
+=======
+#define FH_TCSR_CHNL_NUM                            (8)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* TCSR: tx_config register values */
 #define FH_TCSR_CHNL_TX_CONFIG_REG(_chnl)	\

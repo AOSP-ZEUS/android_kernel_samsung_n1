@@ -44,7 +44,11 @@ static inline u64 pvclock_scale_delta(u64 delta, u32 mul_frac, int shift)
 		: "a" ((u32)delta), "1" ((u32)(delta >> 32)), "2" (mul_frac) );
 #elif defined(__x86_64__)
 	__asm__ (
+<<<<<<< HEAD
 		"mul %[mul_frac] ; shrd $32, %[hi], %[lo]"
+=======
+		"mulq %[mul_frac] ; shrd $32, %[hi], %[lo]"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		: [lo]"=a"(product),
 		  [hi]"=d"(tmp)
 		: "0"(delta),

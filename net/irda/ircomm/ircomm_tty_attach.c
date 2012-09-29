@@ -382,7 +382,11 @@ static void ircomm_tty_discovery_indication(discinfo_t *discovery,
 	info.daddr = discovery->daddr;
 	info.saddr = discovery->saddr;
 
+<<<<<<< HEAD
 	self = (struct ircomm_tty_cb *) priv;
+=======
+	self = priv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ircomm_tty_do_event(self, IRCOMM_TTY_DISCOVERY_INDICATION,
 			    NULL, &info);
 }

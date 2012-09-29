@@ -208,6 +208,7 @@ static int compat_blkpg_ioctl(struct block_device *bdev, fmode_t mode,
 #define BLKBSZSET_32		_IOW(0x12, 113, int)
 #define BLKGETSIZE64_32		_IOR(0x12, 114, int)
 
+<<<<<<< HEAD
 struct compat_floppy_struct {
 	compat_uint_t	size;
 	compat_uint_t	sect;
@@ -221,6 +222,8 @@ struct compat_floppy_struct {
 	const compat_caddr_t name;
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct compat_floppy_drive_params {
 	char		cmos;
 	compat_ulong_t	max_dtr;
@@ -288,7 +291,10 @@ struct compat_floppy_write_errors {
 
 #define FDSETPRM32 _IOW(2, 0x42, struct compat_floppy_struct)
 #define FDDEFPRM32 _IOW(2, 0x43, struct compat_floppy_struct)
+<<<<<<< HEAD
 #define FDGETPRM32 _IOR(2, 0x04, struct compat_floppy_struct)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define FDSETDRVPRM32 _IOW(2, 0x90, struct compat_floppy_drive_params)
 #define FDGETDRVPRM32 _IOR(2, 0x11, struct compat_floppy_drive_params)
 #define FDGETDRVSTAT32 _IOR(2, 0x12, struct compat_floppy_drive_struct)

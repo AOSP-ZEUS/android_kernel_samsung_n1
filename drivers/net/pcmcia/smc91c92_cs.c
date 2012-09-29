@@ -809,7 +809,11 @@ static int smc91c92_config(struct pcmcia_device *link)
     struct net_device *dev = link->priv;
     struct smc_private *smc = netdev_priv(dev);
     char *name;
+<<<<<<< HEAD
     int i, j, rev;
+=======
+    int i, rev, j = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
     unsigned int ioaddr;
     u_long mir;
 

@@ -49,7 +49,11 @@
 #include <asm/stacktrace.h>
 #include <asm/processor.h>
 #include <asm/debugreg.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/system.h>
 #include <asm/traps.h>
 #include <asm/desc.h>
@@ -717,6 +721,7 @@ asmlinkage void __attribute__((weak)) smp_threshold_interrupt(void)
 }
 
 /*
+<<<<<<< HEAD
  * This gets called with the process already owning the
  * FPU state, and with CR0.TS cleared. It just needs to
  * restore the FPU register state.
@@ -736,15 +741,34 @@ void __math_state_restore(struct task_struct *tsk)
 		"fildl %P[addr]",	/* set F?P to defined value */
 		X86_FEATURE_FXSAVE_LEAK,
 		[addr] "m" (safe_address));
+=======
+ * __math_state_restore assumes that cr0.TS is already clear and the
+ * fpu state is all ready for use.  Used during context switch.
+ */
+void __math_state_restore(void)
+{
+	struct thread_info *thread = current_thread_info();
+	struct task_struct *tsk = thread->task;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Paranoid restore. send a SIGSEGV if we fail to restore the state.
 	 */
 	if (unlikely(restore_fpu_checking(tsk))) {
+<<<<<<< HEAD
 		__thread_fpu_end(tsk);
 		force_sig(SIGSEGV, tsk);
 		return;
 	}
+=======
+		stts();
+		force_sig(SIGSEGV, tsk);
+		return;
+	}
+
+	thread->status |= TS_USEDFPU;	/* So we fnsave on switch_to() */
+	tsk->fpu_counter++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -754,12 +778,22 @@ void __math_state_restore(struct task_struct *tsk)
  * Careful.. There are problems with IBM-designed IRQ13 behaviour.
  * Don't touch unless you *really* know how it works.
  *
+<<<<<<< HEAD
  * Must be called with kernel preemption disabled (eg with local
  * local interrupts as in the case of do_device_not_available).
  */
 void math_state_restore(void)
 {
 	struct task_struct *tsk = current;
+=======
+ * Must be called with kernel preemption disabled (in this case,
+ * local interrupts are disabled at the call-site in entry.S).
+ */
+asmlinkage void math_state_restore(void)
+{
+	struct thread_info *thread = current_thread_info();
+	struct task_struct *tsk = thread->task;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!tsk_used_math(tsk)) {
 		local_irq_enable();
@@ -776,10 +810,16 @@ void math_state_restore(void)
 		local_irq_disable();
 	}
 
+<<<<<<< HEAD
 	__thread_fpu_begin(tsk);
 	__math_state_restore(tsk);
 
 	tsk->fpu_counter++;
+=======
+	clts();				/* Allow maths ops (or we recurse) */
+
+	__math_state_restore();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(math_state_restore);
 

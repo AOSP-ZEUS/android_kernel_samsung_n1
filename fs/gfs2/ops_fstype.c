@@ -224,7 +224,11 @@ static int gfs2_read_super(struct gfs2_sbd *sdp, sector_t sector, int silent)
 
 	bio->bi_end_io = end_bio_io_page;
 	bio->bi_private = page;
+<<<<<<< HEAD
 	submit_bio(READ_SYNC | REQ_META, bio);
+=======
+	submit_bio(READ_SYNC | REQ_META | REQ_PRIO, bio);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wait_on_page_locked(page);
 	bio_put(bio);
 	if (!PageUptodate(page)) {
@@ -1094,6 +1098,10 @@ static int fill_super(struct super_block *sb, struct gfs2_args *args, int silent
 	if (sdp->sd_args.ar_nobarrier)
 		set_bit(SDF_NOBARRIERS, &sdp->sd_flags);
 
+<<<<<<< HEAD
+=======
+	sb->s_flags |= MS_NOSEC;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sb->s_magic = GFS2_MAGIC;
 	sb->s_op = &gfs2_super_ops;
 	sb->s_d_op = &gfs2_dops;

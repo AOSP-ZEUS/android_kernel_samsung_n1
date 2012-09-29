@@ -24,7 +24,11 @@
 
 #include <asm/mach-types.h>
 #include <asm/mach/arch.h>
+<<<<<<< HEAD
 #include <mach/hardware.h>
+=======
+#include <mach/pxa3xx.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/audio.h>
 #include <mach/pxafb.h>
 #include <mach/zylonite.h>
@@ -426,6 +430,10 @@ MACHINE_START(ZYLONITE, "PXA3xx Platform Development Kit (aka Zylonite)")
 	.map_io		= pxa3xx_map_io,
 	.nr_irqs	= ZYLONITE_NR_IRQS,
 	.init_irq	= pxa3xx_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa3xx_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 	.init_machine	= zylonite_init,
 MACHINE_END

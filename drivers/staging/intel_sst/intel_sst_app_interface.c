@@ -430,8 +430,15 @@ static int snd_sst_fill_kernel_list(struct stream_info *stream,
 				return -ENOMEM;
 			if (copy_from_user((void *) &rar_handle,
 					iovec[index].iov_base,
+<<<<<<< HEAD
 					sizeof(__u32)))
 				return -EFAULT;
+=======
+					sizeof(__u32))) {
+				kfree(stream_bufs);
+				return -EFAULT;
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			stream_bufs->addr = (char *)rar_handle;
 			stream_bufs->in_use = false;
 			stream_bufs->size = iovec[0].iov_len;

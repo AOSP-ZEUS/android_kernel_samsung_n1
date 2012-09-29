@@ -183,10 +183,17 @@ static int bond_inet6addr_event(struct notifier_block *this,
 		}
 
 		list_for_each_entry(vlan, &bond->vlan_list, vlan_list) {
+<<<<<<< HEAD
 			if (!bond->vlgrp)
 				continue;
 			vlan_dev = vlan_group_get_device(bond->vlgrp,
 							 vlan->vlan_id);
+=======
+			rcu_read_lock();
+			vlan_dev = __vlan_find_dev_deep(bond->dev,
+							vlan->vlan_id);
+			rcu_read_unlock();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (vlan_dev == event_dev) {
 				switch (event) {
 				case NETDEV_UP:

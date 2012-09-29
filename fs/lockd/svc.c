@@ -440,7 +440,11 @@ static int param_set_##name(const char *val, struct kernel_param *kp)	\
 	__typeof__(type) num = which_strtol(val, &endp, 0);		\
 	if (endp == val || *endp || num < (min) || num > (max))		\
 		return -EINVAL;						\
+<<<<<<< HEAD
 	*((type *) kp->arg) = num;					\
+=======
+	*((int *) kp->arg) = num;					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;							\
 }
 

@@ -105,9 +105,12 @@ fp_fetoxm1(struct fp_ext *dest, struct fp_ext *src)
 
 	fp_monadic_check(dest, src);
 
+<<<<<<< HEAD
 	if (IS_ZERO(dest))
 		return dest;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return dest;
 }
 

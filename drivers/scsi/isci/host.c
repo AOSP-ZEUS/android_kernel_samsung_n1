@@ -1094,6 +1094,10 @@ static void isci_host_completion_routine(unsigned long data)
 	struct isci_request *request;
 	struct isci_request *next_request;
 	struct sas_task     *task;
+<<<<<<< HEAD
+=======
+	u16 active;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	INIT_LIST_HEAD(&completed_request_list);
 	INIT_LIST_HEAD(&errored_request_list);
@@ -1184,6 +1188,16 @@ static void isci_host_completion_routine(unsigned long data)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	/* the coalesence timeout doubles at each encoding step, so
+	 * update it based on the ilog2 value of the outstanding requests
+	 */
+	active = isci_tci_active(ihost);
+	writel(SMU_ICC_GEN_VAL(NUMBER, active) |
+	       SMU_ICC_GEN_VAL(TIMER, ISCI_COALESCE_BASE + ilog2(active)),
+	       &ihost->smu_registers->interrupt_coalesce_control);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -1474,7 +1488,11 @@ static void sci_controller_ready_state_enter(struct sci_base_state_machine *sm)
 	struct isci_host *ihost = container_of(sm, typeof(*ihost), sm);
 
 	/* set the default interrupt coalescence number and timeout value. */
+<<<<<<< HEAD
 	sci_controller_set_interrupt_coalescence(ihost, 0x10, 250);
+=======
+	sci_controller_set_interrupt_coalescence(ihost, 0, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void sci_controller_ready_state_exit(struct sci_base_state_machine *sm)

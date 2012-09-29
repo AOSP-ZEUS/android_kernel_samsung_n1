@@ -61,7 +61,12 @@ int irq_set_irq_type(unsigned int irq, unsigned int type)
 		return -EINVAL;
 
 	type &= IRQ_TYPE_SENSE_MASK;
+<<<<<<< HEAD
 	ret = __irq_set_trigger(desc, irq, type);
+=======
+	if (type != IRQ_TYPE_NONE)
+		ret = __irq_set_trigger(desc, irq, type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	irq_put_desc_busunlock(desc, flags);
 	return ret;
 }
@@ -156,14 +161,20 @@ static void irq_state_set_masked(struct irq_desc *desc)
 	irqd_set(&desc->irq_data, IRQD_IRQ_MASKED);
 }
 
+<<<<<<< HEAD
 int irq_startup(struct irq_desc *desc, bool resend)
 {
 	int ret = 0;
 
+=======
+int irq_startup(struct irq_desc *desc)
+{
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	irq_state_clr_disabled(desc);
 	desc->depth = 0;
 
 	if (desc->irq_data.chip->irq_startup) {
+<<<<<<< HEAD
 		ret = desc->irq_data.chip->irq_startup(&desc->irq_data);
 		irq_state_clr_masked(desc);
 	} else {
@@ -172,6 +183,15 @@ int irq_startup(struct irq_desc *desc, bool resend)
 	if (resend)
 		check_irq_resend(desc, desc->irq_data.irq);
 	return ret;
+=======
+		int ret = desc->irq_data.chip->irq_startup(&desc->irq_data);
+		irq_state_clr_masked(desc);
+		return ret;
+	}
+
+	irq_enable(desc);
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void irq_shutdown(struct irq_desc *desc)
@@ -314,6 +334,7 @@ out_unlock:
 }
 EXPORT_SYMBOL_GPL(handle_simple_irq);
 
+<<<<<<< HEAD
 /*
  * Called unconditionally from handle_level_irq() and only for oneshot
  * interrupts from handle_fasteoi_irq()
@@ -332,6 +353,8 @@ static void cond_unmask_irq(struct irq_desc *desc)
 		unmask_irq(desc);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  *	handle_level_irq - Level type irq handler
  *	@irq:	the interrupt number
@@ -364,8 +387,13 @@ handle_level_irq(unsigned int irq, struct irq_desc *desc)
 
 	handle_irq_event(desc);
 
+<<<<<<< HEAD
 	cond_unmask_irq(desc);
 
+=======
+	if (!irqd_irq_disabled(&desc->irq_data) && !(desc->istate & IRQS_ONESHOT))
+		unmask_irq(desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out_unlock:
 	raw_spin_unlock(&desc->lock);
 }
@@ -419,9 +447,12 @@ handle_fasteoi_irq(unsigned int irq, struct irq_desc *desc)
 	preflow_handler(desc);
 	handle_irq_event(desc);
 
+<<<<<<< HEAD
 	if (desc->istate & IRQS_ONESHOT)
 		cond_unmask_irq(desc);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out_eoi:
 	desc->irq_data.chip->irq_eoi(&desc->irq_data);
 out_unlock:
@@ -598,7 +629,11 @@ __irq_set_handler(unsigned int irq, irq_flow_handler_t handle, int is_chained,
 		irq_settings_set_noprobe(desc);
 		irq_settings_set_norequest(desc);
 		irq_settings_set_nothread(desc);
+<<<<<<< HEAD
 		irq_startup(desc, true);
+=======
+		irq_startup(desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 out:
 	irq_put_desc_busunlock(desc, flags);

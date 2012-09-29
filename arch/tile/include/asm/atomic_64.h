@@ -11,7 +11,11 @@
  *   NON INFRINGEMENT.  See the GNU General Public License for
  *   more details.
  *
+<<<<<<< HEAD
  * Do not include directly; use <asm/atomic.h>.
+=======
+ * Do not include directly; use <linux/atomic.h>.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 
 #ifndef _ASM_TILE_ATOMIC_64_H
@@ -64,7 +68,11 @@ static inline int atomic_add_return(int i, atomic_t *v)
 	return val;
 }
 
+<<<<<<< HEAD
 static inline int atomic_add_unless(atomic_t *v, int a, int u)
+=======
+static inline int __atomic_add_unless(atomic_t *v, int a, int u)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int guess, oldval = v->counter;
 	do {
@@ -73,7 +81,11 @@ static inline int atomic_add_unless(atomic_t *v, int a, int u)
 		guess = oldval;
 		oldval = atomic_cmpxchg(v, guess, guess + a);
 	} while (guess != oldval);
+<<<<<<< HEAD
 	return oldval != u;
+=======
+	return oldval;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Now the true 64-bit operations. */

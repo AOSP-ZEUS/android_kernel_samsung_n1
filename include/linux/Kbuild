@@ -135,6 +135,10 @@ header-y += firewire-cdev.h
 header-y += firewire-constants.h
 header-y += flat.h
 header-y += fs.h
+<<<<<<< HEAD
+=======
+header-y += fsl_hypervisor.h
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 header-y += fuse.h
 header-y += futex.h
 header-y += gameport.h

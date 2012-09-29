@@ -81,6 +81,10 @@ config S390
 	select INIT_ALL_POSSIBLE
 	select HAVE_IRQ_WORK
 	select HAVE_PERF_EVENTS
+<<<<<<< HEAD
+=======
+	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select HAVE_KERNEL_GZIP
 	select HAVE_KERNEL_BZIP2
 	select HAVE_KERNEL_LZMA
@@ -89,6 +93,10 @@ config S390
 	select HAVE_GET_USER_PAGES_FAST
 	select HAVE_ARCH_MUTEX_CPU_RELAX
 	select HAVE_ARCH_JUMP_LABEL if !MARCH_G5
+<<<<<<< HEAD
+=======
+	select HAVE_RCU_TABLE_FREE if SMP
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select ARCH_INLINE_SPIN_TRYLOCK
 	select ARCH_INLINE_SPIN_TRYLOCK_BH
 	select ARCH_INLINE_SPIN_LOCK
@@ -227,9 +235,12 @@ config COMPAT
 config SYSVIPC_COMPAT
 	def_bool y if COMPAT && SYSVIPC
 
+<<<<<<< HEAD
 config KEYS_COMPAT
 	def_bool y if COMPAT && KEYS
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config AUDIT_ARCH
 	def_bool y
 
@@ -275,11 +286,19 @@ config MARCH_Z10
 	  on older machines.
 
 config MARCH_Z196
+<<<<<<< HEAD
 	bool "IBM zEnterprise 196"
 	help
 	  Select this to enable optimizations for IBM zEnterprise 196
 	  (2817 series). The kernel will be slightly faster but will not work
 	  on older machines.
+=======
+	bool "IBM zEnterprise 114 and 196"
+	help
+	  Select this to enable optimizations for IBM zEnterprise 114 and 196
+	  (2818 and 2817 series). The kernel will be slightly faster but will
+	  not work on older machines.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 endchoice
 

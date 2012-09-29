@@ -145,6 +145,7 @@ static int twl6030_irq_thread(void *data)
 			}
 		local_irq_enable();
 		}
+<<<<<<< HEAD
 
 		/*
 		 * NOTE:
@@ -156,6 +157,10 @@ static int twl6030_irq_thread(void *data)
 		 * single byte write, so we just use 0x0 to clear.
 		 */
 		ret = twl_i2c_write_u8(TWL_MODULE_PIH, 0x00, REG_INT_STS_A);
+=======
+		ret = twl_i2c_write(TWL_MODULE_PIH, sts.bytes,
+				REG_INT_STS_A, 3); /* clear INT_STS_A */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret)
 			pr_warning("twl6030: I2C error in clearing PIH ISR\n");
 

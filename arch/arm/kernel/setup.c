@@ -280,6 +280,7 @@ static void __init cacheid_init(void)
 	if (arch >= CPU_ARCH_ARMv6) {
 		if ((cachetype & (7 << 29)) == 4 << 29) {
 			/* ARMv7 register format */
+<<<<<<< HEAD
 			cacheid = CACHEID_VIPT_NONALIASING;
 			if ((cachetype & (3 << 14)) == 1 << 14)
 				cacheid |= CACHEID_ASID_TAGGED;
@@ -292,6 +293,21 @@ static void __init cacheid_init(void)
 			if (cpu_has_aliasing_icache(CPU_ARCH_ARMv6))
 				cacheid |= CACHEID_VIPT_I_ALIASING;
 		}
+=======
+			arch = CPU_ARCH_ARMv7;
+			cacheid = CACHEID_VIPT_NONALIASING;
+			if ((cachetype & (3 << 14)) == 1 << 14)
+				cacheid |= CACHEID_ASID_TAGGED;
+		} else {
+			arch = CPU_ARCH_ARMv6;
+			if (cachetype & (1 << 23))
+				cacheid = CACHEID_VIPT_ALIASING;
+			else
+				cacheid = CACHEID_VIPT_NONALIASING;
+		}
+		if (cpu_has_aliasing_icache(arch))
+			cacheid |= CACHEID_VIPT_I_ALIASING;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		cacheid = CACHEID_VIVT;
 	}
@@ -343,6 +359,7 @@ static void __init feat_v6_fixup(void)
 		elf_hwcap &= ~HWCAP_TLS;
 }
 
+<<<<<<< HEAD
 static void __init setup_processor(void)
 {
 	struct proc_info_list *list;
@@ -391,6 +408,8 @@ static void __init setup_processor(void)
 	cpu_proc_init();
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * cpu_init - initialise one CPU.
  *
@@ -406,6 +425,11 @@ void cpu_init(void)
 		BUG();
 	}
 
+<<<<<<< HEAD
+=======
+	cpu_proc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Define the placement constraint for the inline asm directive below.
 	 * In Thumb-2, msr with an immediate value is not allowed.
@@ -442,6 +466,57 @@ void cpu_init(void)
 	    : "r14");
 }
 
+<<<<<<< HEAD
+=======
+static void __init setup_processor(void)
+{
+	struct proc_info_list *list;
+
+	/*
+	 * locate processor in the list of supported processor
+	 * types.  The linker builds this table for us from the
+	 * entries in arch/arm/mm/proc-*.S
+	 */
+	list = lookup_processor_type(read_cpuid_id());
+	if (!list) {
+		printk("CPU configuration botched (ID %08x), unable "
+		       "to continue.\n", read_cpuid_id());
+		while (1);
+	}
+
+	cpu_name = list->cpu_name;
+
+#ifdef MULTI_CPU
+	processor = *list->proc;
+#endif
+#ifdef MULTI_TLB
+	cpu_tlb = *list->tlb;
+#endif
+#ifdef MULTI_USER
+	cpu_user = *list->user;
+#endif
+#ifdef MULTI_CACHE
+	cpu_cache = *list->cache;
+#endif
+
+	printk("CPU: %s [%08x] revision %d (ARMv%s), cr=%08lx\n",
+	       cpu_name, read_cpuid_id(), read_cpuid_id() & 15,
+	       proc_arch[cpu_architecture()], cr_alignment);
+
+	sprintf(init_utsname()->machine, "%s%c", list->arch_name, ENDIANNESS);
+	sprintf(elf_platform, "%s%c", list->elf_name, ENDIANNESS);
+	elf_hwcap = list->elf_hwcap;
+#ifndef CONFIG_ARM_THUMB
+	elf_hwcap &= ~HWCAP_THUMB;
+#endif
+
+	feat_v6_fixup();
+
+	cacheid_init();
+	cpu_init();
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init dump_machine_table(void)
 {
 	struct machine_desc *p;
@@ -791,6 +866,35 @@ static void __init squash_mem_tags(struct tag *tag)
 			tag->hdr.tag = ATAG_NONE;
 }
 
+<<<<<<< HEAD
+=======
+#if 1
+// N1_ICS : hacking console output
+char boot_command_line2[COMMAND_LINE_SIZE];
+char *str_replace(char *s, const char *olds, const char *news)
+{
+ char *result, *sr;
+ int i = 0;
+ size_t oldlen = strlen(olds); if (oldlen < 1) return s;
+ size_t newlen = strlen(news);
+
+ sr = result = boot_command_line2;
+ while (*s) {
+   if (memcmp(s, olds, oldlen) == 0) {
+     memcpy(sr, news, newlen);
+     sr += newlen;
+     s  += oldlen;
+   } else *sr++ = *s++;
+   if (++i == COMMAND_LINE_SIZE)
+       break;
+ }
+ *sr = '\0';
+
+ return result;
+}
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct machine_desc * __init setup_machine_tags(unsigned int nr)
 {
 	struct tag *tags = (struct tag *)&init_tags;
@@ -869,6 +973,12 @@ static struct machine_desc * __init setup_machine_tags(unsigned int nr)
 
 	/* parse_early_param needs a boot_command_line */
 	strlcpy(boot_command_line, from, COMMAND_LINE_SIZE);
+<<<<<<< HEAD
+=======
+	sprintf(from, " androidboot.serialno=%x%x",
+		system_serial_high, system_serial_low);
+	strlcat(boot_command_line, from, COMMAND_LINE_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return mdesc;
 }
@@ -887,6 +997,15 @@ void __init setup_arch(char **cmdline_p)
 	machine_desc = mdesc;
 	machine_name = mdesc->name;
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_ZONE_DMA
+	if (mdesc->dma_zone_size) {
+		extern unsigned long arm_dma_zone_size;
+		arm_dma_zone_size = mdesc->dma_zone_size;
+	}
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (mdesc->soft_reboot)
 		reboot_setup("s");
 
@@ -895,6 +1014,18 @@ void __init setup_arch(char **cmdline_p)
 	init_mm.end_data   = (unsigned long) _edata;
 	init_mm.brk	   = (unsigned long) _end;
 
+<<<<<<< HEAD
+=======
+#if 0
+// N1_ICS : hacking console output
+   boot_command_line[COMMAND_LINE_SIZE-1] = 0;
+   printk(KERN_ERR "old boot_command_line : %s\n", boot_command_line);
+   str_replace(boot_command_line, "console=ram", "console=ttyS0,115200n8");
+   strlcpy(boot_command_line, boot_command_line2, COMMAND_LINE_SIZE);
+   printk(KERN_ERR "new boot_command_line : %s\n", boot_command_line);
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* populate cmd_line too for later use, preserving boot_command_line */
 	strlcpy(cmd_line, boot_command_line, COMMAND_LINE_SIZE);
 	*cmdline_p = cmd_line;
@@ -915,7 +1046,10 @@ void __init setup_arch(char **cmdline_p)
 #endif
 	reserve_crashkernel();
 
+<<<<<<< HEAD
 	cpu_init();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tcm_init();
 
 #ifdef CONFIG_MULTI_IRQ_HANDLER
@@ -979,6 +1113,13 @@ static const char *hwcap_str[] = {
 	"neon",
 	"vfpv3",
 	"vfpv3d16",
+<<<<<<< HEAD
+=======
+	"tls",
+	"vfpv4",
+	"idiva",
+	"idivt",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	NULL
 };
 
@@ -990,7 +1131,15 @@ static int c_show(struct seq_file *m, void *v)
 		   cpu_name, read_cpuid_id() & 15, elf_platform);
 
 #if defined(CONFIG_SMP)
+<<<<<<< HEAD
 	for_each_online_cpu(i) {
+=======
+# if defined(CONFIG_REPORT_PRESENT_CPUS)
+	for_each_present_cpu(i) {
+# else
+	for_each_online_cpu(i) {
+# endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * glibc reads /proc/cpuinfo to determine the number of
 		 * online processors, looking for lines beginning with

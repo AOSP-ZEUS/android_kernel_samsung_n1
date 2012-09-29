@@ -85,7 +85,10 @@ static void __exit_signal(struct task_struct *tsk)
 	struct tty_struct *uninitialized_var(tty);
 
 	sighand = rcu_dereference_check(tsk->sighand,
+<<<<<<< HEAD
 					rcu_read_lock_held() ||
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					lockdep_tasklist_lock_is_held());
 	spin_lock(&sighand->siglock);
 
@@ -169,7 +172,10 @@ void release_task(struct task_struct * p)
 	struct task_struct *leader;
 	int zap_leader;
 repeat:
+<<<<<<< HEAD
 	tracehook_prepare_release_task(p);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* don't need to get the RCU readlock here - the process is dead and
 	 * can't be modifying its own credentials. But shut RCU-lockdep up */
 	rcu_read_lock();
@@ -179,7 +185,11 @@ repeat:
 	proc_flush_task(p);
 
 	write_lock_irq(&tasklist_lock);
+<<<<<<< HEAD
 	tracehook_finish_release_task(p);
+=======
+	ptrace_release_task(p);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__exit_signal(p);
 
 	/*
@@ -190,12 +200,16 @@ repeat:
 	zap_leader = 0;
 	leader = p->group_leader;
 	if (leader != p && thread_group_empty(leader) && leader->exit_state == EXIT_ZOMBIE) {
+<<<<<<< HEAD
 		BUG_ON(task_detached(leader));
 		do_notify_parent(leader, leader->exit_signal);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * If we were the last child thread and the leader has
 		 * exited already, and the leader's parent ignores SIGCHLD,
 		 * then we are the one who should release the leader.
+<<<<<<< HEAD
 		 *
 		 * do_notify_parent() will have marked it self-reaping in
 		 * that case.
@@ -206,6 +220,10 @@ repeat:
 		 * This maintains the invariant that release_task()
 		 * only runs on a task in EXIT_DEAD, just for sanity.
 		 */
+=======
+		 */
+		zap_leader = do_notify_parent(leader, leader->exit_signal);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (zap_leader)
 			leader->exit_state = EXIT_DEAD;
 	}
@@ -277,6 +295,7 @@ int is_current_pgrp_orphaned(void)
 	return retval;
 }
 
+<<<<<<< HEAD
 static int has_stopped_jobs(struct pid *pgrp)
 {
 	int retval = 0;
@@ -289,6 +308,18 @@ static int has_stopped_jobs(struct pid *pgrp)
 		break;
 	} while_each_pid_task(pgrp, PIDTYPE_PGID, p);
 	return retval;
+=======
+static bool has_stopped_jobs(struct pid *pgrp)
+{
+	struct task_struct *p;
+
+	do_each_pid_task(pgrp, PIDTYPE_PGID, p) {
+		if (p->signal->flags & SIGNAL_STOP_STOPPED)
+			return true;
+	} while_each_pid_task(pgrp, PIDTYPE_PGID, p);
+
+	return false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -751,7 +782,11 @@ static void reparent_leader(struct task_struct *father, struct task_struct *p,
 {
 	list_move_tail(&p->sibling, &p->real_parent->children);
 
+<<<<<<< HEAD
 	if (task_detached(p))
+=======
+	if (p->exit_state == EXIT_DEAD)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	/*
 	 * If this is a threaded reparent there is no need to
@@ -764,10 +799,16 @@ static void reparent_leader(struct task_struct *father, struct task_struct *p,
 	p->exit_signal = SIGCHLD;
 
 	/* If it has exited notify the new parent about this child's death. */
+<<<<<<< HEAD
 	if (!task_ptrace(p) &&
 	    p->exit_state == EXIT_ZOMBIE && thread_group_empty(p)) {
 		do_notify_parent(p, p->exit_signal);
 		if (task_detached(p)) {
+=======
+	if (!p->ptrace &&
+	    p->exit_state == EXIT_ZOMBIE && thread_group_empty(p)) {
+		if (do_notify_parent(p, p->exit_signal)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			p->exit_state = EXIT_DEAD;
 			list_move_tail(&p->sibling, dead);
 		}
@@ -794,7 +835,11 @@ static void forget_original_parent(struct task_struct *father)
 		do {
 			t->real_parent = reaper;
 			if (t->parent == father) {
+<<<<<<< HEAD
 				BUG_ON(task_ptrace(t));
+=======
+				BUG_ON(t->ptrace);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				t->parent = t->real_parent;
 			}
 			if (t->pdeath_signal)
@@ -819,8 +864,12 @@ static void forget_original_parent(struct task_struct *father)
  */
 static void exit_notify(struct task_struct *tsk, int group_dead)
 {
+<<<<<<< HEAD
 	int signal;
 	void *cookie;
+=======
+	bool autoreap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * This does two things:
@@ -851,26 +900,52 @@ static void exit_notify(struct task_struct *tsk, int group_dead)
 	 * we have changed execution domain as these two values started
 	 * the same after a fork.
 	 */
+<<<<<<< HEAD
 	if (tsk->exit_signal != SIGCHLD && !task_detached(tsk) &&
+=======
+	if (thread_group_leader(tsk) && tsk->exit_signal != SIGCHLD &&
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    (tsk->parent_exec_id != tsk->real_parent->self_exec_id ||
 	     tsk->self_exec_id != tsk->parent_exec_id))
 		tsk->exit_signal = SIGCHLD;
 
+<<<<<<< HEAD
 	signal = tracehook_notify_death(tsk, &cookie, group_dead);
 	if (signal >= 0)
 		signal = do_notify_parent(tsk, signal);
 
 	tsk->exit_state = signal == DEATH_REAP ? EXIT_DEAD : EXIT_ZOMBIE;
+=======
+	if (unlikely(tsk->ptrace)) {
+		int sig = thread_group_leader(tsk) &&
+				thread_group_empty(tsk) &&
+				!ptrace_reparented(tsk) ?
+			tsk->exit_signal : SIGCHLD;
+		autoreap = do_notify_parent(tsk, sig);
+	} else if (thread_group_leader(tsk)) {
+		autoreap = thread_group_empty(tsk) &&
+			do_notify_parent(tsk, tsk->exit_signal);
+	} else {
+		autoreap = true;
+	}
+
+	tsk->exit_state = autoreap ? EXIT_DEAD : EXIT_ZOMBIE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* mt-exec, de_thread() is waiting for group leader */
 	if (unlikely(tsk->signal->notify_count < 0))
 		wake_up_process(tsk->signal->group_exit_task);
 	write_unlock_irq(&tasklist_lock);
 
+<<<<<<< HEAD
 	tracehook_report_death(tsk, signal, cookie, group_dead);
 
 	/* If the process is dead, release it - nobody will wait for it */
 	if (signal == DEATH_REAP)
+=======
+	/* If the process is dead, release it - nobody will wait for it */
+	if (autoreap)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		release_task(tsk);
 }
 
@@ -906,7 +981,10 @@ NORET_TYPE void do_exit(long code)
 
 	profile_task_exit(tsk);
 
+<<<<<<< HEAD
 	WARN_ON(atomic_read(&tsk->fs_excl));
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	WARN_ON(blk_needs_flush_plug(tsk));
 
 	if (unlikely(in_interrupt()))
@@ -923,7 +1001,11 @@ NORET_TYPE void do_exit(long code)
 	 */
 	set_fs(USER_DS);
 
+<<<<<<< HEAD
 	tracehook_report_exit(&code);
+=======
+	ptrace_event(PTRACE_EVENT_EXIT, code);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	validate_creds_for_do_exit(tsk);
 
@@ -990,6 +1072,10 @@ NORET_TYPE void do_exit(long code)
 	trace_sched_process_exit(tsk);
 
 	exit_sem(tsk);
+<<<<<<< HEAD
+=======
+	exit_shm(tsk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	exit_files(tsk);
 	exit_fs(tsk);
 	check_stack_usage();
@@ -1235,9 +1321,15 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
 	traced = ptrace_reparented(p);
 	/*
 	 * It can be ptraced but not reparented, check
+<<<<<<< HEAD
 	 * !task_detached() to filter out sub-threads.
 	 */
 	if (likely(!traced) && likely(!task_detached(p))) {
+=======
+	 * thread_group_leader() to filter out sub-threads.
+	 */
+	if (likely(!traced) && thread_group_leader(p)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		struct signal_struct *psig;
 		struct signal_struct *sig;
 		unsigned long maxrss;
@@ -1345,6 +1437,7 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
 		/* We dropped tasklist, ptracer could die and untrace */
 		ptrace_unlink(p);
 		/*
+<<<<<<< HEAD
 		 * If this is not a detached task, notify the parent.
 		 * If it's still not detached after that, don't release
 		 * it now.
@@ -1355,6 +1448,15 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
 				p->exit_state = EXIT_ZOMBIE;
 				p = NULL;
 			}
+=======
+		 * If this is not a sub-thread, notify the parent.
+		 * If parent wants a zombie, don't release it now.
+		 */
+		if (thread_group_leader(p) &&
+		    !do_notify_parent(p, p->exit_signal)) {
+			p->exit_state = EXIT_ZOMBIE;
+			p = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		write_unlock_irq(&tasklist_lock);
 	}
@@ -1367,7 +1469,12 @@ static int wait_task_zombie(struct wait_opts *wo, struct task_struct *p)
 static int *task_stopped_code(struct task_struct *p, bool ptrace)
 {
 	if (ptrace) {
+<<<<<<< HEAD
 		if (task_is_stopped_or_traced(p))
+=======
+		if (task_is_stopped_or_traced(p) &&
+		    !(p->jobctl & JOBCTL_LISTENING))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return &p->exit_code;
 	} else {
 		if (p->signal->flags & SIGNAL_STOP_STOPPED)
@@ -1570,7 +1677,11 @@ static int wait_consider_task(struct wait_opts *wo, int ptrace,
 		 * Notification and reaping will be cascaded to the real
 		 * parent when the ptracer detaches.
 		 */
+<<<<<<< HEAD
 		if (likely(!ptrace) && unlikely(task_ptrace(p))) {
+=======
+		if (likely(!ptrace) && unlikely(p->ptrace)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* it will become visible, clear notask_error */
 			wo->notask_error = 0;
 			return 0;
@@ -1613,8 +1724,12 @@ static int wait_consider_task(struct wait_opts *wo, int ptrace,
 		 * own children, it should create a separate process which
 		 * takes the role of real parent.
 		 */
+<<<<<<< HEAD
 		if (likely(!ptrace) && task_ptrace(p) &&
 		    same_thread_group(p->parent, p->real_parent))
+=======
+		if (likely(!ptrace) && p->ptrace && !ptrace_reparented(p))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return 0;
 
 		/*

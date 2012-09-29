@@ -142,6 +142,17 @@ const struct fib_prop fib_props[RTN_MAX + 1] = {
 };
 
 /* Release a nexthop info record */
+<<<<<<< HEAD
+=======
+static void free_fib_info_rcu(struct rcu_head *head)
+{
+	struct fib_info *fi = container_of(head, struct fib_info, rcu);
+
+	if (fi->fib_metrics != (u32 *) dst_default_metrics)
+		kfree(fi->fib_metrics);
+	kfree(fi);
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void free_fib_info(struct fib_info *fi)
 {
@@ -156,7 +167,11 @@ void free_fib_info(struct fib_info *fi)
 	} endfor_nexthops(fi);
 	fib_info_cnt--;
 	release_net(fi->fib_net);
+<<<<<<< HEAD
 	kfree_rcu(fi, rcu);
+=======
+	call_rcu(&fi->rcu, free_fib_info_rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void fib_release_info(struct fib_info *fi)

@@ -1,9 +1,18 @@
 config DVB_CXD2099
+<<<<<<< HEAD
         tristate "CXD2099AR Common Interface driver"
         depends on DVB_CORE && PCI && I2C && DVB_NGENE
         ---help---
           Support for the CI module found on cineS2 DVB-S2, supported by
 	  the Micronas PCIe device driver (ngene).
+=======
+	tristate "CXD2099AR Common Interface driver"
+	depends on DVB_CORE && PCI && I2C
+	---help---
+	  Support for the CI module found on cards based on
+	  - Micronas ngene PCIe bridge: cineS2 etc.
+	  - Digital Devices PCIe bridge: Octopus series
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	  For now, data is passed through '/dev/dvb/adapterX/sec0':
 	    - Encrypted data must be written to 'sec0'.

@@ -73,11 +73,21 @@ struct inode *hfsplus_iget(struct super_block *sb, unsigned long ino)
 
 	if (inode->i_ino >= HFSPLUS_FIRSTUSER_CNID ||
 	    inode->i_ino == HFSPLUS_ROOT_CNID) {
+<<<<<<< HEAD
 		hfs_find_init(HFSPLUS_SB(inode->i_sb)->cat_tree, &fd);
 		err = hfsplus_find_cat(inode->i_sb, inode->i_ino, &fd);
 		if (!err)
 			err = hfsplus_cat_read_inode(inode, &fd);
 		hfs_find_exit(&fd);
+=======
+		err = hfs_find_init(HFSPLUS_SB(inode->i_sb)->cat_tree, &fd);
+		if (!err) {
+			err = hfsplus_find_cat(inode->i_sb, inode->i_ino, &fd);
+			if (!err)
+				err = hfsplus_cat_read_inode(inode, &fd);
+			hfs_find_exit(&fd);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		err = hfsplus_system_read_inode(inode);
 	}
@@ -133,9 +143,19 @@ static int hfsplus_system_write_inode(struct inode *inode)
 static int hfsplus_write_inode(struct inode *inode,
 		struct writeback_control *wbc)
 {
+<<<<<<< HEAD
 	dprint(DBG_INODE, "hfsplus_write_inode: %lu\n", inode->i_ino);
 
 	hfsplus_ext_write_extent(inode);
+=======
+	int err;
+
+	dprint(DBG_INODE, "hfsplus_write_inode: %lu\n", inode->i_ino);
+
+	err = hfsplus_ext_write_extent(inode);
+	if (err)
+		return err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (inode->i_ino >= HFSPLUS_FIRSTUSER_CNID ||
 	    inode->i_ino == HFSPLUS_ROOT_CNID)
@@ -338,6 +358,10 @@ static int hfsplus_fill_super(struct super_block *sb, void *data, int silent)
 	struct inode *root, *inode;
 	struct qstr str;
 	struct nls_table *nls = NULL;
+<<<<<<< HEAD
+=======
+	u64 last_fs_block, last_fs_page;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int err;
 
 	err = -EINVAL;
@@ -393,6 +417,20 @@ static int hfsplus_fill_super(struct super_block *sb, void *data, int silent)
 	if (!sbi->rsrc_clump_blocks)
 		sbi->rsrc_clump_blocks = 1;
 
+<<<<<<< HEAD
+=======
+	err = -EFBIG;
+	last_fs_block = sbi->total_blocks - 1;
+	last_fs_page = (last_fs_block << sbi->alloc_blksz_shift) >>
+			PAGE_CACHE_SHIFT;
+
+	if ((last_fs_block > (sector_t)(~0ULL) >> (sbi->alloc_blksz_shift - 9)) ||
+	    (last_fs_page > (pgoff_t)(~0ULL))) {
+		printk(KERN_ERR "hfs: filesystem size too large.\n");
+		goto out_free_vhdr;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Set up operations so we can load metadata */
 	sb->s_op = &hfsplus_sops;
 	sb->s_maxbytes = MAX_LFS_FILESIZE;
@@ -417,6 +455,11 @@ static int hfsplus_fill_super(struct super_block *sb, void *data, int silent)
 		sb->s_flags |= MS_RDONLY;
 	}
 
+<<<<<<< HEAD
+=======
+	err = -EINVAL;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Load metadata objects (B*Trees) */
 	sbi->ext_tree = hfs_btree_open(sb, HFSPLUS_EXT_CNID);
 	if (!sbi->ext_tree) {
@@ -447,7 +490,13 @@ static int hfsplus_fill_super(struct super_block *sb, void *data, int silent)
 
 	str.len = sizeof(HFSP_HIDDENDIR_NAME) - 1;
 	str.name = HFSP_HIDDENDIR_NAME;
+<<<<<<< HEAD
 	hfs_find_init(sbi->cat_tree, &fd);
+=======
+	err = hfs_find_init(sbi->cat_tree, &fd);
+	if (err)
+		goto out_put_root;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	hfsplus_cat_build_key(sb, fd.search_key, HFSPLUS_ROOT_CNID, &str);
 	if (!hfs_brec_read(&fd, &entry, sizeof(entry))) {
 		hfs_find_exit(&fd);

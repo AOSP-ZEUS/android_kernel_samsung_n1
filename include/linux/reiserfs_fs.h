@@ -2332,7 +2332,13 @@ __u32 keyed_hash(const signed char *msg, int len);
 __u32 yura_hash(const signed char *msg, int len);
 __u32 r5_hash(const signed char *msg, int len);
 
+<<<<<<< HEAD
 #define reiserfs_test_and_set_le_bit	__test_and_set_bit_le
+=======
+#define reiserfs_set_le_bit		__set_bit_le
+#define reiserfs_test_and_set_le_bit	__test_and_set_bit_le
+#define reiserfs_clear_le_bit		__clear_bit_le
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define reiserfs_test_and_clear_le_bit	__test_and_clear_bit_le
 #define reiserfs_test_le_bit		test_bit_le
 #define reiserfs_find_next_zero_le_bit	find_next_zero_bit_le

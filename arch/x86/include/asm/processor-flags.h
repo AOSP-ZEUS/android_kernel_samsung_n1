@@ -59,6 +59,10 @@
 #define X86_CR4_OSFXSR	0x00000200 /* enable fast FPU save and restore */
 #define X86_CR4_OSXMMEXCPT 0x00000400 /* enable unmasked SSE exceptions */
 #define X86_CR4_VMXE	0x00002000 /* enable VMX virtualization */
+<<<<<<< HEAD
+=======
+#define X86_CR4_RDWRGSFS 0x00010000 /* enable RDWRGSFS support */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define X86_CR4_OSXSAVE 0x00040000 /* enable xsave and xrestore */
 #define X86_CR4_SMEP	0x00100000 /* enable SMEP support */
 

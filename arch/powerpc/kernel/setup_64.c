@@ -63,6 +63,10 @@
 #include <asm/kexec.h>
 #include <asm/mmu_context.h>
 #include <asm/code-patching.h>
+<<<<<<< HEAD
+=======
+#include <asm/kvm_ppc.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "setup.h"
 
@@ -73,7 +77,11 @@
 #endif
 
 int boot_cpuid = 0;
+<<<<<<< HEAD
 int __initdata boot_cpu_count;
+=======
+int __initdata spinning_secondaries;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 u64 ppc64_pft_size;
 
 /* Pick defaults since we might want to patch instructions
@@ -253,11 +261,19 @@ void smp_release_cpus(void)
 	for (i = 0; i < 100000; i++) {
 		mb();
 		HMT_low();
+<<<<<<< HEAD
 		if (boot_cpu_count == 0)
 			break;
 		udelay(1);
 	}
 	DBG("boot_cpu_count = %d\n", boot_cpu_count);
+=======
+		if (spinning_secondaries == 0)
+			break;
+		udelay(1);
+	}
+	DBG("spinning_secondaries = %d\n", spinning_secondaries);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	DBG(" <- smp_release_cpus()\n");
 }
@@ -581,6 +597,11 @@ void __init setup_arch(char **cmdline_p)
 	/* Initialize the MMU context management stuff */
 	mmu_context_init();
 
+<<<<<<< HEAD
+=======
+	kvm_rma_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ppc64_boot_msg(0x15, "Setup Done");
 }
 

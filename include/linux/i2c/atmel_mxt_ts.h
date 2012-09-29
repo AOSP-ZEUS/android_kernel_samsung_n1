@@ -2,6 +2,11 @@
  * Atmel maXTouch Touchscreen driver
  *
  * Copyright (C) 2010 Samsung Electronics Co.Ltd
+<<<<<<< HEAD
+=======
+ * Copyright (C) 2011 Atmel Corporation
+ * Copyright (C) 2011 NVIDIA Corporation
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Author: Joonyoung Shim <jy0922.shim@samsung.com>
  *
  * This program is free software; you can redistribute  it and/or modify it
@@ -15,6 +20,19 @@
 
 #include <linux/types.h>
 
+<<<<<<< HEAD
+=======
+/*
+ * Atmel I2C addresses
+ */
+#define	MXT224_I2C_ADDR1	0x4A
+#define	MXT224_I2C_ADDR2	0x4B
+#define	MXT1386_I2C_ADDR1	0x4C
+#define	MXT1386_I2C_ADDR2	0x4D
+#define	MXT1386_I2C_ADDR3	0x5A
+#define	MXT1386_I2C_ADDR4	0x5B
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Orient */
 #define MXT_NORMAL		0x0
 #define MXT_DIAGONAL		0x1
@@ -39,6 +57,13 @@ struct mxt_platform_data {
 	unsigned int voltage;
 	unsigned char orient;
 	unsigned long irqflags;
+<<<<<<< HEAD
+=======
+	u8(*read_chg) (void);
+	unsigned long config_crc;
+	unsigned int actv_cycle_time;
+	unsigned int idle_cycle_time;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif /* __LINUX_ATMEL_MXT_TS_H */

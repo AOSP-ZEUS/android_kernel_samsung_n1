@@ -103,7 +103,11 @@ TRACE_EVENT(kvm_gtlb_write,
  *                         Book3S trace points                           *
  *************************************************************************/
 
+<<<<<<< HEAD
 #ifdef CONFIG_PPC_BOOK3S
+=======
+#ifdef CONFIG_KVM_BOOK3S_PR
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 TRACE_EVENT(kvm_book3s_exit,
 	TP_PROTO(unsigned int exit_nr, struct kvm_vcpu *vcpu),
@@ -252,7 +256,11 @@ TRACE_EVENT(kvm_book3s_mmu_flush,
 	),
 
 	TP_fast_assign(
+<<<<<<< HEAD
 		__entry->count		= vcpu->arch.hpte_cache_count;
+=======
+		__entry->count		= to_book3s(vcpu)->hpte_cache_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__entry->p1		= p1;
 		__entry->p2		= p2;
 		__entry->type		= type;

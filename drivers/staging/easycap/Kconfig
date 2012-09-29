@@ -1,6 +1,11 @@
 config EASYCAP
 	tristate "EasyCAP USB ID 05e1:0408 support"
+<<<<<<< HEAD
 	depends on USB && VIDEO_DEV && (SND || SOUND_OSS_CORE)
+=======
+	depends on USB && VIDEO_DEV && SND
+	select SND_PCM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	---help---
 	  This is an integrated audio/video driver for EasyCAP cards with
@@ -15,6 +20,7 @@ config EASYCAP
 	  To compile this driver as a module, choose M here: the
 	  module will be called easycap
 
+<<<<<<< HEAD
 choice
         prompt "Sound Interface"
         depends on EASYCAP
@@ -44,6 +50,8 @@ config EASYCAP_OSS
           removed.
 endchoice
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config EASYCAP_DEBUG
 	bool "Enable EasyCAP driver debugging"
 	depends on EASYCAP

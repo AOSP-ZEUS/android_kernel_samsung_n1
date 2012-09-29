@@ -13,8 +13,15 @@
  ******************************************************************************/
 #ifndef VXGE_CONFIG_H
 #define VXGE_CONFIG_H
+<<<<<<< HEAD
 #include <linux/list.h>
 #include <linux/slab.h>
+=======
+#include <linux/hardirq.h>
+#include <linux/list.h>
+#include <linux/slab.h>
+#include <asm/io.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifndef VXGE_CACHE_LINE_SIZE
 #define VXGE_CACHE_LINE_SIZE 128

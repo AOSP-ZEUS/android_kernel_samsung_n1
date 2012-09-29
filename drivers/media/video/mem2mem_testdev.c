@@ -19,7 +19,10 @@
 #include <linux/module.h>
 #include <linux/delay.h>
 #include <linux/fs.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/timer.h>
 #include <linux/sched.h>
 #include <linux/slab.h>
@@ -35,7 +38,11 @@
 MODULE_DESCRIPTION("Virtual device for mem2mem framework testing");
 MODULE_AUTHOR("Pawel Osciak, <pawel@osciak.com>");
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
 
+=======
+MODULE_VERSION("0.1.1");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define MIN_W 32
 #define MIN_H 32
@@ -380,7 +387,10 @@ static int vidioc_querycap(struct file *file, void *priv,
 	strncpy(cap->driver, MEM2MEM_NAME, sizeof(cap->driver) - 1);
 	strncpy(cap->card, MEM2MEM_NAME, sizeof(cap->card) - 1);
 	cap->bus_info[0] = 0;
+<<<<<<< HEAD
 	cap->version = KERNEL_VERSION(0, 1, 0);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_VIDEO_OUTPUT
 			  | V4L2_CAP_STREAMING;
 

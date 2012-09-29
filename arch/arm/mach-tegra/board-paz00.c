@@ -25,6 +25,10 @@
 #include <linux/dma-mapping.h>
 #include <linux/pda_power.h>
 #include <linux/io.h>
+<<<<<<< HEAD
+=======
+#include <linux/i2c.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/mach-types.h>
 #include <asm/mach/arch.h>
@@ -34,6 +38,10 @@
 #include <mach/iomap.h>
 #include <mach/irqs.h>
 #include <mach/sdhci.h>
+<<<<<<< HEAD
+=======
+#include <mach/gpio.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "board.h"
 #include "board-paz00.h"
@@ -66,10 +74,29 @@ static struct platform_device debug_uart = {
 static struct platform_device *paz00_devices[] __initdata = {
 	&debug_uart,
 	&tegra_sdhci_device1,
+<<<<<<< HEAD
 	&tegra_sdhci_device2,
 	&tegra_sdhci_device4,
 };
 
+=======
+	&tegra_sdhci_device4,
+};
+
+static void paz00_i2c_init(void)
+{
+	platform_device_register(&tegra_i2c_device1);
+	platform_device_register(&tegra_i2c_device2);
+	platform_device_register(&tegra_i2c_device4);
+}
+
+static void paz00_usb_init(void)
+{
+	platform_device_register(&tegra_ehci2_device);
+	platform_device_register(&tegra_ehci3_device);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init tegra_paz00_fixup(struct machine_desc *desc,
 	struct tag *tags, char **cmdline, struct meminfo *mi)
 {
@@ -84,13 +111,17 @@ static __initdata struct tegra_clk_init_table paz00_clk_init_table[] = {
 	{ NULL,		NULL,		0,		0},
 };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct tegra_sdhci_platform_data sdhci_pdata1 = {
 	.cd_gpio	= TEGRA_GPIO_SD1_CD,
 	.wp_gpio	= TEGRA_GPIO_SD1_WP,
 	.power_gpio	= TEGRA_GPIO_SD1_POWER,
 };
 
+<<<<<<< HEAD
 static struct tegra_sdhci_platform_data sdhci_pdata2 = {
 	.cd_gpio	= -1,
 	.wp_gpio	= -1,
@@ -101,6 +132,12 @@ static struct tegra_sdhci_platform_data sdhci_pdata4 = {
 	.cd_gpio	= TEGRA_GPIO_SD4_CD,
 	.wp_gpio	= TEGRA_GPIO_SD4_WP,
 	.power_gpio	= TEGRA_GPIO_SD4_POWER,
+=======
+static struct tegra_sdhci_platform_data sdhci_pdata4 = {
+	.cd_gpio	= -1,
+	.wp_gpio	= -1,
+	.power_gpio	= -1,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.is_8bit	= 1,
 };
 
@@ -111,6 +148,7 @@ static void __init tegra_paz00_init(void)
 	paz00_pinmux_init();
 
 	tegra_sdhci_device1.dev.platform_data = &sdhci_pdata1;
+<<<<<<< HEAD
 	tegra_sdhci_device2.dev.platform_data = &sdhci_pdata2;
 	tegra_sdhci_device4.dev.platform_data = &sdhci_pdata4;
 
@@ -118,6 +156,17 @@ static void __init tegra_paz00_init(void)
 }
 
 MACHINE_START(PAZ00, "paz00")
+=======
+	tegra_sdhci_device4.dev.platform_data = &sdhci_pdata4;
+
+	platform_add_devices(paz00_devices, ARRAY_SIZE(paz00_devices));
+
+	paz00_i2c_init();
+	paz00_usb_init();
+}
+
+MACHINE_START(PAZ00, "Toshiba AC100 / Dynabook AZ")
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.boot_params	= 0x00000100,
 	.fixup		= tegra_paz00_fixup,
 	.map_io         = tegra_map_common_io,

@@ -29,7 +29,10 @@
 #include "md.h"
 #include "bitmap.h"
 
+<<<<<<< HEAD
 #include <linux/dm-dirty-log.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* debug macros */
 
 #define DEBUG 0
@@ -775,10 +778,15 @@ static inline unsigned long file_page_offset(struct bitmap *bitmap, unsigned lon
  * 0 or page 1
  */
 static inline struct page *filemap_get_page(struct bitmap *bitmap,
+<<<<<<< HEAD
 					unsigned long chunk)
 {
 	if (bitmap->filemap == NULL)
 		return NULL;
+=======
+					    unsigned long chunk)
+{
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (file_page_index(bitmap, chunk) >= bitmap->file_pages)
 		return NULL;
 	return bitmap->filemap[file_page_index(bitmap, chunk)
@@ -878,28 +886,40 @@ enum bitmap_page_attr {
 static inline void set_page_attr(struct bitmap *bitmap, struct page *page,
 				enum bitmap_page_attr attr)
 {
+<<<<<<< HEAD
 	if (page)
 		__set_bit((page->index<<2) + attr, bitmap->filemap_attr);
 	else
 		__set_bit(attr, &bitmap->logattrs);
+=======
+	__set_bit((page->index<<2) + attr, bitmap->filemap_attr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline void clear_page_attr(struct bitmap *bitmap, struct page *page,
 				enum bitmap_page_attr attr)
 {
+<<<<<<< HEAD
 	if (page)
 		__clear_bit((page->index<<2) + attr, bitmap->filemap_attr);
 	else
 		__clear_bit(attr, &bitmap->logattrs);
+=======
+	__clear_bit((page->index<<2) + attr, bitmap->filemap_attr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline unsigned long test_page_attr(struct bitmap *bitmap, struct page *page,
 					   enum bitmap_page_attr attr)
 {
+<<<<<<< HEAD
 	if (page)
 		return test_bit((page->index<<2) + attr, bitmap->filemap_attr);
 	else
 		return test_bit(attr, &bitmap->logattrs);
+=======
+	return test_bit((page->index<<2) + attr, bitmap->filemap_attr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -912,6 +932,7 @@ static inline unsigned long test_page_attr(struct bitmap *bitmap, struct page *p
 static void bitmap_file_set_bit(struct bitmap *bitmap, sector_t block)
 {
 	unsigned long bit;
+<<<<<<< HEAD
 	struct page *page = NULL;
 	void *kaddr;
 	unsigned long chunk = block >> CHUNK_BLOCK_SHIFT(bitmap);
@@ -936,6 +957,28 @@ static void bitmap_file_set_bit(struct bitmap *bitmap, sector_t block)
 		kunmap_atomic(kaddr, KM_USER0);
 		PRINTK("set file bit %lu page %lu\n", bit, page->index);
 	}
+=======
+	struct page *page;
+	void *kaddr;
+	unsigned long chunk = block >> CHUNK_BLOCK_SHIFT(bitmap);
+
+	if (!bitmap->filemap)
+		return;
+
+	page = filemap_get_page(bitmap, chunk);
+	if (!page)
+		return;
+	bit = file_page_offset(bitmap, chunk);
+
+	/* set the bit */
+	kaddr = kmap_atomic(page, KM_USER0);
+	if (bitmap->flags & BITMAP_HOSTENDIAN)
+		set_bit(bit, kaddr);
+	else
+		__set_bit_le(bit, kaddr);
+	kunmap_atomic(kaddr, KM_USER0);
+	PRINTK("set file bit %lu page %lu\n", bit, page->index);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* record page number so it gets flushed to disk when unplug occurs */
 	set_page_attr(bitmap, page, BITMAP_PAGE_DIRTY);
 }
@@ -952,6 +995,7 @@ void bitmap_unplug(struct bitmap *bitmap)
 
 	if (!bitmap)
 		return;
+<<<<<<< HEAD
 	if (!bitmap->filemap) {
 		/* Must be using a dirty_log */
 		struct dm_dirty_log *log = bitmap->mddev->bitmap_info.log;
@@ -962,6 +1006,8 @@ void bitmap_unplug(struct bitmap *bitmap)
 				bitmap->flags |= BITMAP_WRITE_ERROR;
 		goto out;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* look at each page to see if there are any set bits that need to be
 	 * flushed out to disk */
@@ -990,7 +1036,10 @@ void bitmap_unplug(struct bitmap *bitmap)
 		else
 			md_super_wait(bitmap->mddev);
 	}
+<<<<<<< HEAD
 out:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (bitmap->flags & BITMAP_WRITE_ERROR)
 		bitmap_file_kick(bitmap);
 }
@@ -1199,7 +1248,10 @@ void bitmap_daemon_work(mddev_t *mddev)
 	struct page *page = NULL, *lastpage = NULL;
 	sector_t blocks;
 	void *paddr;
+<<<<<<< HEAD
 	struct dm_dirty_log *log = mddev->bitmap_info.log;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Use a mutex to guard daemon_work against
 	 * bitmap_destroy.
@@ -1224,12 +1276,20 @@ void bitmap_daemon_work(mddev_t *mddev)
 	spin_lock_irqsave(&bitmap->lock, flags);
 	for (j = 0; j < bitmap->chunks; j++) {
 		bitmap_counter_t *bmc;
+<<<<<<< HEAD
 		if (!bitmap->filemap) {
 			if (!log)
 				/* error or shutdown */
 				break;
 		} else
 			page = filemap_get_page(bitmap, j);
+=======
+		if (!bitmap->filemap)
+			/* error or shutdown */
+			break;
+
+		page = filemap_get_page(bitmap, j);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (page != lastpage) {
 			/* skip this page unless it's marked as needing cleaning */
@@ -1298,6 +1358,7 @@ void bitmap_daemon_work(mddev_t *mddev)
 						  -1);
 
 				/* clear the bit */
+<<<<<<< HEAD
 				if (page) {
 					paddr = kmap_atomic(page, KM_USER0);
 					if (bitmap->flags & BITMAP_HOSTENDIAN)
@@ -1309,6 +1370,18 @@ void bitmap_daemon_work(mddev_t *mddev)
 					kunmap_atomic(paddr, KM_USER0);
 				} else
 					log->type->clear_region(log, j);
+=======
+				paddr = kmap_atomic(page, KM_USER0);
+				if (bitmap->flags & BITMAP_HOSTENDIAN)
+					clear_bit(file_page_offset(bitmap, j),
+						  paddr);
+				else
+					__clear_bit_le(
+							file_page_offset(bitmap,
+									 j),
+							paddr);
+				kunmap_atomic(paddr, KM_USER0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 		} else
 			j |= PAGE_COUNTER_MASK;
@@ -1316,16 +1389,24 @@ void bitmap_daemon_work(mddev_t *mddev)
 	spin_unlock_irqrestore(&bitmap->lock, flags);
 
 	/* now sync the final page */
+<<<<<<< HEAD
 	if (lastpage != NULL || log != NULL) {
+=======
+	if (lastpage != NULL) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_lock_irqsave(&bitmap->lock, flags);
 		if (test_page_attr(bitmap, lastpage, BITMAP_PAGE_NEEDWRITE)) {
 			clear_page_attr(bitmap, lastpage, BITMAP_PAGE_NEEDWRITE);
 			spin_unlock_irqrestore(&bitmap->lock, flags);
+<<<<<<< HEAD
 			if (lastpage)
 				write_page(bitmap, lastpage, 0);
 			else
 				if (log->type->flush(log))
 					bitmap->flags |= BITMAP_WRITE_ERROR;
+=======
+			write_page(bitmap, lastpage, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else {
 			set_page_attr(bitmap, lastpage, BITMAP_PAGE_NEEDWRITE);
 			spin_unlock_irqrestore(&bitmap->lock, flags);
@@ -1767,12 +1848,19 @@ int bitmap_create(mddev_t *mddev)
 	BUILD_BUG_ON(sizeof(bitmap_super_t) != 256);
 
 	if (!file
+<<<<<<< HEAD
 	    && !mddev->bitmap_info.offset
 	    && !mddev->bitmap_info.log) /* bitmap disabled, nothing to do */
 		return 0;
 
 	BUG_ON(file && mddev->bitmap_info.offset);
 	BUG_ON(mddev->bitmap_info.offset && mddev->bitmap_info.log);
+=======
+	    && !mddev->bitmap_info.offset) /* bitmap disabled, nothing to do */
+		return 0;
+
+	BUG_ON(file && mddev->bitmap_info.offset);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	bitmap = kzalloc(sizeof(*bitmap), GFP_KERNEL);
 	if (!bitmap)
@@ -1863,6 +1951,10 @@ int bitmap_create(mddev_t *mddev)
 int bitmap_load(mddev_t *mddev)
 {
 	int err = 0;
+<<<<<<< HEAD
+=======
+	sector_t start = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sector_t sector = 0;
 	struct bitmap *bitmap = mddev->bitmap;
 
@@ -1881,6 +1973,7 @@ int bitmap_load(mddev_t *mddev)
 	}
 	bitmap_close_sync(bitmap);
 
+<<<<<<< HEAD
 	if (mddev->bitmap_info.log) {
 		unsigned long i;
 		struct dm_dirty_log *log = mddev->bitmap_info.log;
@@ -1901,6 +1994,16 @@ int bitmap_load(mddev_t *mddev)
 		err = bitmap_init_from_disk(bitmap, start);
 		mutex_unlock(&mddev->bitmap_info.mutex);
 	}
+=======
+	if (mddev->degraded == 0
+	    || bitmap->events_cleared == mddev->events)
+		/* no need to keep dirty bits to optimise a
+		 * re-add of a missing device */
+		start = mddev->recovery_cp;
+
+	err = bitmap_init_from_disk(bitmap, start);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err)
 		goto out;
 
@@ -1984,8 +2087,11 @@ location_store(mddev_t *mddev, const char *buf, size_t len)
 			if (mddev->pers) {
 				mddev->pers->quiesce(mddev, 1);
 				rv = bitmap_create(mddev);
+<<<<<<< HEAD
 				if (!rv)
 					rv = bitmap_load(mddev);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				if (rv) {
 					bitmap_destroy(mddev);
 					mddev->bitmap_info.offset = 0;

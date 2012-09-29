@@ -261,6 +261,7 @@ static inline void ext4_update_inode_fsync_trans(handle_t *handle,
 /* super.c */
 int ext4_force_commit(struct super_block *sb);
 
+<<<<<<< HEAD
 /*
  * Ext4 inode journal modes
  */
@@ -290,16 +291,53 @@ static inline int ext4_inode_journal_mode(struct inode *inode)
 static inline int ext4_should_journal_data(struct inode *inode)
 {
 	return ext4_inode_journal_mode(inode) & EXT4_INODE_JOURNAL_DATA_MODE;
+=======
+static inline int ext4_should_journal_data(struct inode *inode)
+{
+	if (EXT4_JOURNAL(inode) == NULL)
+		return 0;
+	if (!S_ISREG(inode->i_mode))
+		return 1;
+	if (test_opt(inode->i_sb, DATA_FLAGS) == EXT4_MOUNT_JOURNAL_DATA)
+		return 1;
+	if (ext4_test_inode_flag(inode, EXT4_INODE_JOURNAL_DATA))
+		return 1;
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline int ext4_should_order_data(struct inode *inode)
 {
+<<<<<<< HEAD
 	return ext4_inode_journal_mode(inode) & EXT4_INODE_ORDERED_DATA_MODE;
+=======
+	if (EXT4_JOURNAL(inode) == NULL)
+		return 0;
+	if (!S_ISREG(inode->i_mode))
+		return 0;
+	if (ext4_test_inode_flag(inode, EXT4_INODE_JOURNAL_DATA))
+		return 0;
+	if (test_opt(inode->i_sb, DATA_FLAGS) == EXT4_MOUNT_ORDERED_DATA)
+		return 1;
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline int ext4_should_writeback_data(struct inode *inode)
 {
+<<<<<<< HEAD
 	return ext4_inode_journal_mode(inode) & EXT4_INODE_WRITEBACK_DATA_MODE;
+=======
+	if (EXT4_JOURNAL(inode) == NULL)
+		return 1;
+	if (!S_ISREG(inode->i_mode))
+		return 0;
+	if (ext4_test_inode_flag(inode, EXT4_INODE_JOURNAL_DATA))
+		return 0;
+	if (test_opt(inode->i_sb, DATA_FLAGS) == EXT4_MOUNT_WRITEBACK_DATA)
+		return 1;
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*

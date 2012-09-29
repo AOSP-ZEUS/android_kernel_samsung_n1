@@ -34,7 +34,11 @@ struct svc_sock {
 /*
  * Function prototypes.
  */
+<<<<<<< HEAD
 void		svc_close_all(struct svc_serv *);
+=======
+void		svc_close_all(struct list_head *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int		svc_recv(struct svc_rqst *, long);
 int		svc_send(struct svc_rqst *);
 void		svc_drop(struct svc_rqst *);

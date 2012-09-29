@@ -115,7 +115,11 @@ int __init init_cyclone_clock(void)
 	}
 	/* initialize last tick */
 	cyclone_mc = cyclone_timer;
+<<<<<<< HEAD
 	clocksource_cyclone.fsys_mmio = cyclone_timer;
+=======
+	clocksource_cyclone.archdata.fsys_mmio = cyclone_timer;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	clocksource_register_hz(&clocksource_cyclone, CYCLONE_TIMER_FREQ);
 
 	return 0;

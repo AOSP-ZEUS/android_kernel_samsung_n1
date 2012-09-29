@@ -18,7 +18,10 @@
 #include <linux/mm.h>
 #include <linux/sched.h>
 #include <linux/file.h>
+<<<<<<< HEAD
 #include <linux/slab.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <media/videobuf2-core.h>
 #include <media/videobuf2-memops.h>
@@ -177,7 +180,11 @@ int vb2_mmap_pfn_range(struct vm_area_struct *vma, unsigned long paddr,
 
 	vma->vm_ops->open(vma);
 
+<<<<<<< HEAD
 	printk(KERN_DEBUG "%s: mapped paddr 0x%08lx at 0x%08lx, size %ld\n",
+=======
+	pr_debug("%s: mapped paddr 0x%08lx at 0x%08lx, size %ld\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			__func__, paddr, vma->vm_start, size);
 
 	return 0;
@@ -195,7 +202,11 @@ static void vb2_common_vm_open(struct vm_area_struct *vma)
 {
 	struct vb2_vmarea_handler *h = vma->vm_private_data;
 
+<<<<<<< HEAD
 	printk(KERN_DEBUG "%s: %p, refcount: %d, vma: %08lx-%08lx\n",
+=======
+	pr_debug("%s: %p, refcount: %d, vma: %08lx-%08lx\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	       __func__, h, atomic_read(h->refcount), vma->vm_start,
 	       vma->vm_end);
 
@@ -213,7 +224,11 @@ static void vb2_common_vm_close(struct vm_area_struct *vma)
 {
 	struct vb2_vmarea_handler *h = vma->vm_private_data;
 
+<<<<<<< HEAD
 	printk(KERN_DEBUG "%s: %p, refcount: %d, vma: %08lx-%08lx\n",
+=======
+	pr_debug("%s: %p, refcount: %d, vma: %08lx-%08lx\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	       __func__, h, atomic_read(h->refcount), vma->vm_start,
 	       vma->vm_end);
 

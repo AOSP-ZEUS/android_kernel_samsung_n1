@@ -21,5 +21,11 @@
 #define _INTEL_DISPLAY_H_
 
 bool psb_intel_pipe_has_type(struct drm_crtc *crtc, int type);
+<<<<<<< HEAD
+=======
+void psb_intel_crtc_gamma_set(struct drm_crtc *crtc, u16 *red,
+			 u16 *green, u16 *blue, uint32_t type, uint32_t size);
+void psb_intel_crtc_destroy(struct drm_crtc *crtc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif

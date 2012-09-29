@@ -136,7 +136,11 @@ int reiserfs_resize(struct super_block *s, unsigned long block_count_new)
 				return -EIO;
 			}
 			memset(bh->b_data, 0, sb_blocksize(sb));
+<<<<<<< HEAD
 			reiserfs_test_and_set_le_bit(0, bh->b_data);
+=======
+			reiserfs_set_le_bit(0, bh->b_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			reiserfs_cache_bitmap_metadata(s, bh, bitmap + i);
 
 			set_buffer_uptodate(bh);
@@ -172,7 +176,11 @@ int reiserfs_resize(struct super_block *s, unsigned long block_count_new)
 
 	reiserfs_prepare_for_journal(s, bh, 1);
 	for (i = block_r; i < s->s_blocksize * 8; i++)
+<<<<<<< HEAD
 		reiserfs_test_and_clear_le_bit(i, bh->b_data);
+=======
+		reiserfs_clear_le_bit(i, bh->b_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	info->free_count += s->s_blocksize * 8 - block_r;
 
 	journal_mark_dirty(&th, s, bh);
@@ -190,7 +198,11 @@ int reiserfs_resize(struct super_block *s, unsigned long block_count_new)
 
 	reiserfs_prepare_for_journal(s, bh, 1);
 	for (i = block_r_new; i < s->s_blocksize * 8; i++)
+<<<<<<< HEAD
 		reiserfs_test_and_set_le_bit(i, bh->b_data);
+=======
+		reiserfs_set_le_bit(i, bh->b_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	journal_mark_dirty(&th, s, bh);
 	brelse(bh);
 

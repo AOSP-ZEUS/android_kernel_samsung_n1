@@ -12,6 +12,10 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
+<<<<<<< HEAD
+=======
+#define pr_fmt(fmt) "%s: " fmt, __func__
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <linux/module.h>
 #include <linux/kernel.h>
@@ -484,6 +488,7 @@ static int cm_x300_ulpi_phy_reset(void)
 	int err;
 
 	/* reset the PHY */
+<<<<<<< HEAD
 	err = gpio_request(GPIO_ULPI_PHY_RST, "ulpi reset");
 	if (err) {
 		pr_err("%s: failed to request ULPI reset GPIO: %d\n",
@@ -492,6 +497,15 @@ static int cm_x300_ulpi_phy_reset(void)
 	}
 
 	gpio_direction_output(GPIO_ULPI_PHY_RST, 0);
+=======
+	err = gpio_request_one(GPIO_ULPI_PHY_RST, GPIOF_OUT_INIT_LOW,
+			       "ulpi reset");
+	if (err) {
+		pr_err("failed to request ULPI reset GPIO: %d\n", err);
+		return err;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	msleep(10);
 	gpio_set_value(GPIO_ULPI_PHY_RST, 1);
 	msleep(10);
@@ -510,8 +524,12 @@ static inline int cm_x300_u2d_init(struct device *dev)
 		pout_clk = clk_get(NULL, "CLK_POUT");
 		if (IS_ERR(pout_clk)) {
 			err = PTR_ERR(pout_clk);
+<<<<<<< HEAD
 			pr_err("%s: failed to get CLK_POUT: %d\n",
 			       __func__, err);
+=======
+			pr_err("failed to get CLK_POUT: %d\n", err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return err;
 		}
 		clk_enable(pout_clk);
@@ -768,6 +786,7 @@ static void __init cm_x300_init_da9030(void)
 	irq_set_irq_wake(IRQ_WAKEUP0, 1);
 }
 
+<<<<<<< HEAD
 static void __init cm_x300_init_wi2wi(void)
 {
 	int bt_reset, wlan_en;
@@ -801,6 +820,36 @@ static void __init cm_x300_init_wi2wi(void)
 		gpio_set_value(bt_reset, 1);
 		gpio_free(bt_reset);
 	}
+=======
+/* wi2wi gpio setting for system_rev >= 130 */
+static struct gpio cm_x300_wi2wi_gpios[] __initdata = {
+	{ 71, GPIOF_OUT_INIT_HIGH, "wlan en" },
+	{ 70, GPIOF_OUT_INIT_HIGH, "bt reset" },
+};
+
+static void __init cm_x300_init_wi2wi(void)
+{
+	int err;
+
+	if (system_rev < 130) {
+		cm_x300_wi2wi_gpios[0].gpio = 77;	/* wlan en */
+		cm_x300_wi2wi_gpios[1].gpio = 78;	/* bt reset */
+	}
+
+	/* Libertas and CSR reset */
+	err = gpio_request_array(ARRAY_AND_SIZE(cm_x300_wi2wi_gpios));
+	if (err) {
+		pr_err("failed to request wifi/bt gpios: %d\n", err);
+		return;
+	}
+
+	udelay(10);
+	gpio_set_value(cm_x300_wi2wi_gpios[1].gpio, 0);
+	udelay(10);
+	gpio_set_value(cm_x300_wi2wi_gpios[1].gpio, 1);
+
+	gpio_free_array(ARRAY_AND_SIZE(cm_x300_wi2wi_gpios));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* MFP */
@@ -859,6 +908,10 @@ MACHINE_START(CM_X300, "CM-X300 module")
 	.boot_params	= 0xa0000100,
 	.map_io		= pxa3xx_map_io,
 	.init_irq	= pxa3xx_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa3xx_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 	.init_machine	= cm_x300_init,
 	.fixup		= cm_x300_fixup,

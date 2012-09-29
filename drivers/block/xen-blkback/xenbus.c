@@ -590,7 +590,11 @@ static void frontend_changed(struct xenbus_device *dev,
 
 		/*
 		 * Enforce precondition before potential leak point.
+<<<<<<< HEAD
 		 * blkif_disconnect() is idempotent.
+=======
+		 * xen_blkif_disconnect() is idempotent.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 */
 		xen_blkif_disconnect(be->blkif);
 
@@ -601,17 +605,28 @@ static void frontend_changed(struct xenbus_device *dev,
 		break;
 
 	case XenbusStateClosing:
+<<<<<<< HEAD
 		xen_blkif_disconnect(be->blkif);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		xenbus_switch_state(dev, XenbusStateClosing);
 		break;
 
 	case XenbusStateClosed:
+<<<<<<< HEAD
+=======
+		xen_blkif_disconnect(be->blkif);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		xenbus_switch_state(dev, XenbusStateClosed);
 		if (xenbus_dev_is_online(dev))
 			break;
 		/* fall through if not online */
 	case XenbusStateUnknown:
+<<<<<<< HEAD
 		/* implies blkif_disconnect() via blkback_remove() */
+=======
+		/* implies xen_blkif_disconnect() via xen_blkbk_remove() */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		device_unregister(&dev->dev);
 		break;
 
@@ -684,7 +699,11 @@ again:
 
 	err = xenbus_switch_state(dev, XenbusStateConnected);
 	if (err)
+<<<<<<< HEAD
 		xenbus_dev_fatal(dev, err, "switching to Connected state",
+=======
+		xenbus_dev_fatal(dev, err, "%s: switching to Connected state",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				 dev->nodename);
 
 	return;

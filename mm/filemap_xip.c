@@ -263,12 +263,16 @@ found:
 							xip_pfn);
 		if (err == -ENOMEM)
 			return VM_FAULT_OOM;
+<<<<<<< HEAD
 		/*
 		 * err == -EBUSY is fine, we've raced against another thread
 		 * that faulted-in the same page
 		 */
 		if (err != -EBUSY)
 			BUG_ON(err);
+=======
+		BUG_ON(err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return VM_FAULT_NOPAGE;
 	} else {
 		int err, ret = VM_FAULT_OOM;

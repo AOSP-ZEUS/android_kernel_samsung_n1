@@ -24,6 +24,10 @@
 #include <linux/i2c/pxa-i2c.h>
 
 #include <asm/mach/map.h>
+<<<<<<< HEAD
+=======
+#include <asm/suspend.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/hardware.h>
 #include <mach/gpio.h>
 #include <mach/pxa3xx-regs.h>
@@ -31,7 +35,10 @@
 #include <mach/ohci.h>
 #include <mach/pm.h>
 #include <mach/dma.h>
+<<<<<<< HEAD
 #include <mach/regs-intc.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/smemc.h>
 
 #include "generic.h"
@@ -141,8 +148,18 @@ static void pxa3xx_cpu_pm_suspend(void)
 {
 	volatile unsigned long *p = (volatile void *)0xc0000000;
 	unsigned long saved_data = *p;
+<<<<<<< HEAD
 
 	extern void pxa3xx_cpu_suspend(long);
+=======
+#ifndef CONFIG_IWMMXT
+	u64 acc0;
+
+	asm volatile("mra %Q0, %R0, acc0" : "=r" (acc0));
+#endif
+
+	extern int pxa3xx_finish_suspend(unsigned long);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* resuming from D2 requires the HSIO2/BOOT/TPM clocks enabled */
 	CKENA |= (1 << CKEN_BOOT) | (1 << CKEN_TPM);
@@ -162,11 +179,22 @@ static void pxa3xx_cpu_pm_suspend(void)
 	/* overwrite with the resume address */
 	*p = virt_to_phys(cpu_resume);
 
+<<<<<<< HEAD
 	pxa3xx_cpu_suspend(PLAT_PHYS_OFFSET - PAGE_OFFSET);
+=======
+	cpu_suspend(0, pxa3xx_finish_suspend);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	*p = saved_data;
 
 	AD3ER = 0;
+<<<<<<< HEAD
+=======
+
+#ifndef CONFIG_IWMMXT
+	asm volatile("mar acc0, %Q0, %R0" : "=r" (acc0));
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void pxa3xx_cpu_pm_enter(suspend_state_t state)
@@ -328,13 +356,21 @@ static void pxa_ack_ext_wakeup(struct irq_data *d)
 
 static void pxa_mask_ext_wakeup(struct irq_data *d)
 {
+<<<<<<< HEAD
 	ICMR2 &= ~(1 << ((d->irq - PXA_IRQ(0)) & 0x1f));
+=======
+	pxa_mask_irq(d);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PECR &= ~PECR_IE(d->irq - IRQ_WAKEUP0);
 }
 
 static void pxa_unmask_ext_wakeup(struct irq_data *d)
 {
+<<<<<<< HEAD
 	ICMR2 |= 1 << ((d->irq - PXA_IRQ(0)) & 0x1f);
+=======
+	pxa_unmask_irq(d);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PECR |= PECR_IE(d->irq - IRQ_WAKEUP0);
 }
 

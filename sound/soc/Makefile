@@ -1,4 +1,8 @@
 snd-soc-core-objs := soc-core.o soc-dapm.o soc-jack.o soc-cache.o soc-utils.o
+<<<<<<< HEAD
+=======
+snd-soc-core-objs += soc-pcm.o soc-io.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 obj-$(CONFIG_SND_SOC)	+= snd-soc-core.o
 obj-$(CONFIG_SND_SOC)	+= codecs/

@@ -35,7 +35,11 @@
 #define CEPH_OPT_MYIP             (1<<2) /* specified my ip */
 #define CEPH_OPT_NOCRC            (1<<3) /* no data crc on writes */
 
+<<<<<<< HEAD
 #define CEPH_OPT_DEFAULT   (0);
+=======
+#define CEPH_OPT_DEFAULT   (0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define ceph_set_opt(client, opt) \
 	(client)->options->flags |= CEPH_OPT_##opt;

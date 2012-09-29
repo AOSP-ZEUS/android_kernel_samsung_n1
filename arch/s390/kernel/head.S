@@ -22,6 +22,10 @@
  */
 
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/linkage.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/asm-offsets.h>
 #include <asm/thread_info.h>
 #include <asm/page.h>
@@ -383,8 +387,12 @@ iplstart:
 # doesn't need a builtin ipl record.
 #
 	.org	0x800
+<<<<<<< HEAD
 	.globl	start
 start:
+=======
+ENTRY(start)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stm	%r0,%r15,0x07b0		# store registers
 	basr	%r12,%r0
 .base:
@@ -448,8 +456,12 @@ start:
 # or linload or SALIPL
 #
 	.org	0x10000
+<<<<<<< HEAD
 	.globl	startup
 startup:
+=======
+ENTRY(startup)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	basr	%r13,0			# get base
 .LPG0:
 	xc	0x200(256),0x200	# partially clear lowcore

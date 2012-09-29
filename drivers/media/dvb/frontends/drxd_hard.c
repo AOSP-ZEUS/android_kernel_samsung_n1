@@ -28,7 +28,10 @@
 #include <linux/delay.h>
 #include <linux/firmware.h>
 #include <linux/i2c.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/div64.h>
 
 #include "dvb_frontend.h"
@@ -233,7 +236,11 @@ static int i2c_read(struct i2c_adapter *adap,
 	return 0;
 }
 
+<<<<<<< HEAD
 inline u32 MulDiv32(u32 a, u32 b, u32 c)
+=======
+static inline u32 MulDiv32(u32 a, u32 b, u32 c)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u64 tmp64;
 
@@ -910,14 +917,25 @@ static int load_firmware(struct drxd_state *state, const char *fw_name)
 		return -EIO;
 	}
 
+<<<<<<< HEAD
 	state->microcode = kzalloc(fw->size, GFP_KERNEL);
 	if (state->microcode == NULL) {
 		printk(KERN_ERR "drxd: firmware load failure: nomemory\n");
+=======
+	state->microcode = kmalloc(fw->size, GFP_KERNEL);
+	if (state->microcode == NULL) {
+		release_firmware(fw);
+		printk(KERN_ERR "drxd: firmware load failure: no memory\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENOMEM;
 	}
 
 	memcpy(state->microcode, fw->data, fw->size);
 	state->microcode_length = fw->size;
+<<<<<<< HEAD
+=======
+	release_firmware(fw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

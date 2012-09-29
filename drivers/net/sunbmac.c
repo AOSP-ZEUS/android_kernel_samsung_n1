@@ -998,7 +998,10 @@ static void bigmac_set_multicast(struct net_device *dev)
 	struct bigmac *bp = netdev_priv(dev);
 	void __iomem *bregs = bp->bregs;
 	struct netdev_hw_addr *ha;
+<<<<<<< HEAD
 	char *addrs;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int i;
 	u32 tmp, crc;
 
@@ -1027,12 +1030,16 @@ static void bigmac_set_multicast(struct net_device *dev)
 			hash_table[i] = 0;
 
 		netdev_for_each_mc_addr(ha, dev) {
+<<<<<<< HEAD
 			addrs = ha->addr;
 
 			if (!(*addrs & 1))
 				continue;
 
 			crc = ether_crc_le(6, addrs);
+=======
+			crc = ether_crc_le(6, ha->addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			crc >>= 26;
 			hash_table[crc >> 4] |= 1 << (crc & 0xf);
 		}

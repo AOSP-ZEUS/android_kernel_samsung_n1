@@ -46,6 +46,7 @@ struct hashtable_t *hash_new(int size)
 {
 	struct hashtable_t *hash;
 
+<<<<<<< HEAD
 	hash = kmalloc(sizeof(struct hashtable_t), GFP_ATOMIC);
 	if (!hash)
 		return NULL;
@@ -55,6 +56,18 @@ struct hashtable_t *hash_new(int size)
 		goto free_hash;
 
 	hash->list_locks = kmalloc(sizeof(spinlock_t) * size, GFP_ATOMIC);
+=======
+	hash = kmalloc(sizeof(*hash), GFP_ATOMIC);
+	if (!hash)
+		return NULL;
+
+	hash->table = kmalloc(sizeof(*hash->table) * size, GFP_ATOMIC);
+	if (!hash->table)
+		goto free_hash;
+
+	hash->list_locks = kmalloc(sizeof(*hash->list_locks) * size,
+				   GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!hash->list_locks)
 		goto free_table;
 

@@ -16,6 +16,10 @@
 #include <linux/delay.h>
 #include <linux/uio.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/dma-mapping.h>
 #include <linux/atm_zatm.h>
 #include <linux/capability.h>
@@ -26,7 +30,11 @@
 #include <asm/system.h>
 #include <asm/string.h>
 #include <asm/io.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/uaccess.h>
 
 #include "uPD98401.h"

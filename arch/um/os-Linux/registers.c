@@ -8,6 +8,11 @@
 #include <string.h>
 #include <sys/ptrace.h>
 #include "sysdep/ptrace.h"
+<<<<<<< HEAD
+=======
+#include "sysdep/ptrace_user.h"
+#include "registers.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 int save_registers(int pid, struct uml_pt_regs *regs)
 {
@@ -32,6 +37,10 @@ int restore_registers(int pid, struct uml_pt_regs *regs)
 /* This is set once at boot time and not changed thereafter */
 
 static unsigned long exec_regs[MAX_REG_NR];
+<<<<<<< HEAD
+=======
+static unsigned long exec_fp_regs[FP_SIZE];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 int init_registers(int pid)
 {
@@ -42,10 +51,23 @@ int init_registers(int pid)
 		return -errno;
 
 	arch_init_registers(pid);
+<<<<<<< HEAD
 	return 0;
 }
 
 void get_safe_registers(unsigned long *regs)
 {
 	memcpy(regs, exec_regs, sizeof(exec_regs));
+=======
+	get_fp_registers(pid, exec_fp_regs);
+	return 0;
+}
+
+void get_safe_registers(unsigned long *regs, unsigned long *fp_regs)
+{
+	memcpy(regs, exec_regs, sizeof(exec_regs));
+
+	if (fp_regs)
+		memcpy(fp_regs, exec_fp_regs, sizeof(exec_fp_regs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

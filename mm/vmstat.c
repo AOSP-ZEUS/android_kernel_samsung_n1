@@ -659,7 +659,11 @@ static void walk_zones_in_node(struct seq_file *m, pg_data_t *pgdat,
 }
 #endif
 
+<<<<<<< HEAD
 #if defined(CONFIG_PROC_FS) || defined(CONFIG_SYSFS)
+=======
+#if defined(CONFIG_PROC_FS) || defined(CONFIG_SYSFS) || defined(CONFIG_NUMA)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_ZONE_DMA
 #define TEXT_FOR_DMA(xx) xx "_dma",
 #else
@@ -788,7 +792,11 @@ const char * const vmstat_text[] = {
 
 #endif /* CONFIG_VM_EVENTS_COUNTERS */
 };
+<<<<<<< HEAD
 #endif /* CONFIG_PROC_FS || CONFIG_SYSFS */
+=======
+#endif /* CONFIG_PROC_FS || CONFIG_SYSFS || CONFIG_NUMA */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 #ifdef CONFIG_PROC_FS

@@ -34,7 +34,15 @@ obj-$(CONFIG_ROSE)		+= rose/
 obj-$(CONFIG_AX25)		+= ax25/
 obj-$(CONFIG_CAN)		+= can/
 obj-$(CONFIG_IRDA)		+= irda/
+<<<<<<< HEAD
 obj-$(CONFIG_BT)		+= bluetooth/
+=======
+ifeq ($(CONFIG_BT_MGMT),y)
+obj-$(CONFIG_BT)		+= bluetooth_mgmt/
+else
+obj-$(CONFIG_BT)		+= bluetooth/
+endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SUNRPC)		+= sunrpc/
 obj-$(CONFIG_AF_RXRPC)		+= rxrpc/
 obj-$(CONFIG_ATM)		+= atm/
@@ -68,4 +76,8 @@ obj-$(CONFIG_WIMAX)		+= wimax/
 obj-$(CONFIG_DNS_RESOLVER)	+= dns_resolver/
 obj-$(CONFIG_CEPH_LIB)		+= ceph/
 obj-$(CONFIG_BATMAN_ADV)	+= batman-adv/
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_NFC)		+= nfc/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_NET_ACTIVITY_STATS)		+= activity_stats.o

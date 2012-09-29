@@ -31,5 +31,9 @@
 #include <crypto/aead.h>
 #include <crypto/authenc.h>
 #include <crypto/scatterwalk.h>
+<<<<<<< HEAD
+=======
+#include <crypto/internal/skcipher.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* !defined(CAAM_COMPAT_H) */

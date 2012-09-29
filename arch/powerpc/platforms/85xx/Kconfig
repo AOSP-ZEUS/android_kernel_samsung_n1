@@ -67,6 +67,19 @@ config MPC85xx_RDB
 	help
 	  This option enables support for the MPC85xx RDB (P2020 RDB) board
 
+<<<<<<< HEAD
+=======
+config P1010_RDB
+	bool "Freescale P1010RDB"
+	select DEFAULT_UIMAGE
+	help
+	  This option enables support for the MPC85xx RDB (P1010 RDB) board
+
+	  P1010RDB contains P1010Si, which provides CPU performance up to 800
+	  MHz and 1600 DMIPS, additional functionality and faster interfaces
+	  (DDR3/3L, SATA II, and PCI  Express).
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config P1022_DS
 	bool "Freescale P1022 DS"
 	select DEFAULT_UIMAGE
@@ -75,6 +88,15 @@ config P1022_DS
 	help
 	  This option enables support for the Freescale P1022DS reference board.
 
+<<<<<<< HEAD
+=======
+config P1023_RDS
+	bool "Freescale P1023 RDS"
+	select DEFAULT_UIMAGE
+	help
+	  This option enables support for the P1023 RDS board
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SOCRATES
 	bool "Socrates"
 	select DEFAULT_UIMAGE
@@ -155,6 +177,21 @@ config SBC8560
 	help
 	  This option enables support for the Wind River SBC8560 board
 
+<<<<<<< HEAD
+=======
+config P2040_RDB
+	bool "Freescale P2040 RDB"
+	select DEFAULT_UIMAGE
+	select PPC_E500MC
+	select PHYS_64BIT
+	select SWIOTLB
+	select MPC8xxx_GPIO
+	select HAS_RAPIDIO
+	select PPC_EPAPR_HV_PIC
+	help
+	  This option enables support for the P2040 RDB board
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config P3041_DS
 	bool "Freescale P3041 DS"
 	select DEFAULT_UIMAGE
@@ -163,6 +200,10 @@ config P3041_DS
 	select SWIOTLB
 	select MPC8xxx_GPIO
 	select HAS_RAPIDIO
+<<<<<<< HEAD
+=======
+	select PPC_EPAPR_HV_PIC
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  This option enables support for the P3041 DS board
 
@@ -174,6 +215,10 @@ config P4080_DS
 	select SWIOTLB
 	select MPC8xxx_GPIO
 	select HAS_RAPIDIO
+<<<<<<< HEAD
+=======
+	select PPC_EPAPR_HV_PIC
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  This option enables support for the P4080 DS board
 
@@ -188,6 +233,10 @@ config P5020_DS
 	select SWIOTLB
 	select MPC8xxx_GPIO
 	select HAS_RAPIDIO
+<<<<<<< HEAD
+=======
+	select PPC_EPAPR_HV_PIC
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  This option enables support for the P5020 DS board
 

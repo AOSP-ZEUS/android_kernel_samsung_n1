@@ -414,6 +414,10 @@ int phys_mem_access_prot_allowed(struct file *file, unsigned long pfn,
  * constraints placed on us by the cache architecture.
  */
 #define HAVE_ARCH_UNMAPPED_AREA
+<<<<<<< HEAD
+=======
+#define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * No page table caches to initialise

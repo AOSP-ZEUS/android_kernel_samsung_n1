@@ -29,7 +29,10 @@
 #include <linux/ioport.h>	/* request_region		*/
 #include <linux/videodev2.h>	/* kernel radio structs		*/
 #include <linux/mutex.h>
+<<<<<<< HEAD
 #include <linux/version.h>      /* for KERNEL_VERSION MACRO     */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/io.h>		/* outb, outb_p			*/
 #include <media/v4l2-device.h>
 #include <media/v4l2-ioctl.h>
@@ -37,6 +40,10 @@
 MODULE_AUTHOR("R.OFFERMANNS & others");
 MODULE_DESCRIPTION("A driver for the TerraTec ActiveRadio Standalone radio card.");
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_VERSION("0.0.3");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifndef CONFIG_RADIO_TERRATEC_PORT
 #define CONFIG_RADIO_TERRATEC_PORT 0x590
@@ -49,8 +56,11 @@ module_param(io, int, 0);
 MODULE_PARM_DESC(io, "I/O address of the TerraTec ActiveRadio card (0x590 or 0x591)");
 module_param(radio_nr, int, 0);
 
+<<<<<<< HEAD
 #define RADIO_VERSION KERNEL_VERSION(0, 0, 2)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct v4l2_queryctrl radio_qctrl[] = {
 	{
 		.id            = V4L2_CID_AUDIO_MUTE,
@@ -205,7 +215,10 @@ static int vidioc_querycap(struct file *file, void *priv,
 	strlcpy(v->driver, "radio-terratec", sizeof(v->driver));
 	strlcpy(v->card, "ActiveRadio", sizeof(v->card));
 	strlcpy(v->bus_info, "ISA", sizeof(v->bus_info));
+<<<<<<< HEAD
 	v->version = RADIO_VERSION;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	v->capabilities = V4L2_CAP_TUNER | V4L2_CAP_RADIO;
 	return 0;
 }

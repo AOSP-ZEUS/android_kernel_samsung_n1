@@ -54,13 +54,21 @@ static inline int ext4_acl_count(size_t size)
 #ifdef CONFIG_EXT4_FS_POSIX_ACL
 
 /* acl.c */
+<<<<<<< HEAD
 extern int ext4_check_acl(struct inode *, int, unsigned int);
+=======
+struct posix_acl *ext4_get_acl(struct inode *inode, int type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern int ext4_acl_chmod(struct inode *);
 extern int ext4_init_acl(handle_t *, struct inode *, struct inode *);
 
 #else  /* CONFIG_EXT4_FS_POSIX_ACL */
 #include <linux/sched.h>
+<<<<<<< HEAD
 #define ext4_check_acl NULL
+=======
+#define ext4_get_acl NULL
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline int
 ext4_acl_chmod(struct inode *inode)

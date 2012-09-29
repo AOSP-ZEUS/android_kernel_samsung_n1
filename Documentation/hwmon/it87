@@ -76,7 +76,12 @@ IT8718F, IT8720F, IT8721F, IT8726F, IT8758E and SiS950 chips.
 These chips are 'Super I/O chips', supporting floppy disks, infrared ports,
 joysticks and other miscellaneous stuff. For hardware monitoring, they
 include an 'environment controller' with 3 temperature sensors, 3 fan
+<<<<<<< HEAD
 rotation speed sensors, 8 voltage sensors, and associated alarms.
+=======
+rotation speed sensors, 8 voltage sensors, associated alarms, and chassis
+intrusion detection.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 The IT8712F and IT8716F additionally feature VID inputs, used to report
 the Vcore voltage of the processor. The early IT8712F have 5 VID pins,

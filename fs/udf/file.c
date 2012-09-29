@@ -150,7 +150,11 @@ long udf_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
 	long old_block, new_block;
 	int result = -EINVAL;
 
+<<<<<<< HEAD
 	if (file_permission(filp, MAY_READ) != 0) {
+=======
+	if (inode_permission(inode, MAY_READ) != 0) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		udf_debug("no permission to access inode %lu\n", inode->i_ino);
 		result = -EPERM;
 		goto out;
@@ -201,10 +205,18 @@ out:
 static int udf_release_file(struct inode *inode, struct file *filp)
 {
 	if (filp->f_mode & FMODE_WRITE) {
+<<<<<<< HEAD
+=======
+		mutex_lock(&inode->i_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		down_write(&UDF_I(inode)->i_data_sem);
 		udf_discard_prealloc(inode);
 		udf_truncate_tail_extent(inode);
 		up_write(&UDF_I(inode)->i_data_sem);
+<<<<<<< HEAD
+=======
+		mutex_unlock(&inode->i_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return 0;
 }

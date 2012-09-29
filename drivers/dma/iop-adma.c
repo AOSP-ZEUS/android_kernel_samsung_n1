@@ -36,6 +36,11 @@
 
 #include <mach/adma.h>
 
+<<<<<<< HEAD
+=======
+#include "dmaengine.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define to_iop_adma_chan(chan) container_of(chan, struct iop_adma_chan, common)
 #define to_iop_adma_device(dev) \
 	container_of(dev, struct iop_adma_device, common)
@@ -317,7 +322,11 @@ static void __iop_adma_slot_cleanup(struct iop_adma_chan *iop_chan)
 	}
 
 	if (cookie > 0) {
+<<<<<<< HEAD
 		iop_chan->completed_cookie = cookie;
+=======
+		iop_chan->common.completed_cookie = cookie;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pr_debug("\tcompleted cookie %d\n", cookie);
 	}
 }
@@ -438,6 +447,7 @@ retry:
 	return NULL;
 }
 
+<<<<<<< HEAD
 static dma_cookie_t
 iop_desc_assign_cookie(struct iop_adma_chan *iop_chan,
 	struct iop_adma_desc_slot *desc)
@@ -450,6 +460,8 @@ iop_desc_assign_cookie(struct iop_adma_chan *iop_chan,
 	return cookie;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void iop_adma_check_threshold(struct iop_adma_chan *iop_chan)
 {
 	dev_dbg(iop_chan->device->common.dev, "pending: %d\n",
@@ -477,7 +489,11 @@ iop_adma_tx_submit(struct dma_async_tx_descriptor *tx)
 	slots_per_op = grp_start->slots_per_op;
 
 	spin_lock_bh(&iop_chan->lock);
+<<<<<<< HEAD
 	cookie = iop_desc_assign_cookie(iop_chan, sw_desc);
+=======
+	cookie = dma_cookie_assign(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	old_chain_tail = list_entry(iop_chan->chain.prev,
 		struct iop_adma_desc_slot, chain_node);
@@ -904,6 +920,7 @@ static enum dma_status iop_adma_status(struct dma_chan *chan,
 					struct dma_tx_state *txstate)
 {
 	struct iop_adma_chan *iop_chan = to_iop_adma_chan(chan);
+<<<<<<< HEAD
 	dma_cookie_t last_used;
 	dma_cookie_t last_complete;
 	enum dma_status ret;
@@ -912,16 +929,25 @@ static enum dma_status iop_adma_status(struct dma_chan *chan,
 	last_complete = iop_chan->completed_cookie;
 	dma_set_tx_state(txstate, last_complete, last_used, 0);
 	ret = dma_async_is_complete(cookie, last_complete, last_used);
+=======
+	enum dma_status ret;
+
+	ret = dma_cookie_status(chan, cookie, txstate);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret == DMA_SUCCESS)
 		return ret;
 
 	iop_adma_slot_cleanup(iop_chan);
 
+<<<<<<< HEAD
 	last_used = chan->cookie;
 	last_complete = iop_chan->completed_cookie;
 	dma_set_tx_state(txstate, last_complete, last_used, 0);
 
 	return dma_async_is_complete(cookie, last_complete, last_used);
+=======
+	return dma_cookie_status(chan, cookie, txstate);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static irqreturn_t iop_adma_eot_handler(int irq, void *data)
@@ -1650,7 +1676,11 @@ static void iop_chan_start_null_memcpy(struct iop_adma_chan *iop_chan)
 		/* initialize the completed cookie to be less than
 		 * the most recently used cookie
 		 */
+<<<<<<< HEAD
 		iop_chan->completed_cookie = cookie - 1;
+=======
+		iop_chan->common.completed_cookie = cookie - 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		iop_chan->common.cookie = sw_desc->async_tx.cookie = cookie;
 
 		/* channel should not be busy */
@@ -1707,7 +1737,11 @@ static void iop_chan_start_null_xor(struct iop_adma_chan *iop_chan)
 		/* initialize the completed cookie to be less than
 		 * the most recently used cookie
 		 */
+<<<<<<< HEAD
 		iop_chan->completed_cookie = cookie - 1;
+=======
+		iop_chan->common.completed_cookie = cookie - 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		iop_chan->common.cookie = sw_desc->async_tx.cookie = cookie;
 
 		/* channel should not be busy */

@@ -28,6 +28,11 @@
 #include <trace/events/skb.h>
 #include <trace/events/net.h>
 #include <trace/events/napi.h>
+<<<<<<< HEAD
+=======
+#include <trace/events/sock.h>
+#include <trace/events/udp.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 EXPORT_TRACEPOINT_SYMBOL_GPL(kfree_skb);
 

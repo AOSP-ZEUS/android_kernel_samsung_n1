@@ -26,8 +26,13 @@
 
 /* returns true if the corresponding bit in the given seq_bits indicates true
  * and curr_seqno is within range of last_seqno */
+<<<<<<< HEAD
 uint8_t get_bit_status(unsigned long *seq_bits, uint32_t last_seqno,
 					   uint32_t curr_seqno);
+=======
+int get_bit_status(const unsigned long *seq_bits, uint32_t last_seqno,
+		   uint32_t curr_seqno);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* turn corresponding bit on, so we can remember that we got the packet */
 void bit_mark(unsigned long *seq_bits, int32_t n);
@@ -35,10 +40,18 @@ void bit_mark(unsigned long *seq_bits, int32_t n);
 
 /* receive and process one packet, returns 1 if received seq_num is considered
  * new, 0 if old  */
+<<<<<<< HEAD
 char bit_get_packet(void *priv, unsigned long *seq_bits,
 		    int32_t seq_num_diff, int8_t set_mark);
 
 /* count the hamming weight, how many good packets did we receive? */
 int  bit_packet_count(unsigned long *seq_bits);
+=======
+int bit_get_packet(void *priv, unsigned long *seq_bits,
+		   int32_t seq_num_diff, int set_mark);
+
+/* count the hamming weight, how many good packets did we receive? */
+int bit_packet_count(const unsigned long *seq_bits);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _NET_BATMAN_ADV_BITARRAY_H_ */

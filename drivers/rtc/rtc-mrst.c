@@ -332,9 +332,14 @@ vrtc_mrst_do_probe(struct device *dev, struct resource *iomem, int rtc_irq)
 	if (!iomem)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	iomem = request_mem_region(iomem->start,
 			iomem->end + 1 - iomem->start,
 			driver_name);
+=======
+	iomem = request_mem_region(iomem->start, resource_size(iomem),
+				   driver_name);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!iomem) {
 		dev_dbg(dev, "i/o mem already in use.\n");
 		return -EBUSY;

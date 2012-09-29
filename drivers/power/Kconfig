@@ -36,6 +36,28 @@ config MAX8925_POWER
 	  Say Y here to enable support for the battery charger in the Maxim
 	  MAX8925 PMIC.
 
+<<<<<<< HEAD
+=======
+config BATTERY_SEC
+    tristate "SAMSUNG battery driver"
+    depends on ARCH_TEGRA
+    help
+      Say Y to enable samsung battery driver for devices with TEGRA chip.
+
+config SAMSUNG_LPM_MODE
+    bool "Off charging mode support in sec battery driver"
+    depends on BATTERY_SEC
+    help
+     Say Y to include support for sec off charging support
+
+config MAX8907C_CHARGER
+	tristate "MAX8907c charger support"
+	depends on MFD_MAX8907C
+	help
+	  Say Y here to enable support for the charger in the Maxim
+	  MAX8907c PMIC.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config WM831X_BACKUP
 	tristate "WM831X backup battery charger support"
 	depends on MFD_WM831X
@@ -142,6 +164,29 @@ config BATTERY_BQ27X00_PLATFORM
 	help
 	  Say Y here to enable support for batteries with BQ27000 (HDQ) chips.
 
+<<<<<<< HEAD
+=======
+config CHARGER_TPS8003X
+	tristate "TPS8003x battery charger driver"
+	depends on MFD_TPS80031
+	default n
+	help
+	  Say Y here to enable support for battery charging with TPS80031x chips.
+
+config BATTERY_GAUGE_TPS8003X
+	tristate "TPS8003x battery gauge driver"
+	depends on MFD_TPS80031
+	default n
+	help
+	 Say Y here to enable support for battery gauge for TPS80031x chips.
+
+config CHARGER_SMB349
+	tristate "SMB349 battery charger driver"
+	depends on I2C
+	help
+	  Say Y here to enable support for battery charging with SMB349 chips.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config BATTERY_DA9030
 	tristate "DA9030 battery driver"
 	depends on PMIC_DA903X
@@ -149,12 +194,21 @@ config BATTERY_DA9030
 	  Say Y here to enable support for batteries charger integrated into
 	  DA9030 PMIC.
 
+<<<<<<< HEAD
 config BATTERY_MAX17040
 	tristate "Maxim MAX17040 Fuel Gauge"
 	depends on I2C
 	help
 	  MAX17040 is fuel-gauge systems for lithium-ion (Li+) batteries
 	  in handheld and portable equipment. The MAX17040 is configured
+=======
+config BATTERY_MAX17043
+	tristate "Maxim MAX17043 Fuel Gauge"
+	depends on I2C
+	help
+	  MAX17043 is fuel-gauge systems for lithium-ion (Li+) batteries
+	  in handheld and portable equipment. The MAX17043 is configured
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	  to operate with a single lithium cell
 
 config BATTERY_MAX17042
@@ -167,30 +221,48 @@ config BATTERY_MAX17042
 	  multi-function devices that include fuel gauages that are compatible
 	  with MAX17042.
 
+<<<<<<< HEAD
+=======
+config BATTERY_MAX17048
+	tristate "Maxim MAX17048/17049 Fuel Gauge"
+	depends on I2C
+	help
+	  MAX17048 is fuel-gauge systems for lithium-ion (Li+) batteries
+	  in handheld and portable equipment. The MAX17048 is configured
+	  to operate with a single lithium cell, and MAX17049 for two lithium
+	  cells.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config BATTERY_Z2
 	tristate "Z2 battery driver"
 	depends on I2C && MACH_ZIPIT2
 	help
 	  Say Y to include support for the battery on the Zipit Z2.
 
+<<<<<<< HEAD
 config BATTERY_S3C
 	tristate "S3C fake battery driver"
 	depends on ARCH_S5PV210 
 	help
 	  Say Y to enable support for batteries with s5pc110 chip.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config BATTERY_S3C_ADC
 	tristate "Battery driver for Samsung ADC based monitoring"
 	depends on S3C_ADC
 	help
 	  Say Y here to enable support for iPAQ h1930/h1940/rx1950 battery
 
+<<<<<<< HEAD
 config BATTERY_S5PC110
 	tristate "Battery driver for CRESPO(S5PC110)"
 	depends on ARCH_S5PV210
 	help
 	  Say Y to enable support for batteries with s5pc110 chip.	  
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config CHARGER_PCF50633
 	tristate "NXP PCF50633 MBC"
 	depends on MFD_PCF50633
@@ -247,4 +319,35 @@ config CHARGER_GPIO
 	  This driver can be build as a module. If so, the module will be
 	  called gpio-charger.
 
+<<<<<<< HEAD
 endif # POWER_SUPPLY
+=======
+config CHARGER_MAX8997
+	tristate "Maxim MAX8997/MAX8966 PMIC battery charger driver"
+	depends on MFD_MAX8997 && REGULATOR_MAX8997
+	help
+	  Say Y to enable support for the battery charger control sysfs and
+	  platform data of MAX8997/LP3974 PMICs.
+
+config CHARGER_MAX8998
+	tristate "Maxim MAX8998/LP3974 PMIC battery charger driver"
+	depends on MFD_MAX8998 && REGULATOR_MAX8998
+	help
+	  Say Y to enable support for the battery charger control sysfs and
+	  platform data of MAX8998/LP3974 PMICs.
+
+config MAX8922_CHARGER
+       tristate "MAX8922 battery charger support"
+       help
+         Say Y here to enable support for the battery charger in the Maxim
+         MAX8922 Charger IC.
+
+endif # POWER_SUPPLY
+
+config TEGRA_BPC_MGMT
+	tristate "battery peak current management"
+	depends on ARCH_TEGRA
+	help
+	  This driver reduces cpu frequency/voltage on gpio event from the
+	  battery current monitor device.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

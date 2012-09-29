@@ -279,6 +279,10 @@ nouveau_fbcon_create(struct nouveau_fbdev *nfbdev,
 	struct fb_info *info;
 	struct drm_framebuffer *fb;
 	struct nouveau_framebuffer *nouveau_fb;
+<<<<<<< HEAD
+=======
+	struct nouveau_channel *chan;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct nouveau_bo *nvbo;
 	struct drm_mode_fb_cmd mode_cmd;
 	struct pci_dev *pdev = dev->pdev;
@@ -296,8 +300,13 @@ nouveau_fbcon_create(struct nouveau_fbdev *nfbdev,
 	size = mode_cmd.pitch * mode_cmd.height;
 	size = roundup(size, PAGE_SIZE);
 
+<<<<<<< HEAD
 	ret = nouveau_gem_new(dev, dev_priv->channel, size, 0,
 			      NOUVEAU_GEM_DOMAIN_VRAM, 0, 0x0000, &nvbo);
+=======
+	ret = nouveau_gem_new(dev, size, 0, NOUVEAU_GEM_DOMAIN_VRAM,
+			      0, 0x0000, &nvbo);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret) {
 		NV_ERROR(dev, "failed to allocate framebuffer\n");
 		goto out;
@@ -318,6 +327,18 @@ nouveau_fbcon_create(struct nouveau_fbdev *nfbdev,
 		goto out;
 	}
 
+<<<<<<< HEAD
+=======
+	chan = nouveau_nofbaccel ? NULL : dev_priv->channel;
+	if (chan && dev_priv->card_type >= NV_50) {
+		ret = nouveau_bo_vma_add(nvbo, chan->vm, &nfbdev->nouveau_fb.vma);
+		if (ret) {
+			NV_ERROR(dev, "failed to map fb into chan: %d\n", ret);
+			chan = NULL;
+		}
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mutex_lock(&dev->struct_mutex);
 
 	info = framebuffer_alloc(0, device);
@@ -448,6 +469,10 @@ nouveau_fbcon_destroy(struct drm_device *dev, struct nouveau_fbdev *nfbdev)
 
 	if (nouveau_fb->nvbo) {
 		nouveau_bo_unmap(nouveau_fb->nvbo);
+<<<<<<< HEAD
+=======
+		nouveau_bo_vma_del(nouveau_fb->nvbo, &nouveau_fb->vma);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		drm_gem_object_unreference_unlocked(nouveau_fb->nvbo->gem);
 		nouveau_fb->nvbo = NULL;
 	}

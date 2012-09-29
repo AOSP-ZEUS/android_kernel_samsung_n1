@@ -35,6 +35,11 @@
 #include "iwl-dev.h"
 #include "iwl-core.h"
 #include "iwl-sta.h"
+<<<<<<< HEAD
+=======
+#include "iwl-trans.h"
+#include "iwl-agn.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* priv->sta_lock must be held */
 static void iwl_sta_ucode_activate(struct iwl_priv *priv, u8 sta_id)
@@ -132,6 +137,19 @@ static void iwl_add_sta_callback(struct iwl_priv *priv,
 
 }
 
+<<<<<<< HEAD
+=======
+static u16 iwlagn_build_addsta_hcmd(const struct iwl_addsta_cmd *cmd, u8 *data)
+{
+	u16 size = (u16)sizeof(struct iwl_addsta_cmd);
+	struct iwl_addsta_cmd *addsta = (struct iwl_addsta_cmd *)data;
+	memcpy(addsta, cmd, size);
+	/* resrved in 5000 */
+	addsta->rate_n_flags = cpu_to_le16(0);
+	return size;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int iwl_send_add_sta(struct iwl_priv *priv,
 		     struct iwl_addsta_cmd *sta, u8 flags)
 {
@@ -155,8 +173,13 @@ int iwl_send_add_sta(struct iwl_priv *priv,
 		might_sleep();
 	}
 
+<<<<<<< HEAD
 	cmd.len[0] = priv->cfg->ops->utils->build_addsta_hcmd(sta, data);
 	ret = iwl_send_cmd(priv, &cmd);
+=======
+	cmd.len[0] = iwlagn_build_addsta_hcmd(sta, data);
+	ret = trans_send_cmd(&priv->trans, &cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ret || (flags & CMD_ASYNC))
 		return ret;
@@ -412,7 +435,11 @@ static int iwl_send_remove_station(struct iwl_priv *priv,
 
 	cmd.flags |= CMD_WANT_SKB;
 
+<<<<<<< HEAD
 	ret = iwl_send_cmd(priv, &cmd);
+=======
+	ret = trans_send_cmd(&priv->trans, &cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ret)
 		return ret;
@@ -657,7 +684,11 @@ void iwl_reprogram_ap_sta(struct iwl_priv *priv, struct iwl_rxon_context *ctx)
 	iwl_send_lq_cmd(priv, ctx, &lq, CMD_SYNC, true);
 }
 
+<<<<<<< HEAD
 int iwl_get_free_ucode_key_index(struct iwl_priv *priv)
+=======
+int iwl_get_free_ucode_key_offset(struct iwl_priv *priv)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int i;
 
@@ -781,7 +812,11 @@ int iwl_send_lq_cmd(struct iwl_priv *priv, struct iwl_rxon_context *ctx,
 		return -EINVAL;
 
 	if (is_lq_table_valid(priv, ctx, lq))
+<<<<<<< HEAD
 		ret = iwl_send_cmd(priv, &cmd);
+=======
+		ret = trans_send_cmd(&priv->trans, &cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	else
 		ret = -EINVAL;
 

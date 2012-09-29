@@ -344,6 +344,7 @@ static struct pxafb_mach_info samsung_info = {
  * Backlight
  */
 
+<<<<<<< HEAD
 static int magician_backlight_init(struct device *dev)
 {
 	int ret;
@@ -360,6 +361,16 @@ err2:
 	gpio_free(EGPIO_MAGICIAN_BL_POWER);
 err:
 	return ret;
+=======
+static struct gpio magician_bl_gpios[] = {
+	{ EGPIO_MAGICIAN_BL_POWER,  GPIOF_DIR_OUT, "Backlight power" },
+	{ EGPIO_MAGICIAN_BL_POWER2, GPIOF_DIR_OUT, "Backlight power 2" },
+};
+
+static int magician_backlight_init(struct device *dev)
+{
+	return gpio_request_array(ARRAY_AND_SIZE(magician_bl_gpios));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int magician_backlight_notify(struct device *dev, int brightness)
@@ -376,8 +387,12 @@ static int magician_backlight_notify(struct device *dev, int brightness)
 
 static void magician_backlight_exit(struct device *dev)
 {
+<<<<<<< HEAD
 	gpio_free(EGPIO_MAGICIAN_BL_POWER);
 	gpio_free(EGPIO_MAGICIAN_BL_POWER2);
+=======
+	gpio_free_array(ARRAY_AND_SIZE(magician_bl_gpios));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct platform_pwm_backlight_data backlight_data = {
@@ -712,16 +727,35 @@ static struct platform_device *devices[] __initdata = {
 	&leds_gpio,
 };
 
+<<<<<<< HEAD
+=======
+static struct gpio magician_global_gpios[] = {
+	{ GPIO13_MAGICIAN_CPLD_IRQ,   GPIOF_IN, "CPLD_IRQ" },
+	{ GPIO107_MAGICIAN_DS1WM_IRQ, GPIOF_IN, "DS1WM_IRQ" },
+	{ GPIO104_MAGICIAN_LCD_POWER_1, GPIOF_OUT_INIT_LOW, "LCD power 1" },
+	{ GPIO105_MAGICIAN_LCD_POWER_2, GPIOF_OUT_INIT_LOW, "LCD power 2" },
+	{ GPIO106_MAGICIAN_LCD_POWER_3, GPIOF_OUT_INIT_LOW, "LCD power 3" },
+	{ GPIO83_MAGICIAN_nIR_EN, GPIOF_OUT_INIT_HIGH, "nIR_EN" },
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init magician_init(void)
 {
 	void __iomem *cpld;
 	int lcd_select;
 	int err;
 
+<<<<<<< HEAD
 	gpio_request(GPIO13_MAGICIAN_CPLD_IRQ, "CPLD_IRQ");
 	gpio_request(GPIO107_MAGICIAN_DS1WM_IRQ, "DS1WM_IRQ");
 
 	pxa2xx_mfp_config(ARRAY_AND_SIZE(magician_pin_config));
+=======
+	pxa2xx_mfp_config(ARRAY_AND_SIZE(magician_pin_config));
+	err = gpio_request_array(ARRAY_AND_SIZE(magician_global_gpios));
+	if (err)
+		pr_err("magician: Failed to request GPIOs: %d\n", err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pxa_set_ffuart_info(NULL);
 	pxa_set_btuart_info(NULL);
@@ -729,11 +763,15 @@ static void __init magician_init(void)
 
 	platform_add_devices(ARRAY_AND_SIZE(devices));
 
+<<<<<<< HEAD
 	err = gpio_request(GPIO83_MAGICIAN_nIR_EN, "nIR_EN");
 	if (!err) {
 		gpio_direction_output(GPIO83_MAGICIAN_nIR_EN, 1);
 		pxa_set_ficp_info(&magician_ficp_info);
 	}
+=======
+	pxa_set_ficp_info(&magician_ficp_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pxa27x_set_i2c_power_info(NULL);
 	pxa_set_i2c_info(&i2c_info);
 	pxa_set_mci_info(&magician_mci_info);
@@ -747,6 +785,7 @@ static void __init magician_init(void)
 		system_rev = board_id & 0x7;
 		lcd_select = board_id & 0x8;
 		pr_info("LCD type: %s\n", lcd_select ? "Samsung" : "Toppoly");
+<<<<<<< HEAD
 		if (lcd_select && (system_rev < 3)) {
 			gpio_request(GPIO75_MAGICIAN_SAMSUNG_POWER, "SAMSUNG_POWER");
 			gpio_direction_output(GPIO75_MAGICIAN_SAMSUNG_POWER, 0);
@@ -757,6 +796,11 @@ static void __init magician_init(void)
 		gpio_direction_output(GPIO104_MAGICIAN_LCD_POWER_1, 0);
 		gpio_direction_output(GPIO105_MAGICIAN_LCD_POWER_2, 0);
 		gpio_direction_output(GPIO106_MAGICIAN_LCD_POWER_3, 0);
+=======
+		if (lcd_select && (system_rev < 3))
+			gpio_request_one(GPIO75_MAGICIAN_SAMSUNG_POWER,
+			                 GPIOF_OUT_INIT_LOW, "SAMSUNG_POWER");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pxa_set_fb_info(NULL, lcd_select ? &samsung_info : &toppoly_info);
 	} else
 		pr_err("LCD detection: CPLD mapping failed\n");
@@ -768,6 +812,10 @@ MACHINE_START(MAGICIAN, "HTC Magician")
 	.map_io = pxa27x_map_io,
 	.nr_irqs = MAGICIAN_NR_IRQS,
 	.init_irq = pxa27x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq = pxa27x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine = magician_init,
 	.timer = &pxa_timer,
 MACHINE_END

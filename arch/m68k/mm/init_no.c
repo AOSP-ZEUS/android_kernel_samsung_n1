@@ -42,7 +42,11 @@
  * ZERO_PAGE is a special page that is used for zero-initialized
  * data and COW.
  */
+<<<<<<< HEAD
 unsigned long empty_zero_page;
+=======
+void *empty_zero_page;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern unsigned long memory_start;
 extern unsigned long memory_end;
@@ -62,8 +66,13 @@ void __init paging_init(void)
 	unsigned long end_mem   = memory_end & PAGE_MASK;
 	unsigned long zones_size[MAX_NR_ZONES] = {0, };
 
+<<<<<<< HEAD
 	empty_zero_page = (unsigned long)alloc_bootmem_pages(PAGE_SIZE);
 	memset((void *)empty_zero_page, 0, PAGE_SIZE);
+=======
+	empty_zero_page = alloc_bootmem_pages(PAGE_SIZE);
+	memset(empty_zero_page, 0, PAGE_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Set up SFC/DFC registers (user data space).
@@ -120,7 +129,12 @@ void free_initrd_mem(unsigned long start, unsigned long end)
 		totalram_pages++;
 		pages++;
 	}
+<<<<<<< HEAD
 	printk (KERN_NOTICE "Freeing initrd memory: %dk freed\n", pages * (PAGE_SIZE / 1024));
+=======
+	pr_notice("Freeing initrd memory: %luk freed\n",
+		  pages * (PAGE_SIZE / 1024));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 #endif
 
@@ -141,7 +155,11 @@ void free_initmem(void)
 		free_page(addr);
 		totalram_pages++;
 	}
+<<<<<<< HEAD
 	printk(KERN_NOTICE "Freeing unused kernel memory: %ldk freed (0x%x - 0x%x)\n",
+=======
+	pr_notice("Freeing unused kernel memory: %luk freed (0x%x - 0x%x)\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			(addr - PAGE_ALIGN((long) &__init_begin)) >> 10,
 			(int)(PAGE_ALIGN((unsigned long)(&__init_begin))),
 			(int)(addr - PAGE_SIZE));

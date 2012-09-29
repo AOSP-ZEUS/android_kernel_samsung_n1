@@ -110,7 +110,11 @@ V. Getting Logical Configuration Table
       ENOBUFS     Buffer not large enough.  If this occurs, the required
                   buffer length is written into *(lct->reslen)
 
+<<<<<<< HEAD
 VI. Settting Parameters
+=======
+VI. Setting Parameters
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
    SYNOPSIS
 

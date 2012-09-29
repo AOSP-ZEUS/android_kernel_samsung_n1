@@ -14,6 +14,10 @@
  * OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+<<<<<<< HEAD
+=======
+#include <asm/unaligned.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "hw.h"
 #include "ar9002_phy.h"
 
@@ -276,11 +280,19 @@ static u32 ath9k_hw_def_get_eeprom(struct ath_hw *ah,
 	case EEP_NFTHRESH_2:
 		return pModal[1].noiseFloorThreshCh[0];
 	case EEP_MAC_LSW:
+<<<<<<< HEAD
 		return pBase->macAddr[0] << 8 | pBase->macAddr[1];
 	case EEP_MAC_MID:
 		return pBase->macAddr[2] << 8 | pBase->macAddr[3];
 	case EEP_MAC_MSW:
 		return pBase->macAddr[4] << 8 | pBase->macAddr[5];
+=======
+		return get_unaligned_be16(pBase->macAddr);
+	case EEP_MAC_MID:
+		return get_unaligned_be16(pBase->macAddr + 2);
+	case EEP_MAC_MSW:
+		return get_unaligned_be16(pBase->macAddr + 4);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case EEP_REG_0:
 		return pBase->regDmn[0];
 	case EEP_REG_1:
@@ -831,10 +843,14 @@ static void ath9k_hw_set_def_power_cal_table(struct ath_hw *ah,
 
 			regOffset = AR_PHY_BASE + (672 << 2) + regChainOffset;
 			for (j = 0; j < 32; j++) {
+<<<<<<< HEAD
 				reg32 = ((pdadcValues[4 * j + 0] & 0xFF) << 0) |
 					((pdadcValues[4 * j + 1] & 0xFF) << 8) |
 					((pdadcValues[4 * j + 2] & 0xFF) << 16)|
 					((pdadcValues[4 * j + 3] & 0xFF) << 24);
+=======
+				reg32 = get_unaligned_le32(&pdadcValues[4 * j]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				REG_WRITE(ah, regOffset, reg32);
 
 				ath_dbg(common, ATH_DBG_EEPROM,

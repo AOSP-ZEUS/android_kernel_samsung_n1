@@ -88,3 +88,17 @@ int __init mxs_add_amba_device(const struct amba_device *dev)
 
 	return amba_device_register(adev, &iomem_resource);
 }
+<<<<<<< HEAD
+=======
+
+struct device mxs_apbh_bus = {
+	.init_name	= "mxs_apbh",
+	.parent         = &platform_bus,
+};
+
+static int __init mxs_device_init(void)
+{
+	return device_register(&mxs_apbh_bus);
+}
+core_initcall(mxs_device_init);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

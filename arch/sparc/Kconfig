@@ -41,6 +41,10 @@ config SPARC64
 	select HAVE_FUNCTION_TRACE_MCOUNT_TEST
 	select HAVE_KRETPROBES
 	select HAVE_KPROBES
+<<<<<<< HEAD
+=======
+	select HAVE_RCU_TABLE_FREE if SMP
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select HAVE_MEMBLOCK
 	select HAVE_SYSCALL_WRAPPERS
 	select HAVE_DYNAMIC_FTRACE
@@ -53,6 +57,10 @@ config SPARC64
 	select HAVE_PERF_EVENTS
 	select PERF_USE_VMALLOC
 	select IRQ_PREFLOW_FASTEOI
+<<<<<<< HEAD
+=======
+	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select HAVE_C_RECORDMCOUNT
 
 config ARCH_DEFCONFIG
@@ -82,10 +90,13 @@ config IOMMU_HELPER
 	bool
 	default y if SPARC64
 
+<<<<<<< HEAD
 config QUICKLIST
 	bool
 	default y if SPARC64
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config STACKTRACE_SUPPORT
 	bool
 	default y if SPARC64

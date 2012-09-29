@@ -143,7 +143,11 @@ static int ad799x_read_raw(struct iio_dev *dev_info,
 			   long m)
 {
 	int ret;
+<<<<<<< HEAD
 	struct ad799x_state *st = dev_info->dev_data;
+=======
+	struct ad799x_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned int scale_uv;
 
 	switch (m) {
@@ -176,7 +180,11 @@ static ssize_t ad799x_read_frequency(struct device *dev,
 					char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad799x_state *st = iio_dev_get_devdata(dev_info);
+=======
+	struct ad799x_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int ret, len = 0;
 	u8 val;
@@ -221,7 +229,11 @@ static ssize_t ad799x_write_frequency(struct device *dev,
 					 size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad799x_state *st = iio_dev_get_devdata(dev_info);
+=======
+	struct ad799x_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	long val;
 	int ret;
@@ -281,7 +293,11 @@ static ssize_t ad799x_read_channel_config(struct device *dev,
 					char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad799x_state *st = iio_dev_get_devdata(dev_info);
+=======
+	struct ad799x_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
 
 	int ret;
@@ -299,7 +315,11 @@ static ssize_t ad799x_write_channel_config(struct device *dev,
 					 size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad799x_state *st = iio_dev_get_devdata(dev_info);
+=======
+	struct ad799x_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
 
 	long val;
@@ -319,7 +339,11 @@ static ssize_t ad799x_write_channel_config(struct device *dev,
 static irqreturn_t ad799x_event_handler(int irq, void *private)
 {
 	struct iio_dev *indio_dev = private;
+<<<<<<< HEAD
 	struct ad799x_state *st = iio_dev_get_devdata(private);
+=======
+	struct ad799x_state *st = iio_priv(private);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 status;
 	int i, ret;
 
@@ -686,7 +710,10 @@ static int __devinit ad799x_probe(struct i2c_client *client,
 	indio_dev->name = id->name;
 	indio_dev->info = st->chip_info->info;
 	indio_dev->name = id->name;
+<<<<<<< HEAD
 	indio_dev->dev_data = (void *)(st);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	indio_dev->modes = INDIO_DIRECT_MODE;
 	indio_dev->channels = st->chip_info->channel;

@@ -19,7 +19,11 @@
 #include <linux/pci.h>
 
 #include <asm/irq.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/setup.h>
 #include <asm/irq_controller.h>
 
@@ -30,6 +34,7 @@ extern void add_dtb(u64 data);
 extern void x86_add_irq_domains(void);
 void __cpuinit x86_of_pci_init(void);
 void x86_dtb_init(void);
+<<<<<<< HEAD
 
 static inline struct device_node *pci_device_to_OF_node(struct pci_dev *pdev)
 {
@@ -41,6 +46,8 @@ static inline struct device_node *pci_bus_to_OF_node(struct pci_bus *bus)
 	return pci_device_to_OF_node(bus->self);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #else
 static inline void add_dtb(u64 data) { }
 static inline void x86_add_irq_domains(void) { }

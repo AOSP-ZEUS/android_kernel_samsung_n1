@@ -60,7 +60,11 @@
 static void __init foxg20_init_early(void)
 {
 	/* Initialize processor: 18.432 MHz crystal */
+<<<<<<< HEAD
 	at91sam9260_initialize(18432000);
+=======
+	at91_initialize(18432000);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* DBGU on ttyS0. (Rx & Tx only) */
 	at91_register_uart(0, 0, 0);
@@ -101,12 +105,15 @@ static void __init foxg20_init_early(void)
 
 }
 
+<<<<<<< HEAD
 static void __init foxg20_init_irq(void)
 {
 	at91sam9260_init_interrupts(NULL);
 }
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * USB Host port
  */
@@ -267,8 +274,14 @@ static void __init foxg20_board_init(void)
 MACHINE_START(ACMENETUSFOXG20, "Acme Systems srl FOX Board G20")
 	/* Maintainer: Sergio Tanzilli */
 	.timer		= &at91sam926x_timer,
+<<<<<<< HEAD
 	.map_io		= at91sam9260_map_io,
 	.init_early	= foxg20_init_early,
 	.init_irq	= foxg20_init_irq,
+=======
+	.map_io		= at91_map_io,
+	.init_early	= foxg20_init_early,
+	.init_irq	= at91_init_irq_default,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine	= foxg20_board_init,
 MACHINE_END

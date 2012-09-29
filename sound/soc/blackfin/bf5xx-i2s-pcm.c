@@ -168,7 +168,11 @@ static int bf5xx_pcm_open(struct snd_pcm_substream *substream)
 
 	snd_soc_set_runtime_hwparams(substream, &bf5xx_pcm_hardware);
 
+<<<<<<< HEAD
 	ret = snd_pcm_hw_constraint_integer(runtime, \
+=======
+	ret = snd_pcm_hw_constraint_integer(runtime,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			SNDRV_PCM_HW_PARAM_PERIODS);
 	if (ret < 0)
 		goto out;
@@ -257,9 +261,17 @@ static void bf5xx_pcm_free_dma_buffers(struct snd_pcm *pcm)
 
 static u64 bf5xx_pcm_dmamask = DMA_BIT_MASK(32);
 
+<<<<<<< HEAD
 int bf5xx_pcm_i2s_new(struct snd_card *card, struct snd_soc_dai *dai,
 	struct snd_pcm *pcm)
 {
+=======
+int bf5xx_pcm_i2s_new(struct snd_soc_pcm_runtime *rtd)
+{
+	struct snd_card *card = rtd->card->snd_card;
+	struct snd_soc_dai *dai = rtd->cpu_dai;
+	struct snd_pcm *pcm = rtd->pcm;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret = 0;
 
 	pr_debug("%s enter\n", __func__);
@@ -304,8 +316,13 @@ static int __devexit bfin_i2s_soc_platform_remove(struct platform_device *pdev)
 
 static struct platform_driver bfin_i2s_pcm_driver = {
 	.driver = {
+<<<<<<< HEAD
 			.name = "bfin-i2s-pcm-audio",
 			.owner = THIS_MODULE,
+=======
+		.name = "bfin-i2s-pcm-audio",
+		.owner = THIS_MODULE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 
 	.probe = bfin_i2s_soc_platform_probe,

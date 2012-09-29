@@ -325,7 +325,11 @@ static int blkvsc_do_operation(struct block_device_context *blkdev,
 
 	page_buf = alloc_page(GFP_KERNEL);
 	if (!page_buf) {
+<<<<<<< HEAD
 		kmem_cache_free(blkvsc_req->dev->request_pool, blkvsc_req);
+=======
+		kmem_cache_free(blkdev->request_pool, blkvsc_req);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENOMEM;
 	}
 
@@ -422,7 +426,11 @@ cleanup:
 
 	__free_page(page_buf);
 
+<<<<<<< HEAD
 	kmem_cache_free(blkvsc_req->dev->request_pool, blkvsc_req);
+=======
+	kmem_cache_free(blkdev->request_pool, blkvsc_req);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return ret;
 }
@@ -518,6 +526,7 @@ static int blkvsc_remove(struct hv_device *dev)
 
 	blkvsc_do_operation(blkdev, DO_FLUSH);
 
+<<<<<<< HEAD
 	blk_cleanup_queue(blkdev->gd->queue);
 
 	/*
@@ -534,6 +543,20 @@ static int blkvsc_remove(struct hv_device *dev)
 
 	return 0;
 
+=======
+	if (blkdev->users == 0) {
+		del_gendisk(blkdev->gd);
+		put_disk(blkdev->gd);
+		blk_cleanup_queue(blkdev->gd->queue);
+
+		storvsc_dev_remove(blkdev->device_ctx);
+
+		kmem_cache_destroy(blkdev->request_pool);
+		kfree(blkdev);
+	}
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void blkvsc_shutdown(struct hv_device *dev)
@@ -568,6 +591,7 @@ static int blkvsc_release(struct gendisk *disk, fmode_t mode)
 	struct block_device_context *blkdev = disk->private_data;
 	unsigned long flags;
 
+<<<<<<< HEAD
 	if (blkdev->users == 1) {
 		blkvsc_do_operation(blkdev, DO_FLUSH);
 	}
@@ -575,6 +599,25 @@ static int blkvsc_release(struct gendisk *disk, fmode_t mode)
 	spin_lock_irqsave(&blkdev->lock, flags);
 	blkdev->users--;
 	spin_unlock_irqrestore(&blkdev->lock, flags);
+=======
+	spin_lock_irqsave(&blkdev->lock, flags);
+
+	if ((--blkdev->users == 0) && (blkdev->shutting_down)) {
+		blk_stop_queue(blkdev->gd->queue);
+		spin_unlock_irqrestore(&blkdev->lock, flags);
+
+		blkvsc_do_operation(blkdev, DO_FLUSH);
+		del_gendisk(blkdev->gd);
+		put_disk(blkdev->gd);
+		blk_cleanup_queue(blkdev->gd->queue);
+
+		storvsc_dev_remove(blkdev->device_ctx);
+
+		kmem_cache_destroy(blkdev->request_pool);
+		kfree(blkdev);
+	} else
+		spin_unlock_irqrestore(&blkdev->lock, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -824,7 +867,10 @@ static int blkvsc_drv_init(void)
 	BUILD_BUG_ON(sizeof(sector_t) != 8);
 
 	memcpy(&drv->dev_type, &dev_type, sizeof(struct hv_guid));
+<<<<<<< HEAD
 	drv->name = drv_name;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	drv->driver.name = drv_name;
 
 	/* The driver belongs to vmbus */
@@ -921,7 +967,10 @@ static int blkvsc_probe(struct hv_device *dev)
 	else
 		blkdev->gd->first_minor = 0;
 	blkdev->gd->fops = &block_ops;
+<<<<<<< HEAD
 	blkdev->gd->events = DISK_EVENT_MEDIA_CHANGE;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	blkdev->gd->private_data = blkdev;
 	blkdev->gd->driverfs_dev = &(blkdev->device_ctx->device);
 	sprintf(blkdev->gd->disk_name, "hd%c", 'a' + major_info.index);

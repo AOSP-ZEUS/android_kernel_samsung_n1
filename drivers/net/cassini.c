@@ -75,6 +75,10 @@
 #include <linux/slab.h>
 #include <linux/delay.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/vmalloc.h>
 #include <linux/ioport.h>
 #include <linux/pci.h>
@@ -97,7 +101,11 @@
 
 #include <net/checksum.h>
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/system.h>
 #include <asm/io.h>
 #include <asm/byteorder.h>
@@ -2451,14 +2459,21 @@ static irqreturn_t cas_interruptN(int irq, void *dev_id)
 	struct net_device *dev = dev_id;
 	struct cas *cp = netdev_priv(dev);
 	unsigned long flags;
+<<<<<<< HEAD
 	int ring;
+=======
+	int ring = (irq == cp->pci_irq_INTC) ? 2 : 3;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 status = readl(cp->regs + REG_PLUS_INTRN_STATUS(ring));
 
 	/* check for shared irq */
 	if (status == 0)
 		return IRQ_NONE;
 
+<<<<<<< HEAD
 	ring = (irq == cp->pci_irq_INTC) ? 2 : 3;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_lock_irqsave(&cp->lock, flags);
 	if (status & INTR_RX_DONE_ALT) { /* handle rx separately */
 #ifdef USE_NAPI

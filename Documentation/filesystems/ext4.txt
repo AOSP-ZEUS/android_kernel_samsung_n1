@@ -68,12 +68,21 @@ Note: More extensive information for getting started with ext4 can be
     '-o barriers=[0|1]' mount option for both ext3 and ext4 filesystems
     for a fair comparison.  When tuning ext3 for best benchmark numbers,
     it is often worthwhile to try changing the data journaling mode; '-o
+<<<<<<< HEAD
     data=writeback,nobh' can be faster for some workloads.  (Note
     however that running mounted with data=writeback can potentially
     leave stale data exposed in recently written files in case of an
     unclean shutdown, which could be a security exposure in some
     situations.)  Configuring the filesystem with a large journal can
     also be helpful for metadata-intensive workloads.
+=======
+    data=writeback' can be faster for some workloads.  (Note however that
+    running mounted with data=writeback can potentially leave stale data
+    exposed in recently written files in case of an unclean shutdown,
+    which could be a security exposure in some situations.)  Configuring
+    the filesystem with a large journal can also be helpful for
+    metadata-intensive workloads.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 2. Features
 ===========
@@ -272,6 +281,7 @@ grpjquota=<file>	during journal replay. They replace the above
 			package for more details
 			(http://sourceforge.net/projects/linuxquota).
 
+<<<<<<< HEAD
 bh		(*)	ext4 associates buffer heads to data pages to
 nobh			(a) cache disk block mapping information
 			(b) link pages into transaction to provide
@@ -280,6 +290,8 @@ nobh			(a) cache disk block mapping information
 			"nobh" option tries to avoid associating buffer
 			heads (supported only for "writeback" mode).
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 stripe=n		Number of filesystem blocks that mballoc will try
 			to use for allocation size and alignment. For RAID5/6
 			systems this should be the number of data
@@ -393,8 +405,12 @@ dioread_nolock		locking. If the dioread_nolock option is specified
 			write and convert the extent to initialized after IO
 			completes. This approach allows ext4 code to avoid
 			using inode mutex, which improves scalability on high
+<<<<<<< HEAD
 			speed storages. However this does not work with nobh
 			option and the mount will fail. Nor does it work with
+=======
+			speed storages. However this does not work with
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			data journaling and dioread_nolock option will be
 			ignored with kernel warning. Note that dioread_nolock
 			code path is only used for extent-based files.

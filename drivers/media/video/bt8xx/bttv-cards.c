@@ -2892,6 +2892,7 @@ void __devinit bttv_idcard(struct bttv *btv)
 {
 	unsigned int gpiobits;
 	int i,type;
+<<<<<<< HEAD
 	unsigned short tmp;
 
 	/* read PCI subsystem ID */
@@ -2899,6 +2900,12 @@ void __devinit bttv_idcard(struct bttv *btv)
 	btv->cardid = tmp << 16;
 	pci_read_config_word(btv->c.pci, PCI_SUBSYSTEM_VENDOR_ID, &tmp);
 	btv->cardid |= tmp;
+=======
+
+	/* read PCI subsystem ID */
+	btv->cardid  = btv->c.pci->subsystem_device << 16;
+	btv->cardid |= btv->c.pci->subsystem_vendor;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (0 != btv->cardid && 0xffffffff != btv->cardid) {
 		/* look for the card */

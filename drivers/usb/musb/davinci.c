@@ -143,12 +143,16 @@ static void davinci_musb_disable(struct musb *musb)
 }
 
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_MUSB_HDRC_HCD
 #define	portstate(stmt)		stmt
 #else
 #define	portstate(stmt)
 #endif
 
+=======
+#define	portstate(stmt)		stmt
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * VBUS SWITCHING IS BOARD-SPECIFIC ... at least for the DM6446 EVM,

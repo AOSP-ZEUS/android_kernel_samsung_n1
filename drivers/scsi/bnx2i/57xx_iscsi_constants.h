@@ -1,6 +1,10 @@
 /* 57xx_iscsi_constants.h: Broadcom NetXtreme II iSCSI HSI
  *
+<<<<<<< HEAD
  * Copyright (c) 2006 - 2010 Broadcom Corporation
+=======
+ * Copyright (c) 2006 - 2011 Broadcom Corporation
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -125,7 +129,11 @@
 
 /* SQ/RQ/CQ DB structure sizes */
 #define ISCSI_SQ_DB_SIZE    (16)
+<<<<<<< HEAD
 #define ISCSI_RQ_DB_SIZE    (16)
+=======
+#define ISCSI_RQ_DB_SIZE    (64)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define ISCSI_CQ_DB_SIZE    (80)
 
 #define ISCSI_SQN_TO_NOTIFY_NOT_VALID                                   0xFFFF

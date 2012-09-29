@@ -10,12 +10,20 @@
  * published by the Free Software Foundation.
 */
 
+<<<<<<< HEAD
 #include <plat/regs-watchdog.h>
 #include <mach/map.h>
 
 #include <linux/kernel.h>
 #include <linux/clk.h>
 #include <linux/delay.h>
+=======
+#include <plat/clock.h>
+#include <plat/regs-watchdog.h>
+#include <mach/map.h>
+
+#include <linux/clk.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/err.h>
 #include <linux/io.h>
 
@@ -25,6 +33,12 @@ static inline void arch_wdt_reset(void)
 
 	__raw_writel(0, S3C2410_WTCON);	  /* disable watchdog, to be safe  */
 
+<<<<<<< HEAD
+=======
+	if (s3c2410_wdtclk)
+		clk_enable(s3c2410_wdtclk);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* put initial values into count and data */
 	__raw_writel(0x80, S3C2410_WTCNT);
 	__raw_writel(0x80, S3C2410_WTDAT);

@@ -88,6 +88,7 @@
 #include "et131x_adapter.h"
 #include "et131x.h"
 
+<<<<<<< HEAD
 struct net_device_stats *et131x_stats(struct net_device *netdev);
 int et131x_open(struct net_device *netdev);
 int et131x_close(struct net_device *netdev);
@@ -151,12 +152,15 @@ struct net_device *et131x_device_alloc(void)
 	return netdev;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * et131x_stats - Return the current device statistics.
  * @netdev: device whose stats are being queried
  *
  * Returns 0 on success, errno on failure (as defined in errno.h)
  */
+<<<<<<< HEAD
 struct net_device_stats *et131x_stats(struct net_device *netdev)
 {
 	struct et131x_adapter *adapter = netdev_priv(netdev);
@@ -165,6 +169,14 @@ struct net_device_stats *et131x_stats(struct net_device *netdev)
 
 	stats->rx_packets = devstat->ipackets;
 	stats->tx_packets = devstat->opackets;
+=======
+static struct net_device_stats *et131x_stats(struct net_device *netdev)
+{
+	struct et131x_adapter *adapter = netdev_priv(netdev);
+	struct net_device_stats *stats = &adapter->net_stats;
+	struct ce_stats *devstat = &adapter->stats;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stats->rx_errors = devstat->length_err + devstat->alignment_err +
 	    devstat->crc_err + devstat->code_violations + devstat->other_errors;
 	stats->tx_errors = devstat->max_pkt_error;
@@ -227,7 +239,11 @@ int et131x_open(struct net_device *netdev)
 	/* Enable device interrupts */
 	et131x_enable_interrupts(adapter);
 
+<<<<<<< HEAD
 	adapter->Flags |= fMP_ADAPTER_INTERRUPT_IN_USE;
+=======
+	adapter->flags |= fMP_ADAPTER_INTERRUPT_IN_USE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* We're ready to move some data, so start the queue */
 	netif_start_queue(netdev);
@@ -255,7 +271,11 @@ int et131x_close(struct net_device *netdev)
 	et131x_disable_interrupts(adapter);
 
 	/* Deregistering ISR */
+<<<<<<< HEAD
 	adapter->Flags &= ~fMP_ADAPTER_INTERRUPT_IN_USE;
+=======
+	adapter->flags &= ~fMP_ADAPTER_INTERRUPT_IN_USE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	free_irq(netdev->irq, netdev);
 
 	/* Stop the error timer */
@@ -279,7 +299,11 @@ int et131x_ioctl_mii(struct net_device *netdev, struct ifreq *reqbuf, int cmd)
 
 	switch (cmd) {
 	case SIOCGMIIPHY:
+<<<<<<< HEAD
 		data->phy_id = etdev->Stats.xcvr_addr;
+=======
+		data->phy_id = etdev->stats.xcvr_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 
 	case SIOCGMIIREG:
@@ -511,6 +535,7 @@ void et131x_tx_timeout(struct net_device *netdev)
 	struct tcb *tcb;
 	unsigned long flags;
 
+<<<<<<< HEAD
 	/* Just skip this part if the adapter is doing link detection */
 	if (etdev->Flags & fMP_ADAPTER_LINK_DETECTION)
 		return;
@@ -523,6 +548,16 @@ void et131x_tx_timeout(struct net_device *netdev)
 
 	/* Hardware failure? */
 	if (etdev->Flags & fMP_ADAPTER_HARDWARE_ERROR) {
+=======
+	/* Any nonrecoverable hardware error?
+	 * Checks adapter->flags for any failure in phy reading
+	 */
+	if (etdev->flags & fMP_ADAPTER_NON_RECOVER_ERROR)
+		return;
+
+	/* Hardware failure? */
+	if (etdev->flags & fMP_ADAPTER_HARDWARE_ERROR) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dev_err(&etdev->pdev->dev, "hardware error - reset\n");
 		return;
 	}
@@ -540,7 +575,11 @@ void et131x_tx_timeout(struct net_device *netdev)
 					       flags);
 
 			dev_warn(&etdev->pdev->dev,
+<<<<<<< HEAD
 				"Send stuck - reset.  tcb->WrIndex %x, Flags 0x%08x\n",
+=======
+				"Send stuck - reset.  tcb->WrIndex %x, flags 0x%08x\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				tcb->index,
 				tcb->flags);
 
@@ -609,7 +648,11 @@ int et131x_change_mtu(struct net_device *netdev, int new_mtu)
 	et131x_adapter_setup(adapter);
 
 	/* Enable interrupts */
+<<<<<<< HEAD
 	if (adapter->Flags & fMP_ADAPTER_INTERRUPT_IN_USE)
+=======
+	if (adapter->flags & fMP_ADAPTER_INTERRUPT_IN_USE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		et131x_enable_interrupts(adapter);
 
 	/* Restart the Tx and Rx DMA engines */
@@ -691,7 +734,11 @@ int et131x_set_mac_addr(struct net_device *netdev, void *new_mac)
 	et131x_adapter_setup(adapter);
 
 	/* Enable interrupts */
+<<<<<<< HEAD
 	if (adapter->Flags & fMP_ADAPTER_INTERRUPT_IN_USE)
+=======
+	if (adapter->flags & fMP_ADAPTER_INTERRUPT_IN_USE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		et131x_enable_interrupts(adapter);
 
 	/* Restart the Tx and Rx DMA engines */
@@ -702,3 +749,57 @@ int et131x_set_mac_addr(struct net_device *netdev, void *new_mac)
 	netif_wake_queue(netdev);
 	return result;
 }
+<<<<<<< HEAD
+=======
+
+static const struct net_device_ops et131x_netdev_ops = {
+	.ndo_open		= et131x_open,
+	.ndo_stop		= et131x_close,
+	.ndo_start_xmit		= et131x_tx,
+	.ndo_set_multicast_list	= et131x_multicast,
+	.ndo_tx_timeout		= et131x_tx_timeout,
+	.ndo_change_mtu		= et131x_change_mtu,
+	.ndo_set_mac_address	= et131x_set_mac_addr,
+	.ndo_validate_addr	= eth_validate_addr,
+	.ndo_get_stats		= et131x_stats,
+	.ndo_do_ioctl		= et131x_ioctl,
+};
+
+/**
+ * et131x_device_alloc
+ *
+ * Returns pointer to the allocated and initialized net_device struct for
+ * this device.
+ *
+ * Create instances of net_device and wl_private for the new adapter and
+ * register the device's entry points in the net_device structure.
+ */
+struct net_device *et131x_device_alloc(void)
+{
+	struct net_device *netdev;
+
+	/* Alloc net_device and adapter structs */
+	netdev = alloc_etherdev(sizeof(struct et131x_adapter));
+
+	if (netdev == NULL) {
+		printk(KERN_ERR "et131x: Alloc of net_device struct failed\n");
+		return NULL;
+	}
+
+	/* Setup the function registration table (and other data) for a
+	 * net_device
+	 */
+	/* netdev->init               = &et131x_init; */
+	/* netdev->set_config = &et131x_config; */
+	netdev->watchdog_timeo = ET131X_TX_TIMEOUT;
+	netdev->netdev_ops = &et131x_netdev_ops;
+
+	/* netdev->ethtool_ops        = &et131x_ethtool_ops; */
+
+	/* Poll? */
+	/* netdev->poll               = &et131x_poll; */
+	/* netdev->poll_controller    = &et131x_poll_controller; */
+	return netdev;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

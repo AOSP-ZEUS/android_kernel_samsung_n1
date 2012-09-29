@@ -64,19 +64,30 @@
 /**
  * struct adis16201_state - device instance specific data
  * @us:			actual spi_device
+<<<<<<< HEAD
  * @indio_dev:		industrial I/O device structure
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @trig:		data ready trigger registered with iio
  * @tx:			transmit buffer
  * @rx:			receive buffer
  * @buf_lock:		mutex to protect tx and rx
  **/
 struct adis16201_state {
+<<<<<<< HEAD
 	struct spi_device		*us;
 	struct iio_dev			*indio_dev;
 	struct iio_trigger		*trig;
 	u8				*tx;
 	u8				*rx;
 	struct mutex			buf_lock;
+=======
+	struct spi_device	*us;
+	struct iio_trigger	*trig;
+	struct mutex		buf_lock;
+	u8			tx[14] ____cacheline_aligned;
+	u8			rx[14];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 int adis16201_set_irq(struct iio_dev *indio_dev, bool enable);

@@ -140,7 +140,10 @@ EXPORT_SYMBOL(kernel_thread);
  */
 void start_thread(struct pt_regs *regs, unsigned long new_ip, unsigned long new_sp)
 {
+<<<<<<< HEAD
 	set_fs(USER_DS);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	regs->pc = new_ip;
 	if (current->mm)
 		regs->p5 = current->mm->start_data;

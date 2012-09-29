@@ -3,7 +3,11 @@
   Broadcom B43 wireless driver
   IEEE 802.11n PHY support
 
+<<<<<<< HEAD
   Copyright (c) 2008 Michael Buesch <mb@bu3sch.de>
+=======
+  Copyright (c) 2008 Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
   This program is free software; you can redistribute it and/or modify
   it under the terms of the GNU General Public License as published by
@@ -299,7 +303,11 @@ static void b43_nphy_tx_power_ctrl(struct b43_wldev *dev, bool enable)
 static void b43_nphy_tx_power_fix(struct b43_wldev *dev)
 {
 	struct b43_phy_n *nphy = dev->phy.n;
+<<<<<<< HEAD
 	struct ssb_sprom *sprom = &(dev->sdev->bus->sprom);
+=======
+	struct ssb_sprom *sprom = dev->dev->bus_sprom;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u8 txpi[2], bbmult, i;
 	u16 tmp, radio_gain, dac_gain;
@@ -423,16 +431,26 @@ static void b43_radio_init2055_pre(struct b43_wldev *dev)
 static void b43_radio_init2055_post(struct b43_wldev *dev)
 {
 	struct b43_phy_n *nphy = dev->phy.n;
+<<<<<<< HEAD
 	struct ssb_sprom *sprom = &(dev->sdev->bus->sprom);
 	struct ssb_boardinfo *binfo = &(dev->sdev->bus->boardinfo);
+=======
+	struct ssb_sprom *sprom = dev->dev->bus_sprom;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int i;
 	u16 val;
 	bool workaround = false;
 
 	if (sprom->revision < 4)
+<<<<<<< HEAD
 		workaround = (binfo->vendor != PCI_VENDOR_ID_BROADCOM &&
 				binfo->type == 0x46D &&
 				binfo->rev >= 0x41);
+=======
+		workaround = (dev->dev->board_vendor != PCI_VENDOR_ID_BROADCOM
+			      && dev->dev->board_type == 0x46D
+			      && dev->dev->board_rev >= 0x41);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	else
 		workaround =
 			!(sprom->boardflags2_lo & B43_BFL2_RXBB_INT_REG_DIS);
@@ -604,17 +622,46 @@ static void b43_nphy_tx_lp_fbw(struct b43_wldev *dev)
 /* http://bcm-v4.sipsolutions.net/802.11/PHY/N/BmacPhyClkFgc */
 static void b43_nphy_bmac_clock_fgc(struct b43_wldev *dev, bool force)
 {
+<<<<<<< HEAD
 	u32 tmslow;
+=======
+	u32 tmp;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (dev->phy.type != B43_PHYTYPE_N)
 		return;
 
+<<<<<<< HEAD
 	tmslow = ssb_read32(dev->sdev, SSB_TMSLOW);
 	if (force)
 		tmslow |= SSB_TMSLOW_FGC;
 	else
 		tmslow &= ~SSB_TMSLOW_FGC;
 	ssb_write32(dev->sdev, SSB_TMSLOW, tmslow);
+=======
+	switch (dev->dev->bus_type) {
+#ifdef CONFIG_B43_BCMA
+	case B43_BUS_BCMA:
+		tmp = bcma_aread32(dev->dev->bdev, BCMA_IOCTL);
+		if (force)
+			tmp |= BCMA_IOCTL_FGC;
+		else
+			tmp &= ~BCMA_IOCTL_FGC;
+		bcma_awrite32(dev->dev->bdev, BCMA_IOCTL, tmp);
+		break;
+#endif
+#ifdef CONFIG_B43_SSB
+	case B43_BUS_SSB:
+		tmp = ssb_read32(dev->dev->sdev, SSB_TMSLOW);
+		if (force)
+			tmp |= SSB_TMSLOW_FGC;
+		else
+			tmp &= ~SSB_TMSLOW_FGC;
+		ssb_write32(dev->dev->sdev, SSB_TMSLOW, tmp);
+		break;
+#endif
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* http://bcm-v4.sipsolutions.net/802.11/PHY/N/CCA */
@@ -959,8 +1006,26 @@ static void b43_nphy_superswitch_init(struct b43_wldev *dev, bool init)
 		b43_phy_write(dev, B43_NPHY_GPIO_LOOEN, 0);
 		b43_phy_write(dev, B43_NPHY_GPIO_HIOEN, 0);
 
+<<<<<<< HEAD
 		ssb_chipco_gpio_control(&dev->sdev->bus->chipco, 0xFC00,
 					0xFC00);
+=======
+		switch (dev->dev->bus_type) {
+#ifdef CONFIG_B43_BCMA
+		case B43_BUS_BCMA:
+			bcma_chipco_gpio_control(&dev->dev->bdev->bus->drv_cc,
+						 0xFC00, 0xFC00);
+			break;
+#endif
+#ifdef CONFIG_B43_SSB
+		case B43_BUS_SSB:
+			ssb_chipco_gpio_control(&dev->dev->sdev->bus->chipco,
+						0xFC00, 0xFC00);
+			break;
+#endif
+		}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		b43_write32(dev, B43_MMIO_MACCTL,
 			b43_read32(dev, B43_MMIO_MACCTL) &
 			~B43_MACCTL_GPOUTSMSK);
@@ -983,7 +1048,11 @@ static u16 b43_nphy_classifier(struct b43_wldev *dev, u16 mask, u16 val)
 {
 	u16 tmp;
 
+<<<<<<< HEAD
 	if (dev->sdev->id.revision == 16)
+=======
+	if (dev->dev->core_rev == 16)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		b43_mac_suspend(dev);
 
 	tmp = b43_phy_read(dev, B43_NPHY_CLASSCTL);
@@ -993,7 +1062,11 @@ static u16 b43_nphy_classifier(struct b43_wldev *dev, u16 mask, u16 val)
 	tmp |= (val & mask);
 	b43_phy_maskset(dev, B43_NPHY_CLASSCTL, 0xFFF8, tmp);
 
+<<<<<<< HEAD
 	if (dev->sdev->id.revision == 16)
+=======
+	if (dev->dev->core_rev == 16)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		b43_mac_enable(dev);
 
 	return tmp;
@@ -1168,7 +1241,11 @@ static void b43_nphy_adjust_lna_gain_table(struct b43_wldev *dev)
 static void b43_nphy_gain_ctrl_workarounds(struct b43_wldev *dev)
 {
 	struct b43_phy_n *nphy = dev->phy.n;
+<<<<<<< HEAD
 	struct ssb_sprom *sprom = &(dev->sdev->bus->sprom);
+=======
+	struct ssb_sprom *sprom = dev->dev->bus_sprom;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* PHY rev 0, 1, 2 */
 	u8 i, j;
@@ -1373,7 +1450,11 @@ static void b43_nphy_gain_ctrl_workarounds(struct b43_wldev *dev)
 /* http://bcm-v4.sipsolutions.net/802.11/PHY/N/Workarounds */
 static void b43_nphy_workarounds(struct b43_wldev *dev)
 {
+<<<<<<< HEAD
 	struct ssb_bus *bus = dev->sdev->bus;
+=======
+	struct ssb_sprom *sprom = dev->dev->bus_sprom;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct b43_phy *phy = &dev->phy;
 	struct b43_phy_n *nphy = phy->n;
 
@@ -1443,9 +1524,15 @@ static void b43_nphy_workarounds(struct b43_wldev *dev)
 
 		/* N PHY WAR TX Chain Update with hw_phytxchain as argument */
 
+<<<<<<< HEAD
 		if ((bus->sprom.boardflags2_lo & B43_BFL2_APLL_WAR &&
 		    b43_current_band(dev->wl) == IEEE80211_BAND_5GHZ) ||
 		    (bus->sprom.boardflags2_lo & B43_BFL2_GPLL_WAR &&
+=======
+		if ((sprom->boardflags2_lo & B43_BFL2_APLL_WAR &&
+		    b43_current_band(dev->wl) == IEEE80211_BAND_5GHZ) ||
+		    (sprom->boardflags2_lo & B43_BFL2_GPLL_WAR &&
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		    b43_current_band(dev->wl) == IEEE80211_BAND_2GHZ))
 			tmp32 = 0x00088888;
 		else
@@ -1503,8 +1590,13 @@ static void b43_nphy_workarounds(struct b43_wldev *dev)
 		b43_phy_write(dev, B43_NPHY_RFCTL_LUT_TRSW_LO2, 0x2D8);
 		b43_phy_write(dev, B43_NPHY_RFCTL_LUT_TRSW_UP2, 0x301);
 
+<<<<<<< HEAD
 		if (bus->sprom.boardflags2_lo & 0x100 &&
 		    bus->boardinfo.type == 0x8B) {
+=======
+		if (sprom->boardflags2_lo & 0x100 &&
+		    dev->dev->board_type == 0x8B) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			delays1[0] = 0x1;
 			delays1[5] = 0x14;
 		}
@@ -3586,7 +3678,11 @@ static void b43_nphy_set_rx_core_state(struct b43_wldev *dev, u8 mask)
  */
 int b43_phy_initn(struct b43_wldev *dev)
 {
+<<<<<<< HEAD
 	struct ssb_bus *bus = dev->sdev->bus;
+=======
+	struct ssb_sprom *sprom = dev->dev->bus_sprom;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct b43_phy *phy = &dev->phy;
 	struct b43_phy_n *nphy = phy->n;
 	u8 tx_pwr_state;
@@ -3599,9 +3695,28 @@ int b43_phy_initn(struct b43_wldev *dev)
 	bool do_cal = false;
 
 	if ((dev->phy.rev >= 3) &&
+<<<<<<< HEAD
 	   (bus->sprom.boardflags_lo & B43_BFL_EXTLNA) &&
 	   (b43_current_band(dev->wl) == IEEE80211_BAND_2GHZ)) {
 		chipco_set32(&dev->sdev->bus->chipco, SSB_CHIPCO_CHIPCTL, 0x40);
+=======
+	   (sprom->boardflags_lo & B43_BFL_EXTLNA) &&
+	   (b43_current_band(dev->wl) == IEEE80211_BAND_2GHZ)) {
+		switch (dev->dev->bus_type) {
+#ifdef CONFIG_B43_BCMA
+		case B43_BUS_BCMA:
+			bcma_cc_set32(&dev->dev->bdev->bus->drv_cc,
+				      BCMA_CC_CHIPCTL, 0x40);
+			break;
+#endif
+#ifdef CONFIG_B43_SSB
+		case B43_BUS_SSB:
+			chipco_set32(&dev->dev->sdev->bus->chipco,
+				     SSB_CHIPCO_CHIPCTL, 0x40);
+			break;
+#endif
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	nphy->deaf_count = 0;
 	b43_nphy_tables_init(dev);
@@ -3639,9 +3754,15 @@ int b43_phy_initn(struct b43_wldev *dev)
 	b43_phy_write(dev, B43_NPHY_AFESEQ_TX2RX_PUD_20M, 0x20);
 	b43_phy_write(dev, B43_NPHY_AFESEQ_TX2RX_PUD_40M, 0x20);
 
+<<<<<<< HEAD
 	if (bus->sprom.boardflags2_lo & 0x100 ||
 	    (bus->boardinfo.vendor == PCI_VENDOR_ID_APPLE &&
 	     bus->boardinfo.type == 0x8B))
+=======
+	if (sprom->boardflags2_lo & 0x100 ||
+	    (dev->dev->board_vendor == PCI_VENDOR_ID_APPLE &&
+	     dev->dev->board_type == 0x8B))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		b43_phy_write(dev, B43_NPHY_TXREALFD, 0xA0);
 	else
 		b43_phy_write(dev, B43_NPHY_TXREALFD, 0xB8);
@@ -4026,11 +4147,32 @@ static void b43_nphy_op_software_rfkill(struct b43_wldev *dev,
 /* http://bcm-v4.sipsolutions.net/802.11/PHY/Anacore */
 static void b43_nphy_op_switch_analog(struct b43_wldev *dev, bool on)
 {
+<<<<<<< HEAD
 	u16 val = on ? 0 : 0x7FFF;
 
 	if (dev->phy.rev >= 3)
 		b43_phy_write(dev, B43_NPHY_AFECTL_OVER1, val);
 	b43_phy_write(dev, B43_NPHY_AFECTL_OVER, val);
+=======
+	u16 override = on ? 0x0 : 0x7FFF;
+	u16 core = on ? 0xD : 0x00FD;
+
+	if (dev->phy.rev >= 3) {
+		if (on) {
+			b43_phy_write(dev, B43_NPHY_AFECTL_C1, core);
+			b43_phy_write(dev, B43_NPHY_AFECTL_OVER1, override);
+			b43_phy_write(dev, B43_NPHY_AFECTL_C2, core);
+			b43_phy_write(dev, B43_NPHY_AFECTL_OVER, override);
+		} else {
+			b43_phy_write(dev, B43_NPHY_AFECTL_OVER1, override);
+			b43_phy_write(dev, B43_NPHY_AFECTL_C1, core);
+			b43_phy_write(dev, B43_NPHY_AFECTL_OVER, override);
+			b43_phy_write(dev, B43_NPHY_AFECTL_C2, core);
+		}
+	} else {
+		b43_phy_write(dev, B43_NPHY_AFECTL_OVER, override);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int b43_nphy_op_switch_channel(struct b43_wldev *dev,

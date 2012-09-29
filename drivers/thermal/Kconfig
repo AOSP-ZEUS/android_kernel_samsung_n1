@@ -14,6 +14,7 @@ menuconfig THERMAL
 	  If you want this support, you should say Y or M here.
 
 config THERMAL_HWMON
+<<<<<<< HEAD
 	bool "Hardware monitoring support"
 	depends on THERMAL
 	depends on HWMON=y || HWMON=THERMAL
@@ -22,3 +23,9 @@ config THERMAL_HWMON
 	  requires a 2.10.7/3.0.2 or later lm-sensors userspace.
 
 	  Say Y if your user-space is new enough.
+=======
+	bool
+	depends on THERMAL
+	depends on HWMON=y || HWMON=THERMAL
+	default y
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

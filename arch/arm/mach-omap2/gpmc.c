@@ -528,6 +528,7 @@ int gpmc_cs_configure(int cs, int cmd, int wval)
 
 	case GPMC_CONFIG_DEV_SIZE:
 		regval  = gpmc_cs_read_reg(cs, GPMC_CS_CONFIG1);
+<<<<<<< HEAD
 
 		/* clear 2 target bits */
 		regval &= ~GPMC_CONFIG1_DEVICESIZE(3);
@@ -535,6 +536,9 @@ int gpmc_cs_configure(int cs, int cmd, int wval)
 		/* set the proper value */
 		regval |= GPMC_CONFIG1_DEVICESIZE(wval);
 
+=======
+		regval |= GPMC_CONFIG1_DEVICESIZE(wval);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		gpmc_cs_write_reg(cs, GPMC_CS_CONFIG1, regval);
 		break;
 

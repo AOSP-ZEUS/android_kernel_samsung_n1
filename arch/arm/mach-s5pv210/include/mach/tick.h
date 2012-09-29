@@ -21,12 +21,15 @@ static inline u32 s3c24xx_ostimer_pending(void)
 	return pend & (1 << (IRQ_TIMER4_VIC - S5P_IRQ_VIC0(0)));
 }
 
+<<<<<<< HEAD
 static inline u32 s5p_ostimer_pending(void)
 {
 	u32 pend = __raw_readl(VA_VIC0 + VIC_RAW_STATUS);
 	return pend & (1 << (IRQ_SYSTIMER - S5P_IRQ_VIC0(0)));
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define TICK_MAX	(0xffffffff)
 
 #endif /* __ASM_ARCH_TICK_H */

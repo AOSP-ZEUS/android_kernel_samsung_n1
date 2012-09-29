@@ -228,7 +228,11 @@ int stmpe_block_write(struct stmpe *stmpe, u8 reg, u8 length,
 EXPORT_SYMBOL_GPL(stmpe_block_write);
 
 /**
+<<<<<<< HEAD
  * stmpe_set_altfunc: set the alternate function for STMPE pins
+=======
+ * stmpe_set_altfunc()- set the alternate function for STMPE pins
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @stmpe:	Device to configure
  * @pins:	Bitmask of pins to affect
  * @block:	block to enable alternate functions for

@@ -5,6 +5,7 @@
  * 'tty.h' defines some structures used by tty_io.c and some defines.
  */
 
+<<<<<<< HEAD
 #ifdef __KERNEL__
 #include <linux/fs.h>
 #include <linux/major.h>
@@ -23,6 +24,8 @@
  */
 #define NR_UNIX98_PTY_DEFAULT	4096      /* Default maximum for Unix98 ptys */
 #define NR_UNIX98_PTY_MAX	(1 << MINORBITS) /* Absolute limit */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define NR_LDISCS		30
 
 /* line disciplines */
@@ -53,6 +56,28 @@
 #define N_TRACESINK	23	/* Trace data routing for MIPI P1149.7 */
 #define N_TRACEROUTER	24	/* Trace data routing for MIPI P1149.7 */
 
+<<<<<<< HEAD
+=======
+#ifdef __KERNEL__
+#include <linux/fs.h>
+#include <linux/major.h>
+#include <linux/termios.h>
+#include <linux/workqueue.h>
+#include <linux/tty_driver.h>
+#include <linux/tty_ldisc.h>
+#include <linux/mutex.h>
+
+#include <asm/system.h>
+
+
+/*
+ * (Note: the *_driver.minor_start values 1, 64, 128, 192 are
+ * hardcoded at present.)
+ */
+#define NR_UNIX98_PTY_DEFAULT	4096      /* Default maximum for Unix98 ptys */
+#define NR_UNIX98_PTY_MAX	(1 << MINORBITS) /* Absolute limit */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * This character is the same as _POSIX_VDISABLE: it cannot be used as
  * a c_cc[] character, but indicates that a particular special character
@@ -294,7 +319,11 @@ struct tty_struct {
 	void *driver_data;
 	struct list_head tty_files;
 
+<<<<<<< HEAD
 #define N_TTY_BUF_SIZE 4096
+=======
+#define N_TTY_BUF_SIZE 32768
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * The following is data for the N_TTY line discipline.  For

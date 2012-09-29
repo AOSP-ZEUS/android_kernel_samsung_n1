@@ -101,7 +101,10 @@ static void iwl_legacy_complete_scan(struct iwl_priv *priv, bool aborted)
 		ieee80211_scan_completed(priv->hw, aborted);
 	}
 
+<<<<<<< HEAD
 	priv->is_internal_short_scan = false;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	priv->scan_vif = NULL;
 	priv->scan_request = NULL;
 }
@@ -329,10 +332,15 @@ void iwl_legacy_init_scan_params(struct iwl_priv *priv)
 }
 EXPORT_SYMBOL(iwl_legacy_init_scan_params);
 
+<<<<<<< HEAD
 static int __must_check iwl_legacy_scan_initiate(struct iwl_priv *priv,
 					  struct ieee80211_vif *vif,
 					  bool internal,
 					  enum ieee80211_band band)
+=======
+static int iwl_legacy_scan_initiate(struct iwl_priv *priv,
+				    struct ieee80211_vif *vif)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int ret;
 
@@ -359,6 +367,7 @@ static int __must_check iwl_legacy_scan_initiate(struct iwl_priv *priv,
 		return -EBUSY;
 	}
 
+<<<<<<< HEAD
 	IWL_DEBUG_SCAN(priv, "Starting %sscan...\n",
 			internal ? "internal short " : "");
 
@@ -366,11 +375,20 @@ static int __must_check iwl_legacy_scan_initiate(struct iwl_priv *priv,
 	priv->is_internal_short_scan = internal;
 	priv->scan_start = jiffies;
 	priv->scan_band = band;
+=======
+	IWL_DEBUG_SCAN(priv, "Starting scan...\n");
+
+	set_bit(STATUS_SCANNING, &priv->status);
+	priv->scan_start = jiffies;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = priv->cfg->ops->utils->request_scan(priv, vif);
 	if (ret) {
 		clear_bit(STATUS_SCANNING, &priv->status);
+<<<<<<< HEAD
 		priv->is_internal_short_scan = false;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return ret;
 	}
 
@@ -394,8 +412,12 @@ int iwl_legacy_mac_hw_scan(struct ieee80211_hw *hw,
 
 	mutex_lock(&priv->mutex);
 
+<<<<<<< HEAD
 	if (test_bit(STATUS_SCANNING, &priv->status) &&
 	    !priv->is_internal_short_scan) {
+=======
+	if (test_bit(STATUS_SCANNING, &priv->status)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		IWL_DEBUG_SCAN(priv, "Scan already in progress.\n");
 		ret = -EAGAIN;
 		goto out_unlock;
@@ -404,6 +426,7 @@ int iwl_legacy_mac_hw_scan(struct ieee80211_hw *hw,
 	/* mac80211 will only ask for one band at a time */
 	priv->scan_request = req;
 	priv->scan_vif = vif;
+<<<<<<< HEAD
 
 	/*
 	 * If an internal scan is in progress, just set
@@ -415,6 +438,11 @@ int iwl_legacy_mac_hw_scan(struct ieee80211_hw *hw,
 	} else
 		ret = iwl_legacy_scan_initiate(priv, vif, false,
 					req->channels[0]->band);
+=======
+	priv->scan_band = req->channels[0]->band;
+
+	ret = iwl_legacy_scan_initiate(priv, vif);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	IWL_DEBUG_MAC80211(priv, "leave\n");
 
@@ -425,6 +453,7 @@ out_unlock:
 }
 EXPORT_SYMBOL(iwl_legacy_mac_hw_scan);
 
+<<<<<<< HEAD
 /*
  * internal short scan, this function should only been called while associated.
  * It will reset and tune the radio to prevent possible RF related problem
@@ -459,6 +488,8 @@ static void iwl_legacy_bg_start_internal_scan(struct work_struct *work)
 	mutex_unlock(&priv->mutex);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void iwl_legacy_bg_scan_check(struct work_struct *data)
 {
 	struct iwl_priv *priv =
@@ -542,8 +573,12 @@ static void iwl_legacy_bg_scan_completed(struct work_struct *work)
 	    container_of(work, struct iwl_priv, scan_completed);
 	bool aborted;
 
+<<<<<<< HEAD
 	IWL_DEBUG_SCAN(priv, "Completed %sscan.\n",
 		       priv->is_internal_short_scan ? "internal short " : "");
+=======
+	IWL_DEBUG_SCAN(priv, "Completed scan.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	cancel_delayed_work(&priv->scan_check);
 
@@ -558,6 +593,7 @@ static void iwl_legacy_bg_scan_completed(struct work_struct *work)
 		goto out_settings;
 	}
 
+<<<<<<< HEAD
 	if (priv->is_internal_short_scan && !aborted) {
 		int err;
 
@@ -579,6 +615,8 @@ static void iwl_legacy_bg_scan_completed(struct work_struct *work)
 	}
 
 out_complete:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	iwl_legacy_complete_scan(priv, aborted);
 
 out_settings:
@@ -590,8 +628,12 @@ out_settings:
 	 * We do not commit power settings while scan is pending,
 	 * do it now if the settings changed.
 	 */
+<<<<<<< HEAD
 	iwl_legacy_power_set_mode(priv, &priv->power_data.sleep_cmd_next,
 								false);
+=======
+	iwl_legacy_power_set_mode(priv, &priv->power_data.sleep_cmd_next, false);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	iwl_legacy_set_tx_power(priv, priv->tx_power_next, false);
 
 	priv->cfg->ops->utils->post_scan(priv);
@@ -604,15 +646,21 @@ void iwl_legacy_setup_scan_deferred_work(struct iwl_priv *priv)
 {
 	INIT_WORK(&priv->scan_completed, iwl_legacy_bg_scan_completed);
 	INIT_WORK(&priv->abort_scan, iwl_legacy_bg_abort_scan);
+<<<<<<< HEAD
 	INIT_WORK(&priv->start_internal_scan,
 				iwl_legacy_bg_start_internal_scan);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	INIT_DELAYED_WORK(&priv->scan_check, iwl_legacy_bg_scan_check);
 }
 EXPORT_SYMBOL(iwl_legacy_setup_scan_deferred_work);
 
 void iwl_legacy_cancel_scan_deferred_work(struct iwl_priv *priv)
 {
+<<<<<<< HEAD
 	cancel_work_sync(&priv->start_internal_scan);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cancel_work_sync(&priv->abort_scan);
 	cancel_work_sync(&priv->scan_completed);
 

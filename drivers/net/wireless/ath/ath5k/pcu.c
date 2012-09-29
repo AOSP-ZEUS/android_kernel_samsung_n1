@@ -32,7 +32,11 @@
 #include "base.h"
 
 /*
+<<<<<<< HEAD
  * AR5212+ can use higher rates for ack transmition
+=======
+ * AR5212+ can use higher rates for ack transmission
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * based on current tx rate instead of the base rate.
  * It does this to better utilize channel usage.
  * This is a mapping between G rates (that cover both
@@ -77,14 +81,21 @@ static const unsigned int ack_rates_high[] =
 int ath5k_hw_get_frame_duration(struct ath5k_hw *ah,
 		int len, struct ieee80211_rate *rate, bool shortpre)
 {
+<<<<<<< HEAD
 	struct ath5k_softc *sc = ah->ah_sc;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int sifs, preamble, plcp_bits, sym_time;
 	int bitrate, bits, symbols, symbol_bits;
 	int dur;
 
 	/* Fallback */
 	if (!ah->ah_bwmode) {
+<<<<<<< HEAD
 		__le16 raw_dur = ieee80211_generic_frame_duration(sc->hw,
+=======
+		__le16 raw_dur = ieee80211_generic_frame_duration(ah->hw,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					NULL, len, rate);
 
 		/* subtract difference between long and short preamble */
@@ -205,7 +216,11 @@ unsigned int ath5k_hw_get_default_sifs(struct ath5k_hw *ah)
  */
 void ath5k_hw_update_mib_counters(struct ath5k_hw *ah)
 {
+<<<<<<< HEAD
 	struct ath5k_statistics *stats = &ah->ah_sc->stats;
+=======
+	struct ath5k_statistics *stats = &ah->stats;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Read-And-Clear */
 	stats->ack_fail += ath5k_hw_reg_read(ah, AR5K_ACK_FAIL);
@@ -240,18 +255,26 @@ void ath5k_hw_update_mib_counters(struct ath5k_hw *ah)
  */
 static inline void ath5k_hw_write_rate_duration(struct ath5k_hw *ah)
 {
+<<<<<<< HEAD
 	struct ath5k_softc *sc = ah->ah_sc;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ieee80211_rate *rate;
 	unsigned int i;
 	/* 802.11g covers both OFDM and CCK */
 	u8 band = IEEE80211_BAND_2GHZ;
 
 	/* Write rate duration table */
+<<<<<<< HEAD
 	for (i = 0; i < sc->sbands[band].n_bitrates; i++) {
+=======
+	for (i = 0; i < ah->sbands[band].n_bitrates; i++) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		u32 reg;
 		u16 tx_time;
 
 		if (ah->ah_ack_bitrate_high)
+<<<<<<< HEAD
 			rate = &sc->sbands[band].bitrates[ack_rates_high[i]];
 		/* CCK -> 1Mb */
 		else if (i < 4)
@@ -259,6 +282,15 @@ static inline void ath5k_hw_write_rate_duration(struct ath5k_hw *ah)
 		/* OFDM -> 6Mb */
 		else
 			rate = &sc->sbands[band].bitrates[4];
+=======
+			rate = &ah->sbands[band].bitrates[ack_rates_high[i]];
+		/* CCK -> 1Mb */
+		else if (i < 4)
+			rate = &ah->sbands[band].bitrates[0];
+		/* OFDM -> 6Mb */
+		else
+			rate = &ah->sbands[band].bitrates[4];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* Set ACK timeout */
 		reg = AR5K_RATE_DUR(rate->hw_value);
@@ -534,9 +566,15 @@ u64 ath5k_hw_get_tsf64(struct ath5k_hw *ah)
 
 	local_irq_restore(flags);
 
+<<<<<<< HEAD
 	WARN_ON( i == ATH5K_MAX_TSF_READ );
 
 	return (((u64)tsf_upper1 << 32) | tsf_lower);
+=======
+	WARN_ON(i == ATH5K_MAX_TSF_READ);
+
+	return ((u64)tsf_upper1 << 32) | tsf_lower;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -586,7 +624,11 @@ void ath5k_hw_init_beacon(struct ath5k_hw *ah, u32 next_beacon, u32 interval)
 	/*
 	 * Set the additional timers by mode
 	 */
+<<<<<<< HEAD
 	switch (ah->ah_sc->opmode) {
+=======
+	switch (ah->opmode) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case NL80211_IFTYPE_MONITOR:
 	case NL80211_IFTYPE_STATION:
 		/* In STA mode timer1 is used as next wakeup
@@ -623,8 +665,13 @@ void ath5k_hw_init_beacon(struct ath5k_hw *ah, u32 next_beacon, u32 interval)
 	 * Set the beacon register and enable all timers.
 	 */
 	/* When in AP or Mesh Point mode zero timer0 to start TSF */
+<<<<<<< HEAD
 	if (ah->ah_sc->opmode == NL80211_IFTYPE_AP ||
 	    ah->ah_sc->opmode == NL80211_IFTYPE_MESH_POINT)
+=======
+	if (ah->opmode == NL80211_IFTYPE_AP ||
+	    ah->opmode == NL80211_IFTYPE_MESH_POINT)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ath5k_hw_reg_write(ah, 0, AR5K_TIMER0);
 
 	ath5k_hw_reg_write(ah, next_beacon, AR5K_TIMER0);
@@ -643,14 +690,23 @@ void ath5k_hw_init_beacon(struct ath5k_hw *ah, u32 next_beacon, u32 interval)
 	/* Flush any pending BMISS interrupts on ISR by
 	 * performing a clear-on-write operation on PISR
 	 * register for the BMISS bit (writing a bit on
+<<<<<<< HEAD
 	 * ISR togles a reset for that bit and leaves
 	 * the rest bits intact) */
+=======
+	 * ISR toggles a reset for that bit and leaves
+	 * the remaining bits intact) */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ah->ah_version == AR5K_AR5210)
 		ath5k_hw_reg_write(ah, AR5K_ISR_BMISS, AR5K_ISR);
 	else
 		ath5k_hw_reg_write(ah, AR5K_ISR_BMISS, AR5K_PISR);
 
+<<<<<<< HEAD
 	/* TODO: Set enchanced sleep registers on AR5212
+=======
+	/* TODO: Set enhanced sleep registers on AR5212
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * based on vif->bss_conf params, until then
 	 * disable power save reporting.*/
 	AR5K_REG_DISABLE_BITS(ah, AR5K_STA_ID1, AR5K_STA_ID1_PWR_SV);
@@ -738,7 +794,11 @@ ath5k_hw_check_beacon_timers(struct ath5k_hw *ah, int intval)
 	dma = ath5k_hw_reg_read(ah, AR5K_TIMER1) >> 3;
 
 	/* NOTE: SWBA is different. Having a wrong window there does not
+<<<<<<< HEAD
 	 * stop us from sending data and this condition is catched thru
+=======
+	 * stop us from sending data and this condition is caught by
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * other means (SWBA interrupt) */
 
 	if (ath5k_check_timer_win(nbtt, atim, 1, intval) &&
@@ -814,7 +874,11 @@ int ath5k_hw_set_opmode(struct ath5k_hw *ah, enum nl80211_iftype op_mode)
 	struct ath_common *common = ath5k_hw_common(ah);
 	u32 pcu_reg, beacon_reg, low_id, high_id;
 
+<<<<<<< HEAD
 	ATH5K_DBG(ah->ah_sc, ATH5K_DEBUG_MODE, "mode %d\n", op_mode);
+=======
+	ATH5K_DBG(ah, ATH5K_DEBUG_MODE, "mode %d\n", op_mode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Preserve rest settings */
 	pcu_reg = ath5k_hw_reg_read(ah, AR5K_STA_ID1) & 0xffff0000;
@@ -890,13 +954,21 @@ void ath5k_hw_pcu_init(struct ath5k_hw *ah, enum nl80211_iftype op_mode,
 	 * XXX: rethink this after new mode changes to
 	 * mac80211 are integrated */
 	if (ah->ah_version == AR5K_AR5212 &&
+<<<<<<< HEAD
 		ah->ah_sc->nvifs)
+=======
+		ah->nvifs)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ath5k_hw_write_rate_duration(ah);
 
 	/* Set RSSI/BRSSI thresholds
 	 *
 	 * Note: If we decide to set this value
+<<<<<<< HEAD
 	 * dynamicaly, have in mind that when AR5K_RSSI_THR
+=======
+	 * dynamically, have in mind that when AR5K_RSSI_THR
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * register is read it might return 0x40 if we haven't
 	 * wrote anything to it plus BMISS RSSI threshold is zeroed.
 	 * So doing a save/restore procedure here isn't the right

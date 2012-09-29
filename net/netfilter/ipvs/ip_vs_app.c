@@ -576,7 +576,11 @@ static const struct file_operations ip_vs_app_fops = {
 };
 #endif
 
+<<<<<<< HEAD
 int __net_init __ip_vs_app_init(struct net *net)
+=======
+int __net_init ip_vs_app_net_init(struct net *net)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct netns_ipvs *ipvs = net_ipvs(net);
 
@@ -585,6 +589,7 @@ int __net_init __ip_vs_app_init(struct net *net)
 	return 0;
 }
 
+<<<<<<< HEAD
 void __net_exit __ip_vs_app_cleanup(struct net *net)
 {
 	proc_net_remove(net, "ip_vs_app");
@@ -599,3 +604,9 @@ int __init ip_vs_app_init(void)
 void ip_vs_app_cleanup(void)
 {
 }
+=======
+void __net_exit ip_vs_app_net_cleanup(struct net *net)
+{
+	proc_net_remove(net, "ip_vs_app");
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

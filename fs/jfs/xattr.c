@@ -693,8 +693,12 @@ static int can_set_system_xattr(struct inode *inode, const char *name,
 			return rc;
 		}
 		if (acl) {
+<<<<<<< HEAD
 			mode_t mode = inode->i_mode;
 			rc = posix_acl_equiv_mode(acl, &mode);
+=======
+			rc = posix_acl_equiv_mode(acl, &inode->i_mode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			posix_acl_release(acl);
 			if (rc < 0) {
 				printk(KERN_ERR
@@ -702,7 +706,10 @@ static int can_set_system_xattr(struct inode *inode, const char *name,
 				       rc);
 				return rc;
 			}
+<<<<<<< HEAD
 			inode->i_mode = mode;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			mark_inode_dirty(inode);
 		}
 		/*

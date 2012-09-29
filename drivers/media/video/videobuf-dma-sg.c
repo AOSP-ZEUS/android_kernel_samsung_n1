@@ -108,8 +108,14 @@ static struct scatterlist *videobuf_pages_to_sg(struct page **pages,
 	if (PageHighMem(pages[0]))
 		/* DMA to highmem pages might not work */
 		goto highmem;
+<<<<<<< HEAD
 	sg_set_page(&sglist[0], pages[0], PAGE_SIZE - offset, offset);
 	size -= PAGE_SIZE - offset;
+=======
+	sg_set_page(&sglist[0], pages[0],
+			min_t(size_t, PAGE_SIZE - offset, size), offset);
+	size -= min_t(size_t, PAGE_SIZE - offset, size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (i = 1; i < nr_pages; i++) {
 		if (NULL == pages[i])
 			goto nopage;

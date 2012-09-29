@@ -25,7 +25,10 @@
 #include <asm/mach/map.h>
 #include <asm/mach/irq.h>
 
+<<<<<<< HEAD
 #include <asm/mach-types.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/proc-fns.h>
 #include <mach/map.h>
 #include <mach/regs-clock.h>
@@ -96,6 +99,7 @@ static struct map_desc s5pv210_iodesc[] __initdata = {
 		.pfn		=__phys_to_pfn(S5PV210_PA_HSPHY),
 		.length		= SZ_4K,
 		.type		= MT_DEVICE,
+<<<<<<< HEAD
 	}, {
 		.virtual	= (unsigned long)S3C_VA_OTG,
 		.pfn		= __phys_to_pfn(S5PV210_PA_OTG),
@@ -121,6 +125,9 @@ static struct map_desc s5pv210_iodesc[] __initdata = {
 		.length		= SZ_1M,
 		.type		= MT_DEVICE,
 	},
+=======
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void s5pv210_idle(void)
@@ -151,7 +158,11 @@ void __init s5pv210_map_io(void)
 	s5pv210_default_sdhci2();
 	s5pv210_default_sdhci3();
 
+<<<<<<< HEAD
 	s3c_adc_setname("s3c64xx-adc");
+=======
+	s3c_adc_setname("samsung-adc-v3");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	s3c_cfcon_setname("s5pv210-pata");
 
@@ -216,8 +227,12 @@ int __init s5pv210_init(void)
 	pm_idle = s5pv210_idle;
 
 	/* set sw_reset function */
+<<<<<<< HEAD
 	if (!machine_is_herring())
 		s5p_reset_hook = s5pv210_sw_reset;
+=======
+	s5p_reset_hook = s5pv210_sw_reset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return sysdev_register(&s5pv210_sysdev);
 }

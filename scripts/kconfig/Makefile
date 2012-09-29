@@ -170,8 +170,13 @@ mconf-objs     := mconf.o zconf.tab.o $(lxdialog)
 nconf-objs     := nconf.o zconf.tab.o nconf.gui.o
 kxgettext-objs	:= kxgettext.o zconf.tab.o
 qconf-cxxobjs	:= qconf.o
+<<<<<<< HEAD
 qconf-objs	:= kconfig_load.o zconf.tab.o
 gconf-objs	:= gconf.o kconfig_load.o zconf.tab.o
+=======
+qconf-objs	:= zconf.tab.o
+gconf-objs	:= gconf.o zconf.tab.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 hostprogs-y := conf
 
@@ -203,8 +208,13 @@ ifeq ($(gconf-target),1)
 	hostprogs-y += gconf
 endif
 
+<<<<<<< HEAD
 clean-files	:= lkc_defs.h qconf.moc .tmp_qtcheck .tmp_gtkcheck
 clean-files	+= zconf.tab.c lex.zconf.c zconf.hash.c gconf.glade.h
+=======
+clean-files	:= qconf.moc .tmp_qtcheck .tmp_gtkcheck
+clean-files	+= zconf.tab.c zconf.lex.c zconf.hash.c gconf.glade.h
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 clean-files     += mconf qconf gconf nconf
 clean-files     += config.pot linux.pot
 
@@ -220,6 +230,7 @@ always := dochecklxdialog
 HOST_EXTRACFLAGS += $(shell $(CONFIG_SHELL) $(srctree)/$(src)/check.sh $(HOSTCC) $(HOSTCFLAGS))
 
 # generated files seem to need this to find local include files
+<<<<<<< HEAD
 HOSTCFLAGS_lex.zconf.o	:= -I$(src)
 HOSTCFLAGS_zconf.tab.o	:= -I$(src)
 
@@ -229,6 +240,20 @@ HOSTCXXFLAGS_qconf.o	= $(KC_QT_CFLAGS) -D LKC_DIRECT_LINK
 HOSTLOADLIBES_gconf	= `pkg-config --libs gtk+-2.0 gmodule-2.0 libglade-2.0` -ldl
 HOSTCFLAGS_gconf.o	= `pkg-config --cflags gtk+-2.0 gmodule-2.0 libglade-2.0` \
                           -D LKC_DIRECT_LINK
+=======
+HOSTCFLAGS_zconf.lex.o	:= -I$(src)
+HOSTCFLAGS_zconf.tab.o	:= -I$(src)
+
+LEX_PREFIX_zconf	:= zconf
+YACC_PREFIX_zconf	:= zconf
+
+HOSTLOADLIBES_qconf	= $(KC_QT_LIBS)
+HOSTCXXFLAGS_qconf.o	= $(KC_QT_CFLAGS)
+
+HOSTLOADLIBES_gconf	= `pkg-config --libs gtk+-2.0 gmodule-2.0 libglade-2.0`
+HOSTCFLAGS_gconf.o	= `pkg-config --cflags gtk+-2.0 gmodule-2.0 libglade-2.0` \
+                          -Wno-missing-prototypes
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 HOSTLOADLIBES_mconf   = $(shell $(CONFIG_SHELL) $(check-lxdialog) -ldflags $(HOSTCC))
 
@@ -316,6 +341,7 @@ $(obj)/.tmp_gtkcheck:
 	fi
 endif
 
+<<<<<<< HEAD
 $(obj)/zconf.tab.o: $(obj)/lex.zconf.c $(obj)/zconf.hash.c
 
 $(obj)/kconfig_load.o: $(obj)/lkc_defs.h
@@ -323,18 +349,27 @@ $(obj)/kconfig_load.o: $(obj)/lkc_defs.h
 $(obj)/qconf.o: $(obj)/qconf.moc $(obj)/lkc_defs.h
 
 $(obj)/gconf.o: $(obj)/lkc_defs.h
+=======
+$(obj)/zconf.tab.o: $(obj)/zconf.lex.c $(obj)/zconf.hash.c
+
+$(obj)/qconf.o: $(obj)/qconf.moc
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 $(obj)/%.moc: $(src)/%.h
 	$(KC_QT_MOC) -i $< -o $@
 
+<<<<<<< HEAD
 $(obj)/lkc_defs.h: $(src)/lkc_proto.h
 	$(Q)sed < $< > $@ 's/P(\([^,]*\),.*/#define \1 (\*\1_p)/'
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 # Extract gconf menu items for I18N support
 $(obj)/gconf.glade.h: $(obj)/gconf.glade
 	$(Q)intltool-extract --type=gettext/glade --srcdir=$(srctree) \
 	$(obj)/gconf.glade
 
+<<<<<<< HEAD
 ###
 # The following requires flex/bison/gperf
 # By default we use the _shipped versions, uncomment the following line if
@@ -360,3 +395,5 @@ lex.%.c: %.l
 	cp $@ $@_shipped
 
 endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

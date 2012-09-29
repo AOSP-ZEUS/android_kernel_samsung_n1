@@ -51,6 +51,7 @@ struct pci_dev *isa_bridge_pcidev;
 EXPORT_SYMBOL_GPL(isa_bridge_pcidev);
 
 static void
+<<<<<<< HEAD
 fixup_hide_host_resource_fsl(struct pci_dev *dev)
 {
 	int i, class = dev->class >> 8;
@@ -70,6 +71,8 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_MOTOROLA, PCI_ANY_ID, fixup_hide_host_res
 DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_FREESCALE, PCI_ANY_ID, fixup_hide_host_resource_fsl); 
 
 static void
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 fixup_cpc710_pci64(struct pci_dev* dev)
 {
 	/* Hide the PCI64 BARs from the kernel as their content doesn't
@@ -167,6 +170,7 @@ pcibios_make_OF_bus_map(void)
 #endif
 }
 
+<<<<<<< HEAD
 typedef int (*pci_OF_scan_iterator)(struct device_node* node, void* data);
 
 static struct device_node*
@@ -288,10 +292,13 @@ find_OF_pci_device_filter(struct device_node* node, void* data)
 {
 	return ((void *)node == data);
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Returns the PCI device matching a given OF node
  */
+<<<<<<< HEAD
 int
 pci_device_from_OF_node(struct device_node* node, u8* bus, u8* devfn)
 {
@@ -311,6 +318,24 @@ pci_device_from_OF_node(struct device_node* node, u8* bus, u8* devfn)
 		return -ENODEV;
 	*bus = (reg[0] >> 16) & 0xff;
 	*devfn = ((reg[0] >> 8) & 0xff);
+=======
+int pci_device_from_OF_node(struct device_node *node, u8 *bus, u8 *devfn)
+{
+	struct pci_dev *dev = NULL;
+	const __be32 *reg;
+	int size;
+
+	/* Check if it might have a chance to be a PCI device */
+	if (!pci_find_hose_for_OF_device(node))
+		return -ENODEV;
+
+	reg = of_get_property(node, "reg", &size);
+	if (!reg || size < 5 * sizeof(u32))
+		return -ENODEV;
+
+	*bus = (be32_to_cpup(&reg[0]) >> 16) & 0xff;
+	*devfn = (be32_to_cpup(&reg[0]) >> 8) & 0xff;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Ok, here we need some tweak. If we have already renumbered
 	 * all busses, we can't rely on the OF bus number any more.
@@ -373,7 +398,11 @@ static int __init pcibios_init(void)
 
 	printk(KERN_INFO "PCI: Probing PCI hardware\n");
 
+<<<<<<< HEAD
 	if (ppc_pci_flags & PPC_PCI_REASSIGN_ALL_BUS)
+=======
+	if (pci_has_flag(PCI_REASSIGN_ALL_BUS))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pci_assign_all_buses = 1;
 
 	/* Scan all of the recorded PCI controllers.  */

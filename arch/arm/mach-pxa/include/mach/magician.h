@@ -12,6 +12,10 @@
 #ifndef _MAGICIAN_H_
 #define _MAGICIAN_H_
 
+<<<<<<< HEAD
+=======
+#include <linux/gpio.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/irqs.h>
 
 /*
@@ -77,7 +81,11 @@
  * CPLD EGPIOs
  */
 
+<<<<<<< HEAD
 #define MAGICIAN_EGPIO_BASE			0x80 /* GPIO_BOARD_START */
+=======
+#define MAGICIAN_EGPIO_BASE			NR_BUILTIN_GPIO
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define MAGICIAN_EGPIO(reg,bit) \
 	(MAGICIAN_EGPIO_BASE + 8*reg + bit)
 

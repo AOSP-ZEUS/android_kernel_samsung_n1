@@ -97,6 +97,10 @@ static void br_forward_delay_timer_expired(unsigned long arg)
 		netif_carrier_on(br->dev);
 	}
 	br_log_state(p);
+<<<<<<< HEAD
+=======
+	br_ifinfo_notify(RTM_NEWLINK, p);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock(&br->lock);
 }
 

@@ -2398,6 +2398,7 @@ static void __exit journal_exit(void)
 	jbd2_journal_destroy_caches();
 }
 
+<<<<<<< HEAD
 /* 
  * jbd2_dev_to_name is a utility function used by the jbd2 and ext4 
  * tracing infrastructure to map a dev_t to a device name.
@@ -2465,6 +2466,8 @@ const char *jbd2_dev_to_name(dev_t device)
 }
 EXPORT_SYMBOL(jbd2_dev_to_name);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_LICENSE("GPL");
 module_init(journal_init);
 module_exit(journal_exit);

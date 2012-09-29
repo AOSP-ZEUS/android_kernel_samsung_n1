@@ -318,6 +318,11 @@ nv50_sor_create(struct drm_connector *connector, struct dcb_entry *entry)
 		uint32_t tmp;
 
 		tmp = nv_rd32(dev, 0x61c700 + (or * 0x800));
+<<<<<<< HEAD
+=======
+		if (!tmp)
+			tmp = nv_rd32(dev, 0x610798 + (or * 8));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		switch ((tmp & 0x00000f00) >> 8) {
 		case 8:

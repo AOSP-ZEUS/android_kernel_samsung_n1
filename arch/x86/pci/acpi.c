@@ -54,6 +54,7 @@ static const struct dmi_system_id pci_use_crs_table[] __initconst = {
 			DMI_MATCH(DMI_BIOS_VENDOR, "American Megatrends Inc."),
 		},
 	},
+<<<<<<< HEAD
 	/* https://bugzilla.kernel.org/show_bug.cgi?id=42619 */
 	{
 		.callback = set_use_crs,
@@ -64,6 +65,8 @@ static const struct dmi_system_id pci_use_crs_table[] __initconst = {
 			DMI_MATCH(DMI_BIOS_VENDOR, "Phoenix Technologies, LTD"),
 		},
 	},
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{}
 };
 
@@ -281,10 +284,16 @@ static void add_resources(struct pci_root_info *info)
 
 		conflict = insert_resource_conflict(root, res);
 		if (conflict)
+<<<<<<< HEAD
 			dev_err(&info->bridge->dev,
 				"address space collision: host bridge window %pR "
 				"conflicts with %s %pR\n",
 				res, conflict->name, conflict);
+=======
+			dev_info(&info->bridge->dev,
+				 "ignoring host bridge window %pR (conflicts with %s %pR)\n",
+				 res, conflict->name, conflict);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		else
 			pci_bus_add_resource(info->bus, res, 0);
 	}
@@ -396,6 +405,23 @@ struct pci_bus * __devinit pci_acpi_scan_root(struct acpi_pci_root *root)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	/* After the PCI-E bus has been walked and all devices discovered,
+	 * configure any settings of the fabric that might be necessary.
+	 */
+	if (bus) {
+		struct pci_bus *child;
+		list_for_each_entry(child, &bus->children, node) {
+			struct pci_dev *self = child->self;
+			if (!self)
+				continue;
+
+			pcie_bus_configure_settings(child, self->pcie_mpss);
+		}
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!bus)
 		kfree(sd);
 

@@ -88,7 +88,11 @@ static int __devinit xonar_probe(struct pci_dev *pci,
 }
 
 static struct pci_driver xonar_driver = {
+<<<<<<< HEAD
 	.name = "AV200",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = xonar_ids,
 	.probe = xonar_probe,
 	.remove = __devexit_p(oxygen_pci_remove),

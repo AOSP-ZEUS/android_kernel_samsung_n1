@@ -39,6 +39,10 @@ config S5P_GPIO_INT
 
 config S5P_HRT
 	bool
+<<<<<<< HEAD
+=======
+	select SAMSUNG_DEV_PWM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  Use the High Resolution timer support
 
@@ -70,6 +74,19 @@ config S5P_DEV_FIMC3
 	help
 	  Compile in platform device definitions for FIMC controller 3
 
+<<<<<<< HEAD
+=======
+config S5P_DEV_FIMD0
+	bool
+	help
+	  Compile in platform device definitions for FIMD controller 0
+
+config S5P_DEV_MFC
+	bool
+	help
+	  Compile in platform device definitions for MFC
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config S5P_DEV_ONENAND
 	bool
 	help
@@ -94,6 +111,7 @@ config S5P_SETUP_MIPIPHY
 	bool
 	help
 	  Compile in common setup code for MIPI-CSIS and MIPI-DSIM devices
+<<<<<<< HEAD
 
 # FB part
 config S5P_DEV_FB
@@ -134,3 +152,5 @@ config S5P_SETUP_MFC
 	help
 	  Common setup code for MFC
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

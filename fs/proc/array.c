@@ -172,7 +172,11 @@ static inline void task_state(struct seq_file *m, struct pid_namespace *ns,
 		task_tgid_nr_ns(rcu_dereference(p->real_parent), ns) : 0;
 	tpid = 0;
 	if (pid_alive(p)) {
+<<<<<<< HEAD
 		struct task_struct *tracer = tracehook_tracer_task(p);
+=======
+		struct task_struct *tracer = ptrace_parent(p);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (tracer)
 			tpid = task_pid_nr_ns(tracer, ns);
 	}

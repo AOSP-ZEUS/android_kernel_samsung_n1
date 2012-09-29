@@ -147,6 +147,13 @@ extern struct gpio_chip *gpiochip_find(void *data,
 /* Always use the library code for GPIO management calls,
  * or when sleeping may be involved.
  */
+<<<<<<< HEAD
+=======
+#if 1
+// N1_ICS
+extern const char * gpio_is_requested(unsigned gpio);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern int gpio_request(unsigned gpio, const char *label);
 extern void gpio_free(unsigned gpio);
 

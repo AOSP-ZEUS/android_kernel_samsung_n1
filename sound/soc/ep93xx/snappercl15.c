@@ -2,7 +2,11 @@
  * snappercl15.c -- SoC audio for Bluewater Systems Snapper CL15 module
  *
  * Copyright (C) 2008 Bluewater Systems Ltd
+<<<<<<< HEAD
  * Author: Ryan Mallon <ryan@bluewatersys.com>
+=======
+ * Author: Ryan Mallon
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  *  This program is free software; you can redistribute  it and/or modify it
  *  under  the terms of  the GNU General  Public License as published by the
@@ -140,7 +144,11 @@ static void __exit snappercl15_exit(void)
 module_init(snappercl15_init);
 module_exit(snappercl15_exit);
 
+<<<<<<< HEAD
 MODULE_AUTHOR("Ryan Mallon <ryan@bluewatersys.com>");
+=======
+MODULE_AUTHOR("Ryan Mallon");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_DESCRIPTION("ALSA SoC Snapper CL15");
 MODULE_LICENSE("GPL");
 

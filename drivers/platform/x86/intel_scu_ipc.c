@@ -725,7 +725,11 @@ static void ipc_remove(struct pci_dev *pdev)
 	intel_scu_devices_destroy();
 }
 
+<<<<<<< HEAD
 static const struct pci_device_id pci_ids[] = {
+=======
+static DEFINE_PCI_DEVICE_TABLE(pci_ids) = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x080e)},
 	{PCI_DEVICE(PCI_VENDOR_ID_INTEL, 0x082a)},
 	{ 0,}

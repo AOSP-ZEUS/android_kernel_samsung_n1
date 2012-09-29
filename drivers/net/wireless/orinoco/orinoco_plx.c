@@ -4,7 +4,11 @@
  * but are connected to the PCI bus by a PLX9052.
  *
  * Current maintainers are:
+<<<<<<< HEAD
  * 	Pavel Roskin <proski AT gnu.org>
+=======
+ *	Pavel Roskin <proski AT gnu.org>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * and	David Gibson <hermes AT gibson.dropbear.id.au>
  *
  * (C) Copyright David Gibson, IBM Corp. 2001-2003.
@@ -102,14 +106,22 @@
 #define PLX_RESET_TIME	(500)	/* milliseconds */
 
 #define PLX_INTCSR		0x4c /* Interrupt Control & Status Register */
+<<<<<<< HEAD
 #define PLX_INTCSR_INTEN	(1<<6) /* Interrupt Enable bit */
+=======
+#define PLX_INTCSR_INTEN	(1 << 6) /* Interrupt Enable bit */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Do a soft reset of the card using the Configuration Option Register
  */
 static int orinoco_plx_cor_reset(struct orinoco_private *priv)
 {
+<<<<<<< HEAD
 	hermes_t *hw = &priv->hw;
+=======
+	struct hermes *hw = &priv->hw;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct orinoco_pci_card *card = priv->card;
 	unsigned long timeout;
 	u16 reg;

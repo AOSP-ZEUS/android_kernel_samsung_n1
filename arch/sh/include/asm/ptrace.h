@@ -45,8 +45,11 @@
 #define GET_FP(regs)	((regs)->regs[14])
 #define GET_USP(regs)	((regs)->regs[15])
 
+<<<<<<< HEAD
 extern void show_regs(struct pt_regs *);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define arch_has_single_step()	(1)
 
 /*
@@ -125,7 +128,11 @@ static inline unsigned long regs_get_kernel_stack_nth(struct pt_regs *regs,
 struct perf_event;
 struct perf_sample_data;
 
+<<<<<<< HEAD
 extern void ptrace_triggered(struct perf_event *bp, int nmi,
+=======
+extern void ptrace_triggered(struct perf_event *bp,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		      struct perf_sample_data *data, struct pt_regs *regs);
 
 #define task_pt_regs(task) \

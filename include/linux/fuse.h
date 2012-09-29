@@ -47,6 +47,12 @@
  *  - FUSE_IOCTL_UNRESTRICTED shall now return with array of 'struct
  *    fuse_ioctl_iovec' instead of ambiguous 'struct iovec'
  *  - add FUSE_IOCTL_32BIT flag
+<<<<<<< HEAD
+=======
+ *
+ * 7.17
+ *  - add FUSE_FLOCK_LOCKS and FUSE_RELEASE_FLOCK_UNLOCK
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 
 #ifndef _LINUX_FUSE_H
@@ -78,7 +84,11 @@
 #define FUSE_KERNEL_VERSION 7
 
 /** Minor version number of this interface */
+<<<<<<< HEAD
 #define FUSE_KERNEL_MINOR_VERSION 16
+=======
+#define FUSE_KERNEL_MINOR_VERSION 17
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /** The node ID of the root inode */
 #define FUSE_ROOT_ID 1
@@ -153,8 +163,15 @@ struct fuse_file_lock {
 /**
  * INIT request/reply flags
  *
+<<<<<<< HEAD
  * FUSE_EXPORT_SUPPORT: filesystem handles lookups of "." and ".."
  * FUSE_DONT_MASK: don't apply umask to file mode on create operations
+=======
+ * FUSE_POSIX_LOCKS: remote locking for POSIX file locks
+ * FUSE_EXPORT_SUPPORT: filesystem handles lookups of "." and ".."
+ * FUSE_DONT_MASK: don't apply umask to file mode on create operations
+ * FUSE_FLOCK_LOCKS: remote locking for BSD style file locks
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 #define FUSE_ASYNC_READ		(1 << 0)
 #define FUSE_POSIX_LOCKS	(1 << 1)
@@ -163,6 +180,10 @@ struct fuse_file_lock {
 #define FUSE_EXPORT_SUPPORT	(1 << 4)
 #define FUSE_BIG_WRITES		(1 << 5)
 #define FUSE_DONT_MASK		(1 << 6)
+<<<<<<< HEAD
+=======
+#define FUSE_FLOCK_LOCKS	(1 << 10)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * CUSE INIT request/reply flags
@@ -175,6 +196,10 @@ struct fuse_file_lock {
  * Release flags
  */
 #define FUSE_RELEASE_FLUSH	(1 << 0)
+<<<<<<< HEAD
+=======
+#define FUSE_RELEASE_FLOCK_UNLOCK	(1 << 1)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * Getattr flags

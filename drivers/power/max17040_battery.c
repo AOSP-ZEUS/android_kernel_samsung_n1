@@ -20,7 +20,10 @@
 #include <linux/power_supply.h>
 #include <linux/max17040_battery.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
 #include <linux/time.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define MAX17040_VCELL_MSB	0x02
 #define MAX17040_VCELL_LSB	0x03
@@ -40,9 +43,15 @@
 
 struct max17040_chip {
 	struct i2c_client		*client;
+<<<<<<< HEAD
 	struct power_supply		battery;
 	struct max17040_platform_data	*pdata;
 	struct timespec			next_update_time;
+=======
+	struct delayed_work		work;
+	struct power_supply		battery;
+	struct max17040_platform_data	*pdata;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* State Of Connect */
 	int online;
@@ -54,20 +63,26 @@ struct max17040_chip {
 	int status;
 };
 
+<<<<<<< HEAD
 static void max17040_update_values(struct max17040_chip *chip);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int max17040_get_property(struct power_supply *psy,
 			    enum power_supply_property psp,
 			    union power_supply_propval *val)
 {
 	struct max17040_chip *chip = container_of(psy,
 				struct max17040_chip, battery);
+<<<<<<< HEAD
 	struct timespec now;
 
 	ktime_get_ts(&now);
 	monotonic_to_bootbased(&now);
 	if (timespec_compare(&now, &chip->next_update_time) >= 0)
 		max17040_update_values(chip);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (psp) {
 	case POWER_SUPPLY_PROP_STATUS:
@@ -77,7 +92,11 @@ static int max17040_get_property(struct power_supply *psy,
 		val->intval = chip->online;
 		break;
 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
+<<<<<<< HEAD
 		val->intval = chip->vcell * 1250;
+=======
+		val->intval = chip->vcell;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case POWER_SUPPLY_PROP_CAPACITY:
 		val->intval = chip->soc;
@@ -112,6 +131,15 @@ static int max17040_read_reg(struct i2c_client *client, int reg)
 	return ret;
 }
 
+<<<<<<< HEAD
+=======
+static void max17040_reset(struct i2c_client *client)
+{
+	max17040_write_reg(client, MAX17040_CMD_MSB, 0x54);
+	max17040_write_reg(client, MAX17040_CMD_LSB, 0x00);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void max17040_get_vcell(struct i2c_client *client)
 {
 	struct max17040_chip *chip = i2c_get_clientdata(client);
@@ -133,7 +161,11 @@ static void max17040_get_soc(struct i2c_client *client)
 	msb = max17040_read_reg(client, MAX17040_SOC_MSB);
 	lsb = max17040_read_reg(client, MAX17040_SOC_LSB);
 
+<<<<<<< HEAD
 	chip->soc = min(msb, (u8)100);
+=======
+	chip->soc = msb;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void max17040_get_version(struct i2c_client *client)
@@ -151,7 +183,11 @@ static void max17040_get_online(struct i2c_client *client)
 {
 	struct max17040_chip *chip = i2c_get_clientdata(client);
 
+<<<<<<< HEAD
 	if (chip->pdata && chip->pdata->battery_online)
+=======
+	if (chip->pdata->battery_online)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		chip->online = chip->pdata->battery_online();
 	else
 		chip->online = 1;
@@ -161,8 +197,12 @@ static void max17040_get_status(struct i2c_client *client)
 {
 	struct max17040_chip *chip = i2c_get_clientdata(client);
 
+<<<<<<< HEAD
 	if (!chip->pdata || !chip->pdata->charger_online ||
 		!chip->pdata->charger_enable) {
+=======
+	if (!chip->pdata->charger_online || !chip->pdata->charger_enable) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		chip->status = POWER_SUPPLY_STATUS_UNKNOWN;
 		return;
 	}
@@ -180,17 +220,30 @@ static void max17040_get_status(struct i2c_client *client)
 		chip->status = POWER_SUPPLY_STATUS_FULL;
 }
 
+<<<<<<< HEAD
 static void max17040_update_values(struct max17040_chip *chip)
 {
+=======
+static void max17040_work(struct work_struct *work)
+{
+	struct max17040_chip *chip;
+
+	chip = container_of(work, struct max17040_chip, work.work);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	max17040_get_vcell(chip->client);
 	max17040_get_soc(chip->client);
 	max17040_get_online(chip->client);
 	max17040_get_status(chip->client);
 
+<<<<<<< HEAD
 	/* next update must be at least 1 second later */
 	ktime_get_ts(&chip->next_update_time);
 	monotonic_to_bootbased(&chip->next_update_time);
 	chip->next_update_time.tv_sec++;
+=======
+	schedule_delayed_work(&chip->work, MAX17040_DELAY);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static enum power_supply_property max17040_battery_props[] = {
@@ -225,23 +278,35 @@ static int __devinit max17040_probe(struct i2c_client *client,
 	chip->battery.properties	= max17040_battery_props;
 	chip->battery.num_properties	= ARRAY_SIZE(max17040_battery_props);
 
+<<<<<<< HEAD
 	max17040_update_values(chip);
 
 	if (chip->pdata && chip->pdata->power_supply_register)
 		ret = chip->pdata->power_supply_register(&client->dev, &chip->battery);
 	else
 		ret = power_supply_register(&client->dev, &chip->battery);
+=======
+	ret = power_supply_register(&client->dev, &chip->battery);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret) {
 		dev_err(&client->dev, "failed: power supply register\n");
 		kfree(chip);
 		return ret;
 	}
 
+<<<<<<< HEAD
 	max17040_get_version(client);
 
 	if (chip->pdata)
 		i2c_smbus_write_word_data(client, MAX17040_RCOMP_MSB,
 			swab16(chip->pdata->rcomp_value));
+=======
+	max17040_reset(client);
+	max17040_get_version(client);
+
+	INIT_DELAYED_WORK_DEFERRABLE(&chip->work, max17040_work);
+	schedule_delayed_work(&chip->work, MAX17040_DELAY);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -250,14 +315,48 @@ static int __devexit max17040_remove(struct i2c_client *client)
 {
 	struct max17040_chip *chip = i2c_get_clientdata(client);
 
+<<<<<<< HEAD
 	if (chip->pdata && chip->pdata->power_supply_unregister)
 		chip->pdata->power_supply_unregister(&chip->battery);
 	else
 		power_supply_unregister(&chip->battery);
+=======
+	power_supply_unregister(&chip->battery);
+	cancel_delayed_work(&chip->work);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(chip);
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_PM
+
+static int max17040_suspend(struct i2c_client *client,
+		pm_message_t state)
+{
+	struct max17040_chip *chip = i2c_get_clientdata(client);
+
+	cancel_delayed_work(&chip->work);
+	return 0;
+}
+
+static int max17040_resume(struct i2c_client *client)
+{
+	struct max17040_chip *chip = i2c_get_clientdata(client);
+
+	schedule_delayed_work(&chip->work, MAX17040_DELAY);
+	return 0;
+}
+
+#else
+
+#define max17040_suspend NULL
+#define max17040_resume NULL
+
+#endif /* CONFIG_PM */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct i2c_device_id max17040_id[] = {
 	{ "max17040", 0 },
 	{ }
@@ -270,6 +369,11 @@ static struct i2c_driver max17040_i2c_driver = {
 	},
 	.probe		= max17040_probe,
 	.remove		= __devexit_p(max17040_remove),
+<<<<<<< HEAD
+=======
+	.suspend	= max17040_suspend,
+	.resume		= max17040_resume,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table	= max17040_id,
 };
 

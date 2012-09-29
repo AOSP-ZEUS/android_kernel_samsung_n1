@@ -433,9 +433,16 @@ static int snd_usb_audio_create(struct usb_device *dev, int idx,
  * only at the first time.  the successive calls of this function will
  * append the pcm interface to the corresponding card.
  */
+<<<<<<< HEAD
 static void *snd_usb_audio_probe(struct usb_device *dev,
 				 struct usb_interface *intf,
 				 const struct usb_device_id *usb_id)
+=======
+static struct snd_usb_audio *
+snd_usb_audio_probe(struct usb_device *dev,
+		    struct usb_interface *intf,
+		    const struct usb_device_id *usb_id)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	const struct snd_usb_audio_quirk *quirk = (const struct snd_usb_audio_quirk *)usb_id->driver_info;
 	int i, err;
@@ -543,6 +550,7 @@ static void *snd_usb_audio_probe(struct usb_device *dev,
  * we need to take care of counter, since disconnection can be called also
  * many times as well as usb_audio_probe().
  */
+<<<<<<< HEAD
 static void snd_usb_audio_disconnect(struct usb_device *dev, void *ptr)
 {
 	struct snd_usb_audio *chip;
@@ -553,6 +561,17 @@ static void snd_usb_audio_disconnect(struct usb_device *dev, void *ptr)
 		return;
 
 	chip = ptr;
+=======
+static void snd_usb_audio_disconnect(struct usb_device *dev,
+				     struct snd_usb_audio *chip)
+{
+	struct snd_card *card;
+	struct list_head *p;
+
+	if (chip == (void *)-1L)
+		return;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	card = chip->card;
 	mutex_lock(&register_mutex);
 	mutex_lock(&chip->shutdown_mutex);
@@ -588,7 +607,11 @@ static void snd_usb_audio_disconnect(struct usb_device *dev, void *ptr)
 static int usb_audio_probe(struct usb_interface *intf,
 			   const struct usb_device_id *id)
 {
+<<<<<<< HEAD
 	void *chip;
+=======
+	struct snd_usb_audio *chip;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	chip = snd_usb_audio_probe(interface_to_usbdev(intf), intf, id);
 	if (chip) {
 		usb_set_intfdata(intf, chip);

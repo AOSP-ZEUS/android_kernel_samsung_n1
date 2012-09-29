@@ -356,7 +356,11 @@ static int __devinit nforce2_probe_smb (struct pci_dev *dev, int bar,
 	error = acpi_check_region(smbus->base, smbus->size,
 				  nforce2_driver.name);
 	if (error)
+<<<<<<< HEAD
 		return error;
+=======
+		return -1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!request_region(smbus->base, smbus->size, nforce2_driver.name)) {
 		dev_err(&smbus->adapter.dev, "Error requesting region %02x .. %02X for %s\n",

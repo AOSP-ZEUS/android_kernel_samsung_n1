@@ -95,7 +95,10 @@ extern void usb_stor_set_xfer_buf(struct us_data*, unsigned char *buffer,
  */
 extern void ENE_stor_invoke_transport(struct scsi_cmnd *, struct us_data *);
 extern int ENE_InitMedia(struct us_data *);
+<<<<<<< HEAD
 extern int ENE_MSInit(struct us_data *);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern int ENE_SMInit(struct us_data *);
 extern int ENE_SendScsiCmd(struct us_data*, BYTE, void*, int);
 extern int ENE_LoadBinCode(struct us_data*, BYTE);
@@ -107,6 +110,7 @@ extern void BuildSenseBuffer(struct scsi_cmnd *, int);
 /*
  * ENE scsi function
  */
+<<<<<<< HEAD
 extern int MS_SCSIIrp(struct us_data *us, struct scsi_cmnd *srb);
 extern int SM_SCSIIrp(struct us_data *us, struct scsi_cmnd *srb);
 
@@ -154,4 +158,8 @@ extern int	MS_CountFreeBlock(struct us_data *us, WORD PhyBlock);
 extern int	MS_LibSearchBlockFromLogical(struct us_data *us, WORD logblk);
 extern int	MS_LibSearchBlockFromPhysical(struct us_data *us, WORD phyblk);
 
+=======
+extern int SM_SCSIIrp(struct us_data *us, struct scsi_cmnd *srb);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif

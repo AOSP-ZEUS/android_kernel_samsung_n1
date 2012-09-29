@@ -466,6 +466,7 @@ static void nfs_delegation_run_state_manager(struct nfs_client *clp)
 		nfs4_schedule_state_manager(clp);
 }
 
+<<<<<<< HEAD
 void nfs_remove_bad_delegation(struct inode *inode)
 {
 	struct nfs_delegation *delegation;
@@ -477,6 +478,8 @@ void nfs_remove_bad_delegation(struct inode *inode)
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * nfs_expire_all_delegation_types
  * @clp: client to process

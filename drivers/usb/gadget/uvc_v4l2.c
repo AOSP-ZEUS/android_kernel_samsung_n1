@@ -41,7 +41,11 @@ uvc_send_response(struct uvc_device *uvc, struct uvc_request_data *data)
 	if (data->length < 0)
 		return usb_ep_set_halt(cdev->gadget->ep0);
 
+<<<<<<< HEAD
 	req->length = min_t(unsigned int, uvc->event_length, data->length);
+=======
+	req->length = min(uvc->event_length, data->length);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	req->zero = data->length < uvc->event_length;
 	req->dma = DMA_ADDR_INVALID;
 
@@ -124,12 +128,16 @@ uvc_v4l2_open(struct file *file)
 	struct video_device *vdev = video_devdata(file);
 	struct uvc_device *uvc = video_get_drvdata(vdev);
 	struct uvc_file_handle *handle;
+<<<<<<< HEAD
 	int ret;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	handle = kzalloc(sizeof(*handle), GFP_KERNEL);
 	if (handle == NULL)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	ret = v4l2_fh_init(&handle->vfh, vdev);
 	if (ret < 0)
 		goto error;
@@ -142,6 +150,9 @@ uvc_v4l2_open(struct file *file)
 	if (ret < 0)
 		goto error;
 
+=======
+	v4l2_fh_init(&handle->vfh, vdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	v4l2_fh_add(&handle->vfh);
 
 	handle->device = &uvc->video;
@@ -149,10 +160,13 @@ uvc_v4l2_open(struct file *file)
 
 	uvc_function_connect(uvc);
 	return 0;
+<<<<<<< HEAD
 
 error:
 	v4l2_fh_exit(&handle->vfh);
 	return ret;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int
@@ -314,7 +328,11 @@ uvc_v4l2_do_ioctl(struct file *file, unsigned int cmd, void *arg)
 		if (sub->type < UVC_EVENT_FIRST || sub->type > UVC_EVENT_LAST)
 			return -EINVAL;
 
+<<<<<<< HEAD
 		return v4l2_event_subscribe(&handle->vfh, arg);
+=======
+		return v4l2_event_subscribe(&handle->vfh, arg, 2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	case VIDIOC_UNSUBSCRIBE_EVENT:
@@ -354,7 +372,11 @@ uvc_v4l2_poll(struct file *file, poll_table *wait)
 	struct uvc_file_handle *handle = to_uvc_file_handle(file->private_data);
 	unsigned int mask = 0;
 
+<<<<<<< HEAD
 	poll_wait(file, &handle->vfh.events->wait, wait);
+=======
+	poll_wait(file, &handle->vfh.wait, wait);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (v4l2_event_pending(&handle->vfh))
 		mask |= POLLPRI;
 

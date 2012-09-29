@@ -171,7 +171,11 @@ int mpc831x_usb_cfg(void)
 		of_node_put(np);
 		return ret;
 	}
+<<<<<<< HEAD
 	usb_regs = ioremap(res.start, res.end - res.start + 1);
+=======
+	usb_regs = ioremap(res.start, resource_size(&res));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Using on-chip PHY */
 	if (prop && (!strcmp(prop, "utmi_wide") ||

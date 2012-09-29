@@ -116,7 +116,11 @@ int __devinit lx_dsp_get_version(struct lx6464es *chip, u32 *rdsp_version);
 int lx_dsp_get_clock_frequency(struct lx6464es *chip, u32 *rfreq);
 int lx_dsp_set_granularity(struct lx6464es *chip, u32 gran);
 int lx_dsp_read_async_events(struct lx6464es *chip, u32 *data);
+<<<<<<< HEAD
 int lx_dsp_get_mac(struct lx6464es *chip, u8 *mac_address);
+=======
+int lx_dsp_get_mac(struct lx6464es *chip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /* low-level pipe handling */

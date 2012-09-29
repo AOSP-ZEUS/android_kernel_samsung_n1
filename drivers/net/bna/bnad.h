@@ -24,6 +24,10 @@
 #include <linux/etherdevice.h>
 #include <linux/mutex.h>
 #include <linux/firmware.h>
+<<<<<<< HEAD
+=======
+#include <linux/if_vlan.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Fix for IA64 */
 #include <asm/checksum.h>
@@ -67,10 +71,20 @@ struct bnad_rx_ctrl {
 
 #define BNAD_VERSION			"2.3.2.3"
 
+<<<<<<< HEAD
 #define BNAD_MAILBOX_MSIX_VECTORS	1
 
 #define BNAD_STATS_TIMER_FREQ		1000 	/* in msecs */
 #define BNAD_DIM_TIMER_FREQ		1000 	/* in msecs */
+=======
+#define BNAD_MAILBOX_MSIX_INDEX		0
+#define BNAD_MAILBOX_MSIX_VECTORS	1
+#define BNAD_INTX_TX_IB_BITMASK		0x1
+#define BNAD_INTX_RX_IB_BITMASK		0x2
+
+#define BNAD_STATS_TIMER_FREQ		1000	/* in msecs */
+#define BNAD_DIM_TIMER_FREQ		1000	/* in msecs */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define BNAD_MAX_Q_DEPTH		0x10000
 #define BNAD_MIN_Q_DEPTH		0x200
@@ -101,12 +115,21 @@ enum bnad_intr_source {
 
 enum bnad_link_state {
 	BNAD_LS_DOWN		= 0,
+<<<<<<< HEAD
 	BNAD_LS_UP 		= 1
 };
 
 struct bnad_completion {
 	struct completion 	ioc_comp;
 	struct completion 	ucast_comp;
+=======
+	BNAD_LS_UP		= 1
+};
+
+struct bnad_completion {
+	struct completion	ioc_comp;
+	struct completion	ucast_comp;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct completion	mcast_comp;
 	struct completion	tx_comp;
 	struct completion	rx_comp;
@@ -124,7 +147,11 @@ struct bnad_completion {
 
 /* Tx Rx Control Stats */
 struct bnad_drv_stats {
+<<<<<<< HEAD
 	u64 		netif_queue_stop;
+=======
+	u64		netif_queue_stop;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u64		netif_queue_wakeup;
 	u64		netif_queue_stopped;
 	u64		tso4;
@@ -187,7 +214,11 @@ struct bnad_skb_unmap {
 struct bnad_unmap_q {
 	u32		producer_index;
 	u32		consumer_index;
+<<<<<<< HEAD
 	u32 		q_depth;
+=======
+	u32		q_depth;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* This should be the last one */
 	struct bnad_skb_unmap unmap_array[1];
 };
@@ -210,13 +241,21 @@ struct bnad_unmap_q {
 #define BNAD_RF_RX_SHUTDOWN_DELAYED	7
 
 struct bnad {
+<<<<<<< HEAD
 	struct net_device 	*netdev;
+=======
+	struct net_device	*netdev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Data path */
 	struct bnad_tx_info tx_info[BNAD_MAX_TXS];
 	struct bnad_rx_info rx_info[BNAD_MAX_RXS];
 
+<<<<<<< HEAD
 	struct vlan_group	*vlan_grp;
+=======
+	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * These q numbers are global only because
 	 * they are used to calculate MSIx vectors.
@@ -244,7 +283,11 @@ struct bnad {
 	u32		cfg_flags;
 	unsigned long		run_flags;
 
+<<<<<<< HEAD
 	struct pci_dev 		*pcidev;
+=======
+	struct pci_dev		*pcidev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u64		mmio_start;
 	u64		mmio_len;
 
@@ -277,7 +320,11 @@ struct bnad {
 	struct bnad_diag *diag;
 
 	char			adapter_name[BNAD_NAME_LEN];
+<<<<<<< HEAD
 	char 			port_name[BNAD_NAME_LEN];
+=======
+	char			port_name[BNAD_NAME_LEN];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char			mbox_irq_name[BNAD_NAME_LEN];
 };
 
@@ -285,7 +332,11 @@ struct bnad {
  * EXTERN VARIABLES
  */
 extern struct firmware *bfi_fw;
+<<<<<<< HEAD
 extern u32 		bnad_rxqs_per_cq;
+=======
+extern u32		bnad_rxqs_per_cq;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * EXTERN PROTOTYPES
@@ -331,7 +382,11 @@ extern void bnad_netdev_hwstats_fill(struct bnad *bnad,
 }
 
 #define bnad_dim_timer_running(_bnad)				\
+<<<<<<< HEAD
 	(((_bnad)->cfg_flags & BNAD_CF_DIM_ENABLED) && 		\
+=======
+	(((_bnad)->cfg_flags & BNAD_CF_DIM_ENABLED) &&		\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	(test_bit(BNAD_RF_DIM_TIMER_RUNNING, &((_bnad)->run_flags))))
 
 #endif /* __BNAD_H__ */

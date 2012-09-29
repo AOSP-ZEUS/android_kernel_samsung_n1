@@ -485,6 +485,7 @@ static int __setup_rt_frame(int sig, struct k_sigaction *ka, siginfo_t *info,
 asmlinkage int
 sys_sigsuspend(int history0, int history1, old_sigset_t mask)
 {
+<<<<<<< HEAD
 	mask &= _BLOCKABLE;
 	spin_lock_irq(&current->sighand->siglock);
 	current->saved_sigmask = current->blocked;
@@ -496,6 +497,20 @@ sys_sigsuspend(int history0, int history1, old_sigset_t mask)
 	schedule();
 	set_restore_sigmask();
 
+=======
+	sigset_t blocked;
+
+	current->saved_sigmask = current->blocked;
+
+	mask &= _BLOCKABLE;
+	siginitset(&blocked, mask);
+	set_current_blocked(&blocked);
+
+	current->state = TASK_INTERRUPTIBLE;
+	schedule();
+
+	set_restore_sigmask();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return -ERESTARTNOHAND;
 }
 
@@ -572,10 +587,14 @@ unsigned long sys_sigreturn(struct pt_regs *regs)
 		goto badframe;
 
 	sigdelsetmask(&set, ~_BLOCKABLE);
+<<<<<<< HEAD
 	spin_lock_irq(&current->sighand->siglock);
 	current->blocked = set;
 	recalc_sigpending();
 	spin_unlock_irq(&current->sighand->siglock);
+=======
+	set_current_blocked(&set);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (restore_sigcontext(regs, &frame->sc, &ax))
 		goto badframe;
@@ -653,11 +672,23 @@ int ia32_setup_frame(int sig, struct k_sigaction *ka,
 
 static int
 setup_rt_frame(int sig, struct k_sigaction *ka, siginfo_t *info,
+<<<<<<< HEAD
 	       sigset_t *set, struct pt_regs *regs)
 {
 	int usig = signr_convert(sig);
 	int ret;
 
+=======
+		struct pt_regs *regs)
+{
+	int usig = signr_convert(sig);
+	sigset_t *set = &current->blocked;
+	int ret;
+
+	if (current_thread_info()->status & TS_RESTORE_SIGMASK)
+		set = &current->saved_sigmask;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Set up the stack frame */
 	if (is_ia32) {
 		if (ka->sa.sa_flags & SA_SIGINFO)
@@ -672,12 +703,20 @@ setup_rt_frame(int sig, struct k_sigaction *ka, siginfo_t *info,
 		return -EFAULT;
 	}
 
+<<<<<<< HEAD
+=======
+	current_thread_info()->status &= ~TS_RESTORE_SIGMASK;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
 static int
 handle_signal(unsigned long sig, siginfo_t *info, struct k_sigaction *ka,
+<<<<<<< HEAD
 	      sigset_t *oldset, struct pt_regs *regs)
+=======
+		struct pt_regs *regs)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	sigset_t blocked;
 	int ret;
@@ -712,11 +751,16 @@ handle_signal(unsigned long sig, siginfo_t *info, struct k_sigaction *ka,
 	    likely(test_and_clear_thread_flag(TIF_FORCED_TF)))
 		regs->flags &= ~X86_EFLAGS_TF;
 
+<<<<<<< HEAD
 	ret = setup_rt_frame(sig, ka, info, oldset, regs);
+=======
+	ret = setup_rt_frame(sig, ka, info, regs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
 #ifdef CONFIG_X86_64
 	/*
 	 * This has nothing to do with segment registers,
@@ -726,6 +770,8 @@ handle_signal(unsigned long sig, siginfo_t *info, struct k_sigaction *ka,
 	set_fs(USER_DS);
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Clear the direction flag as per the ABI for function entry.
 	 */
@@ -767,7 +813,10 @@ static void do_signal(struct pt_regs *regs)
 	struct k_sigaction ka;
 	siginfo_t info;
 	int signr;
+<<<<<<< HEAD
 	sigset_t *oldset;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * We want the common case to go fast, which is why we may in certain
@@ -779,6 +828,7 @@ static void do_signal(struct pt_regs *regs)
 	if (!user_mode(regs))
 		return;
 
+<<<<<<< HEAD
 	if (current_thread_info()->status & TS_RESTORE_SIGMASK)
 		oldset = &current->saved_sigmask;
 	else
@@ -796,6 +846,12 @@ static void do_signal(struct pt_regs *regs)
 			 */
 			current_thread_info()->status &= ~TS_RESTORE_SIGMASK;
 		}
+=======
+	signr = get_signal_to_deliver(&info, &ka, regs, NULL);
+	if (signr > 0) {
+		/* Whee! Actually deliver the signal.  */
+		handle_signal(signr, &info, &ka, regs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	}
 
@@ -823,7 +879,11 @@ static void do_signal(struct pt_regs *regs)
 	 */
 	if (current_thread_info()->status & TS_RESTORE_SIGMASK) {
 		current_thread_info()->status &= ~TS_RESTORE_SIGMASK;
+<<<<<<< HEAD
 		sigprocmask(SIG_SETMASK, &current->saved_sigmask, NULL);
+=======
+		set_current_blocked(&current->saved_sigmask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 

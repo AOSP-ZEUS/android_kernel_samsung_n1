@@ -20,6 +20,7 @@
 #include <media/videobuf2-core.h>
 #include <media/v4l2-device.h>
 
+<<<<<<< HEAD
 extern struct bus_type soc_camera_bus_type;
 
 struct file;
@@ -28,6 +29,17 @@ struct soc_camera_device {
 	struct list_head list;
 	struct device dev;
 	struct device *pdev;		/* Platform device */
+=======
+struct file;
+struct soc_camera_link;
+
+struct soc_camera_device {
+	struct list_head list;		/* list of all registered devices */
+	struct soc_camera_link *link;
+	struct device *pdev;		/* Platform device */
+	struct device *parent;		/* Camera host device */
+	struct device *control;		/* E.g., the i2c client */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	s32 user_width;
 	s32 user_height;
 	u32 bytesperline;		/* for padding, zero if unused */
@@ -66,8 +78,11 @@ struct soc_camera_host_ops {
 	struct module *owner;
 	int (*add)(struct soc_camera_device *);
 	void (*remove)(struct soc_camera_device *);
+<<<<<<< HEAD
 	int (*suspend)(struct soc_camera_device *, pm_message_t);
 	int (*resume)(struct soc_camera_device *);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * .get_formats() is called for each client device format, but
 	 * .put_formats() is only called once. Further, if any of the calls to
@@ -109,12 +124,15 @@ struct soc_camera_host_ops {
 #define SOCAM_SENSOR_INVERT_HSYNC	(1 << 2)
 #define SOCAM_SENSOR_INVERT_VSYNC	(1 << 3)
 #define SOCAM_SENSOR_INVERT_DATA	(1 << 4)
+<<<<<<< HEAD
 #define SOCAM_MIPI_1LANE		(1 << 5)
 #define SOCAM_MIPI_2LANE		(1 << 6)
 #define SOCAM_MIPI_3LANE		(1 << 7)
 #define SOCAM_MIPI_4LANE		(1 << 8)
 #define SOCAM_MIPI	(SOCAM_MIPI_1LANE | SOCAM_MIPI_2LANE | \
 			SOCAM_MIPI_3LANE | SOCAM_MIPI_4LANE)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct i2c_board_info;
 struct regulator_bulk_data;
@@ -134,11 +152,19 @@ struct soc_camera_link {
 	int num_regulators;
 
 	/*
+<<<<<<< HEAD
 	 * For non-I2C devices platform platform has to provide methods to
 	 * add a device to the system and to remove
 	 */
 	int (*add_device)(struct soc_camera_link *, struct device *);
 	void (*del_device)(struct soc_camera_link *);
+=======
+	 * For non-I2C devices platform has to provide methods to add a device
+	 * to the system and to remove it
+	 */
+	int (*add_device)(struct soc_camera_device *);
+	void (*del_device)(struct soc_camera_device *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Optional callbacks to power on or off and reset the sensor */
 	int (*power)(struct device *, int);
 	int (*reset)(struct device *);
@@ -152,12 +178,15 @@ struct soc_camera_link {
 	void (*free_bus)(struct soc_camera_link *);
 };
 
+<<<<<<< HEAD
 static inline struct soc_camera_device *to_soc_camera_dev(
 	const struct device *dev)
 {
 	return container_of(dev, struct soc_camera_device, dev);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline struct soc_camera_host *to_soc_camera_host(
 	const struct device *dev)
 {
@@ -169,13 +198,21 @@ static inline struct soc_camera_host *to_soc_camera_host(
 static inline struct soc_camera_link *to_soc_camera_link(
 	const struct soc_camera_device *icd)
 {
+<<<<<<< HEAD
 	return icd->dev.platform_data;
+=======
+	return icd->link;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline struct device *to_soc_camera_control(
 	const struct soc_camera_device *icd)
 {
+<<<<<<< HEAD
 	return dev_get_drvdata(&icd->dev);
+=======
+	return icd->control;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline struct v4l2_subdev *soc_camera_to_subdev(
@@ -207,11 +244,16 @@ struct soc_camera_format_xlate {
 };
 
 struct soc_camera_ops {
+<<<<<<< HEAD
 	int (*suspend)(struct soc_camera_device *, pm_message_t state);
 	int (*resume)(struct soc_camera_device *);
 	unsigned long (*query_bus_param)(struct soc_camera_device *);
 	int (*set_bus_param)(struct soc_camera_device *, unsigned long);
 	int (*enum_input)(struct soc_camera_device *, struct v4l2_input *);
+=======
+	unsigned long (*query_bus_param)(struct soc_camera_device *);
+	int (*set_bus_param)(struct soc_camera_device *, unsigned long);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	const struct v4l2_queryctrl *controls;
 	int num_controls;
 };
@@ -270,6 +312,15 @@ static inline struct v4l2_queryctrl const *soc_camera_find_qctrl(
 #define SOCAM_PCLK_SAMPLE_FALLING	(1 << 13)
 #define SOCAM_DATA_ACTIVE_HIGH		(1 << 14)
 #define SOCAM_DATA_ACTIVE_LOW		(1 << 15)
+<<<<<<< HEAD
+=======
+#define SOCAM_MIPI_1LANE		(1 << 16)
+#define SOCAM_MIPI_2LANE		(1 << 17)
+#define SOCAM_MIPI_3LANE		(1 << 18)
+#define SOCAM_MIPI_4LANE		(1 << 19)
+#define SOCAM_MIPI	(SOCAM_MIPI_1LANE | SOCAM_MIPI_2LANE | \
+			SOCAM_MIPI_3LANE | SOCAM_MIPI_4LANE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define SOCAM_DATAWIDTH_MASK (SOCAM_DATAWIDTH_4 | SOCAM_DATAWIDTH_8 | \
 			      SOCAM_DATAWIDTH_9 | SOCAM_DATAWIDTH_10 | \

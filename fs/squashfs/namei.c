@@ -220,11 +220,14 @@ static struct dentry *squashfs_lookup(struct inode *dir, struct dentry *dentry,
 					blk, off, ino_num);
 
 				inode = squashfs_iget(dir->i_sb, ino, ino_num);
+<<<<<<< HEAD
 				if (IS_ERR(inode)) {
 					err = PTR_ERR(inode);
 					goto failed;
 				}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				goto exit_lookup;
 			}
 		}
@@ -232,10 +235,14 @@ static struct dentry *squashfs_lookup(struct inode *dir, struct dentry *dentry,
 
 exit_lookup:
 	kfree(dire);
+<<<<<<< HEAD
 	if (inode)
 		return d_splice_alias(inode, dentry);
 	d_add(dentry, inode);
 	return ERR_PTR(0);
+=======
+	return d_splice_alias(inode, dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 data_error:
 	err = -EIO;

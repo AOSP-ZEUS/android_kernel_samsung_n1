@@ -254,7 +254,11 @@ static const struct ath5k_ini_rfbuffer rfb_5111[] = {
 
 /* RFX112 (Derby 1) */
 
+<<<<<<< HEAD
 /* BANK 6 				len  pos col */
+=======
+/* BANK 6				len  pos col */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define	AR5K_RF5112_OB_2GHZ		{ 3, 269, 0 }
 #define	AR5K_RF5112_DB_2GHZ		{ 3, 272, 0 }
 
@@ -495,7 +499,11 @@ static const struct ath5k_ini_rfbuffer rfb_5112a[] = {
 /* BANK 2				len  pos col */
 #define AR5K_RF2413_RF_TURBO		{ 1, 1,   2 }
 
+<<<<<<< HEAD
 /* BANK 6 				len  pos col */
+=======
+/* BANK 6				len  pos col */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define	AR5K_RF2413_OB_2GHZ		{ 3, 168, 0 }
 #define	AR5K_RF2413_DB_2GHZ		{ 3, 165, 0 }
 

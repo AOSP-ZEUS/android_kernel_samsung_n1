@@ -24,5 +24,9 @@ struct platform_device; /* don't need the contents */
 void s3c_i2c2_cfg_gpio(struct platform_device *dev)
 {
 	s3c_gpio_cfgall_range(S5PV210_GPD1(4), 2,
+<<<<<<< HEAD
 			      S3C_GPIO_SFN(2), S3C_GPIO_PULL_NONE);
+=======
+			      S3C_GPIO_SFN(2), S3C_GPIO_PULL_UP);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

@@ -367,6 +367,48 @@ extern struct dev_pm_ops generic_subsys_pm_ops;
 					{ .event = PM_EVENT_AUTO_RESUME, })
 
 /**
+<<<<<<< HEAD
+=======
+ * Device power management states
+ *
+ * These state labels are used internally by the PM core to indicate the current
+ * status of a device with respect to the PM core operations.
+ *
+ * DPM_ON		Device is regarded as operational.  Set this way
+ *			initially and when ->complete() is about to be called.
+ *			Also set when ->prepare() fails.
+ *
+ * DPM_PREPARING	Device is going to be prepared for a PM transition.  Set
+ *			when ->prepare() is about to be called.
+ *
+ * DPM_RESUMING		Device is going to be resumed.  Set when ->resume(),
+ *			->thaw(), or ->restore() is about to be called.
+ *
+ * DPM_SUSPENDING	Device has been prepared for a power transition.  Set
+ *			when ->prepare() has just succeeded.
+ *
+ * DPM_OFF		Device is regarded as inactive.  Set immediately after
+ *			->suspend(), ->freeze(), or ->poweroff() has succeeded.
+ *			Also set when ->resume()_noirq, ->thaw_noirq(), or
+ *			->restore_noirq() is about to be called.
+ *
+ * DPM_OFF_IRQ		Device is in a "deep sleep".  Set immediately after
+ *			->suspend_noirq(), ->freeze_noirq(), or
+ *			->poweroff_noirq() has just succeeded.
+ */
+
+enum dpm_state {
+	DPM_INVALID,
+	DPM_ON,
+	DPM_PREPARING,
+	DPM_RESUMING,
+	DPM_SUSPENDING,
+	DPM_OFF,
+	DPM_OFF_IRQ,
+};
+
+/**
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Device run-time power management status.
  *
  * These status labels are used internally by the PM core to indicate the
@@ -428,6 +470,10 @@ struct dev_pm_info {
 	bool			is_prepared:1;	/* Owned by the PM core */
 	bool			is_suspended:1;	/* Ditto */
 	spinlock_t		lock;
+<<<<<<< HEAD
+=======
+	enum dpm_state		status;		/* Owned by the PM core */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_PM_SLEEP
 	struct list_head	entry;
 	struct completion	completion;
@@ -461,8 +507,13 @@ struct dev_pm_info {
 	unsigned long		active_jiffies;
 	unsigned long		suspended_jiffies;
 	unsigned long		accounting_timestamp;
+<<<<<<< HEAD
 	void			*subsys_data;  /* Owned by the subsystem. */
 #endif
+=======
+#endif
+	void			*subsys_data;  /* Owned by the subsystem. */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 extern void update_pm_runtime_accounting(struct device *dev);
@@ -472,7 +523,11 @@ extern void update_pm_runtime_accounting(struct device *dev);
  * hibernation, system resume and during runtime PM transitions along with
  * subsystem-level and driver-level callbacks.
  */
+<<<<<<< HEAD
 struct dev_power_domain {
+=======
+struct dev_pm_domain {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct dev_pm_ops	ops;
 };
 
@@ -553,11 +608,25 @@ extern void __suspend_report_result(const char *function, void *fn, int ret);
 extern int device_pm_wait_for_dev(struct device *sub, struct device *dev);
 
 extern int pm_generic_prepare(struct device *dev);
+<<<<<<< HEAD
 extern int pm_generic_suspend(struct device *dev);
 extern int pm_generic_resume(struct device *dev);
 extern int pm_generic_freeze(struct device *dev);
 extern int pm_generic_thaw(struct device *dev);
 extern int pm_generic_restore(struct device *dev);
+=======
+extern int pm_generic_suspend_noirq(struct device *dev);
+extern int pm_generic_suspend(struct device *dev);
+extern int pm_generic_resume_noirq(struct device *dev);
+extern int pm_generic_resume(struct device *dev);
+extern int pm_generic_freeze_noirq(struct device *dev);
+extern int pm_generic_freeze(struct device *dev);
+extern int pm_generic_thaw_noirq(struct device *dev);
+extern int pm_generic_thaw(struct device *dev);
+extern int pm_generic_restore_noirq(struct device *dev);
+extern int pm_generic_restore(struct device *dev);
+extern int pm_generic_poweroff_noirq(struct device *dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern int pm_generic_poweroff(struct device *dev);
 extern void pm_generic_complete(struct device *dev);
 

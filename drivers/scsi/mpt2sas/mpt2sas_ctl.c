@@ -994,7 +994,11 @@ _ctl_do_mpt_command(struct MPT2SAS_ADAPTER *ioc,
 			mpt2sas_scsih_issue_tm(ioc,
 			    le16_to_cpu(mpi_request->FunctionDependent1), 0, 0,
 			    0, MPI2_SCSITASKMGMT_TASKTYPE_TARGET_RESET, 0, 10,
+<<<<<<< HEAD
 			    NULL);
+=======
+			    0, TM_MUTEX_ON);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ioc->tm_cmds.status = MPT2_CMD_NOT_USED;
 		} else
 			mpt2sas_base_hard_reset_handler(ioc, CAN_SLEEP,

@@ -1,5 +1,9 @@
 /**************************************************************************
+<<<<<<< HEAD
  * Copyright (c) 2007, Intel Corporation.
+=======
+ * Copyright (c) 2007-2011, Intel Corporation.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * All Rights Reserved.
  * Copyright (c) 2008, Tungsten Graphics Inc.  Cedar Park, TX., USA.
  * All Rights Reserved.
@@ -22,6 +26,7 @@
 #ifndef _PSB_DRM_H_
 #define _PSB_DRM_H_
 
+<<<<<<< HEAD
 #if defined(__linux__) && !defined(__KERNEL__)
 #include<stdint.h>
 #include <linux/types.h>
@@ -100,6 +105,10 @@ struct drm_psb_sarea {
 	u32 num_active_scanouts;
 };
 
+=======
+#define PSB_NUM_PIPE 3
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PSB_GPU_ACCESS_READ         (1ULL << 32)
 #define PSB_GPU_ACCESS_WRITE        (1ULL << 33)
 #define PSB_GPU_ACCESS_MASK         (PSB_GPU_ACCESS_READ | PSB_GPU_ACCESS_WRITE)
@@ -194,10 +203,17 @@ struct drm_psb_register_rw_arg {
 		u32 OGAMC3;
 		u32 OGAMC4;
 		u32 OGAMC5;
+<<<<<<< HEAD
         	u32 IEP_ENABLED;
         	u32 IEP_BLE_MINMAX;
         	u32 IEP_BSSCC_CONTROL;
                 u32 b_wait_vblank;
+=======
+		u32 IEP_ENABLED;
+		u32 IEP_BLE_MINMAX;
+		u32 IEP_BSSCC_CONTROL;
+		u32 b_wait_vblank;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} overlay;
 
 	u32 sprite_enable_mask;
@@ -221,6 +237,7 @@ struct drm_psb_register_rw_arg {
 
 /* Controlling the kernel modesetting buffers */
 
+<<<<<<< HEAD
 #define DRM_PSB_KMS_OFF		0x00
 #define DRM_PSB_KMS_ON		0x01
 #define DRM_PSB_VT_LEAVE        0x02
@@ -229,20 +246,30 @@ struct drm_psb_register_rw_arg {
 #define DRM_PSB_SIZES           0x07
 #define DRM_PSB_FUSE_REG	0x08
 #define DRM_PSB_VBT		0x09
+=======
+#define DRM_PSB_SIZES           0x07
+#define DRM_PSB_FUSE_REG	0x08
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define DRM_PSB_DC_STATE	0x0A
 #define DRM_PSB_ADB		0x0B
 #define DRM_PSB_MODE_OPERATION	0x0C
 #define DRM_PSB_STOLEN_MEMORY	0x0D
 #define DRM_PSB_REGISTER_RW	0x0E
+<<<<<<< HEAD
 #define DRM_PSB_GTT_MAP         0x0F
 #define DRM_PSB_GTT_UNMAP       0x10
 #define DRM_PSB_GETPAGEADDRS	0x11
 /**
+=======
+
+/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * NOTE: Add new commands here, but increment
  * the values below and increment their
  * corresponding defines where they're
  * defined elsewhere.
  */
+<<<<<<< HEAD
 #define DRM_PVR_RESERVED1	0x12
 #define DRM_PVR_RESERVED2	0x13
 #define DRM_PVR_RESERVED3	0x14
@@ -259,6 +286,15 @@ struct drm_psb_register_rw_arg {
 
 #define DRM_PVR_RESERVED6	0x1E
 
+=======
+
+#define DRM_PSB_GEM_CREATE	0x10
+#define DRM_PSB_2D_OP		0x11
+#define DRM_PSB_GEM_MMAP	0x12
+#define DRM_PSB_DPST		0x1B
+#define DRM_PSB_GAMMA		0x1C
+#define DRM_PSB_DPST_BL		0x1D
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define DRM_PSB_GET_PIPE_FROM_CRTC_ID 0x1F
 
 #define PSB_MODE_OPERATION_MODE_VALID	0x01
@@ -272,4 +308,44 @@ struct drm_psb_get_pipe_from_crtc_id_arg {
 	u32 pipe;
 };
 
+<<<<<<< HEAD
+=======
+/* FIXME: move this into a medfield header once we are sure it isn't needed for an
+   ioctl  */
+struct psb_drm_dpu_rect {  
+	int x, y;             
+	int width, height;    
+};  
+
+struct drm_psb_gem_create {
+	__u64 size;
+	__u32 handle;
+	__u32 flags;
+#define PSB_GEM_CREATE_STOLEN		1	/* Stolen memory can be used */
+};
+
+#define PSB_2D_OP_BUFLEN		16
+
+struct drm_psb_2d_op {
+	__u32 src;		/* Handles, only src supported right now */
+	__u32 dst;
+	__u32 mask;
+	__u32 pat;
+	__u32 size;		/* In dwords of command */
+	__u32 spare;		/* And bumps array to u64 align */
+	__u32 cmd[PSB_2D_OP_BUFLEN];
+};
+
+struct drm_psb_gem_mmap {
+	__u32 handle;
+	__u32 pad;
+	/**
+	 * Fake offset to use for subsequent mmap call
+	 *
+	 * This is a fixed-size type for 32/64 compatibility.
+	 */
+	__u64 offset;
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif

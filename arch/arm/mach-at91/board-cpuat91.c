@@ -57,7 +57,11 @@ static void __init cpuat91_init_early(void)
 	at91rm9200_set_type(ARCH_REVISON_9200_PQFP);
 
 	/* Initialize processor: 18.432 MHz crystal */
+<<<<<<< HEAD
 	at91rm9200_initialize(18432000);
+=======
+	at91_initialize(18432000);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* DBGU on ttyS0. (Rx & Tx only) */
 	at91_register_uart(0, 0, 0);
@@ -82,11 +86,14 @@ static void __init cpuat91_init_early(void)
 	at91_set_serial_console(0);
 }
 
+<<<<<<< HEAD
 static void __init cpuat91_init_irq(void)
 {
 	at91rm9200_init_interrupts(NULL);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct at91_eth_data __initdata cpuat91_eth_data = {
 	.is_rmii	= 1,
 };
@@ -180,8 +187,14 @@ static void __init cpuat91_board_init(void)
 MACHINE_START(CPUAT91, "Eukrea")
 	/* Maintainer: Eric Benard - EUKREA Electromatique */
 	.timer		= &at91rm9200_timer,
+<<<<<<< HEAD
 	.map_io		= at91rm9200_map_io,
 	.init_early	= cpuat91_init_early,
 	.init_irq	= cpuat91_init_irq,
+=======
+	.map_io		= at91_map_io,
+	.init_early	= cpuat91_init_early,
+	.init_irq	= at91_init_irq_default,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine	= cpuat91_board_init,
 MACHINE_END

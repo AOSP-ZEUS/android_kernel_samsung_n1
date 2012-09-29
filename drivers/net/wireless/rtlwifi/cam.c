@@ -27,6 +27,11 @@
  *
  *****************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "wifi.h"
 #include "cam.h"
 
@@ -131,9 +136,15 @@ u8 rtl_cam_add_one_entry(struct ieee80211_hw *hw, u8 *mac_addr,
 
 	RT_TRACE(rtlpriv, COMP_SEC, DBG_DMESG,
 		 ("EntryNo:%x, ulKeyId=%x, ulEncAlg=%x, "
+<<<<<<< HEAD
 		  "ulUseDK=%x MacAddr" MAC_FMT "\n",
 		  ul_entry_idx, ul_key_id, ul_enc_alg,
 		  ul_default_key, MAC_ARG(mac_addr)));
+=======
+		  "ulUseDK=%x MacAddr %pM\n",
+		  ul_entry_idx, ul_key_id, ul_enc_alg,
+		  ul_default_key, mac_addr));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ul_key_id == TOTAL_CAM_ENTRY) {
 		RT_TRACE(rtlpriv, COMP_ERR, DBG_WARNING,
@@ -347,7 +358,11 @@ void rtl_cam_del_entry(struct ieee80211_hw *hw, u8 *sta_addr)
 			/* Remove from HW Security CAM */
 			memset(rtlpriv->sec.hwsec_cam_sta_addr[i], 0, ETH_ALEN);
 			rtlpriv->sec.hwsec_cam_bitmap &= ~(BIT(0) << i);
+<<<<<<< HEAD
 			printk(KERN_INFO "&&&&&&&&&del entry %d\n", i);
+=======
+			pr_info("&&&&&&&&&del entry %d\n", i);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 	return;

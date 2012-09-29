@@ -333,6 +333,7 @@ static int _set_hwmod_postsetup_state(struct omap_hwmod *oh, void *data)
 	return omap_hwmod_set_postsetup_state(oh, *(u8 *)data);
 }
 
+<<<<<<< HEAD
 void __iomem *omap_irq_base;
 
 /*
@@ -350,6 +351,11 @@ static inline void omap_irq_base_init(void)
 		pr_err("Could not initialize omap_irq_base\n");
 }
 
+=======
+/* See irq.c, omap4-common.c and entry-macro.S */
+void __iomem *omap_irq_base;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init omap2_init_common_infrastructure(void)
 {
 	u8 postsetup_state;
@@ -422,7 +428,10 @@ void __init omap2_init_common_devices(struct omap_sdrc_params *sdrc_cs0,
 		_omap2_init_reprogram_sdrc();
 	}
 
+<<<<<<< HEAD
 	omap_irq_base_init();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*

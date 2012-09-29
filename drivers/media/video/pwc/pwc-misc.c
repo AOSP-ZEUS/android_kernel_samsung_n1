@@ -126,8 +126,12 @@ void pwc_construct(struct pwc_device *pdev)
 	pdev->pixfmt = V4L2_PIX_FMT_YUV420; /* default */
 	pdev->view_min.size = pdev->view_min.x * pdev->view_min.y;
 	pdev->view_max.size = pdev->view_max.x * pdev->view_max.y;
+<<<<<<< HEAD
 	/* length of image, in YUV format; always allocate enough memory. */
 	pdev->len_per_image = PAGE_ALIGN((pdev->abs_max.x * pdev->abs_max.y * 3) / 2);
 }
 
 
+=======
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

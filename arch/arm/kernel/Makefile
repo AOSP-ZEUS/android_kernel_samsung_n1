@@ -37,7 +37,16 @@ obj-$(CONFIG_HAVE_ARM_TWD)	+= smp_twd.o
 obj-$(CONFIG_DYNAMIC_FTRACE)	+= ftrace.o
 obj-$(CONFIG_FUNCTION_GRAPH_TRACER)	+= ftrace.o
 obj-$(CONFIG_KEXEC)		+= machine_kexec.o relocate_kernel.o
+<<<<<<< HEAD
 obj-$(CONFIG_KPROBES)		+= kprobes.o kprobes-decode.o
+=======
+obj-$(CONFIG_KPROBES)		+= kprobes.o kprobes-common.o
+ifdef CONFIG_THUMB2_KERNEL
+obj-$(CONFIG_KPROBES)		+= kprobes-thumb.o
+else
+obj-$(CONFIG_KPROBES)		+= kprobes-arm.o
+endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_ATAGS_PROC)	+= atags.o
 obj-$(CONFIG_OABI_COMPAT)	+= sys_oabi-compat.o
 obj-$(CONFIG_ARM_THUMBEE)	+= thumbee.o
@@ -60,6 +69,10 @@ obj-$(CONFIG_CPU_PJ4)		+= pj4-cp0.o
 obj-$(CONFIG_IWMMXT)		+= iwmmxt.o
 obj-$(CONFIG_CPU_HAS_PMU)	+= pmu.o
 obj-$(CONFIG_HW_PERF_EVENTS)	+= perf_event.o
+<<<<<<< HEAD
+=======
+obj-y				+= cpu_pm.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 AFLAGS_iwmmxt.o			:= -Wa,-mcpu=iwmmxt
 
 ifneq ($(CONFIG_ARCH_EBSA110),y)

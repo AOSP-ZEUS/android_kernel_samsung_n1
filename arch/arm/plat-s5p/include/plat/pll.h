@@ -94,12 +94,18 @@ static inline unsigned long s5p_get_pll46xx(unsigned long baseclk,
 	return result;
 }
 
+<<<<<<< HEAD
 #define PLL90XX_VDIV_MASK	(0x1)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PLL90XX_MDIV_MASK	(0xFF)
 #define PLL90XX_PDIV_MASK	(0x3F)
 #define PLL90XX_SDIV_MASK	(0x7)
 #define PLL90XX_KDIV_MASK	(0xffff)
+<<<<<<< HEAD
 #define PLL90XX_VDIV_SHIFT	(27)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PLL90XX_MDIV_SHIFT	(16)
 #define PLL90XX_PDIV_SHIFT	(8)
 #define PLL90XX_SDIV_SHIFT	(0)

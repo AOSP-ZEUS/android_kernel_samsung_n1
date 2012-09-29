@@ -6,8 +6,11 @@
 
 #if BITS_PER_LONG == 64
 
+<<<<<<< HEAD
 #define div64_long(x,y) div64_s64((x),(y))
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * div_u64_rem - unsigned 64bit divide with 32bit divisor with remainder
  *
@@ -47,8 +50,11 @@ static inline s64 div64_s64(s64 dividend, s64 divisor)
 
 #elif BITS_PER_LONG == 32
 
+<<<<<<< HEAD
 #define div64_long(x,y) div_s64((x),(y))
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef div_u64_rem
 static inline u64 div_u64_rem(u64 dividend, u32 divisor, u32 *remainder)
 {

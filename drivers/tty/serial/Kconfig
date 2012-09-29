@@ -457,7 +457,10 @@ config SERIAL_SAMSUNG_UARTS_4
 config SERIAL_SAMSUNG_UARTS
 	int
 	depends on ARM && PLAT_SAMSUNG
+<<<<<<< HEAD
 	default 2 if ARCH_S3C2400
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default 6 if ARCH_S5P6450
 	default 4 if SERIAL_SAMSUNG_UARTS_4
 	default 3
@@ -489,6 +492,7 @@ config SERIAL_SAMSUNG_CONSOLE
 	  your boot loader about how to pass options to the kernel at
 	  boot time.)
 
+<<<<<<< HEAD
 config SERIAL_S3C2400
 	tristate "Samsung S3C2410 Serial port support"
 	depends on ARM && SERIAL_SAMSUNG && CPU_S3C2400
@@ -496,6 +500,8 @@ config SERIAL_S3C2400
 	help
 	  Serial port support for the Samsung S3C2400 SoC
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SERIAL_S3C2410
 	tristate "Samsung S3C2410 Serial port support"
 	depends on SERIAL_SAMSUNG && CPU_S3C2410
@@ -519,6 +525,7 @@ config SERIAL_S3C2440
 	help
 	  Serial port support for the Samsung S3C2440, S3C2416 and S3C2442 SoC
 
+<<<<<<< HEAD
 config SERIAL_S3C24A0
 	tristate "Samsung S3C24A0 Serial port support"
 	depends on SERIAL_SAMSUNG && CPU_S3C24A0
@@ -526,6 +533,8 @@ config SERIAL_S3C24A0
 	help
 	  Serial port support for the Samsung S3C24A0 SoC
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SERIAL_S3C6400
 	tristate "Samsung S3C6400/S3C6410/S5P6440/S5P6450/S5PC100 Serial port support"
 	depends on SERIAL_SAMSUNG && (CPU_S3C6400 || CPU_S3C6410 || CPU_S5P6440 || CPU_S5P6450 || CPU_S5PC100)
@@ -543,6 +552,17 @@ config SERIAL_S5PV210
 	help
 	  Serial port support for Samsung's S5P Family of SoC's
 
+<<<<<<< HEAD
+=======
+config SERIAL_TEGRA
+	boolean "High speed serial support for NVIDIA Tegra SoCs"
+	depends on ARCH_TEGRA && TEGRA_SYSTEM_DMA
+	select SERIAL_CORE
+	help
+	  Support for the on-chip UARTs on NVIDIA Tegra SoC, providing
+	  /dev/ttyHSx, where x is determined by the number of UARTs on the
+	  platform
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 config SERIAL_MAX3100
 	tristate "MAX3100 support"
@@ -974,7 +994,11 @@ config SERIAL_IP22_ZILOG_CONSOLE
 
 config SERIAL_SH_SCI
 	tristate "SuperH SCI(F) serial port support"
+<<<<<<< HEAD
 	depends on HAVE_CLK && (SUPERH || H8300 || ARCH_SHMOBILE)
+=======
+	depends on HAVE_CLK && (SUPERH || ARCH_SHMOBILE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select SERIAL_CORE
 
 config SERIAL_SH_SCI_NR_UARTS

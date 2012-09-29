@@ -36,6 +36,10 @@
 #include <linux/io-mapping.h>
 #include <linux/i2c.h>
 #include <drm/intel-gtt.h>
+<<<<<<< HEAD
+=======
+#include <linux/backlight.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* General customization:
  */
@@ -214,6 +218,11 @@ struct drm_i915_display_funcs {
 	int (*queue_flip)(struct drm_device *dev, struct drm_crtc *crtc,
 			  struct drm_framebuffer *fb,
 			  struct drm_i915_gem_object *obj);
+<<<<<<< HEAD
+=======
+	int (*update_plane)(struct drm_crtc *crtc, struct drm_framebuffer *fb,
+			    int x, int y);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* clock updates for mode set */
 	/* cursor updates */
 	/* render clock increase/decrease */
@@ -265,6 +274,10 @@ enum intel_pch {
 #define QUIRK_LVDS_SSC_DISABLE (1<<1)
 
 struct intel_fbdev;
+<<<<<<< HEAD
+=======
+struct intel_fbc_work;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 typedef struct drm_i915_private {
 	struct drm_device *dev;
@@ -275,6 +288,10 @@ typedef struct drm_i915_private {
 	int relative_constants_mode;
 
 	void __iomem *regs;
+<<<<<<< HEAD
+=======
+	u32 gt_fifo_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	struct intel_gmbus {
 		struct i2c_adapter adapter;
@@ -325,17 +342,27 @@ typedef struct drm_i915_private {
 	struct timer_list hangcheck_timer;
 	int hangcheck_count;
 	uint32_t last_acthd;
+<<<<<<< HEAD
 	uint32_t last_acthd_bsd;
 	uint32_t last_acthd_blt;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	uint32_t last_instdone;
 	uint32_t last_instdone1;
 
 	unsigned long cfb_size;
+<<<<<<< HEAD
 	unsigned long cfb_pitch;
 	unsigned long cfb_offset;
 	int cfb_fence;
 	int cfb_plane;
 	int cfb_y;
+=======
+	unsigned int cfb_fb;
+	enum plane cfb_plane;
+	int cfb_y;
+	struct intel_fbc_work *fbc_work;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	struct intel_opregion opregion;
 
@@ -689,6 +716,10 @@ typedef struct drm_i915_private {
 	int child_dev_num;
 	struct child_device_config *child_dev;
 	struct drm_connector *int_lvds_connector;
+<<<<<<< HEAD
+=======
+	struct drm_connector *int_edp_connector;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	bool mchbar_need_disable;
 
@@ -723,6 +754,11 @@ typedef struct drm_i915_private {
 	/* list of fbdev register on this device */
 	struct intel_fbdev *fbdev;
 
+<<<<<<< HEAD
+=======
+	struct backlight_device *backlight;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct drm_property *broadcast_rgb_property;
 	struct drm_property *force_audio_property;
 
@@ -990,6 +1026,7 @@ struct drm_i915_file_private {
 
 extern struct drm_ioctl_desc i915_ioctls[];
 extern int i915_max_ioctl;
+<<<<<<< HEAD
 extern unsigned int i915_fbpercrtc;
 extern int i915_panel_ignore_lid;
 extern unsigned int i915_powersave;
@@ -999,6 +1036,18 @@ extern unsigned int i915_panel_use_ssc;
 extern int i915_vbt_sdvo_panel_type;
 extern unsigned int i915_enable_rc6;
 extern unsigned int i915_enable_fbc;
+=======
+extern unsigned int i915_fbpercrtc __always_unused;
+extern int i915_panel_ignore_lid __read_mostly;
+extern unsigned int i915_powersave __read_mostly;
+extern unsigned int i915_semaphores __read_mostly;
+extern unsigned int i915_lvds_downclock __read_mostly;
+extern unsigned int i915_panel_use_ssc __read_mostly;
+extern int i915_vbt_sdvo_panel_type __read_mostly;
+extern unsigned int i915_enable_rc6 __read_mostly;
+extern unsigned int i915_enable_fbc __read_mostly;
+extern bool i915_enable_hangcheck __read_mostly;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern int i915_suspend(struct drm_device *dev, pm_message_t state);
 extern int i915_resume(struct drm_device *dev);
@@ -1168,7 +1217,11 @@ void i915_gem_clflush_object(struct drm_i915_gem_object *obj);
 int __must_check i915_gem_object_set_domain(struct drm_i915_gem_object *obj,
 					    uint32_t read_domains,
 					    uint32_t write_domain);
+<<<<<<< HEAD
 int __must_check i915_gem_object_flush_gpu(struct drm_i915_gem_object *obj);
+=======
+int __must_check i915_gem_object_finish_gpu(struct drm_i915_gem_object *obj);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int __must_check i915_gem_init_ringbuffer(struct drm_device *dev);
 void i915_gem_cleanup_ringbuffer(struct drm_device *dev);
 void i915_gem_do_init(struct drm_device *dev,
@@ -1187,7 +1240,12 @@ int __must_check
 i915_gem_object_set_to_gtt_domain(struct drm_i915_gem_object *obj,
 				  bool write);
 int __must_check
+<<<<<<< HEAD
 i915_gem_object_set_to_display_plane(struct drm_i915_gem_object *obj,
+=======
+i915_gem_object_pin_to_display_plane(struct drm_i915_gem_object *obj,
+				     u32 alignment,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				     struct intel_ring_buffer *pipelined);
 int i915_gem_attach_phys_object(struct drm_device *dev,
 				struct drm_i915_gem_object *obj,
@@ -1203,9 +1261,20 @@ i915_gem_get_unfenced_gtt_alignment(struct drm_device *dev,
 				    uint32_t size,
 				    int tiling_mode);
 
+<<<<<<< HEAD
 /* i915_gem_gtt.c */
 void i915_gem_restore_gtt_mappings(struct drm_device *dev);
 int __must_check i915_gem_gtt_bind_object(struct drm_i915_gem_object *obj);
+=======
+int i915_gem_object_set_cache_level(struct drm_i915_gem_object *obj,
+				    enum i915_cache_level cache_level);
+
+/* i915_gem_gtt.c */
+void i915_gem_restore_gtt_mappings(struct drm_device *dev);
+int __must_check i915_gem_gtt_bind_object(struct drm_i915_gem_object *obj);
+void i915_gem_gtt_rebind_object(struct drm_i915_gem_object *obj,
+				enum i915_cache_level cache_level);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void i915_gem_gtt_unbind_object(struct drm_i915_gem_object *obj);
 
 /* i915_gem_evict.c */
@@ -1287,12 +1356,17 @@ extern void intel_modeset_init(struct drm_device *dev);
 extern void intel_modeset_gem_init(struct drm_device *dev);
 extern void intel_modeset_cleanup(struct drm_device *dev);
 extern int intel_modeset_vga_set_state(struct drm_device *dev, bool state);
+<<<<<<< HEAD
 extern void i8xx_disable_fbc(struct drm_device *dev);
 extern void g4x_disable_fbc(struct drm_device *dev);
 extern void ironlake_disable_fbc(struct drm_device *dev);
 extern void intel_disable_fbc(struct drm_device *dev);
 extern void intel_enable_fbc(struct drm_crtc *crtc, unsigned long interval);
 extern bool intel_fbc_enabled(struct drm_device *dev);
+=======
+extern bool intel_fbc_enabled(struct drm_device *dev);
+extern void intel_disable_fbc(struct drm_device *dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern bool ironlake_set_drps(struct drm_device *dev, u8 val);
 extern void ironlake_enable_rc6(struct drm_device *dev);
 extern void gen6_set_rps(struct drm_device *dev, u8 val);

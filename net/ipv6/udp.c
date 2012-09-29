@@ -1090,8 +1090,13 @@ do_udp_sendmsg:
 		memset(opt, 0, sizeof(struct ipv6_txoptions));
 		opt->tot_len = sizeof(*opt);
 
+<<<<<<< HEAD
 		err = datagram_send_ctl(sock_net(sk), msg, &fl6, opt, &hlimit,
 					&tclass, &dontfrag);
+=======
+		err = datagram_send_ctl(sock_net(sk), sk, msg, &fl6, opt,
+					&hlimit, &tclass, &dontfrag);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (err < 0) {
 			fl6_sock_release(flowlabel);
 			return err;
@@ -1309,7 +1314,10 @@ static struct sk_buff *udp6_ufo_fragment(struct sk_buff *skb, u32 features)
 	u8 frag_hdr_sz = sizeof(struct frag_hdr);
 	int offset;
 	__wsum csum;
+<<<<<<< HEAD
 	struct rt6_info *rt = (struct rt6_info *)skb_dst(skb);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mss = skb_shinfo(skb)->gso_size;
 	if (unlikely(skb->len <= mss))
@@ -1360,8 +1368,12 @@ static struct sk_buff *udp6_ufo_fragment(struct sk_buff *skb, u32 features)
 	fptr = (struct frag_hdr *)(skb_network_header(skb) + unfrag_ip6hlen);
 	fptr->nexthdr = nexthdr;
 	fptr->reserved = 0;
+<<<<<<< HEAD
 	ipv6_select_ident(fptr,
 			  rt ? &rt->rt6i_dst.addr : &ipv6_hdr(skb)->daddr);
+=======
+	ipv6_select_ident(fptr, (struct rt6_info *)skb_dst(skb));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Fragment the skb. ipv6 header and the remaining fields of the
 	 * fragment header are updated in ipv6_gso_segment()

@@ -1,7 +1,11 @@
 /*
  * OMAP4 PRM module functions
  *
+<<<<<<< HEAD
  * Copyright (C) 2010 Texas Instruments, Inc.
+=======
+ * Copyright (C) 2011 Texas Instruments, Inc.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Copyright (C) 2010 Nokia Corporation
  * Benoît Cousson
  * Paul Walmsley
@@ -24,12 +28,15 @@
 #include "prm44xx.h"
 #include "prm-regbits-44xx.h"
 
+<<<<<<< HEAD
 /*
  * Address offset (in bytes) between the reset control and the reset
  * status registers: 4 bytes on OMAP4
  */
 #define OMAP4_RST_CTRL_ST_OFFSET		4
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* PRM low-level functions */
 
 /* Read a register in a CM/PRM instance in the PRM module */
@@ -56,6 +63,7 @@ u32 omap4_prm_rmw_inst_reg_bits(u32 mask, u32 bits, s16 inst, s16 reg)
 
 	return v;
 }
+<<<<<<< HEAD
 
 /* Read a PRM register, AND it, and shift the result down to bit 0 */
 /* XXX deprecated */
@@ -193,3 +201,5 @@ void omap4_prm_global_warm_sw_reset(void)
 	v = omap4_prm_read_inst_reg(OMAP4430_PRM_DEVICE_INST,
 				    OMAP4_RM_RSTCTRL);
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

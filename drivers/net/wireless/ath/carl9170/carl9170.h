@@ -67,6 +67,11 @@
 
 #define PAYLOAD_MAX	(CARL9170_MAX_CMD_LEN / 4 - 1)
 
+<<<<<<< HEAD
+=======
+static const u8 ar9170_qmap[__AR9170_NUM_TXQ] = { 3, 2, 1, 0 };
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 enum carl9170_rf_init_mode {
 	CARL9170_RFI_NONE,
 	CARL9170_RFI_WARM,
@@ -175,7 +180,11 @@ struct carl9170_tx_queue_stats {
 
 struct carl9170_vif {
 	unsigned int id;
+<<<<<<< HEAD
 	struct ieee80211_vif *vif;
+=======
+	struct ieee80211_vif __rcu *vif;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct carl9170_vif_info {
@@ -309,7 +318,11 @@ struct ar9170 {
 	spinlock_t beacon_lock;
 	unsigned int global_pretbtt;
 	unsigned int global_beacon_int;
+<<<<<<< HEAD
 	struct carl9170_vif_info *beacon_iter;
+=======
+	struct carl9170_vif_info __rcu *beacon_iter;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned int beacon_enabled;
 
 	/* cryptographic engine */
@@ -387,7 +400,11 @@ struct ar9170 {
 	/* tx ampdu */
 	struct work_struct ampdu_work;
 	spinlock_t tx_ampdu_list_lock;
+<<<<<<< HEAD
 	struct carl9170_sta_tid *tx_ampdu_iter;
+=======
+	struct carl9170_sta_tid __rcu *tx_ampdu_iter;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct list_head tx_ampdu_list;
 	atomic_t tx_ampdu_upload;
 	atomic_t tx_ampdu_scheduler;
@@ -440,7 +457,10 @@ struct ar9170 {
 enum carl9170_ps_off_override_reasons {
 	PS_OFF_VIF	= BIT(0),
 	PS_OFF_BCN	= BIT(1),
+<<<<<<< HEAD
 	PS_OFF_5GHZ	= BIT(2),
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct carl9170_ba_stats {
@@ -455,7 +475,11 @@ struct carl9170_sta_info {
 	bool sleeping;
 	atomic_t pending_frames;
 	unsigned int ampdu_max_len;
+<<<<<<< HEAD
 	struct carl9170_sta_tid *agg[CARL9170_NUM_TID];
+=======
+	struct carl9170_sta_tid __rcu *agg[CARL9170_NUM_TID];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct carl9170_ba_stats stats[CARL9170_NUM_TID];
 };
 
@@ -531,7 +555,10 @@ int carl9170_set_ampdu_settings(struct ar9170 *ar);
 int carl9170_set_slot_time(struct ar9170 *ar);
 int carl9170_set_mac_rates(struct ar9170 *ar);
 int carl9170_set_hwretry_limit(struct ar9170 *ar, const u32 max_retry);
+<<<<<<< HEAD
 int carl9170_update_beacon(struct ar9170 *ar, const bool submit);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int carl9170_upload_key(struct ar9170 *ar, const u8 id, const u8 *mac,
 	const u8 ktype, const u8 keyidx, const u8 *keydata, const int keylen);
 int carl9170_disable_key(struct ar9170 *ar, const u8 id);
@@ -552,6 +579,10 @@ void carl9170_tx_drop(struct ar9170 *ar, struct sk_buff *skb);
 void carl9170_tx_scheduler(struct ar9170 *ar);
 void carl9170_tx_get_skb(struct sk_buff *skb);
 int carl9170_tx_put_skb(struct sk_buff *skb);
+<<<<<<< HEAD
+=======
+int carl9170_update_beacon(struct ar9170 *ar, const bool submit);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* LEDs */
 #ifdef CONFIG_CARL9170_LEDS

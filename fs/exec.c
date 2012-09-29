@@ -181,6 +181,7 @@ static void acct_arg_size(struct linux_binprm *bprm, unsigned long pages)
 		return;
 
 	bprm->vma_pages = pages;
+<<<<<<< HEAD
 
 #ifdef SPLIT_RSS_COUNTING
 	add_mm_counter(mm, MM_ANONPAGES, diff);
@@ -189,6 +190,9 @@ static void acct_arg_size(struct linux_binprm *bprm, unsigned long pages)
 	add_mm_counter(mm, MM_ANONPAGES, diff);
 	spin_unlock(&mm->page_table_lock);
 #endif
+=======
+	add_mm_counter(mm, MM_ANONPAGES, diff);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct page *get_arg_page(struct linux_binprm *bprm, unsigned long pos,
@@ -277,7 +281,11 @@ static int __bprm_mm_init(struct linux_binprm *bprm)
 	 * use STACK_TOP because that can depend on attributes which aren't
 	 * configured yet.
 	 */
+<<<<<<< HEAD
 	BUG_ON(VM_STACK_FLAGS & VM_STACK_INCOMPLETE_SETUP);
+=======
+	BUILD_BUG_ON(VM_STACK_FLAGS & VM_STACK_INCOMPLETE_SETUP);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	vma->vm_end = STACK_TOP_MAX;
 	vma->vm_start = vma->vm_end - PAGE_SIZE;
 	vma->vm_flags = VM_STACK_FLAGS | VM_STACK_INCOMPLETE_SETUP;
@@ -963,9 +971,24 @@ static int de_thread(struct task_struct *tsk)
 		leader->group_leader = tsk;
 
 		tsk->exit_signal = SIGCHLD;
+<<<<<<< HEAD
 
 		BUG_ON(leader->exit_state != EXIT_ZOMBIE);
 		leader->exit_state = EXIT_DEAD;
+=======
+		leader->exit_signal = -1;
+
+		BUG_ON(leader->exit_state != EXIT_ZOMBIE);
+		leader->exit_state = EXIT_DEAD;
+
+		/*
+		 * We are going to release_task()->ptrace_unlink() silently,
+		 * the tracer can sleep in do_wait(). EXIT_DEAD guarantees
+		 * the tracer wont't block again waiting for this thread.
+		 */
+		if (unlikely(leader->ptrace))
+			__wake_up_parent(leader, leader->parent);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		write_unlock_irq(&tasklist_lock);
 
 		release_task(leader);
@@ -1105,6 +1128,16 @@ out:
 }
 EXPORT_SYMBOL(flush_old_exec);
 
+<<<<<<< HEAD
+=======
+void would_dump(struct linux_binprm *bprm, struct file *file)
+{
+	if (inode_permission(file->f_path.dentry->d_inode, MAY_READ) < 0)
+		bprm->interp_flags |= BINPRM_FLAGS_ENFORCE_NONDUMP;
+}
+EXPORT_SYMBOL(would_dump);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void setup_new_exec(struct linux_binprm * bprm)
 {
 	int i, ch;
@@ -1144,9 +1177,16 @@ void setup_new_exec(struct linux_binprm * bprm)
 	if (bprm->cred->uid != current_euid() ||
 	    bprm->cred->gid != current_egid()) {
 		current->pdeath_signal = 0;
+<<<<<<< HEAD
 	} else if (file_permission(bprm->file, MAY_READ) ||
 		   bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP) {
 		set_dumpable(current->mm, suid_dumpable);
+=======
+	} else {
+		would_dump(bprm, bprm->file);
+		if (bprm->interp_flags & BINPRM_FLAGS_ENFORCE_NONDUMP)
+			set_dumpable(current->mm, suid_dumpable);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/*
@@ -1225,7 +1265,16 @@ int check_unsafe_exec(struct linux_binprm *bprm)
 	unsigned n_fs;
 	int res = 0;
 
+<<<<<<< HEAD
 	bprm->unsafe = tracehook_unsafe_exec(p);
+=======
+	if (p->ptrace) {
+		if (p->ptrace & PT_PTRACE_CAP)
+			bprm->unsafe |= LSM_UNSAFE_PTRACE_CAP;
+		else
+			bprm->unsafe |= LSM_UNSAFE_PTRACE;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	n_fs = 1;
 	spin_lock(&p->fs->lock);
@@ -1353,6 +1402,10 @@ int search_binary_handler(struct linux_binprm *bprm,struct pt_regs *regs)
 	unsigned int depth = bprm->recursion_depth;
 	int try,retval;
 	struct linux_binfmt *fmt;
+<<<<<<< HEAD
+=======
+	pid_t old_pid;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	retval = security_bprm_check(bprm);
 	if (retval)
@@ -1362,6 +1415,14 @@ int search_binary_handler(struct linux_binprm *bprm,struct pt_regs *regs)
 	if (retval)
 		return retval;
 
+<<<<<<< HEAD
+=======
+	/* Need to fetch pid before load_binary changes it */
+	rcu_read_lock();
+	old_pid = task_pid_nr_ns(current, task_active_pid_ns(current->parent));
+	rcu_read_unlock();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	retval = -ENOENT;
 	for (try=0; try<2; try++) {
 		read_lock(&binfmt_lock);
@@ -1381,7 +1442,12 @@ int search_binary_handler(struct linux_binprm *bprm,struct pt_regs *regs)
 			bprm->recursion_depth = depth;
 			if (retval >= 0) {
 				if (depth == 0)
+<<<<<<< HEAD
 					tracehook_report_exec(fmt, bprm, regs);
+=======
+					ptrace_event(PTRACE_EVENT_EXEC,
+							old_pid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				put_binfmt(fmt);
 				allow_write_access(bprm->file);
 				if (bprm->file)
@@ -1401,9 +1467,15 @@ int search_binary_handler(struct linux_binprm *bprm,struct pt_regs *regs)
 			}
 		}
 		read_unlock(&binfmt_lock);
+<<<<<<< HEAD
 		if (retval != -ENOEXEC || bprm->mm == NULL) {
 			break;
 #ifdef CONFIG_MODULES
+=======
+#ifdef CONFIG_MODULES
+		if (retval != -ENOEXEC || bprm->mm == NULL) {
+			break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else {
 #define printable(c) (((c)=='\t') || ((c)=='\n') || (0x20<=(c) && (c)<=0x7e))
 			if (printable(bprm->buf[0]) &&
@@ -1414,8 +1486,15 @@ int search_binary_handler(struct linux_binprm *bprm,struct pt_regs *regs)
 			if (try)
 				break; /* -ENOEXEC */
 			request_module("binfmt-%04x", *(unsigned short *)(&bprm->buf[2]));
+<<<<<<< HEAD
 #endif
 		}
+=======
+		}
+#else
+		break;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return retval;
 }
@@ -1435,6 +1514,26 @@ static int do_execve_common(const char *filename,
 	struct files_struct *displaced;
 	bool clear_in_exec;
 	int retval;
+<<<<<<< HEAD
+=======
+	const struct cred *cred = current_cred();
+
+	/*
+	 * We move the actual failure in case of RLIMIT_NPROC excess from
+	 * set*uid() to execve() because too many poorly written programs
+	 * don't check setuid() return code.  Here we additionally recheck
+	 * whether NPROC limit is still exceeded.
+	 */
+	if ((current->flags & PF_NPROC_EXCEEDED) &&
+	    atomic_read(&cred->user->processes) > rlimit(RLIMIT_NPROC)) {
+		retval = -EAGAIN;
+		goto out_ret;
+	}
+
+	/* We're below the limit (still or again), so we don't want to make
+	 * further execve() calls fail. */
+	current->flags &= ~PF_NPROC_EXCEEDED;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	retval = unshare_files(&displaced);
 	if (retval)
@@ -1622,6 +1721,7 @@ expand_fail:
 	return ret;
 }
 
+<<<<<<< HEAD
 static int cn_print_exe_file(struct core_name *cn)
 {
 	struct file *exe_file;
@@ -1631,6 +1731,28 @@ static int cn_print_exe_file(struct core_name *cn)
 	exe_file = get_mm_exe_file(current->mm);
 	if (!exe_file)
 		return cn_printf(cn, "(unknown)");
+=======
+static void cn_escape(char *str)
+{
+	for (; *str; str++)
+		if (*str == '/')
+			*str = '!';
+}
+
+static int cn_print_exe_file(struct core_name *cn)
+{
+	struct file *exe_file;
+	char *pathbuf, *path;
+	int ret;
+
+	exe_file = get_mm_exe_file(current->mm);
+	if (!exe_file) {
+		char *commstart = cn->corename + cn->used;
+		ret = cn_printf(cn, "%s (path unknown)", current->comm);
+		cn_escape(commstart);
+		return ret;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pathbuf = kmalloc(PATH_MAX, GFP_TEMPORARY);
 	if (!pathbuf) {
@@ -1644,9 +1766,13 @@ static int cn_print_exe_file(struct core_name *cn)
 		goto free_buf;
 	}
 
+<<<<<<< HEAD
 	for (p = path; *p; p++)
 		if (*p == '/')
 			*p = '!';
+=======
+	cn_escape(path);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = cn_printf(cn, "%s", path);
 
@@ -1718,16 +1844,34 @@ static int format_corename(struct core_name *cn, long signr)
 				break;
 			}
 			/* hostname */
+<<<<<<< HEAD
 			case 'h':
+=======
+			case 'h': {
+				char *namestart = cn->corename + cn->used;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				down_read(&uts_sem);
 				err = cn_printf(cn, "%s",
 					      utsname()->nodename);
 				up_read(&uts_sem);
+<<<<<<< HEAD
 				break;
 			/* executable */
 			case 'e':
 				err = cn_printf(cn, "%s", current->comm);
 				break;
+=======
+				cn_escape(namestart);
+				break;
+			}
+			/* executable */
+			case 'e': {
+				char *commstart = cn->corename + cn->used;
+				err = cn_printf(cn, "%s", current->comm);
+				cn_escape(commstart);
+				break;
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			case 'E':
 				err = cn_print_exe_file(cn);
 				break;
@@ -1771,7 +1915,11 @@ static int zap_process(struct task_struct *start, int exit_code)
 
 	t = start;
 	do {
+<<<<<<< HEAD
 		task_clear_group_stop_pending(t);
+=======
+		task_clear_jobctl_pending(t, JOBCTL_PENDING_MASK);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (t != current && t->mm) {
 			sigaddset(&t->pending.signal, SIGKILL);
 			signal_wake_up(t, 1);
@@ -2091,16 +2239,28 @@ void do_coredump(long signr, int exit_code, struct pt_regs *regs)
 
 	ispipe = format_corename(&cn, signr);
 
+<<<<<<< HEAD
 	if (ispipe == -ENOMEM) {
 		printk(KERN_WARNING "format_corename failed\n");
 		printk(KERN_WARNING "Aborting core\n");
 		goto fail_corename;
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  	if (ispipe) {
 		int dump_count;
 		char **helper_argv;
 
+<<<<<<< HEAD
+=======
+		if (ispipe < 0) {
+			printk(KERN_WARNING "format_corename failed\n");
+			printk(KERN_WARNING "Aborting core\n");
+			goto fail_corename;
+		}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (cprm.limit == 1) {
 			/*
 			 * Normally core limits are irrelevant to pipes, since

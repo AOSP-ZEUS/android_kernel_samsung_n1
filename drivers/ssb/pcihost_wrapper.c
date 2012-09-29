@@ -6,7 +6,11 @@
  * Copyright (c) 2005 Stefano Brivio <st3@riseup.net>
  * Copyright (c) 2005 Danny van Dyk <kugelfang@gentoo.org>
  * Copyright (c) 2005 Andreas Jaggi <andreas.jaggi@waterwave.ch>
+<<<<<<< HEAD
  * Copyright (c) 2005-2007 Michael Buesch <mbuesch@freenet.de>
+=======
+ * Copyright (c) 2005-2007 Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Licensed under the GNU/GPL. See COPYING for details.
  */
@@ -53,8 +57,13 @@ static int ssb_pcihost_resume(struct pci_dev *dev)
 # define ssb_pcihost_resume	NULL
 #endif /* CONFIG_PM */
 
+<<<<<<< HEAD
 static int ssb_pcihost_probe(struct pci_dev *dev,
 			     const struct pci_device_id *id)
+=======
+static int __devinit ssb_pcihost_probe(struct pci_dev *dev,
+				       const struct pci_device_id *id)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct ssb_bus *ssb;
 	int err = -ENOMEM;
@@ -110,7 +119,11 @@ static void ssb_pcihost_remove(struct pci_dev *dev)
 	pci_set_drvdata(dev, NULL);
 }
 
+<<<<<<< HEAD
 int ssb_pcihost_register(struct pci_driver *driver)
+=======
+int __devinit ssb_pcihost_register(struct pci_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	driver->probe = ssb_pcihost_probe;
 	driver->remove = ssb_pcihost_remove;

@@ -106,6 +106,7 @@ separated by spaces:
       To use the first on-chip serial port at baud rate 115200, no parity, 8
       bits, and no flow control.
 
+<<<<<<< HEAD
   (*) root=/dev/<xxxx>
 
       This specifies the device upon which the root filesystem resides. For
@@ -113,6 +114,22 @@ separated by spaces:
 
 	/dev/nfs	NFS root filesystem
 	/dev/mtdblock3	Fourth RedBoot partition on the System Flash
+=======
+  (*) root=<xxxx>
+
+      This specifies the device upon which the root filesystem resides. It
+      may be specified by major and minor number, device path, or even
+      partition uuid, if supported.  For example:
+
+	/dev/nfs	NFS root filesystem
+	/dev/mtdblock3	Fourth RedBoot partition on the System Flash
+	PARTUUID=00112233-4455-6677-8899-AABBCCDDEEFF/PARTNROFF=1
+		first partition after the partition with the given UUID
+	253:0		Device with major 253 and minor 0
+
+      Authoritative information can be found in
+      "Documentation/kernel-parameters.txt".
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
   (*) rw
 

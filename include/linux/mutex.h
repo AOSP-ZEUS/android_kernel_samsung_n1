@@ -15,7 +15,11 @@
 #include <linux/linkage.h>
 #include <linux/lockdep.h>
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Simple, straightforward mutexes with strict semantics:
@@ -92,7 +96,11 @@ do {							\
 							\
 	__mutex_init((mutex), #mutex, &__key);		\
 } while (0)
+<<<<<<< HEAD
 # define mutex_destroy(mutex)				do { } while (0)
+=======
+static inline void mutex_destroy(struct mutex *lock) {}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 #ifdef CONFIG_DEBUG_LOCK_ALLOC

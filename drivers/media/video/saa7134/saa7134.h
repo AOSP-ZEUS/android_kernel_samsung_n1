@@ -19,8 +19,12 @@
  *  Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
  */
 
+<<<<<<< HEAD
 #include <linux/version.h>
 #define SAA7134_VERSION_CODE KERNEL_VERSION(0, 2, 16)
+=======
+#define SAA7134_VERSION "0, 2, 17"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <linux/pci.h>
 #include <linux/i2c.h>

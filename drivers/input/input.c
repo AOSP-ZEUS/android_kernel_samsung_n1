@@ -28,6 +28,13 @@
 #include <linux/rcupdate.h>
 #include "input-compat.h"
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+#include <linux/kernel_sec_common.h>
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_AUTHOR("Vojtech Pavlik <vojtech@suse.cz>");
 MODULE_DESCRIPTION("Input core");
 MODULE_LICENSE("GPL");
@@ -327,6 +334,27 @@ static void input_handle_event(struct input_dev *dev,
 		input_pass_event(dev, type, code, value);
 }
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_KERNEL_DEBUG_SEC)
+static bool forced_upload ;
+static bool first ;
+static int loopcount ;
+static void enter_upload_mode(unsigned long val)
+{
+	int debuglevel = kernel_sec_get_debug_level();
+	if (forced_upload
+		&& (debuglevel == KERNEL_SEC_DEBUG_LEVEL_MID
+		    || debuglevel == KERNEL_SEC_DEBUG_LEVEL_HIGH)) {
+		printk(KERN_ERR "[debug] forced upload mode!!!!\n");
+		dump_all_task_info();
+		dump_cpu_stat();
+		panic("Forced_Upload");
+	}
+}
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * input_event() - report new input event
  * @dev: device that generated the event
@@ -349,6 +377,32 @@ void input_event(struct input_dev *dev,
 {
 	unsigned long flags;
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+	if (value) {
+		if (code == KEY_VOLUMEDOWN)
+			first = true;
+		if (first) {
+			if (code == KEY_POWER) {
+				if (++loopcount == 2) {
+					forced_upload = true;
+					enter_upload_mode(0);
+				}
+				pr_info("count for enter forced upload : %d\n",
+					loopcount);
+			}
+		}
+	} else {
+		if (code == KEY_VOLUMEDOWN) {
+			loopcount = 0;
+			first = false;
+			forced_upload = false;
+		}
+	}
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (is_event_supported(type, dev->evbit, EV_MAX)) {
 
 		spin_lock_irqsave(&dev->event_lock, flags);
@@ -1574,9 +1628,15 @@ void input_reset_device(struct input_dev *dev)
 		 * Keys that have been pressed at suspend time are unlikely
 		 * to be still pressed when we resume.
 		 */
+<<<<<<< HEAD
 		spin_lock_irq(&dev->event_lock);
 		input_dev_release_keys(dev);
 		spin_unlock_irq(&dev->event_lock);
+=======
+	/*	spin_lock_irq(&dev->event_lock);
+		input_dev_release_keys(dev);
+		spin_unlock_irq(&dev->event_lock);*/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	mutex_unlock(&dev->mutex);
@@ -2156,6 +2216,13 @@ static int __init input_init(void)
 		goto fail2;
 	}
 
+<<<<<<< HEAD
+=======
+	forced_upload = 0;
+	first = 0;
+	loopcount = 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
  fail2:	input_proc_exit();

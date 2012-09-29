@@ -50,7 +50,10 @@ static void remove_channel_from_table(struct st_data_s *st_gdata,
 		struct st_proto_s *proto)
 {
 	pr_info("%s: id %d\n", __func__, proto->chnl_id);
+<<<<<<< HEAD
 /*	st_gdata->list[proto->chnl_id] = NULL; */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	st_gdata->is_registered[proto->chnl_id] = false;
 }
 
@@ -123,7 +126,10 @@ void st_send_frame(unsigned char chnl_id, struct st_data_s *st_gdata)
 			(st_gdata->list[chnl_id]->priv_data, st_gdata->rx_skb)
 			     != 0)) {
 			pr_err(" proto stack %d's ->recv failed", chnl_id);
+<<<<<<< HEAD
 			kfree_skb(st_gdata->rx_skb);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return;
 		}
 	} else {
@@ -338,9 +344,37 @@ void st_int_recv(void *disc_data,
 			/* Unknow packet? */
 		default:
 			type = *ptr;
+<<<<<<< HEAD
 			st_gdata->rx_skb = alloc_skb(
 					st_gdata->list[type]->max_frame_size,
 					GFP_ATOMIC);
+=======
+
+			/* Default case means non-HCILL packets,
+			 * possibilities are packets for:
+			 * (a) valid protocol -  Supported Protocols within
+			 *     the ST_MAX_CHANNELS.
+			 * (b) registered protocol - Checked by
+			 *     "st_gdata->list[type] == NULL)" are supported
+			 *     protocols only.
+			 *  Rules out any invalid protocol and
+			 *  unregistered protocols with channel ID < 16.
+			 */
+
+			if ((type >= ST_MAX_CHANNELS) ||
+					(st_gdata->list[type] == NULL)) {
+				pr_err("chip/interface misbehavior "
+						"dropping frame starting "
+						"with 0x%02x", type);
+				goto done;
+			}
+			st_gdata->rx_skb = alloc_skb(
+					st_gdata->list[type]->max_frame_size,
+					GFP_ATOMIC);
+			if (!st_gdata->rx_skb)
+				goto done;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			skb_reserve(st_gdata->rx_skb,
 					st_gdata->list[type]->reserve);
 			/* next 2 required for BT only */
@@ -354,6 +388,10 @@ void st_int_recv(void *disc_data,
 		ptr++;
 		count--;
 	}
+<<<<<<< HEAD
+=======
+done:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock_irqrestore(&st_gdata->lock, flags);
 	pr_debug("done %s", __func__);
 	return;
@@ -717,9 +755,16 @@ static void st_tty_close(struct tty_struct *tty)
 	 */
 	spin_lock_irqsave(&st_gdata->lock, flags);
 	for (i = ST_BT; i < ST_MAX_CHANNELS; i++) {
+<<<<<<< HEAD
 		if (st_gdata->list[i] != NULL)
 			pr_err("%d not un-registered", i);
 		st_gdata->list[i] = NULL;
+=======
+		if (st_gdata->is_registered[i] == true)
+			pr_err("%d not un-registered", i);
+		st_gdata->list[i] = NULL;
+		st_gdata->is_registered[i] = false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	st_gdata->protos_registered = 0;
 	spin_unlock_irqrestore(&st_gdata->lock, flags);

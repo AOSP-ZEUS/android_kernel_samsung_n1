@@ -62,7 +62,10 @@
 #include <linux/uaccess.h>
 
 #include <linux/i2c.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/workqueue.h>
 #include <linux/poll.h>
 #include <linux/mm.h>
@@ -70,7 +73,10 @@
 #include <linux/delay.h>
 #include <linux/types.h>
 
+<<<<<<< HEAD
 #ifndef CONFIG_EASYCAP_OSS
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/vmalloc.h>
 #include <linux/sound.h>
 #include <sound/core.h>
@@ -79,16 +85,22 @@
 #include <sound/info.h>
 #include <sound/initval.h>
 #include <sound/control.h>
+<<<<<<< HEAD
 #endif /* !CONFIG_EASYCAP_OSS */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <media/v4l2-dev.h>
 #include <media/v4l2-device.h>
 #include <linux/videodev2.h>
 #include <linux/soundcard.h>
 
+<<<<<<< HEAD
 #ifndef PAGE_SIZE
 #error "PAGE_SIZE not defined"
 #endif /* PAGE_SIZE */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*---------------------------------------------------------------------------*/
 /*  VENDOR, PRODUCT:  Syntek Semiconductor Co., Ltd
  *
@@ -285,8 +297,11 @@ struct inputset {
  */
 /*---------------------------------------------------------------------------*/
 struct easycap {
+<<<<<<< HEAD
 #define TELLTALE "expectedstring"
 	char telltale[16];
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int isdongle;
 	int minor;
 
@@ -420,7 +435,10 @@ struct easycap {
  *  ALSA
  */
 /*---------------------------------------------------------------------------*/
+<<<<<<< HEAD
 #ifndef CONFIG_EASYCAP_OSS
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct snd_pcm_hardware alsa_hardware;
 	struct snd_card *psnd_card;
 	struct snd_pcm *psnd_pcm;
@@ -428,7 +446,10 @@ struct easycap {
 	int dma_fill;
 	int dma_next;
 	int dma_read;
+<<<<<<< HEAD
 #endif /* !CONFIG_EASYCAP_OSS */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*---------------------------------------------------------------------------*/
 /*
  *  SOUND PROPERTIES
@@ -510,12 +531,17 @@ int              adjust_volume(struct easycap *, int);
  *  AUDIO FUNCTION PROTOTYPES
  */
 /*---------------------------------------------------------------------------*/
+<<<<<<< HEAD
 #ifndef CONFIG_EASYCAP_OSS
 int		easycap_alsa_probe(struct easycap *);
 void            easycap_alsa_complete(struct urb *);
 #else /* CONFIG_EASYCAP_OSS */
 void             easyoss_complete(struct urb *);
 #endif /* !CONFIG_EASYCAP_OSS */
+=======
+int		easycap_alsa_probe(struct easycap *);
+void            easycap_alsa_complete(struct urb *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 int              easycap_sound_setup(struct easycap *);
 int              submit_audio_urbs(struct easycap *);
@@ -603,6 +629,7 @@ extern int easycap_debug;
 #define JOM(n, format, args...) do {} while (0)
 #endif /* CONFIG_EASYCAP_DEBUG */
 
+<<<<<<< HEAD
 #define MICROSECONDS(X, Y) \
 			((1000000*((long long int)(X.tv_sec - Y.tv_sec))) + \
 					(long long int)(X.tv_usec - Y.tv_usec))
@@ -631,6 +658,8 @@ extern int easycap_debug;
 	*((Y)) += (long int) s;                              \
 	*((Z)) += ((long long int)(s) * (long long int)(s)); \
 } while (0)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*---------------------------------------------------------------------------*/
 
 /*---------------------------------------------------------------------------*/
@@ -644,8 +673,11 @@ extern struct easycap_format easycap_format[];
 extern struct v4l2_queryctrl easycap_control[];
 extern struct usb_driver easycap_usb_driver;
 extern struct easycap_dongle easycapdc60_dongle[];
+<<<<<<< HEAD
 #ifdef CONFIG_EASYCAP_OSS
 extern struct usb_class_driver easyoss_class;
 #endif /* !CONFIG_EASYCAP_OSS */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* !__EASYCAP_H__  */

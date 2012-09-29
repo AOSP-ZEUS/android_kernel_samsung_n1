@@ -44,6 +44,13 @@ extern struct device omap_device_parent;
 #define OMAP_DEVICE_STATE_IDLE		2
 #define OMAP_DEVICE_STATE_SHUTDOWN	3
 
+<<<<<<< HEAD
+=======
+/* omap_device.flags values */
+#define OMAP_DEVICE_SUSPENDED BIT(0)
+#define OMAP_DEVICE_NO_IDLE_ON_SUSPEND BIT(1)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * struct omap_device - omap_device wrapper for platform_devices
  * @pdev: platform_device
@@ -73,6 +80,10 @@ struct omap_device {
 	s8				pm_lat_level;
 	u8				hwmods_cnt;
 	u8				_state;
+<<<<<<< HEAD
+=======
+	u8                              flags;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* Device driver interface (call via platform_data fn ptrs) */
@@ -117,6 +128,13 @@ int omap_device_enable_hwmods(struct omap_device *od);
 int omap_device_disable_clocks(struct omap_device *od);
 int omap_device_enable_clocks(struct omap_device *od);
 
+<<<<<<< HEAD
+=======
+static inline void omap_device_disable_idle_on_suspend(struct omap_device *od)
+{
+	od->flags |= OMAP_DEVICE_NO_IDLE_ON_SUSPEND;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Entries should be kept in latency order ascending

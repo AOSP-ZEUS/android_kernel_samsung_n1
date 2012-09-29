@@ -13,11 +13,17 @@
 #include <linux/init.h>
 #include <linux/platform_device.h>
 #include <linux/pci.h>
+<<<<<<< HEAD
 #include <linux/serial_8250.h>
 #include <linux/clk.h>
 #include <linux/mbus.h>
 #include <linux/ata_platform.h>
 #include <linux/serial_8250.h>
+=======
+#include <linux/clk.h>
+#include <linux/mbus.h>
+#include <linux/ata_platform.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/gpio.h>
 #include <asm/page.h>
 #include <asm/setup.h>
@@ -31,7 +37,10 @@
 #include <asm/mach/arch.h>
 #include <linux/irq.h>
 #include <plat/time.h>
+<<<<<<< HEAD
 #include <plat/ehci-orion.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <plat/common.h>
 #include "common.h"
 
@@ -75,7 +84,11 @@ void __init dove_map_io(void)
 void __init dove_ehci0_init(void)
 {
 	orion_ehci_init(&dove_mbus_dram_info,
+<<<<<<< HEAD
 			DOVE_USB0_PHYS_BASE, IRQ_DOVE_USB0, EHCI_PHY_NA);
+=======
+			DOVE_USB0_PHYS_BASE, IRQ_DOVE_USB0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*****************************************************************************

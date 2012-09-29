@@ -319,4 +319,10 @@ MACHINE_START(NAS100D, "Iomega NAS 100d")
 	.init_irq	= ixp4xx_init_irq,
 	.timer          = &ixp4xx_timer,
 	.init_machine	= nas100d_init,
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_PCI)
+	.dma_zone_size	= SZ_64M,
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

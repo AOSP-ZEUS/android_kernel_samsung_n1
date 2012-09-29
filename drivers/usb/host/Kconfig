@@ -578,3 +578,12 @@ config USB_OCTEON_OHCI
 config USB_OCTEON2_COMMON
 	bool
 	default y if USB_OCTEON_EHCI || USB_OCTEON_OHCI
+<<<<<<< HEAD
+=======
+
+config USB_EHCI_ONOFF_FEATURE
+        boolean "EHCI ON/OFF Feature"
+        depends on USB && USB_EHCI_HCD
+        help
+          Enable support for turning EHCI Off and On
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -128,8 +128,11 @@ struct usb_hcd {
 	unsigned		wireless:1;	/* Wireless USB HCD */
 	unsigned		authorized_default:1;
 	unsigned		has_tt:1;	/* Integrated TT in root hub */
+<<<<<<< HEAD
 	unsigned		broken_pci_sleep:1;	/* Don't put the
 			controller in PCI-D3 for system sleep */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int			irq;		/* irq allocated */
 	void __iomem		*regs;		/* device memory/io */

@@ -21,7 +21,10 @@
  * Lock ordering in mm:
  *
  * inode->i_mutex	(while writing or truncating, not reading or faulting)
+<<<<<<< HEAD
  *   inode->i_alloc_sem (vmtruncate_range)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *   mm->mmap_sem
  *     page->flags PG_locked (lock_page)
  *       mapping->i_mmap_mutex
@@ -32,11 +35,19 @@
  *               mmlist_lock (in mmput, drain_mmlist and others)
  *               mapping->private_lock (in __set_page_dirty_buffers)
  *               inode->i_lock (in set_page_dirty's __mark_inode_dirty)
+<<<<<<< HEAD
  *               inode_wb_list_lock (in set_page_dirty's __mark_inode_dirty)
  *                 sb_lock (within inode_lock in fs/fs-writeback.c)
  *                 mapping->tree_lock (widely used, in set_page_dirty,
  *                           in arch-dependent flush_dcache_mmap_lock,
  *                           within inode_wb_list_lock in __sync_single_inode)
+=======
+ *               bdi.wb->list_lock (in set_page_dirty's __mark_inode_dirty)
+ *                 sb_lock (within inode_lock in fs/fs-writeback.c)
+ *                 mapping->tree_lock (widely used, in set_page_dirty,
+ *                           in arch-dependent flush_dcache_mmap_lock,
+ *                           within bdi.wb->list_lock in __sync_single_inode)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * anon_vma->mutex,mapping->i_mutex      (memory_failure, collect_procs_anon)
  *   ->tasklist_lock
@@ -870,11 +881,19 @@ int page_referenced(struct page *page,
 								vm_flags);
 		if (we_locked)
 			unlock_page(page);
+<<<<<<< HEAD
 	}
 out:
 	if (page_test_and_clear_young(page_to_pfn(page)))
 		referenced++;
 
+=======
+
+		if (page_test_and_clear_young(page_to_pfn(page)))
+			referenced++;
+	}
+out:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return referenced;
 }
 

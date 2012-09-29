@@ -83,5 +83,9 @@
 #define S3C64XX_SDHCI_CONTROL4_DRIVE_9mA	(0x3 << 16)
 
 #define S3C64XX_SDHCI_CONTROL4_BUSY		(1)
+<<<<<<< HEAD
 #define SDHCI_S3C_CTRL_8BITBUS                  (1 << 5)
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* __PLAT_S3C_SDHCI_REGS_H */

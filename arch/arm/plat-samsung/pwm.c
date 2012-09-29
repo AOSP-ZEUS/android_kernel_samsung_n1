@@ -44,7 +44,10 @@ struct pwm_device {
 #define pwm_dbg(_pwm, msg...) dev_dbg(&(_pwm)->pdev->dev, msg)
 
 static struct clk *clk_scaler[2];
+<<<<<<< HEAD
 static DEFINE_SPINLOCK(pwm_spin_lock);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline int pwm_is_tdiv(struct pwm_device *pwm)
 {
@@ -109,6 +112,7 @@ int pwm_enable(struct pwm_device *pwm)
 	unsigned long flags;
 	unsigned long tcon;
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&pwm_spin_lock, flags);
 
 	if (!pwm->running) {
@@ -124,6 +128,17 @@ int pwm_enable(struct pwm_device *pwm)
 
 	spin_unlock_irqrestore(&pwm_spin_lock, flags);
 
+=======
+	local_irq_save(flags);
+
+	tcon = __raw_readl(S3C2410_TCON);
+	tcon |= pwm_tcon_start(pwm);
+	__raw_writel(tcon, S3C2410_TCON);
+
+	local_irq_restore(flags);
+
+	pwm->running = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -134,6 +149,7 @@ void pwm_disable(struct pwm_device *pwm)
 	unsigned long flags;
 	unsigned long tcon;
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&pwm_spin_lock, flags);
 
 	if (pwm->running) {
@@ -148,6 +164,17 @@ void pwm_disable(struct pwm_device *pwm)
 	}
 
 	spin_unlock_irqrestore(&pwm_spin_lock, flags);
+=======
+	local_irq_save(flags);
+
+	tcon = __raw_readl(S3C2410_TCON);
+	tcon &= ~pwm_tcon_start(pwm);
+	__raw_writel(tcon, S3C2410_TCON);
+
+	local_irq_restore(flags);
+
+	pwm->running = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 EXPORT_SYMBOL(pwm_disable);
@@ -197,9 +224,12 @@ int pwm_config(struct pwm_device *pwm, int duty_ns, int period_ns)
 	/* The TCMP and TCNT can be read without a lock, they're not
 	 * shared between the timers. */
 
+<<<<<<< HEAD
 	clk_enable(pwm->clk);
 	clk_enable(pwm->clk_div);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tcmp = __raw_readl(S3C2410_TCMPB(pwm->pwm_id));
 	tcnt = __raw_readl(S3C2410_TCNTB(pwm->pwm_id));
 
@@ -242,7 +272,11 @@ int pwm_config(struct pwm_device *pwm, int duty_ns, int period_ns)
 
 	/* Update the PWM register block. */
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&pwm_spin_lock, flags);
+=======
+	local_irq_save(flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	__raw_writel(tcmp, S3C2410_TCMPB(pwm->pwm_id));
 	__raw_writel(tcnt, S3C2410_TCNTB(pwm->pwm_id));
@@ -255,6 +289,7 @@ int pwm_config(struct pwm_device *pwm, int duty_ns, int period_ns)
 	tcon &= ~pwm_tcon_manulupdate(pwm);
 	__raw_writel(tcon, S3C2410_TCON);
 
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&pwm_spin_lock, flags);
 
 	clk_disable(pwm->clk);
@@ -262,6 +297,11 @@ int pwm_config(struct pwm_device *pwm, int duty_ns, int period_ns)
 
 	return 0;
 
+=======
+	local_irq_restore(flags);
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 EXPORT_SYMBOL(pwm_config);
@@ -318,13 +358,22 @@ static int s3c_pwm_probe(struct platform_device *pdev)
 		goto err_clk_tin;
 	}
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&pwm_spin_lock, flags);
+=======
+	local_irq_save(flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	tcon = __raw_readl(S3C2410_TCON);
 	tcon |= pwm_tcon_invert(pwm);
 	__raw_writel(tcon, S3C2410_TCON);
 
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&pwm_spin_lock, flags);
+=======
+	local_irq_restore(flags);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = pwm_register(pwm);
 	if (ret) {

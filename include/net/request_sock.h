@@ -96,7 +96,12 @@ extern int sysctl_max_syn_backlog;
  */
 struct listen_sock {
 	u8			max_qlen_log;
+<<<<<<< HEAD
 	/* 3 bytes hole, try to use */
+=======
+	u8			synflood_warned;
+	/* 2 bytes hole, try to use */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int			qlen;
 	int			qlen_young;
 	int			clock_hand;

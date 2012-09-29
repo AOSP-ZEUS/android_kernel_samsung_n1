@@ -60,7 +60,11 @@
  *                          are considered as fatal)
  */
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/wait.h>
 #include <linux/list.h>
 #include <linux/kref.h>
@@ -1005,6 +1009,10 @@ struct r600_asic {
 	unsigned		tiling_npipes;
 	unsigned		tiling_group_size;
 	unsigned		tile_config;
+<<<<<<< HEAD
+=======
+	unsigned		backend_map;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct r100_gpu_lockup	lockup;
 };
 
@@ -1030,6 +1038,10 @@ struct rv770_asic {
 	unsigned		tiling_npipes;
 	unsigned		tiling_group_size;
 	unsigned		tile_config;
+<<<<<<< HEAD
+=======
+	unsigned		backend_map;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct r100_gpu_lockup	lockup;
 };
 
@@ -1056,6 +1068,10 @@ struct evergreen_asic {
 	unsigned tiling_npipes;
 	unsigned tiling_group_size;
 	unsigned tile_config;
+<<<<<<< HEAD
+=======
+	unsigned backend_map;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct r100_gpu_lockup	lockup;
 };
 
@@ -1176,7 +1192,11 @@ struct radeon_device {
 	/* Register mmio */
 	resource_size_t			rmmio_base;
 	resource_size_t			rmmio_size;
+<<<<<<< HEAD
 	void				*rmmio;
+=======
+	void __iomem			*rmmio;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	radeon_rreg_t			mc_rreg;
 	radeon_wreg_t			mc_wreg;
 	radeon_rreg_t			pll_rreg;
@@ -1253,20 +1273,34 @@ int radeon_gpu_wait_for_idle(struct radeon_device *rdev);
 static inline uint32_t r100_mm_rreg(struct radeon_device *rdev, uint32_t reg)
 {
 	if (reg < rdev->rmmio_size)
+<<<<<<< HEAD
 		return readl(((void __iomem *)rdev->rmmio) + reg);
 	else {
 		writel(reg, ((void __iomem *)rdev->rmmio) + RADEON_MM_INDEX);
 		return readl(((void __iomem *)rdev->rmmio) + RADEON_MM_DATA);
+=======
+		return readl((rdev->rmmio) + reg);
+	else {
+		writel(reg, (rdev->rmmio) + RADEON_MM_INDEX);
+		return readl((rdev->rmmio) + RADEON_MM_DATA);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
 static inline void r100_mm_wreg(struct radeon_device *rdev, uint32_t reg, uint32_t v)
 {
 	if (reg < rdev->rmmio_size)
+<<<<<<< HEAD
 		writel(v, ((void __iomem *)rdev->rmmio) + reg);
 	else {
 		writel(reg, ((void __iomem *)rdev->rmmio) + RADEON_MM_INDEX);
 		writel(v, ((void __iomem *)rdev->rmmio) + RADEON_MM_DATA);
+=======
+		writel(v, (rdev->rmmio) + reg);
+	else {
+		writel(reg, (rdev->rmmio) + RADEON_MM_INDEX);
+		writel(v, (rdev->rmmio) + RADEON_MM_DATA);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -1298,10 +1332,17 @@ static inline void r100_io_wreg(struct radeon_device *rdev, u32 reg, u32 v)
 /*
  * Registers read & write functions.
  */
+<<<<<<< HEAD
 #define RREG8(reg) readb(((void __iomem *)rdev->rmmio) + (reg))
 #define WREG8(reg, v) writeb(v, ((void __iomem *)rdev->rmmio) + (reg))
 #define RREG16(reg) readw(((void __iomem *)rdev->rmmio) + (reg))
 #define WREG16(reg, v) writew(v, ((void __iomem *)rdev->rmmio) + (reg))
+=======
+#define RREG8(reg) readb((rdev->rmmio) + (reg))
+#define WREG8(reg, v) writeb(v, (rdev->rmmio) + (reg))
+#define RREG16(reg) readw((rdev->rmmio) + (reg))
+#define WREG16(reg, v) writew(v, (rdev->rmmio) + (reg))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define RREG32(reg) r100_mm_rreg(rdev, (reg))
 #define DREG32(reg) printk(KERN_INFO "REGISTER: " #reg " : 0x%08X\n", r100_mm_rreg(rdev, (reg)))
 #define WREG32(reg, v) r100_mm_wreg(rdev, (reg), (v))

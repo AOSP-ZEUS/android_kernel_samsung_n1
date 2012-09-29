@@ -93,7 +93,12 @@ static int wiphy_suspend(struct device *dev, pm_message_t state)
 
 	if (rdev->ops->suspend) {
 		rtnl_lock();
+<<<<<<< HEAD
 		ret = rdev->ops->suspend(&rdev->wiphy, rdev->wowlan);
+=======
+		if (rdev->wiphy.registered)
+			ret = rdev->ops->suspend(&rdev->wiphy, rdev->wowlan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rtnl_unlock();
 	}
 
@@ -112,7 +117,12 @@ static int wiphy_resume(struct device *dev)
 
 	if (rdev->ops->resume) {
 		rtnl_lock();
+<<<<<<< HEAD
 		ret = rdev->ops->resume(&rdev->wiphy);
+=======
+		if (rdev->wiphy.registered)
+			ret = rdev->ops->resume(&rdev->wiphy);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rtnl_unlock();
 	}
 

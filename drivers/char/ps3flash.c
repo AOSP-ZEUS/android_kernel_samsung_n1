@@ -101,12 +101,22 @@ static loff_t ps3flash_llseek(struct file *file, loff_t offset, int origin)
 
 	mutex_lock(&file->f_mapping->host->i_mutex);
 	switch (origin) {
+<<<<<<< HEAD
+=======
+	case 0:
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case 1:
 		offset += file->f_pos;
 		break;
 	case 2:
 		offset += dev->regions[dev->region_idx].size*dev->blk_size;
 		break;
+<<<<<<< HEAD
+=======
+	default:
+		offset = -1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (offset < 0) {
 		res = -EINVAL;
@@ -305,9 +315,20 @@ static int ps3flash_flush(struct file *file, fl_owner_t id)
 	return ps3flash_writeback(ps3flash_dev);
 }
 
+<<<<<<< HEAD
 static int ps3flash_fsync(struct file *file, int datasync)
 {
 	return ps3flash_writeback(ps3flash_dev);
+=======
+static int ps3flash_fsync(struct file *file, loff_t start, loff_t end, int datasync)
+{
+	struct inode *inode = file->f_path.dentry->d_inode;
+	int err;
+	mutex_lock(&inode->i_mutex);
+	err = ps3flash_writeback(ps3flash_dev);
+	mutex_unlock(&inode->i_mutex);
+	return err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static irqreturn_t ps3flash_interrupt(int irq, void *data)

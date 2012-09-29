@@ -5,7 +5,11 @@
  * because of its small size we include it in the SSB core
  * instead of creating a standalone module.
  *
+<<<<<<< HEAD
  * Copyright 2007  Michael Buesch <mb@bu3sch.de>
+=======
+ * Copyright 2007  Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Licensed under the GNU/GPL. See COPYING for details.
  */

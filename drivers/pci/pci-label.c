@@ -55,7 +55,11 @@ enum smbios_attr_enum {
 	SMBIOS_ATTR_INSTANCE_SHOW,
 };
 
+<<<<<<< HEAD
 static mode_t
+=======
+static size_t
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 find_smbios_instance_string(struct pci_dev *pdev, char *buf,
 			    enum smbios_attr_enum attribute)
 {

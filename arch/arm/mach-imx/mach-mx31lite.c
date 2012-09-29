@@ -230,6 +230,11 @@ static void __init mx31lite_init(void)
 {
 	int ret;
 
+<<<<<<< HEAD
+=======
+	imx31_soc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (mx31lite_baseboard) {
 	case MX31LITE_NOBOARD:
 		break;

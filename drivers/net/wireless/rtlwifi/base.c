@@ -27,6 +27,11 @@
  *
  *****************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/ip.h>
 #include "wifi.h"
 #include "rc.h"
@@ -397,8 +402,13 @@ void rtl_init_rfkill(struct ieee80211_hw *hw)
 	radio_state = rtlpriv->cfg->ops->radio_onoff_checking(hw, &valid);
 
 	if (valid) {
+<<<<<<< HEAD
 		printk(KERN_INFO "rtlwifi: wireless switch is %s\n",
 				rtlpriv->rfkill.rfkill_state ? "on" : "off");
+=======
+		pr_info("wireless switch is %s\n",
+			rtlpriv->rfkill.rfkill_state ? "on" : "off");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		rtlpriv->rfkill.rfkill_state = radio_state;
 
@@ -523,7 +533,11 @@ static void _rtl_query_shortgi(struct ieee80211_hw *hw,
 		mac->opmode == NL80211_IFTYPE_ADHOC)
 		bw_40 = sta->ht_cap.cap & IEEE80211_HT_CAP_SUP_WIDTH_20_40;
 
+<<<<<<< HEAD
 	if ((bw_40 == true) && sgi_40)
+=======
+	if (bw_40 && sgi_40)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tcb_desc->use_shortgi = true;
 	else if ((bw_40 == false) && sgi_20)
 		tcb_desc->use_shortgi = true;
@@ -756,6 +770,7 @@ bool rtl_action_proc(struct ieee80211_hw *hw, struct sk_buff *skb, u8 is_tx)
 				return false;
 
 			RT_TRACE(rtlpriv, (COMP_SEND | COMP_RECV), DBG_DMESG,
+<<<<<<< HEAD
 				 ("%s ACT_ADDBAREQ From :" MAC_FMT "\n",
 				  is_tx ? "Tx" : "Rx", MAC_ARG(hdr->addr2)));
 			break;
@@ -768,6 +783,19 @@ bool rtl_action_proc(struct ieee80211_hw *hw, struct sk_buff *skb, u8 is_tx)
 			RT_TRACE(rtlpriv, (COMP_SEND | COMP_RECV), DBG_DMESG,
 				 ("ACT_ADDBADEL From :" MAC_FMT "\n",
 				  MAC_ARG(hdr->addr2)));
+=======
+				 ("%s ACT_ADDBAREQ From :%pM\n",
+				  is_tx ? "Tx" : "Rx", hdr->addr2));
+			break;
+		case ACT_ADDBARSP:
+			RT_TRACE(rtlpriv, (COMP_SEND | COMP_RECV), DBG_DMESG,
+				 ("%s ACT_ADDBARSP From :%pM\n",
+				  is_tx ? "Tx" : "Rx", hdr->addr2));
+			break;
+		case ACT_DELBA:
+			RT_TRACE(rtlpriv, (COMP_SEND | COMP_RECV), DBG_DMESG,
+				 ("ACT_ADDBADEL From :%pM\n", hdr->addr2));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		}
 		break;
@@ -888,7 +916,10 @@ int rtl_tx_agg_stop(struct ieee80211_hw *hw,
 {
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
 	struct rtl_mac *mac = rtl_mac(rtl_priv(hw));
+<<<<<<< HEAD
 	struct rtl_tid_data *tid_data;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct rtl_sta_info *sta_entry = NULL;
 
 	if (sta == NULL)
@@ -906,7 +937,10 @@ int rtl_tx_agg_stop(struct ieee80211_hw *hw,
 		return -EINVAL;
 
 	sta_entry = (struct rtl_sta_info *)sta->drv_priv;
+<<<<<<< HEAD
 	tid_data = &sta_entry->tids[tid];
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sta_entry->tids[tid].agg.agg_state = RTL_AGG_STOP;
 
 	ieee80211_stop_tx_ba_cb_irqsafe(mac->vif, sta->addr, tid);
@@ -918,7 +952,10 @@ int rtl_tx_agg_oper(struct ieee80211_hw *hw,
 		struct ieee80211_sta *sta, u16 tid)
 {
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
+<<<<<<< HEAD
 	struct rtl_tid_data *tid_data;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct rtl_sta_info *sta_entry = NULL;
 
 	if (sta == NULL)
@@ -936,7 +973,10 @@ int rtl_tx_agg_oper(struct ieee80211_hw *hw,
 		return -EINVAL;
 
 	sta_entry = (struct rtl_sta_info *)sta->drv_priv;
+<<<<<<< HEAD
 	tid_data = &sta_entry->tids[tid];
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sta_entry->tids[tid].agg.agg_state = RTL_AGG_OPERATIONAL;
 
 	return 0;
@@ -1406,8 +1446,12 @@ MODULE_DESCRIPTION("Realtek 802.11n PCI wireless core");
 static int __init rtl_core_module_init(void)
 {
 	if (rtl_rate_control_register())
+<<<<<<< HEAD
 		printk(KERN_ERR "rtlwifi: Unable to register rtl_rc,"
 		       "use default RC !!\n");
+=======
+		pr_err("Unable to register rtl_rc, use default RC !!\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

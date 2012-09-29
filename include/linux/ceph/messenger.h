@@ -94,6 +94,10 @@ struct ceph_msg {
 	bool more_to_follow;
 	bool needs_out_seq;
 	int front_max;
+<<<<<<< HEAD
+=======
+	unsigned long ack_stamp;        /* tx: when we were acked */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	struct ceph_msgpool *pool;
 };

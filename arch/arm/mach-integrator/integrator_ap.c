@@ -32,6 +32,10 @@
 #include <linux/interrupt.h>
 #include <linux/io.h>
 #include <linux/mtd/physmap.h>
+<<<<<<< HEAD
+=======
+#include <video/vga.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <mach/hardware.h>
 #include <mach/platform.h>
@@ -154,6 +158,10 @@ static struct map_desc ap_io_desc[] __initdata = {
 static void __init ap_map_io(void)
 {
 	iotable_init(ap_io_desc, ARRAY_SIZE(ap_io_desc));
+<<<<<<< HEAD
+=======
+	vga_base = PCI_MEMORY_VADDR;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #define INTEGRATOR_SC_VALID_INT	0x003fffff

@@ -99,6 +99,7 @@ static void audit_mappings(struct kvm_vcpu *vcpu, u64 *sptep, int level)
 				     "level = %d\n", sp, level);
 			return;
 		}
+<<<<<<< HEAD
 
 		if (*sptep == shadow_notrap_nonpresent_pte) {
 			audit_printk(vcpu->kvm, "notrap spte in unsync "
@@ -111,6 +112,8 @@ static void audit_mappings(struct kvm_vcpu *vcpu, u64 *sptep, int level)
 		audit_printk(vcpu->kvm, "notrap spte in direct sp: %p\n",
 			     sp);
 		return;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (!is_shadow_present_pte(*sptep) || !is_last_spte(*sptep, level))

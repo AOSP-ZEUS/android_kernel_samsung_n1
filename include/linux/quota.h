@@ -180,7 +180,11 @@ enum {
 #include <linux/dqblk_v1.h>
 #include <linux/dqblk_v2.h>
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 typedef __kernel_uid32_t qid_t; /* Type in which we store ids in memory */
 typedef long long qsize_t;	/* Type in which we store sizes */
@@ -415,6 +419,7 @@ struct quota_module_name {
 	{QFMT_VFS_V0, "quota_v2"},\
 	{0, NULL}}
 
+<<<<<<< HEAD
 #else
 
 # /* nodep */ include <sys/cdefs.h>
@@ -423,5 +428,7 @@ __BEGIN_DECLS
 long quotactl __P ((unsigned int, const char *, int, caddr_t));
 __END_DECLS
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* __KERNEL__ */
 #endif /* _QUOTA_ */

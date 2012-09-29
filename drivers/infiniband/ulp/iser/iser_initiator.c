@@ -170,7 +170,11 @@ static void iser_create_send_desc(struct iser_conn	*ib_conn,
 }
 
 
+<<<<<<< HEAD
 int iser_alloc_rx_descriptors(struct iser_conn *ib_conn)
+=======
+static int iser_alloc_rx_descriptors(struct iser_conn *ib_conn)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int i, j;
 	u64 dma_addr;
@@ -236,6 +240,7 @@ void iser_free_rx_descriptors(struct iser_conn *ib_conn)
 	kfree(ib_conn->rx_descs);
 }
 
+<<<<<<< HEAD
 static int iser_post_rx_bufs(struct iscsi_conn *conn, struct iscsi_hdr *req)
 {
 	struct iscsi_iser_conn *iser_conn = conn->dd_data;
@@ -254,6 +259,25 @@ static int iser_post_rx_bufs(struct iscsi_conn *conn, struct iscsi_hdr *req)
 	WARN_ON(atomic_read(&iser_conn->ib_conn->post_send_buf_count) != 0);
 
 	iser_dbg("Initially post: %d\n", ISER_MIN_POSTED_RX);
+=======
+/**
+ *  iser_conn_set_full_featured_mode - (iSER API)
+ */
+int iser_conn_set_full_featured_mode(struct iscsi_conn *conn)
+{
+	struct iscsi_iser_conn *iser_conn = conn->dd_data;
+
+	iser_dbg("Initially post: %d\n", ISER_MIN_POSTED_RX);
+
+	/* Check that there is no posted recv or send buffers left - */
+	/* they must be consumed during the login phase */
+	BUG_ON(iser_conn->ib_conn->post_recv_buf_count != 0);
+	BUG_ON(atomic_read(&iser_conn->ib_conn->post_send_buf_count) != 0);
+
+	if (iser_alloc_rx_descriptors(iser_conn->ib_conn))
+		return -ENOMEM;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Initial post receive buffers */
 	if (iser_post_recvm(iser_conn->ib_conn, ISER_MIN_POSTED_RX))
 		return -ENOMEM;
@@ -272,7 +296,11 @@ int iser_send_command(struct iscsi_conn *conn,
 	unsigned long edtl;
 	int err;
 	struct iser_data_buf *data_buf;
+<<<<<<< HEAD
 	struct iscsi_cmd *hdr =  (struct iscsi_cmd *)task->hdr;
+=======
+	struct iscsi_scsi_req *hdr = (struct iscsi_scsi_req *)task->hdr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct scsi_cmnd *sc  =  task->sc;
 	struct iser_tx_desc *tx_desc = &iser_task->desc;
 
@@ -413,7 +441,11 @@ int iser_send_control(struct iscsi_conn *conn,
 		memcpy(iser_conn->ib_conn->login_buf, task->data,
 							task->data_count);
 		tx_dsg->addr    = iser_conn->ib_conn->login_dma;
+<<<<<<< HEAD
 		tx_dsg->length  = data_seg_len;
+=======
+		tx_dsg->length  = task->data_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tx_dsg->lkey    = device->mr->lkey;
 		mdesc->num_sge = 2;
 	}
@@ -422,9 +454,12 @@ int iser_send_control(struct iscsi_conn *conn,
 		err = iser_post_recvl(iser_conn->ib_conn);
 		if (err)
 			goto send_control_error;
+<<<<<<< HEAD
 		err = iser_post_rx_bufs(conn, task->hdr);
 		if (err)
 			goto send_control_error;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	err = iser_post_send(iser_conn->ib_conn, mdesc);

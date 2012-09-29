@@ -56,6 +56,14 @@ ENTRY(cpu_v6_proc_fin)
  */
 	.align	5
 ENTRY(cpu_v6_reset)
+<<<<<<< HEAD
+=======
+	mrc	p15, 0, r1, c1, c0, 0		@ ctrl register
+	bic	r1, r1, #0x1			@ ...............m
+	mcr	p15, 0, r1, c1, c0, 0		@ disable MMU
+	mov	r1, #0
+	mcr	p15, 0, r1, c7, c5, 4		@ ISB
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mov	pc, r0
 
 /*
@@ -164,6 +172,7 @@ ENDPROC(cpu_v6_do_resume)
 cpu_resume_l1_flags:
 	ALT_SMP(.long PMD_TYPE_SECT | PMD_SECT_AP_WRITE | PMD_FLAGS_SMP)
 	ALT_UP(.long  PMD_TYPE_SECT | PMD_SECT_AP_WRITE | PMD_FLAGS_UP)
+<<<<<<< HEAD
 #else
 #define cpu_v6_do_suspend 0
 #define cpu_v6_do_resume 0
@@ -174,6 +183,11 @@ cpu_resume_l1_flags:
 cpu_v6_name:
 	.asciz	"ARMv6-compatible processor"
 	.size	cpu_v6_name, . - cpu_v6_name
+=======
+#endif
+
+	string	cpu_v6_name, "ARMv6-compatible processor"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 
@@ -225,6 +239,25 @@ __v6_setup:
 	mrc	p15, 0, r0, c1, c0, 0		@ read control register
 	bic	r0, r0, r5			@ clear bits them
 	orr	r0, r0, r6			@ set them
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_ARM_ERRATA_364296
+	/*
+	 * Workaround for the 364296 ARM1136 r0p2 erratum (possible cache data
+	 * corruption with hit-under-miss enabled). The conditional code below
+	 * (setting the undocumented bit 31 in the auxiliary control register
+	 * and the FI bit in the control register) disables hit-under-miss
+	 * without putting the processor into full low interrupt latency mode.
+	 */
+	ldr	r6, =0x4107b362			@ id for ARM1136 r0p2
+	mrc	p15, 0, r5, c0, c0, 0		@ get processor id
+	teq	r5, r6				@ check for the faulty core
+	mrceq	p15, 0, r5, c1, c0, 1		@ load aux control reg
+	orreq	r5, r5, #(1 << 31)		@ set the undocumented bit 31
+	mcreq	p15, 0, r5, c1, c0, 1		@ write aux control reg
+	orreq	r0, r0, #(1 << 21)		@ low interrupt latency configuration
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mov	pc, lr				@ return to head.S:__ret
 
 	/*
@@ -239,6 +272,7 @@ v6_crval:
 
 	__INITDATA
 
+<<<<<<< HEAD
 	.type	v6_processor_functions, #object
 ENTRY(v6_processor_functions)
 	.word	v6_early_abort
@@ -266,6 +300,15 @@ cpu_arch_name:
 cpu_elf_name:
 	.asciz	"v6"
 	.size	cpu_elf_name, . - cpu_elf_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions v6, dabort=v6_early_abort, pabort=v6_pabort, suspend=1
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv6"
+	string	cpu_elf_name, "v6"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.align
 
 	.section ".proc.info.init", #alloc, #execinstr

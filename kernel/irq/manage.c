@@ -770,7 +770,11 @@ static int irq_thread(void *data)
 			struct irqaction *action);
 	int wake;
 
+<<<<<<< HEAD
 	if (force_irqthreads && test_bit(IRQTF_FORCED_THREAD,
+=======
+	if (force_irqthreads & test_bit(IRQTF_FORCED_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					&action->thread_flags))
 		handler_fn = irq_forced_thread_fn;
 	else
@@ -886,6 +890,11 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 
 	if (desc->irq_data.chip == &no_irq_chip)
 		return -ENOSYS;
+<<<<<<< HEAD
+=======
+	if (!try_module_get(desc->owner))
+		return -ENODEV;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Some drivers like serial.c use request_irq() heavily,
 	 * so we have to be careful not to interfere with a
@@ -909,8 +918,15 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 	 */
 	nested = irq_settings_is_nested_thread(desc);
 	if (nested) {
+<<<<<<< HEAD
 		if (!new->thread_fn)
 			return -EINVAL;
+=======
+		if (!new->thread_fn) {
+			ret = -EINVAL;
+			goto out_mput;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * Replace the primary handler which was provided from
 		 * the driver for non nested interrupt handling by the
@@ -932,8 +948,15 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 
 		t = kthread_create(irq_thread, new, "irq/%d-%s", irq,
 				   new->name);
+<<<<<<< HEAD
 		if (IS_ERR(t))
 			return PTR_ERR(t);
+=======
+		if (IS_ERR(t)) {
+			ret = PTR_ERR(t);
+			goto out_mput;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * We keep the reference to the task struct even if
 		 * the thread dies to avoid that the interrupt code
@@ -976,11 +999,14 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 
 		/* add new interrupt at end of irq queue */
 		do {
+<<<<<<< HEAD
 			/*
 			 * Or all existing action->thread_mask bits,
 			 * so we can find the next zero bit for this
 			 * new action.
 			 */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			thread_mask |= old->thread_mask;
 			old_ptr = &old->next;
 			old = *old_ptr;
@@ -989,6 +1015,7 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 	}
 
 	/*
+<<<<<<< HEAD
 	 * Setup the thread mask for this irqaction for ONESHOT. For
 	 * !ONESHOT irqs the thread mask is 0 so we can avoid a
 	 * conditional in irq_wake_thread().
@@ -1024,6 +1051,16 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 		 */
 		new->thread_mask = 1 << ffz(thread_mask);
 	}
+=======
+	 * Setup the thread mask for this irqaction. Unlikely to have
+	 * 32 resp 64 irqs sharing one line, but who knows.
+	 */
+	if (new->flags & IRQF_ONESHOT && thread_mask == ~0UL) {
+		ret = -EBUSY;
+		goto out_mask;
+	}
+	new->thread_mask = 1 << ffz(thread_mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!shared) {
 		init_waitqueue_head(&desc->wait_for_threads);
@@ -1050,7 +1087,11 @@ __setup_irq(unsigned int irq, struct irq_desc *desc, struct irqaction *new)
 			desc->istate |= IRQS_ONESHOT;
 
 		if (irq_settings_can_autoenable(desc))
+<<<<<<< HEAD
 			irq_startup(desc, true);
+=======
+			irq_startup(desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		else
 			/* Undo nested disables: */
 			desc->depth = 1;
@@ -1130,6 +1171,11 @@ out_thread:
 			kthread_stop(t);
 		put_task_struct(t);
 	}
+<<<<<<< HEAD
+=======
+out_mput:
+	module_put(desc->owner);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
@@ -1238,6 +1284,10 @@ static struct irqaction *__free_irq(unsigned int irq, void *dev_id)
 		put_task_struct(action->thread);
 	}
 
+<<<<<<< HEAD
+=======
+	module_put(desc->owner);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return action;
 }
 

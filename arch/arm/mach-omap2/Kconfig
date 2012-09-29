@@ -7,7 +7,10 @@ config ARCH_OMAP2PLUS_TYPICAL
 	default y
 	select AEABI
 	select REGULATOR
+<<<<<<< HEAD
 	select PM
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select PM_RUNTIME
 	select VFP
 	select NEON if ARCH_OMAP3 || ARCH_OMAP4
@@ -266,9 +269,16 @@ config MACH_OMAP_ZOOM3
 	select REGULATOR_FIXED_VOLTAGE
 
 config MACH_CM_T35
+<<<<<<< HEAD
 	bool "CompuLab CM-T35 module"
 	depends on ARCH_OMAP3
 	default y
+=======
+	bool "CompuLab CM-T35/CM-T3730 modules"
+	depends on ARCH_OMAP3
+	default y
+	select MACH_CM_T3730
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select OMAP_PACKAGE_CUS
 
 config MACH_CM_T3517
@@ -277,6 +287,12 @@ config MACH_CM_T3517
 	default y
 	select OMAP_PACKAGE_CBB
 
+<<<<<<< HEAD
+=======
+config MACH_CM_T3730
+       bool
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config MACH_IGEP0020
 	bool "IGEP v2 board"
 	depends on ARCH_OMAP3

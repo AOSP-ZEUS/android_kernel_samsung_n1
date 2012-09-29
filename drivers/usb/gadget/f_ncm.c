@@ -48,12 +48,15 @@
 #define NCM_NDP_HDR_CRC		0x01000000
 #define NCM_NDP_HDR_NOCRC	0x00000000
 
+<<<<<<< HEAD
 struct ncm_ep_descs {
 	struct usb_endpoint_descriptor	*in;
 	struct usb_endpoint_descriptor	*out;
 	struct usb_endpoint_descriptor	*notify;
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 enum ncm_notify_state {
 	NCM_NOTIFY_NONE,		/* don't notify */
 	NCM_NOTIFY_CONNECT,		/* issue CONNECT next */
@@ -66,11 +69,15 @@ struct f_ncm {
 
 	char				ethaddr[14];
 
+<<<<<<< HEAD
 	struct ncm_ep_descs		fs;
 	struct ncm_ep_descs		hs;
 
 	struct usb_ep			*notify;
 	struct usb_endpoint_descriptor	*notify_desc;
+=======
+	struct usb_ep			*notify;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct usb_request		*notify_req;
 	u8				notify_state;
 	bool				is_open;
@@ -802,6 +809,7 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 		if (ncm->notify->driver_data) {
 			DBG(cdev, "reset ncm control %d\n", intf);
 			usb_ep_disable(ncm->notify);
+<<<<<<< HEAD
 		} else {
 			DBG(cdev, "init ncm ctrl %d\n", intf);
 			ncm->notify_desc = ep_choose(cdev->gadget,
@@ -809,6 +817,16 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 					ncm->fs.notify);
 		}
 		usb_ep_enable(ncm->notify, ncm->notify_desc);
+=======
+		}
+
+		if (!(ncm->notify->desc)) {
+			DBG(cdev, "init ncm ctrl %d\n", intf);
+			if (config_ep_by_speed(cdev->gadget, f, ncm->notify))
+				goto fail;
+		}
+		usb_ep_enable(ncm->notify);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ncm->notify->driver_data = ncm;
 
 	/* Data interface has two altsettings, 0 and 1 */
@@ -829,6 +847,7 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 		if (alt == 1) {
 			struct net_device	*net;
 
+<<<<<<< HEAD
 			if (!ncm->port.in) {
 				DBG(cdev, "init ncm\n");
 				ncm->port.in = ep_choose(cdev->gadget,
@@ -837,6 +856,19 @@ static int ncm_set_alt(struct usb_function *f, unsigned intf, unsigned alt)
 				ncm->port.out = ep_choose(cdev->gadget,
 							  ncm->hs.out,
 							  ncm->fs.out);
+=======
+			if (!ncm->port.in_ep->desc ||
+			    !ncm->port.out_ep->desc) {
+				DBG(cdev, "init ncm\n");
+				if (config_ep_by_speed(cdev->gadget, f,
+						       ncm->port.in_ep) ||
+				    config_ep_by_speed(cdev->gadget, f,
+						       ncm->port.out_ep)) {
+					ncm->port.in_ep->desc = NULL;
+					ncm->port.out_ep->desc = NULL;
+					goto fail;
+				}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 
 			/* TODO */
@@ -1111,7 +1143,11 @@ static void ncm_disable(struct usb_function *f)
 	if (ncm->notify->driver_data) {
 		usb_ep_disable(ncm->notify);
 		ncm->notify->driver_data = NULL;
+<<<<<<< HEAD
 		ncm->notify_desc = NULL;
+=======
+		ncm->notify->desc = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -1228,6 +1264,7 @@ ncm_bind(struct usb_configuration *c, struct usb_function *f)
 	if (!f->descriptors)
 		goto fail;
 
+<<<<<<< HEAD
 	ncm->fs.in = usb_find_endpoint(ncm_fs_function,
 			f->descriptors, &fs_ncm_in_desc);
 	ncm->fs.out = usb_find_endpoint(ncm_fs_function,
@@ -1235,6 +1272,8 @@ ncm_bind(struct usb_configuration *c, struct usb_function *f)
 	ncm->fs.notify = usb_find_endpoint(ncm_fs_function,
 			f->descriptors, &fs_ncm_notify_desc);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * support all relevant hardware speeds... we expect that when
 	 * hardware is dual speed, all bulk-capable endpoints work at
@@ -1252,6 +1291,7 @@ ncm_bind(struct usb_configuration *c, struct usb_function *f)
 		f->hs_descriptors = usb_copy_descriptors(ncm_hs_function);
 		if (!f->hs_descriptors)
 			goto fail;
+<<<<<<< HEAD
 
 		ncm->hs.in = usb_find_endpoint(ncm_hs_function,
 				f->hs_descriptors, &hs_ncm_in_desc);
@@ -1259,6 +1299,8 @@ ncm_bind(struct usb_configuration *c, struct usb_function *f)
 				f->hs_descriptors, &hs_ncm_out_desc);
 		ncm->hs.notify = usb_find_endpoint(ncm_hs_function,
 				f->hs_descriptors, &hs_ncm_notify_desc);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/*
@@ -1288,9 +1330,15 @@ fail:
 	/* we might as well release our claims on endpoints */
 	if (ncm->notify)
 		ncm->notify->driver_data = NULL;
+<<<<<<< HEAD
 	if (ncm->port.out)
 		ncm->port.out_ep->driver_data = NULL;
 	if (ncm->port.in)
+=======
+	if (ncm->port.out_ep->desc)
+		ncm->port.out_ep->driver_data = NULL;
+	if (ncm->port.in_ep->desc)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ncm->port.in_ep->driver_data = NULL;
 
 	ERROR(cdev, "%s: can't bind, err %d\n", f->name, status);

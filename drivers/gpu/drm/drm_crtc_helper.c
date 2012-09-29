@@ -560,6 +560,14 @@ int drm_crtc_helper_set_config(struct drm_mode_set *set)
 			mode_changed = true;
 		} else if (set->fb == NULL) {
 			mode_changed = true;
+<<<<<<< HEAD
+=======
+		} else if (set->fb->depth != set->crtc->fb->depth) {
+			mode_changed = true;
+		} else if (set->fb->bits_per_pixel !=
+			   set->crtc->fb->bits_per_pixel) {
+			mode_changed = true;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else
 			fb_changed = true;
 	}

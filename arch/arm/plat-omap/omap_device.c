@@ -236,6 +236,7 @@ static int _omap_device_deactivate(struct omap_device *od, u8 ignore_lat)
 	return 0;
 }
 
+<<<<<<< HEAD
 static inline struct omap_device *_find_by_pdev(struct platform_device *pdev)
 {
 	return container_of(pdev, struct omap_device, pdev);
@@ -248,12 +249,61 @@ static inline struct omap_device *_find_by_pdev(struct platform_device *pdev)
  * For every optional clock present per hwmod per omap_device, this function
  * adds an entry in the clkdev table of the form <dev-id=dev_name, con-id=role>
  * if it does not exist already.
+=======
+static void _add_clkdev(struct omap_device *od, const char *clk_alias,
+		       const char *clk_name)
+{
+	struct clk *r;
+	struct clk_lookup *l;
+
+	if (!clk_alias || !clk_name)
+		return;
+
+	pr_debug("omap_device: %s: Creating %s -> %s\n",
+		 dev_name(&od->pdev.dev), clk_alias, clk_name);
+
+	r = clk_get_sys(dev_name(&od->pdev.dev), clk_alias);
+	if (!IS_ERR(r)) {
+		pr_warning("omap_device: %s: alias %s already exists\n",
+			   dev_name(&od->pdev.dev), clk_alias);
+		clk_put(r);
+		return;
+	}
+
+	r = omap_clk_get_by_name(clk_name);
+	if (IS_ERR(r)) {
+		pr_err("omap_device: %s: omap_clk_get_by_name for %s failed\n",
+		       dev_name(&od->pdev.dev), clk_name);
+		return;
+	}
+
+	l = clkdev_alloc(r, clk_alias, dev_name(&od->pdev.dev));
+	if (!l) {
+		pr_err("omap_device: %s: clkdev_alloc for %s failed\n",
+		       dev_name(&od->pdev.dev), clk_alias);
+		return;
+	}
+
+	clkdev_add(l);
+}
+
+/**
+ * _add_hwmod_clocks_clkdev - Add clkdev entry for hwmod optional clocks
+ * and main clock
+ * @od: struct omap_device *od
+ * @oh: struct omap_hwmod *oh
+ *
+ * For the main clock and every optional clock present per hwmod per
+ * omap_device, this function adds an entry in the clkdev table of the
+ * form <dev-id=dev_name, con-id=role> if it does not exist already.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * The function is called from inside omap_device_build_ss(), after
  * omap_device_register.
  *
  * This allows drivers to get a pointer to its optional clocks based on its role
  * by calling clk_get(<dev*>, <role>).
+<<<<<<< HEAD
  *
  * No return value.
  */
@@ -291,6 +341,21 @@ static void _add_optional_clock_clkdev(struct omap_device *od,
 		}
 		clkdev_add(l);
 	}
+=======
+ * In the case of the main clock, a "fck" alias is used.
+ *
+ * No return value.
+ */
+static void _add_hwmod_clocks_clkdev(struct omap_device *od,
+				     struct omap_hwmod *oh)
+{
+	int i;
+
+	_add_clkdev(od, "fck", oh->main_clk);
+
+	for (i = 0; i < oh->opt_clks_cnt; i++)
+		_add_clkdev(od, oh->opt_clks[i].role, oh->opt_clks[i].clk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 
@@ -316,7 +381,11 @@ u32 omap_device_get_context_loss_count(struct platform_device *pdev)
 	struct omap_device *od;
 	u32 ret = 0;
 
+<<<<<<< HEAD
 	od = _find_by_pdev(pdev);
+=======
+	od = to_omap_device(pdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (od->hwmods_cnt)
 		ret = omap_hwmod_get_context_loss_count(od->hwmods[0]);
@@ -497,7 +566,11 @@ struct omap_device *omap_device_build_ss(const char *pdev_name, int pdev_id,
 
 	for (i = 0; i < oh_cnt; i++) {
 		hwmods[i]->od = od;
+<<<<<<< HEAD
 		_add_optional_clock_clkdev(od, hwmods[i]);
+=======
+		_add_hwmod_clocks_clkdev(od, hwmods[i]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (ret)
@@ -537,6 +610,10 @@ int omap_early_device_register(struct omap_device *od)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_PM_RUNTIME
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int _od_runtime_suspend(struct device *dev)
 {
 	struct platform_device *pdev = to_platform_device(dev);
@@ -563,6 +640,7 @@ static int _od_runtime_resume(struct device *dev)
 
 	return pm_generic_runtime_resume(dev);
 }
+<<<<<<< HEAD
 
 static struct dev_power_domain omap_device_power_domain = {
 	.ops = {
@@ -570,6 +648,61 @@ static struct dev_power_domain omap_device_power_domain = {
 		.runtime_idle = _od_runtime_idle,
 		.runtime_resume = _od_runtime_resume,
 		USE_PLATFORM_PM_SLEEP_OPS
+=======
+#endif
+
+#ifdef CONFIG_SUSPEND
+static int _od_suspend_noirq(struct device *dev)
+{
+	struct platform_device *pdev = to_platform_device(dev);
+	struct omap_device *od = to_omap_device(pdev);
+	int ret;
+
+	if (od->flags & OMAP_DEVICE_NO_IDLE_ON_SUSPEND)
+		return pm_generic_suspend_noirq(dev);
+
+	ret = pm_generic_suspend_noirq(dev);
+
+	if (!ret && !pm_runtime_status_suspended(dev)) {
+		if (pm_generic_runtime_suspend(dev) == 0) {
+			omap_device_idle(pdev);
+			od->flags |= OMAP_DEVICE_SUSPENDED;
+		}
+	}
+
+	return ret;
+}
+
+static int _od_resume_noirq(struct device *dev)
+{
+	struct platform_device *pdev = to_platform_device(dev);
+	struct omap_device *od = to_omap_device(pdev);
+
+	if (od->flags & OMAP_DEVICE_NO_IDLE_ON_SUSPEND)
+		return pm_generic_resume_noirq(dev);
+
+	if ((od->flags & OMAP_DEVICE_SUSPENDED) &&
+	    !pm_runtime_status_suspended(dev)) {
+		od->flags &= ~OMAP_DEVICE_SUSPENDED;
+		omap_device_enable(pdev);
+		pm_generic_runtime_resume(dev);
+	}
+
+	return pm_generic_resume_noirq(dev);
+}
+#else
+#define _od_suspend_noirq NULL
+#define _od_resume_noirq NULL
+#endif
+
+static struct dev_pm_domain omap_device_pm_domain = {
+	.ops = {
+		SET_RUNTIME_PM_OPS(_od_runtime_suspend, _od_runtime_resume,
+				   _od_runtime_idle)
+		USE_PLATFORM_PM_SLEEP_OPS
+		.suspend_noirq = _od_suspend_noirq,
+		.resume_noirq = _od_resume_noirq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 };
 
@@ -586,7 +719,11 @@ int omap_device_register(struct omap_device *od)
 	pr_debug("omap_device: %s: registering\n", od->pdev.name);
 
 	od->pdev.dev.parent = &omap_device_parent;
+<<<<<<< HEAD
 	od->pdev.dev.pwr_domain = &omap_device_power_domain;
+=======
+	od->pdev.dev.pm_domain = &omap_device_pm_domain;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return platform_device_register(&od->pdev);
 }
 
@@ -611,7 +748,11 @@ int omap_device_enable(struct platform_device *pdev)
 	int ret;
 	struct omap_device *od;
 
+<<<<<<< HEAD
 	od = _find_by_pdev(pdev);
+=======
+	od = to_omap_device(pdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (od->_state == OMAP_DEVICE_STATE_ENABLED) {
 		WARN(1, "omap_device: %s.%d: %s() called from invalid state %d\n",
@@ -650,7 +791,11 @@ int omap_device_idle(struct platform_device *pdev)
 	int ret;
 	struct omap_device *od;
 
+<<<<<<< HEAD
 	od = _find_by_pdev(pdev);
+=======
+	od = to_omap_device(pdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (od->_state != OMAP_DEVICE_STATE_ENABLED) {
 		WARN(1, "omap_device: %s.%d: %s() called from invalid state %d\n",
@@ -681,7 +826,11 @@ int omap_device_shutdown(struct platform_device *pdev)
 	int ret, i;
 	struct omap_device *od;
 
+<<<<<<< HEAD
 	od = _find_by_pdev(pdev);
+=======
+	od = to_omap_device(pdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (od->_state != OMAP_DEVICE_STATE_ENABLED &&
 	    od->_state != OMAP_DEVICE_STATE_IDLE) {
@@ -722,7 +871,11 @@ int omap_device_align_pm_lat(struct platform_device *pdev,
 	int ret = -EINVAL;
 	struct omap_device *od;
 
+<<<<<<< HEAD
 	od = _find_by_pdev(pdev);
+=======
+	od = to_omap_device(pdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (new_wakeup_lat_limit == od->dev_wakeup_lat)
 		return 0;

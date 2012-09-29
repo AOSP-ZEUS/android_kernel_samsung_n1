@@ -417,7 +417,11 @@ static const struct tv_mode tv_modes[] = {
 	{
 		.name		= "NTSC-M",
 		.clock		= 108000,
+<<<<<<< HEAD
 		.refresh	= 59940,
+=======
+		.refresh	= 29970,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.oversample	= TV_OVERSAMPLE_8X,
 		.component_only = 0,
 		/* 525 Lines, 60 Fields, 15.734KHz line, Sub-Carrier 3.580MHz */
@@ -460,7 +464,11 @@ static const struct tv_mode tv_modes[] = {
 	{
 		.name		= "NTSC-443",
 		.clock		= 108000,
+<<<<<<< HEAD
 		.refresh	= 59940,
+=======
+		.refresh	= 29970,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.oversample	= TV_OVERSAMPLE_8X,
 		.component_only = 0,
 		/* 525 Lines, 60 Fields, 15.734KHz line, Sub-Carrier 4.43MHz */
@@ -502,7 +510,11 @@ static const struct tv_mode tv_modes[] = {
 	{
 		.name		= "NTSC-J",
 		.clock		= 108000,
+<<<<<<< HEAD
 		.refresh	= 59940,
+=======
+		.refresh	= 29970,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.oversample	= TV_OVERSAMPLE_8X,
 		.component_only = 0,
 
@@ -545,7 +557,11 @@ static const struct tv_mode tv_modes[] = {
 	{
 		.name		= "PAL-M",
 		.clock		= 108000,
+<<<<<<< HEAD
 		.refresh	= 59940,
+=======
+		.refresh	= 29970,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.oversample	= TV_OVERSAMPLE_8X,
 		.component_only = 0,
 
@@ -589,7 +605,11 @@ static const struct tv_mode tv_modes[] = {
 		/* 625 Lines, 50 Fields, 15.625KHz line, Sub-Carrier 4.434MHz */
 		.name	    = "PAL-N",
 		.clock		= 108000,
+<<<<<<< HEAD
 		.refresh	= 50000,
+=======
+		.refresh	= 25000,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.oversample	= TV_OVERSAMPLE_8X,
 		.component_only = 0,
 
@@ -634,7 +654,11 @@ static const struct tv_mode tv_modes[] = {
 		/* 625 Lines, 50 Fields, 15.625KHz line, Sub-Carrier 4.434MHz */
 		.name	    = "PAL",
 		.clock		= 108000,
+<<<<<<< HEAD
 		.refresh	= 50000,
+=======
+		.refresh	= 25000,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.oversample	= TV_OVERSAMPLE_8X,
 		.component_only = 0,
 
@@ -821,7 +845,11 @@ static const struct tv_mode tv_modes[] = {
 	{
 		.name       = "1080i@50Hz",
 		.clock		= 148800,
+<<<<<<< HEAD
 		.refresh	= 50000,
+=======
+		.refresh	= 25000,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.oversample     = TV_OVERSAMPLE_2X,
 		.component_only = 1,
 
@@ -847,7 +875,11 @@ static const struct tv_mode tv_modes[] = {
 	{
 		.name       = "1080i@60Hz",
 		.clock		= 148800,
+<<<<<<< HEAD
 		.refresh	= 60000,
+=======
+		.refresh	= 30000,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.oversample     = TV_OVERSAMPLE_2X,
 		.component_only = 1,
 
@@ -1236,6 +1268,11 @@ intel_tv_detect_type (struct intel_tv *intel_tv,
 		      struct drm_connector *connector)
 {
 	struct drm_encoder *encoder = &intel_tv->base.base;
+<<<<<<< HEAD
+=======
+	struct drm_crtc *crtc = encoder->crtc;
+	struct intel_crtc *intel_crtc = to_intel_crtc(crtc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct drm_device *dev = encoder->dev;
 	struct drm_i915_private *dev_priv = dev->dev_private;
 	unsigned long irqflags;
@@ -1258,6 +1295,13 @@ intel_tv_detect_type (struct intel_tv *intel_tv,
 	/* Poll for TV detection */
 	tv_ctl &= ~(TV_ENC_ENABLE | TV_TEST_MODE_MASK);
 	tv_ctl |= TV_TEST_MODE_MONITOR_DETECT;
+<<<<<<< HEAD
+=======
+	if (intel_crtc->pipe == 1)
+		tv_ctl |= TV_ENC_PIPEB_SELECT;
+	else
+		tv_ctl &= ~TV_ENC_PIPEB_SELECT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	tv_dac &= ~(TVDAC_SENSE_MASK | DAC_A_MASK | DAC_B_MASK | DAC_C_MASK);
 	tv_dac |= (TVDAC_STATE_CHG_EN |
@@ -1277,6 +1321,7 @@ intel_tv_detect_type (struct intel_tv *intel_tv,
 			      to_intel_crtc(intel_tv->base.base.crtc)->pipe);
 
 	type = -1;
+<<<<<<< HEAD
 	if (wait_for((tv_dac = I915_READ(TV_DAC)) & TVDAC_STATE_CHG, 20) == 0) {
 		DRM_DEBUG_KMS("TV detected: %x, %x\n", tv_ctl, tv_dac);
 		/*
@@ -1297,6 +1342,28 @@ intel_tv_detect_type (struct intel_tv *intel_tv,
 		} else {
 			DRM_DEBUG_KMS("Unrecognised TV connection\n");
 		}
+=======
+	tv_dac = I915_READ(TV_DAC);
+	DRM_DEBUG_KMS("TV detected: %x, %x\n", tv_ctl, tv_dac);
+	/*
+	 *  A B C
+	 *  0 1 1 Composite
+	 *  1 0 X svideo
+	 *  0 0 0 Component
+	 */
+	if ((tv_dac & TVDAC_SENSE_MASK) == (TVDAC_B_SENSE | TVDAC_C_SENSE)) {
+		DRM_DEBUG_KMS("Detected Composite TV connection\n");
+		type = DRM_MODE_CONNECTOR_Composite;
+	} else if ((tv_dac & (TVDAC_A_SENSE|TVDAC_B_SENSE)) == TVDAC_A_SENSE) {
+		DRM_DEBUG_KMS("Detected S-Video TV connection\n");
+		type = DRM_MODE_CONNECTOR_SVIDEO;
+	} else if ((tv_dac & TVDAC_SENSE_MASK) == 0) {
+		DRM_DEBUG_KMS("Detected Component TV connection\n");
+		type = DRM_MODE_CONNECTOR_Component;
+	} else {
+		DRM_DEBUG_KMS("Unrecognised TV connection\n");
+		type = -1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	I915_WRITE(TV_DAC, save_tv_dac & ~TVDAC_STATE_CHG_EN);

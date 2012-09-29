@@ -11,8 +11,15 @@
  * Written by Thierry Reding <thierry.reding@avionic-design.de>
  */
 
+<<<<<<< HEAD
 #include <linux/etherdevice.h>
 #include <linux/crc32.h>
+=======
+#include <linux/dma-mapping.h>
+#include <linux/etherdevice.h>
+#include <linux/crc32.h>
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/io.h>
 #include <linux/mii.h>
 #include <linux/phy.h>
@@ -874,6 +881,10 @@ static netdev_tx_t ethoc_start_xmit(struct sk_buff *skb, struct net_device *dev)
 	}
 
 	spin_unlock_irq(&priv->lock);
+<<<<<<< HEAD
+=======
+	skb_tx_timestamp(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out:
 	dev_kfree_skb(skb);
 	return NETDEV_TX_OK;
@@ -965,7 +976,11 @@ static int __devinit ethoc_probe(struct platform_device *pdev)
 	priv = netdev_priv(netdev);
 	priv->netdev = netdev;
 	priv->dma_alloc = 0;
+<<<<<<< HEAD
 	priv->io_region_size = mmio->end - mmio->start + 1;
+=======
+	priv->io_region_size = resource_size(mmio);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	priv->iobase = devm_ioremap_nocache(&pdev->dev, netdev->base_addr,
 			resource_size(mmio));

@@ -146,7 +146,11 @@ extern struct request *elv_rb_latter_request(struct request_queue *, struct requ
 /*
  * rb support functions.
  */
+<<<<<<< HEAD
 extern struct request *elv_rb_add(struct rb_root *, struct request *);
+=======
+extern void elv_rb_add(struct rb_root *, struct request *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void elv_rb_del(struct rb_root *, struct request *);
 extern struct request *elv_rb_find(struct rb_root *, sector_t);
 

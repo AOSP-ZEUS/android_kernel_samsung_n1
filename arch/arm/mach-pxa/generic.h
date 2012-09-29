@@ -13,6 +13,7 @@ struct irq_data;
 struct sys_timer;
 
 extern struct sys_timer pxa_timer;
+<<<<<<< HEAD
 extern void __init pxa_init_irq(int irq_nr,
 				int (*set_wake)(struct irq_data *,
 						unsigned int));
@@ -28,6 +29,10 @@ extern void __init pxa_map_io(void);
 extern void __init pxa25x_map_io(void);
 extern void __init pxa27x_map_io(void);
 extern void __init pxa3xx_map_io(void);
+=======
+
+extern void __init pxa_map_io(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern unsigned int get_clk_frequency_khz(int info);
 

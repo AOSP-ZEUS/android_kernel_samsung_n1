@@ -132,7 +132,11 @@ static void __init mx51_efikasb_usb(void)
 		mxc_register_device(&mxc_usbh2_device, &usbh2_config);
 }
 
+<<<<<<< HEAD
 static struct gpio_led mx51_efikasb_leds[] = {
+=======
+static const struct gpio_led mx51_efikasb_leds[] __initconst = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		.name = "efikasb:green",
 		.default_trigger = "default-on",
@@ -146,11 +150,17 @@ static struct gpio_led mx51_efikasb_leds[] = {
 	},
 };
 
+<<<<<<< HEAD
 static struct gpio_led_platform_data mx51_efikasb_leds_data = {
+=======
+static const struct gpio_led_platform_data
+		mx51_efikasb_leds_data __initconst = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.leds = mx51_efikasb_leds,
 	.num_leds = ARRAY_SIZE(mx51_efikasb_leds),
 };
 
+<<<<<<< HEAD
 static struct platform_device mx51_efikasb_leds_device = {
 	.name = "leds-gpio",
 	.id = -1,
@@ -159,20 +169,30 @@ static struct platform_device mx51_efikasb_leds_device = {
 	},
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct gpio_keys_button mx51_efikasb_keys[] = {
 	{
 		.code = KEY_POWER,
 		.gpio = EFIKASB_PWRKEY,
+<<<<<<< HEAD
 		.type = EV_PWR,
 		.desc = "Power Button",
 		.wakeup = 1,
 		.debounce_interval = 10, /* ms */
+=======
+		.type = EV_KEY,
+		.desc = "Power Button",
+		.wakeup = 1,
+		.active_low = 1,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 	{
 		.code = SW_LID,
 		.gpio = EFIKASB_LID,
 		.type = EV_SW,
 		.desc = "Lid Switch",
+<<<<<<< HEAD
 	},
 	{
 		/* SW_RFKILLALL vs KEY_RFKILL ? */
@@ -180,6 +200,16 @@ static struct gpio_keys_button mx51_efikasb_keys[] = {
 		.gpio = EFIKASB_RFKILL,
 		.type = EV_SW,
 		.desc = "rfkill",
+=======
+		.active_low = 1,
+	},
+	{
+		.code = KEY_RFKILL,
+		.gpio = EFIKASB_RFKILL,
+		.type = EV_KEY,
+		.desc = "rfkill",
+		.active_low = 1,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 };
 
@@ -231,8 +261,13 @@ static void __init mx51_efikasb_board_id(void)
 	gpio_request(EFIKASB_PCBID1, "pcb id1");
 	gpio_direction_input(EFIKASB_PCBID1);
 
+<<<<<<< HEAD
 	id = gpio_get_value(EFIKASB_PCBID0);
 	id |= gpio_get_value(EFIKASB_PCBID1) << 1;
+=======
+	id = gpio_get_value(EFIKASB_PCBID0) ? 1 : 0;
+	id |= (gpio_get_value(EFIKASB_PCBID1) ? 1 : 0) << 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (id) {
 	default:
@@ -248,6 +283,11 @@ static void __init mx51_efikasb_board_id(void)
 
 static void __init efikasb_board_init(void)
 {
+<<<<<<< HEAD
+=======
+	imx51_soc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mxc_iomux_v3_setup_multiple_pads(mx51efikasb_pads,
 					ARRAY_SIZE(mx51efikasb_pads));
 	efika_board_common_init();
@@ -256,9 +296,14 @@ static void __init efikasb_board_init(void)
 	mx51_efikasb_usb();
 	imx51_add_sdhci_esdhc_imx(1, NULL);
 
+<<<<<<< HEAD
 	platform_device_register(&mx51_efikasb_leds_device);
 	imx_add_gpio_keys(&mx51_efikasb_keys_data);
 
+=======
+	gpio_led_register_device(-1, &mx51_efikasb_leds_data);
+	imx_add_gpio_keys(&mx51_efikasb_keys_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void __init mx51_efikasb_timer_init(void)

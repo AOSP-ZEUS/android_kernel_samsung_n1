@@ -76,7 +76,11 @@ static inline unsigned long macio_resource_len(struct macio_dev *dev, int resour
 	struct resource *res = &dev->resource[resource_no];
 	if (res->start == 0 || res->end == 0 || res->end < res->start)
 		return 0;
+<<<<<<< HEAD
 	return res->end - res->start + 1;
+=======
+	return resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 extern int macio_enable_devres(struct macio_dev *dev);

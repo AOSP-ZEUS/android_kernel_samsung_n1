@@ -45,7 +45,13 @@ static LIST_HEAD(inactive_locks);
 static struct list_head active_wake_locks[WAKE_LOCK_TYPE_COUNT];
 static int current_event_num;
 struct workqueue_struct *suspend_work_queue;
+<<<<<<< HEAD
 struct wake_lock main_wake_lock;
+=======
+struct workqueue_struct *sync_work_queue;
+struct wake_lock main_wake_lock;
+struct wake_lock sync_wake_lock;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 suspend_state_t requested_suspend_state = PM_SUSPEND_MEM;
 static struct wake_lock unknown_wakeup;
 static struct wake_lock suspend_backoff_lock;
@@ -572,6 +578,10 @@ static int __init wakelocks_init(void)
 			"deleted_wake_locks");
 #endif
 	wake_lock_init(&main_wake_lock, WAKE_LOCK_SUSPEND, "main");
+<<<<<<< HEAD
+=======
+	wake_lock_init(&sync_wake_lock, WAKE_LOCK_SUSPEND, "sync_system");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wake_lock(&main_wake_lock);
 	wake_lock_init(&unknown_wakeup, WAKE_LOCK_SUSPEND, "unknown_wakeups");
 	wake_lock_init(&suspend_backoff_lock, WAKE_LOCK_SUSPEND,
@@ -594,12 +604,26 @@ static int __init wakelocks_init(void)
 		goto err_suspend_work_queue;
 	}
 
+<<<<<<< HEAD
+=======
+	sync_work_queue = create_singlethread_workqueue("sync_system_work");
+	if (sync_work_queue == NULL) {
+		ret = -ENOMEM;
+		goto err_sync_work_queue;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_WAKELOCK_STAT
 	proc_create("wakelocks", S_IRUGO, NULL, &wakelock_stats_fops);
 #endif
 
 	return 0;
 
+<<<<<<< HEAD
+=======
+err_sync_work_queue:
+	destroy_workqueue(suspend_work_queue);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_suspend_work_queue:
 	platform_driver_unregister(&power_driver);
 err_platform_driver_register:
@@ -607,6 +631,10 @@ err_platform_driver_register:
 err_platform_device_register:
 	wake_lock_destroy(&suspend_backoff_lock);
 	wake_lock_destroy(&unknown_wakeup);
+<<<<<<< HEAD
+=======
+	wake_lock_destroy(&sync_wake_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wake_lock_destroy(&main_wake_lock);
 #ifdef CONFIG_WAKELOCK_STAT
 	wake_lock_destroy(&deleted_wake_locks);
@@ -620,10 +648,18 @@ static void  __exit wakelocks_exit(void)
 	remove_proc_entry("wakelocks", NULL);
 #endif
 	destroy_workqueue(suspend_work_queue);
+<<<<<<< HEAD
+=======
+	destroy_workqueue(sync_work_queue);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	platform_driver_unregister(&power_driver);
 	platform_device_unregister(&power_device);
 	wake_lock_destroy(&suspend_backoff_lock);
 	wake_lock_destroy(&unknown_wakeup);
+<<<<<<< HEAD
+=======
+	wake_lock_destroy(&sync_wake_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wake_lock_destroy(&main_wake_lock);
 #ifdef CONFIG_WAKELOCK_STAT
 	wake_lock_destroy(&deleted_wake_locks);

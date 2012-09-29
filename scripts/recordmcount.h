@@ -462,7 +462,11 @@ __has_rel_mcount(Elf_Shdr const *const relhdr,  /* is SHT_REL or SHT_RELA */
 		succeed_file();
 	}
 	if (w(txthdr->sh_type) != SHT_PROGBITS ||
+<<<<<<< HEAD
 	    !(_w(txthdr->sh_flags) & SHF_EXECINSTR))
+=======
+	    !(w(txthdr->sh_flags) & SHF_EXECINSTR))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return NULL;
 	return txtname;
 }

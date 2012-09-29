@@ -81,6 +81,7 @@
 /* RSSI to dBm */
 #define IWLAGN_RSSI_OFFSET	44
 
+<<<<<<< HEAD
 /* PCI registers */
 #define PCI_CFG_RETRY_TIMEOUT	0x041
 
@@ -88,6 +89,8 @@
 #define PCI_CFG_LINK_CTRL_VAL_L0S_EN	0x01
 #define PCI_CFG_LINK_CTRL_VAL_L1_EN	0x02
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define IWLAGN_DEFAULT_TX_RETRY  15
 
 /* Limit range of txpower output target to be between these values */

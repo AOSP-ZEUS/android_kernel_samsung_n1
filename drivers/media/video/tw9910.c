@@ -552,6 +552,7 @@ static int tw9910_s_std(struct v4l2_subdev *sd, v4l2_std_id norm)
 	return ret;
 }
 
+<<<<<<< HEAD
 static int tw9910_enum_input(struct soc_camera_device *icd,
 			     struct v4l2_input *inp)
 {
@@ -562,6 +563,8 @@ static int tw9910_enum_input(struct soc_camera_device *icd,
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int tw9910_g_chip_ident(struct v4l2_subdev *sd,
 			       struct v4l2_dbg_chip_ident *id)
 {
@@ -846,6 +849,7 @@ static int tw9910_video_probe(struct soc_camera_device *icd,
 	struct tw9910_priv *priv = to_tw9910(client);
 	s32 id;
 
+<<<<<<< HEAD
 	/*
 	 * We must have a parent by now. And it cannot be a wrong one.
 	 * So this entire test is completely redundant.
@@ -853,6 +857,11 @@ static int tw9910_video_probe(struct soc_camera_device *icd,
 	if (!icd->dev.parent ||
 	    to_soc_camera_host(icd->dev.parent)->nr != icd->iface)
 		return -ENODEV;
+=======
+	/* We must have a parent by now. And it cannot be a wrong one. */
+	BUG_ON(!icd->parent ||
+	       to_soc_camera_host(icd->parent)->nr != icd->iface);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * tw9910 only use 8 or 16 bit bus width
@@ -891,7 +900,10 @@ static int tw9910_video_probe(struct soc_camera_device *icd,
 static struct soc_camera_ops tw9910_ops = {
 	.set_bus_param		= tw9910_set_bus_param,
 	.query_bus_param	= tw9910_query_bus_param,
+<<<<<<< HEAD
 	.enum_input		= tw9910_enum_input,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct v4l2_subdev_core_ops tw9910_subdev_core_ops = {

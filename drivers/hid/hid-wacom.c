@@ -353,11 +353,15 @@ static int wacom_probe(struct hid_device *hdev,
 	if (ret) {
 		hid_warn(hdev, "can't create sysfs battery attribute, err: %d\n",
 			 ret);
+<<<<<<< HEAD
 		/*
 		 * battery attribute is not critical for the tablet, but if it
 		 * failed then there is no need to create ac attribute
 		 */
 		goto move_on;
+=======
+		goto err_battery;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	wdata->ac.properties = wacom_ac_props;
@@ -371,6 +375,7 @@ static int wacom_probe(struct hid_device *hdev,
 	if (ret) {
 		hid_warn(hdev,
 			 "can't create ac battery attribute, err: %d\n", ret);
+<<<<<<< HEAD
 		/*
 		 * ac attribute is not critical for the tablet, but if it
 		 * failed then we don't want to battery attribute to exist
@@ -379,10 +384,19 @@ static int wacom_probe(struct hid_device *hdev,
 	}
 
 move_on:
+=======
+		goto err_ac;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 	hidinput = list_entry(hdev->inputs.next, struct hid_input, list);
 	input = hidinput->input;
 
+<<<<<<< HEAD
+=======
+	__set_bit(INPUT_PROP_POINTER, input->propbit);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Basics */
 	input->evbit[0] |= BIT(EV_KEY) | BIT(EV_ABS) | BIT(EV_REL);
 
@@ -416,6 +430,16 @@ move_on:
 
 	return 0;
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_HID_WACOM_POWER_SUPPLY
+err_ac:
+	power_supply_unregister(&wdata->battery);
+err_battery:
+	device_remove_file(&hdev->dev, &dev_attr_speed);
+	hid_hw_stop(hdev);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_free:
 	kfree(wdata);
 	return ret;
@@ -426,6 +450,10 @@ static void wacom_remove(struct hid_device *hdev)
 #ifdef CONFIG_HID_WACOM_POWER_SUPPLY
 	struct wacom_data *wdata = hid_get_drvdata(hdev);
 #endif
+<<<<<<< HEAD
+=======
+	device_remove_file(&hdev->dev, &dev_attr_speed);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	hid_hw_stop(hdev);
 
 #ifdef CONFIG_HID_WACOM_POWER_SUPPLY

@@ -28,6 +28,10 @@
 
 int wl1271_scan(struct wl1271 *wl, const u8 *ssid, size_t ssid_len,
 		struct cfg80211_scan_request *req);
+<<<<<<< HEAD
+=======
+int wl1271_scan_stop(struct wl1271 *wl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int wl1271_scan_build_probe_req(struct wl1271 *wl,
 				const u8 *ssid, size_t ssid_len,
 				const u8 *ie, size_t ie_len, u8 band);
@@ -112,11 +116,19 @@ struct wl1271_cmd_trigger_scan_to {
 	__le32 timeout;
 } __packed;
 
+<<<<<<< HEAD
 #define MAX_CHANNELS_ALL_BANDS 41
+=======
+#define MAX_CHANNELS_2GHZ	14
+#define MAX_CHANNELS_5GHZ	23
+#define MAX_CHANNELS_4GHZ	4
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define SCAN_MAX_CYCLE_INTERVALS 16
 #define SCAN_MAX_BANDS 3
 
 enum {
+<<<<<<< HEAD
 	SCAN_CHANNEL_TYPE_2GHZ_PASSIVE,
 	SCAN_CHANNEL_TYPE_2GHZ_ACTIVE,
 	SCAN_CHANNEL_TYPE_5GHZ_PASSIVE,
@@ -125,6 +137,8 @@ enum {
 };
 
 enum {
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	SCAN_SSID_FILTER_ANY      = 0,
 	SCAN_SSID_FILTER_SPECIFIC = 1,
 	SCAN_SSID_FILTER_LIST     = 2,
@@ -182,7 +196,13 @@ struct wl1271_cmd_sched_scan_config {
 
 	u8 padding[3];
 
+<<<<<<< HEAD
 	struct conn_scan_ch_params channels[MAX_CHANNELS_ALL_BANDS];
+=======
+	struct conn_scan_ch_params channels_2[MAX_CHANNELS_2GHZ];
+	struct conn_scan_ch_params channels_5[MAX_CHANNELS_5GHZ];
+	struct conn_scan_ch_params channels_4[MAX_CHANNELS_4GHZ];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 } __packed;
 
 

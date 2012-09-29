@@ -623,19 +623,31 @@ static int __devinit p54spi_probe(struct spi_device *spi)
 	ret = spi_setup(spi);
 	if (ret < 0) {
 		dev_err(&priv->spi->dev, "spi_setup failed");
+<<<<<<< HEAD
 		goto err_free;
+=======
+		goto err_free_common;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	ret = gpio_request(p54spi_gpio_power, "p54spi power");
 	if (ret < 0) {
 		dev_err(&priv->spi->dev, "power GPIO request failed: %d", ret);
+<<<<<<< HEAD
 		goto err_free;
+=======
+		goto err_free_common;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	ret = gpio_request(p54spi_gpio_irq, "p54spi irq");
 	if (ret < 0) {
 		dev_err(&priv->spi->dev, "irq GPIO request failed: %d", ret);
+<<<<<<< HEAD
 		goto err_free_gpio_power;
+=======
+		goto err_free_common;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	gpio_direction_output(p54spi_gpio_power, 0);
@@ -646,7 +658,11 @@ static int __devinit p54spi_probe(struct spi_device *spi)
 			  priv->spi);
 	if (ret < 0) {
 		dev_err(&priv->spi->dev, "request_irq() failed");
+<<<<<<< HEAD
 		goto err_free_gpio_irq;
+=======
+		goto err_free_common;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	irq_set_irq_type(gpio_to_irq(p54spi_gpio_irq), IRQ_TYPE_EDGE_RISING);
@@ -678,12 +694,15 @@ static int __devinit p54spi_probe(struct spi_device *spi)
 	return 0;
 
 err_free_common:
+<<<<<<< HEAD
 	free_irq(gpio_to_irq(p54spi_gpio_irq), spi);
 err_free_gpio_irq:
 	gpio_free(p54spi_gpio_irq);
 err_free_gpio_power:
 	gpio_free(p54spi_gpio_power);
 err_free:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	p54_free_common(priv->hw);
 	return ret;
 }

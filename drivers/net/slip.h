@@ -90,7 +90,10 @@ struct slip {
 
   unsigned char		mode;		/* SLIP mode			*/
   unsigned char		leased;
+<<<<<<< HEAD
   dev_t			line;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
   pid_t			pid;
 #define SL_MODE_SLIP	0
 #define SL_MODE_CSLIP	1

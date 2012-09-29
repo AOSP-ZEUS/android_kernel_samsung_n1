@@ -29,6 +29,10 @@
 #define APMU_BUS	APMU_REG(0x06c)
 #define APMU_SDH2	APMU_REG(0x0e8)
 #define APMU_SDH3	APMU_REG(0x0ec)
+<<<<<<< HEAD
+=======
+#define APMU_ETH	APMU_REG(0x0fc)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define APMU_FNCLK_EN	(1 << 4)
 #define APMU_AXICLK_EN	(1 << 3)

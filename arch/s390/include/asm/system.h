@@ -113,6 +113,10 @@ extern void pfault_fini(void);
 
 extern void cmma_init(void);
 extern int memcpy_real(void *, void *, size_t);
+<<<<<<< HEAD
+=======
+extern void copy_to_absolute_zero(void *dest, void *src, size_t count);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define finish_arch_switch(prev) do {					     \
 	set_fs(current->thread.mm_segment);				     \

@@ -171,6 +171,10 @@ struct ceph_mds_request {
 	struct inode *r_inode;              /* arg1 */
 	struct dentry *r_dentry;            /* arg1 */
 	struct dentry *r_old_dentry;        /* arg2: rename from or link from */
+<<<<<<< HEAD
+=======
+	struct inode *r_old_dentry_dir;     /* arg2: old dentry's parent dir */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char *r_path1, *r_path2;
 	struct ceph_vino r_ino1, r_ino2;
 
@@ -333,7 +337,11 @@ extern void ceph_mdsc_sync(struct ceph_mds_client *mdsc);
 
 extern void ceph_mdsc_lease_release(struct ceph_mds_client *mdsc,
 				    struct inode *inode,
+<<<<<<< HEAD
 				    struct dentry *dn, int mask);
+=======
+				    struct dentry *dn);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern void ceph_invalidate_dir_request(struct ceph_mds_request *req);
 

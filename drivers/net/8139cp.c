@@ -60,6 +60,10 @@
 #include <linux/netdevice.h>
 #include <linux/etherdevice.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/pci.h>
 #include <linux/dma-mapping.h>
 #include <linux/delay.h>
@@ -77,6 +81,7 @@
 #include <asm/irq.h>
 #include <asm/uaccess.h>
 
+<<<<<<< HEAD
 /* VLAN tagging feature enable/disable */
 #if defined(CONFIG_VLAN_8021Q) || defined(CONFIG_VLAN_8021Q_MODULE)
 #define CP_VLAN_TAG_USED 1
@@ -88,6 +93,8 @@
 	do { (tx_desc)->opts2 = 0; } while (0)
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* These identify the driver base version and may not be removed. */
 static char version[] =
 DRV_NAME ": 10/100 PCI Ethernet driver v" DRV_VERSION " (" DRV_RELDATE ")\n";
@@ -355,9 +362,12 @@ struct cp_private {
 	unsigned		rx_buf_sz;
 	unsigned		wol_enabled : 1; /* Is Wake-on-LAN enabled? */
 
+<<<<<<< HEAD
 #if CP_VLAN_TAG_USED
 	struct vlan_group	*vlgrp;
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dma_addr_t		ring_dma;
 
 	struct mii_if_info	mii_if;
@@ -422,6 +432,7 @@ static struct {
 };
 
 
+<<<<<<< HEAD
 #if CP_VLAN_TAG_USED
 static void cp_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 {
@@ -440,6 +451,8 @@ static void cp_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 }
 #endif /* CP_VLAN_TAG_USED */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline void cp_set_rxbufsize (struct cp_private *cp)
 {
 	unsigned int mtu = cp->dev->mtu;
@@ -454,11 +467,17 @@ static inline void cp_set_rxbufsize (struct cp_private *cp)
 static inline void cp_rx_skb (struct cp_private *cp, struct sk_buff *skb,
 			      struct cp_desc *desc)
 {
+<<<<<<< HEAD
+=======
+	u32 opts2 = le32_to_cpu(desc->opts2);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	skb->protocol = eth_type_trans (skb, cp->dev);
 
 	cp->dev->stats.rx_packets++;
 	cp->dev->stats.rx_bytes += skb->len;
 
+<<<<<<< HEAD
 #if CP_VLAN_TAG_USED
 	if (cp->vlgrp && (desc->opts2 & cpu_to_le32(RxVlanTagged))) {
 		vlan_hwaccel_receive_skb(skb, cp->vlgrp,
@@ -466,6 +485,12 @@ static inline void cp_rx_skb (struct cp_private *cp, struct sk_buff *skb,
 	} else
 #endif
 		netif_receive_skb(skb);
+=======
+	if (opts2 & RxVlanTagged)
+		__vlan_hwaccel_put_tag(skb, swab16(opts2 & 0xffff));
+
+	napi_gro_receive(&cp->napi, skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void cp_rx_err_acct (struct cp_private *cp, unsigned rx_tail,
@@ -729,6 +754,15 @@ static void cp_tx (struct cp_private *cp)
 		netif_wake_queue(cp->dev);
 }
 
+<<<<<<< HEAD
+=======
+static inline u32 cp_tx_vlan_tag(struct sk_buff *skb)
+{
+	return vlan_tx_tag_present(skb) ?
+		TxVlanTag | swab16(vlan_tx_tag_get(skb)) : 0x00;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static netdev_tx_t cp_start_xmit (struct sk_buff *skb,
 					struct net_device *dev)
 {
@@ -736,9 +770,13 @@ static netdev_tx_t cp_start_xmit (struct sk_buff *skb,
 	unsigned entry;
 	u32 eor, flags;
 	unsigned long intr_flags;
+<<<<<<< HEAD
 #if CP_VLAN_TAG_USED
 	u32 vlan_tag = 0;
 #endif
+=======
+	__le32 opts2;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int mss = 0;
 
 	spin_lock_irqsave(&cp->lock, intr_flags);
@@ -751,15 +789,23 @@ static netdev_tx_t cp_start_xmit (struct sk_buff *skb,
 		return NETDEV_TX_BUSY;
 	}
 
+<<<<<<< HEAD
 #if CP_VLAN_TAG_USED
 	if (vlan_tx_tag_present(skb))
 		vlan_tag = TxVlanTag | swab16(vlan_tx_tag_get(skb));
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	entry = cp->tx_head;
 	eor = (entry == (CP_TX_RING_SIZE - 1)) ? RingEnd : 0;
 	mss = skb_shinfo(skb)->gso_size;
 
+<<<<<<< HEAD
+=======
+	opts2 = cpu_to_le32(cp_tx_vlan_tag(skb));
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (skb_shinfo(skb)->nr_frags == 0) {
 		struct cp_desc *txd = &cp->tx_ring[entry];
 		u32 len;
@@ -767,7 +813,11 @@ static netdev_tx_t cp_start_xmit (struct sk_buff *skb,
 
 		len = skb->len;
 		mapping = dma_map_single(&cp->pdev->dev, skb->data, len, PCI_DMA_TODEVICE);
+<<<<<<< HEAD
 		CP_VLAN_TX_TAG(txd, vlan_tag);
+=======
+		txd->opts2 = opts2;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		txd->addr = cpu_to_le64(mapping);
 		wmb();
 
@@ -838,7 +888,11 @@ static netdev_tx_t cp_start_xmit (struct sk_buff *skb,
 				ctrl |= LastFrag;
 
 			txd = &cp->tx_ring[entry];
+<<<<<<< HEAD
 			CP_VLAN_TX_TAG(txd, vlan_tag);
+=======
+			txd->opts2 = opts2;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			txd->addr = cpu_to_le64(mapping);
 			wmb();
 
@@ -850,7 +904,11 @@ static netdev_tx_t cp_start_xmit (struct sk_buff *skb,
 		}
 
 		txd = &cp->tx_ring[first_entry];
+<<<<<<< HEAD
 		CP_VLAN_TX_TAG(txd, vlan_tag);
+=======
+		txd->opts2 = opts2;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		txd->addr = cpu_to_le64(first_mapping);
 		wmb();
 
@@ -992,11 +1050,14 @@ static inline void cp_start_hw (struct cp_private *cp)
 	cpw8(Cmd, RxOn | TxOn);
 }
 
+<<<<<<< HEAD
 static void cp_enable_irq(struct cp_private *cp)
 {
 	cpw16_f(IntrMask, cp_intr_mask);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void cp_init_hw (struct cp_private *cp)
 {
 	struct net_device *dev = cp->dev;
@@ -1036,6 +1097,11 @@ static void cp_init_hw (struct cp_private *cp)
 
 	cpw16(MultiIntr, 0);
 
+<<<<<<< HEAD
+=======
+	cpw16_f(IntrMask, cp_intr_mask);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cpw8_f(Cfg9346, Cfg9346_Lock);
 }
 
@@ -1167,8 +1233,11 @@ static int cp_open (struct net_device *dev)
 	if (rc)
 		goto err_out_hw;
 
+<<<<<<< HEAD
 	cp_enable_irq(cp);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	netif_carrier_off(dev);
 	mii_check_media(&cp->mii_if, netif_msg_link(cp), true);
 	netif_start_queue(dev);
@@ -1435,6 +1504,14 @@ static int cp_set_features(struct net_device *dev, u32 features)
 	else
 		cp->cpcmd &= ~RxChkSum;
 
+<<<<<<< HEAD
+=======
+	if (features & NETIF_F_HW_VLAN_RX)
+		cp->cpcmd |= RxVlanOn;
+	else
+		cp->cpcmd &= ~RxVlanOn;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cpw16_f(CpCmd, cp->cpcmd);
 	spin_unlock_irqrestore(&cp->lock, flags);
 
@@ -1822,9 +1899,12 @@ static const struct net_device_ops cp_netdev_ops = {
 	.ndo_start_xmit		= cp_start_xmit,
 	.ndo_tx_timeout		= cp_tx_timeout,
 	.ndo_set_features	= cp_set_features,
+<<<<<<< HEAD
 #if CP_VLAN_TAG_USED
 	.ndo_vlan_rx_register	= cp_vlan_rx_register,
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef BROKEN
 	.ndo_change_mtu		= cp_change_mtu,
 #endif
@@ -1953,15 +2033,26 @@ static int cp_init_one (struct pci_dev *pdev, const struct pci_device_id *ent)
 	dev->ethtool_ops = &cp_ethtool_ops;
 	dev->watchdog_timeo = TX_TIMEOUT;
 
+<<<<<<< HEAD
 #if CP_VLAN_TAG_USED
 	dev->features |= NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX;
 #endif
+=======
+	dev->features |= NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (pci_using_dac)
 		dev->features |= NETIF_F_HIGHDMA;
 
 	/* disabled by default until verified */
+<<<<<<< HEAD
 	dev->hw_features |= NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_TSO;
+=======
+	dev->hw_features |= NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_TSO |
+		NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX;
+	dev->vlan_features = NETIF_F_SG | NETIF_F_IP_CSUM | NETIF_F_TSO |
+		NETIF_F_HIGHDMA;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	dev->irq = pdev->irq;
 
@@ -2057,7 +2148,10 @@ static int cp_resume (struct pci_dev *pdev)
 	/* FIXME: sh*t may happen if the Rx ring buffer is depleted */
 	cp_init_rings_index (cp);
 	cp_init_hw (cp);
+<<<<<<< HEAD
 	cp_enable_irq(cp);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	netif_start_queue (dev);
 
 	spin_lock_irqsave (&cp->lock, flags);

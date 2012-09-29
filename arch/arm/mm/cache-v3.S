@@ -129,6 +129,7 @@ ENDPROC(v3_dma_map_area)
 
 	__INITDATA
 
+<<<<<<< HEAD
 	.type	v3_cache_fns, #object
 ENTRY(v3_cache_fns)
 	.long	v3_flush_icache_all
@@ -142,3 +143,7 @@ ENTRY(v3_cache_fns)
 	.long	v3_dma_unmap_area
 	.long	v3_dma_flush_range
 	.size	v3_cache_fns, . - v3_cache_fns
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions v3
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

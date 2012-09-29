@@ -55,7 +55,11 @@
 #include <linux/spinlock.h>
 #include <linux/slab.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct ttm_object_file {
 	struct ttm_object_device *tdev;

@@ -53,6 +53,11 @@
 #include "powerdomain.h"
 #include "clockdomain.h"
 
+<<<<<<< HEAD
+=======
+static int omap2_pm_debug;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_SUSPEND
 static suspend_state_t suspend_state = PM_SUSPEND_ON;
 static inline bool is_suspending(void)
@@ -123,7 +128,10 @@ static void omap2_enter_full_retention(void)
 	omap2_gpio_prepare_for_idle(0);
 
 	if (omap2_pm_debug) {
+<<<<<<< HEAD
 		omap2_pm_dump(0, 0, 0);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		getnstimeofday(&ts_preidle);
 	}
 
@@ -160,7 +168,10 @@ no_sleep:
 		getnstimeofday(&ts_postidle);
 		ts_idle = timespec_sub(ts_postidle, ts_preidle);
 		tmp = timespec_to_ns(&ts_idle) * NSEC_PER_USEC;
+<<<<<<< HEAD
 		omap2_pm_dump(0, 1, tmp);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	omap2_gpio_resume_after_idle();
 
@@ -247,7 +258,10 @@ static void omap2_enter_mpu_retention(void)
 	}
 
 	if (omap2_pm_debug) {
+<<<<<<< HEAD
 		omap2_pm_dump(only_idle ? 2 : 1, 0, 0);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		getnstimeofday(&ts_preidle);
 	}
 
@@ -259,7 +273,10 @@ static void omap2_enter_mpu_retention(void)
 		getnstimeofday(&ts_postidle);
 		ts_idle = timespec_sub(ts_postidle, ts_preidle);
 		tmp = timespec_to_ns(&ts_idle) * NSEC_PER_USEC;
+<<<<<<< HEAD
 		omap2_pm_dump(only_idle ? 2 : 1, 1, tmp);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 

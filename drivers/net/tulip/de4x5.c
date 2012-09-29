@@ -1868,14 +1868,23 @@ de4x5_local_stats(struct net_device *dev, char *buf, int pkt_len)
 	    i = DE4X5_PKT_STAT_SZ;
 	}
     }
+<<<<<<< HEAD
     if (buf[0] & 0x01) {          /* Multicast/Broadcast */
         if ((*(s32 *)&buf[0] == -1) && (*(s16 *)&buf[4] == -1)) {
+=======
+    if (is_multicast_ether_addr(buf)) {
+        if (is_broadcast_ether_addr(buf)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    lp->pktStats.broadcast++;
 	} else {
 	    lp->pktStats.multicast++;
 	}
+<<<<<<< HEAD
     } else if ((*(s32 *)&buf[0] == *(s32 *)&dev->dev_addr[0]) &&
 	       (*(s16 *)&buf[4] == *(s16 *)&dev->dev_addr[4])) {
+=======
+    } else if (compare_ether_addr(buf, dev->dev_addr) == 0) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
         lp->pktStats.unicast++;
     }
 
@@ -1964,9 +1973,13 @@ SetMulticastFilter(struct net_device *dev)
 	omr |= OMR_PM;                       /* Pass all multicasts */
     } else if (lp->setup_f == HASH_PERF) {   /* Hash Filtering */
 	netdev_for_each_mc_addr(ha, dev) {
+<<<<<<< HEAD
 	    addrs = ha->addr;
 	    if ((*addrs & 0x01) == 1) {      /* multicast address? */
 		crc = ether_crc_le(ETH_ALEN, addrs);
+=======
+		crc = ether_crc_le(ETH_ALEN, ha->addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		hashcode = crc & HASH_BITS;  /* hashcode is 9 LSb of CRC */
 
 		byte = hashcode >> 3;        /* bit[3-8] -> byte in filter */
@@ -1977,7 +1990,10 @@ SetMulticastFilter(struct net_device *dev)
 		    byte -= 1;
 		}
 		lp->setup_frame[byte] |= bit;
+<<<<<<< HEAD
 	    }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
     } else {                                 /* Perfect filtering */
 	netdev_for_each_mc_addr(ha, dev) {

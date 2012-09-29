@@ -128,6 +128,12 @@ struct hd_struct {
 #define GENHD_FL_EXT_DEVT			64 /* allow extended devt */
 #define GENHD_FL_NATIVE_CAPACITY		128
 #define GENHD_FL_BLOCK_EVENTS_ON_EXCL_WRITE	256
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_USB_HOST_NOTIFY
+#define GENHD_IF_USB	1
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 enum {
 	DISK_EVENT_MEDIA_CHANGE			= 1 << 0, /* media changed */
@@ -190,6 +196,13 @@ struct gendisk {
 	struct blk_integrity *integrity;
 #endif
 	int node_id;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_USB_HOST_NOTIFY
+	int media_present;
+	int interfaces;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static inline struct gendisk *part_to_disk(struct hd_struct *part)
@@ -420,7 +433,11 @@ static inline int get_disk_ro(struct gendisk *disk)
 
 extern void disk_block_events(struct gendisk *disk);
 extern void disk_unblock_events(struct gendisk *disk);
+<<<<<<< HEAD
 extern void disk_check_events(struct gendisk *disk);
+=======
+extern void disk_flush_events(struct gendisk *disk, unsigned int mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern unsigned int disk_clear_events(struct gendisk *disk, unsigned int mask);
 
 /* drivers/char/random.c */
@@ -594,7 +611,10 @@ extern char *disk_name (struct gendisk *hd, int partno, char *buf);
 
 extern int disk_expand_part_tbl(struct gendisk *disk, int target);
 extern int rescan_partitions(struct gendisk *disk, struct block_device *bdev);
+<<<<<<< HEAD
 extern int invalidate_partitions(struct gendisk *disk, struct block_device *bdev);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern struct hd_struct * __must_check add_partition(struct gendisk *disk,
 						     int partno, sector_t start,
 						     sector_t len, int flags,

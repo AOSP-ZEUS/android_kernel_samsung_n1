@@ -6,12 +6,43 @@
 #include "driver-ops.h"
 #include "led.h"
 
+<<<<<<< HEAD
+=======
+/* return value indicates whether the driver should be further notified */
+static bool ieee80211_quiesce(struct ieee80211_sub_if_data *sdata)
+{
+	switch (sdata->vif.type) {
+	case NL80211_IFTYPE_STATION:
+		ieee80211_sta_quiesce(sdata);
+		return true;
+	case NL80211_IFTYPE_ADHOC:
+		ieee80211_ibss_quiesce(sdata);
+		return true;
+	case NL80211_IFTYPE_MESH_POINT:
+		ieee80211_mesh_quiesce(sdata);
+		return true;
+	case NL80211_IFTYPE_AP_VLAN:
+	case NL80211_IFTYPE_MONITOR:
+		/* don't tell driver about this */
+		return false;
+	default:
+		return true;
+	}
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int __ieee80211_suspend(struct ieee80211_hw *hw, struct cfg80211_wowlan *wowlan)
 {
 	struct ieee80211_local *local = hw_to_local(hw);
 	struct ieee80211_sub_if_data *sdata;
 	struct sta_info *sta;
 
+<<<<<<< HEAD
+=======
+	if (!local->open_count)
+		goto suspend;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ieee80211_scan_cancel(local);
 
 	if (hw->flags & IEEE80211_HW_AMPDU_AGGREGATION) {
@@ -50,11 +81,27 @@ int __ieee80211_suspend(struct ieee80211_hw *hw, struct cfg80211_wowlan *wowlan)
 	local->wowlan = wowlan && local->open_count;
 	if (local->wowlan) {
 		int err = drv_suspend(local, wowlan);
+<<<<<<< HEAD
 		if (err) {
 			local->quiescing = false;
 			return err;
 		}
 		goto suspend;
+=======
+		if (err < 0) {
+			local->quiescing = false;
+			return err;
+		} else if (err > 0) {
+			WARN_ON(err != 1);
+			local->wowlan = false;
+		} else {
+			list_for_each_entry(sdata, &local->interfaces, list) {
+				cancel_work_sync(&sdata->work);
+				ieee80211_quiesce(sdata);
+			}
+			goto suspend;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* disable keys */
@@ -82,6 +129,7 @@ int __ieee80211_suspend(struct ieee80211_hw *hw, struct cfg80211_wowlan *wowlan)
 	list_for_each_entry(sdata, &local->interfaces, list) {
 		cancel_work_sync(&sdata->work);
 
+<<<<<<< HEAD
 		switch(sdata->vif.type) {
 		case NL80211_IFTYPE_STATION:
 			ieee80211_sta_quiesce(sdata);
@@ -99,6 +147,10 @@ int __ieee80211_suspend(struct ieee80211_hw *hw, struct cfg80211_wowlan *wowlan)
 		default:
 			break;
 		}
+=======
+		if (!ieee80211_quiesce(sdata))
+			continue;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (!ieee80211_sdata_running(sdata))
 			continue;

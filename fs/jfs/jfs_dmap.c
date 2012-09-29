@@ -3161,7 +3161,11 @@ static int dbAllocDmapBU(struct bmap * bmp, struct dmap * dp, s64 blkno,
 {
 	int rc;
 	int dbitno, word, rembits, nb, nwords, wbitno, agno;
+<<<<<<< HEAD
 	s8 oldroot, *leaf;
+=======
+	s8 oldroot;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct dmaptree *tp = (struct dmaptree *) & dp->tree;
 
 	/* save the current value of the root (i.e. maximum free string)
@@ -3169,9 +3173,12 @@ static int dbAllocDmapBU(struct bmap * bmp, struct dmap * dp, s64 blkno,
 	 */
 	oldroot = tp->stree[ROOT];
 
+<<<<<<< HEAD
 	/* pick up a pointer to the leaves of the dmap tree */
 	leaf = tp->stree + LEAFIND;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* determine the bit number and word within the dmap of the
 	 * starting block.
 	 */

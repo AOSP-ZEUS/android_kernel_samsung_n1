@@ -249,12 +249,21 @@ static void __ad7879_enable(struct ad7879 *ts)
 
 static void __ad7879_disable(struct ad7879 *ts)
 {
+<<<<<<< HEAD
+=======
+	u16 reg = (ts->cmd_crtl2 & ~AD7879_PM(-1)) |
+		AD7879_PM(AD7879_PM_SHUTDOWN);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	disable_irq(ts->irq);
 
 	if (del_timer_sync(&ts->timer))
 		ad7879_ts_event_release(ts);
 
+<<<<<<< HEAD
 	ad7879_write(ts, AD7879_REG_CTRL2, AD7879_PM(AD7879_PM_SHUTDOWN));
+=======
+	ad7879_write(ts, AD7879_REG_CTRL2, reg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 

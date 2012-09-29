@@ -809,6 +809,12 @@ int netxen_config_hw_lro(struct netxen_adapter *adapter, int enable)
 	u64 word;
 	int rv = 0;
 
+<<<<<<< HEAD
+=======
+	if (!test_bit(__NX_FW_ATTACHED, &adapter->state))
+		return 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	memset(&req, 0, sizeof(nx_nic_req_t));
 
 	req.qhdr = cpu_to_le64(NX_HOST_REQUEST << 23);
@@ -959,6 +965,12 @@ int netxen_send_lro_cleanup(struct netxen_adapter *adapter)
 	u64 word;
 	int rv;
 
+<<<<<<< HEAD
+=======
+	if (!test_bit(__NX_FW_ATTACHED, &adapter->state))
+		return 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	memset(&req, 0, sizeof(nx_nic_req_t));
 	req.qhdr = cpu_to_le64(NX_HOST_REQUEST << 23);
 

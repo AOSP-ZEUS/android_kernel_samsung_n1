@@ -49,10 +49,13 @@
 #define MTS_MT9234ZBA_PRODUCT_ID	0xF115
 #define MTS_MT9234ZBAOLD_PRODUCT_ID	0x0319
 
+<<<<<<< HEAD
 /* Abbott Diabetics vendor and product ids */
 #define ABBOTT_VENDOR_ID		0x1a61
 #define ABBOTT_PRODUCT_ID		0x3410
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Commands */
 #define TI_GET_VERSION			0x01
 #define TI_GET_PORT_STATUS		0x02

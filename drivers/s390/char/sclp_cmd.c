@@ -383,8 +383,15 @@ static int sclp_attach_storage(u8 id)
 	switch (sccb->header.response_code) {
 	case 0x0020:
 		set_bit(id, sclp_storage_ids);
+<<<<<<< HEAD
 		for (i = 0; i < sccb->assigned; i++)
 			sclp_unassign_storage(sccb->entries[i] >> 16);
+=======
+		for (i = 0; i < sccb->assigned; i++) {
+			if (sccb->entries[i])
+				sclp_unassign_storage(sccb->entries[i] >> 16);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		rc = -EIO;

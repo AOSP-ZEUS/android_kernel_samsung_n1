@@ -153,6 +153,7 @@ static struct fc_rport_priv *fc_rport_create(struct fc_lport *lport,
 }
 
 /**
+<<<<<<< HEAD
  * fc_rport_free_rcu() - Free a remote port
  * @rcu: The rcu_head structure inside the remote port
  */
@@ -165,6 +166,8 @@ static void fc_rport_free_rcu(struct rcu_head *rcu)
 }
 
 /**
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * fc_rport_destroy() - Free a remote port after last reference is released
  * @kref: The remote port's kref
  */
@@ -173,7 +176,11 @@ static void fc_rport_destroy(struct kref *kref)
 	struct fc_rport_priv *rdata;
 
 	rdata = container_of(kref, struct fc_rport_priv, kref);
+<<<<<<< HEAD
 	call_rcu(&rdata->rcu, fc_rport_free_rcu);
+=======
+	kfree_rcu(rdata, rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**

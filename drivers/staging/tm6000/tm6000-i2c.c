@@ -40,7 +40,11 @@ MODULE_PARM_DESC(i2c_debug, "enable debug messages [i2c]");
 
 #define i2c_dprintk(lvl, fmt, args...) if (i2c_debug >= lvl) do { \
 			printk(KERN_DEBUG "%s at %s: " fmt, \
+<<<<<<< HEAD
 			dev->name, __FUNCTION__ , ##args); } while (0)
+=======
+			dev->name, __func__, ##args); } while (0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int tm6000_i2c_send_regs(struct tm6000_core *dev, unsigned char addr,
 				__u8 reg, char *buf, int len)

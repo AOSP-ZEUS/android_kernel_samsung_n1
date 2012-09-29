@@ -151,6 +151,10 @@ MACHINE_START(CAPC7117,
 	.boot_params = 0xa0000100,
 	.map_io = pxa3xx_map_io,
 	.init_irq = pxa3xx_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq = pxa3xx_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer = &pxa_timer,
 	.init_machine = capc7117_init
 MACHINE_END

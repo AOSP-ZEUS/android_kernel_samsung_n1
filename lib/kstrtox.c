@@ -19,11 +19,14 @@
 #include <linux/types.h>
 #include <asm/uaccess.h>
 
+<<<<<<< HEAD
 static inline char _tolower(const char c)
 {
 	return c | 0x20;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int _kstrtoull(const char *s, unsigned int base, unsigned long long *res)
 {
 	unsigned long long acc;

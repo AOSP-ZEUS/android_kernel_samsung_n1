@@ -155,7 +155,11 @@ static u32 acpi_osi_handler(acpi_string interface, u32 supported)
 {
 	if (!strcmp("Linux", interface)) {
 
+<<<<<<< HEAD
 		printk(KERN_NOTICE FW_BUG PREFIX
+=======
+		printk_once(KERN_NOTICE FW_BUG PREFIX
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			"BIOS _OSI(Linux) query %s%s\n",
 			osi_linux.enable ? "honored" : "ignored",
 			osi_linux.cmdline ? " via cmdline" :
@@ -237,8 +241,28 @@ void acpi_os_vprintf(const char *fmt, va_list args)
 #endif
 }
 
+<<<<<<< HEAD
 acpi_physical_address __init acpi_os_get_root_pointer(void)
 {
+=======
+#ifdef CONFIG_KEXEC
+static unsigned long acpi_rsdp;
+static int __init setup_acpi_rsdp(char *arg)
+{
+	acpi_rsdp = simple_strtoul(arg, NULL, 16);
+	return 0;
+}
+early_param("acpi_rsdp", setup_acpi_rsdp);
+#endif
+
+acpi_physical_address __init acpi_os_get_root_pointer(void)
+{
+#ifdef CONFIG_KEXEC
+	if (acpi_rsdp)
+		return acpi_rsdp;
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (efi_enabled) {
 		if (efi.acpi20 != EFI_INVALID_TABLE_ADDR)
 			return efi.acpi20;
@@ -1083,7 +1107,17 @@ struct osi_setup_entry {
 	bool enable;
 };
 
+<<<<<<< HEAD
 static struct osi_setup_entry __initdata osi_setup_entries[OSI_STRING_ENTRIES_MAX];
+=======
+static struct osi_setup_entry __initdata
+		osi_setup_entries[OSI_STRING_ENTRIES_MAX] = {
+	{"Module Device", true},
+	{"Processor Device", true},
+	{"3.0 _SCP Extensions", true},
+	{"Processor Aggregator Device", true},
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void __init acpi_osi_setup(char *str)
 {

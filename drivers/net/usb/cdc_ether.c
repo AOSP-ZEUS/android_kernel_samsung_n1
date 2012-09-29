@@ -570,6 +570,7 @@ static const struct usb_device_id	products [] = {
 	.driver_info = (unsigned long)&wwan_info,
 },
 
+<<<<<<< HEAD
 /* Logitech Harmony 900 - uses the pseudo-MDLM (BLAN) driver */
 {
 	USB_DEVICE_AND_INTERFACE_INFO(0x046d, 0xc11f, USB_CLASS_COMM,
@@ -577,6 +578,33 @@ static const struct usb_device_id	products [] = {
 	.driver_info		= 0,
 },
 
+=======
+/* PH450 */
+{
+	.match_flags = USB_DEVICE_ID_MATCH_INT_INFO
+		| USB_DEVICE_ID_MATCH_DEVICE,
+	USB_DEVICE(0x1983,0x0310),
+	.driver_info = (unsigned long)&wwan_info,
+}, {
+	.match_flags = USB_DEVICE_ID_MATCH_INT_INFO
+		| USB_DEVICE_ID_MATCH_DEVICE,
+	USB_DEVICE(0x1983,0x0321),
+	.driver_info = (unsigned long)&wwan_info,
+}, {
+	.match_flags = USB_DEVICE_ID_MATCH_INT_INFO
+		| USB_DEVICE_ID_MATCH_DEVICE,
+	USB_DEVICE(0x1983, 0x0327),	/* 5AE */
+	.driver_info = (unsigned long)&wwan_info,
+},
+
+/* Tango module */
+{
+	.match_flags = USB_DEVICE_ID_MATCH_INT_INFO
+		 | USB_DEVICE_ID_MATCH_DEVICE,
+	USB_DEVICE(0x0489,0xE03A),
+	.driver_info = (unsigned long)&wwan_info,
+},
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * WHITELIST!!!
  *

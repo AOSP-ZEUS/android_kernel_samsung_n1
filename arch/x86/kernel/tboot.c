@@ -36,6 +36,10 @@
 #include <asm/bootparam.h>
 #include <asm/pgtable.h>
 #include <asm/pgalloc.h>
+<<<<<<< HEAD
+=======
+#include <asm/swiotlb.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/fixmap.h>
 #include <asm/proto.h>
 #include <asm/setup.h>

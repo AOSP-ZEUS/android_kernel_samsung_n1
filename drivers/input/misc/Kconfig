@@ -12,12 +12,15 @@ menuconfig INPUT_MISC
 
 if INPUT_MISC
 
+<<<<<<< HEAD
 config GYRO_K3G
 	tristate "K3G driver for s5pc11x"
 	default n
 	help
 	  This option enables gyro sensors using K3G driver
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config INPUT_88PM860X_ONKEY
 	tristate "88PM860x ONKEY support"
 	depends on MFD_88PM860X
@@ -106,6 +109,30 @@ config INPUT_MAX8925_ONKEY
 	  To compile this driver as a module, choose M here: the module
 	  will be called max8925_onkey.
 
+<<<<<<< HEAD
+=======
+config INPUT_MMA8450
+	tristate "MMA8450 - Freescale's 3-Axis, 8/12-bit Digital Accelerometer"
+	depends on I2C
+	select INPUT_POLLDEV
+	help
+	  Say Y here if you want to support Freescale's MMA8450 Accelerometer
+	  through I2C interface.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called mma8450.
+
+config INPUT_MPU3050
+	tristate "MPU3050 Triaxial gyroscope sensor"
+	depends on I2C
+	help
+	  Say Y here if you want to support InvenSense MPU3050
+	  connected via an I2C bus.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called mpu3050.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config INPUT_APANEL
 	tristate "Fujitsu Lifebook Application Panel buttons"
 	depends on X86 && I2C && LEDS_CLASS
@@ -226,6 +253,26 @@ config INPUT_KEYSPAN_REMOTE
 	  To compile this driver as a module, choose M here: the module will
 	  be called keyspan_remote.
 
+<<<<<<< HEAD
+=======
+config INPUT_KXTJ9
+	tristate "Kionix KXTJ9 tri-axis digital accelerometer"
+	depends on I2C
+	help
+	  Say Y here to enable support for the Kionix KXTJ9 digital tri-axis
+	  accelerometer.
+
+	  To compile this driver as a module, choose M here: the module will
+	  be called kxtj9.
+
+config INPUT_KXTJ9_POLLED_MODE
+	bool "Enable polling mode support"
+	depends on INPUT_KXTJ9
+	select INPUT_POLLDEV
+	help
+	  Say Y here if you need accelerometer to work in polling mode.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config INPUT_POWERMATE
 	tristate "Griffin PowerMate and Contour Jog support"
 	depends on USB_ARCH_HAS_HCD
@@ -284,7 +331,11 @@ config INPUT_TWL4030_PWRBUTTON
 config INPUT_TWL4030_VIBRA
 	tristate "Support for TWL4030 Vibrator"
 	depends on TWL4030_CORE
+<<<<<<< HEAD
 	select TWL4030_CODEC
+=======
+	select MFD_TWL4030_AUDIO
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select INPUT_FF_MEMLESS
 	help
 	  This option enables support for TWL4030 Vibrator Driver.
@@ -292,6 +343,20 @@ config INPUT_TWL4030_VIBRA
 	  To compile this driver as a module, choose M here. The module will
 	  be called twl4030_vibra.
 
+<<<<<<< HEAD
+=======
+config INPUT_TWL6040_VIBRA
+	tristate "Support for TWL6040 Vibrator"
+	depends on TWL4030_CORE
+	select TWL6040_CORE
+	select INPUT_FF_MEMLESS
+	help
+	  This option enables support for TWL6040 Vibrator Driver.
+
+	  To compile this driver as a module, choose M here. The module will
+	  be called twl6040_vibra.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config INPUT_UINPUT
 	tristate "User level driver support"
 	help
@@ -500,6 +565,7 @@ config INPUT_XEN_KBDDEV_FRONTEND
 	  To compile this driver as a module, choose M here: the
 	  module will be called xen-kbdfront.
 
+<<<<<<< HEAD
 config OPTICAL_GP2A
 	depends on I2C && GENERIC_GPIO
 	tristate "GP2A ambient light and proximity input device"
@@ -507,4 +573,34 @@ config OPTICAL_GP2A
 	help
 	  This option enables proximity & light sensors using gp2a driver.
 
+=======
+config INPUT_ALPS_GPIO_SCROLLWHEEL
+	tristate "Alps GPIO Scrollwheel"
+	depends on GENERIC_GPIO
+	help
+	  This driver implements support for Alps SRBE
+          ScrollWheel connected to GPIO pins of various
+          CPUs (and some other chips).
+
+	  Say Y here if your device has ScrollWheel connected
+	  directly to such GPIO pins.  Your board-specific
+	  setup logic must also provide a platform device,
+	  with configuration data saying which GPIOs are used.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called alps_gpio_scrollwheel.
+
+config INPUT_CAPELLA_CM3217
+	tristate "CM3217 light sensor"
+	depends on I2C
+	help
+	  Say Y here to enable the CM3217 Ambient Light Sensor.
+
+config INPUT_HALL
+    bool "HALL IC"
+    help
+      Say Y here if you want HALL Slider IC to be confiured for device
+
+      If unsure, say Y.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endif

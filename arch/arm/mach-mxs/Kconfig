@@ -41,6 +41,10 @@ config MACH_MX23EVK
 config MACH_MX28EVK
 	bool "Support MX28EVK Platform"
 	select SOC_IMX28
+<<<<<<< HEAD
+=======
+	select LEDS_GPIO_REGISTER
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select MXS_HAVE_AMBA_DUART
 	select MXS_HAVE_PLATFORM_AUART
 	select MXS_HAVE_PLATFORM_FEC
@@ -55,10 +59,18 @@ config MACH_MX28EVK
 config MODULE_TX28
 	bool
 	select SOC_IMX28
+<<<<<<< HEAD
+=======
+	select LEDS_GPIO_REGISTER
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select MXS_HAVE_AMBA_DUART
 	select MXS_HAVE_PLATFORM_AUART
 	select MXS_HAVE_PLATFORM_FEC
 	select MXS_HAVE_PLATFORM_MXS_I2C
+<<<<<<< HEAD
+=======
+	select MXS_HAVE_PLATFORM_MXS_MMC
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select MXS_HAVE_PLATFORM_MXS_PWM
 
 config MACH_TX28

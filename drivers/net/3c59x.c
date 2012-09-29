@@ -1842,7 +1842,11 @@ vortex_timer(unsigned long data)
 		ok = 1;
 	}
 
+<<<<<<< HEAD
 	if (dev->flags & IFF_SLAVE || !netif_carrier_ok(dev))
+=======
+	if (!netif_carrier_ok(dev))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		next_tick = 5*HZ;
 
 	if (vp->medialock)

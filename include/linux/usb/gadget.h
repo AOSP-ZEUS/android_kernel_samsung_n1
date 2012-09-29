@@ -15,7 +15,17 @@
 #ifndef __LINUX_USB_GADGET_H
 #define __LINUX_USB_GADGET_H
 
+<<<<<<< HEAD
 #include <linux/slab.h>
+=======
+#include <linux/device.h>
+#include <linux/errno.h>
+#include <linux/init.h>
+#include <linux/list.h>
+#include <linux/slab.h>
+#include <linux/types.h>
+#include <linux/usb/ch9.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct usb_ep;
 
@@ -27,6 +37,10 @@ struct usb_ep;
  *	field, and the usb controller needs one, it is responsible
  *	for mapping and unmapping the buffer.
  * @length: Length of that data
+<<<<<<< HEAD
+=======
+ * @stream_id: The stream id, when USB3.0 bulk streams are being used
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @no_interrupt: If true, hints that no completion irq is needed.
  *	Helpful sometimes with deep request queues that are handled
  *	directly by DMA controllers.
@@ -81,6 +95,10 @@ struct usb_request {
 	unsigned		length;
 	dma_addr_t		dma;
 
+<<<<<<< HEAD
+=======
+	unsigned		stream_id:16;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned		no_interrupt:1;
 	unsigned		zero:1;
 	unsigned		short_not_ok:1;
@@ -131,8 +149,22 @@ struct usb_ep_ops {
  * @maxpacket:The maximum packet size used on this endpoint.  The initial
  *	value can sometimes be reduced (hardware allowing), according to
  *      the endpoint descriptor used to configure the endpoint.
+<<<<<<< HEAD
  * @driver_data:for use by the gadget driver.  all other fields are
  *	read-only to gadget drivers.
+=======
+ * @max_streams: The maximum number of streams supported
+ *	by this EP (0 - 16, actual number is 2^n)
+ * @mult: multiplier, 'mult' value for SS Isoc EPs
+ * @maxburst: the maximum number of bursts supported by this EP (for usb3)
+ * @driver_data:for use by the gadget driver.
+ * @address: used to identify the endpoint when finding descriptor that
+ *	matches connection speed
+ * @desc: endpoint descriptor.  This pointer is set before the endpoint is
+ *	enabled and remains valid until the endpoint is disabled.
+ * @comp_desc: In case of SuperSpeed support, this is the endpoint companion
+ *	descriptor that is used to configure the endpoint
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * the bus controller driver lists all the general purpose endpoints in
  * gadget->ep_list.  the control endpoint (gadget->ep0) is not in that list,
@@ -145,6 +177,15 @@ struct usb_ep {
 	const struct usb_ep_ops	*ops;
 	struct list_head	ep_list;
 	unsigned		maxpacket:16;
+<<<<<<< HEAD
+=======
+	unsigned		max_streams:16;
+	unsigned		mult:2;
+	unsigned		maxburst:4;
+	u8			address;
+	const struct usb_endpoint_descriptor	*desc;
+	const struct usb_ss_ep_comp_descriptor	*comp_desc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*-------------------------------------------------------------------------*/
@@ -153,11 +194,16 @@ struct usb_ep {
  * usb_ep_enable - configure endpoint, making it usable
  * @ep:the endpoint being configured.  may not be the endpoint named "ep0".
  *	drivers discover endpoints through the ep_list of a usb_gadget.
+<<<<<<< HEAD
  * @desc:descriptor for desired behavior.  caller guarantees this pointer
  *	remains valid until the endpoint is disabled; the data byte order
  *	is little-endian (usb-standard).
  *
  * when configurations are set, or when interface settings change, the driver
+=======
+ *
+ * When configurations are set, or when interface settings change, the driver
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * will enable or disable the relevant endpoints.  while it is enabled, an
  * endpoint may be used for i/o until the driver receives a disconnect() from
  * the host or until the endpoint is disabled.
@@ -172,10 +218,16 @@ struct usb_ep {
  *
  * returns zero, or a negative error code.
  */
+<<<<<<< HEAD
 static inline int usb_ep_enable(struct usb_ep *ep,
 				const struct usb_endpoint_descriptor *desc)
 {
 	return ep->ops->enable(ep, desc);
+=======
+static inline int usb_ep_enable(struct usb_ep *ep)
+{
+	return ep->ops->enable(ep, ep->desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -416,7 +468,20 @@ static inline void usb_ep_fifo_flush(struct usb_ep *ep)
 
 /*-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 struct usb_gadget;
+=======
+struct usb_dcd_config_params {
+	__u8  bU1devExitLat;	/* U1 Device exit Latency */
+#define USB_DEFULT_U1_DEV_EXIT_LAT	0x01	/* Less then 1 microsec */
+	__le16 bU2DevExitLat;	/* U2 Device exit Latency */
+#define USB_DEFULT_U2_DEV_EXIT_LAT	0x1F4	/* Less then 500 microsec */
+};
+
+
+struct usb_gadget;
+struct usb_gadget_driver;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* the rest of the api to the controller hardware: device operations,
  * which don't involve endpoints (or i/o).
@@ -430,6 +495,19 @@ struct usb_gadget_ops {
 	int	(*pullup) (struct usb_gadget *, int is_on);
 	int	(*ioctl)(struct usb_gadget *,
 				unsigned code, unsigned long param);
+<<<<<<< HEAD
+=======
+	void	(*get_config_params)(struct usb_dcd_config_params *);
+	int	(*udc_start)(struct usb_gadget *,
+			struct usb_gadget_driver *);
+	int	(*udc_stop)(struct usb_gadget *,
+			struct usb_gadget_driver *);
+
+	/* Those two are deprecated */
+	int	(*start)(struct usb_gadget_driver *,
+			int (*bind)(struct usb_gadget *));
+	int	(*stop)(struct usb_gadget_driver *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /**
@@ -521,6 +599,27 @@ static inline int gadget_is_dualspeed(struct usb_gadget *g)
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * gadget_is_superspeed() - return true if the hardware handles
+ * supperspeed
+ * @g: controller that might support supper speed
+ */
+static inline int gadget_is_superspeed(struct usb_gadget *g)
+{
+#ifdef CONFIG_USB_GADGET_SUPERSPEED
+	/*
+	 * runtime test would check "g->is_superspeed" ... that might be
+	 * useful to work around hardware bugs, but is mostly pointless
+	 */
+	return 1;
+#else
+	return 0;
+#endif
+}
+
+/**
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * gadget_is_otg - return true iff the hardware is OTG-ready
  * @g: controller that might have a Mini-AB connector
  *
@@ -821,6 +920,12 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
  */
 int usb_gadget_unregister_driver(struct usb_gadget_driver *driver);
 
+<<<<<<< HEAD
+=======
+extern int usb_add_gadget_udc(struct device *parent, struct usb_gadget *gadget);
+extern void usb_del_gadget_udc(struct usb_gadget *gadget);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*-------------------------------------------------------------------------*/
 
 /* utility to simplify dealing with string descriptors */
@@ -870,12 +975,15 @@ int usb_gadget_config_buf(const struct usb_config_descriptor *config,
 struct usb_descriptor_header **usb_copy_descriptors(
 		struct usb_descriptor_header **);
 
+<<<<<<< HEAD
 /* return copy of endpoint descriptor given original descriptor set */
 struct usb_endpoint_descriptor *usb_find_endpoint(
 	struct usb_descriptor_header **src,
 	struct usb_descriptor_header **copy,
 	struct usb_endpoint_descriptor *match);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * usb_free_descriptors - free descriptors returned by usb_copy_descriptors()
  * @v: vector of descriptors
@@ -892,6 +1000,14 @@ static inline void usb_free_descriptors(struct usb_descriptor_header **v)
 extern struct usb_ep *usb_ep_autoconfig(struct usb_gadget *,
 			struct usb_endpoint_descriptor *);
 
+<<<<<<< HEAD
+=======
+
+extern struct usb_ep *usb_ep_autoconfig_ss(struct usb_gadget *,
+			struct usb_endpoint_descriptor *,
+			struct usb_ss_ep_comp_descriptor *);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void usb_ep_autoconfig_reset(struct usb_gadget *);
 
 #endif /* __LINUX_USB_GADGET_H */

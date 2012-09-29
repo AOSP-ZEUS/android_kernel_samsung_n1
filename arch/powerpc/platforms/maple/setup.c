@@ -338,14 +338,20 @@ define_machine(maple) {
 #ifdef CONFIG_EDAC
 /*
  * Register a platform device for CPC925 memory controller on
+<<<<<<< HEAD
  * Motorola ATCA-6101 blade.
  */
 #define MAPLE_CPC925_MODEL	"Motorola,ATCA-6101"
+=======
+ * all boards with U3H (CPC925) bridge.
+ */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __init maple_cpc925_edac_setup(void)
 {
 	struct platform_device *pdev;
 	struct device_node *np = NULL;
 	struct resource r;
+<<<<<<< HEAD
 	const unsigned char *model;
 	int ret;
 
@@ -367,6 +373,11 @@ static int __init maple_cpc925_edac_setup(void)
 
 	if (ret != 0)
 		return 0;
+=======
+	int ret;
+	volatile void __iomem *mem;
+	u32 rev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	np = of_find_node_by_type(NULL, "memory-controller");
 	if (!np) {
@@ -384,6 +395,25 @@ static int __init maple_cpc925_edac_setup(void)
 		return -ENODEV;
 	}
 
+<<<<<<< HEAD
+=======
+	mem = ioremap(r.start, resource_size(&r));
+	if (!mem) {
+		printk(KERN_ERR "%s: Unable to map memory-controller memory\n",
+				__func__);
+		return -ENOMEM;
+	}
+
+	rev = __raw_readl(mem);
+	iounmap(mem);
+
+	if (rev < 0x34 || rev > 0x3f) { /* U3H */
+		printk(KERN_ERR "%s: Non-CPC925(U3H) bridge revision: %02x\n",
+			__func__, rev);
+		return 0;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pdev = platform_device_register_simple("cpc925_edac", 0, &r, 1);
 	if (IS_ERR(pdev))
 		return PTR_ERR(pdev);

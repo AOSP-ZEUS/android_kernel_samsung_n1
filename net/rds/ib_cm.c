@@ -34,6 +34,10 @@
 #include <linux/in.h>
 #include <linux/slab.h>
 #include <linux/vmalloc.h>
+<<<<<<< HEAD
+=======
+#include <linux/ratelimit.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "rds.h"
 #include "ib.h"
@@ -435,13 +439,21 @@ static u32 rds_ib_protocol_compatible(struct rdma_cm_event *event)
 		version = RDS_PROTOCOL_3_0;
 		while ((common >>= 1) != 0)
 			version++;
+<<<<<<< HEAD
 	} else if (printk_ratelimit()) {
 		printk(KERN_NOTICE "RDS: Connection from %pI4 using "
+=======
+	}
+	printk_ratelimited(KERN_NOTICE "RDS: Connection from %pI4 using "
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			"incompatible protocol version %u.%u\n",
 			&dp->dp_saddr,
 			dp->dp_protocol_major,
 			dp->dp_protocol_minor);
+<<<<<<< HEAD
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return version;
 }
 

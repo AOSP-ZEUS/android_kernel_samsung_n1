@@ -35,6 +35,10 @@ extern int gfs2_diradd_alloc_required(struct inode *dir,
 				      const struct qstr *filename);
 extern int gfs2_dir_get_new_buffer(struct gfs2_inode *ip, u64 block,
 				   struct buffer_head **bhp);
+<<<<<<< HEAD
+=======
+extern void gfs2_dir_hash_inval(struct gfs2_inode *ip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline u32 gfs2_disk_hash(const char *data, int len)
 {

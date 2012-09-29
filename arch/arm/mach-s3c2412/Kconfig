@@ -15,7 +15,11 @@ config CPU_S3C2412
 
 config CPU_S3C2412_ONLY
 	bool
+<<<<<<< HEAD
 	depends on ARCH_S3C2410 && !CPU_S3C2400 && !CPU_S3C2410 && \
+=======
+	depends on ARCH_S3C2410 && !CPU_S3C2410 && \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		   !CPU_S3C2416 && !CPU_S3C2440 && !CPU_S3C2442 && \
 		   !CPU_S3C2443 && CPU_S3C2412
 	default y if CPU_S3C2412

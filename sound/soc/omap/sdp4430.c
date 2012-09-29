@@ -21,6 +21,11 @@
 
 #include <linux/clk.h>
 #include <linux/platform_device.h>
+<<<<<<< HEAD
+=======
+#include <linux/mfd/twl6040.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <sound/core.h>
 #include <sound/pcm.h>
 #include <sound/soc.h>
@@ -34,8 +39,11 @@
 #include "omap-pcm.h"
 #include "../codecs/twl6040.h"
 
+<<<<<<< HEAD
 static int twl6040_power_mode;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int sdp4430_hw_params(struct snd_pcm_substream *substream,
 	struct snd_pcm_hw_params *params)
 {
@@ -44,6 +52,7 @@ static int sdp4430_hw_params(struct snd_pcm_substream *substream,
 	int clk_id, freq;
 	int ret;
 
+<<<<<<< HEAD
 	if (twl6040_power_mode) {
 		clk_id = TWL6040_SYSCLK_SEL_HPPLL;
 		freq = 38400000;
@@ -51,6 +60,15 @@ static int sdp4430_hw_params(struct snd_pcm_substream *substream,
 		clk_id = TWL6040_SYSCLK_SEL_LPPLL;
 		freq = 32768;
 	}
+=======
+	clk_id = twl6040_get_clk_id(rtd->codec);
+	if (clk_id == TWL6040_SYSCLK_SEL_HPPLL)
+		freq = 38400000;
+	else if (clk_id == TWL6040_SYSCLK_SEL_LPPLL)
+		freq = 32768;
+	else
+		return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* set the codec mclk */
 	ret = snd_soc_dai_set_sysclk(codec_dai, clk_id, freq,
@@ -81,6 +99,7 @@ static struct snd_soc_jack_pin hs_jack_pins[] = {
 	},
 };
 
+<<<<<<< HEAD
 static int sdp4430_get_power_mode(struct snd_kcontrol *kcontrol,
 	struct snd_ctl_elem_value *ucontrol)
 {
@@ -110,6 +129,8 @@ static const struct snd_kcontrol_new sdp4430_controls[] = {
 		sdp4430_get_power_mode, sdp4430_set_power_mode),
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* SDP4430 machine DAPM */
 static const struct snd_soc_dapm_widget sdp4430_twl6040_dapm_widgets[] = {
 	SND_SOC_DAPM_MIC("Ext Mic", NULL),
@@ -152,12 +173,15 @@ static int sdp4430_twl6040_init(struct snd_soc_pcm_runtime *rtd)
 	struct snd_soc_dapm_context *dapm = &codec->dapm;
 	int ret;
 
+<<<<<<< HEAD
 	/* Add SDP4430 specific controls */
 	ret = snd_soc_add_controls(codec, sdp4430_controls,
 				ARRAY_SIZE(sdp4430_controls));
 	if (ret)
 		return ret;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Add SDP4430 specific widgets */
 	ret = snd_soc_dapm_new_controls(dapm, sdp4430_twl6040_dapm_widgets,
 				ARRAY_SIZE(sdp4430_twl6040_dapm_widgets));
@@ -237,9 +261,12 @@ static int __init sdp4430_soc_init(void)
 	if (ret)
 		goto err;
 
+<<<<<<< HEAD
 	/* Codec starts in HP mode */
 	twl6040_power_mode = 1;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
 err:

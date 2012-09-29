@@ -241,7 +241,11 @@ extern uint32_t __xchg_32(uint32_t i, volatile void *v);
 #define atomic64_cmpxchg(v, old, new)	(__cmpxchg_64(old, new, &(v)->counter))
 #define atomic64_xchg(v, new)		(__xchg_64(new, &(v)->counter))
 
+<<<<<<< HEAD
 static __inline__ int atomic_add_unless(atomic_t *v, int a, int u)
+=======
+static __inline__ int __atomic_add_unless(atomic_t *v, int a, int u)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int c, old;
 	c = atomic_read(v);
@@ -253,10 +257,17 @@ static __inline__ int atomic_add_unless(atomic_t *v, int a, int u)
 			break;
 		c = old;
 	}
+<<<<<<< HEAD
 	return c != (u);
 }
 
 #define atomic_inc_not_zero(v) atomic_add_unless((v), 1, 0)
 
 #include <asm-generic/atomic-long.h>
+=======
+	return c;
+}
+
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* _ASM_ATOMIC_H */

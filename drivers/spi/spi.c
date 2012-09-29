@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * spi.c - SPI init/core code
+=======
+ * SPI init/core code
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Copyright (C) 2005 David Brownell
  *
@@ -318,7 +322,11 @@ struct spi_device *spi_alloc_device(struct spi_master *master)
 	}
 
 	spi->master = master;
+<<<<<<< HEAD
 	spi->dev.parent = &master->dev;
+=======
+	spi->dev.parent = dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spi->dev.bus = &spi_bus_type;
 	spi->dev.release = spidev_release;
 	device_initialize(&spi->dev);

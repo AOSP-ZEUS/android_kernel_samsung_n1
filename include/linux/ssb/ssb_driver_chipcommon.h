@@ -8,7 +8,11 @@
  * gpio interface, extbus, and support for serial and parallel flashes.
  *
  * Copyright 2005, Broadcom Corporation
+<<<<<<< HEAD
  * Copyright 2006, Michael Buesch <mb@bu3sch.de>
+=======
+ * Copyright 2006, Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Licensed under the GPL version 2. See COPYING for details.
  */

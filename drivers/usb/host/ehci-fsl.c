@@ -100,7 +100,11 @@ static int usb_hcd_fsl_probe(const struct hc_driver *driver,
 		goto err2;
 	}
 	hcd->rsrc_start = res->start;
+<<<<<<< HEAD
 	hcd->rsrc_len = res->end - res->start + 1;
+=======
+	hcd->rsrc_len = resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len,
 				driver->description)) {
 		dev_dbg(&pdev->dev, "controller already in use\n");
@@ -117,9 +121,12 @@ static int usb_hcd_fsl_probe(const struct hc_driver *driver,
 
 	pdata->regs = hcd->regs;
 
+<<<<<<< HEAD
 	if (pdata->power_budget)
 		hcd->power_budget = pdata->power_budget;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * do platform specific init: check the clock, grab/config pins, etc.
 	 */
@@ -137,6 +144,7 @@ static int usb_hcd_fsl_probe(const struct hc_driver *driver,
 	retval = usb_add_hcd(hcd, irq, IRQF_DISABLED | IRQF_SHARED);
 	if (retval != 0)
 		goto err4;
+<<<<<<< HEAD
 
 #ifdef CONFIG_USB_OTG
 	if (pdata->operating_mode == FSL_USB2_DR_OTG) {
@@ -161,6 +169,8 @@ static int usb_hcd_fsl_probe(const struct hc_driver *driver,
 		}
 	}
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return retval;
 
       err4:
@@ -191,12 +201,15 @@ static void usb_hcd_fsl_remove(struct usb_hcd *hcd,
 			       struct platform_device *pdev)
 {
 	struct fsl_usb2_platform_data *pdata = pdev->dev.platform_data;
+<<<<<<< HEAD
 	struct ehci_hcd *ehci = hcd_to_ehci(hcd);
 
 	if (ehci->transceiver) {
 		otg_set_host(ehci->transceiver, NULL);
 		put_device(ehci->transceiver->dev);
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	usb_remove_hcd(hcd);
 
@@ -216,8 +229,11 @@ static void ehci_fsl_setup_phy(struct ehci_hcd *ehci,
 			       unsigned int port_offset)
 {
 	u32 portsc;
+<<<<<<< HEAD
 	struct usb_hcd *hcd = ehci_to_hcd(ehci);
 	void __iomem *non_ehci = hcd->regs;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	portsc = ehci_readl(ehci, &ehci->regs->port_status[port_offset]);
 	portsc &= ~(PORT_PTS_MSK | PORT_PTS_PTW);
@@ -233,8 +249,11 @@ static void ehci_fsl_setup_phy(struct ehci_hcd *ehci,
 		portsc |= PORT_PTS_PTW;
 		/* fall through */
 	case FSL_USB2_PHY_UTMI:
+<<<<<<< HEAD
 		/* enable UTMI PHY */
 		setbits32(non_ehci + FSL_SOC_USB_CTRL, CTRL_UTMI_PHY_EN);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		portsc |= PORT_PTS_UTMI;
 		break;
 	case FSL_USB2_PHY_NONE:
@@ -581,6 +600,7 @@ static struct dev_pm_ops ehci_fsl_pm_ops = {
 #define EHCI_FSL_PM_OPS		NULL
 #endif /* CONFIG_PM */
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_OTG
 static int ehci_start_port_reset(struct usb_hcd *hcd, unsigned port)
 {
@@ -613,6 +633,8 @@ static int ehci_start_port_reset(struct usb_hcd *hcd, unsigned port)
 #endif /* CONFIG_USB_OTG */
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct hc_driver ehci_fsl_hc_driver = {
 	.description = hcd_name,
 	.product_desc = "Freescale On-Chip EHCI Host Controller",
@@ -652,7 +674,10 @@ static const struct hc_driver ehci_fsl_hc_driver = {
 	.hub_control = ehci_hub_control,
 	.bus_suspend = ehci_bus_suspend,
 	.bus_resume = ehci_bus_resume,
+<<<<<<< HEAD
 	.start_port_reset = ehci_start_port_reset,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.relinquish_port = ehci_relinquish_port,
 	.port_handed_over = ehci_port_handed_over,
 

@@ -238,6 +238,10 @@ char **argv_split(const char *str, int *argcp);
 void argv_free(char **argv);
 bool strglobmatch(const char *str, const char *pat);
 bool strlazymatch(const char *str, const char *pat);
+<<<<<<< HEAD
+=======
+int strtailcmp(const char *s1, const char *s2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 unsigned long convert_unit(unsigned long value, char *unit);
 int readn(int fd, void *buf, size_t size);
 

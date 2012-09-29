@@ -58,6 +58,13 @@
 #include <dhdioctl.h>
 #include <sdiovar.h>
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_HAS_WAKELOCK
+#include <linux/wakelock.h>
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef DHD_DEBUG
 #include <hndrte_cons.h>
 #endif /* DHD_DEBUG */
@@ -65,9 +72,15 @@
 #include <hndrte_armtrap.h>
 #endif /* DHD_DEBUG_TRAP */
 
+<<<<<<< HEAD
 #define QLEN		256	/* bulk rx and tx queue lengths */
 #define FCHI		(QLEN - 10)
 #define FCLOW		(FCHI / 2)
+=======
+#define QLEN		2048	/* bulk rx and tx queue lengths */
+#define FCHI		(QLEN - 256)
+#define FCLOW		(FCHI -256)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PRIOMASK	7
 
 #define TXRETRIES	2	/* # of retries for tx frames */
@@ -4125,6 +4138,12 @@ dhdsdio_dpc(dhd_bus_t *bus)
 
 	/* Handle host mailbox indication */
 	if (intstatus & I_HMB_HOST_INT) {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_HAS_WAKELOCK
+		wake_lock_timeout(&bus->dhd->wow_wakelock, 3*HZ);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		intstatus &= ~I_HMB_HOST_INT;
 		intstatus |= dhdsdio_hostmail(bus);
 	}
@@ -4157,6 +4176,12 @@ dhdsdio_dpc(dhd_bus_t *bus)
 
 	/* On frame indication, read available frames */
 	if (PKT_AVAILABLE()) {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_HAS_WAKELOCK
+		wake_lock_timeout(&bus->dhd->wow_wakelock, 3*HZ);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		framecnt = dhdsdio_readframes(bus, rxlimit, &rxdone);
 		if (rxdone || bus->rxskip)
 			intstatus &= ~I_HMB_FRAME_IND;
@@ -4761,7 +4786,12 @@ dhdsdio_chipmatch(uint16 chipid)
 
 static void *
 dhdsdio_probe(uint16 venid, uint16 devid, uint16 bus_no, uint16 slot,
+<<<<<<< HEAD
 	uint16 func, uint bustype, void *regsva, osl_t * osh, void *sdh)
+=======
+	uint16 func, uint bustype, void *regsva, osl_t * osh, void *sdh,
+	void *dev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int ret;
 	dhd_bus_t *bus;
@@ -4778,7 +4808,11 @@ dhdsdio_probe(uint16 venid, uint16 devid, uint16 bus_no, uint16 slot,
 	sd1idle = TRUE;
 	dhd_readahead = TRUE;
 	retrydata = FALSE;
+<<<<<<< HEAD
 	dhd_doflow = FALSE;
+=======
+	dhd_doflow = TRUE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dhd_dongle_memsize = 0;
 	dhd_txminmax = DHD_TXMINMAX;
 
@@ -4869,7 +4903,11 @@ dhdsdio_probe(uint16 venid, uint16 devid, uint16 bus_no, uint16 slot,
 	}
 
 	/* Attach to the dhd/OS/network interface */
+<<<<<<< HEAD
 	if (!(bus->dhd = dhd_attach(osh, bus, SDPCM_RESERVE))) {
+=======
+	if (!(bus->dhd = dhd_attach(osh, bus, SDPCM_RESERVE, dev))) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		DHD_ERROR(("%s: dhd_attach failed\n", __FUNCTION__));
 		goto fail;
 	}
@@ -5749,6 +5787,15 @@ dhd_bus_devreset(dhd_pub_t *dhdp, uint8 flag)
 			/* Force flow control as protection when stop come before ifconfig_down */
 			dhd_txflowcontrol(bus->dhd, 0, ON);
 #endif /* !defined(IGNORE_ETH0_DOWN) */
+<<<<<<< HEAD
+=======
+
+#if !defined(OOB_INTR_ONLY)
+			/* to avoid supurious client interrupt during stop process */
+			bcmsdh_stop(bus->sdh);
+#endif /* !defined(OOB_INTR_ONLY) */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* Expect app to have torn down any connection before calling */
 			/* Stop the bus, disable F2 */
 			dhd_bus_stop(bus, FALSE);

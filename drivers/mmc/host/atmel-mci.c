@@ -203,6 +203,10 @@ struct atmel_mci_slot {
 #define ATMCI_CARD_PRESENT	0
 #define ATMCI_CARD_NEED_INIT	1
 #define ATMCI_SHUTDOWN		2
+<<<<<<< HEAD
+=======
+#define ATMCI_SUSPENDED		3
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int			detect_pin;
 	int			wp_pin;
@@ -468,6 +472,7 @@ err:
 static inline unsigned int ns_to_clocks(struct atmel_mci *host,
 					unsigned int ns)
 {
+<<<<<<< HEAD
 	/*
 	 * It is easier here to use us instead of ns for the timeout,
 	 * it prevents from overflows during calculation.
@@ -476,6 +481,9 @@ static inline unsigned int ns_to_clocks(struct atmel_mci *host,
 
 	/* Maximum clock frequency is host->bus_hz/2 */
 	return us * (DIV_ROUND_UP(host->bus_hz, 2000000));
+=======
+	return (ns * (host->bus_hz / 1000000) + 999) / 1000;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void atmci_set_timeout(struct atmel_mci *host,
@@ -695,8 +703,14 @@ atmci_prepare_data_dma(struct atmel_mci *host, struct mmc_data *data)
 	sglen = dma_map_sg(chan->device->dev, data->sg,
 			   data->sg_len, direction);
 
+<<<<<<< HEAD
 	desc = chan->device->device_prep_slave_sg(chan,
 			data->sg, sglen, direction,
+=======
+	dmaengine_slave_config(chan, &host->dma_conf);
+	desc = dmaengine_prep_slave_sg(chan,
+			data->sg, sglen, slave_dirn,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
 	if (!desc)
 		goto unmap_exit;
@@ -1885,10 +1899,78 @@ static int __exit atmci_remove(struct platform_device *pdev)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_PM
+static int atmci_suspend(struct device *dev)
+{
+	struct atmel_mci *host = dev_get_drvdata(dev);
+	int i;
+
+	 for (i = 0; i < ATMEL_MCI_MAX_NR_SLOTS; i++) {
+		struct atmel_mci_slot *slot = host->slot[i];
+		int ret;
+
+		if (!slot)
+			continue;
+		ret = mmc_suspend_host(slot->mmc);
+		if (ret < 0) {
+			while (--i >= 0) {
+				slot = host->slot[i];
+				if (slot
+				&& test_bit(ATMCI_SUSPENDED, &slot->flags)) {
+					mmc_resume_host(host->slot[i]->mmc);
+					clear_bit(ATMCI_SUSPENDED, &slot->flags);
+				}
+			}
+			return ret;
+		} else {
+			set_bit(ATMCI_SUSPENDED, &slot->flags);
+		}
+	}
+
+	return 0;
+}
+
+static int atmci_resume(struct device *dev)
+{
+	struct atmel_mci *host = dev_get_drvdata(dev);
+	int i;
+	int ret = 0;
+
+	for (i = 0; i < ATMEL_MCI_MAX_NR_SLOTS; i++) {
+		struct atmel_mci_slot *slot = host->slot[i];
+		int err;
+
+		slot = host->slot[i];
+		if (!slot)
+			continue;
+		if (!test_bit(ATMCI_SUSPENDED, &slot->flags))
+			continue;
+		err = mmc_resume_host(slot->mmc);
+		if (err < 0)
+			ret = err;
+		else
+			clear_bit(ATMCI_SUSPENDED, &slot->flags);
+	}
+
+	return ret;
+}
+static SIMPLE_DEV_PM_OPS(atmci_pm, atmci_suspend, atmci_resume);
+#define ATMCI_PM_OPS	(&atmci_pm)
+#else
+#define ATMCI_PM_OPS	NULL
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct platform_driver atmci_driver = {
 	.remove		= __exit_p(atmci_remove),
 	.driver		= {
 		.name		= "atmel_mci",
+<<<<<<< HEAD
+=======
+		.pm		= ATMCI_PM_OPS,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 };
 

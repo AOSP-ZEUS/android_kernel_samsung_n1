@@ -20,7 +20,11 @@
 
 static struct s3c24xx_uart_clksrc s5pv210_serial_clocks[] = {
 	[0] = {
+<<<<<<< HEAD
 		.name		= "sclk",
+=======
+		.name		= "pclk",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.divisor	= 1,
 		.min_baud	= 0,
 		.max_baud	= 0,

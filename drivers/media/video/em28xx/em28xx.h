@@ -117,9 +117,15 @@
 #define EM2800_BOARD_VC211A			  74
 #define EM2882_BOARD_DIKOM_DK300		  75
 #define EM2870_BOARD_KWORLD_A340		  76
+<<<<<<< HEAD
 #define EM2874_LEADERSHIP_ISDBT			  77
 #define EM28174_BOARD_PCTV_290E                   78
 
+=======
+#define EM2874_BOARD_LEADERSHIP_ISDBT		  77
+#define EM28174_BOARD_PCTV_290E                   78
+#define EM2884_BOARD_TERRATEC_H5		  79
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Limits minimum and default number of buffers */
 #define EM28XX_MIN_BUF 4
@@ -487,6 +493,11 @@ struct em28xx {
 	int devno;		/* marks the number of this device */
 	enum em28xx_chip_id chip_id;
 
+<<<<<<< HEAD
+=======
+	int audio_ifnum;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct v4l2_device v4l2_dev;
 	struct em28xx_board board;
 
@@ -503,6 +514,10 @@ struct em28xx {
 
 	unsigned int has_audio_class:1;
 	unsigned int has_alsa_audio:1;
+<<<<<<< HEAD
+=======
+	unsigned int is_audio_only:1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Controls audio streaming */
 	struct work_struct wq_trigger;              /* Trigger to start/stop audio for alsa module */
@@ -697,6 +712,12 @@ int em28xx_tuner_callback(void *ptr, int component, int command, int arg);
 void em28xx_release_resources(struct em28xx *dev);
 
 /* Provided by em28xx-input.c */
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_VIDEO_EM28XX_RC
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int em28xx_get_key_terratec(struct IR_i2c *ir, u32 *ir_key, u32 *ir_raw);
 int em28xx_get_key_em_haup(struct IR_i2c *ir, u32 *ir_key, u32 *ir_raw);
 int em28xx_get_key_pinnacle_usb_grey(struct IR_i2c *ir, u32 *ir_key,
@@ -709,6 +730,23 @@ void em28xx_deregister_snapshot_button(struct em28xx *dev);
 int em28xx_ir_init(struct em28xx *dev);
 int em28xx_ir_fini(struct em28xx *dev);
 
+<<<<<<< HEAD
+=======
+#else
+
+#define em28xx_get_key_terratec			NULL
+#define em28xx_get_key_em_haup			NULL
+#define em28xx_get_key_pinnacle_usb_grey	NULL
+#define em28xx_get_key_winfast_usbii_deluxe	NULL
+
+static inline void em28xx_register_snapshot_button(struct em28xx *dev) {}
+static inline void em28xx_deregister_snapshot_button(struct em28xx *dev) {}
+static inline int em28xx_ir_init(struct em28xx *dev) { return 0; }
+static inline int em28xx_ir_fini(struct em28xx *dev) { return 0; }
+
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Provided by em28xx-vbi.c */
 extern struct videobuf_queue_ops em28xx_vbi_qops;
 

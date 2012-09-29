@@ -38,7 +38,11 @@ Status: in development
 #include <linux/sched.h>
 #include <linux/slab.h>
 
+<<<<<<< HEAD
 #include <asm/termios.h>
+=======
+#include <linux/termios.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/ioctls.h>
 #include <linux/serial.h>
 #include <linux/poll.h>
@@ -192,9 +196,14 @@ static int tty_read(struct file *f, int timeout)
 				elapsed =
 				    (1000000 * (now.tv_sec - start.tv_sec) +
 				     now.tv_usec - start.tv_usec);
+<<<<<<< HEAD
 				if (elapsed > timeout) {
 					break;
 				}
+=======
+				if (elapsed > timeout)
+					break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				set_current_state(TASK_INTERRUPTIBLE);
 				schedule_timeout(((timeout -
 						   elapsed) * HZ) / 10000);
@@ -204,9 +213,14 @@ static int tty_read(struct file *f, int timeout)
 				unsigned char ch;
 
 				f->f_pos = 0;
+<<<<<<< HEAD
 				if (f->f_op->read(f, &ch, 1, &f->f_pos) == 1) {
 					result = ch;
 				}
+=======
+				if (f->f_op->read(f, &ch, 1, &f->f_pos) == 1)
+					result = ch;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 		} else {
 			/* Device does not support poll, busy wait */
@@ -215,9 +229,14 @@ static int tty_read(struct file *f, int timeout)
 				unsigned char ch;
 
 				retries++;
+<<<<<<< HEAD
 				if (retries >= timeout) {
 					break;
 				}
+=======
+				if (retries >= timeout)
+					break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 				f->f_pos = 0;
 				if (f->f_op->read(f, &ch, 1, &f->f_pos) == 1) {
@@ -329,7 +348,11 @@ static struct serial_data serial_read(struct file *f, int timeout)
 
 		length++;
 		if (data < 0) {
+<<<<<<< HEAD
 			printk("serial2002 error\n");
+=======
+			printk(KERN_ERR "serial2002 error\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		} else if (data & 0x80) {
 			result.value = (result.value << 7) | (data & 0x7f);
@@ -402,7 +425,11 @@ static int serial_2002_open(struct comedi_device *dev)
 	devpriv->tty = filp_open(port, O_RDWR, 0);
 	if (IS_ERR(devpriv->tty)) {
 		result = (int)PTR_ERR(devpriv->tty);
+<<<<<<< HEAD
 		printk("serial_2002: file open error = %d\n", result);
+=======
+		printk(KERN_ERR "serial_2002: file open error = %d\n", result);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		struct config_t {
 
@@ -516,9 +543,14 @@ static int serial_2002_open(struct comedi_device *dev)
 								}
 								break;
 							}
+<<<<<<< HEAD
 							if (sign) {
 								min = -min;
 							}
+=======
+							if (sign)
+								min = -min;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 							cur_config[channel].min
 							    = min;
 						}
@@ -557,9 +589,14 @@ static int serial_2002_open(struct comedi_device *dev)
 								}
 								break;
 							}
+<<<<<<< HEAD
 							if (sign) {
 								max = -max;
 							}
+=======
+							if (sign)
+								max = -max;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 							cur_config[channel].max
 							    = max;
 						}
@@ -622,9 +659,14 @@ static int serial_2002_open(struct comedi_device *dev)
 				int j, chan;
 
 				for (chan = 0, j = 0; j < 32; j++) {
+<<<<<<< HEAD
 					if (c[j].kind == kind) {
 						chan++;
 					}
+=======
+					if (c[j].kind == kind)
+						chan++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				}
 				s = &dev->subdevices[i];
 				s->n_chan = chan;
@@ -649,9 +691,14 @@ static int serial_2002_open(struct comedi_device *dev)
 				}
 				for (chan = 0, j = 0; j < 32; j++) {
 					if (c[j].kind == kind) {
+<<<<<<< HEAD
 						if (mapping) {
 							mapping[chan] = j;
 						}
+=======
+						if (mapping)
+							mapping[chan] = j;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 						if (range) {
 							range[j].length = 1;
 							range[j].range.min =
@@ -704,9 +751,14 @@ err_alloc_configs:
 
 static void serial_2002_close(struct comedi_device *dev)
 {
+<<<<<<< HEAD
 	if (!IS_ERR(devpriv->tty) && (devpriv->tty != 0)) {
 		filp_close(devpriv->tty, 0);
 	}
+=======
+	if (!IS_ERR(devpriv->tty) && (devpriv->tty != 0))
+		filp_close(devpriv->tty, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int serial2002_di_rinsn(struct comedi_device *dev,
@@ -723,9 +775,14 @@ static int serial2002_di_rinsn(struct comedi_device *dev,
 		poll_digital(devpriv->tty, chan);
 		while (1) {
 			read = serial_read(devpriv->tty, 1000);
+<<<<<<< HEAD
 			if (read.kind != is_digital || read.index == chan) {
 				break;
 			}
+=======
+			if (read.kind != is_digital || read.index == chan)
+				break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		data[n] = read.value;
 	}
@@ -765,9 +822,14 @@ static int serial2002_ai_rinsn(struct comedi_device *dev,
 		poll_channel(devpriv->tty, chan);
 		while (1) {
 			read = serial_read(devpriv->tty, 1000);
+<<<<<<< HEAD
 			if (read.kind != is_channel || read.index == chan) {
 				break;
 			}
+=======
+			if (read.kind != is_channel || read.index == chan)
+				break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		data[n] = read.value;
 	}
@@ -801,9 +863,14 @@ static int serial2002_ao_rinsn(struct comedi_device *dev,
 	int n;
 	int chan = CR_CHAN(insn->chanspec);
 
+<<<<<<< HEAD
 	for (n = 0; n < insn->n; n++) {
 		data[n] = devpriv->ao_readback[chan];
 	}
+=======
+	for (n = 0; n < insn->n; n++)
+		data[n] = devpriv->ao_readback[chan];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return n;
 }
@@ -822,9 +889,14 @@ static int serial2002_ei_rinsn(struct comedi_device *dev,
 		poll_channel(devpriv->tty, chan);
 		while (1) {
 			read = serial_read(devpriv->tty, 1000);
+<<<<<<< HEAD
 			if (read.kind != is_channel || read.index == chan) {
 				break;
 			}
+=======
+			if (read.kind != is_channel || read.index == chan)
+				break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		data[n] = read.value;
 	}
@@ -838,9 +910,14 @@ static int serial2002_attach(struct comedi_device *dev,
 
 	printk("comedi%d: serial2002: ", dev->minor);
 	dev->board_name = thisboard->name;
+<<<<<<< HEAD
 	if (alloc_private(dev, sizeof(struct serial2002_private)) < 0) {
 		return -ENOMEM;
 	}
+=======
+	if (alloc_private(dev, sizeof(struct serial2002_private)) < 0)
+		return -ENOMEM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev->open = serial_2002_open;
 	dev->close = serial_2002_close;
 	devpriv->port = it->options[0];

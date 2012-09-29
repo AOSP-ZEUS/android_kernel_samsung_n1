@@ -25,6 +25,10 @@
 #include <linux/irq.h>
 
 #include <asm/mach/map.h>
+<<<<<<< HEAD
+=======
+#include <asm/suspend.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/hardware.h>
 #include <mach/irqs.h>
 #include <mach/gpio.h>
@@ -244,7 +248,11 @@ static void pxa25x_cpu_pm_enter(suspend_state_t state)
 
 	switch (state) {
 	case PM_SUSPEND_MEM:
+<<<<<<< HEAD
 		pxa25x_cpu_suspend(PWRMODE_SLEEP, PLAT_PHYS_OFFSET - PAGE_OFFSET);
+=======
+		cpu_suspend(PWRMODE_SLEEP, pxa25x_finish_suspend);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 }

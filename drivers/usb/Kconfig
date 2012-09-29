@@ -110,6 +110,11 @@ config USB
 
 source "drivers/usb/core/Kconfig"
 
+<<<<<<< HEAD
+=======
+source "drivers/usb/notify/Kconfig"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "drivers/usb/mon/Kconfig"
 
 source "drivers/usb/wusbcore/Kconfig"

@@ -538,6 +538,18 @@ static struct dmi_system_id __initdata msi_load_scm_models_dmi_table[] = {
 		},
 		.callback = dmi_check_cb
 	},
+<<<<<<< HEAD
+=======
+	{
+		.ident = "MSI U270",
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR,
+				"Micro-Star International Co., Ltd."),
+			DMI_MATCH(DMI_PRODUCT_NAME, "U270 series"),
+		},
+		.callback = dmi_check_cb
+	},
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ }
 };
 
@@ -996,3 +1008,7 @@ MODULE_ALIAS("dmi:*:svnMICRO-STARINTERNATIONAL*:pnMS-N034:*");
 MODULE_ALIAS("dmi:*:svnMICRO-STARINTERNATIONAL*:pnMS-N051:*");
 MODULE_ALIAS("dmi:*:svnMICRO-STARINTERNATIONAL*:pnMS-N014:*");
 MODULE_ALIAS("dmi:*:svnMicro-StarInternational*:pnCR620:*");
+<<<<<<< HEAD
+=======
+MODULE_ALIAS("dmi:*:svnMicro-StarInternational*:pnU270series:*");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

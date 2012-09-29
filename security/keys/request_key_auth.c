@@ -251,6 +251,11 @@ struct key *key_get_instantiation_authkey(key_serial_t target_id)
 
 	if (IS_ERR(authkey_ref)) {
 		authkey = ERR_CAST(authkey_ref);
+<<<<<<< HEAD
+=======
+		if (authkey == ERR_PTR(-EAGAIN))
+			authkey = ERR_PTR(-ENOKEY);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto error;
 	}
 

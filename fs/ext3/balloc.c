@@ -21,6 +21,10 @@
 #include <linux/quotaops.h>
 #include <linux/buffer_head.h>
 #include <linux/blkdev.h>
+<<<<<<< HEAD
+=======
+#include <trace/events/ext3.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * balloc.c contains the blocks allocation and deallocation routines
@@ -161,6 +165,10 @@ read_block_bitmap(struct super_block *sb, unsigned int block_group)
 	desc = ext3_get_group_desc(sb, block_group, NULL);
 	if (!desc)
 		return NULL;
+<<<<<<< HEAD
+=======
+	trace_ext3_read_block_bitmap(sb, block_group);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bitmap_blk = le32_to_cpu(desc->bg_block_bitmap);
 	bh = sb_getblk(sb, bitmap_blk);
 	if (unlikely(!bh)) {
@@ -351,6 +359,10 @@ void ext3_rsv_window_add(struct super_block *sb,
 	struct rb_node * parent = NULL;
 	struct ext3_reserve_window_node *this;
 
+<<<<<<< HEAD
+=======
+	trace_ext3_rsv_window_add(sb, rsv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	while (*p)
 	{
 		parent = *p;
@@ -476,8 +488,15 @@ void ext3_discard_reservation(struct inode *inode)
 	rsv = &block_i->rsv_window_node;
 	if (!rsv_is_empty(&rsv->rsv_window)) {
 		spin_lock(rsv_lock);
+<<<<<<< HEAD
 		if (!rsv_is_empty(&rsv->rsv_window))
 			rsv_window_remove(inode->i_sb, rsv);
+=======
+		if (!rsv_is_empty(&rsv->rsv_window)) {
+			trace_ext3_discard_reservation(inode, rsv);
+			rsv_window_remove(inode->i_sb, rsv);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_unlock(rsv_lock);
 	}
 }
@@ -683,6 +702,7 @@ error_return:
 void ext3_free_blocks(handle_t *handle, struct inode *inode,
 			ext3_fsblk_t block, unsigned long count)
 {
+<<<<<<< HEAD
 	struct super_block * sb;
 	unsigned long dquot_freed_blocks;
 
@@ -691,6 +711,12 @@ void ext3_free_blocks(handle_t *handle, struct inode *inode,
 		printk ("ext3_free_blocks: nonexistent device");
 		return;
 	}
+=======
+	struct super_block *sb = inode->i_sb;
+	unsigned long dquot_freed_blocks;
+
+	trace_ext3_free_blocks(inode, block, count);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ext3_free_blocks_sb(handle, sb, block, count, &dquot_freed_blocks);
 	if (dquot_freed_blocks)
 		dquot_free_block(inode, dquot_freed_blocks);
@@ -1136,6 +1162,10 @@ static int alloc_new_reservation(struct ext3_reserve_window_node *my_rsv,
 	else
 		start_block = grp_goal + group_first_block;
 
+<<<<<<< HEAD
+=======
+	trace_ext3_alloc_new_reservation(sb, start_block);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	size = my_rsv->rsv_goal_size;
 
 	if (!rsv_is_empty(&my_rsv->rsv_window)) {
@@ -1230,8 +1260,16 @@ retry:
 	 * check if the first free block is within the
 	 * free space we just reserved
 	 */
+<<<<<<< HEAD
 	if (start_block >= my_rsv->rsv_start && start_block <= my_rsv->rsv_end)
 		return 0;		/* success */
+=======
+	if (start_block >= my_rsv->rsv_start &&
+	    start_block <= my_rsv->rsv_end) {
+		trace_ext3_reserved(sb, start_block, my_rsv);
+		return 0;		/* success */
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * if the first free bit we found is out of the reservable space
 	 * continue search for next reservable space,
@@ -1514,10 +1552,13 @@ ext3_fsblk_t ext3_new_blocks(handle_t *handle, struct inode *inode,
 
 	*errp = -ENOSPC;
 	sb = inode->i_sb;
+<<<<<<< HEAD
 	if (!sb) {
 		printk("ext3_new_block: nonexistent device");
 		return 0;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Check quota for allocation of this block.
@@ -1528,8 +1569,15 @@ ext3_fsblk_t ext3_new_blocks(handle_t *handle, struct inode *inode,
 		return 0;
 	}
 
+<<<<<<< HEAD
 	sbi = EXT3_SB(sb);
 	es = EXT3_SB(sb)->s_es;
+=======
+	trace_ext3_request_blocks(inode, goal, num);
+
+	sbi = EXT3_SB(sb);
+	es = sbi->s_es;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ext3_debug("goal=%lu.\n", goal);
 	/*
 	 * Allocate a block from reservation only when
@@ -1742,6 +1790,13 @@ allocated:
 	brelse(bitmap_bh);
 	dquot_free_block(inode, *count-num);
 	*count = num;
+<<<<<<< HEAD
+=======
+
+	trace_ext3_allocate_blocks(inode, goal, num,
+				   (unsigned long long)ret_block);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret_block;
 
 io_error:
@@ -1996,6 +2051,10 @@ ext3_grpblk_t ext3_trim_all_free(struct super_block *sb, unsigned int group,
 		if ((next - start) < minblocks)
 			goto free_extent;
 
+<<<<<<< HEAD
+=======
+		trace_ext3_discard_blocks(sb, discard_block, next - start);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 /* Send the TRIM command down to the device */
 		err = sb_issue_discard(sb, discard_block, next - start,
 				       GFP_NOFS, 0);
@@ -2100,7 +2159,11 @@ int ext3_trim_fs(struct super_block *sb, struct fstrim_range *range)
 	if (unlikely(minlen > EXT3_BLOCKS_PER_GROUP(sb)))
 		return -EINVAL;
 	if (start >= max_blks)
+<<<<<<< HEAD
 		goto out;
+=======
+		return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (start + len > max_blks)
 		len = max_blks - start;
 
@@ -2148,8 +2211,11 @@ int ext3_trim_fs(struct super_block *sb, struct fstrim_range *range)
 
 	if (ret >= 0)
 		ret = 0;
+<<<<<<< HEAD
 
 out:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	range->len = trimmed * sb->s_blocksize;
 
 	return ret;

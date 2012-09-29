@@ -47,7 +47,11 @@
  * So, need to either use silicon v0.2+ or disable DMA mode in MUSB.
  */
 #if ANOMALY_05000380 && defined(CONFIG_BF52x) && \
+<<<<<<< HEAD
     defined(CONFIG_USB_MUSB_HDRC) && !defined(CONFIG_MUSB_PIO_ONLY)
+=======
+	!defined(CONFIG_MUSB_PIO_ONLY)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 # error "Please use PIO mode in MUSB driver on bf52x chip v0.0 and v0.1"
 #endif
 

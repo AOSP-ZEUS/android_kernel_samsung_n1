@@ -39,6 +39,10 @@
 #include <sound/tpa6130a2-plat.h>
 #include <media/radio-si4713.h>
 #include <media/si4713.h>
+<<<<<<< HEAD
+=======
+#include <linux/leds-lp5523.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <../drivers/staging/iio/light/tsl2563.h>
 
@@ -53,6 +57,10 @@
 #define RX51_WL1251_IRQ_GPIO		42
 #define RX51_FMTX_RESET_GPIO		163
 #define RX51_FMTX_IRQ			53
+<<<<<<< HEAD
+=======
+#define RX51_LP5523_CHIP_EN_GPIO	41
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define RX51_USB_TRANSCEIVER_RST_GPIO	67
 
@@ -71,6 +79,67 @@ static struct tsl2563_platform_data rx51_tsl2563_platform_data = {
 };
 #endif
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_LEDS_LP5523) || defined(CONFIG_LEDS_LP5523_MODULE)
+static struct lp5523_led_config rx51_lp5523_led_config[] = {
+	{
+		.chan_nr	= 0,
+		.led_current	= 50,
+	}, {
+		.chan_nr	= 1,
+		.led_current	= 50,
+	}, {
+		.chan_nr	= 2,
+		.led_current	= 50,
+	}, {
+		.chan_nr	= 3,
+		.led_current	= 50,
+	}, {
+		.chan_nr	= 4,
+		.led_current	= 50,
+	}, {
+		.chan_nr	= 5,
+		.led_current	= 50,
+	}, {
+		.chan_nr	= 6,
+		.led_current	= 50,
+	}, {
+		.chan_nr	= 7,
+		.led_current	= 50,
+	}, {
+		.chan_nr	= 8,
+		.led_current	= 50,
+	}
+};
+
+static int rx51_lp5523_setup(void)
+{
+	return gpio_request_one(RX51_LP5523_CHIP_EN_GPIO, GPIOF_DIR_OUT,
+			"lp5523_enable");
+}
+
+static void rx51_lp5523_release(void)
+{
+	gpio_free(RX51_LP5523_CHIP_EN_GPIO);
+}
+
+static void rx51_lp5523_enable(bool state)
+{
+	gpio_set_value(RX51_LP5523_CHIP_EN_GPIO, !!state);
+}
+
+static struct lp5523_platform_data rx51_lp5523_platform_data = {
+	.led_config		= rx51_lp5523_led_config,
+	.num_channels		= ARRAY_SIZE(rx51_lp5523_led_config),
+	.clock_mode		= LP5523_CLOCK_AUTO,
+	.setup_resources	= rx51_lp5523_setup,
+	.release_resources	= rx51_lp5523_release,
+	.enable			= rx51_lp5523_enable,
+};
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct omap2_mcspi_device_config wl1251_mcspi_config = {
 	.turbo_mode	= 0,
 	.single_channel	= 1,
@@ -288,10 +357,13 @@ static struct twl4030_keypad_data rx51_kp_data = {
 	.rep		= 1,
 };
 
+<<<<<<< HEAD
 static struct twl4030_madc_platform_data rx51_madc_data = {
 	.irq_line		= 1,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Enable input logic and pull all lines up when eMMC is on. */
 static struct omap_board_mux rx51_mmc2_on_mux[] = {
 	OMAP3_MUX(SDMMC2_CMD, OMAP_PIN_INPUT_PULLUP | OMAP_MUX_MODE0),
@@ -358,6 +430,7 @@ static struct omap2_hsmmc_info mmc[] __initdata = {
 	{}	/* Terminator */
 };
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply rx51_vmmc1_supply =
 	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.0");
 
@@ -366,6 +439,23 @@ static struct regulator_consumer_supply rx51_vaux3_supply =
 
 static struct regulator_consumer_supply rx51_vsim_supply =
 	REGULATOR_SUPPLY("vmmc_aux", "omap_hsmmc.1");
+=======
+static struct regulator_consumer_supply rx51_vmmc1_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.0"),
+};
+
+static struct regulator_consumer_supply rx51_vaux2_supply[] = {
+	REGULATOR_SUPPLY("vdds_csib", "omap3isp"),
+};
+
+static struct regulator_consumer_supply rx51_vaux3_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.1"),
+};
+
+static struct regulator_consumer_supply rx51_vsim_supply[] = {
+	REGULATOR_SUPPLY("vmmc_aux", "omap_hsmmc.1"),
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct regulator_consumer_supply rx51_vmmc2_supplies[] = {
 	/* tlv320aic3x analog supplies */
@@ -395,10 +485,13 @@ static struct regulator_consumer_supply rx51_vaux1_consumers[] = {
 	REGULATOR_SUPPLY("vdd", "2-0063"),
 };
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply rx51_vdac_supply[] = {
 	REGULATOR_SUPPLY("vdda_dac", "omapdss_venc"),
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct regulator_init_data rx51_vaux1 = {
 	.constraints = {
 		.name			= "V28",
@@ -424,6 +517,11 @@ static struct regulator_init_data rx51_vaux2 = {
 		.valid_ops_mask		= REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(rx51_vaux2_supply),
+	.consumer_supplies	= rx51_vaux2_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* VAUX3 - adds more power to VIO_18 rail */
@@ -452,8 +550,13 @@ static struct regulator_init_data rx51_vaux3_mmc = {
 					| REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies	= 1,
 	.consumer_supplies	= &rx51_vaux3_supply,
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(rx51_vaux3_supply),
+	.consumer_supplies	= rx51_vaux3_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct regulator_init_data rx51_vaux4 = {
@@ -479,8 +582,13 @@ static struct regulator_init_data rx51_vmmc1 = {
 					| REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies	= 1,
 	.consumer_supplies	= &rx51_vmmc1_supply,
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(rx51_vmmc1_supply),
+	.consumer_supplies	= rx51_vmmc1_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct regulator_init_data rx51_vmmc2 = {
@@ -500,6 +608,7 @@ static struct regulator_init_data rx51_vmmc2 = {
 	.consumer_supplies	= rx51_vmmc2_supplies,
 };
 
+<<<<<<< HEAD
 static struct regulator_init_data rx51_vsim = {
 	.constraints = {
 		.name			= "VMMC2_IO_18",
@@ -518,6 +627,37 @@ static struct regulator_init_data rx51_vsim = {
 static struct regulator_init_data rx51_vdac = {
 	.constraints = {
 		.name			= "VDAC",
+=======
+static struct regulator_init_data rx51_vpll1 = {
+	.constraints = {
+		.name			= "VPLL",
+		.min_uV			= 1800000,
+		.max_uV			= 1800000,
+		.apply_uV		= true,
+		.always_on		= true,
+		.valid_modes_mask	= REGULATOR_MODE_NORMAL
+					| REGULATOR_MODE_STANDBY,
+		.valid_ops_mask		= REGULATOR_CHANGE_MODE,
+	},
+};
+
+static struct regulator_init_data rx51_vpll2 = {
+	.constraints = {
+		.name			= "VSDI_CSI",
+		.min_uV			= 1800000,
+		.max_uV			= 1800000,
+		.apply_uV		= true,
+		.always_on		= true,
+		.valid_modes_mask	= REGULATOR_MODE_NORMAL
+					| REGULATOR_MODE_STANDBY,
+		.valid_ops_mask		= REGULATOR_CHANGE_MODE,
+	},
+};
+
+static struct regulator_init_data rx51_vsim = {
+	.constraints = {
+		.name			= "VMMC2_IO_18",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.min_uV			= 1800000,
 		.max_uV			= 1800000,
 		.apply_uV		= true,
@@ -526,8 +666,13 @@ static struct regulator_init_data rx51_vdac = {
 		.valid_ops_mask		= REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies	= 1,
 	.consumer_supplies	= rx51_vdac_supply,
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(rx51_vsim_supply),
+	.consumer_supplies	= rx51_vsim_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct regulator_init_data rx51_vio = {
@@ -544,6 +689,46 @@ static struct regulator_init_data rx51_vio = {
 	.consumer_supplies	= rx51_vio_supplies,
 };
 
+<<<<<<< HEAD
+=======
+static struct regulator_init_data rx51_vintana1 = {
+	.constraints = {
+		.name			= "VINTANA1",
+		.min_uV			= 1500000,
+		.max_uV			= 1500000,
+		.always_on		= true,
+		.valid_modes_mask	= REGULATOR_MODE_NORMAL
+					| REGULATOR_MODE_STANDBY,
+		.valid_ops_mask		= REGULATOR_CHANGE_MODE,
+	},
+};
+
+static struct regulator_init_data rx51_vintana2 = {
+	.constraints = {
+		.name			= "VINTANA2",
+		.min_uV			= 2750000,
+		.max_uV			= 2750000,
+		.apply_uV		= true,
+		.always_on		= true,
+		.valid_modes_mask	= REGULATOR_MODE_NORMAL
+					| REGULATOR_MODE_STANDBY,
+		.valid_ops_mask		= REGULATOR_CHANGE_MODE,
+	},
+};
+
+static struct regulator_init_data rx51_vintdig = {
+	.constraints = {
+		.name			= "VINTDIG",
+		.min_uV			= 1500000,
+		.max_uV			= 1500000,
+		.always_on		= true,
+		.valid_modes_mask	= REGULATOR_MODE_NORMAL
+					| REGULATOR_MODE_STANDBY,
+		.valid_ops_mask		= REGULATOR_CHANGE_MODE,
+	},
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct si4713_platform_data rx51_si4713_i2c_data __initdata_or_module = {
 	.gpio_reset	= RX51_FMTX_RESET_GPIO,
 };
@@ -600,10 +785,13 @@ static struct twl4030_gpio_platform_data rx51_gpio_data = {
 	.setup			= rx51_twlgpio_setup,
 };
 
+<<<<<<< HEAD
 static struct twl4030_usb_data rx51_usb_data = {
 	.usb_mode		= T2_USB_MODE_ULPI,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct twl4030_ins sleep_on_seq[] __initdata = {
 /*
  * Turn off everything
@@ -765,16 +953,25 @@ static struct twl4030_power_data rx51_t2scripts_data __initdata = {
 	.resource_config = twl4030_rconfig,
 };
 
+<<<<<<< HEAD
 struct twl4030_codec_vibra_data rx51_vibra_data __initdata = {
 	.coexist	= 0,
 };
 
 struct twl4030_codec_data rx51_codec_data __initdata = {
+=======
+struct twl4030_vibra_data rx51_vibra_data __initdata = {
+	.coexist	= 0,
+};
+
+struct twl4030_audio_data rx51_audio_data __initdata = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.audio_mclk	= 26000000,
 	.vibra		= &rx51_vibra_data,
 };
 
 static struct twl4030_platform_data rx51_twldata __initdata = {
+<<<<<<< HEAD
 	.irq_base		= TWL4030_IRQ_BASE,
 	.irq_end		= TWL4030_IRQ_END,
 
@@ -785,13 +982,29 @@ static struct twl4030_platform_data rx51_twldata __initdata = {
 	.usb			= &rx51_usb_data,
 	.power			= &rx51_t2scripts_data,
 	.codec			= &rx51_codec_data,
+=======
+	/* platform_data for children goes here */
+	.gpio			= &rx51_gpio_data,
+	.keypad			= &rx51_kp_data,
+	.power			= &rx51_t2scripts_data,
+	.audio			= &rx51_audio_data,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.vaux1			= &rx51_vaux1,
 	.vaux2			= &rx51_vaux2,
 	.vaux4			= &rx51_vaux4,
 	.vmmc1			= &rx51_vmmc1,
+<<<<<<< HEAD
 	.vsim			= &rx51_vsim,
 	.vdac			= &rx51_vdac,
+=======
+	.vpll1			= &rx51_vpll1,
+	.vpll2			= &rx51_vpll2,
+	.vsim			= &rx51_vsim,
+	.vintana1		= &rx51_vintana1,
+	.vintana2		= &rx51_vintana2,
+	.vintdig		= &rx51_vintdig,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.vio			= &rx51_vio,
 };
 
@@ -830,6 +1043,15 @@ static struct i2c_board_info __initdata rx51_peripherals_i2c_board_info_2[] = {
 		.platform_data = &rx51_tsl2563_platform_data,
 	},
 #endif
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_LEDS_LP5523) || defined(CONFIG_LEDS_LP5523_MODULE)
+	{
+		I2C_BOARD_INFO("lp5523", 0x32),
+		.platform_data  = &rx51_lp5523_platform_data,
+	},
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		I2C_BOARD_INFO("tpa6130a2", 0x60),
 		.platform_data = &rx51_tpa6130a2_data,
@@ -847,6 +1069,16 @@ static int __init rx51_i2c_init(void)
 		rx51_twldata.vaux3 = &rx51_vaux3_cam;
 	}
 	rx51_twldata.vmmc2 = &rx51_vmmc2;
+<<<<<<< HEAD
+=======
+	omap3_pmic_get_config(&rx51_twldata,
+			TWL_COMMON_PDATA_USB | TWL_COMMON_PDATA_MADC,
+			TWL_COMMON_REGULATOR_VDAC);
+
+	rx51_twldata.vdac->constraints.apply_uV = true;
+	rx51_twldata.vdac->constraints.name = "VDAC";
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	omap_pmic_init(1, 2200, "twl5030", INT_34XX_SYS_NIRQ, &rx51_twldata);
 	omap_register_i2c_bus(2, 100, rx51_peripherals_i2c_board_info_2,
 			      ARRAY_SIZE(rx51_peripherals_i2c_board_info_2));
@@ -973,6 +1205,10 @@ error:
 void __init rx51_peripherals_init(void)
 {
 	rx51_i2c_init();
+<<<<<<< HEAD
+=======
+	regulator_has_full_constraints();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	gpmc_onenand_init(board_onenand_data);
 	board_smc91x_init();
 	rx51_add_gpio_keys();

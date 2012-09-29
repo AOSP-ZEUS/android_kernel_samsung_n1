@@ -1666,7 +1666,11 @@ static int __devinit snd_ca0106_create(int dev, struct snd_card *card,
 	}
 
 	if (request_irq(pci->irq, snd_ca0106_interrupt,
+<<<<<<< HEAD
 			IRQF_SHARED, "snd_ca0106", chip)) {
+=======
+			IRQF_SHARED, KBUILD_MODNAME, chip)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		snd_ca0106_free(chip);
 		printk(KERN_ERR "cannot grab irq\n");
 		return -EBUSY;
@@ -1933,7 +1937,11 @@ MODULE_DEVICE_TABLE(pci, snd_ca0106_ids);
 
 // pci_driver definition
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name = "CA0106",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_ca0106_ids,
 	.probe = snd_ca0106_probe,
 	.remove = __devexit_p(snd_ca0106_remove),

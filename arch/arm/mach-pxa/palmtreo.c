@@ -444,6 +444,10 @@ MACHINE_START(TREO680, "Palm Treo 680")
 	.map_io         = pxa27x_map_io,
 	.reserve	= treo_reserve,
 	.init_irq       = pxa27x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq       = pxa27x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer          = &pxa_timer,
 	.init_machine   = treo680_init,
 MACHINE_END
@@ -453,6 +457,10 @@ MACHINE_START(CENTRO, "Palm Centro 685")
 	.map_io         = pxa27x_map_io,
 	.reserve	= treo_reserve,
 	.init_irq       = pxa27x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq       = pxa27x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer          = &pxa_timer,
 	.init_machine	= centro_init,
 MACHINE_END

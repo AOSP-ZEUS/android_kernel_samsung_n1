@@ -369,4 +369,10 @@ MACHINE_START(JORNADA720, "HP Jornada 720")
 	.init_irq	= sa1100_init_irq,
 	.timer		= &sa1100_timer,
 	.init_machine	= jornada720_mach_init,
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SA1111
+	.dma_zone_size	= SZ_1M,
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

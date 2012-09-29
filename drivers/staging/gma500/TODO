@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 -	Test on more platforms
 -	Clean up the various chunks of unused code
 -	Sort out the power management side. Not important for Poulsbo but
@@ -7,10 +8,24 @@
 -	Sort out the bo and ttm code to support userframe buffers and DRM
 	interfaces rather than just faking it enough for a framebuffer
 -	Add 2D acceleration via console and DRM
+=======
+-	Sort out the power management side. Not important for Poulsbo but
+	matters for Moorestown/Medfield
+-	Debug Oaktrail/Moorestown support (single pipe, no BIOS on mrst,
+					some other differences)
+-	Add 2D acceleration via console and DRM
+-	Add scrolling acceleration using the GTT to do remapping on the main
+	framebuffer.
+-	HDMI testing
+-	Oaktrail HDMI and other features
+-	Oaktrail MIPI
+-	Medfield needs a lot of further love
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 As per kernel policy and the in the interest of the safety of various
 kittens there is no support or plans to add hooks for the closed user space
 stuff.
+<<<<<<< HEAD
 
 
 Why bother ?
@@ -24,3 +39,5 @@ Currently tested on
 +	Dell Mini 10 100x600
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

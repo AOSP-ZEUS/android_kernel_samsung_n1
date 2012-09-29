@@ -113,7 +113,11 @@ struct fw_hdr {/*8-byte alinment required*/
 	struct fw_priv	fwpriv;
 };
 
+<<<<<<< HEAD
 struct hal_priv{
+=======
+struct hal_priv {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*Endpoint handles*/
 	struct  net_device *pipehdls_r8712[10];
 	u8 (*hal_bus_init)(struct _adapter *adapter);

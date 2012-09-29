@@ -58,7 +58,11 @@ int register_trapped_io(struct trapped_io *tiop)
 
 	for (k = 0; k < tiop->num_resources; k++) {
 		res = tiop->resource + k;
+<<<<<<< HEAD
 		len += roundup((res->end - res->start) + 1, PAGE_SIZE);
+=======
+		len += roundup(resource_size(res), PAGE_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		flags |= res->flags;
 	}
 
@@ -85,7 +89,11 @@ int register_trapped_io(struct trapped_io *tiop)
 		       (unsigned long)(tiop->virt_base + len),
 		       res->flags & IORESOURCE_IO ? "io" : "mmio",
 		       (unsigned long)res->start);
+<<<<<<< HEAD
 		len += roundup((res->end - res->start) + 1, PAGE_SIZE);
+=======
+		len += roundup(resource_size(res), PAGE_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	tiop->magic = IO_TRAPPED_MAGIC;
@@ -128,7 +136,11 @@ void __iomem *match_trapped_io_handler(struct list_head *list,
 				return tiop->virt_base + voffs;
 			}
 
+<<<<<<< HEAD
 			len = (res->end - res->start) + 1;
+=======
+			len = resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			voffs += roundup(len, PAGE_SIZE);
 		}
 	}
@@ -173,7 +185,11 @@ static unsigned long lookup_address(struct trapped_io *tiop,
 
 	for (k = 0; k < tiop->num_resources; k++) {
 		res = tiop->resource + k;
+<<<<<<< HEAD
 		len = roundup((res->end - res->start) + 1, PAGE_SIZE);
+=======
+		len = roundup(resource_size(res), PAGE_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (address < (vaddr + len))
 			return res->start + (address - vaddr);
 		vaddr += len;

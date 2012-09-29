@@ -58,6 +58,7 @@ ACPI_MODULE_NAME("processor_thermal");
 static DEFINE_PER_CPU(unsigned int, cpufreq_thermal_reduction_pctg);
 static unsigned int acpi_thermal_cpufreq_is_init = 0;
 
+<<<<<<< HEAD
 #define reduction_pctg(cpu) \
 	per_cpu(cpufreq_thermal_reduction_pctg, phys_package_first_cpu(cpu))
 
@@ -79,6 +80,8 @@ static int phys_package_first_cpu(int cpu)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int cpu_has_cpufreq(unsigned int cpu)
 {
 	struct cpufreq_policy policy;
@@ -98,7 +101,11 @@ static int acpi_thermal_cpufreq_notifier(struct notifier_block *nb,
 
 	max_freq = (
 	    policy->cpuinfo.max_freq *
+<<<<<<< HEAD
 	    (100 - reduction_pctg(policy->cpu) * 20)
+=======
+	    (100 - per_cpu(cpufreq_thermal_reduction_pctg, policy->cpu) * 20)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	) / 100;
 
 	cpufreq_verify_within_limits(policy, 0, max_freq);
@@ -124,11 +131,16 @@ static int cpufreq_get_cur_state(unsigned int cpu)
 	if (!cpu_has_cpufreq(cpu))
 		return 0;
 
+<<<<<<< HEAD
 	return reduction_pctg(cpu);
+=======
+	return per_cpu(cpufreq_thermal_reduction_pctg, cpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int cpufreq_set_cur_state(unsigned int cpu, int state)
 {
+<<<<<<< HEAD
 	int i;
 
 	if (!cpu_has_cpufreq(cpu))
@@ -146,6 +158,13 @@ static int cpufreq_set_cur_state(unsigned int cpu, int state)
 		    topology_physical_package_id(cpu))
 			cpufreq_update_policy(i);
 	}
+=======
+	if (!cpu_has_cpufreq(cpu))
+		return 0;
+
+	per_cpu(cpufreq_thermal_reduction_pctg, cpu) = state;
+	cpufreq_update_policy(cpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -153,6 +172,13 @@ void acpi_thermal_cpufreq_init(void)
 {
 	int i;
 
+<<<<<<< HEAD
+=======
+	for (i = 0; i < nr_cpu_ids; i++)
+		if (cpu_present(i))
+			per_cpu(cpufreq_thermal_reduction_pctg, i) = 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	i = cpufreq_register_notifier(&acpi_thermal_cpufreq_notifier_block,
 				      CPUFREQ_POLICY_NOTIFIER);
 	if (!i)
@@ -273,7 +299,11 @@ processor_set_cur_state(struct thermal_cooling_device *cdev,
 	return result;
 }
 
+<<<<<<< HEAD
 struct thermal_cooling_device_ops processor_cooling_ops = {
+=======
+const struct thermal_cooling_device_ops processor_cooling_ops = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.get_max_state = processor_get_max_state,
 	.get_cur_state = processor_get_cur_state,
 	.set_cur_state = processor_set_cur_state,

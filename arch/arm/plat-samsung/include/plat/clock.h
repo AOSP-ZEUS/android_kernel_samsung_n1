@@ -9,7 +9,15 @@
  * published by the Free Software Foundation.
 */
 
+<<<<<<< HEAD
 #include <linux/spinlock.h>
+=======
+#ifndef __ASM_PLAT_CLOCK_H
+#define __ASM_PLAT_CLOCK_H __FILE__
+
+#include <linux/spinlock.h>
+#include <linux/clkdev.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct clk;
 
@@ -40,14 +48,23 @@ struct clk {
 	struct module        *owner;
 	struct clk           *parent;
 	const char           *name;
+<<<<<<< HEAD
+=======
+	const char		*devname;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int		      id;
 	int		      usage;
 	unsigned long         rate;
 	unsigned long         ctrlbit;
 
 	struct clk_ops		*ops;
+<<<<<<< HEAD
 	struct device		*dev;
 	int		    (*enable)(struct clk *, int enable);
+=======
+	int		    (*enable)(struct clk *, int enable);
+	struct clk_lookup	lookup;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_PM_DEBUG) && defined(CONFIG_DEBUG_FS)
 	struct dentry		*dent;	/* For visible tree hierarchy */
 #endif
@@ -119,3 +136,11 @@ extern int s3c64xx_sclk_ctrl(struct clk *clk, int enable);
 
 extern void s3c_pwmclk_init(void);
 
+<<<<<<< HEAD
+=======
+/* Global watchdog clock used by arch_wtd_reset() callback */
+
+extern struct clk *s3c2410_wdtclk;
+
+#endif /* __ASM_PLAT_CLOCK_H */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -642,7 +642,11 @@ static int __erst_write_to_storage(u64 offset)
 	int rc;
 
 	erst_exec_ctx_init(&ctx);
+<<<<<<< HEAD
 	rc = apei_exec_run(&ctx, ACPI_ERST_BEGIN_WRITE);
+=======
+	rc = apei_exec_run_optional(&ctx, ACPI_ERST_BEGIN_WRITE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (rc)
 		return rc;
 	apei_exec_ctx_set_input(&ctx, offset);
@@ -666,7 +670,11 @@ static int __erst_write_to_storage(u64 offset)
 	if (rc)
 		return rc;
 	val = apei_exec_ctx_get_output(&ctx);
+<<<<<<< HEAD
 	rc = apei_exec_run(&ctx, ACPI_ERST_END);
+=======
+	rc = apei_exec_run_optional(&ctx, ACPI_ERST_END);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (rc)
 		return rc;
 
@@ -681,7 +689,11 @@ static int __erst_read_from_storage(u64 record_id, u64 offset)
 	int rc;
 
 	erst_exec_ctx_init(&ctx);
+<<<<<<< HEAD
 	rc = apei_exec_run(&ctx, ACPI_ERST_BEGIN_READ);
+=======
+	rc = apei_exec_run_optional(&ctx, ACPI_ERST_BEGIN_READ);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (rc)
 		return rc;
 	apei_exec_ctx_set_input(&ctx, offset);
@@ -709,7 +721,11 @@ static int __erst_read_from_storage(u64 record_id, u64 offset)
 	if (rc)
 		return rc;
 	val = apei_exec_ctx_get_output(&ctx);
+<<<<<<< HEAD
 	rc = apei_exec_run(&ctx, ACPI_ERST_END);
+=======
+	rc = apei_exec_run_optional(&ctx, ACPI_ERST_END);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (rc)
 		return rc;
 
@@ -724,7 +740,11 @@ static int __erst_clear_from_storage(u64 record_id)
 	int rc;
 
 	erst_exec_ctx_init(&ctx);
+<<<<<<< HEAD
 	rc = apei_exec_run(&ctx, ACPI_ERST_BEGIN_CLEAR);
+=======
+	rc = apei_exec_run_optional(&ctx, ACPI_ERST_BEGIN_CLEAR);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (rc)
 		return rc;
 	apei_exec_ctx_set_input(&ctx, record_id);
@@ -748,7 +768,11 @@ static int __erst_clear_from_storage(u64 record_id)
 	if (rc)
 		return rc;
 	val = apei_exec_ctx_get_output(&ctx);
+<<<<<<< HEAD
 	rc = apei_exec_run(&ctx, ACPI_ERST_END);
+=======
+	rc = apei_exec_run_optional(&ctx, ACPI_ERST_END);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (rc)
 		return rc;
 
@@ -932,8 +956,16 @@ static int erst_check_table(struct acpi_table_erst *erst_tab)
 static int erst_open_pstore(struct pstore_info *psi);
 static int erst_close_pstore(struct pstore_info *psi);
 static ssize_t erst_reader(u64 *id, enum pstore_type_id *type,
+<<<<<<< HEAD
 		       struct timespec *time);
 static u64 erst_writer(enum pstore_type_id type, size_t size);
+=======
+			   struct timespec *time, struct pstore_info *psi);
+static u64 erst_writer(enum pstore_type_id type, unsigned int part,
+		       size_t size, struct pstore_info *psi);
+static int erst_clearer(enum pstore_type_id type, u64 id,
+			struct pstore_info *psi);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct pstore_info erst_info = {
 	.owner		= THIS_MODULE,
@@ -942,7 +974,11 @@ static struct pstore_info erst_info = {
 	.close		= erst_close_pstore,
 	.read		= erst_reader,
 	.write		= erst_writer,
+<<<<<<< HEAD
 	.erase		= erst_clear
+=======
+	.erase		= erst_clearer
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #define CPER_CREATOR_PSTORE						\
@@ -983,7 +1019,11 @@ static int erst_close_pstore(struct pstore_info *psi)
 }
 
 static ssize_t erst_reader(u64 *id, enum pstore_type_id *type,
+<<<<<<< HEAD
 		       struct timespec *time)
+=======
+			   struct timespec *time, struct pstore_info *psi)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int rc;
 	ssize_t len = 0;
@@ -1037,7 +1077,12 @@ out:
 	return (rc < 0) ? rc : (len - sizeof(*rcd));
 }
 
+<<<<<<< HEAD
 static u64 erst_writer(enum pstore_type_id type, size_t size)
+=======
+static u64 erst_writer(enum pstore_type_id type, unsigned int part,
+		       size_t size, struct pstore_info *psi)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct cper_pstore_record *rcd = (struct cper_pstore_record *)
 					(erst_info.buf - sizeof(*rcd));
@@ -1080,6 +1125,15 @@ static u64 erst_writer(enum pstore_type_id type, size_t size)
 	return rcd->hdr.record_id;
 }
 
+<<<<<<< HEAD
+=======
+static int erst_clearer(enum pstore_type_id type, u64 id,
+			struct pstore_info *psi)
+{
+	return erst_clear(id);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __init erst_init(void)
 {
 	int rc = 0;

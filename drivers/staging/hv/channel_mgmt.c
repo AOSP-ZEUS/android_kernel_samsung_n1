@@ -283,10 +283,13 @@ static struct vmbus_channel *alloc_channel(void)
 
 	spin_lock_init(&channel->inbound_lock);
 
+<<<<<<< HEAD
 	init_timer(&channel->poll_timer);
 	channel->poll_timer.data = (unsigned long)channel;
 	channel->poll_timer.function = vmbus_ontimer;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	channel->controlwq = create_workqueue("hv_vmbus_ctl");
 	if (!channel->controlwq) {
 		kfree(channel);
@@ -315,7 +318,10 @@ static void release_channel(struct work_struct *work)
  */
 void free_channel(struct vmbus_channel *channel)
 {
+<<<<<<< HEAD
 	del_timer_sync(&channel->poll_timer);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * We have to release the channel's workqueue/thread in the vmbus's
@@ -482,7 +488,10 @@ static void vmbus_onoffer(struct vmbus_channel_message_header *hdr)
 	newchannel->monitor_grp = (u8)offer->monitorid / 32;
 	newchannel->monitor_bit = (u8)offer->monitorid % 32;
 
+<<<<<<< HEAD
 	/* TODO: Make sure the offer comes from our parent partition */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	INIT_WORK(&newchannel->work, vmbus_process_offer);
 	queue_work(newchannel->controlwq, &newchannel->work);
 }

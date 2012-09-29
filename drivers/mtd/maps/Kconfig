@@ -561,4 +561,14 @@ config MTD_LATCH_ADDR
 
           If compiled as a module, it will be called latch-addr-flash.
 
+<<<<<<< HEAD
+=======
+config MTD_NOR_TEGRA
+	bool "NOR Flash mapping driver for NVIDIA Tegra based boards"
+	depends on MTD_COMPLEX_MAPPINGS && ARCH_TEGRA
+	help
+	  This enables access routines for the flash chips on the NVIDIA Tegra
+	  based boards.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endmenu

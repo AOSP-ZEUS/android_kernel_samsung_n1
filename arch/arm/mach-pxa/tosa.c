@@ -974,6 +974,10 @@ MACHINE_START(TOSA, "SHARP Tosa")
 	.map_io         = pxa25x_map_io,
 	.nr_irqs	= TOSA_NR_IRQS,
 	.init_irq       = pxa25x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq       = pxa25x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine   = tosa_init,
 	.timer          = &pxa_timer,
 MACHINE_END

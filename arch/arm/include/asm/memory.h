@@ -33,7 +33,11 @@
  * TASK_UNMAPPED_BASE - the lower boundary of the mmap VM area
  */
 #define PAGE_OFFSET		UL(CONFIG_PAGE_OFFSET)
+<<<<<<< HEAD
 #define TASK_SIZE		(UL(CONFIG_PAGE_OFFSET) - UL(0x01000000))
+=======
+#define TASK_SIZE		UL(CONFIG_TASK_SIZE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define TASK_UNMAPPED_BASE	(UL(CONFIG_PAGE_OFFSET) / 3)
 
 /*
@@ -46,7 +50,11 @@
  * and PAGE_OFFSET - it must be within 32MB of the kernel text.
  */
 #ifndef CONFIG_THUMB2_KERNEL
+<<<<<<< HEAD
 #define MODULES_VADDR		(PAGE_OFFSET - 16*1024*1024)
+=======
+#define MODULES_VADDR		UL(CONFIG_TASK_SIZE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #else
 /* smaller range for Thumb-2 symbols relocation (2^24)*/
 #define MODULES_VADDR		(PAGE_OFFSET - 8*1024*1024)
@@ -204,6 +212,7 @@ static inline unsigned long __phys_to_virt(unsigned long x)
 #endif
 
 /*
+<<<<<<< HEAD
  * The DMA mask corresponding to the maximum bus address allocatable
  * using GFP_DMA.  The default here places no restriction on DMA
  * allocations.  This must be the smallest DMA mask in the system,
@@ -216,6 +225,8 @@ static inline unsigned long __phys_to_virt(unsigned long x)
 #endif
 
 /*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * PFNs are used to describe any physical page; this means
  * PFN 0 == physical address 0.
  *

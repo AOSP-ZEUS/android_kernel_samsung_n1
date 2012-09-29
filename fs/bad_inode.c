@@ -87,7 +87,12 @@ static int bad_file_release(struct inode *inode, struct file *filp)
 	return -EIO;
 }
 
+<<<<<<< HEAD
 static int bad_file_fsync(struct file *file, int datasync)
+=======
+static int bad_file_fsync(struct file *file, loff_t start, loff_t end,
+			  int datasync)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return -EIO;
 }
@@ -229,7 +234,11 @@ static int bad_inode_readlink(struct dentry *dentry, char __user *buffer,
 	return -EIO;
 }
 
+<<<<<<< HEAD
 static int bad_inode_permission(struct inode *inode, int mask, unsigned int flags)
+=======
+static int bad_inode_permission(struct inode *inode, int mask)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return -EIO;
 }

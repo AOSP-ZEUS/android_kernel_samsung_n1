@@ -229,11 +229,18 @@
 #include <linux/jiffies.h>
 #include <linux/acpi.h>
 #include <linux/syscore_ops.h>
+<<<<<<< HEAD
+=======
+#include <linux/i8253.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/system.h>
 #include <asm/uaccess.h>
 #include <asm/desc.h>
+<<<<<<< HEAD
 #include <asm/i8253.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/olpc.h>
 #include <asm/paravirt.h>
 #include <asm/reboot.h>
@@ -1220,11 +1227,19 @@ static void reinit_timer(void)
 
 	raw_spin_lock_irqsave(&i8253_lock, flags);
 	/* set the clock to HZ */
+<<<<<<< HEAD
 	outb_pit(0x34, PIT_MODE);		/* binary, mode 2, LSB/MSB, ch 0 */
 	udelay(10);
 	outb_pit(LATCH & 0xff, PIT_CH0);	/* LSB */
 	udelay(10);
 	outb_pit(LATCH >> 8, PIT_CH0);	/* MSB */
+=======
+	outb_p(0x34, PIT_MODE);		/* binary, mode 2, LSB/MSB, ch 0 */
+	udelay(10);
+	outb_p(LATCH & 0xff, PIT_CH0);	/* LSB */
+	udelay(10);
+	outb_p(LATCH >> 8, PIT_CH0);	/* MSB */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udelay(10);
 	raw_spin_unlock_irqrestore(&i8253_lock, flags);
 #endif

@@ -13,6 +13,10 @@ obj-$(CONFIG_LCD_TDO24M)	   += tdo24m.o
 obj-$(CONFIG_LCD_TOSA)		   += tosa_lcd.o
 obj-$(CONFIG_LCD_S6E63M0)	+= s6e63m0.o
 obj-$(CONFIG_LCD_LD9040)	+= ld9040.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_LCD_AMS369FG06)	+= ams369fg06.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 obj-$(CONFIG_BACKLIGHT_CLASS_DEVICE) += backlight.o
 obj-$(CONFIG_BACKLIGHT_ATMEL_PWM)    += atmel-pwm-bl.o
@@ -25,6 +29,10 @@ obj-$(CONFIG_BACKLIGHT_OMAP1)	+= omap1_bl.o
 obj-$(CONFIG_BACKLIGHT_PROGEAR) += progear_bl.o
 obj-$(CONFIG_BACKLIGHT_CARILLO_RANCH) += cr_bllcd.o
 obj-$(CONFIG_BACKLIGHT_PWM)	+= pwm_bl.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_BACKLIGHT_TEGRA_PWM) += tegra_pwm_bl.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_BACKLIGHT_DA903X)	+= da903x_bl.o
 obj-$(CONFIG_BACKLIGHT_MAX8925)	+= max8925_bl.o
 obj-$(CONFIG_BACKLIGHT_APPLE)	+= apple_bl.o
@@ -37,4 +45,13 @@ obj-$(CONFIG_BACKLIGHT_ADP8860)	+= adp8860_bl.o
 obj-$(CONFIG_BACKLIGHT_ADP8870)	+= adp8870_bl.o
 obj-$(CONFIG_BACKLIGHT_88PM860X) += 88pm860x_bl.o
 obj-$(CONFIG_BACKLIGHT_PCF50633)	+= pcf50633-backlight.o
+<<<<<<< HEAD
 
+=======
+obj-$(CONFIG_BACKLIGHT_AAT2870) += aat2870_bl.o
+ifeq ($(CONFIG_MACH_BOSE_ATT),y)
+obj-$(CONFIG_BACKLIGHT_CMC623_PWM)  += cmc623_pwm_bl_bose.o
+else
+obj-$(CONFIG_BACKLIGHT_CMC623_PWM)  += cmc623_pwm_bl.o
+endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

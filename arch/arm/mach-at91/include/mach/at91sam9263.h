@@ -70,7 +70,10 @@
 #define AT91SAM9263_BASE_EMAC		0xfffbc000
 #define AT91SAM9263_BASE_ISI		0xfffc4000
 #define AT91SAM9263_BASE_2DGE		0xfffc8000
+<<<<<<< HEAD
 #define AT91_BASE_SYS			0xffffe000
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * System Peripherals (offset from AT91_BASE_SYS)

@@ -30,6 +30,10 @@
 #include <linux/uaccess.h>
 #include <linux/random.h>
 #include <linux/hw_breakpoint.h>
+<<<<<<< HEAD
+=======
+#include <linux/cpuidle.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/console.h>
 
 #include <asm/cacheflush.h>
@@ -39,6 +43,13 @@
 #include <asm/stacktrace.h>
 #include <asm/mach/time.h>
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+#include <linux/kernel_sec_common.h>
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_CC_STACKPROTECTOR
 #include <linux/stackprotector.h>
 unsigned long __stack_chk_guard __read_mostly;
@@ -130,6 +141,7 @@ void arm_machine_flush_console(void)
 
 void arm_machine_restart(char mode, const char *cmd)
 {
+<<<<<<< HEAD
 	/* Flush the console to make sure all the relevant messages make it
 	 * out to the console drivers */
 	arm_machine_flush_console();
@@ -138,6 +150,11 @@ void arm_machine_restart(char mode, const char *cmd)
 	local_irq_disable();
 	local_fiq_disable();
 
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+	kernel_sec_upload_cause_type upload_cause;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Tell the mm system that we are going to reboot -
 	 * we may need it to insert some 1:1 mappings so that
@@ -145,6 +162,18 @@ void arm_machine_restart(char mode, const char *cmd)
 	 */
 	setup_mm_for_reboot(mode);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Clear the magic number because it's normal reboot.
+	 */
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+	upload_cause = kernel_sec_get_upload_cause();
+	if (upload_cause == UPLOAD_CAUSE_INIT)
+		kernel_sec_clear_upload_magic_number();
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Clean and invalidate caches */
 	flush_cache_all();
 
@@ -240,7 +269,12 @@ void cpu_idle(void)
 				cpu_relax();
 			} else {
 				stop_critical_timings();
+<<<<<<< HEAD
 				pm_idle();
+=======
+				if (cpuidle_idle_call())
+					pm_idle();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				start_critical_timings();
 				/*
 				 * This will eventually be removed - pm_idle
@@ -271,6 +305,16 @@ __setup("reboot=", reboot_setup);
 
 void machine_shutdown(void)
 {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+	kernel_sec_upload_cause_type upload_cause;
+	upload_cause = kernel_sec_get_upload_cause();
+        /* Clear the magic number because it's normal reboot */
+	if (upload_cause == UPLOAD_CAUSE_INIT)
+		kernel_sec_clear_upload_magic_number();
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_SMP
 	smp_send_stop();
 #endif
@@ -291,6 +335,17 @@ void machine_power_off(void)
 
 void machine_restart(char *cmd)
 {
+<<<<<<< HEAD
+=======
+	/* Flush the console to make sure all the relevant messages make it
+	 * out to the console drivers */
+	arm_machine_flush_console();
+
+	/* Disable interrupts first */
+	local_irq_disable();
+	local_fiq_disable();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	machine_shutdown();
 	arm_pm_restart(reboot_mode, cmd);
 }

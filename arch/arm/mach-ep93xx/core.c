@@ -174,14 +174,20 @@ struct sys_timer ep93xx_timer = {
 /*************************************************************************
  * EP93xx IRQ handling
  *************************************************************************/
+<<<<<<< HEAD
 extern void ep93xx_gpio_init_irq(void);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init ep93xx_init_irq(void)
 {
 	vic_init(EP93XX_VIC1_BASE, 0, EP93XX_VIC1_VALID_IRQ_MASK, 0);
 	vic_init(EP93XX_VIC2_BASE, 32, EP93XX_VIC2_VALID_IRQ_MASK, 0);
+<<<<<<< HEAD
 
 	ep93xx_gpio_init_irq();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 
@@ -241,6 +247,27 @@ unsigned int ep93xx_chip_revision(void)
 }
 
 /*************************************************************************
+<<<<<<< HEAD
+=======
+ * EP93xx GPIO
+ *************************************************************************/
+static struct resource ep93xx_gpio_resource[] = {
+	{
+		.start		= EP93XX_GPIO_PHYS_BASE,
+		.end		= EP93XX_GPIO_PHYS_BASE + 0xcc - 1,
+		.flags		= IORESOURCE_MEM,
+	},
+};
+
+static struct platform_device ep93xx_gpio_device = {
+	.name		= "gpio-ep93xx",
+	.id		= -1,
+	.num_resources	= ARRAY_SIZE(ep93xx_gpio_resource),
+	.resource	= ep93xx_gpio_resource,
+};
+
+/*************************************************************************
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * EP93xx peripheral handling
  *************************************************************************/
 #define EP93XX_UART_MCR_OFFSET		(0x0100)
@@ -492,11 +519,22 @@ static struct resource ep93xx_spi_resources[] = {
 	},
 };
 
+<<<<<<< HEAD
+=======
+static u64 ep93xx_spi_dma_mask = DMA_BIT_MASK(32);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct platform_device ep93xx_spi_device = {
 	.name		= "ep93xx-spi",
 	.id		= 0,
 	.dev		= {
+<<<<<<< HEAD
 		.platform_data = &ep93xx_spi_master_data,
+=======
+		.platform_data		= &ep93xx_spi_master_data,
+		.coherent_dma_mask	= DMA_BIT_MASK(32),
+		.dma_mask		= &ep93xx_spi_dma_mask,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 	.num_resources	= ARRAY_SIZE(ep93xx_spi_resources),
 	.resource	= ep93xx_spi_resources,
@@ -870,14 +908,22 @@ void __init ep93xx_register_ac97(void)
 	platform_device_register(&ep93xx_pcm_device);
 }
 
+<<<<<<< HEAD
 extern void ep93xx_gpio_init(void);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init ep93xx_init_devices(void)
 {
 	/* Disallow access to MaverickCrunch initially */
 	ep93xx_devcfg_clear_bits(EP93XX_SYSCON_DEVCFG_CPENA);
 
+<<<<<<< HEAD
 	ep93xx_gpio_init();
+=======
+	/* Get the GPIO working early, other devices need it */
+	platform_device_register(&ep93xx_gpio_device);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	amba_device_register(&uart1_device, &iomem_resource);
 	amba_device_register(&uart2_device, &iomem_resource);

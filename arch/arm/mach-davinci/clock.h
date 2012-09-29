@@ -111,6 +111,10 @@ struct clk {
 #define CLK_PLL			BIT(4) /* PLL-derived clock */
 #define PRE_PLL			BIT(5) /* source is before PLL mult/div */
 #define PSC_SWRSTDISABLE	BIT(6) /* Disable state is SwRstDisable */
+<<<<<<< HEAD
+=======
+#define PSC_FORCE		BIT(7) /* Force module state transtition */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define CLK(dev, con, ck) 	\
 	{			\
@@ -123,6 +127,11 @@ int davinci_clk_init(struct clk_lookup *clocks);
 int davinci_set_pllrate(struct pll_data *pll, unsigned int prediv,
 				unsigned int mult, unsigned int postdiv);
 int davinci_set_sysclk_rate(struct clk *clk, unsigned long rate);
+<<<<<<< HEAD
+=======
+int davinci_set_refclk_rate(unsigned long rate);
+int davinci_simple_set_rate(struct clk *clk, unsigned long rate);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern struct platform_device davinci_wdt_device;
 extern void davinci_watchdog_reset(struct platform_device *);

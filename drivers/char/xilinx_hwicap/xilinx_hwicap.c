@@ -621,7 +621,11 @@ static int __devinit hwicap_setup(struct device *dev, int id,
 
 	drvdata->mem_start = regs_res->start;
 	drvdata->mem_end = regs_res->end;
+<<<<<<< HEAD
 	drvdata->mem_size = regs_res->end - regs_res->start + 1;
+=======
+	drvdata->mem_size = resource_size(regs_res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!request_mem_region(drvdata->mem_start,
 					drvdata->mem_size, DRIVER_NAME)) {

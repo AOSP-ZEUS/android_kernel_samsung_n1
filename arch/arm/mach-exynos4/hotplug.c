@@ -13,9 +13,18 @@
 #include <linux/kernel.h>
 #include <linux/errno.h>
 #include <linux/smp.h>
+<<<<<<< HEAD
 
 #include <asm/cacheflush.h>
 
+=======
+#include <linux/io.h>
+
+#include <asm/cacheflush.h>
+
+#include <mach/regs-pmu.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern volatile int pen_release;
 
 static inline void cpu_enter_lowpower(void)
@@ -58,12 +67,21 @@ static inline void cpu_leave_lowpower(void)
 
 static inline void platform_do_lowpower(unsigned int cpu, int *spurious)
 {
+<<<<<<< HEAD
 	/*
 	 * there is no power-control hardware on this platform, so all
 	 * we can do is put the core into WFI; this is safe as the calling
 	 * code will have already disabled interrupts
 	 */
 	for (;;) {
+=======
+	for (;;) {
+
+		/* make cpu1 to be turned off at next WFI command */
+		if (cpu == 1)
+			__raw_writel(0, S5P_ARM_CORE1_CONFIGURATION);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * here's the WFI
 		 */

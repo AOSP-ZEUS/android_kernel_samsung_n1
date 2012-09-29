@@ -18,9 +18,13 @@ enum s3c2410_dma_buffresult {
 
 enum s3c2410_dmasrc {
 	S3C2410_DMASRC_HW,		/* source is memory */
+<<<<<<< HEAD
 	S3C2410_DMASRC_MEM,		/* source is hardware */
 	S3C_DMA_MEM2MEM,
 	S3C_DMA_MEM2MEM_SET,
+=======
+	S3C2410_DMASRC_MEM		/* source is hardware */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* enum s3c2410_chan_op

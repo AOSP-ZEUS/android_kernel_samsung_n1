@@ -358,7 +358,10 @@ typedef enum {
  */
 struct acpi_object_extra {
 	ACPI_OBJECT_COMMON_HEADER struct acpi_namespace_node *method_REG;	/* _REG method for this region (if any) */
+<<<<<<< HEAD
 	struct acpi_namespace_node *scope_node;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	void *region_context;	/* Region-specific data */
 	u8 *aml_start;
 	u32 aml_length;

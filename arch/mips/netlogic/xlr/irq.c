@@ -209,7 +209,11 @@ void __init init_xlr_irqs(void)
 			irq_set_chip_and_handler(i, &xlr_pic, handle_level_irq);
 		else
 			irq_set_chip_and_handler(i, &nlm_cpu_intr,
+<<<<<<< HEAD
 						handle_level_irq);
+=======
+						handle_percpu_irq);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 #ifdef CONFIG_SMP
 	irq_set_chip_and_handler(IRQ_IPI_SMP_FUNCTION, &nlm_cpu_intr,

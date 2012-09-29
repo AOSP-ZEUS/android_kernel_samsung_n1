@@ -159,7 +159,12 @@ retry_tx:
 				goto retry_tx;
 		}
 
+<<<<<<< HEAD
 		if (priv->mdev->dev->caps.loopback_support){
+=======
+		if (priv->mdev->dev->caps.flags &
+					MLX4_DEV_CAP_FLAG_UC_LOOPBACK) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			buf[3] = mlx4_en_test_registers(priv);
 			buf[4] = mlx4_en_test_loopback(priv);
 		}

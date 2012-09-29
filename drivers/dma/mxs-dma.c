@@ -28,6 +28,11 @@
 #include <mach/dma.h>
 #include <mach/common.h>
 
+<<<<<<< HEAD
+=======
+#include "dmaengine.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * NOTE: The term "PIO" throughout the mxs-dma implementation means
  * PIO mode of mxs apbh-dma and apbx-dma.  With this working mode,
@@ -111,7 +116,11 @@ struct mxs_dma_chan {
 	int				chan_irq;
 	struct mxs_dma_ccw		*ccw;
 	dma_addr_t			ccw_phys;
+<<<<<<< HEAD
 	dma_cookie_t			last_completed;
+=======
+	int				desc_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	enum dma_status			status;
 	unsigned int			flags;
 #define MXS_DMA_SG_LOOP			(1 << 0)
@@ -216,6 +225,7 @@ static void mxs_dma_resume_chan(struct mxs_dma_chan *mxs_chan)
 	mxs_chan->status = DMA_IN_PROGRESS;
 }
 
+<<<<<<< HEAD
 static dma_cookie_t mxs_dma_assign_cookie(struct mxs_dma_chan *mxs_chan)
 {
 	dma_cookie_t cookie = mxs_chan->chan.cookie;
@@ -229,6 +239,8 @@ static dma_cookie_t mxs_dma_assign_cookie(struct mxs_dma_chan *mxs_chan)
 	return cookie;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct mxs_dma_chan *to_mxs_dma_chan(struct dma_chan *chan)
 {
 	return container_of(chan, struct mxs_dma_chan, chan);
@@ -240,7 +252,11 @@ static dma_cookie_t mxs_dma_tx_submit(struct dma_async_tx_descriptor *tx)
 
 	mxs_dma_enable_chan(mxs_chan);
 
+<<<<<<< HEAD
 	return mxs_dma_assign_cookie(mxs_chan);
+=======
+	return dma_cookie_assign(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void mxs_dma_tasklet(unsigned long data)
@@ -297,7 +313,11 @@ static irqreturn_t mxs_dma_int_handler(int irq, void *dev_id)
 		stat1 &= ~(1 << channel);
 
 		if (mxs_chan->status == DMA_SUCCESS)
+<<<<<<< HEAD
 			mxs_chan->last_completed = mxs_chan->desc.cookie;
+=======
+			dma_cookie_complete(&mxs_chan->desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* schedule tasklet on this channel */
 		tasklet_schedule(&mxs_chan->tasklet);
@@ -327,10 +347,19 @@ static int mxs_dma_alloc_chan_resources(struct dma_chan *chan)
 
 	memset(mxs_chan->ccw, 0, PAGE_SIZE);
 
+<<<<<<< HEAD
 	ret = request_irq(mxs_chan->chan_irq, mxs_dma_int_handler,
 				0, "mxs-dma", mxs_dma);
 	if (ret)
 		goto err_irq;
+=======
+	if (mxs_chan->chan_irq != NO_IRQ) {
+		ret = request_irq(mxs_chan->chan_irq, mxs_dma_int_handler,
+					0, "mxs-dma", mxs_dma);
+		if (ret)
+			goto err_irq;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = clk_enable(mxs_dma->clk);
 	if (ret)
@@ -372,8 +401,13 @@ static void mxs_dma_free_chan_resources(struct dma_chan *chan)
 
 static struct dma_async_tx_descriptor *mxs_dma_prep_slave_sg(
 		struct dma_chan *chan, struct scatterlist *sgl,
+<<<<<<< HEAD
 		unsigned int sg_len, enum dma_data_direction direction,
 		unsigned long append)
+=======
+		unsigned int sg_len, enum dma_transfer_direction direction,
+		unsigned long append, void *context)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct mxs_dma_chan *mxs_chan = to_mxs_dma_chan(chan);
 	struct mxs_dma_engine *mxs_dma = mxs_chan->mxs_dma;
@@ -467,7 +501,12 @@ err_out:
 
 static struct dma_async_tx_descriptor *mxs_dma_prep_dma_cyclic(
 		struct dma_chan *chan, dma_addr_t dma_addr, size_t buf_len,
+<<<<<<< HEAD
 		size_t period_len, enum dma_data_direction direction)
+=======
+		size_t period_len, enum dma_transfer_direction direction,
+		void *context)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct mxs_dma_chan *mxs_chan = to_mxs_dma_chan(chan);
 	struct mxs_dma_engine *mxs_dma = mxs_chan->mxs_dma;
@@ -535,6 +574,10 @@ static int mxs_dma_control(struct dma_chan *chan, enum dma_ctrl_cmd cmd,
 	switch (cmd) {
 	case DMA_TERMINATE_ALL:
 		mxs_dma_disable_chan(mxs_chan);
+<<<<<<< HEAD
+=======
+		mxs_dma_reset_chan(mxs_chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case DMA_PAUSE:
 		mxs_dma_pause_chan(mxs_chan);
@@ -556,7 +599,11 @@ static enum dma_status mxs_dma_tx_status(struct dma_chan *chan,
 	dma_cookie_t last_used;
 
 	last_used = chan->cookie;
+<<<<<<< HEAD
 	dma_set_tx_state(txstate, mxs_chan->last_completed, last_used, 0);
+=======
+	dma_set_tx_state(txstate, chan->completed_cookie, last_used, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return mxs_chan->status;
 }
@@ -707,6 +754,11 @@ static struct platform_device_id mxs_dma_type[] = {
 	}, {
 		.name = "mxs-dma-apbx",
 		.driver_data = MXS_DMA_APBX,
+<<<<<<< HEAD
+=======
+	}, {
+		/* end of list */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 };
 

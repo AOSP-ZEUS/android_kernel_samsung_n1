@@ -5,7 +5,11 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  */
+<<<<<<< HEAD
 
+=======
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/gfp.h>
 #include <linux/skbuff.h>
@@ -95,8 +99,16 @@ static int xt_ct_tg_check(const struct xt_tgchk_param *par)
 	if (info->helper[0]) {
 		ret = -ENOENT;
 		proto = xt_ct_find_proto(par);
+<<<<<<< HEAD
 		if (!proto)
 			goto err3;
+=======
+		if (!proto) {
+			pr_info("You must specify a L4 protocol, "
+				"and not use inversions on it.\n");
+			goto err3;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		ret = -ENOMEM;
 		help = nf_ct_helper_ext_add(ct, GFP_KERNEL);
@@ -107,8 +119,15 @@ static int xt_ct_tg_check(const struct xt_tgchk_param *par)
 		help->helper = nf_conntrack_helper_try_module_get(info->helper,
 								  par->family,
 								  proto);
+<<<<<<< HEAD
 		if (help->helper == NULL)
 			goto err3;
+=======
+		if (help->helper == NULL) {
+			pr_info("No such helper \"%s\"\n", info->helper);
+			goto err3;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	__set_bit(IPS_TEMPLATE_BIT, &ct->status);

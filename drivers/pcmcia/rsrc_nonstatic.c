@@ -770,7 +770,11 @@ static int nonstatic_find_io(struct pcmcia_socket *s, unsigned int attr,
 							res->end + num);
 			if (!ret) {
 				ret = adjust_resource(s->io[i].res, res->start,
+<<<<<<< HEAD
 					       res->end - res->start + num + 1);
+=======
+						      resource_size(res) + num);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				if (ret)
 					continue;
 				*base = try;
@@ -788,8 +792,13 @@ static int nonstatic_find_io(struct pcmcia_socket *s, unsigned int attr,
 							res->end);
 			if (!ret) {
 				ret = adjust_resource(s->io[i].res,
+<<<<<<< HEAD
 					       res->start - num,
 					       res->end - res->start + num + 1);
+=======
+						      res->start - num,
+						      resource_size(res) + num);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				if (ret)
 					continue;
 				*base = try;

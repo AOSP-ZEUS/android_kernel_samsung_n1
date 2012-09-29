@@ -467,7 +467,11 @@ typedef volatile struct tioce {
 #define CE_LSI_GB_CFG1_RXL0S_THS_SHFT	0
 #define CE_LSI_GB_CFG1_RXL0S_THS_MASK	(0xffULL << 0)
 #define CE_LSI_GB_CFG1_RXL0S_SMP_SHFT	8
+<<<<<<< HEAD
 #define CE_LSI_GB_CFG1_RXL0S_SMP_MASK	(0xfULL << 8);
+=======
+#define CE_LSI_GB_CFG1_RXL0S_SMP_MASK	(0xfULL << 8)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define CE_LSI_GB_CFG1_RXL0S_ADJ_SHFT	12
 #define CE_LSI_GB_CFG1_RXL0S_ADJ_MASK	(0x7ULL << 12)
 #define CE_LSI_GB_CFG1_RXL0S_FLT_SHFT	15

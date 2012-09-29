@@ -6,7 +6,10 @@
  */
 
 #include <linux/pm_runtime.h>
+<<<<<<< HEAD
 #include <linux/async.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <scsi/scsi.h>
 #include <scsi/scsi_device.h>
@@ -69,6 +72,7 @@ static int scsi_bus_resume_common(struct device *dev)
 	return err;
 }
 
+<<<<<<< HEAD
 static int scsi_bus_prepare(struct device *dev)
 {
 	if (scsi_is_sdev_device(dev)) {
@@ -82,6 +86,8 @@ static int scsi_bus_prepare(struct device *dev)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int scsi_bus_suspend(struct device *dev)
 {
 	return scsi_bus_suspend_common(dev, PMSG_SUSPEND);
@@ -100,7 +106,10 @@ static int scsi_bus_poweroff(struct device *dev)
 #else /* CONFIG_PM_SLEEP */
 
 #define scsi_bus_resume_common		NULL
+<<<<<<< HEAD
 #define scsi_bus_prepare		NULL
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define scsi_bus_suspend		NULL
 #define scsi_bus_freeze			NULL
 #define scsi_bus_poweroff		NULL
@@ -159,9 +168,15 @@ int scsi_autopm_get_device(struct scsi_device *sdev)
 	int	err;
 
 	err = pm_runtime_get_sync(&sdev->sdev_gendev);
+<<<<<<< HEAD
 	if (err < 0)
 		pm_runtime_put_sync(&sdev->sdev_gendev);
 	else if (err > 0)
+=======
+	if (err < 0 && err !=-EACCES)
+		pm_runtime_put_sync(&sdev->sdev_gendev);
+	else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		err = 0;
 	return err;
 }
@@ -188,9 +203,15 @@ int scsi_autopm_get_host(struct Scsi_Host *shost)
 	int	err;
 
 	err = pm_runtime_get_sync(&shost->shost_gendev);
+<<<<<<< HEAD
 	if (err < 0)
 		pm_runtime_put_sync(&shost->shost_gendev);
 	else if (err > 0)
+=======
+	if (err < 0 && err !=-EACCES)
+		pm_runtime_put_sync(&shost->shost_gendev);
+	else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		err = 0;
 	return err;
 }
@@ -209,7 +230,10 @@ void scsi_autopm_put_host(struct Scsi_Host *shost)
 #endif /* CONFIG_PM_RUNTIME */
 
 const struct dev_pm_ops scsi_bus_pm_ops = {
+<<<<<<< HEAD
 	.prepare =		scsi_bus_prepare,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.suspend =		scsi_bus_suspend,
 	.resume =		scsi_bus_resume_common,
 	.freeze =		scsi_bus_freeze,

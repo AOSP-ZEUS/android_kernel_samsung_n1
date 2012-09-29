@@ -50,6 +50,7 @@
 #include "xfs_vnodeops.h"
 #include "xfs_trace.h"
 
+<<<<<<< HEAD
 int
 xfs_setattr(
 	struct xfs_inode	*ip,
@@ -474,6 +475,8 @@ xfs_setattr(
 	return code;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * The maximum pathlen is 1024 bytes. Since the minimum file system
  * blocksize is 512 bytes, we can get a max of 2 extents back from
@@ -507,7 +510,13 @@ xfs_readlink_bmap(
 
 		bp = xfs_buf_read(mp->m_ddev_targp, d, BTOBB(byte_cnt),
 				  XBF_LOCK | XBF_MAPPED | XBF_DONT_BLOCK);
+<<<<<<< HEAD
 		error = XFS_BUF_GETERROR(bp);
+=======
+		if (!bp)
+			return XFS_ERROR(ENOMEM);
+		error = bp->b_error;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (error) {
 			xfs_ioerror_alert("xfs_readlink",
 				  ip->i_mount, bp, XFS_BUF_ADDR(bp));
@@ -518,7 +527,11 @@ xfs_readlink_bmap(
 			byte_cnt = pathlen;
 		pathlen -= byte_cnt;
 
+<<<<<<< HEAD
 		memcpy(link, XFS_BUF_PTR(bp), byte_cnt);
+=======
+		memcpy(link, bp->b_addr, byte_cnt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		xfs_buf_relse(bp);
 	}
 
@@ -628,6 +641,7 @@ xfs_free_eofblocks(
 		 */
 		tp = xfs_trans_alloc(mp, XFS_TRANS_INACTIVE);
 
+<<<<<<< HEAD
 		/*
 		 * Do the xfs_itruncate_start() call before
 		 * reserving any log space because
@@ -635,6 +649,8 @@ xfs_free_eofblocks(
 		 * cache and we can't
 		 * do that within a transaction.
 		 */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (flags & XFS_FREE_EOF_TRYLOCK) {
 			if (!xfs_ilock_nowait(ip, XFS_IOLOCK_EXCL)) {
 				xfs_trans_cancel(tp, 0);
@@ -643,6 +659,7 @@ xfs_free_eofblocks(
 		} else {
 			xfs_ilock(ip, XFS_IOLOCK_EXCL);
 		}
+<<<<<<< HEAD
 		error = xfs_itruncate_start(ip, XFS_ITRUNC_DEFINITE,
 				    ip->i_size);
 		if (error) {
@@ -650,6 +667,8 @@ xfs_free_eofblocks(
 			xfs_iunlock(ip, XFS_IOLOCK_EXCL);
 			return error;
 		}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		error = xfs_trans_reserve(tp, 0,
 					  XFS_ITRUNCATE_LOG_RES(mp),
@@ -665,6 +684,7 @@ xfs_free_eofblocks(
 		xfs_ilock(ip, XFS_ILOCK_EXCL);
 		xfs_trans_ijoin(tp, ip);
 
+<<<<<<< HEAD
 		error = xfs_itruncate_finish(&tp, ip,
 					     ip->i_size,
 					     XFS_DATA_FORK,
@@ -674,6 +694,14 @@ xfs_free_eofblocks(
 		 * simply don't bother truncating the file.
 		 */
 		if (error) {
+=======
+		error = xfs_itruncate_data(&tp, ip, ip->i_size);
+		if (error) {
+			/*
+			 * If we get an error at this point we simply don't
+			 * bother truncating the file.
+			 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			xfs_trans_cancel(tp,
 					 (XFS_TRANS_RELEASE_LOG_RES |
 					  XFS_TRANS_ABORT));
@@ -977,7 +1005,11 @@ xfs_release(
 	if (ip->i_d.di_nlink == 0)
 		return 0;
 
+<<<<<<< HEAD
 	if ((((ip->i_d.di_mode & S_IFMT) == S_IFREG) &&
+=======
+	if ((S_ISREG(ip->i_d.di_mode) &&
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	     ((ip->i_size > 0) || (VN_CACHED(VFS_I(ip)) > 0 ||
 	       ip->i_delayed_blks > 0)) &&
 	     (ip->i_df.if_flags & XFS_IFEXTENTS))  &&
@@ -1058,7 +1090,11 @@ xfs_inactive(
 	truncate = ((ip->i_d.di_nlink == 0) &&
 	    ((ip->i_d.di_size != 0) || (ip->i_size != 0) ||
 	     (ip->i_d.di_nextents > 0) || (ip->i_delayed_blks > 0)) &&
+<<<<<<< HEAD
 	    ((ip->i_d.di_mode & S_IFMT) == S_IFREG));
+=======
+	    S_ISREG(ip->i_d.di_mode));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mp = ip->i_mount;
 
@@ -1069,7 +1105,11 @@ xfs_inactive(
 		goto out;
 
 	if (ip->i_d.di_nlink != 0) {
+<<<<<<< HEAD
 		if ((((ip->i_d.di_mode & S_IFMT) == S_IFREG) &&
+=======
+		if ((S_ISREG(ip->i_d.di_mode) &&
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
                      ((ip->i_size > 0) || (VN_CACHED(VFS_I(ip)) > 0 ||
                        ip->i_delayed_blks > 0)) &&
 		      (ip->i_df.if_flags & XFS_IFEXTENTS) &&
@@ -1091,6 +1131,7 @@ xfs_inactive(
 
 	tp = xfs_trans_alloc(mp, XFS_TRANS_INACTIVE);
 	if (truncate) {
+<<<<<<< HEAD
 		/*
 		 * Do the xfs_itruncate_start() call before
 		 * reserving any log space because itruncate_start
@@ -1105,6 +1146,11 @@ xfs_inactive(
 			xfs_iunlock(ip, XFS_IOLOCK_EXCL);
 			return VN_INACTIVE_CACHE;
 		}
+=======
+		xfs_ilock(ip, XFS_IOLOCK_EXCL);
+
+		xfs_ioend_wait(ip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		error = xfs_trans_reserve(tp, 0,
 					  XFS_ITRUNCATE_LOG_RES(mp),
@@ -1121,6 +1167,7 @@ xfs_inactive(
 		xfs_ilock(ip, XFS_ILOCK_EXCL);
 		xfs_trans_ijoin(tp, ip);
 
+<<<<<<< HEAD
 		/*
 		 * normally, we have to run xfs_itruncate_finish sync.
 		 * But if filesystem is wsync and we're in the inactive
@@ -1131,13 +1178,20 @@ xfs_inactive(
 		error = xfs_itruncate_finish(&tp, ip, 0, XFS_DATA_FORK,
 				(!(mp->m_flags & XFS_MOUNT_WSYNC) ? 1 : 0));
 
+=======
+		error = xfs_itruncate_data(&tp, ip, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (error) {
 			xfs_trans_cancel(tp,
 				XFS_TRANS_RELEASE_LOG_RES | XFS_TRANS_ABORT);
 			xfs_iunlock(ip, XFS_IOLOCK_EXCL | XFS_ILOCK_EXCL);
 			return VN_INACTIVE_CACHE;
 		}
+<<<<<<< HEAD
 	} else if ((ip->i_d.di_mode & S_IFMT) == S_IFLNK) {
+=======
+	} else if (S_ISLNK(ip->i_d.di_mode)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/*
 		 * If we get an error while cleaning up a
@@ -2116,13 +2170,21 @@ xfs_symlink(
 			byte_cnt = XFS_FSB_TO_B(mp, mval[n].br_blockcount);
 			bp = xfs_trans_get_buf(tp, mp->m_ddev_targp, d,
 					       BTOBB(byte_cnt), 0);
+<<<<<<< HEAD
 			ASSERT(bp && !XFS_BUF_GETERROR(bp));
+=======
+			ASSERT(!xfs_buf_geterror(bp));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (pathlen < byte_cnt) {
 				byte_cnt = pathlen;
 			}
 			pathlen -= byte_cnt;
 
+<<<<<<< HEAD
 			memcpy(XFS_BUF_PTR(bp), cur_chunk, byte_cnt);
+=======
+			memcpy(bp->b_addr, cur_chunk, byte_cnt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			cur_chunk += byte_cnt;
 
 			xfs_trans_log_buf(tp, bp, 0, byte_cnt - 1);
@@ -2437,6 +2499,11 @@ xfs_zero_remaining_bytes(
 	if (!bp)
 		return XFS_ERROR(ENOMEM);
 
+<<<<<<< HEAD
+=======
+	xfs_buf_unlock(bp);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (offset = startoff; offset <= endoff; offset = lastoffset + 1) {
 		offset_fsb = XFS_B_TO_FSBT(mp, offset);
 		nimap = 1;
@@ -2465,7 +2532,11 @@ xfs_zero_remaining_bytes(
 					  mp, bp, XFS_BUF_ADDR(bp));
 			break;
 		}
+<<<<<<< HEAD
 		memset(XFS_BUF_PTR(bp) +
+=======
+		memset(bp->b_addr +
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			(offset - XFS_FSB_TO_B(mp, imap.br_startoff)),
 		      0, lastoffset - offset + 1);
 		XFS_BUF_UNDONE(bp);
@@ -2791,7 +2862,11 @@ xfs_change_file_space(
 		iattr.ia_valid = ATTR_SIZE;
 		iattr.ia_size = startoffset;
 
+<<<<<<< HEAD
 		error = xfs_setattr(ip, &iattr, attr_flags);
+=======
+		error = xfs_setattr_size(ip, &iattr, attr_flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (error)
 			return error;

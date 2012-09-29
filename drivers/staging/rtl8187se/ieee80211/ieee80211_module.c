@@ -46,7 +46,10 @@
 #include <linux/slab.h>
 #include <linux/tcp.h>
 #include <linux/types.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/wireless.h>
 #include <linux/etherdevice.h>
 #include <asm/uaccess.h>

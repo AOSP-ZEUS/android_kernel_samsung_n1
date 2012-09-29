@@ -59,7 +59,10 @@
 
 static struct clk clk_i2s_ext = {
 	.name		= "i2s-ext",
+<<<<<<< HEAD
 	.id		= -1,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* armdiv
@@ -129,7 +132,11 @@ static int s3c2443_armclk_setrate(struct clk *clk, unsigned long rate)
 		unsigned long clkcon0;
 
 		clkcon0 = __raw_readl(S3C2443_CLKDIV0);
+<<<<<<< HEAD
 		clkcon0 &= S3C2443_CLKDIV0_ARMDIV_MASK;
+=======
+		clkcon0 &= ~S3C2443_CLKDIV0_ARMDIV_MASK;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		clkcon0 |= val << S3C2443_CLKDIV0_ARMDIV_SHIFT;
 		__raw_writel(clkcon0, S3C2443_CLKDIV0);
 	}
@@ -139,7 +146,10 @@ static int s3c2443_armclk_setrate(struct clk *clk, unsigned long rate)
 
 static struct clk clk_armdiv = {
 	.name		= "armdiv",
+<<<<<<< HEAD
 	.id		= -1,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.parent		= &clk_msysclk.clk,
 	.ops		= &(struct clk_ops) {
 		.round_rate = s3c2443_armclk_roundrate,
@@ -160,7 +170,10 @@ static struct clk *clk_arm_sources[] = {
 static struct clksrc_clk clk_arm = {
 	.clk	= {
 		.name		= "armclk",
+<<<<<<< HEAD
 		.id		= -1,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 	.sources = &(struct clksrc_sources) {
 		.sources = clk_arm_sources,
@@ -177,7 +190,10 @@ static struct clksrc_clk clk_arm = {
 static struct clksrc_clk clk_hsspi = {
 	.clk	= {
 		.name		= "hsspi",
+<<<<<<< HEAD
 		.id		= -1,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.parent		= &clk_esysclk.clk,
 		.ctrlbit	= S3C2443_SCLKCON_HSSPICLK,
 		.enable		= s3c2443_clkcon_enable_s,
@@ -196,7 +212,11 @@ static struct clksrc_clk clk_hsspi = {
 static struct clksrc_clk clk_hsmmc_div = {
 	.clk	= {
 		.name		= "hsmmc-div",
+<<<<<<< HEAD
 		.id		= 1,
+=======
+		.devname	= "s3c-sdhci.1",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.parent		= &clk_esysclk.clk,
 	},
 	.reg_div = { .reg = S3C2443_CLKDIV1, .size = 2, .shift = 6 },
@@ -231,7 +251,11 @@ static int s3c2443_enable_hsmmc(struct clk *clk, int enable)
 
 static struct clk clk_hsmmc = {
 	.name		= "hsmmc-if",
+<<<<<<< HEAD
 	.id		= 1,
+=======
+	.devname	= "s3c-sdhci.1",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.parent		= &clk_hsmmc_div.clk,
 	.enable		= s3c2443_enable_hsmmc,
 	.ops		= &(struct clk_ops) {
@@ -248,7 +272,10 @@ static struct clk clk_hsmmc = {
 static struct clksrc_clk clk_i2s_eplldiv = {
 	.clk	= {
 		.name		= "i2s-eplldiv",
+<<<<<<< HEAD
 		.id		= -1,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.parent		= &clk_esysclk.clk,
 	},
 	.reg_div = { .reg = S3C2443_CLKDIV1, .size = 4, .shift = 12, },
@@ -271,7 +298,10 @@ struct clk *clk_i2s_srclist[] = {
 static struct clksrc_clk clk_i2s = {
 	.clk	= {
 		.name		= "i2s-if",
+<<<<<<< HEAD
 		.id		= -1,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.ctrlbit	= S3C2443_SCLKCON_I2SCLK,
 		.enable		= s3c2443_clkcon_enable_s,
 
@@ -288,25 +318,39 @@ static struct clksrc_clk clk_i2s = {
 static struct clk init_clocks_off[] = {
 	{
 		.name		= "sdi",
+<<<<<<< HEAD
 		.id		= -1,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.parent		= &clk_p,
 		.enable		= s3c2443_clkcon_enable_p,
 		.ctrlbit	= S3C2443_PCLKCON_SDI,
 	}, {
 		.name		= "iis",
+<<<<<<< HEAD
 		.id		= -1,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.parent		= &clk_p,
 		.enable		= s3c2443_clkcon_enable_p,
 		.ctrlbit	= S3C2443_PCLKCON_IIS,
 	}, {
 		.name		= "spi",
+<<<<<<< HEAD
 		.id		= 0,
+=======
+		.devname	= "s3c2410-spi.0",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.parent		= &clk_p,
 		.enable		= s3c2443_clkcon_enable_p,
 		.ctrlbit	= S3C2443_PCLKCON_SPI0,
 	}, {
 		.name		= "spi",
+<<<<<<< HEAD
 		.id		= 1,
+=======
+		.devname	= "s3c2410-spi.1",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.parent		= &clk_p,
 		.enable		= s3c2443_clkcon_enable_p,
 		.ctrlbit	= S3C2443_PCLKCON_SPI1,

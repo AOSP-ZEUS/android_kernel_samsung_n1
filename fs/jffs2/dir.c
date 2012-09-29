@@ -56,7 +56,11 @@ const struct inode_operations jffs2_dir_inode_operations =
 	.rmdir =	jffs2_rmdir,
 	.mknod =	jffs2_mknod,
 	.rename =	jffs2_rename,
+<<<<<<< HEAD
 	.check_acl =	jffs2_check_acl,
+=======
+	.get_acl =	jffs2_get_acl,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.setattr =	jffs2_setattr,
 	.setxattr =	jffs2_setxattr,
 	.getxattr =	jffs2_getxattr,
@@ -102,10 +106,15 @@ static struct dentry *jffs2_lookup(struct inode *dir_i, struct dentry *target,
 	mutex_unlock(&dir_f->sem);
 	if (ino) {
 		inode = jffs2_iget(dir_i->i_sb, ino);
+<<<<<<< HEAD
 		if (IS_ERR(inode)) {
 			printk(KERN_WARNING "iget() failed for ino #%u\n", ino);
 			return ERR_CAST(inode);
 		}
+=======
+		if (IS_ERR(inode))
+			printk(KERN_WARNING "iget() failed for ino #%u\n", ino);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return d_splice_alias(inode, target);
@@ -822,7 +831,14 @@ static int jffs2_rename (struct inode *old_dir_i, struct dentry *old_dentry,
 
 	if (victim_f) {
 		/* There was a victim. Kill it off nicely */
+<<<<<<< HEAD
 		drop_nlink(new_dentry->d_inode);
+=======
+		if (S_ISDIR(new_dentry->d_inode->i_mode))
+			clear_nlink(new_dentry->d_inode);
+		else
+			drop_nlink(new_dentry->d_inode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Don't oops if the victim was a dirent pointing to an
 		   inode which didn't exist. */
 		if (victim_f->inocache) {

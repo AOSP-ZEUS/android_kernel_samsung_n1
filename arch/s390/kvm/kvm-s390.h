@@ -58,6 +58,7 @@ int kvm_s390_inject_vcpu(struct kvm_vcpu *vcpu,
 int kvm_s390_inject_program_int(struct kvm_vcpu *vcpu, u16 code);
 int kvm_s390_inject_sigp_stop(struct kvm_vcpu *vcpu, int action);
 
+<<<<<<< HEAD
 static inline long kvm_s390_vcpu_get_memsize(struct kvm_vcpu *vcpu)
 {
 	return vcpu->arch.sie_block->gmslm
@@ -87,6 +88,11 @@ static inline void kvm_s390_vcpu_set_mem(struct kvm_vcpu *vcpu)
 
 /* implemented in priv.c */
 int kvm_s390_handle_b2(struct kvm_vcpu *vcpu);
+=======
+/* implemented in priv.c */
+int kvm_s390_handle_b2(struct kvm_vcpu *vcpu);
+int kvm_s390_handle_e5(struct kvm_vcpu *vcpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* implemented in sigp.c */
 int kvm_s390_handle_sigp(struct kvm_vcpu *vcpu);

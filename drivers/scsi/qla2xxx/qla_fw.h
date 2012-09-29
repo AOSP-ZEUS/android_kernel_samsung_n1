@@ -537,6 +537,14 @@ struct sts_entry_24xx {
 	/*
 	 * If DIF Error is set in comp_status, these additional fields are
 	 * defined:
+<<<<<<< HEAD
+=======
+	 *
+	 * !!! NOTE: Firmware sends expected/actual DIF data in big endian
+	 * format; but all of the "data" field gets swab32-d in the beginning
+	 * of qla2x00_status_entry().
+	 *
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * &data[10] : uint8_t report_runt_bg[2];	- computed guard
 	 * &data[12] : uint8_t actual_dif[8];		- DIF Data received
 	 * &data[20] : uint8_t expected_dif[8];		- DIF Data computed

@@ -24,7 +24,10 @@
 #include <linux/hiddev.h>
 #include <linux/pci.h>
 #include <linux/dmi.h>
+<<<<<<< HEAD
 #include <linux/delay.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "hyperv.h"
 
@@ -936,7 +939,10 @@ static int __init mousevsc_init(void)
 	       sizeof(struct hv_guid));
 
 	drv->driver.name = driver_name;
+<<<<<<< HEAD
 	drv->name = driver_name;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* The driver belongs to vmbus */
 	vmbus_child_driver_register(&drv->driver);

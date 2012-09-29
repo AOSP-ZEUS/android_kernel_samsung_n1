@@ -192,6 +192,7 @@ static void sas_set_ex_phy(struct domain_device *dev, int phy_id,
 	phy->attached_sata_ps   = dr->attached_sata_ps;
 	phy->attached_iproto = dr->iproto << 1;
 	phy->attached_tproto = dr->tproto << 1;
+<<<<<<< HEAD
 	/* help some expanders that fail to zero sas_address in the 'no
 	 * device' case
 	 */
@@ -200,6 +201,9 @@ static void sas_set_ex_phy(struct domain_device *dev, int phy_id,
 		memset(phy->attached_sas_addr, 0, SAS_ADDR_SIZE);
 	else
 		memcpy(phy->attached_sas_addr, dr->attached_sas_addr, SAS_ADDR_SIZE);
+=======
+	memcpy(phy->attached_sas_addr, dr->attached_sas_addr, SAS_ADDR_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	phy->attached_phy_id = dr->attached_phy_id;
 	phy->phy_change_count = dr->change_count;
 	phy->routing_attr = dr->routing_attr;
@@ -1639,6 +1643,7 @@ static int sas_find_bcast_phy(struct domain_device *dev, int *phy_id,
 		int phy_change_count = 0;
 
 		res = sas_get_phy_change_count(dev, i, &phy_change_count);
+<<<<<<< HEAD
 		switch (res) {
 		case SMP_RESP_PHY_VACANT:
 		case SMP_RESP_NO_PHY:
@@ -1650,6 +1655,11 @@ static int sas_find_bcast_phy(struct domain_device *dev, int *phy_id,
 		}
 
 		if (phy_change_count != ex->ex_phy[i].phy_change_count) {
+=======
+		if (res)
+			goto out;
+		else if (phy_change_count != ex->ex_phy[i].phy_change_count) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (update)
 				ex->ex_phy[i].phy_change_count =
 					phy_change_count;
@@ -1657,7 +1667,12 @@ static int sas_find_bcast_phy(struct domain_device *dev, int *phy_id,
 			return 0;
 		}
 	}
+<<<<<<< HEAD
 	return 0;
+=======
+out:
+	return res;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int sas_get_ex_change_count(struct domain_device *dev, int *ecc)

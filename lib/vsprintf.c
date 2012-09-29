@@ -31,6 +31,7 @@
 #include <asm/div64.h>
 #include <asm/sections.h>	/* for dereference_function_descriptor() */
 
+<<<<<<< HEAD
 /* Works only for digits and letters, but small and fast */
 #define TOLOWER(x) ((x) | 0x20)
 
@@ -38,6 +39,12 @@ static unsigned int simple_guess_base(const char *cp)
 {
 	if (cp[0] == '0') {
 		if (TOLOWER(cp[1]) == 'x' && isxdigit(cp[2]))
+=======
+static unsigned int simple_guess_base(const char *cp)
+{
+	if (cp[0] == '0') {
+		if (_tolower(cp[1]) == 'x' && isxdigit(cp[2]))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return 16;
 		else
 			return 8;
@@ -59,13 +66,21 @@ unsigned long long simple_strtoull(const char *cp, char **endp, unsigned int bas
 	if (!base)
 		base = simple_guess_base(cp);
 
+<<<<<<< HEAD
 	if (base == 16 && cp[0] == '0' && TOLOWER(cp[1]) == 'x')
+=======
+	if (base == 16 && cp[0] == '0' && _tolower(cp[1]) == 'x')
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cp += 2;
 
 	while (isxdigit(*cp)) {
 		unsigned int value;
 
+<<<<<<< HEAD
 		value = isdigit(*cp) ? *cp - '0' : TOLOWER(*cp) - 'a' + 10;
+=======
+		value = isdigit(*cp) ? *cp - '0' : _tolower(*cp) - 'a' + 10;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (value >= base)
 			break;
 		result = result * base + value;
@@ -1036,8 +1051,13 @@ precision:
 qualifier:
 	/* get the conversion qualifier */
 	spec->qualifier = -1;
+<<<<<<< HEAD
 	if (*fmt == 'h' || TOLOWER(*fmt) == 'l' ||
 	    TOLOWER(*fmt) == 'z' || *fmt == 't') {
+=======
+	if (*fmt == 'h' || _tolower(*fmt) == 'l' ||
+	    _tolower(*fmt) == 'z' || *fmt == 't') {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spec->qualifier = *fmt++;
 		if (unlikely(spec->qualifier == *fmt)) {
 			if (spec->qualifier == 'l') {
@@ -1104,7 +1124,11 @@ qualifier:
 			spec->type = FORMAT_TYPE_LONG;
 		else
 			spec->type = FORMAT_TYPE_ULONG;
+<<<<<<< HEAD
 	} else if (TOLOWER(spec->qualifier) == 'z') {
+=======
+	} else if (_tolower(spec->qualifier) == 'z') {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spec->type = FORMAT_TYPE_SIZE_T;
 	} else if (spec->qualifier == 't') {
 		spec->type = FORMAT_TYPE_PTRDIFF;
@@ -1149,8 +1173,12 @@ qualifier:
  * %pi4 print an IPv4 address with leading zeros
  * %pI6 print an IPv6 address with colons
  * %pi6 print an IPv6 address without colons
+<<<<<<< HEAD
  * %pI6c print an IPv6 address as specified by
  *   http://tools.ietf.org/html/draft-ietf-6man-text-addr-representation-00
+=======
+ * %pI6c print an IPv6 address as specified by RFC 5952
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * %pU[bBlL] print a UUID/GUID in big or little endian using lower or upper
  *   case.
  * %n is ignored
@@ -1263,7 +1291,11 @@ int vsnprintf(char *buf, size_t size, const char *fmt, va_list args)
 			if (qualifier == 'l') {
 				long *ip = va_arg(args, long *);
 				*ip = (str - buf);
+<<<<<<< HEAD
 			} else if (TOLOWER(qualifier) == 'z') {
+=======
+			} else if (_tolower(qualifier) == 'z') {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				size_t *ip = va_arg(args, size_t *);
 				*ip = (str - buf);
 			} else {
@@ -1550,7 +1582,11 @@ do {									\
 			void *skip_arg;
 			if (qualifier == 'l')
 				skip_arg = va_arg(args, long *);
+<<<<<<< HEAD
 			else if (TOLOWER(qualifier) == 'z')
+=======
+			else if (_tolower(qualifier) == 'z')
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				skip_arg = va_arg(args, size_t *);
 			else
 				skip_arg = va_arg(args, int *);
@@ -1856,8 +1892,13 @@ int vsscanf(const char *buf, const char *fmt, va_list args)
 
 		/* get conversion qualifier */
 		qualifier = -1;
+<<<<<<< HEAD
 		if (*fmt == 'h' || TOLOWER(*fmt) == 'l' ||
 		    TOLOWER(*fmt) == 'z') {
+=======
+		if (*fmt == 'h' || _tolower(*fmt) == 'l' ||
+		    _tolower(*fmt) == 'z') {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			qualifier = *fmt++;
 			if (unlikely(qualifier == *fmt)) {
 				if (qualifier == 'h') {

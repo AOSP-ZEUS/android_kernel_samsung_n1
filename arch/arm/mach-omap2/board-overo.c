@@ -74,15 +74,26 @@
 	defined(CONFIG_TOUCHSCREEN_ADS7846_MODULE)
 
 /* fixed regulator for ads7846 */
+<<<<<<< HEAD
 static struct regulator_consumer_supply ads7846_supply =
 	REGULATOR_SUPPLY("vcc", "spi1.0");
+=======
+static struct regulator_consumer_supply ads7846_supply[] = {
+	REGULATOR_SUPPLY("vcc", "spi1.0"),
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct regulator_init_data vads7846_regulator = {
 	.constraints = {
 		.valid_ops_mask		= REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies	= 1,
 	.consumer_supplies	= &ads7846_supply,
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(ads7846_supply),
+	.consumer_supplies	= ads7846_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct fixed_voltage_config vads7846 = {
@@ -264,6 +275,7 @@ static struct omap_dss_board_info overo_dss_data = {
 	.default_device	= &overo_dvi_device,
 };
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply overo_vdda_dac_supply =
 	REGULATOR_SUPPLY("vdda_dac", "omapdss_venc");
 
@@ -272,6 +284,8 @@ static struct regulator_consumer_supply overo_vdds_dsi_supply[] = {
 	REGULATOR_SUPPLY("vdds_dsi", "omapdss_dsi1"),
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct mtd_partition overo_nand_partitions[] = {
 	{
 		.name           = "xloader",
@@ -319,8 +333,13 @@ static struct omap2_hsmmc_info mmc[] = {
 	{}	/* Terminator */
 };
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply overo_vmmc1_supply = {
 	.supply			= "vmmc",
+=======
+static struct regulator_consumer_supply overo_vmmc1_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.0"),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #if defined(CONFIG_LEDS_GPIO) || defined(CONFIG_LEDS_GPIO_MODULE)
@@ -415,8 +434,11 @@ static int overo_twl_gpio_setup(struct device *dev,
 {
 	omap2_hsmmc_init(mmc);
 
+<<<<<<< HEAD
 	overo_vmmc1_supply.dev = mmc[0].dev;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_LEDS_GPIO) || defined(CONFIG_LEDS_GPIO_MODULE)
 	/* TWL4030_GPIO_MAX + 1 == ledB, PMU_STAT (out, active low LED) */
 	gpio_leds[2].gpio = gpio + TWL4030_GPIO_MAX + 1;
@@ -433,10 +455,13 @@ static struct twl4030_gpio_platform_data overo_gpio_data = {
 	.setup		= overo_twl_gpio_setup,
 };
 
+<<<<<<< HEAD
 static struct twl4030_usb_data overo_usb_data = {
 	.usb_mode	= T2_USB_MODE_ULPI,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct regulator_init_data overo_vmmc1 = {
 	.constraints = {
 		.min_uV			= 1850000,
@@ -447,6 +472,7 @@ static struct regulator_init_data overo_vmmc1 = {
 					| REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies	= 1,
 	.consumer_supplies	= &overo_vmmc1_supply,
 };
@@ -496,10 +522,28 @@ static struct twl4030_platform_data overo_twldata = {
 	.vmmc1		= &overo_vmmc1,
 	.vdac		= &overo_vdac,
 	.vpll2		= &overo_vpll2,
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(overo_vmmc1_supply),
+	.consumer_supplies	= overo_vmmc1_supply,
+};
+
+static struct twl4030_platform_data overo_twldata = {
+	.gpio		= &overo_gpio_data,
+	.vmmc1		= &overo_vmmc1,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __init overo_i2c_init(void)
 {
+<<<<<<< HEAD
+=======
+	omap3_pmic_get_config(&overo_twldata,
+			TWL_COMMON_PDATA_USB | TWL_COMMON_PDATA_AUDIO,
+			TWL_COMMON_REGULATOR_VDAC | TWL_COMMON_REGULATOR_VPLL2);
+
+	overo_twldata.vpll2->constraints.name = "VDVI";
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	omap3_pmic_init("tps65950", &overo_twldata);
 	/* i2c2 pins are used for gpio */
 	omap_register_i2c_bus(3, 400, NULL, 0);
@@ -568,7 +612,10 @@ static void __init overo_init(void)
 	usb_musb_init(NULL);
 	usbhs_init(&usbhs_bdata);
 	overo_spi_init();
+<<<<<<< HEAD
 	overo_ads7846_init();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	overo_init_smsc911x();
 	overo_display_init();
 	overo_init_led();
@@ -615,7 +662,13 @@ MACHINE_START(OVERO, "Gumstix Overo")
 	.reserve	= omap_reserve,
 	.map_io		= omap3_map_io,
 	.init_early	= overo_init_early,
+<<<<<<< HEAD
 	.init_irq	= omap_init_irq,
 	.init_machine	= overo_init,
 	.timer		= &omap_timer,
+=======
+	.init_irq	= omap3_init_irq,
+	.init_machine	= overo_init,
+	.timer		= &omap3_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

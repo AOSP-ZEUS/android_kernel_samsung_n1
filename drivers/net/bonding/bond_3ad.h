@@ -253,11 +253,14 @@ struct ad_system {
 struct ad_bond_info {
 	struct ad_system system;	    /* 802.3ad system structure */
 	u32 agg_select_timer;	    // Timer to select aggregator after all adapter's hand shakes
+<<<<<<< HEAD
 	u32 agg_select_mode;	    // Mode of selection of active aggregator(bandwidth/count)
 	int lacp_fast;		/* whether fast periodic tx should be
 				 * requested
 				 */
 	struct timer_list ad_timer;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct ad_slave_info {
@@ -269,7 +272,11 @@ struct ad_slave_info {
 };
 
 // ================= AD Exported functions to the main bonding code ==================
+<<<<<<< HEAD
 void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution, int lacp_fast);
+=======
+void bond_3ad_initialize(struct bonding *bond, u16 tick_resolution);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int  bond_3ad_bind_slave(struct slave *slave);
 void bond_3ad_unbind_slave(struct slave *slave);
 void bond_3ad_state_machine_handler(struct work_struct *);
@@ -282,5 +289,9 @@ int bond_3ad_xmit_xor(struct sk_buff *skb, struct net_device *dev);
 void bond_3ad_lacpdu_recv(struct sk_buff *skb, struct bonding *bond,
 			  struct slave *slave);
 int bond_3ad_set_carrier(struct bonding *bond);
+<<<<<<< HEAD
+=======
+void bond_3ad_update_lacp_rate(struct bonding *bond);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif //__BOND_3AD_H__
 

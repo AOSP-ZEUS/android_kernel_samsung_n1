@@ -48,9 +48,12 @@ static int sharpsl_pcmcia_hw_init(struct soc_pcmcia_socket *skt)
 {
 	int ret;
 
+<<<<<<< HEAD
 	if (platform_scoop_config->pcmcia_init)
 		platform_scoop_config->pcmcia_init();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Register interrupts */
 	if (SCOOP_DEV[skt->nr].cd_irq >= 0) {
 		struct pcmcia_irqs cd_irq;

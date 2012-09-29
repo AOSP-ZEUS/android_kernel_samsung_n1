@@ -261,8 +261,14 @@ static void ip_expire(unsigned long arg)
 		 * Only an end host needs to send an ICMP
 		 * "Fragment Reassembly Timeout" message, per RFC792.
 		 */
+<<<<<<< HEAD
 		if (qp->user == IP_DEFRAG_CONNTRACK_IN &&
 		    skb_rtable(head)->rt_type != RTN_LOCAL)
+=======
+		if (qp->user == IP_DEFRAG_AF_PACKET ||
+		    (qp->user == IP_DEFRAG_CONNTRACK_IN &&
+		     skb_rtable(head)->rt_type != RTN_LOCAL))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto out_rcu_unlock;
 
 

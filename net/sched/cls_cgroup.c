@@ -101,7 +101,11 @@ struct cls_cgroup_head {
 	struct tcf_ematch_tree	ematches;
 };
 
+<<<<<<< HEAD
 static int cls_cgroup_classify(struct sk_buff *skb, struct tcf_proto *tp,
+=======
+static int cls_cgroup_classify(struct sk_buff *skb, const struct tcf_proto *tp,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			       struct tcf_result *res)
 {
 	struct cls_cgroup_head *head = tp->root;

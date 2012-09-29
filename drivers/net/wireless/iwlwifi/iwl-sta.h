@@ -31,9 +31,12 @@
 
 #include "iwl-dev.h"
 
+<<<<<<< HEAD
 #define HW_KEY_DYNAMIC 0
 #define HW_KEY_DEFAULT 1
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define IWL_STA_DRIVER_ACTIVE BIT(0) /* driver entry is active */
 #define IWL_STA_UCODE_ACTIVE  BIT(1) /* ucode entry is active */
 #define IWL_STA_UCODE_INPROGRESS  BIT(2) /* ucode entry is in process of
@@ -47,7 +50,11 @@ void iwl_restore_stations(struct iwl_priv *priv, struct iwl_rxon_context *ctx);
 void iwl_clear_ucode_stations(struct iwl_priv *priv,
 			      struct iwl_rxon_context *ctx);
 void iwl_dealloc_bcast_stations(struct iwl_priv *priv);
+<<<<<<< HEAD
 int iwl_get_free_ucode_key_index(struct iwl_priv *priv);
+=======
+int iwl_get_free_ucode_key_offset(struct iwl_priv *priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int iwl_send_add_sta(struct iwl_priv *priv,
 		     struct iwl_addsta_cmd *sta, u8 flags);
 int iwl_add_station_common(struct iwl_priv *priv, struct iwl_rxon_context *ctx,

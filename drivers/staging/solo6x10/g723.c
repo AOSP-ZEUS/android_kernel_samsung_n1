@@ -21,6 +21,10 @@
 #include <linux/mempool.h>
 #include <linux/poll.h>
 #include <linux/kthread.h>
+<<<<<<< HEAD
+=======
+#include <linux/slab.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/freezer.h>
 #include <sound/core.h>
 #include <sound/initval.h>

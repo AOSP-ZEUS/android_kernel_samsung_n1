@@ -109,12 +109,19 @@ void __init smp_init_cpus(void)
 	ncores = scu_get_core_count(scu_base);
 
 	/* sanity check */
+<<<<<<< HEAD
 	if (ncores > NR_CPUS) {
 		printk(KERN_WARNING
 		       "OMAP4: no. of cores (%d) greater than configured "
 		       "maximum of %d - clipping\n",
 		       ncores, NR_CPUS);
 		ncores = NR_CPUS;
+=======
+	if (ncores > nr_cpu_ids) {
+		pr_warn("SMP: %u cores greater than maximum (%u), clipping\n",
+			ncores, nr_cpu_ids);
+		ncores = nr_cpu_ids;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	for (i = 0; i < ncores; i++)
@@ -125,6 +132,7 @@ void __init smp_init_cpus(void)
 
 void __init platform_smp_prepare_cpus(unsigned int max_cpus)
 {
+<<<<<<< HEAD
 	int i;
 
 	/*
@@ -133,6 +141,8 @@ void __init platform_smp_prepare_cpus(unsigned int max_cpus)
 	 */
 	for (i = 0; i < max_cpus; i++)
 		set_cpu_present(i, true);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Initialise the SCU and wake up the secondary core using

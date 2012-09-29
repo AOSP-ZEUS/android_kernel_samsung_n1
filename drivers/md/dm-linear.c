@@ -116,6 +116,7 @@ static int linear_ioctl(struct dm_target *ti, unsigned int cmd,
 			unsigned long arg)
 {
 	struct linear_c *lc = (struct linear_c *) ti->private;
+<<<<<<< HEAD
 	struct dm_dev *dev = lc->dev;
 	int r = 0;
 
@@ -127,6 +128,9 @@ static int linear_ioctl(struct dm_target *ti, unsigned int cmd,
 		r = scsi_verify_blk_ioctl(NULL, cmd);
 
 	return r ? : __blkdev_driver_ioctl(dev->bdev, dev->mode, cmd, arg);
+=======
+	return __blkdev_driver_ioctl(lc->dev->bdev, lc->dev->mode, cmd, arg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int linear_merge(struct dm_target *ti, struct bvec_merge_data *bvm,

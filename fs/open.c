@@ -446,6 +446,7 @@ out:
 	return error;
 }
 
+<<<<<<< HEAD
 SYSCALL_DEFINE2(fchmod, unsigned int, fd, mode_t, mode)
 {
 	struct inode * inode;
@@ -481,12 +482,48 @@ out_unlock:
 out_putf:
 	fput(file);
 out:
+=======
+static int chmod_common(struct path *path, umode_t mode)
+{
+	struct inode *inode = path->dentry->d_inode;
+	struct iattr newattrs;
+	int error;
+
+	error = mnt_want_write(path->mnt);
+	if (error)
+		return error;
+	mutex_lock(&inode->i_mutex);
+	error = security_path_chmod(path->dentry, path->mnt, mode);
+	if (error)
+		goto out_unlock;
+	newattrs.ia_mode = (mode & S_IALLUGO) | (inode->i_mode & ~S_IALLUGO);
+	newattrs.ia_valid = ATTR_MODE | ATTR_CTIME;
+	error = notify_change(path->dentry, &newattrs);
+out_unlock:
+	mutex_unlock(&inode->i_mutex);
+	mnt_drop_write(path->mnt);
+	return error;
+}
+
+SYSCALL_DEFINE2(fchmod, unsigned int, fd, mode_t, mode)
+{
+	struct file * file;
+	int err = -EBADF;
+
+	file = fget(fd);
+	if (file) {
+		audit_inode(NULL, file->f_path.dentry);
+		err = chmod_common(&file->f_path, mode);
+		fput(file);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return err;
 }
 
 SYSCALL_DEFINE3(fchmodat, int, dfd, const char __user *, filename, mode_t, mode)
 {
 	struct path path;
+<<<<<<< HEAD
 	struct inode *inode;
 	int error;
 	struct iattr newattrs;
@@ -514,6 +551,15 @@ out_unlock:
 dput_and_out:
 	path_put(&path);
 out:
+=======
+	int error;
+
+	error = user_path_at(dfd, filename, LOOKUP_FOLLOW, &path);
+	if (!error) {
+		error = chmod_common(&path, mode);
+		path_put(&path);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return error;
 }
 
@@ -793,7 +839,11 @@ out:
 	return nd->intent.open.file;
 out_err:
 	release_open_intent(nd);
+<<<<<<< HEAD
 	nd->intent.open.file = (struct file *)dentry;
+=======
+	nd->intent.open.file = ERR_CAST(dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	goto out;
 }
 EXPORT_SYMBOL_GPL(lookup_instantiate_filp);

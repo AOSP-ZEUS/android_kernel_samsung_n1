@@ -484,6 +484,7 @@ static bool radeon_atom_apply_quirks(struct drm_device *dev,
 		struct radeon_device *rdev = dev->dev_private;
 		*i2c_bus = radeon_lookup_i2c_gpio(rdev, 0x93);
 	}
+<<<<<<< HEAD
 
 	/* Fujitsu D3003-S2 board lists DVI-I as DVI-D and VGA */
 	if ((dev->pdev->device == 0x9802) &&
@@ -498,6 +499,8 @@ static bool radeon_atom_apply_quirks(struct drm_device *dev,
 	}
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return true;
 }
 

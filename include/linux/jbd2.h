@@ -1329,12 +1329,15 @@ extern int jbd_blocks_per_page(struct inode *inode);
 #define BUFFER_TRACE2(bh, bh2, info)	do {} while (0)
 #define JBUFFER_TRACE(jh, info)	do {} while (0)
 
+<<<<<<< HEAD
 /* 
  * jbd2_dev_to_name is a utility function used by the jbd2 and ext4 
  * tracing infrastructure to map a dev_t to a device name.
  */
 extern const char *jbd2_dev_to_name(dev_t device);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif	/* __KERNEL__ */
 
 #endif	/* _LINUX_JBD2_H */

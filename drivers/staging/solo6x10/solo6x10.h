@@ -28,8 +28,14 @@
 #include <linux/list.h>
 #include <linux/wait.h>
 #include <linux/delay.h>
+<<<<<<< HEAD
 #include <asm/io.h>
 #include <asm/atomic.h>
+=======
+#include <linux/slab.h>
+#include <asm/io.h>
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/videodev2.h>
 #include <media/v4l2-dev.h>
 #include <media/videobuf-core.h>

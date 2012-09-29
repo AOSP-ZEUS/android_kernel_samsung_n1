@@ -17,6 +17,26 @@
 
 #include "mm.h"
 
+<<<<<<< HEAD
+=======
+DEFINE_SPINLOCK(pgd_lock);
+LIST_HEAD(pgd_list);
+
+static inline void pgd_list_add(pgd_t *pgd)
+{
+	struct page *page = virt_to_page(pgd);
+
+	list_add(&page->lru, &pgd_list);
+}
+
+static inline void pgd_list_del(pgd_t *pgd)
+{
+	struct page *page = virt_to_page(pgd);
+
+	list_del(&page->lru);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * need to get a 16k page for level 1
  */
@@ -26,6 +46,10 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
 	pud_t *new_pud, *init_pud;
 	pmd_t *new_pmd, *init_pmd;
 	pte_t *new_pte, *init_pte;
+<<<<<<< HEAD
+=======
+	unsigned long flags;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	new_pgd = (pgd_t *)__get_free_pages(GFP_KERNEL, 2);
 	if (!new_pgd)
@@ -33,6 +57,10 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
 
 	memset(new_pgd, 0, USER_PTRS_PER_PGD * sizeof(pgd_t));
 
+<<<<<<< HEAD
+=======
+	spin_lock_irqsave(&pgd_lock, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Copy over the kernel and IO PGD entries
 	 */
@@ -40,7 +68,16 @@ pgd_t *pgd_alloc(struct mm_struct *mm)
 	memcpy(new_pgd + USER_PTRS_PER_PGD, init_pgd + USER_PTRS_PER_PGD,
 		       (PTRS_PER_PGD - USER_PTRS_PER_PGD) * sizeof(pgd_t));
 
+<<<<<<< HEAD
 	clean_dcache_area(new_pgd, PTRS_PER_PGD * sizeof(pgd_t));
+=======
+#if !defined(CONFIG_CPU_CACHE_V7) || !defined(CONFIG_SMP)
+	clean_dcache_area(new_pgd, PTRS_PER_PGD * sizeof(pgd_t));
+#endif
+
+	pgd_list_add(new_pgd);
+	spin_unlock_irqrestore(&pgd_lock, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!vectors_high()) {
 		/*
@@ -74,6 +111,12 @@ no_pte:
 no_pmd:
 	pud_free(mm, new_pud);
 no_pud:
+<<<<<<< HEAD
+=======
+	spin_lock_irqsave(&pgd_lock, flags);
+	pgd_list_del(new_pgd);
+	spin_unlock_irqrestore(&pgd_lock, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	free_pages((unsigned long)new_pgd, 2);
 no_pgd:
 	return NULL;
@@ -85,10 +128,21 @@ void pgd_free(struct mm_struct *mm, pgd_t *pgd_base)
 	pud_t *pud;
 	pmd_t *pmd;
 	pgtable_t pte;
+<<<<<<< HEAD
+=======
+	unsigned long flags;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!pgd_base)
 		return;
 
+<<<<<<< HEAD
+=======
+	spin_lock_irqsave(&pgd_lock, flags);
+	pgd_list_del(pgd_base);
+	spin_unlock_irqrestore(&pgd_lock, flags);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pgd = pgd_base + pgd_index(0);
 	if (pgd_none_or_clear_bad(pgd))
 		goto no_pgd;

@@ -17,7 +17,11 @@
 #include <linux/init.h>
 
 #include <asm/hwrpb.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/irq.h>
 #include <asm/irq_regs.h>
 #include <asm/pal.h>
@@ -847,7 +851,11 @@ static void alpha_perf_event_irq_handler(unsigned long la_ptr,
 	data.period = event->hw.last_period;
 
 	if (alpha_perf_event_set_period(event, hwc, idx)) {
+<<<<<<< HEAD
 		if (perf_event_overflow(event, 1, &data, regs)) {
+=======
+		if (perf_event_overflow(event, &data, regs)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* Interrupts coming too quickly; "throttle" the
 			 * counter, i.e., disable it for a little while.
 			 */

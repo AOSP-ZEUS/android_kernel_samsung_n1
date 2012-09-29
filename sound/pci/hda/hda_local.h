@@ -131,7 +131,11 @@ int snd_hda_codec_amp_update(struct hda_codec *codec, hda_nid_t nid, int ch,
 			     int direction, int idx, int mask, int val);
 int snd_hda_codec_amp_stereo(struct hda_codec *codec, hda_nid_t nid,
 			     int dir, int idx, int mask, int val);
+<<<<<<< HEAD
 #ifdef SND_HDA_NEEDS_RESUME
+=======
+#ifdef CONFIG_PM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void snd_hda_codec_resume_amp(struct hda_codec *codec);
 #endif
 
@@ -212,7 +216,13 @@ int snd_hda_mixer_bind_tlv(struct snd_kcontrol *kcontrol, int op_flag,
 /*
  * SPDIF I/O
  */
+<<<<<<< HEAD
 int snd_hda_create_spdif_out_ctls(struct hda_codec *codec, hda_nid_t nid);
+=======
+int snd_hda_create_spdif_out_ctls(struct hda_codec *codec,
+				  hda_nid_t associated_nid,
+				  hda_nid_t cvt_nid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int snd_hda_create_spdif_in_ctls(struct hda_codec *codec, hda_nid_t nid);
 
 /*
@@ -568,7 +578,10 @@ int snd_hda_get_bool_hint(struct hda_codec *codec, const char *key)
  * power-management
  */
 
+<<<<<<< HEAD
 #ifdef CONFIG_SND_HDA_POWER_SAVE
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void snd_hda_schedule_power_save(struct hda_codec *codec);
 
 struct hda_amp_list {
@@ -585,7 +598,10 @@ struct hda_loopback_check {
 int snd_hda_check_amp_list_power(struct hda_codec *codec,
 				 struct hda_loopback_check *check,
 				 hda_nid_t nid);
+<<<<<<< HEAD
 #endif /* CONFIG_SND_HDA_POWER_SAVE */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * AMP control callbacks
@@ -621,6 +637,10 @@ struct cea_sad {
 struct hdmi_eld {
 	bool	monitor_present;
 	bool	eld_valid;
+<<<<<<< HEAD
+=======
+	bool	lpcm_sad_ready;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int	eld_size;
 	int	baseline_len;
 	int	eld_ver;
@@ -644,8 +664,13 @@ struct hdmi_eld {
 int snd_hdmi_get_eld_size(struct hda_codec *codec, hda_nid_t nid);
 int snd_hdmi_get_eld(struct hdmi_eld *, struct hda_codec *, hda_nid_t);
 void snd_hdmi_show_eld(struct hdmi_eld *eld);
+<<<<<<< HEAD
 void hdmi_eld_update_pcm_info(struct hdmi_eld *eld, struct hda_pcm_stream *pcm,
 			      struct hda_pcm_stream *codec_pars);
+=======
+void snd_hdmi_eld_update_pcm_info(struct hdmi_eld *eld,
+			      struct hda_pcm_stream *hinfo);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_PROC_FS
 int snd_hda_eld_proc_new(struct hda_codec *codec, struct hdmi_eld *eld,

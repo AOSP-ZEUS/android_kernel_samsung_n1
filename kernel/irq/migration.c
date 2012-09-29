@@ -43,6 +43,7 @@ void irq_move_masked_irq(struct irq_data *idata)
 	 * masking the irqs.
 	 */
 	if (likely(cpumask_any_and(desc->pending_mask, cpu_online_mask)
+<<<<<<< HEAD
 		   < nr_cpu_ids)) {
 		int ret = chip->irq_set_affinity(&desc->irq_data,
 						 desc->pending_mask, false);
@@ -53,6 +54,14 @@ void irq_move_masked_irq(struct irq_data *idata)
 			irq_set_thread_affinity(desc);
 		}
 	}
+=======
+		   < nr_cpu_ids))
+		if (!chip->irq_set_affinity(&desc->irq_data,
+					    desc->pending_mask, false)) {
+			cpumask_copy(desc->irq_data.affinity, desc->pending_mask);
+			irq_set_thread_affinity(desc);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	cpumask_clear(desc->pending_mask);
 }

@@ -20,6 +20,11 @@
  *		2 of the License, or (at your option) any later version.
  */
 
+<<<<<<< HEAD
+=======
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/skbuff.h>
@@ -55,7 +60,11 @@ static int vlan_dev_rebuild_header(struct sk_buff *skb)
 		return arp_find(veth->h_dest, skb);
 #endif
 	default:
+<<<<<<< HEAD
 		pr_debug("%s: unable to resolve type %X addresses.\n",
+=======
+		pr_debug("%s: unable to resolve type %X addresses\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			 dev->name, ntohs(veth->h_vlan_encapsulated_proto));
 
 		memcpy(veth->h_source, dev->dev_addr, ETH_ALEN);
@@ -595,8 +604,12 @@ static u32 vlan_dev_fix_features(struct net_device *dev, u32 features)
 	features &= real_dev->features;
 	features &= real_dev->vlan_features;
 
+<<<<<<< HEAD
 	if (old_features & NETIF_F_SOFT_FEATURES)
 		features |= old_features & NETIF_F_SOFT_FEATURES;
+=======
+	features |= old_features & NETIF_F_SOFT_FEATURES;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (dev_ethtool_get_rx_csum(real_dev))
 		features |= NETIF_F_RXCSUM;

@@ -2,7 +2,11 @@
  * linux/sound/soc/ep93xx-i2s.c
  * EP93xx I2S driver
  *
+<<<<<<< HEAD
  * Copyright (C) 2010 Ryan Mallon <ryan@bluewatersys.com>
+=======
+ * Copyright (C) 2010 Ryan Mallon
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Based on the original driver by:
  *   Copyright (C) 2007 Chase Douglas <chasedouglas@gmail>
@@ -70,11 +74,19 @@ struct ep93xx_i2s_info {
 struct ep93xx_pcm_dma_params ep93xx_i2s_dma_params[] = {
 	[SNDRV_PCM_STREAM_PLAYBACK] = {
 		.name		= "i2s-pcm-out",
+<<<<<<< HEAD
 		.dma_port	= EP93XX_DMA_M2P_PORT_I2S1,
 	},
 	[SNDRV_PCM_STREAM_CAPTURE] = {
 		.name		= "i2s-pcm-in",
 		.dma_port	= EP93XX_DMA_M2P_PORT_I2S1,
+=======
+		.dma_port	= EP93XX_DMA_I2S1,
+	},
+	[SNDRV_PCM_STREAM_CAPTURE] = {
+		.name		= "i2s-pcm-in",
+		.dma_port	= EP93XX_DMA_I2S1,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 };
 
@@ -385,14 +397,22 @@ static int ep93xx_i2s_probe(struct platform_device *pdev)
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	if (!res) {
 		err = -ENODEV;
+<<<<<<< HEAD
 		goto fail;
+=======
+		goto fail_free_info;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	info->mem = request_mem_region(res->start, resource_size(res),
 				       pdev->name);
 	if (!info->mem) {
 		err = -EBUSY;
+<<<<<<< HEAD
 		goto fail;
+=======
+		goto fail_free_info;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	info->regs = ioremap(info->mem->start, resource_size(info->mem));
@@ -435,6 +455,10 @@ fail_unmap_mem:
 	iounmap(info->regs);
 fail_release_mem:
 	release_mem_region(info->mem->start, resource_size(info->mem));
+<<<<<<< HEAD
+=======
+fail_free_info:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(info);
 fail:
 	return err;
@@ -477,6 +501,10 @@ module_init(ep93xx_i2s_init);
 module_exit(ep93xx_i2s_exit);
 
 MODULE_ALIAS("platform:ep93xx-i2s");
+<<<<<<< HEAD
 MODULE_AUTHOR("Ryan Mallon <ryan@bluewatersys.com>");
+=======
+MODULE_AUTHOR("Ryan Mallon");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_DESCRIPTION("EP93XX I2S driver");
 MODULE_LICENSE("GPL");

@@ -56,6 +56,13 @@ extern ssize_t tpm_show_owned(struct device *, struct device_attribute *attr,
 				char *);
 extern ssize_t tpm_show_temp_deactivated(struct device *,
 					 struct device_attribute *attr, char *);
+<<<<<<< HEAD
+=======
+extern ssize_t tpm_show_durations(struct device *,
+				  struct device_attribute *attr, char *);
+extern ssize_t tpm_show_timeouts(struct device *,
+				 struct device_attribute *attr, char *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct tpm_chip;
 
@@ -67,6 +74,10 @@ struct tpm_vendor_specific {
 	unsigned long base;		/* TPM base address */
 
 	int irq;
+<<<<<<< HEAD
+=======
+	int probed_irq;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int region_size;
 	int have_region;
@@ -81,7 +92,13 @@ struct tpm_vendor_specific {
 	struct list_head list;
 	int locality;
 	unsigned long timeout_a, timeout_b, timeout_c, timeout_d; /* jiffies */
+<<<<<<< HEAD
 	unsigned long duration[3]; /* jiffies */
+=======
+	bool timeout_adjusted;
+	unsigned long duration[3]; /* jiffies */
+	bool duration_adjusted;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	wait_queue_head_t read_queue;
 	wait_queue_head_t int_queue;

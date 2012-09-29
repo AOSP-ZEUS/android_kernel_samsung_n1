@@ -172,6 +172,7 @@ int acpi_get_cpuid(acpi_handle handle, int type, u32 acpi_id)
 	apic_id = map_mat_entry(handle, type, acpi_id);
 	if (apic_id == -1)
 		apic_id = map_madt_entry(type, acpi_id);
+<<<<<<< HEAD
 	if (apic_id == -1) {
 		/*
 		 * On UP processor, there is no _MAT or MADT table.
@@ -196,6 +197,10 @@ int acpi_get_cpuid(acpi_handle handle, int type, u32 acpi_id)
 		else
 			return apic_id;
 	}
+=======
+	if (apic_id == -1)
+		return apic_id;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_SMP
 	for_each_possible_cpu(i) {

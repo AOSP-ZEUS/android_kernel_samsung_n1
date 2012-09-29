@@ -87,9 +87,16 @@ struct cfq_rb_root {
 	unsigned count;
 	unsigned total_weight;
 	u64 min_vdisktime;
+<<<<<<< HEAD
 };
 #define CFQ_RB_ROOT	(struct cfq_rb_root) { .rb = RB_ROOT, .left = NULL, \
 			.count = 0, .min_vdisktime = 0, }
+=======
+	struct cfq_ttime ttime;
+};
+#define CFQ_RB_ROOT	(struct cfq_rb_root) { .rb = RB_ROOT, \
+			.ttime = {.last_end_request = jiffies,},}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Per process-grouping structure
@@ -129,14 +136,23 @@ struct cfq_queue {
 	unsigned long slice_end;
 	long slice_resid;
 
+<<<<<<< HEAD
 	/* pending metadata requests */
 	int meta_pending;
+=======
+	/* pending priority requests */
+	int prio_pending;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* number of requests that are on the dispatch list or inside driver */
 	int dispatched;
 
 	/* io prio of this group */
 	unsigned short ioprio, org_ioprio;
+<<<<<<< HEAD
 	unsigned short ioprio_class, org_ioprio_class;
+=======
+	unsigned short ioprio_class;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pid_t pid;
 
@@ -212,6 +228,10 @@ struct cfq_group {
 #endif
 	/* number of requests that are on the dispatch list or inside driver */
 	int dispatched;
+<<<<<<< HEAD
+=======
+	struct cfq_ttime ttime;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*
@@ -393,6 +413,21 @@ CFQ_CFQQ_FNS(wait_busy);
 			j++, st = i < IDLE_WORKLOAD ? \
 			&cfqg->service_trees[i][j]: NULL) \
 
+<<<<<<< HEAD
+=======
+static inline bool cfq_io_thinktime_big(struct cfq_data *cfqd,
+	struct cfq_ttime *ttime, bool group_idle)
+{
+	unsigned long slice;
+	if (!sample_valid(ttime->ttime_samples))
+		return false;
+	if (group_idle)
+		slice = cfqd->cfq_group_idle;
+	else
+		slice = cfqd->cfq_slice_idle;
+	return ttime->ttime_mean > slice;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline bool iops_mode(struct cfq_data *cfqd)
 {
@@ -670,8 +705,13 @@ cfq_choose_req(struct cfq_data *cfqd, struct request *rq1, struct request *rq2, 
 	if (rq_is_sync(rq1) != rq_is_sync(rq2))
 		return rq_is_sync(rq1) ? rq1 : rq2;
 
+<<<<<<< HEAD
 	if ((rq1->cmd_flags ^ rq2->cmd_flags) & REQ_META)
 		return rq1->cmd_flags & REQ_META ? rq1 : rq2;
+=======
+	if ((rq1->cmd_flags ^ rq2->cmd_flags) & REQ_PRIO)
+		return rq1->cmd_flags & REQ_PRIO ? rq1 : rq2;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	s1 = blk_rq_pos(rq1);
 	s2 = blk_rq_pos(rq2);
@@ -1005,8 +1045,13 @@ static inline struct cfq_group *cfqg_of_blkg(struct blkio_group *blkg)
 	return NULL;
 }
 
+<<<<<<< HEAD
 void cfq_update_blkio_group_weight(void *key, struct blkio_group *blkg,
 					unsigned int weight)
+=======
+static void cfq_update_blkio_group_weight(void *key, struct blkio_group *blkg,
+					  unsigned int weight)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct cfq_group *cfqg = cfqg_of_blkg(blkg);
 	cfqg->new_weight = weight;
@@ -1059,6 +1104,11 @@ static struct cfq_group * cfq_alloc_cfqg(struct cfq_data *cfqd)
 		*st = CFQ_RB_ROOT;
 	RB_CLEAR_NODE(&cfqg->rb_node);
 
+<<<<<<< HEAD
+=======
+	cfqg->ttime.last_end_request = jiffies;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Take the initial reference that will be released on destroy
 	 * This can be thought of a joint reference by cgroup and
@@ -1198,6 +1248,12 @@ static void cfq_destroy_cfqg(struct cfq_data *cfqd, struct cfq_group *cfqg)
 
 	hlist_del_init(&cfqg->cfqd_node);
 
+<<<<<<< HEAD
+=======
+	BUG_ON(cfqd->nr_blkcg_linked_grps <= 0);
+	cfqd->nr_blkcg_linked_grps--;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Put the reference taken at the time of creation so that when all
 	 * queues are gone, group can be destroyed.
@@ -1235,7 +1291,11 @@ static void cfq_release_cfq_groups(struct cfq_data *cfqd)
  * it should not be NULL as even if elevator was exiting, cgroup deltion
  * path got to it first.
  */
+<<<<<<< HEAD
 void cfq_unlink_blkio_group(void *key, struct blkio_group *blkg)
+=======
+static void cfq_unlink_blkio_group(void *key, struct blkio_group *blkg)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	unsigned long  flags;
 	struct cfq_data *cfqd = key;
@@ -1502,6 +1562,7 @@ static void cfq_add_rq_rb(struct request *rq)
 {
 	struct cfq_queue *cfqq = RQ_CFQQ(rq);
 	struct cfq_data *cfqd = cfqq->cfqd;
+<<<<<<< HEAD
 	struct request *__alias, *prev;
 
 	cfqq->queued[rq_is_sync(rq)]++;
@@ -1512,6 +1573,13 @@ static void cfq_add_rq_rb(struct request *rq)
 	 */
 	while ((__alias = elv_rb_add(&cfqq->sort_list, rq)) != NULL)
 		cfq_dispatch_insert(cfqd->queue, __alias);
+=======
+	struct request *prev;
+
+	cfqq->queued[rq_is_sync(rq)]++;
+
+	elv_rb_add(&cfqq->sort_list, rq);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!cfq_cfqq_on_rr(cfqq))
 		cfq_add_cfqq_rr(cfqd, cfqq);
@@ -1598,9 +1666,15 @@ static void cfq_remove_request(struct request *rq)
 	cfqq->cfqd->rq_queued--;
 	cfq_blkiocg_update_io_remove_stats(&(RQ_CFQG(rq))->blkg,
 					rq_data_dir(rq), rq_is_sync(rq));
+<<<<<<< HEAD
 	if (rq->cmd_flags & REQ_META) {
 		WARN_ON(!cfqq->meta_pending);
 		cfqq->meta_pending--;
+=======
+	if (rq->cmd_flags & REQ_PRIO) {
+		WARN_ON(!cfqq->prio_pending);
+		cfqq->prio_pending--;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -1969,7 +2043,12 @@ static bool cfq_should_idle(struct cfq_data *cfqd, struct cfq_queue *cfqq)
 	 * Otherwise, we do only if they are the last ones
 	 * in their service tree.
 	 */
+<<<<<<< HEAD
 	if (service_tree->count == 1 && cfq_cfqq_sync(cfqq))
+=======
+	if (service_tree->count == 1 && cfq_cfqq_sync(cfqq) &&
+	   !cfq_io_thinktime_big(cfqd, &service_tree->ttime, false))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return true;
 	cfq_log_cfqq(cfqd, cfqq, "Not idling. st->count:%d",
 			service_tree->count);
@@ -2022,10 +2101,17 @@ static void cfq_arm_slice_timer(struct cfq_data *cfqd)
 	 * slice, then don't idle. This avoids overrunning the allotted
 	 * time slice.
 	 */
+<<<<<<< HEAD
 	if (sample_valid(cic->ttime_samples) &&
 	    (cfqq->slice_end - jiffies < cic->ttime_mean)) {
 		cfq_log_cfqq(cfqd, cfqq, "Not idling. think_time:%lu",
 			     cic->ttime_mean);
+=======
+	if (sample_valid(cic->ttime.ttime_samples) &&
+	    (cfqq->slice_end - jiffies < cic->ttime.ttime_mean)) {
+		cfq_log_cfqq(cfqd, cfqq, "Not idling. think_time:%lu",
+			     cic->ttime.ttime_mean);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	}
 
@@ -2381,8 +2467,14 @@ static struct cfq_queue *cfq_select_queue(struct cfq_data *cfqd)
 	 * this group, wait for requests to complete.
 	 */
 check_group_idle:
+<<<<<<< HEAD
 	if (cfqd->cfq_group_idle && cfqq->cfqg->nr_cfqq == 1
 	    && cfqq->cfqg->dispatched) {
+=======
+	if (cfqd->cfq_group_idle && cfqq->cfqg->nr_cfqq == 1 &&
+	    cfqq->cfqg->dispatched &&
+	    !cfq_io_thinktime_big(cfqd, &cfqq->cfqg->ttime, true)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cfqq = NULL;
 		goto keep_queue;
 	}
@@ -2833,7 +2925,11 @@ cfq_alloc_io_context(struct cfq_data *cfqd, gfp_t gfp_mask)
 	cic = kmem_cache_alloc_node(cfq_ioc_pool, gfp_mask | __GFP_ZERO,
 							cfqd->queue->node);
 	if (cic) {
+<<<<<<< HEAD
 		cic->last_end_request = jiffies;
+=======
+		cic->ttime.last_end_request = jiffies;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		INIT_LIST_HEAD(&cic->queue_list);
 		INIT_HLIST_NODE(&cic->cic_list);
 		cic->dtor = cfq_free_io_context;
@@ -2883,7 +2979,10 @@ static void cfq_init_prio_data(struct cfq_queue *cfqq, struct io_context *ioc)
 	 * elevate the priority of this queue
 	 */
 	cfqq->org_ioprio = cfqq->ioprio;
+<<<<<<< HEAD
 	cfqq->org_ioprio_class = cfqq->ioprio_class;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cfq_clear_cfqq_prio_changed(cfqq);
 }
 
@@ -3228,6 +3327,7 @@ err:
 }
 
 static void
+<<<<<<< HEAD
 cfq_update_io_thinktime(struct cfq_data *cfqd, struct cfq_io_context *cic)
 {
 	unsigned long elapsed = jiffies - cic->last_end_request;
@@ -3236,6 +3336,30 @@ cfq_update_io_thinktime(struct cfq_data *cfqd, struct cfq_io_context *cic)
 	cic->ttime_samples = (7*cic->ttime_samples + 256) / 8;
 	cic->ttime_total = (7*cic->ttime_total + 256*ttime) / 8;
 	cic->ttime_mean = (cic->ttime_total + 128) / cic->ttime_samples;
+=======
+__cfq_update_io_thinktime(struct cfq_ttime *ttime, unsigned long slice_idle)
+{
+	unsigned long elapsed = jiffies - ttime->last_end_request;
+	elapsed = min(elapsed, 2UL * slice_idle);
+
+	ttime->ttime_samples = (7*ttime->ttime_samples + 256) / 8;
+	ttime->ttime_total = (7*ttime->ttime_total + 256*elapsed) / 8;
+	ttime->ttime_mean = (ttime->ttime_total + 128) / ttime->ttime_samples;
+}
+
+static void
+cfq_update_io_thinktime(struct cfq_data *cfqd, struct cfq_queue *cfqq,
+	struct cfq_io_context *cic)
+{
+	if (cfq_cfqq_sync(cfqq)) {
+		__cfq_update_io_thinktime(&cic->ttime, cfqd->cfq_slice_idle);
+		__cfq_update_io_thinktime(&cfqq->service_tree->ttime,
+			cfqd->cfq_slice_idle);
+	}
+#ifdef CONFIG_CFQ_GROUP_IOSCHED
+	__cfq_update_io_thinktime(&cfqq->cfqg->ttime, cfqd->cfq_group_idle);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void
@@ -3284,8 +3408,13 @@ cfq_update_idle_window(struct cfq_data *cfqd, struct cfq_queue *cfqq,
 	else if (!atomic_read(&cic->ioc->nr_tasks) || !cfqd->cfq_slice_idle ||
 	    (!cfq_cfqq_deep(cfqq) && CFQQ_SEEKY(cfqq)))
 		enable_idle = 0;
+<<<<<<< HEAD
 	else if (sample_valid(cic->ttime_samples)) {
 		if (cic->ttime_mean > cfqd->cfq_slice_idle)
+=======
+	else if (sample_valid(cic->ttime.ttime_samples)) {
+		if (cic->ttime.ttime_mean > cfqd->cfq_slice_idle)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			enable_idle = 0;
 		else
 			enable_idle = 1;
@@ -3350,7 +3479,11 @@ cfq_should_preempt(struct cfq_data *cfqd, struct cfq_queue *new_cfqq,
 	 * So both queues are sync. Let the new request get disk time if
 	 * it's a metadata request and the current queue is doing regular IO.
 	 */
+<<<<<<< HEAD
 	if ((rq->cmd_flags & REQ_META) && !cfqq->meta_pending)
+=======
+	if ((rq->cmd_flags & REQ_PRIO) && !cfqq->prio_pending)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return true;
 
 	/*
@@ -3417,10 +3550,17 @@ cfq_rq_enqueued(struct cfq_data *cfqd, struct cfq_queue *cfqq,
 	struct cfq_io_context *cic = RQ_CIC(rq);
 
 	cfqd->rq_queued++;
+<<<<<<< HEAD
 	if (rq->cmd_flags & REQ_META)
 		cfqq->meta_pending++;
 
 	cfq_update_io_thinktime(cfqd, cic);
+=======
+	if (rq->cmd_flags & REQ_PRIO)
+		cfqq->prio_pending++;
+
+	cfq_update_io_thinktime(cfqd, cfqq, cic);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cfq_update_io_seektime(cfqd, cfqq, rq);
 	cfq_update_idle_window(cfqd, cfqq, cic);
 
@@ -3527,12 +3667,24 @@ static bool cfq_should_wait_busy(struct cfq_data *cfqd, struct cfq_queue *cfqq)
 	if (cfqq->cfqg->nr_cfqq > 1)
 		return false;
 
+<<<<<<< HEAD
+=======
+	/* the only queue in the group, but think time is big */
+	if (cfq_io_thinktime_big(cfqd, &cfqq->cfqg->ttime, true))
+		return false;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (cfq_slice_used(cfqq))
 		return true;
 
 	/* if slice left is less than think time, wait busy */
+<<<<<<< HEAD
 	if (cic && sample_valid(cic->ttime_samples)
 	    && (cfqq->slice_end - jiffies < cic->ttime_mean))
+=======
+	if (cic && sample_valid(cic->ttime.ttime_samples)
+	    && (cfqq->slice_end - jiffies < cic->ttime.ttime_mean))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return true;
 
 	/*
@@ -3573,11 +3725,31 @@ static void cfq_completed_request(struct request_queue *q, struct request *rq)
 	cfqd->rq_in_flight[cfq_cfqq_sync(cfqq)]--;
 
 	if (sync) {
+<<<<<<< HEAD
 		RQ_CIC(rq)->last_end_request = now;
+=======
+		struct cfq_rb_root *service_tree;
+
+		RQ_CIC(rq)->ttime.last_end_request = now;
+
+		if (cfq_cfqq_on_rr(cfqq))
+			service_tree = cfqq->service_tree;
+		else
+			service_tree = service_tree_for(cfqq->cfqg,
+				cfqq_prio(cfqq), cfqq_type(cfqq));
+		service_tree->ttime.last_end_request = now;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!time_after(rq->start_time + cfqd->cfq_fifo_expire[1], now))
 			cfqd->last_delayed_sync = now;
 	}
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_CFQ_GROUP_IOSCHED
+	cfqq->cfqg->ttime.last_end_request = now;
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * If this is the active queue, check if it needs to be expired,
 	 * or if we want to idle in case it has no pending requests.
@@ -3623,6 +3795,7 @@ static void cfq_completed_request(struct request_queue *q, struct request *rq)
 		cfq_schedule_dispatch(cfqd);
 }
 
+<<<<<<< HEAD
 /*
  * we temporarily boost lower priority queues if they are holding fs exclusive
  * resources. they are boosted to normal prio (CLASS_BE/4)
@@ -3647,6 +3820,8 @@ static void cfq_prio_boost(struct cfq_queue *cfqq)
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int __cfq_may_queue(struct cfq_queue *cfqq)
 {
 	if (cfq_cfqq_wait_request(cfqq) && !cfq_cfqq_must_alloc_slice(cfqq)) {
@@ -3677,7 +3852,10 @@ static int cfq_may_queue(struct request_queue *q, int rw)
 	cfqq = cic_to_cfqq(cic, rw_is_sync(rw));
 	if (cfqq) {
 		cfq_init_prio_data(cfqq, cic->ioc);
+<<<<<<< HEAD
 		cfq_prio_boost(cfqq);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		return __cfq_may_queue(cfqq);
 	}

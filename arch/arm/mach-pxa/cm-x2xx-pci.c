@@ -77,7 +77,11 @@ void cmx2xx_pci_resume(void) {}
 #endif
 
 /* PCI IRQ mapping*/
+<<<<<<< HEAD
 static int __init cmx2xx_pci_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int __init cmx2xx_pci_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int irq;
 
@@ -125,6 +129,12 @@ static void cmx2xx_pci_preinit(void)
 {
 	pr_info("Initializing CM-X2XX PCI subsystem\n");
 
+<<<<<<< HEAD
+=======
+	pcibios_min_io = 0;
+	pcibios_min_mem = 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__raw_writel(0x800, IT8152_PCI_CFG_ADDR);
 	if (__raw_readl(IT8152_PCI_CFG_DATA) == 0x81521283) {
 		pr_info("PCI Bridge found.\n");

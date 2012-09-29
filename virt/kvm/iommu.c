@@ -30,6 +30,15 @@
 #include <linux/iommu.h>
 #include <linux/intel-iommu.h>
 
+<<<<<<< HEAD
+=======
+static int allow_unsafe_assigned_interrupts;
+module_param_named(allow_unsafe_assigned_interrupts,
+		   allow_unsafe_assigned_interrupts, bool, S_IRUGO | S_IWUSR);
+MODULE_PARM_DESC(allow_unsafe_assigned_interrupts,
+ "Enable device assignment on platforms without interrupt remapping support.");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int kvm_iommu_unmap_memslots(struct kvm *kvm);
 static void kvm_iommu_put_pages(struct kvm *kvm,
 				gfn_t base_gfn, unsigned long npages);
@@ -105,7 +114,11 @@ int kvm_iommu_map_pages(struct kvm *kvm, struct kvm_memory_slot *slot)
 
 		/* Map into IO address space */
 		r = iommu_map(domain, gfn_to_gpa(gfn), pfn_to_hpa(pfn),
+<<<<<<< HEAD
 			      get_order(page_size), flags);
+=======
+			      page_size, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (r) {
 			printk(KERN_ERR "kvm_iommu_map_address:"
 			       "iommu failed to map pfn=%llx\n", pfn);
@@ -222,15 +235,38 @@ int kvm_iommu_map_guest(struct kvm *kvm)
 {
 	int r;
 
+<<<<<<< HEAD
 	if (!iommu_found()) {
+=======
+	if (!iommu_present(&pci_bus_type)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		printk(KERN_ERR "%s: iommu not found\n", __func__);
 		return -ENODEV;
 	}
 
+<<<<<<< HEAD
 	kvm->arch.iommu_domain = iommu_domain_alloc();
 	if (!kvm->arch.iommu_domain)
 		return -ENOMEM;
 
+=======
+	kvm->arch.iommu_domain = iommu_domain_alloc(&pci_bus_type);
+	if (!kvm->arch.iommu_domain)
+		return -ENOMEM;
+
+	if (!allow_unsafe_assigned_interrupts &&
+	    !iommu_domain_has_cap(kvm->arch.iommu_domain,
+				  IOMMU_CAP_INTR_REMAP)) {
+		printk(KERN_WARNING "%s: No interrupt remapping support,"
+		       " disallowing device assignment."
+		       " Re-enble with \"allow_unsafe_assigned_interrupts=1\""
+		       " module option.\n", __func__);
+		iommu_domain_free(kvm->arch.iommu_domain);
+		kvm->arch.iommu_domain = NULL;
+		return -EPERM;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	r = kvm_iommu_map_memslots(kvm);
 	if (r)
 		goto out_unmap;
@@ -268,15 +304,24 @@ static void kvm_iommu_put_pages(struct kvm *kvm,
 
 	while (gfn < end_gfn) {
 		unsigned long unmap_pages;
+<<<<<<< HEAD
 		int order;
+=======
+		size_t size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* Get physical address */
 		phys = iommu_iova_to_phys(domain, gfn_to_gpa(gfn));
 		pfn  = phys >> PAGE_SHIFT;
 
 		/* Unmap address from IO address space */
+<<<<<<< HEAD
 		order       = iommu_unmap(domain, gfn_to_gpa(gfn), 0);
 		unmap_pages = 1ULL << order;
+=======
+		size       = iommu_unmap(domain, gfn_to_gpa(gfn), PAGE_SIZE);
+		unmap_pages = 1ULL << get_order(size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* Unpin all pages we just unmapped to not leak any memory */
 		kvm_unpin_pages(kvm, pfn, unmap_pages);
@@ -285,11 +330,14 @@ static void kvm_iommu_put_pages(struct kvm *kvm,
 	}
 }
 
+<<<<<<< HEAD
 void kvm_iommu_unmap_pages(struct kvm *kvm, struct kvm_memory_slot *slot)
 {
 	kvm_iommu_put_pages(kvm, slot->base_gfn, slot->npages);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int kvm_iommu_unmap_memslots(struct kvm *kvm)
 {
 	int i, idx;
@@ -298,9 +346,16 @@ static int kvm_iommu_unmap_memslots(struct kvm *kvm)
 	idx = srcu_read_lock(&kvm->srcu);
 	slots = kvm_memslots(kvm);
 
+<<<<<<< HEAD
 	for (i = 0; i < slots->nmemslots; i++)
 		kvm_iommu_unmap_pages(kvm, &slots->memslots[i]);
 
+=======
+	for (i = 0; i < slots->nmemslots; i++) {
+		kvm_iommu_put_pages(kvm, slots->memslots[i].base_gfn,
+				    slots->memslots[i].npages);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	srcu_read_unlock(&kvm->srcu, idx);
 
 	return 0;

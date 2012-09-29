@@ -191,7 +191,12 @@ static void __zero_source_counters(struct sym_entry *syme)
 	symbol__annotate_zero_histograms(sym);
 }
 
+<<<<<<< HEAD
 static void record_precise_ip(struct sym_entry *syme, int counter, u64 ip)
+=======
+static void record_precise_ip(struct sym_entry *syme, struct map *map,
+			      int counter, u64 ip)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct annotation *notes;
 	struct symbol *sym;
@@ -205,8 +210,13 @@ static void record_precise_ip(struct sym_entry *syme, int counter, u64 ip)
 	if (pthread_mutex_trylock(&notes->lock))
 		return;
 
+<<<<<<< HEAD
 	ip = syme->map->map_ip(syme->map, ip);
 	symbol__inc_addr_samples(sym, syme->map, counter, ip);
+=======
+	ip = map->map_ip(map, ip);
+	symbol__inc_addr_samples(sym, map, counter, ip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pthread_mutex_unlock(&notes->lock);
 }
@@ -810,7 +820,11 @@ static void perf_event__process_sample(const union perf_event *event,
 		evsel = perf_evlist__id2evsel(top.evlist, sample->id);
 		assert(evsel != NULL);
 		syme->count[evsel->idx]++;
+<<<<<<< HEAD
 		record_precise_ip(syme, evsel->idx, ip);
+=======
+		record_precise_ip(syme, al.map, evsel->idx, ip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pthread_mutex_lock(&top.active_symbols_lock);
 		if (list_empty(&syme->node) || !syme->node.next) {
 			static bool first = true;
@@ -990,7 +1004,11 @@ static const char * const top_usage[] = {
 static const struct option options[] = {
 	OPT_CALLBACK('e', "event", &top.evlist, "event",
 		     "event selector. use 'perf list' to list available events",
+<<<<<<< HEAD
 		     parse_events),
+=======
+		     parse_events_option),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	OPT_INTEGER('c', "count", &default_interval,
 		    "event period to sample"),
 	OPT_INTEGER('p', "pid", &top.target_pid,

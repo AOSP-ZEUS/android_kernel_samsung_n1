@@ -282,7 +282,11 @@ static void __init osk_init_cf(void)
 static void __init osk_init_irq(void)
 {
 	omap1_init_common_hw();
+<<<<<<< HEAD
 	omap_init_irq();
+=======
+	omap1_init_irq();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct omap_usb_config osk_usb_config __initdata = {
@@ -588,5 +592,9 @@ MACHINE_START(OMAP_OSK, "TI-OSK")
 	.reserve	= omap_reserve,
 	.init_irq	= osk_init_irq,
 	.init_machine	= osk_init,
+<<<<<<< HEAD
 	.timer		= &omap_timer,
+=======
+	.timer		= &omap1_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

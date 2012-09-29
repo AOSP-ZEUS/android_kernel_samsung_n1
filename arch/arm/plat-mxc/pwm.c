@@ -228,14 +228,22 @@ static int __devinit mxc_pwm_probe(struct platform_device *pdev)
 		goto err_free_clk;
 	}
 
+<<<<<<< HEAD
 	r = request_mem_region(r->start, r->end - r->start + 1, pdev->name);
+=======
+	r = request_mem_region(r->start, resource_size(r), pdev->name);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (r == NULL) {
 		dev_err(&pdev->dev, "failed to request memory resource\n");
 		ret = -EBUSY;
 		goto err_free_clk;
 	}
 
+<<<<<<< HEAD
 	pwm->mmio_base = ioremap(r->start, r->end - r->start + 1);
+=======
+	pwm->mmio_base = ioremap(r->start, resource_size(r));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (pwm->mmio_base == NULL) {
 		dev_err(&pdev->dev, "failed to ioremap() registers\n");
 		ret = -ENODEV;
@@ -250,7 +258,11 @@ static int __devinit mxc_pwm_probe(struct platform_device *pdev)
 	return 0;
 
 err_free_mem:
+<<<<<<< HEAD
 	release_mem_region(r->start, r->end - r->start + 1);
+=======
+	release_mem_region(r->start, resource_size(r));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_free_clk:
 	clk_put(pwm->clk);
 err_free:
@@ -274,7 +286,11 @@ static int __devexit mxc_pwm_remove(struct platform_device *pdev)
 	iounmap(pwm->mmio_base);
 
 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+<<<<<<< HEAD
 	release_mem_region(r->start, r->end - r->start + 1);
+=======
+	release_mem_region(r->start, resource_size(r));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	clk_put(pwm->clk);
 

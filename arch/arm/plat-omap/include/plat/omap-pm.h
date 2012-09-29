@@ -40,11 +40,15 @@
  * framework starts.  The "_if_" is to avoid name collisions with the
  * PM idle-loop code.
  */
+<<<<<<< HEAD
 #ifdef CONFIG_OMAP_PM_NONE
 #define omap_pm_if_early_init() 0
 #else
 int __init omap_pm_if_early_init(void);
 #endif
+=======
+int __init omap_pm_if_early_init(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * omap_pm_if_init - OMAP PM init code called after clock fw init
@@ -52,11 +56,15 @@ int __init omap_pm_if_early_init(void);
  * The main initialization code.  OPP tables are passed in here.  The
  * "_if_" is to avoid name collisions with the PM idle-loop code.
  */
+<<<<<<< HEAD
 #ifdef CONFIG_OMAP_PM_NONE
 #define omap_pm_if_init() 0
 #else
 int __init omap_pm_if_init(void);
 #endif
+=======
+int __init omap_pm_if_init(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * omap_pm_if_exit - OMAP PM exit code

@@ -7,6 +7,10 @@
  * Copyright (C) 1994 - 2001, 2003, 07 Ralf Baechle
  */
 #include <linux/clockchips.h>
+<<<<<<< HEAD
+=======
+#include <linux/i8253.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/init.h>
 #include <linux/interrupt.h>
 #include <linux/kernel.h>
@@ -15,7 +19,10 @@
 #include <linux/irq.h>
 
 #include <asm/irq_cpu.h>
+<<<<<<< HEAD
 #include <asm/i8253.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/i8259.h>
 #include <asm/io.h>
 #include <asm/jazz.h>

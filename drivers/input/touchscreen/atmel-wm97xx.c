@@ -164,7 +164,11 @@ static irqreturn_t atmel_wm97xx_channel_b_interrupt(int irq, void *dev_id)
 
 		data = ac97c_readl(atmel_wm97xx, CBRHR);
 		value = data & 0x0fff;
+<<<<<<< HEAD
 		source = data & WM97XX_ADCSRC_MASK;
+=======
+		source = data & WM97XX_ADCSEL_MASK;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pen_down = (data & WM97XX_PEN_DOWN) >> 8;
 
 		if (source == WM97XX_ADCSEL_X)
@@ -442,6 +446,10 @@ static void __exit atmel_wm97xx_exit(void)
 }
 module_exit(atmel_wm97xx_exit);
 
+<<<<<<< HEAD
 MODULE_AUTHOR("Hans-Christian Egtvedt <hans-christian.egtvedt@atmel.com>");
+=======
+MODULE_AUTHOR("Hans-Christian Egtvedt <egtvedt@samfundet.no>");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_DESCRIPTION("wm97xx continuous touch driver for Atmel AT91 and AVR32");
 MODULE_LICENSE("GPL");

@@ -409,7 +409,11 @@ static void tcp_options(const struct sk_buff *skb,
 			if (opsize < 2) /* "silly options" */
 				return;
 			if (opsize > length)
+<<<<<<< HEAD
 				break;	/* don't parse partial options */
+=======
+				return;	/* don't parse partial options */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			if (opcode == TCPOPT_SACK_PERM
 			    && opsize == TCPOLEN_SACK_PERM)
@@ -447,7 +451,11 @@ static void tcp_sack(const struct sk_buff *skb, unsigned int dataoff,
 	BUG_ON(ptr == NULL);
 
 	/* Fast path for timestamp-only option */
+<<<<<<< HEAD
 	if (length == TCPOLEN_TSTAMP_ALIGNED*4
+=======
+	if (length == TCPOLEN_TSTAMP_ALIGNED
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    && *(__be32 *)ptr == htonl((TCPOPT_NOP << 24)
 				       | (TCPOPT_NOP << 16)
 				       | (TCPOPT_TIMESTAMP << 8)
@@ -469,7 +477,11 @@ static void tcp_sack(const struct sk_buff *skb, unsigned int dataoff,
 			if (opsize < 2) /* "silly options" */
 				return;
 			if (opsize > length)
+<<<<<<< HEAD
 				break;	/* don't parse partial options */
+=======
+				return;	/* don't parse partial options */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			if (opcode == TCPOPT_SACK
 			    && opsize >= (TCPOLEN_SACK_BASE

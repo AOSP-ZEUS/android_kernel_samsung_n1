@@ -14,6 +14,10 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/dma-mapping.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 
 #include <linux/kernel.h>
@@ -22,6 +26,10 @@
 #include <linux/slab.h>
 #include <linux/errno.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/crc32.h>
 #include <linux/hardirq.h>
 #include <linux/delay.h>
@@ -335,6 +343,10 @@ static int mpc52xx_fec_start_xmit(struct sk_buff *skb, struct net_device *dev)
 	bd->skb_pa = dma_map_single(dev->dev.parent, skb->data, skb->len,
 				    DMA_TO_DEVICE);
 
+<<<<<<< HEAD
+=======
+	skb_tx_timestamp(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bcom_submit_next_buffer(priv->tx_dmatsk, skb);
 	spin_unlock_irqrestore(&priv->lock, flags);
 
@@ -434,7 +446,12 @@ static irqreturn_t mpc52xx_fec_rx_interrupt(int irq, void *dev_id)
 		length = status & BCOM_FEC_RX_BD_LEN_MASK;
 		skb_put(rskb, length - 4);	/* length without CRC32 */
 		rskb->protocol = eth_type_trans(rskb, dev);
+<<<<<<< HEAD
 		netif_rx(rskb);
+=======
+		if (!skb_defer_rx_timestamp(skb))
+			netif_rx(rskb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		spin_lock(&priv->lock);
 	}
@@ -867,10 +884,18 @@ static int __devinit mpc52xx_fec_probe(struct platform_device *op)
 				"Error while parsing device node resource\n" );
 		goto err_netdev;
 	}
+<<<<<<< HEAD
 	if ((mem.end - mem.start + 1) < sizeof(struct mpc52xx_fec)) {
 		printk(KERN_ERR DRIVER_NAME
 			" - invalid resource size (%lx < %x), check mpc52xx_devices.c\n",
 			(unsigned long)(mem.end - mem.start + 1), sizeof(struct mpc52xx_fec));
+=======
+	if (resource_size(&mem) < sizeof(struct mpc52xx_fec)) {
+		printk(KERN_ERR DRIVER_NAME
+		       " - invalid resource size (%lx < %x), check mpc52xx_devices.c\n",
+		       (unsigned long)resource_size(&mem),
+		       sizeof(struct mpc52xx_fec));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rv = -EINVAL;
 		goto err_netdev;
 	}

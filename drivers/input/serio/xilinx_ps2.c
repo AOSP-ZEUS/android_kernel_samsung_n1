@@ -23,7 +23,11 @@
 #include <linux/init.h>
 #include <linux/list.h>
 #include <linux/io.h>
+<<<<<<< HEAD
 
+=======
+#include <linux/of_address.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/of_device.h>
 #include <linux/of_platform.h>
 

@@ -57,6 +57,10 @@ struct stmpe_variant_info;
  * @irq_lock: IRQ bus lock
  * @dev: device, mostly for dev_dbg()
  * @i2c: i2c client
+<<<<<<< HEAD
+=======
+ * @partnum: part number
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @variant: the detected STMPE model number
  * @regs: list of addresses of registers which are at different addresses on
  *	  different variants.  Indexed by one of STMPE_IDX_*.
@@ -121,6 +125,11 @@ struct stmpe_keypad_platform_data {
  * @norequest_mask: bitmask specifying which GPIOs should _not_ be
  *		    requestable due to different usage (e.g. touch, keypad)
  *		    STMPE_GPIO_NOREQ_* macros can be used here.
+<<<<<<< HEAD
+=======
+ * @setup: board specific setup callback.
+ * @remove: board specific remove callback
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 struct stmpe_gpio_platform_data {
 	int gpio_base;

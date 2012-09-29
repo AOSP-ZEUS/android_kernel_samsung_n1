@@ -23,6 +23,12 @@
 #include <linux/init.h>
 #include <linux/nmi.h>
 #include <linux/dmi.h>
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+#include <linux/kernel_sec_common.h>
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define PANIC_TIMER_STEP 100
 #define PANIC_BLINK_SPD 18
@@ -107,6 +113,21 @@ NORET_TYPE void panic(const char * fmt, ...)
 
 	bust_spinlocks(0);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+	if (!strcmp(buf, "CP Crash"))
+		kernel_sec_set_upload_cause(UPLOAD_CAUSE_CP_ERROR_FATAL);
+	else if (!strcmp(buf, "Forced_Upload"))
+		kernel_sec_set_upload_cause(UPLOAD_CAUSE_FORCED_UPLOAD);
+	else
+		kernel_sec_set_upload_cause(UPLOAD_CAUSE_KERNEL_PANIC);
+
+	kernel_sec_set_upload_magic_number();
+	
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!panic_blink)
 		panic_blink = no_blink;
 
@@ -125,6 +146,18 @@ NORET_TYPE void panic(const char * fmt, ...)
 			}
 			mdelay(PANIC_TIMER_STEP);
 		}
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+		/*
+		 * TODO : debugLevel considerationi should be done. (tkhwang)
+		 *        bluescreen display will be necessary.
+		 */
+		/* kernel_sec_set_cp_upload(); */
+		/* kernel_sec_save_final_context(); */
+		kernel_sec_hw_reset(false);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * This will not be a clean reboot, with everything
 		 * shutting down.  But if there is a chance of
@@ -157,6 +190,18 @@ NORET_TYPE void panic(const char * fmt, ...)
 		}
 		mdelay(PANIC_TIMER_STEP);
 	}
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+	/*
+	 * TODO : debugLevel considerationi should be done. (tkhwang)
+	 *        bluescreen display will be necessary.
+	 */
+	/* kernel_sec_set_cp_upload(); */
+	/* kernel_sec_save_final_context(); */
+	kernel_sec_hw_reset(false);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 EXPORT_SYMBOL(panic);
@@ -242,6 +287,7 @@ void add_taint(unsigned flag)
 	 * Also we want to keep up lockdep for staging development and
 	 * post-warning case.
 	 */
+<<<<<<< HEAD
 	switch (flag) {
 	case TAINT_CRAP:
 	case TAINT_WARN:
@@ -252,6 +298,10 @@ void add_taint(unsigned flag)
 		if (__debug_locks_off())
 			printk(KERN_WARNING "Disabling lock debugging due to kernel taint\n");
 	}
+=======
+	if (flag != TAINT_CRAP && flag != TAINT_WARN && __debug_locks_off())
+		printk(KERN_WARNING "Disabling lock debugging due to kernel taint\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	set_bit(flag, &tainted_mask);
 }

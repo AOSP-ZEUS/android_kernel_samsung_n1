@@ -371,7 +371,11 @@ typedef struct xfs_mod_sb {
 	int64_t		msb_delta;	/* Change to make to specified field */
 } xfs_mod_sb_t;
 
+<<<<<<< HEAD
 extern int	xfs_log_sbcount(xfs_mount_t *, uint);
+=======
+extern int	xfs_log_sbcount(xfs_mount_t *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern __uint64_t xfs_default_resblks(xfs_mount_t *mp);
 extern int	xfs_mountfs(xfs_mount_t *mp);
 

@@ -742,6 +742,7 @@ static inline void setup_ring_params(struct adapter *adapter, u64 addr,
 /*
  * Enable/disable VLAN acceleration.
  */
+<<<<<<< HEAD
 void t1_set_vlan_accel(struct adapter *adapter, int on_off)
 {
 	struct sge *sge = adapter->sge;
@@ -749,6 +750,16 @@ void t1_set_vlan_accel(struct adapter *adapter, int on_off)
 	sge->sge_control &= ~F_VLAN_XTRACT;
 	if (on_off)
 		sge->sge_control |= F_VLAN_XTRACT;
+=======
+void t1_vlan_mode(struct adapter *adapter, u32 features)
+{
+	struct sge *sge = adapter->sge;
+
+	if (features & NETIF_F_HW_VLAN_RX)
+		sge->sge_control |= F_VLAN_XTRACT;
+	else
+		sge->sge_control &= ~F_VLAN_XTRACT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (adapter->open_device_map) {
 		writel(sge->sge_control, adapter->regs + A_SG_CONTROL);
 		readl(adapter->regs + A_SG_CONTROL);   /* flush */
@@ -1397,12 +1408,20 @@ static void sge_rx(struct sge *sge, struct freelQ *fl, unsigned int len)
 	} else
 		skb_checksum_none_assert(skb);
 
+<<<<<<< HEAD
 	if (unlikely(adapter->vlan_grp && p->vlan_valid)) {
 		st->vlan_xtract++;
 		vlan_hwaccel_receive_skb(skb, adapter->vlan_grp,
 					 ntohs(p->vlan));
 	} else
 		netif_receive_skb(skb);
+=======
+	if (p->vlan_valid) {
+		st->vlan_xtract++;
+		__vlan_hwaccel_put_tag(skb, ntohs(p->vlan));
+	}
+	netif_receive_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -1875,13 +1894,19 @@ netdev_tx_t t1_start_xmit(struct sk_buff *skb, struct net_device *dev)
 	}
 	cpl->iff = dev->if_port;
 
+<<<<<<< HEAD
 #if defined(CONFIG_VLAN_8021Q) || defined(CONFIG_VLAN_8021Q_MODULE)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (vlan_tx_tag_present(skb)) {
 		cpl->vlan_valid = 1;
 		cpl->vlan = htons(vlan_tx_tag_get(skb));
 		st->vlan_insert++;
 	} else
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cpl->vlan_valid = 0;
 
 send:

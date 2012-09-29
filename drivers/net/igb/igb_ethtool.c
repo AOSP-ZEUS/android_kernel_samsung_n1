@@ -1,7 +1,11 @@
 /*******************************************************************************
 
   Intel(R) Gigabit Ethernet Linux driver
+<<<<<<< HEAD
   Copyright(c) 2007-2009 Intel Corporation.
+=======
+  Copyright(c) 2007-2011 Intel Corporation.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
   This program is free software; you can redistribute it and/or modify it
   under the terms and conditions of the GNU General Public License,
@@ -318,6 +322,7 @@ static int igb_set_pauseparam(struct net_device *netdev,
 	return retval;
 }
 
+<<<<<<< HEAD
 static u32 igb_get_rx_csum(struct net_device *netdev)
 {
 	struct igb_adapter *adapter = netdev_priv(netdev);
@@ -377,6 +382,8 @@ static int igb_set_tso(struct net_device *netdev, u32 data)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static u32 igb_get_msglevel(struct net_device *netdev)
 {
 	struct igb_adapter *adapter = netdev_priv(netdev);
@@ -1284,6 +1291,10 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
 
 	/* Disable all the interrupts */
 	wr32(E1000_IMC, ~0);
+<<<<<<< HEAD
+=======
+	wrfl();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	msleep(10);
 
 	/* Define all writable bits for ICS */
@@ -1327,6 +1338,10 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
 
 			wr32(E1000_IMC, mask);
 			wr32(E1000_ICS, mask);
+<<<<<<< HEAD
+=======
+			wrfl();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			msleep(10);
 
 			if (adapter->test_icr & mask) {
@@ -1348,6 +1363,10 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
 
 		wr32(E1000_IMS, mask);
 		wr32(E1000_ICS, mask);
+<<<<<<< HEAD
+=======
+		wrfl();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		msleep(10);
 
 		if (!(adapter->test_icr & mask)) {
@@ -1369,6 +1388,10 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
 
 			wr32(E1000_IMC, ~mask);
 			wr32(E1000_ICS, ~mask);
+<<<<<<< HEAD
+=======
+			wrfl();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			msleep(10);
 
 			if (adapter->test_icr & mask) {
@@ -1380,6 +1403,10 @@ static int igb_intr_test(struct igb_adapter *adapter, u64 *data)
 
 	/* Disable all the interrupts */
 	wr32(E1000_IMC, ~0);
+<<<<<<< HEAD
+=======
+	wrfl();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	msleep(10);
 
 	/* Unhook test interrupt handler */
@@ -1520,6 +1547,25 @@ static int igb_setup_loopback_test(struct igb_adapter *adapter)
 
 	/* use CTRL_EXT to identify link type as SGMII can appear as copper */
 	if (reg & E1000_CTRL_EXT_LINK_MODE_MASK) {
+<<<<<<< HEAD
+=======
+		if ((hw->device_id == E1000_DEV_ID_DH89XXCC_SGMII) ||
+		(hw->device_id == E1000_DEV_ID_DH89XXCC_SERDES) ||
+		(hw->device_id == E1000_DEV_ID_DH89XXCC_BACKPLANE) ||
+		(hw->device_id == E1000_DEV_ID_DH89XXCC_SFP)) {
+
+			/* Enable DH89xxCC MPHY for near end loopback */
+			reg = rd32(E1000_MPHY_ADDR_CTL);
+			reg = (reg & E1000_MPHY_ADDR_CTL_OFFSET_MASK) |
+			E1000_MPHY_PCS_CLK_REG_OFFSET;
+			wr32(E1000_MPHY_ADDR_CTL, reg);
+
+			reg = rd32(E1000_MPHY_DATA);
+			reg |= E1000_MPHY_PCS_CLK_REG_DIGINELBEN;
+			wr32(E1000_MPHY_DATA, reg);
+		}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		reg = rd32(E1000_RCTL);
 		reg |= E1000_RCTL_LBM_TCVR;
 		wr32(E1000_RCTL, reg);
@@ -1561,6 +1607,26 @@ static void igb_loopback_cleanup(struct igb_adapter *adapter)
 	u32 rctl;
 	u16 phy_reg;
 
+<<<<<<< HEAD
+=======
+	if ((hw->device_id == E1000_DEV_ID_DH89XXCC_SGMII) ||
+	(hw->device_id == E1000_DEV_ID_DH89XXCC_SERDES) ||
+	(hw->device_id == E1000_DEV_ID_DH89XXCC_BACKPLANE) ||
+	(hw->device_id == E1000_DEV_ID_DH89XXCC_SFP)) {
+		u32 reg;
+
+		/* Disable near end loopback on DH89xxCC */
+		reg = rd32(E1000_MPHY_ADDR_CTL);
+		reg = (reg & E1000_MPHY_ADDR_CTL_OFFSET_MASK) |
+		E1000_MPHY_PCS_CLK_REG_OFFSET;
+		wr32(E1000_MPHY_ADDR_CTL, reg);
+
+		reg = rd32(E1000_MPHY_DATA);
+		reg &= ~E1000_MPHY_PCS_CLK_REG_DIGINELBEN;
+		wr32(E1000_MPHY_DATA, reg);
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	rctl = rd32(E1000_RCTL);
 	rctl &= ~(E1000_RCTL_LBM_TCVR | E1000_RCTL_LBM_MAC);
 	wr32(E1000_RCTL, rctl);
@@ -2207,6 +2273,7 @@ static const struct ethtool_ops igb_ethtool_ops = {
 	.set_ringparam          = igb_set_ringparam,
 	.get_pauseparam         = igb_get_pauseparam,
 	.set_pauseparam         = igb_set_pauseparam,
+<<<<<<< HEAD
 	.get_rx_csum            = igb_get_rx_csum,
 	.set_rx_csum            = igb_set_rx_csum,
 	.get_tx_csum            = igb_get_tx_csum,
@@ -2215,6 +2282,8 @@ static const struct ethtool_ops igb_ethtool_ops = {
 	.set_sg                 = ethtool_op_set_sg,
 	.get_tso                = ethtool_op_get_tso,
 	.set_tso                = igb_set_tso,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.self_test              = igb_diag_test,
 	.get_strings            = igb_get_strings,
 	.set_phys_id            = igb_set_phys_id,

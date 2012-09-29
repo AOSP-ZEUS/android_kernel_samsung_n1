@@ -1294,7 +1294,11 @@ static int __devinit snd_sonicvibes_create(struct snd_card *card,
 	sonic->game_port = pci_resource_start(pci, 4);
 
 	if (request_irq(pci->irq, snd_sonicvibes_interrupt, IRQF_SHARED,
+<<<<<<< HEAD
 			"S3 SonicVibes", sonic)) {
+=======
+			KBUILD_MODNAME, sonic)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		snd_printk(KERN_ERR "unable to grab IRQ %d\n", pci->irq);
 		snd_sonicvibes_free(sonic);
 		return -EBUSY;
@@ -1530,7 +1534,11 @@ static void __devexit snd_sonic_remove(struct pci_dev *pci)
 }
 
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name = "S3 SonicVibes",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_sonic_ids,
 	.probe = snd_sonic_probe,
 	.remove = __devexit_p(snd_sonic_remove),

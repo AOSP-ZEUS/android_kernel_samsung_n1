@@ -632,6 +632,7 @@ xfs_inode_item_unlock(
 	struct xfs_inode	*ip = iip->ili_inode;
 	unsigned short		lock_flags;
 
+<<<<<<< HEAD
 	ASSERT(iip->ili_inode->i_itemp != NULL);
 	ASSERT(xfs_isilocked(iip->ili_inode, XFS_ILOCK_EXCL));
 
@@ -639,6 +640,10 @@ xfs_inode_item_unlock(
 	 * Clear the transaction pointer in the inode.
 	 */
 	ip->i_transp = NULL;
+=======
+	ASSERT(ip->i_itemp != NULL);
+	ASSERT(xfs_isilocked(ip, XFS_ILOCK_EXCL));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * If the inode needed a separate buffer with which to log
@@ -664,8 +669,13 @@ xfs_inode_item_unlock(
 	lock_flags = iip->ili_lock_flags;
 	iip->ili_lock_flags = 0;
 	if (lock_flags) {
+<<<<<<< HEAD
 		xfs_iunlock(iip->ili_inode, lock_flags);
 		IRELE(iip->ili_inode);
+=======
+		xfs_iunlock(ip, lock_flags);
+		IRELE(ip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -742,7 +752,11 @@ xfs_inode_item_pushbuf(
 		return true;
 	if (XFS_BUF_ISDELAYWRITE(bp))
 		xfs_buf_delwri_promote(bp);
+<<<<<<< HEAD
 	if (XFS_BUF_ISPINNED(bp))
+=======
+	if (xfs_buf_ispinned(bp))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = false;
 	xfs_buf_relse(bp);
 	return ret;
@@ -883,7 +897,11 @@ xfs_iflush_done(
 	 * Scan the buffer IO completions for other inodes being completed and
 	 * attach them to the current inode log item.
 	 */
+<<<<<<< HEAD
 	blip = XFS_BUF_FSPRIVATE(bp, xfs_log_item_t *);
+=======
+	blip = bp->b_fspriv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	prev = NULL;
 	while (blip != NULL) {
 		if (lip->li_cb != xfs_iflush_done) {
@@ -895,7 +913,11 @@ xfs_iflush_done(
 		/* remove from list */
 		next = blip->li_bio_list;
 		if (!prev) {
+<<<<<<< HEAD
 			XFS_BUF_SET_FSPRIVATE(bp, next);
+=======
+			bp->b_fspriv = next;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else {
 			prev->li_bio_list = next;
 		}

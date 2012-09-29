@@ -242,6 +242,7 @@ if ($kconfig) {
     read_kconfig($kconfig);
 }
 
+<<<<<<< HEAD
 sub convert_vars {
     my ($line, %vars) = @_;
 
@@ -286,17 +287,44 @@ foreach my $makefile (@makefiles) {
 	my $objs;
 
 	$_ = convert_vars($_, %make_vars);
+=======
+# Read all Makefiles to map the configs to the objects
+foreach my $makefile (@makefiles) {
+
+    my $cont = 0;
+
+    open(MIN,$makefile) || die "Can't open $makefile";
+    while (<MIN>) {
+	my $objs;
+
+	# is this a line after a line with a backslash?
+	if ($cont && /(\S.*)$/) {
+	    $objs = $1;
+	}
+	$cont = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	# collect objects after obj-$(CONFIG_FOO_BAR)
 	if (/obj-\$\((CONFIG_[^\)]*)\)\s*[+:]?=\s*(.*)/) {
 	    $var = $1;
 	    $objs = $2;
+<<<<<<< HEAD
 
 	# check if variables are set
 	} elsif (/^\s*(\S+)\s*[:]?=\s*(.*\S)/) {
 	    $make_vars{$1} = $2;
 	}
 	if (defined($objs)) {
+=======
+	}
+	if (defined($objs)) {
+	    # test if the line ends with a backslash
+	    if ($objs =~ m,(.*)\\$,) {
+		$objs = $1;
+		$cont = 1;
+	    }
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    foreach my $obj (split /\s+/,$objs) {
 		$obj =~ s/-/_/g;
 		if ($obj =~ /(.*)\.o$/) {

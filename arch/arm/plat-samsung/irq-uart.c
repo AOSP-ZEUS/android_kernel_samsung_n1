@@ -19,6 +19,11 @@
 #include <linux/irq.h>
 #include <linux/io.h>
 
+<<<<<<< HEAD
+=======
+#include <asm/mach/irq.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/map.h>
 #include <plat/irq-uart.h>
 #include <plat/regs-serial.h>
@@ -30,9 +35,18 @@
 static void s3c_irq_demux_uart(unsigned int irq, struct irq_desc *desc)
 {
 	struct s3c_uart_irq *uirq = desc->irq_data.handler_data;
+<<<<<<< HEAD
 	u32 pend = __raw_readl(uirq->regs + S3C64XX_UINTP);
 	int base = uirq->base_irq;
 
+=======
+	struct irq_chip *chip = irq_get_chip(irq);
+	u32 pend = __raw_readl(uirq->regs + S3C64XX_UINTP);
+	int base = uirq->base_irq;
+
+	chained_irq_enter(chip, desc);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (pend & (1 << 0))
 		generic_handle_irq(base);
 	if (pend & (1 << 1))
@@ -41,6 +55,11 @@ static void s3c_irq_demux_uart(unsigned int irq, struct irq_desc *desc)
 		generic_handle_irq(base + 2);
 	if (pend & (1 << 3))
 		generic_handle_irq(base + 3);
+<<<<<<< HEAD
+=======
+
+	chained_irq_exit(chip, desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void __init s3c_init_uart_irq(struct s3c_uart_irq *uirq)

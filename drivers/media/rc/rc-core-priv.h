@@ -84,6 +84,20 @@ struct ir_raw_event_ctrl {
 		unsigned count;
 		unsigned wanted_bits;
 	} rc5_sz;
+<<<<<<< HEAD
+=======
+	struct mce_kbd_dec {
+		struct input_dev *idev;
+		struct timer_list rx_timeout;
+		char name[64];
+		char phys[64];
+		int state;
+		u8 header;
+		u32 body;
+		unsigned count;
+		unsigned wanted_bits;
+	} mce_kbd;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct lirc_codec {
 		struct rc_dev *dev;
 		struct lirc_driver *drv;
@@ -182,6 +196,16 @@ void ir_raw_init(void);
 #define load_sony_decode()	0
 #endif
 
+<<<<<<< HEAD
+=======
+/* from ir-mce_kbd-decoder.c */
+#ifdef CONFIG_IR_MCE_KBD_DECODER_MODULE
+#define load_mce_kbd_decode()	request_module("ir-mce_kbd-decoder")
+#else
+#define load_mce_kbd_decode()	0
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* from ir-lirc-codec.c */
 #ifdef CONFIG_IR_LIRC_CODEC_MODULE
 #define load_lirc_codec()	request_module("ir-lirc-codec")

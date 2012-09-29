@@ -363,17 +363,30 @@
 #define __NR_open_by_handle_at		(__NR_Linux + 340)
 #define __NR_clock_adjtime		(__NR_Linux + 341)
 #define __NR_syncfs			(__NR_Linux + 342)
+<<<<<<< HEAD
 #define __NR_setns			(__NR_Linux + 343)
+=======
+#define __NR_sendmmsg			(__NR_Linux + 343)
+#define __NR_setns			(__NR_Linux + 344)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Offset of the last Linux o32 flavoured syscall
  */
+<<<<<<< HEAD
 #define __NR_Linux_syscalls		343
+=======
+#define __NR_Linux_syscalls		344
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _MIPS_SIM == _MIPS_SIM_ABI32 */
 
 #define __NR_O32_Linux			4000
+<<<<<<< HEAD
 #define __NR_O32_Linux_syscalls		343
+=======
+#define __NR_O32_Linux_syscalls		344
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #if _MIPS_SIM == _MIPS_SIM_ABI64
 
@@ -683,17 +696,30 @@
 #define __NR_open_by_handle_at		(__NR_Linux + 299)
 #define __NR_clock_adjtime		(__NR_Linux + 300)
 #define __NR_syncfs			(__NR_Linux + 301)
+<<<<<<< HEAD
 #define __NR_setns			(__NR_Linux + 302)
+=======
+#define __NR_sendmmsg			(__NR_Linux + 302)
+#define __NR_setns			(__NR_Linux + 303)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Offset of the last Linux 64-bit flavoured syscall
  */
+<<<<<<< HEAD
 #define __NR_Linux_syscalls		302
+=======
+#define __NR_Linux_syscalls		303
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _MIPS_SIM == _MIPS_SIM_ABI64 */
 
 #define __NR_64_Linux			5000
+<<<<<<< HEAD
 #define __NR_64_Linux_syscalls		302
+=======
+#define __NR_64_Linux_syscalls		303
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #if _MIPS_SIM == _MIPS_SIM_NABI32
 
@@ -1008,17 +1034,30 @@
 #define __NR_open_by_handle_at		(__NR_Linux + 304)
 #define __NR_clock_adjtime		(__NR_Linux + 305)
 #define __NR_syncfs			(__NR_Linux + 306)
+<<<<<<< HEAD
 #define __NR_setns			(__NR_Linux + 307)
+=======
+#define __NR_sendmmsg			(__NR_Linux + 307)
+#define __NR_setns			(__NR_Linux + 308)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Offset of the last N32 flavoured syscall
  */
+<<<<<<< HEAD
 #define __NR_Linux_syscalls		307
+=======
+#define __NR_Linux_syscalls		308
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _MIPS_SIM == _MIPS_SIM_NABI32 */
 
 #define __NR_N32_Linux			6000
+<<<<<<< HEAD
 #define __NR_N32_Linux_syscalls		307
+=======
+#define __NR_N32_Linux_syscalls		308
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef __KERNEL__
 

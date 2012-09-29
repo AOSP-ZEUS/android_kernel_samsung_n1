@@ -44,7 +44,11 @@ my %end;
 my %type;
 my $done = 0;
 my $maxtime = 0;
+<<<<<<< HEAD
 my $firsttime = 100;
+=======
+my $firsttime = 99999;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 my $count = 0;
 my %pids;
 my %pidctr;

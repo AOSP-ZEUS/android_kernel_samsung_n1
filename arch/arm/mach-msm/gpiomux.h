@@ -19,6 +19,10 @@
 
 #include <linux/bitops.h>
 #include <linux/errno.h>
+<<<<<<< HEAD
+=======
+#include <mach/msm_gpiomux.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #if defined(CONFIG_MSM_V2_TLMM)
 #include "gpiomux-v2.h"
@@ -71,12 +75,15 @@ enum {
  */
 extern struct msm_gpiomux_config msm_gpiomux_configs[GPIOMUX_NGPIOS];
 
+<<<<<<< HEAD
 /* Increment a gpio's reference count, possibly activating the line. */
 int __must_check msm_gpiomux_get(unsigned gpio);
 
 /* Decrement a gpio's reference count, possibly suspending the line. */
 int msm_gpiomux_put(unsigned gpio);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Install a new configuration to the gpio line.  To avoid overwriting
  * a configuration, leave the VALID bit out.
  */
@@ -94,6 +101,7 @@ int msm_gpiomux_write(unsigned gpio,
  */
 void __msm_gpiomux_write(unsigned gpio, gpiomux_config_t val);
 #else
+<<<<<<< HEAD
 static inline int __must_check msm_gpiomux_get(unsigned gpio)
 {
 	return -ENOSYS;
@@ -104,6 +112,8 @@ static inline int msm_gpiomux_put(unsigned gpio)
 	return -ENOSYS;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int msm_gpiomux_write(unsigned gpio,
 				    gpiomux_config_t active,
 				    gpiomux_config_t suspended)

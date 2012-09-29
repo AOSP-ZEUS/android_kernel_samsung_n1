@@ -77,6 +77,7 @@ filelayout_get_dserver_offset(struct pnfs_layout_segment *lseg, loff_t offset)
 	BUG();
 }
 
+<<<<<<< HEAD
 /* For data server errors we don't recover from */
 static void
 filelayout_set_lo_fail(struct pnfs_layout_segment *lseg)
@@ -90,6 +91,8 @@ filelayout_set_lo_fail(struct pnfs_layout_segment *lseg)
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int filelayout_async_handle_error(struct rpc_task *task,
 					 struct nfs4_state *state,
 					 struct nfs_client *clp,
@@ -145,7 +148,11 @@ static int filelayout_read_done_cb(struct rpc_task *task,
 		dprintk("%s calling restart ds_clp %p ds_clp->cl_session %p\n",
 			__func__, data->ds_clp, data->ds_clp->cl_session);
 		if (reset) {
+<<<<<<< HEAD
 			filelayout_set_lo_fail(data->lseg);
+=======
+			pnfs_set_lo_fail(data->lseg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			nfs4_reset_read(task, data);
 			clp = NFS_SERVER(data->inode)->nfs_client;
 		}
@@ -221,7 +228,11 @@ static int filelayout_write_done_cb(struct rpc_task *task,
 		dprintk("%s calling restart ds_clp %p ds_clp->cl_session %p\n",
 			__func__, data->ds_clp, data->ds_clp->cl_session);
 		if (reset) {
+<<<<<<< HEAD
 			filelayout_set_lo_fail(data->lseg);
+=======
+			pnfs_set_lo_fail(data->lseg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			nfs4_reset_write(task, data);
 			clp = NFS_SERVER(data->inode)->nfs_client;
 		} else
@@ -256,7 +267,11 @@ static int filelayout_commit_done_cb(struct rpc_task *task,
 			__func__, data->ds_clp, data->ds_clp->cl_session);
 		if (reset) {
 			prepare_to_resend_writes(data);
+<<<<<<< HEAD
 			filelayout_set_lo_fail(data->lseg);
+=======
+			pnfs_set_lo_fail(data->lseg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else
 			nfs_restart_rpc(task, data->ds_clp);
 		return -EAGAIN;
@@ -334,6 +349,12 @@ filelayout_read_pagelist(struct nfs_read_data *data)
 		__func__, data->inode->i_ino,
 		data->args.pgbase, (size_t)data->args.count, offset);
 
+<<<<<<< HEAD
+=======
+	if (test_bit(NFS_DEVICEID_INVALID, &FILELAYOUT_DEVID_NODE(lseg)->flags))
+		return PNFS_NOT_ATTEMPTED;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Retrieve the correct rpc_client for the byte range */
 	j = nfs4_fl_calc_j_index(lseg, offset);
 	idx = nfs4_fl_calc_ds_index(lseg, j);
@@ -344,8 +365,12 @@ filelayout_read_pagelist(struct nfs_read_data *data)
 		set_bit(lo_fail_bit(IOMODE_READ), &lseg->pls_layout->plh_flags);
 		return PNFS_NOT_ATTEMPTED;
 	}
+<<<<<<< HEAD
 	dprintk("%s USE DS:ip %x %hu\n", __func__,
 		ntohl(ds->ds_ip_addr), ntohs(ds->ds_port));
+=======
+	dprintk("%s USE DS: %s\n", __func__, ds->ds_remotestr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* No multipath support. Use first DS */
 	data->ds_clp = ds->ds_clp;
@@ -374,6 +399,12 @@ filelayout_write_pagelist(struct nfs_write_data *data, int sync)
 	struct nfs_fh *fh;
 	int status;
 
+<<<<<<< HEAD
+=======
+	if (test_bit(NFS_DEVICEID_INVALID, &FILELAYOUT_DEVID_NODE(lseg)->flags))
+		return PNFS_NOT_ATTEMPTED;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Retrieve the correct rpc_client for the byte range */
 	j = nfs4_fl_calc_j_index(lseg, offset);
 	idx = nfs4_fl_calc_ds_index(lseg, j);
@@ -384,9 +415,15 @@ filelayout_write_pagelist(struct nfs_write_data *data, int sync)
 		set_bit(lo_fail_bit(IOMODE_READ), &lseg->pls_layout->plh_flags);
 		return PNFS_NOT_ATTEMPTED;
 	}
+<<<<<<< HEAD
 	dprintk("%s ino %lu sync %d req %Zu@%llu DS:%x:%hu\n", __func__,
 		data->inode->i_ino, sync, (size_t) data->args.count, offset,
 		ntohl(ds->ds_ip_addr), ntohs(ds->ds_port));
+=======
+	dprintk("%s ino %lu sync %d req %Zu@%llu DS: %s\n", __func__,
+		data->inode->i_ino, sync, (size_t) data->args.count, offset,
+		ds->ds_remotestr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	data->write_done_cb = filelayout_write_done_cb;
 	data->ds_clp = ds->ds_clp;
@@ -457,6 +494,13 @@ filelayout_check_layout(struct pnfs_layout_hdr *lo,
 			goto out;
 	} else
 		dsaddr = container_of(d, struct nfs4_file_layout_dsaddr, id_node);
+<<<<<<< HEAD
+=======
+	/* Found deviceid is being reaped */
+	if (test_bit(NFS_DEVICEID_INVALID, &dsaddr->id_node.flags))
+			goto out_put;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	fl->dsaddr = dsaddr;
 
 	if (fl->first_stripe_index < 0 ||
@@ -667,7 +711,11 @@ filelayout_alloc_lseg(struct pnfs_layout_hdr *layoutid,
  * return true  : coalesce page
  * return false : don't coalesce page
  */
+<<<<<<< HEAD
 bool
+=======
+static bool
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 filelayout_pg_test(struct nfs_pageio_descriptor *pgio, struct nfs_page *prev,
 		   struct nfs_page *req)
 {
@@ -678,8 +726,11 @@ filelayout_pg_test(struct nfs_pageio_descriptor *pgio, struct nfs_page *prev,
 	    !nfs_generic_pg_test(pgio, prev, req))
 		return false;
 
+<<<<<<< HEAD
 	if (!pgio->pg_lseg)
 		return 1;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	p_stripe = (u64)prev->wb_index << PAGE_CACHE_SHIFT;
 	r_stripe = (u64)req->wb_index << PAGE_CACHE_SHIFT;
 	stripe_unit = FILELAYOUT_LSEG(pgio->pg_lseg)->stripe_unit;
@@ -690,6 +741,55 @@ filelayout_pg_test(struct nfs_pageio_descriptor *pgio, struct nfs_page *prev,
 	return (p_stripe == r_stripe);
 }
 
+<<<<<<< HEAD
+=======
+void
+filelayout_pg_init_read(struct nfs_pageio_descriptor *pgio,
+			struct nfs_page *req)
+{
+	BUG_ON(pgio->pg_lseg != NULL);
+
+	pgio->pg_lseg = pnfs_update_layout(pgio->pg_inode,
+					   req->wb_context,
+					   0,
+					   NFS4_MAX_UINT64,
+					   IOMODE_READ,
+					   GFP_KERNEL);
+	/* If no lseg, fall back to read through mds */
+	if (pgio->pg_lseg == NULL)
+		nfs_pageio_reset_read_mds(pgio);
+}
+
+void
+filelayout_pg_init_write(struct nfs_pageio_descriptor *pgio,
+			 struct nfs_page *req)
+{
+	BUG_ON(pgio->pg_lseg != NULL);
+
+	pgio->pg_lseg = pnfs_update_layout(pgio->pg_inode,
+					   req->wb_context,
+					   0,
+					   NFS4_MAX_UINT64,
+					   IOMODE_RW,
+					   GFP_NOFS);
+	/* If no lseg, fall back to write through mds */
+	if (pgio->pg_lseg == NULL)
+		nfs_pageio_reset_write_mds(pgio);
+}
+
+static const struct nfs_pageio_ops filelayout_pg_read_ops = {
+	.pg_init = filelayout_pg_init_read,
+	.pg_test = filelayout_pg_test,
+	.pg_doio = pnfs_generic_pg_readpages,
+};
+
+static const struct nfs_pageio_ops filelayout_pg_write_ops = {
+	.pg_init = filelayout_pg_init_write,
+	.pg_test = filelayout_pg_test,
+	.pg_doio = pnfs_generic_pg_writepages,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static bool filelayout_mark_pnfs_commit(struct pnfs_layout_segment *lseg)
 {
 	return !FILELAYOUT_LSEG(lseg)->commit_through_mds;
@@ -887,7 +987,12 @@ static struct pnfs_layoutdriver_type filelayout_type = {
 	.owner			= THIS_MODULE,
 	.alloc_lseg		= filelayout_alloc_lseg,
 	.free_lseg		= filelayout_free_lseg,
+<<<<<<< HEAD
 	.pg_test		= filelayout_pg_test,
+=======
+	.pg_read_ops		= &filelayout_pg_read_ops,
+	.pg_write_ops		= &filelayout_pg_write_ops,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.mark_pnfs_commit	= filelayout_mark_pnfs_commit,
 	.choose_commit_list	= filelayout_choose_commit_list,
 	.commit_pagelist	= filelayout_commit_pagelist,
@@ -910,5 +1015,10 @@ static void __exit nfs4filelayout_exit(void)
 	pnfs_unregister_layoutdriver(&filelayout_type);
 }
 
+<<<<<<< HEAD
+=======
+MODULE_ALIAS("nfs-layouttype4-1");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 module_init(nfs4filelayout_init);
 module_exit(nfs4filelayout_exit);

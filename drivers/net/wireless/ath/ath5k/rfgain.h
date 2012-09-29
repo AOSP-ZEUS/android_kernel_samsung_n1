@@ -30,7 +30,11 @@ struct ath5k_ini_rfgain {
 
 /* Initial RF Gain settings for RF5111 */
 static const struct ath5k_ini_rfgain rfgain_5111[] = {
+<<<<<<< HEAD
 	/*			      5Ghz	2Ghz	*/
+=======
+	/*			      5GHz	2GHz	*/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ AR5K_RF_GAIN(0),	{ 0x000001a9, 0x00000000 } },
 	{ AR5K_RF_GAIN(1),	{ 0x000001e9, 0x00000040 } },
 	{ AR5K_RF_GAIN(2),	{ 0x00000029, 0x00000080 } },
@@ -99,7 +103,11 @@ static const struct ath5k_ini_rfgain rfgain_5111[] = {
 
 /* Initial RF Gain settings for RF5112 */
 static const struct ath5k_ini_rfgain rfgain_5112[] = {
+<<<<<<< HEAD
 	/*			      5Ghz	2Ghz	*/
+=======
+	/*			      5GHz	2GHz	*/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ AR5K_RF_GAIN(0),	{ 0x00000007, 0x00000007 } },
 	{ AR5K_RF_GAIN(1),	{ 0x00000047, 0x00000047 } },
 	{ AR5K_RF_GAIN(2),	{ 0x00000087, 0x00000087 } },
@@ -305,7 +313,11 @@ static const struct ath5k_ini_rfgain rfgain_2316[] = {
 
 /* Initial RF Gain settings for RF5413 */
 static const struct ath5k_ini_rfgain rfgain_5413[] = {
+<<<<<<< HEAD
 	/*			      5Ghz	2Ghz	*/
+=======
+	/*			      5GHz	2GHz	*/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ AR5K_RF_GAIN(0),	{ 0x00000000, 0x00000000 } },
 	{ AR5K_RF_GAIN(1),	{ 0x00000040, 0x00000040 } },
 	{ AR5K_RF_GAIN(2),	{ 0x00000080, 0x00000080 } },
@@ -452,7 +464,11 @@ static const struct ath5k_ini_rfgain rfgain_2425[] = {
 
 /* Check if our current measurement is inside our
  * current variable attenuation window */
+<<<<<<< HEAD
 #define AR5K_GAIN_CHECK_ADJUST(_g) 		\
+=======
+#define AR5K_GAIN_CHECK_ADJUST(_g)		\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	((_g)->g_current <= (_g)->g_low || (_g)->g_current >= (_g)->g_high)
 
 struct ath5k_gain_opt_step {

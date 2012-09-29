@@ -2873,7 +2873,11 @@ static int ql_alloc_mem_resources(struct ql3_adapter *qdev)
 				     PAGE_SIZE, &qdev->shadow_reg_phy_addr);
 
 	if (qdev->shadow_reg_virt_addr != NULL) {
+<<<<<<< HEAD
 		qdev->preq_consumer_index = (u16 *) qdev->shadow_reg_virt_addr;
+=======
+		qdev->preq_consumer_index = qdev->shadow_reg_virt_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		qdev->req_consumer_index_phy_addr_high =
 			MS_64BITS(qdev->shadow_reg_phy_addr);
 		qdev->req_consumer_index_phy_addr_low =
@@ -3114,8 +3118,12 @@ static int ql_adapter_initialize(struct ql3_adapter *qdev)
 	qdev->small_buf_release_cnt = 8;
 	qdev->lrg_buf_q_producer_index = qdev->num_lbufq_entries - 1;
 	qdev->lrg_buf_release_cnt = 8;
+<<<<<<< HEAD
 	qdev->lrg_buf_next_free =
 	    (struct bufq_addr_element *)qdev->lrg_buf_q_virt_addr;
+=======
+	qdev->lrg_buf_next_free = qdev->lrg_buf_q_virt_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	qdev->small_buf_index = 0;
 	qdev->lrg_buf_index = 0;
 	qdev->lrg_buf_free_count = 0;

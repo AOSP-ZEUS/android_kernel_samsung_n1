@@ -32,7 +32,10 @@
 
 #include <linux/sched.h>
 #include <linux/firmware.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/etherdevice.h>
 #include <linux/vmalloc.h>
 #include <linux/usb.h>
@@ -303,9 +306,12 @@ enum hw_variables {
 	HW_VAR_DATA_FILTER,
 };
 
+<<<<<<< HEAD
 #define HWSET_MAX_SIZE				128
 #define EFUSE_MAX_SECTION			16
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 enum _RT_MEDIA_STATUS {
 	RT_MEDIA_DISCONNECT = 0,
 	RT_MEDIA_CONNECT = 1
@@ -938,7 +944,11 @@ struct rtl_mac {
 	int n_channels;
 	int n_bitrates;
 
+<<<<<<< HEAD
 	bool offchan_deley;
+=======
+	bool offchan_delay;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*filters */
 	u32 rx_conf;
@@ -1188,7 +1198,10 @@ struct rtl_efuse {
 
 struct rtl_ps_ctl {
 	bool pwrdomain_protect;
+<<<<<<< HEAD
 	bool set_rfpowerstate_inprogress;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bool in_powersavemode;
 	bool rfchange_inprogress;
 	bool swrf_processing;
@@ -1536,6 +1549,10 @@ struct rtl_works {
 	/* For SW LPS */
 	struct delayed_work ps_work;
 	struct delayed_work ps_rfon_wq;
+<<<<<<< HEAD
+=======
+	struct tasklet_struct ips_leave_tasklet;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct rtl_debug {
@@ -1983,7 +2000,11 @@ static inline u16 rtl_get_tid(struct sk_buff *skb)
 
 static inline struct ieee80211_sta *get_sta(struct ieee80211_hw *hw,
 					    struct ieee80211_vif *vif,
+<<<<<<< HEAD
 					    u8 *bssid)
+=======
+					    const u8 *bssid)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return ieee80211_find_sta(vif, bssid);
 }

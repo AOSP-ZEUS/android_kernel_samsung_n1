@@ -1435,7 +1435,11 @@ static int __devinit su_probe(struct platform_device *op)
 
 	rp = &op->resource[0];
 	up->port.mapbase = rp->start;
+<<<<<<< HEAD
 	up->reg_size = (rp->end - rp->start) + 1;
+=======
+	up->reg_size = resource_size(rp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	up->port.membase = of_ioremap(rp, 0, up->reg_size, "su");
 	if (!up->port.membase) {
 		if (type != SU_PORT_PORT)

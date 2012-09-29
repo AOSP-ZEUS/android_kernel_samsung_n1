@@ -531,3 +531,7 @@ module_exit(poseidon_exit);
 MODULE_AUTHOR("Telegent Systems");
 MODULE_DESCRIPTION("For tlg2300-based USB device ");
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_VERSION("0.0.2");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

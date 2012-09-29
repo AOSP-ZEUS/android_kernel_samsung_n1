@@ -102,6 +102,7 @@ static int do_setxattr(struct btrfs_trans_handle *trans,
 	if (!path)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	/* first lets see if we already have this xattr */
 	di = btrfs_lookup_xattr(trans, root, path, btrfs_ino(inode), name,
 				strlen(name), -1);
@@ -139,11 +140,76 @@ static int do_setxattr(struct btrfs_trans_handle *trans,
 	ret = btrfs_insert_xattr_item(trans, root, path, btrfs_ino(inode),
 				      name, name_len, value, size);
 	BUG_ON(ret);
+=======
+	if (flags & XATTR_REPLACE) {
+		di = btrfs_lookup_xattr(trans, root, path, btrfs_ino(inode), name,
+					name_len, -1);
+		if (IS_ERR(di)) {
+			ret = PTR_ERR(di);
+			goto out;
+		} else if (!di) {
+			ret = -ENODATA;
+			goto out;
+		}
+		ret = btrfs_delete_one_dir_name(trans, root, path, di);
+		if (ret)
+			goto out;
+		btrfs_release_path(path);
+
+		/*
+		 * remove the attribute
+		 */
+		if (!value)
+			goto out;
+	}
+
+again:
+	ret = btrfs_insert_xattr_item(trans, root, path, btrfs_ino(inode),
+				      name, name_len, value, size);
+	if (ret == -EEXIST) {
+		if (flags & XATTR_CREATE)
+			goto out;
+		/*
+		 * We can't use the path we already have since we won't have the
+		 * proper locking for a delete, so release the path and
+		 * re-lookup to delete the thing.
+		 */
+		btrfs_release_path(path);
+		di = btrfs_lookup_xattr(trans, root, path, btrfs_ino(inode),
+					name, name_len, -1);
+		if (IS_ERR(di)) {
+			ret = PTR_ERR(di);
+			goto out;
+		} else if (!di) {
+			/* Shouldn't happen but just in case... */
+			btrfs_release_path(path);
+			goto again;
+		}
+
+		ret = btrfs_delete_one_dir_name(trans, root, path, di);
+		if (ret)
+			goto out;
+
+		/*
+		 * We have a value to set, so go back and try to insert it now.
+		 */
+		if (value) {
+			btrfs_release_path(path);
+			goto again;
+		}
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out:
 	btrfs_free_path(path);
 	return ret;
 }
 
+<<<<<<< HEAD
+=======
+/*
+ * @value: "" makes the attribute to empty, NULL removes it
+ */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int __btrfs_setxattr(struct btrfs_trans_handle *trans,
 		     struct inode *inode, const char *name,
 		     const void *value, size_t size, int flags)

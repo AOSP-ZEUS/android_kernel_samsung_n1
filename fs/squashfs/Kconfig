@@ -1,7 +1,10 @@
 config SQUASHFS
 	tristate "SquashFS 4.0 - Squashed file system support"
 	depends on BLOCK
+<<<<<<< HEAD
 	select ZLIB_INFLATE
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  Saying Y here includes support for SquashFS 4.0 (a Compressed
 	  Read-Only File System).  Squashfs is a highly compressed read-only
@@ -36,6 +39,22 @@ config SQUASHFS_XATTR
 
 	  If unsure, say N.
 
+<<<<<<< HEAD
+=======
+config SQUASHFS_ZLIB
+	bool "Include support for ZLIB compressed file systems"
+	depends on SQUASHFS
+	select ZLIB_INFLATE
+	default y
+	help
+	  ZLIB compression is the standard compression used by Squashfs
+	  file systems.  It offers a good trade-off between compression
+	  achieved and the amount of CPU time and memory necessary to
+	  compress and decompress.
+
+	  If unsure, say Y.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SQUASHFS_LZO
 	bool "Include support for LZO compressed file systems"
 	depends on SQUASHFS

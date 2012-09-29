@@ -580,10 +580,17 @@ int __init pmac_nvram_init(void)
 	/* Try to obtain an address */
 	if (of_address_to_resource(dp, 0, &r1) == 0) {
 		nvram_naddrs = 1;
+<<<<<<< HEAD
 		s1 = (r1.end - r1.start) + 1;
 		if (of_address_to_resource(dp, 1, &r2) == 0) {
 			nvram_naddrs = 2;
 			s2 = (r2.end - r2.start) + 1;
+=======
+		s1 = resource_size(&r1);
+		if (of_address_to_resource(dp, 1, &r2) == 0) {
+			nvram_naddrs = 2;
+			s2 = resource_size(&r2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 

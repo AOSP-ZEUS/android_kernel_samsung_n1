@@ -18,7 +18,11 @@
 
 # Step 3 is used to place certain information in the module's ELF
 # section, including information such as:
+<<<<<<< HEAD
 #   Version magic (see include/vermagic.h for full details)
+=======
+#   Version magic (see include/linux/vermagic.h for full details)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #     - Kernel release
 #     - SMP is CONFIG_SMP
 #     - PREEMPT is CONFIG_PREEMPT

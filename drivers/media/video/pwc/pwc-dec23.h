@@ -49,14 +49,19 @@ struct pwc_dec23_private
 
 };
 
+<<<<<<< HEAD
 
 int pwc_dec23_alloc(struct pwc_device *pwc);
 int pwc_dec23_init(struct pwc_device *pwc, int type, unsigned char *cmd);
 void pwc_dec23_exit(void);
+=======
+int pwc_dec23_init(struct pwc_device *pwc, int type, unsigned char *cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void pwc_dec23_decompress(const struct pwc_device *pwc,
 			  const void *src,
 			  void *dst,
 			  int flags);
+<<<<<<< HEAD
 
 
 
@@ -65,3 +70,6 @@ void pwc_dec23_decompress(const struct pwc_device *pwc,
 
 /* vim: set cino= formatoptions=croql cindent shiftwidth=8 tabstop=8: */
 
+=======
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

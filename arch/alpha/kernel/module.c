@@ -29,6 +29,7 @@
 #define DEBUGP(fmt...)
 #endif
 
+<<<<<<< HEAD
 void *
 module_alloc(unsigned long size)
 {
@@ -43,6 +44,8 @@ module_free(struct module *mod, void *module_region)
 	vfree(module_region);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Allocate the GOT at the end of the core sections.  */
 
 struct got_entry {
@@ -156,6 +159,7 @@ module_frob_arch_sections(Elf64_Ehdr *hdr, Elf64_Shdr *sechdrs,
 }
 
 int
+<<<<<<< HEAD
 apply_relocate(Elf64_Shdr *sechdrs, const char *strtab, unsigned int symindex,
 	       unsigned int relsec, struct module *me)
 {
@@ -164,6 +168,8 @@ apply_relocate(Elf64_Shdr *sechdrs, const char *strtab, unsigned int symindex,
 }
 
 int
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 apply_relocate_add(Elf64_Shdr *sechdrs, const char *strtab,
 		   unsigned int symindex, unsigned int relsec,
 		   struct module *me)
@@ -302,6 +308,7 @@ apply_relocate_add(Elf64_Shdr *sechdrs, const char *strtab,
 
 	return 0;
 }
+<<<<<<< HEAD
 
 int
 module_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
@@ -314,3 +321,5 @@ void
 module_arch_cleanup(struct module *mod)
 {
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

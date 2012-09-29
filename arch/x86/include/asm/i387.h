@@ -29,8 +29,13 @@ extern unsigned int sig_xstate_size;
 extern void fpu_init(void);
 extern void mxcsr_feature_mask_init(void);
 extern int init_fpu(struct task_struct *child);
+<<<<<<< HEAD
 extern void __math_state_restore(struct task_struct *);
 extern void math_state_restore(void);
+=======
+extern asmlinkage void math_state_restore(void);
+extern void __math_state_restore(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern int dump_fpu(struct pt_regs *, struct user_i387_struct *);
 
 extern user_regset_active_fn fpregs_active, xfpregs_active;
@@ -212,11 +217,27 @@ static inline void fpu_fxsave(struct fpu *fpu)
 
 #endif	/* CONFIG_X86_64 */
 
+<<<<<<< HEAD
 /*
  * These must be called with preempt disabled. Returns
  * 'true' if the FPU state is still intact.
  */
 static inline int fpu_save_init(struct fpu *fpu)
+=======
+/* We need a safe address that is cheap to find and that is already
+   in L1 during context switch. The best choices are unfortunately
+   different for UP and SMP */
+#ifdef CONFIG_SMP
+#define safe_address (__per_cpu_offset[0])
+#else
+#define safe_address (kstat_cpu(0).cpustat.user)
+#endif
+
+/*
+ * These must be called with preempt disabled
+ */
+static inline void fpu_save_init(struct fpu *fpu)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	if (use_xsave()) {
 		fpu_xsave(fpu);
@@ -225,12 +246,17 @@ static inline int fpu_save_init(struct fpu *fpu)
 		 * xsave header may indicate the init state of the FP.
 		 */
 		if (!(fpu->state->xsave.xsave_hdr.xstate_bv & XSTATE_FP))
+<<<<<<< HEAD
 			return 1;
+=======
+			return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else if (use_fxsr()) {
 		fpu_fxsave(fpu);
 	} else {
 		asm volatile("fnsave %[fx]; fwait"
 			     : [fx] "=m" (fpu->state->fsave));
+<<<<<<< HEAD
 		return 0;
 	}
 
@@ -252,6 +278,29 @@ static inline int fpu_save_init(struct fpu *fpu)
 static inline int __save_init_fpu(struct task_struct *tsk)
 {
 	return fpu_save_init(&tsk->thread.fpu);
+=======
+		return;
+	}
+
+	if (unlikely(fpu->state->fxsave.swd & X87_FSW_ES))
+		asm volatile("fnclex");
+
+	/* AMD K7/K8 CPUs don't save/restore FDP/FIP/FOP unless an exception
+	   is pending.  Clear the x87 state here by setting it to fixed
+	   values. safe_address is a random variable that should be in L1 */
+	alternative_input(
+		ASM_NOP8 ASM_NOP2,
+		"emms\n\t"	  	/* clear stack tags */
+		"fildl %P[addr]",	/* set F?P to defined value */
+		X86_FEATURE_FXSAVE_LEAK,
+		[addr] "m" (safe_address));
+}
+
+static inline void __save_init_fpu(struct task_struct *tsk)
+{
+	fpu_save_init(&tsk->thread.fpu);
+	task_thread_info(tsk)->status &= ~TS_USEDFPU;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline int fpu_fxrstor_checking(struct fpu *fpu)
@@ -273,6 +322,7 @@ static inline int restore_fpu_checking(struct task_struct *tsk)
 }
 
 /*
+<<<<<<< HEAD
  * Software FPU state helpers. Careful: these need to
  * be preemption protection *and* they need to be
  * properly paired with the CR0.TS changes!
@@ -382,18 +432,36 @@ static inline void switch_fpu_finish(struct task_struct *new, fpu_switch_t fpu)
 }
 
 /*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Signal frame handlers...
  */
 extern int save_i387_xstate(void __user *buf);
 extern int restore_i387_xstate(void __user *buf);
 
+<<<<<<< HEAD
 static inline void __clear_fpu(struct task_struct *tsk)
 {
 	if (__thread_has_fpu(tsk)) {
+=======
+static inline void __unlazy_fpu(struct task_struct *tsk)
+{
+	if (task_thread_info(tsk)->status & TS_USEDFPU) {
+		__save_init_fpu(tsk);
+		stts();
+	} else
+		tsk->fpu_counter = 0;
+}
+
+static inline void __clear_fpu(struct task_struct *tsk)
+{
+	if (task_thread_info(tsk)->status & TS_USEDFPU) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Ignore delayed exceptions from user space */
 		asm volatile("1: fwait\n"
 			     "2:\n"
 			     _ASM_EXTABLE(1b, 2b));
+<<<<<<< HEAD
 		__thread_fpu_end(tsk);
 	}
 }
@@ -452,6 +520,20 @@ static inline void kernel_fpu_begin(void)
 		__thread_clear_has_fpu(me);
 		/* We do 'stts()' in kernel_fpu_end() */
 	} else
+=======
+		task_thread_info(tsk)->status &= ~TS_USEDFPU;
+		stts();
+	}
+}
+
+static inline void kernel_fpu_begin(void)
+{
+	struct thread_info *me = current_thread_info();
+	preempt_disable();
+	if (me->status & TS_USEDFPU)
+		__save_init_fpu(me->task);
+	else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		clts();
 }
 
@@ -461,6 +543,17 @@ static inline void kernel_fpu_end(void)
 	preempt_enable();
 }
 
+<<<<<<< HEAD
+=======
+static inline bool irq_fpu_usable(void)
+{
+	struct pt_regs *regs;
+
+	return !in_interrupt() || !(regs = get_irq_regs()) || \
+		user_mode(regs) || (read_cr0() & X86_CR0_TS);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Some instructions like VIA's padlock instructions generate a spurious
  * DNA fault but don't modify SSE registers. And these instructions
@@ -493,6 +586,7 @@ static inline void irq_ts_restore(int TS_state)
 }
 
 /*
+<<<<<<< HEAD
  * The question "does this thread have fpu access?"
  * is slightly racy, since preemption could come in
  * and revoke it immediately after the test.
@@ -532,25 +626,37 @@ static inline void user_fpu_begin(void)
 }
 
 /*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * These disable preemption on their own and are safe
  */
 static inline void save_init_fpu(struct task_struct *tsk)
 {
+<<<<<<< HEAD
 	WARN_ON_ONCE(!__thread_has_fpu(tsk));
 	preempt_disable();
 	__save_init_fpu(tsk);
 	__thread_fpu_end(tsk);
+=======
+	preempt_disable();
+	__save_init_fpu(tsk);
+	stts();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	preempt_enable();
 }
 
 static inline void unlazy_fpu(struct task_struct *tsk)
 {
 	preempt_disable();
+<<<<<<< HEAD
 	if (__thread_has_fpu(tsk)) {
 		__save_init_fpu(tsk);
 		__thread_fpu_end(tsk);
 	} else
 		tsk->fpu_counter = 0;
+=======
+	__unlazy_fpu(tsk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	preempt_enable();
 }
 

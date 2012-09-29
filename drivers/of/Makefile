@@ -10,3 +10,7 @@ obj-$(CONFIG_OF_NET)	+= of_net.o
 obj-$(CONFIG_OF_SPI)	+= of_spi.o
 obj-$(CONFIG_OF_MDIO)	+= of_mdio.o
 obj-$(CONFIG_OF_PCI)	+= of_pci.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_OF_PCI_IRQ)  += of_pci_irq.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

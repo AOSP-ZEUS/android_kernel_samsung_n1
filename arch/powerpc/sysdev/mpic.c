@@ -598,6 +598,7 @@ static void __init mpic_scan_ht_pics(struct mpic *mpic)
 
 #endif /* CONFIG_MPIC_U3_HT_IRQS */
 
+<<<<<<< HEAD
 #ifdef CONFIG_SMP
 static int irq_choose_cpu(const struct cpumask *mask)
 {
@@ -634,6 +635,8 @@ static int irq_choose_cpu(const struct cpumask *mask)
 }
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Find an mpic associated with a given linux interrupt */
 static struct mpic *mpic_find(unsigned int irq)
 {
@@ -849,7 +852,11 @@ static void mpic_unmask_tm(struct irq_data *d)
 	struct mpic *mpic = mpic_from_irq_data(d);
 	unsigned int src = virq_to_hw(d->irq) - mpic->timer_vecs[0];
 
+<<<<<<< HEAD
 	DBG("%s: enable_tm: %d (tm %d)\n", mpic->name, irq, src);
+=======
+	DBG("%s: enable_tm: %d (tm %d)\n", mpic->name, d->irq, src);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mpic_tm_write(src, mpic_tm_read(src) & ~MPIC_VECPRI_MASK);
 	mpic_tm_read(src);
 }

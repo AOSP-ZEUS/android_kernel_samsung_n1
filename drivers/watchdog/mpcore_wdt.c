@@ -407,12 +407,41 @@ static int __devexit mpcore_wdt_remove(struct platform_device *dev)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_PM
+static int mpcore_wdt_suspend(struct platform_device *dev, pm_message_t msg)
+{
+	struct mpcore_wdt *wdt = platform_get_drvdata(dev);
+	mpcore_wdt_stop(wdt);		/* Turn the WDT off */
+	return 0;
+}
+
+static int mpcore_wdt_resume(struct platform_device *dev)
+{
+	struct mpcore_wdt *wdt = platform_get_drvdata(dev);
+	/* re-activate timer */
+	if (test_bit(0, &wdt->timer_alive))
+		mpcore_wdt_start(wdt);
+	return 0;
+}
+#else
+#define mpcore_wdt_suspend	NULL
+#define mpcore_wdt_resume	NULL
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* work with hotplug and coldplug */
 MODULE_ALIAS("platform:mpcore_wdt");
 
 static struct platform_driver mpcore_wdt_driver = {
 	.probe		= mpcore_wdt_probe,
 	.remove		= __devexit_p(mpcore_wdt_remove),
+<<<<<<< HEAD
+=======
+	.suspend	= mpcore_wdt_suspend,
+	.resume		= mpcore_wdt_resume,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.shutdown	= mpcore_wdt_shutdown,
 	.driver		= {
 		.owner	= THIS_MODULE,

@@ -264,7 +264,11 @@ static int snd_emu10k1_resume(struct pci_dev *pci)
 #endif
 
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name = "EMU10K1_Audigy",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_emu10k1_ids,
 	.probe = snd_card_emu10k1_probe,
 	.remove = __devexit_p(snd_card_emu10k1_remove),

@@ -24,6 +24,12 @@
  * Hsinchu 300, Taiwan.
  *
  *****************************************************************************/
+<<<<<<< HEAD
+=======
+
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/usb.h>
 #include "core.h"
 #include "wifi.h"
@@ -104,9 +110,14 @@ static int _usbctrl_vendorreq_sync_read(struct usb_device *udev, u8 request,
 				 pdata, len, 0); /* max. timeout */
 
 	if (status < 0)
+<<<<<<< HEAD
 		printk(KERN_ERR "reg 0x%x, usbctrl_vendorreq TimeOut! "
 		       "status:0x%x value=0x%x\n", value, status,
 		       *(u32 *)pdata);
+=======
+		pr_err("reg 0x%x, usbctrl_vendorreq TimeOut! status:0x%x value=0x%x\n",
+		       value, status, *(u32 *)pdata);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return status;
 }
 
@@ -316,7 +327,11 @@ static int _rtl_usb_init_rx(struct ieee80211_hw *hw)
 	rtlusb->usb_rx_segregate_hdl =
 		rtlpriv->cfg->usb_interface_cfg->usb_rx_segregate_hdl;
 
+<<<<<<< HEAD
 	printk(KERN_INFO "rtl8192cu: rx_max_size %d, rx_urb_num %d, in_ep %d\n",
+=======
+	pr_info("rx_max_size %d, rx_urb_num %d, in_ep %d\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rtlusb->rx_max_size, rtlusb->rx_urb_num, rtlusb->in_ep);
 	init_usb_anchor(&rtlusb->rx_submitted);
 	return 0;
@@ -580,7 +595,11 @@ static void _rtl_rx_completed(struct urb *_urb)
 		} else{
 			/* TO DO */
 			_rtl_rx_pre_process(hw, skb);
+<<<<<<< HEAD
 			printk(KERN_ERR "rtlwifi: rx agg not supported\n");
+=======
+			pr_err("rx agg not supported\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		goto resubmit;
 	}

@@ -254,19 +254,28 @@ static int isofs_readdir(struct file *filp,
 	char *tmpname;
 	struct iso_directory_record *tmpde;
 	struct inode *inode = filp->f_path.dentry->d_inode;
+<<<<<<< HEAD
 	struct isofs_sb_info *sbi = ISOFS_SB(inode->i_sb);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	tmpname = (char *)__get_free_page(GFP_KERNEL);
 	if (tmpname == NULL)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	mutex_lock(&sbi->s_mutex);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tmpde = (struct iso_directory_record *) (tmpname+1024);
 
 	result = do_isofs_readdir(inode, filp, dirent, filldir, tmpname, tmpde);
 
 	free_page((unsigned long) tmpname);
+<<<<<<< HEAD
 	mutex_unlock(&sbi->s_mutex);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return result;
 }
 

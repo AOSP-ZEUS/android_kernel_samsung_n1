@@ -1,20 +1,33 @@
 #
 # Makefile for misc devices that really don't fit anywhere else.
 #
+<<<<<<< HEAD
+=======
+GCOV_PROFILE_tegra-cryptodev.o := y
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 obj-$(CONFIG_IBM_ASM)		+= ibmasm/
 obj-$(CONFIG_AD525X_DPOT)	+= ad525x_dpot.o
 obj-$(CONFIG_AD525X_DPOT_I2C)	+= ad525x_dpot-i2c.o
 obj-$(CONFIG_AD525X_DPOT_SPI)	+= ad525x_dpot-spi.o
+<<<<<<< HEAD
 0bj-$(CONFIG_INTEL_MID_PTI)	+= pti.o
+=======
+obj-$(CONFIG_INTEL_MID_PTI)	+= pti.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_ATMEL_PWM)		+= atmel_pwm.o
 obj-$(CONFIG_ATMEL_SSC)		+= atmel-ssc.o
 obj-$(CONFIG_ATMEL_TCLIB)	+= atmel_tclib.o
 obj-$(CONFIG_BMP085)		+= bmp085.o
 obj-$(CONFIG_ICS932S401)	+= ics932s401.o
 obj-$(CONFIG_LKDTM)		+= lkdtm.o
+<<<<<<< HEAD
 obj-$(CONFIG_TIFM_CORE)       	+= tifm_core.o
 obj-$(CONFIG_TIFM_7XX1)       	+= tifm_7xx1.o
+=======
+obj-$(CONFIG_TIFM_CORE)		+= tifm_core.o
+obj-$(CONFIG_TIFM_7XX1)		+= tifm_7xx1.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_PHANTOM)		+= phantom.o
 obj-$(CONFIG_SENSORS_BH1780)	+= bh1780gli.o
 obj-$(CONFIG_SENSORS_BH1770)	+= bh1770glc.o
@@ -47,6 +60,7 @@ obj-y				+= ti-st/
 obj-$(CONFIG_AB8500_PWM)	+= ab8500-pwm.o
 obj-y				+= lis3lv02d/
 obj-y				+= carma/
+<<<<<<< HEAD
 obj-$(CONFIG_WL127X_RFKILL)	+= wl127x-rfkill.o
 obj-$(CONFIG_APANIC)		+= apanic.o
 obj-$(CONFIG_SENSORS_AK8973)	+= ak8973.o
@@ -56,3 +70,20 @@ obj-$(CONFIG_PN544)		+= pn544.o
 obj-$(CONFIG_SAMSUNG_JACK)	+= sec_jack.o
 obj-$(CONFIG_USB_SWITCH_FSA9480)	+= fsa9480.o
 obj-$(CONFIG_SAMSUNG_MODEMCTL) += samsung_modemctl/
+=======
+obj-$(CONFIG_USB_SWITCH_FSA9480) += fsa9480.o
+obj-$(CONFIG_WL127X_RFKILL)	+= wl127x-rfkill.o
+obj-$(CONFIG_APANIC)		+= apanic.o
+obj-$(CONFIG_SENSORS_NCT1008)	+= nct1008.o
+obj-$(CONFIG_BCM4329_RFKILL)	+= bcm4329_rfkill.o
+obj-$(CONFIG_BCM4330_RFKILL)    += bcm4330_rfkill.o
+obj-$(CONFIG_SAMSUNG_JACK)  += sec_jack.o
+obj-$(CONFIG_SAMSUNG_FM_SI4709)		+= fm_si4709/
+obj-$(CONFIG_TEGRA_CRYPTO_DEV)	+= tegra-cryptodev.o
+obj-$(CONFIG_TEGRA_BB_SUPPORT)	+= tegra-baseband/
+obj-$(CONFIG_MAX1749_VIBRATOR)	+= max1749.o
+obj-$(CONFIG_FSA9480)       += fsa9480.o
+obj-$(CONFIG_SEC_MISC)      += sec_misc.o
+obj-$(CONFIG_SEC_MODEM)     += modem_if/
+obj-$(CONFIG_VIBTONZ)       += vibetonz/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

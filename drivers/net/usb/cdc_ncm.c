@@ -47,7 +47,10 @@
 #include <linux/mii.h>
 #include <linux/crc32.h>
 #include <linux/usb.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/timer.h>
 #include <linux/spinlock.h>
 #include <linux/atomic.h>
@@ -138,11 +141,28 @@ struct cdc_ncm_ctx {
 
 static void cdc_ncm_tx_timeout(unsigned long arg);
 static const struct driver_info cdc_ncm_info;
+<<<<<<< HEAD
+=======
+static const struct driver_info cdc_mbm_info;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct usb_driver cdc_ncm_driver;
 static struct ethtool_ops cdc_ncm_ethtool_ops;
 
 static const struct usb_device_id cdc_devs[] = {
+<<<<<<< HEAD
 	{ USB_INTERFACE_INFO(USB_CLASS_COMM,
+=======
+	{
+		/* Ericsson f5521gw */
+		.match_flags = USB_DEVICE_ID_MATCH_INT_INFO
+			| USB_DEVICE_ID_MATCH_DEVICE,
+		USB_DEVICE(0x0BDB,0x190D),
+		.driver_info = (unsigned long)&cdc_mbm_info,
+	},
+	{
+		/* Standard NCM class device */
+		USB_INTERFACE_INFO(USB_CLASS_COMM,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		USB_CDC_SUBCLASS_NCM, USB_CDC_PROTO_NONE),
 		.driver_info = (unsigned long)&cdc_ncm_info,
 	},
@@ -1212,6 +1232,21 @@ static const struct driver_info cdc_ncm_info = {
 	.tx_fixup = cdc_ncm_tx_fixup,
 };
 
+<<<<<<< HEAD
+=======
+static const struct driver_info cdc_mbm_info = {
+	.description = "CDC NCM",
+	.flags = FLAG_RMNET | FLAG_NO_SETINT | FLAG_MULTI_PACKET,
+	.bind = cdc_ncm_bind,
+	.unbind = cdc_ncm_unbind,
+	.check_connect = cdc_ncm_check_connect,
+	.manage_power = cdc_ncm_manage_power,
+	.status = cdc_ncm_status,
+	.rx_fixup = cdc_ncm_rx_fixup,
+	.tx_fixup = cdc_ncm_tx_fixup,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct usb_driver cdc_ncm_driver = {
 	.name = "cdc_ncm",
 	.id_table = cdc_devs,

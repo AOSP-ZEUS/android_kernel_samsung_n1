@@ -57,7 +57,11 @@ u16 hpi_validate_response(struct hpi_message *phm, struct hpi_response *phr)
 	}
 
 	if (phr->function != phm->function) {
+<<<<<<< HEAD
 		HPI_DEBUG_LOG(ERROR, "header type %d invalid\n",
+=======
+		HPI_DEBUG_LOG(ERROR, "header function %d invalid\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			phr->function);
 		return HPI_ERROR_INVALID_RESPONSE;
 	}
@@ -315,8 +319,12 @@ short hpi_check_control_cache(struct hpi_control_cache *p_cache,
 	short found = 1;
 	struct hpi_control_cache_info *pI;
 	struct hpi_control_cache_single *pC;
+<<<<<<< HEAD
 	struct hpi_control_cache_pad *p_pad;
 
+=======
+	size_t response_size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!find_control(phm->obj_index, p_cache, &pI)) {
 		HPI_DEBUG_LOG(VERBOSE,
 			"HPICMN find_control() failed for adap %d\n",
@@ -326,11 +334,22 @@ short hpi_check_control_cache(struct hpi_control_cache *p_cache,
 
 	phr->error = 0;
 
+<<<<<<< HEAD
+=======
+	/* set the default response size */
+	response_size =
+		sizeof(struct hpi_response_header) +
+		sizeof(struct hpi_control_res);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* pC is the default cached control strucure. May be cast to
 	   something else in the following switch statement.
 	 */
 	pC = (struct hpi_control_cache_single *)pI;
+<<<<<<< HEAD
 	p_pad = (struct hpi_control_cache_pad *)pI;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (pI->control_type) {
 
@@ -529,9 +548,13 @@ short hpi_check_control_cache(struct hpi_control_cache *p_cache,
 		pI->control_index, pI->control_type, phm->u.c.attribute);
 
 	if (found)
+<<<<<<< HEAD
 		phr->size =
 			sizeof(struct hpi_response_header) +
 			sizeof(struct hpi_control_res);
+=======
+		phr->size = (u16)response_size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return found;
 }
@@ -630,13 +653,21 @@ struct hpi_control_cache *hpi_alloc_control_cache(const u32 control_count,
 	if (!p_cache)
 		return NULL;
 
+<<<<<<< HEAD
 	p_cache->p_info =
 		kmalloc(sizeof(*p_cache->p_info) * control_count, GFP_KERNEL);
+=======
+	p_cache->p_info = kzalloc(sizeof(*p_cache->p_info) * control_count,
+				  GFP_KERNEL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!p_cache->p_info) {
 		kfree(p_cache);
 		return NULL;
 	}
+<<<<<<< HEAD
 	memset(p_cache->p_info, 0, sizeof(*p_cache->p_info) * control_count);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	p_cache->cache_size_in_bytes = size_in_bytes;
 	p_cache->control_count = control_count;
 	p_cache->p_cache = p_dsp_control_buffer;
@@ -682,7 +713,11 @@ static void subsys_message(struct hpi_message *phm, struct hpi_response *phr)
 void HPI_COMMON(struct hpi_message *phm, struct hpi_response *phr)
 {
 	switch (phm->type) {
+<<<<<<< HEAD
 	case HPI_TYPE_MESSAGE:
+=======
+	case HPI_TYPE_REQUEST:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		switch (phm->object) {
 		case HPI_OBJ_SUBSYSTEM:
 			subsys_message(phm, phr);

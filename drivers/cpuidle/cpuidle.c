@@ -25,9 +25,25 @@ DEFINE_PER_CPU(struct cpuidle_device *, cpuidle_devices);
 
 DEFINE_MUTEX(cpuidle_lock);
 LIST_HEAD(cpuidle_detected_devices);
+<<<<<<< HEAD
 static void (*pm_idle_old)(void);
 
 static int enabled_devices;
+=======
+
+static int enabled_devices;
+static int off __read_mostly;
+static int initialized __read_mostly;
+
+int cpuidle_disabled(void)
+{
+	return off;
+}
+void disable_cpuidle(void)
+{
+	off = 1;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #if defined(CONFIG_ARCH_HAS_CPU_IDLE_WAIT)
 static void cpuidle_kick_cpus(void)
@@ -46,13 +62,20 @@ static int __cpuidle_register_device(struct cpuidle_device *dev);
  * cpuidle_idle_call - the main idle loop
  *
  * NOTE: no locks or semaphores should be used here
+<<<<<<< HEAD
  */
 static void cpuidle_idle_call(void)
+=======
+ * return non-zero on failure
+ */
+int cpuidle_idle_call(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct cpuidle_device *dev = __this_cpu_read(cpuidle_devices);
 	struct cpuidle_state *target_state;
 	int next_state;
 
+<<<<<<< HEAD
 	/* check if the device is ready */
 	if (!dev || !dev->enabled) {
 		if (pm_idle_old)
@@ -65,6 +88,17 @@ static void cpuidle_idle_call(void)
 #endif
 		return;
 	}
+=======
+	if (off)
+		return -ENODEV;
+
+	if (!initialized)
+		return -ENODEV;
+
+	/* check if the device is ready */
+	if (!dev || !dev->enabled)
+		return -EBUSY;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #if 0
 	/* shows regressions, re-enable for 2.6.29 */
@@ -89,7 +123,11 @@ static void cpuidle_idle_call(void)
 	next_state = cpuidle_curr_governor->select(dev);
 	if (need_resched()) {
 		local_irq_enable();
+<<<<<<< HEAD
 		return;
+=======
+		return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	target_state = &dev->states[next_state];
@@ -114,6 +152,11 @@ static void cpuidle_idle_call(void)
 	/* give the governor an opportunity to reflect on the outcome */
 	if (cpuidle_curr_governor->reflect)
 		cpuidle_curr_governor->reflect(dev);
+<<<<<<< HEAD
+=======
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -121,10 +164,17 @@ static void cpuidle_idle_call(void)
  */
 void cpuidle_install_idle_handler(void)
 {
+<<<<<<< HEAD
 	if (enabled_devices && (pm_idle != cpuidle_idle_call)) {
 		/* Make sure all changes finished before we switch to new idle */
 		smp_wmb();
 		pm_idle = cpuidle_idle_call;
+=======
+	if (enabled_devices) {
+		/* Make sure all changes finished before we switch to new idle */
+		smp_wmb();
+		initialized = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -133,8 +183,13 @@ void cpuidle_install_idle_handler(void)
  */
 void cpuidle_uninstall_idle_handler(void)
 {
+<<<<<<< HEAD
 	if (enabled_devices && pm_idle_old && (pm_idle != pm_idle_old)) {
 		pm_idle = pm_idle_old;
+=======
+	if (enabled_devices) {
+		initialized = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cpuidle_kick_cpus();
 	}
 }
@@ -427,7 +482,12 @@ static int __init cpuidle_init(void)
 {
 	int ret;
 
+<<<<<<< HEAD
 	pm_idle_old = pm_idle;
+=======
+	if (cpuidle_disabled())
+		return -ENODEV;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = cpuidle_add_class_sysfs(&cpu_sysdev_class);
 	if (ret)
@@ -438,4 +498,8 @@ static int __init cpuidle_init(void)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+module_param(off, int, 0444);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 core_initcall(cpuidle_init);

@@ -60,6 +60,7 @@ EXPORT_SYMBOL(s3c_device_ohci);
  */
 void __init s3c_ohci_set_platdata(struct s3c2410_hcd_info *info)
 {
+<<<<<<< HEAD
 	struct s3c2410_hcd_info *npd;
 
 	npd = kmemdup(info, sizeof(struct s3c2410_hcd_info), GFP_KERNEL);
@@ -67,4 +68,8 @@ void __init s3c_ohci_set_platdata(struct s3c2410_hcd_info *info)
 		printk(KERN_ERR "%s: no memory for platform data\n", __func__);
 
 	s3c_device_ohci.dev.platform_data = npd;
+=======
+	s3c_set_platdata(info, sizeof(struct s3c2410_hcd_info),
+			 &s3c_device_ohci);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

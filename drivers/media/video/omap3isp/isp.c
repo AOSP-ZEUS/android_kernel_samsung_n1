@@ -1107,8 +1107,12 @@ isp_restore_context(struct isp_device *isp, struct isp_reg *reg_list)
 static void isp_save_ctx(struct isp_device *isp)
 {
 	isp_save_context(isp, isp_reg_list);
+<<<<<<< HEAD
 	if (isp->iommu)
 		iommu_save_ctx(isp->iommu);
+=======
+	omap_iommu_save_ctx(isp->dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -1121,8 +1125,12 @@ static void isp_save_ctx(struct isp_device *isp)
 static void isp_restore_ctx(struct isp_device *isp)
 {
 	isp_restore_context(isp, isp_reg_list);
+<<<<<<< HEAD
 	if (isp->iommu)
 		iommu_restore_ctx(isp->iommu);
+=======
+	omap_iommu_restore_ctx(isp->dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	omap3isp_ccdc_restore_context(isp);
 	omap3isp_preview_restore_context(isp);
 }
@@ -1975,7 +1983,12 @@ static int isp_remove(struct platform_device *pdev)
 	isp_cleanup_modules(isp);
 
 	omap3isp_get(isp);
+<<<<<<< HEAD
 	iommu_put(isp->iommu);
+=======
+	iommu_detach_device(isp->domain, &pdev->dev);
+	iommu_domain_free(isp->domain);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	omap3isp_put(isp);
 
 	free_irq(isp->irq_num, isp);
@@ -2122,6 +2135,7 @@ static int isp_probe(struct platform_device *pdev)
 		}
 	}
 
+<<<<<<< HEAD
 	/* IOMMU */
 	isp->iommu = iommu_get("isp");
 	if (IS_ERR_OR_NULL(isp->iommu)) {
@@ -2130,18 +2144,41 @@ static int isp_probe(struct platform_device *pdev)
 		goto error_isp;
 	}
 
+=======
+	isp->domain = iommu_domain_alloc(pdev->dev.bus);
+	if (!isp->domain) {
+		dev_err(isp->dev, "can't alloc iommu domain\n");
+		ret = -ENOMEM;
+		goto error_isp;
+	}
+
+	ret = iommu_attach_device(isp->domain, &pdev->dev);
+	if (ret) {
+		dev_err(&pdev->dev, "can't attach iommu device: %d\n", ret);
+		goto free_domain;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Interrupt */
 	isp->irq_num = platform_get_irq(pdev, 0);
 	if (isp->irq_num <= 0) {
 		dev_err(isp->dev, "No IRQ resource\n");
 		ret = -ENODEV;
+<<<<<<< HEAD
 		goto error_isp;
+=======
+		goto detach_dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (request_irq(isp->irq_num, isp_isr, IRQF_SHARED, "OMAP3 ISP", isp)) {
 		dev_err(isp->dev, "Unable to request IRQ\n");
 		ret = -EINVAL;
+<<<<<<< HEAD
 		goto error_isp;
+=======
+		goto detach_dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* Entities */
@@ -2162,8 +2199,16 @@ error_modules:
 	isp_cleanup_modules(isp);
 error_irq:
 	free_irq(isp->irq_num, isp);
+<<<<<<< HEAD
 error_isp:
 	iommu_put(isp->iommu);
+=======
+detach_dev:
+	iommu_detach_device(isp->domain, &pdev->dev);
+free_domain:
+	iommu_domain_free(isp->domain);
+error_isp:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	omap3isp_put(isp);
 error:
 	isp_put_clocks(isp);
@@ -2234,3 +2279,7 @@ module_exit(isp_cleanup);
 MODULE_AUTHOR("Nokia Corporation");
 MODULE_DESCRIPTION("TI OMAP3 ISP driver");
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_VERSION(ISP_VIDEO_DRIVER_VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

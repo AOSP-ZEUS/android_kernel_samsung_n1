@@ -174,12 +174,38 @@ struct omap_gpio_dev_attr {
 	bool dbck_flag;		/* dbck required or not - True for OMAP3&4 */
 };
 
+<<<<<<< HEAD
+=======
+struct omap_gpio_reg_offs {
+	u16 revision;
+	u16 direction;
+	u16 datain;
+	u16 dataout;
+	u16 set_dataout;
+	u16 clr_dataout;
+	u16 irqstatus;
+	u16 irqstatus2;
+	u16 irqenable;
+	u16 set_irqenable;
+	u16 clr_irqenable;
+	u16 debounce;
+	u16 debounce_en;
+
+	bool irqenable_inv;
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct omap_gpio_platform_data {
 	u16 virtual_irq_start;
 	int bank_type;
 	int bank_width;		/* GPIO bank width */
 	int bank_stride;	/* Only needed for omap1 MPUIO */
 	bool dbck_flag;		/* dbck required or not - True for OMAP3&4 */
+<<<<<<< HEAD
+=======
+
+	struct omap_gpio_reg_offs *regs;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* TODO: Analyze removing gpio_bank_count usage from driver code */

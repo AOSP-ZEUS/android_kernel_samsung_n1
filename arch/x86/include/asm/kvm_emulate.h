@@ -189,9 +189,12 @@ struct x86_emulate_ops {
 	int (*intercept)(struct x86_emulate_ctxt *ctxt,
 			 struct x86_instruction_info *info,
 			 enum x86_intercept_stage stage);
+<<<<<<< HEAD
 
 	bool (*get_cpuid)(struct x86_emulate_ctxt *ctxt,
 			 u32 *eax, u32 *ebx, u32 *ecx, u32 *edx);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 typedef u32 __attribute__((vector_size(16))) sse128_t;
@@ -232,7 +235,30 @@ struct read_cache {
 	unsigned long end;
 };
 
+<<<<<<< HEAD
 struct decode_cache {
+=======
+struct x86_emulate_ctxt {
+	struct x86_emulate_ops *ops;
+
+	/* Register state before/after emulation. */
+	unsigned long eflags;
+	unsigned long eip; /* eip before instruction emulation */
+	/* Emulated execution mode, represented by an X86EMUL_MODE value. */
+	int mode;
+
+	/* interruptibility state, as a result of execution of STI or MOV SS */
+	int interruptibility;
+
+	bool guest_mode; /* guest running a nested guest */
+	bool perm_ok; /* do not check permissions if true */
+	bool only_vendor_specific_insn;
+
+	bool have_exception;
+	struct x86_exception exception;
+
+	/* decode cache */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 twobyte;
 	u8 b;
 	u8 intercept;
@@ -249,8 +275,11 @@ struct decode_cache {
 	unsigned int d;
 	int (*execute)(struct x86_emulate_ctxt *ctxt);
 	int (*check_perm)(struct x86_emulate_ctxt *ctxt);
+<<<<<<< HEAD
 	unsigned long regs[NR_VCPU_REGS];
 	unsigned long eip;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* modrm */
 	u8 modrm;
 	u8 modrm_mod;
@@ -258,11 +287,18 @@ struct decode_cache {
 	u8 modrm_rm;
 	u8 modrm_seg;
 	bool rip_relative;
+<<<<<<< HEAD
+=======
+	unsigned long _eip;
+	/* Fields above regs are cleared together. */
+	unsigned long regs[NR_VCPU_REGS];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct fetch_cache fetch;
 	struct read_cache io_read;
 	struct read_cache mem_read;
 };
 
+<<<<<<< HEAD
 struct x86_emulate_ctxt {
 	struct x86_emulate_ops *ops;
 
@@ -286,6 +322,8 @@ struct x86_emulate_ctxt {
 	struct decode_cache decode;
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Repeat String Operation Prefix */
 #define REPE_PREFIX	0xf3
 #define REPNE_PREFIX	0xf2
@@ -301,6 +339,7 @@ struct x86_emulate_ctxt {
 #define X86EMUL_MODE_PROT     (X86EMUL_MODE_PROT16|X86EMUL_MODE_PROT32| \
 			       X86EMUL_MODE_PROT64)
 
+<<<<<<< HEAD
 /* CPUID vendors */
 #define X86EMUL_CPUID_VENDOR_AuthenticAMD_ebx 0x68747541
 #define X86EMUL_CPUID_VENDOR_AuthenticAMD_ecx 0x444d4163
@@ -314,6 +353,8 @@ struct x86_emulate_ctxt {
 #define X86EMUL_CPUID_VENDOR_GenuineIntel_ecx 0x6c65746e
 #define X86EMUL_CPUID_VENDOR_GenuineIntel_edx 0x49656e69
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 enum x86_intercept_stage {
 	X86_ICTP_NONE = 0,   /* Allow zero-init to not match anything */
 	X86_ICPT_PRE_EXCEPT,
@@ -389,6 +430,10 @@ int x86_emulate_insn(struct x86_emulate_ctxt *ctxt);
 int emulator_task_switch(struct x86_emulate_ctxt *ctxt,
 			 u16 tss_selector, int reason,
 			 bool has_error_code, u32 error_code);
+<<<<<<< HEAD
 int emulate_int_real(struct x86_emulate_ctxt *ctxt,
 		     struct x86_emulate_ops *ops, int irq);
+=======
+int emulate_int_real(struct x86_emulate_ctxt *ctxt, int irq);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* _ASM_X86_KVM_X86_EMULATE_H */

@@ -117,6 +117,10 @@ struct mmc_data {
 
 	unsigned int		sg_len;		/* size of scatter list */
 	struct scatterlist	*sg;		/* I/O scatter list */
+<<<<<<< HEAD
+=======
+	s32			host_cookie;	/* host private data */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct mmc_request {
@@ -125,12 +129,25 @@ struct mmc_request {
 	struct mmc_data		*data;
 	struct mmc_command	*stop;
 
+<<<<<<< HEAD
 	void			*done_data;	/* completion data */
+=======
+	struct completion	completion;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	void			(*done)(struct mmc_request *);/* completion function */
 };
 
 struct mmc_host;
 struct mmc_card;
+<<<<<<< HEAD
+=======
+struct mmc_async_req;
+
+extern struct mmc_async_req *mmc_start_req(struct mmc_host *,
+					   struct mmc_async_req *, int *);
+extern int mmc_interrupt_hpi(struct mmc_card *);
+extern int mmc_bkops_start(struct mmc_card *card, bool is_synchronous);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern void mmc_wait_for_req(struct mmc_host *, struct mmc_request *);
 extern int mmc_wait_for_cmd(struct mmc_host *, struct mmc_command *, int);
@@ -155,6 +172,10 @@ extern int mmc_can_trim(struct mmc_card *card);
 extern int mmc_can_secure_erase_trim(struct mmc_card *card);
 extern int mmc_erase_group_aligned(struct mmc_card *card, unsigned int from,
 				   unsigned int nr);
+<<<<<<< HEAD
+=======
+extern unsigned int mmc_calc_max_discard(struct mmc_card *card);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern int mmc_set_blocklen(struct mmc_card *card, unsigned int blocklen);
 
@@ -179,4 +200,8 @@ static inline void mmc_claim_host(struct mmc_host *host)
 
 extern u32 mmc_vddrange_to_ocrmask(int vdd_min, int vdd_max);
 
+<<<<<<< HEAD
 #endif
+=======
+#endif /* LINUX_MMC_CORE_H */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

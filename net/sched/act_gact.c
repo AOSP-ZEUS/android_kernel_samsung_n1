@@ -125,7 +125,12 @@ static int tcf_gact_cleanup(struct tc_action *a, int bind)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int tcf_gact(struct sk_buff *skb, struct tc_action *a, struct tcf_result *res)
+=======
+static int tcf_gact(struct sk_buff *skb, const struct tc_action *a,
+		    struct tcf_result *res)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct tcf_gact *gact = a->priv;
 	int action = TC_ACT_SHOT;

@@ -12,6 +12,7 @@
  *
  */
 
+<<<<<<< HEAD
 #ifndef __S5PC110_WM8994_H
 #define __S5PC110_WM8994_H
 
@@ -21,4 +22,21 @@ struct wm8994_platform_data {
 	void (*set_mic_bias)(bool on);
 };
 
+=======
+#ifndef __T20_WM8994_H
+#define __T20_WM8994_H
+
+#define WM8994_SUB_MIC_OFF		0x00
+#define WM8994_SUB_MIC_ON		0x01
+
+struct wm8994_platform_data {
+	int ldo;
+	void (*set_mic_bias)(bool on);
+	void (*set_sub_mic_bias)(bool on);
+	bool (*get_codec_state)(void);
+	void (*set_ear_sel)(bool on);
+	void (*set_dap_connection)(u8 value);
+	int wm8994_submic_state;
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif

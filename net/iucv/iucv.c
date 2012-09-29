@@ -51,7 +51,11 @@
 #include <linux/cpu.h>
 #include <linux/reboot.h>
 #include <net/iucv/iucv.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/ebcdic.h>
 #include <asm/io.h>
 #include <asm/irq.h>
@@ -1988,12 +1992,22 @@ static int __init iucv_init(void)
 		rc = -EPROTONOSUPPORT;
 		goto out;
 	}
+<<<<<<< HEAD
 	rc = iucv_query_maxconn();
 	if (rc)
 		goto out;
 	rc = register_external_interrupt(0x4000, iucv_external_interrupt);
 	if (rc)
 		goto out;
+=======
+	ctl_set_bit(0, 1);
+	rc = iucv_query_maxconn();
+	if (rc)
+		goto out_ctl;
+	rc = register_external_interrupt(0x4000, iucv_external_interrupt);
+	if (rc)
+		goto out_ctl;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	iucv_root = root_device_register("iucv");
 	if (IS_ERR(iucv_root)) {
 		rc = PTR_ERR(iucv_root);
@@ -2055,6 +2069,11 @@ out_free:
 	root_device_unregister(iucv_root);
 out_int:
 	unregister_external_interrupt(0x4000, iucv_external_interrupt);
+<<<<<<< HEAD
+=======
+out_ctl:
+	ctl_clear_bit(0, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out:
 	return rc;
 }

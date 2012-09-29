@@ -209,6 +209,13 @@ struct snd_soc_dai_driver {
 	struct snd_soc_pcm_stream capture;
 	struct snd_soc_pcm_stream playback;
 	unsigned int symmetric_rates:1;
+<<<<<<< HEAD
+=======
+
+	/* probe ordering - for components with runtime dependencies */
+	int probe_order;
+	int remove_order;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*

@@ -11,6 +11,10 @@
  */
 
 #include <linux/device.h>
+<<<<<<< HEAD
+=======
+#include <linux/dma-mapping.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/dmaengine.h>
 #include <linux/mfd/tmio.h>
 #include <linux/mmc/host.h>
@@ -22,11 +26,22 @@
 
 #define TMIO_MMC_MIN_DMA_LEN 8
 
+<<<<<<< HEAD
 static void tmio_mmc_enable_dma(struct tmio_mmc_host *host, bool enable)
 {
 #if defined(CONFIG_SUPERH) || defined(CONFIG_ARCH_SHMOBILE)
 	/* Switch DMA mode on or off - SuperH specific? */
 	writew(enable ? 2 : 0, host->ctl + (0xd8 << host->bus_shift));
+=======
+void tmio_mmc_enable_dma(struct tmio_mmc_host *host, bool enable)
+{
+	if (!host->chan_tx || !host->chan_rx)
+		return;
+
+#if defined(CONFIG_SUPERH) || defined(CONFIG_ARCH_SHMOBILE)
+	/* Switch DMA mode on or off - SuperH specific? */
+	sd_ctrl_write16(host, CTL_DMA_ENABLE, enable ? 2 : 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 }
 
@@ -72,8 +87,13 @@ static void tmio_mmc_start_dma_rx(struct tmio_mmc_host *host)
 
 	ret = dma_map_sg(chan->device->dev, sg, host->sg_len, DMA_FROM_DEVICE);
 	if (ret > 0)
+<<<<<<< HEAD
 		desc = chan->device->device_prep_slave_sg(chan, sg, ret,
 			DMA_FROM_DEVICE, DMA_CTRL_ACK);
+=======
+		desc = dmaengine_prep_slave_sg(chan, sg, ret,
+			DMA_DEV_TO_MEM, DMA_CTRL_ACK);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (desc) {
 		cookie = dmaengine_submit(desc);
@@ -153,8 +173,18 @@ static void tmio_mmc_start_dma_tx(struct tmio_mmc_host *host)
 
 	ret = dma_map_sg(chan->device->dev, sg, host->sg_len, DMA_TO_DEVICE);
 	if (ret > 0)
+<<<<<<< HEAD
 		desc = chan->device->device_prep_slave_sg(chan, sg, ret,
 			DMA_TO_DEVICE, DMA_CTRL_ACK);
+=======
+<<<<<<< HEAD
+		desc = chan->device->device_prep_slave_sg(chan, sg, ret,
+			DMA_TO_DEVICE, DMA_CTRL_ACK);
+=======
+		desc = dmaengine_prep_slave_sg(chan, sg, ret,
+			DMA_MEM_TO_DEV, DMA_CTRL_ACK);
+>>>>>>> 1605282... dmaengine/dma_slave: introduce inline wrappers
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (desc) {
 		cookie = dmaengine_submit(desc);

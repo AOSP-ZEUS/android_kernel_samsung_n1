@@ -73,7 +73,11 @@ int nouveau_ignorelid = 0;
 module_param_named(ignorelid, nouveau_ignorelid, int, 0400);
 
 MODULE_PARM_DESC(noaccel, "Disable all acceleration");
+<<<<<<< HEAD
 int nouveau_noaccel = 0;
+=======
+int nouveau_noaccel = -1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 module_param_named(noaccel, nouveau_noaccel, int, 0400);
 
 MODULE_PARM_DESC(nofbaccel, "Disable fbcon acceleration");
@@ -119,6 +123,13 @@ MODULE_PARM_DESC(msi, "Enable MSI (default: off)\n");
 int nouveau_msi;
 module_param_named(msi, nouveau_msi, int, 0400);
 
+<<<<<<< HEAD
+=======
+MODULE_PARM_DESC(ctxfw, "Use external HUB/GPC ucode (fermi)\n");
+int nouveau_ctxfw;
+module_param_named(ctxfw, nouveau_ctxfw, int, 0400);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int nouveau_fbpercrtc;
 #if 0
 module_param_named(fbpercrtc, nouveau_fbpercrtc, int, 0400);
@@ -210,10 +221,20 @@ nouveau_pci_suspend(struct pci_dev *pdev, pm_message_t pm_state)
 	pfifo->unload_context(dev);
 
 	for (e = NVOBJ_ENGINE_NR - 1; e >= 0; e--) {
+<<<<<<< HEAD
 		if (dev_priv->eng[e]) {
 			ret = dev_priv->eng[e]->fini(dev, e);
 			if (ret)
 				goto out_abort;
+=======
+		if (!dev_priv->eng[e])
+			continue;
+
+		ret = dev_priv->eng[e]->fini(dev, e, true);
+		if (ret) {
+			NV_ERROR(dev, "... engine %d failed: %d\n", i, ret);
+			goto out_abort;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -354,7 +375,11 @@ nouveau_pci_resume(struct pci_dev *pdev)
 
 	list_for_each_entry(crtc, &dev->mode_config.crtc_list, head) {
 		struct nouveau_crtc *nv_crtc = nouveau_crtc(crtc);
+<<<<<<< HEAD
 		u32 offset = nv_crtc->cursor.nvbo->bo.mem.start << PAGE_SHIFT;
+=======
+		u32 offset = nv_crtc->cursor.nvbo->bo.offset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		nv_crtc->cursor.set_offset(nv_crtc, offset);
 		nv_crtc->cursor.set_pos(nv_crtc, nv_crtc->cursor_saved_x,
@@ -389,7 +414,13 @@ static struct drm_driver driver = {
 	.firstopen = nouveau_firstopen,
 	.lastclose = nouveau_lastclose,
 	.unload = nouveau_unload,
+<<<<<<< HEAD
 	.preclose = nouveau_preclose,
+=======
+	.open = nouveau_open,
+	.preclose = nouveau_preclose,
+	.postclose = nouveau_postclose,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_DRM_NOUVEAU_DEBUG)
 	.debugfs_init = nouveau_debugfs_init,
 	.debugfs_cleanup = nouveau_debugfs_takedown,
@@ -420,6 +451,11 @@ static struct drm_driver driver = {
 
 	.gem_init_object = nouveau_gem_object_new,
 	.gem_free_object = nouveau_gem_object_del,
+<<<<<<< HEAD
+=======
+	.gem_open_object = nouveau_gem_object_open,
+	.gem_close_object = nouveau_gem_object_close,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.name = DRIVER_NAME,
 	.desc = DRIVER_DESC,

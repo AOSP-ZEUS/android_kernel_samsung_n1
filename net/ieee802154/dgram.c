@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * ZigBee socket interface
+=======
+ * IEEE 802.15.4 dgram socket interface
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Copyright 2007, 2008 Siemens AG
  *

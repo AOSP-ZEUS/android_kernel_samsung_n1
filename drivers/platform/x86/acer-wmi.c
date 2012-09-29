@@ -99,6 +99,10 @@ enum acer_wmi_event_ids {
 static const struct key_entry acer_wmi_keymap[] = {
 	{KE_KEY, 0x01, {KEY_WLAN} },     /* WiFi */
 	{KE_KEY, 0x03, {KEY_WLAN} },     /* WiFi */
+<<<<<<< HEAD
+=======
+	{KE_KEY, 0x04, {KEY_WLAN} },     /* WiFi */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{KE_KEY, 0x12, {KEY_BLUETOOTH} },	/* BT */
 	{KE_KEY, 0x21, {KEY_PROG1} },    /* Backup */
 	{KE_KEY, 0x22, {KEY_PROG2} },    /* Arcade */
@@ -463,6 +467,7 @@ static struct dmi_system_id acer_quirks[] = {
 		},
 		.driver_data = &quirk_lenovo_ideapad_s205,
 	},
+<<<<<<< HEAD
 	{
 		.callback = dmi_matched,
 		.ident = "Lenovo 3000 N200",
@@ -472,6 +477,8 @@ static struct dmi_system_id acer_quirks[] = {
 		},
 		.driver_data = &quirk_fujitsu_amilo_li_1718,
 	},
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{}
 };
 
@@ -676,6 +683,7 @@ static acpi_status AMW0_find_mailled(void)
 	return AE_OK;
 }
 
+<<<<<<< HEAD
 static int AMW0_set_cap_acpi_check_device_found;
 
 static acpi_status AMW0_set_cap_acpi_check_device_cb(acpi_handle handle,
@@ -703,6 +711,8 @@ static int AMW0_set_cap_acpi_check_device(void)
 	return AMW0_set_cap_acpi_check_device_found;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static acpi_status AMW0_set_capabilities(void)
 {
 	struct wmab_args args;
@@ -716,9 +726,13 @@ static acpi_status AMW0_set_capabilities(void)
 	 * work.
 	 */
 	if (wmi_has_guid(AMW0_GUID2)) {
+<<<<<<< HEAD
 		if ((quirks != &quirk_unknown) ||
 		    !AMW0_set_cap_acpi_check_device())
 			interface->capability |= ACER_CAP_WIRELESS;
+=======
+		interface->capability |= ACER_CAP_WIRELESS;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return AE_OK;
 	}
 
@@ -1322,6 +1336,7 @@ static void acer_rfkill_update(struct work_struct *ignored)
 	u32 state;
 	acpi_status status;
 
+<<<<<<< HEAD
 	if (has_cap(ACER_CAP_WIRELESS)) {
 		status = get_u32(&state, ACER_CAP_WIRELESS);
 		if (ACPI_SUCCESS(status)) {
@@ -1329,6 +1344,14 @@ static void acer_rfkill_update(struct work_struct *ignored)
 				rfkill_set_hw_state(wireless_rfkill, !state);
 			else
 				rfkill_set_sw_state(wireless_rfkill, !state);
+=======
+	status = get_u32(&state, ACER_CAP_WIRELESS);
+	if (ACPI_SUCCESS(status)) {
+		if (quirks->wireless == 3) {
+			rfkill_set_hw_state(wireless_rfkill, !state);
+		} else {
+			rfkill_set_sw_state(wireless_rfkill, !state);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -1397,6 +1420,7 @@ static struct rfkill *acer_rfkill_register(struct device *dev,
 
 static int acer_rfkill_init(struct device *dev)
 {
+<<<<<<< HEAD
 	int err;
 
 	if (has_cap(ACER_CAP_WIRELESS)) {
@@ -1407,14 +1431,26 @@ static int acer_rfkill_init(struct device *dev)
 			goto error_wireless;
 		}
 	}
+=======
+	wireless_rfkill = acer_rfkill_register(dev, RFKILL_TYPE_WLAN,
+		"acer-wireless", ACER_CAP_WIRELESS);
+	if (IS_ERR(wireless_rfkill))
+		return PTR_ERR(wireless_rfkill);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (has_cap(ACER_CAP_BLUETOOTH)) {
 		bluetooth_rfkill = acer_rfkill_register(dev,
 			RFKILL_TYPE_BLUETOOTH, "acer-bluetooth",
 			ACER_CAP_BLUETOOTH);
 		if (IS_ERR(bluetooth_rfkill)) {
+<<<<<<< HEAD
 			err = PTR_ERR(bluetooth_rfkill);
 			goto error_bluetooth;
+=======
+			rfkill_unregister(wireless_rfkill);
+			rfkill_destroy(wireless_rfkill);
+			return PTR_ERR(bluetooth_rfkill);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -1423,19 +1459,32 @@ static int acer_rfkill_init(struct device *dev)
 			RFKILL_TYPE_WWAN, "acer-threeg",
 			ACER_CAP_THREEG);
 		if (IS_ERR(threeg_rfkill)) {
+<<<<<<< HEAD
 			err = PTR_ERR(threeg_rfkill);
 			goto error_threeg;
+=======
+			rfkill_unregister(wireless_rfkill);
+			rfkill_destroy(wireless_rfkill);
+			rfkill_unregister(bluetooth_rfkill);
+			rfkill_destroy(bluetooth_rfkill);
+			return PTR_ERR(threeg_rfkill);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
 	rfkill_inited = true;
 
+<<<<<<< HEAD
 	if ((ec_raw_mode || !wmi_has_guid(ACERWMID_EVENT_GUID)) &&
 	    has_cap(ACER_CAP_WIRELESS | ACER_CAP_BLUETOOTH | ACER_CAP_THREEG))
+=======
+	if (ec_raw_mode || !wmi_has_guid(ACERWMID_EVENT_GUID))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		schedule_delayed_work(&acer_rfkill_work,
 			round_jiffies_relative(HZ));
 
 	return 0;
+<<<<<<< HEAD
 
 error_threeg:
 	if (has_cap(ACER_CAP_BLUETOOTH)) {
@@ -1449,10 +1498,13 @@ error_bluetooth:
 	}
 error_wireless:
 	return err;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void acer_rfkill_exit(void)
 {
+<<<<<<< HEAD
 	if ((ec_raw_mode || !wmi_has_guid(ACERWMID_EVENT_GUID)) &&
 	    has_cap(ACER_CAP_WIRELESS | ACER_CAP_BLUETOOTH | ACER_CAP_THREEG))
 		cancel_delayed_work_sync(&acer_rfkill_work);
@@ -1461,6 +1513,13 @@ static void acer_rfkill_exit(void)
 		rfkill_unregister(wireless_rfkill);
 		rfkill_destroy(wireless_rfkill);
 	}
+=======
+	if (ec_raw_mode || !wmi_has_guid(ACERWMID_EVENT_GUID))
+		cancel_delayed_work_sync(&acer_rfkill_work);
+
+	rfkill_unregister(wireless_rfkill);
+	rfkill_destroy(wireless_rfkill);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (has_cap(ACER_CAP_BLUETOOTH)) {
 		rfkill_unregister(bluetooth_rfkill);
@@ -1482,6 +1541,12 @@ static ssize_t show_bool_threeg(struct device *dev,
 {
 	u32 result; \
 	acpi_status status;
+<<<<<<< HEAD
+=======
+
+	pr_info("This threeg sysfs will be removed in 2012"
+		" - used by: %s\n", current->comm);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (wmi_has_guid(WMID_GUID3))
 		status = wmid3_get_device_status(&result,
 				ACER_WMID3_GDS_THREEG);
@@ -1497,8 +1562,15 @@ static ssize_t set_bool_threeg(struct device *dev,
 {
 	u32 tmp = simple_strtoul(buf, NULL, 10);
 	acpi_status status = set_u32(tmp, ACER_CAP_THREEG);
+<<<<<<< HEAD
 		if (ACPI_FAILURE(status))
 			return -EINVAL;
+=======
+	pr_info("This threeg sysfs will be removed in 2012"
+		" - used by: %s\n", current->comm);
+	if (ACPI_FAILURE(status))
+		return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return count;
 }
 static DEVICE_ATTR(threeg, S_IRUGO | S_IWUSR, show_bool_threeg,
@@ -1507,6 +1579,11 @@ static DEVICE_ATTR(threeg, S_IRUGO | S_IWUSR, show_bool_threeg,
 static ssize_t show_interface(struct device *dev, struct device_attribute *attr,
 	char *buf)
 {
+<<<<<<< HEAD
+=======
+	pr_info("This interface sysfs will be removed in 2012"
+		" - used by: %s\n", current->comm);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (interface->type) {
 	case ACER_AMW0:
 		return sprintf(buf, "AMW0\n");

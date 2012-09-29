@@ -176,7 +176,11 @@ static int __init make_tempfile(const char *template, char **out_tempname,
 
 	find_tempdir();
 	if ((tempdir == NULL) || (strlen(tempdir) >= MAXPATHLEN))
+<<<<<<< HEAD
 		return -1;
+=======
+		goto out;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (template[0] != '/')
 		strcpy(tempname, tempdir);
@@ -191,13 +195,22 @@ static int __init make_tempfile(const char *template, char **out_tempname,
 	}
 	if (do_unlink && (unlink(tempname) < 0)) {
 		perror("unlink");
+<<<<<<< HEAD
 		goto out;
+=======
+		goto close;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (out_tempname) {
 		*out_tempname = tempname;
 	} else
 		free(tempname);
 	return fd;
+<<<<<<< HEAD
+=======
+close:
+	close(fd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out:
 	free(tempname);
 	return -1;

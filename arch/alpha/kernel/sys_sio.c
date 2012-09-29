@@ -146,7 +146,11 @@ sio_fixup_irq_levels(unsigned int level_bits)
 }
 
 static inline int __init
+<<<<<<< HEAD
 noname_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+noname_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	/*
 	 * The Noname board has 5 PCI slots with each of the 4
@@ -185,7 +189,11 @@ noname_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
 }
 
 static inline int __init
+<<<<<<< HEAD
 p2k_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+p2k_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	static char irq_tab[][5] __initdata = {
 		/*INT A   B   C   D */

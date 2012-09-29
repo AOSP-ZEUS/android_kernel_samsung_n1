@@ -709,7 +709,11 @@ get_a_page:
 		set_buffer_uptodate(bh);
 
 	if (!buffer_uptodate(bh)) {
+<<<<<<< HEAD
 		ll_rw_block(READ_META, 1, &bh);
+=======
+		ll_rw_block(READ | REQ_META | REQ_PRIO, 1, &bh);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		wait_on_buffer(bh);
 		if (!buffer_uptodate(bh))
 			goto unlock_out;

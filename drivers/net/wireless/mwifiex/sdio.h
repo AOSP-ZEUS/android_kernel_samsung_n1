@@ -28,6 +28,11 @@
 
 #include "main.h"
 
+<<<<<<< HEAD
+=======
+#define SD8787_DEFAULT_FW_NAME "mrvl/sd8787_uapsta.bin"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define BLOCK_MODE	1
 #define BYTE_MODE	0
 
@@ -52,10 +57,17 @@
 
 #define SDIO_MP_AGGR_DEF_PKT_LIMIT	8
 
+<<<<<<< HEAD
 #define SDIO_MP_TX_AGGR_DEF_BUF_SIZE        (4096)	/* 4K */
 
 /* Multi port RX aggregation buffer size */
 #define SDIO_MP_RX_AGGR_DEF_BUF_SIZE        (4096)	/* 4K */
+=======
+#define SDIO_MP_TX_AGGR_DEF_BUF_SIZE        (8192)	/* 8K */
+
+/* Multi port RX aggregation buffer size */
+#define SDIO_MP_RX_AGGR_DEF_BUF_SIZE        (16384)	/* 16K */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Misc. Config Register : Auto Re-enable interrupts */
 #define AUTO_RE_ENABLE_INT              BIT(4)

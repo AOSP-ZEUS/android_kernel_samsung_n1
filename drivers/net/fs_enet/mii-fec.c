@@ -136,7 +136,11 @@ static int __devinit fs_enet_mdio_probe(struct platform_device *ofdev)
 
 	snprintf(new_bus->id, MII_BUS_ID_SIZE, "%x", res.start);
 
+<<<<<<< HEAD
 	fec->fecp = ioremap(res.start, res.end - res.start + 1);
+=======
+	fec->fecp = ioremap(res.start, resource_size(&res));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!fec->fecp)
 		goto out_fec;
 

@@ -13,6 +13,10 @@ extern struct list_head cpuidle_governors;
 extern struct list_head cpuidle_detected_devices;
 extern struct mutex cpuidle_lock;
 extern spinlock_t cpuidle_driver_lock;
+<<<<<<< HEAD
+=======
+extern int cpuidle_disabled(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* idle loop */
 extern void cpuidle_install_idle_handler(void);

@@ -237,22 +237,37 @@ ssize_t part_size_show(struct device *dev,
 	return sprintf(buf, "%llu\n",(unsigned long long)p->nr_sects);
 }
 
+<<<<<<< HEAD
 ssize_t part_ro_show(struct device *dev,
 		       struct device_attribute *attr, char *buf)
+=======
+static ssize_t part_ro_show(struct device *dev,
+			    struct device_attribute *attr, char *buf)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct hd_struct *p = dev_to_part(dev);
 	return sprintf(buf, "%d\n", p->policy ? 1 : 0);
 }
 
+<<<<<<< HEAD
 ssize_t part_alignment_offset_show(struct device *dev,
 				   struct device_attribute *attr, char *buf)
+=======
+static ssize_t part_alignment_offset_show(struct device *dev,
+					  struct device_attribute *attr, char *buf)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct hd_struct *p = dev_to_part(dev);
 	return sprintf(buf, "%llu\n", (unsigned long long)p->alignment_offset);
 }
 
+<<<<<<< HEAD
 ssize_t part_discard_alignment_show(struct device *dev,
 				   struct device_attribute *attr, char *buf)
+=======
+static ssize_t part_discard_alignment_show(struct device *dev,
+					   struct device_attribute *attr, char *buf)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct hd_struct *p = dev_to_part(dev);
 	return sprintf(buf, "%u\n", p->discard_alignment);
@@ -550,11 +565,25 @@ static bool disk_unlock_native_capacity(struct gendisk *disk)
 	}
 }
 
+<<<<<<< HEAD
 static int drop_partitions(struct gendisk *disk, struct block_device *bdev)
 {
 	struct disk_part_iter piter;
 	struct hd_struct *part;
 	int res;
+=======
+int rescan_partitions(struct gendisk *disk, struct block_device *bdev)
+{
+	struct parsed_partitions *state = NULL;
+	struct disk_part_iter piter;
+	struct hd_struct *part;
+	int p, highest, res;
+rescan:
+	if (state && !IS_ERR(state)) {
+		kfree(state);
+		state = NULL;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (bdev->bd_part_count)
 		return -EBUSY;
@@ -567,6 +596,7 @@ static int drop_partitions(struct gendisk *disk, struct block_device *bdev)
 		delete_partition(disk, part->partno);
 	disk_part_iter_exit(&piter);
 
+<<<<<<< HEAD
 	return 0;
 }
 
@@ -585,6 +615,8 @@ rescan:
 	if (res)
 		return res;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (disk->fops->revalidate_disk)
 		disk->fops->revalidate_disk(disk);
 	check_disk_size_change(disk, bdev);
@@ -688,6 +720,7 @@ rescan:
 	return 0;
 }
 
+<<<<<<< HEAD
 int invalidate_partitions(struct gendisk *disk, struct block_device *bdev)
 {
 	int res;
@@ -708,6 +741,8 @@ int invalidate_partitions(struct gendisk *disk, struct block_device *bdev)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 unsigned char *read_dev_sector(struct block_device *bdev, sector_t n, Sector *p)
 {
 	struct address_space *mapping = bdev->bd_inode->i_mapping;

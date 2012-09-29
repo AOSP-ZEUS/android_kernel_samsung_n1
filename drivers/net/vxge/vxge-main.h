@@ -18,6 +18,11 @@
 #include "vxge-config.h"
 #include "vxge-version.h"
 #include <linux/list.h>
+<<<<<<< HEAD
+=======
+#include <linux/bitops.h>
+#include <linux/if_vlan.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define VXGE_DRIVER_NAME		"vxge"
 #define VXGE_DRIVER_VENDOR		"Neterion, Inc"
@@ -201,6 +206,7 @@ struct vxge_msix_entry {
 /* Software Statistics */
 
 struct vxge_sw_stats {
+<<<<<<< HEAD
 	/* Network Stats (interface stats) */
 
 	/* Tx */
@@ -225,6 +231,16 @@ struct vxge_sw_stats {
 	u64 link_down;
 	u64 pci_map_fail;
 	u64 skb_alloc_fail;
+=======
+
+	/* Virtual Path */
+	unsigned long vpaths_open;
+	unsigned long vpath_open_fail;
+
+	/* Misc. */
+	unsigned long link_up;
+	unsigned long link_down;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct vxge_mac_addrs {
@@ -237,12 +253,23 @@ struct vxge_mac_addrs {
 struct vxgedev;
 
 struct vxge_fifo_stats {
+<<<<<<< HEAD
 	u64 tx_frms;
 	u64 tx_errors;
 	u64 tx_bytes;
 	u64 txd_not_free;
 	u64 txd_out_of_desc;
 	u64 pci_map_fail;
+=======
+	struct u64_stats_sync	syncp;
+	u64 tx_frms;
+	u64 tx_bytes;
+
+	unsigned long tx_errors;
+	unsigned long txd_not_free;
+	unsigned long txd_out_of_desc;
+	unsigned long pci_map_fail;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct vxge_fifo {
@@ -264,6 +291,7 @@ struct vxge_fifo {
 } ____cacheline_aligned;
 
 struct vxge_ring_stats {
+<<<<<<< HEAD
 	u64 prev_rx_frms;
 	u64 rx_frms;
 	u64 rx_errors;
@@ -272,6 +300,18 @@ struct vxge_ring_stats {
 	u64 rx_mcast;
 	u64 pci_map_fail;
 	u64 skb_alloc_fail;
+=======
+	struct u64_stats_sync syncp;
+	u64 rx_frms;
+	u64 rx_mcast;
+	u64 rx_bytes;
+
+	unsigned long rx_errors;
+	unsigned long rx_dropped;
+	unsigned long prev_rx_frms;
+	unsigned long pci_map_fail;
+	unsigned long skb_alloc_fail;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct vxge_ring {
@@ -299,7 +339,10 @@ struct vxge_ring {
 #define VXGE_MAX_MAC_ADDR_COUNT		30
 
 	int vlan_tag_strip;
+<<<<<<< HEAD
 	struct vlan_group *vlgrp;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 rx_vector_no;
 	enum vxge_hw_status last_status;
 
@@ -344,7 +387,11 @@ struct vxgedev {
 	struct net_device	*ndev;
 	struct pci_dev		*pdev;
 	struct __vxge_hw_device *devh;
+<<<<<<< HEAD
 	struct vlan_group	*vlgrp;
+=======
+	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int vlan_tag_strip;
 	struct vxge_config	config;
 	unsigned long	state;

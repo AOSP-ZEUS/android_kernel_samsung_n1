@@ -87,7 +87,11 @@ do {									\
 	__ar->cmd_buf[2 * __nreg + 1] = cpu_to_le32(r);			\
 	__ar->cmd_buf[2 * __nreg + 2] = cpu_to_le32(v);			\
 	__nreg++;							\
+<<<<<<< HEAD
 	if ((__nreg >= PAYLOAD_MAX/2)) {				\
+=======
+	if ((__nreg >= PAYLOAD_MAX / 2)) {				\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (IS_ACCEPTING_CMD(__ar))				\
 			__err = carl9170_exec_cmd(__ar,			\
 				CARL9170_CMD_WREG, 8 * __nreg,		\
@@ -160,7 +164,11 @@ do {									\
 } while (0)
 
 #define carl9170_async_regwrite_finish() do {				\
+<<<<<<< HEAD
 __async_regwrite_out :							\
+=======
+__async_regwrite_out:							\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (__cmd != NULL && __err == 0)				\
 		carl9170_async_regwrite_flush();			\
 	kfree(__cmd);							\

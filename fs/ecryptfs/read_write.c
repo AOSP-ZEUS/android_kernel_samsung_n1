@@ -130,7 +130,11 @@ int ecryptfs_write(struct inode *ecryptfs_inode, char *data, loff_t offset,
 		pgoff_t ecryptfs_page_idx = (pos >> PAGE_CACHE_SHIFT);
 		size_t start_offset_in_page = (pos & ~PAGE_CACHE_MASK);
 		size_t num_bytes = (PAGE_CACHE_SIZE - start_offset_in_page);
+<<<<<<< HEAD
 		loff_t total_remaining_bytes = ((offset + size) - pos);
+=======
+		size_t total_remaining_bytes = ((offset + size) - pos);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (fatal_signal_pending(current)) {
 			rc = -EINTR;
@@ -141,7 +145,11 @@ int ecryptfs_write(struct inode *ecryptfs_inode, char *data, loff_t offset,
 			num_bytes = total_remaining_bytes;
 		if (pos < offset) {
 			/* remaining zeros to write, up to destination offset */
+<<<<<<< HEAD
 			loff_t total_remaining_zeros = (offset - pos);
+=======
+			size_t total_remaining_zeros = (offset - pos);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			if (num_bytes > total_remaining_zeros)
 				num_bytes = total_remaining_zeros;

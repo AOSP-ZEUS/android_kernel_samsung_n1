@@ -240,6 +240,11 @@
 		#address-cells = <2>;
 		#size-cells = <1>;
 		reg = <0xe0005000 0x40>;
+<<<<<<< HEAD
+=======
+		interrupt-parent = <&mpic>;
+		interrupts = <19 2>;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		ranges = <0 0 0xfc000000 0x04000000
 			  2 0 0xc8000000 0x04000000

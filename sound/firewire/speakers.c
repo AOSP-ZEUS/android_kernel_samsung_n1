@@ -171,7 +171,11 @@ static int fwspk_open(struct snd_pcm_substream *substream)
 
 	err = snd_pcm_hw_constraint_minmax(runtime,
 					   SNDRV_PCM_HW_PARAM_PERIOD_TIME,
+<<<<<<< HEAD
 					   5000, 8192000);
+=======
+					   5000, UINT_MAX);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err < 0)
 		return err;
 

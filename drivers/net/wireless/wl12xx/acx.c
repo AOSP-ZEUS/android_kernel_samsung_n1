@@ -25,7 +25,10 @@
 
 #include <linux/module.h>
 #include <linux/platform_device.h>
+<<<<<<< HEAD
 #include <linux/crc7.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/spi/spi.h>
 #include <linux/slab.h>
 
@@ -78,8 +81,11 @@ int wl1271_acx_sleep_auth(struct wl1271 *wl, u8 sleep_auth)
 	auth->sleep_auth = sleep_auth;
 
 	ret = wl1271_cmd_configure(wl, ACX_SLEEP_AUTH, auth, sizeof(*auth));
+<<<<<<< HEAD
 	if (ret < 0)
 		return ret;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 out:
 	kfree(auth);
@@ -91,7 +97,11 @@ int wl1271_acx_tx_power(struct wl1271 *wl, int power)
 	struct acx_current_tx_power *acx;
 	int ret;
 
+<<<<<<< HEAD
 	wl1271_debug(DEBUG_ACX, "acx dot11_cur_tx_pwr");
+=======
+	wl1271_debug(DEBUG_ACX, "acx dot11_cur_tx_pwr %d", power);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (power < 0 || power > 25)
 		return -EINVAL;
@@ -625,10 +635,15 @@ int wl1271_acx_cca_threshold(struct wl1271 *wl)
 
 	ret = wl1271_cmd_configure(wl, ACX_CCA_THRESHOLD,
 				   detection, sizeof(*detection));
+<<<<<<< HEAD
 	if (ret < 0) {
 		wl1271_warning("failed to set cca threshold: %d", ret);
 		return ret;
 	}
+=======
+	if (ret < 0)
+		wl1271_warning("failed to set cca threshold: %d", ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 out:
 	kfree(detection);
@@ -1068,6 +1083,10 @@ int wl1271_acx_sta_mem_cfg(struct wl1271 *wl)
 	mem_conf->tx_free_req = mem->min_req_tx_blocks;
 	mem_conf->rx_free_req = mem->min_req_rx_blocks;
 	mem_conf->tx_min = mem->tx_min;
+<<<<<<< HEAD
+=======
+	mem_conf->fwlog_blocks = wl->conf.fwlog.mem_blocks;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = wl1271_cmd_configure(wl, ACX_MEM_CFG, mem_conf,
 				   sizeof(*mem_conf));
@@ -1577,22 +1596,86 @@ out:
 	return ret;
 }
 
+<<<<<<< HEAD
 int wl1271_acx_max_tx_retry(struct wl1271 *wl)
 {
 	struct wl1271_acx_max_tx_retry *acx = NULL;
 	int ret;
 
 	wl1271_debug(DEBUG_ACX, "acx max tx retry");
+=======
+int wl1271_acx_ps_rx_streaming(struct wl1271 *wl, bool enable)
+{
+	struct wl1271_acx_ps_rx_streaming *rx_streaming;
+	u32 conf_queues, enable_queues;
+	int i, ret = 0;
+
+	wl1271_debug(DEBUG_ACX, "acx ps rx streaming");
+
+	rx_streaming = kzalloc(sizeof(*rx_streaming), GFP_KERNEL);
+	if (!rx_streaming) {
+		ret = -ENOMEM;
+		goto out;
+	}
+
+	conf_queues = wl->conf.rx_streaming.queues;
+	if (enable)
+		enable_queues = conf_queues;
+	else
+		enable_queues = 0;
+
+	for (i = 0; i < 8; i++) {
+		/*
+		 * Skip non-changed queues, to avoid redundant acxs.
+		 * this check assumes conf.rx_streaming.queues can't
+		 * be changed while rx_streaming is enabled.
+		 */
+		if (!(conf_queues & BIT(i)))
+			continue;
+
+		rx_streaming->tid = i;
+		rx_streaming->enable = enable_queues & BIT(i);
+		rx_streaming->period = wl->conf.rx_streaming.interval;
+		rx_streaming->timeout = wl->conf.rx_streaming.interval;
+
+		ret = wl1271_cmd_configure(wl, ACX_PS_RX_STREAMING,
+					   rx_streaming,
+					   sizeof(*rx_streaming));
+		if (ret < 0) {
+			wl1271_warning("acx ps rx streaming failed: %d", ret);
+			goto out;
+		}
+	}
+out:
+	kfree(rx_streaming);
+	return ret;
+}
+
+int wl1271_acx_ap_max_tx_retry(struct wl1271 *wl)
+{
+	struct wl1271_acx_ap_max_tx_retry *acx = NULL;
+	int ret;
+
+	wl1271_debug(DEBUG_ACX, "acx ap max tx retry");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	acx = kzalloc(sizeof(*acx), GFP_KERNEL);
 	if (!acx)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	acx->max_tx_retry = cpu_to_le16(wl->conf.tx.ap_max_tx_retries);
 
 	ret = wl1271_cmd_configure(wl, ACX_MAX_TX_FAILURE, acx, sizeof(*acx));
 	if (ret < 0) {
 		wl1271_warning("acx max tx retry failed: %d", ret);
+=======
+	acx->max_tx_retry = cpu_to_le16(wl->conf.tx.max_tx_retries);
+
+	ret = wl1271_cmd_configure(wl, ACX_MAX_TX_FAILURE, acx, sizeof(*acx));
+	if (ret < 0) {
+		wl1271_warning("acx ap max tx retry failed: %d", ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto out;
 	}
 

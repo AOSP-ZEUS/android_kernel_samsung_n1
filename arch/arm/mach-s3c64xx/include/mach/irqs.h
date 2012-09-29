@@ -198,7 +198,13 @@
  * interrupt controllers). */
 #define IRQ_BOARD_START (IRQ_EINT_GROUP9_BASE + IRQ_EINT_GROUP9_NR + 1)
 
+<<<<<<< HEAD
 #ifdef CONFIG_SMDK6410_WM1190_EV1
+=======
+#ifdef CONFIG_MACH_WLF_CRAGG_6410
+#define IRQ_BOARD_NR 128
+#elif defined(CONFIG_SMDK6410_WM1190_EV1)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define IRQ_BOARD_NR 64
 #elif defined(CONFIG_SMDK6410_WM1192_EV1)
 #define IRQ_BOARD_NR 64
@@ -215,6 +221,10 @@
 /* Compatibility */
 
 #define IRQ_ONENAND	IRQ_ONENAND0
+<<<<<<< HEAD
+=======
+#define IRQ_I2S0	IRQ_S3C6410_IIS
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* __ASM_MACH_S3C64XX_IRQS_H */
 

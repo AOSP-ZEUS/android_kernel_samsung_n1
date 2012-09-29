@@ -68,7 +68,11 @@
  *  we're using 655us, similar to UV1: 65 units of 10us
  */
 #define UV1_INTD_SOFT_ACK_TIMEOUT_PERIOD (9UL)
+<<<<<<< HEAD
 #define UV2_INTD_SOFT_ACK_TIMEOUT_PERIOD (65*10UL)
+=======
+#define UV2_INTD_SOFT_ACK_TIMEOUT_PERIOD (15UL)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define UV_INTD_SOFT_ACK_TIMEOUT_PERIOD	(is_uv1_hub() ?			\
 		UV1_INTD_SOFT_ACK_TIMEOUT_PERIOD :			\
@@ -107,12 +111,29 @@
 #define DS_SOURCE_TIMEOUT		3
 /*
  * bits put together from HRP_LB_BAU_SB_ACTIVATION_STATUS_0/1/2
+<<<<<<< HEAD
  * values 1 and 5 will not occur
  */
 #define UV2H_DESC_IDLE			0
 #define UV2H_DESC_DEST_TIMEOUT		2
 #define UV2H_DESC_DEST_STRONG_NACK	3
 #define UV2H_DESC_BUSY			4
+=======
+ * values 1 and 3 will not occur
+ *        Decoded meaning              ERROR  BUSY    AUX ERR
+ * -------------------------------     ----   -----   -------
+ * IDLE                                 0       0        0
+ * BUSY (active)                        0       1        0
+ * SW Ack Timeout (destination)         1       0        0
+ * SW Ack INTD rejected (strong NACK)   1       0        1
+ * Source Side Time Out Detected        1       1        0
+ * Destination Side PUT Failed          1       1        1
+ */
+#define UV2H_DESC_IDLE			0
+#define UV2H_DESC_BUSY			2
+#define UV2H_DESC_DEST_TIMEOUT		4
+#define UV2H_DESC_DEST_STRONG_NACK	5
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define UV2H_DESC_SOURCE_TIMEOUT	6
 #define UV2H_DESC_DEST_PUT_ERR		7
 
@@ -184,7 +205,11 @@
  * 'base_dest_nasid' field of the header corresponds to the
  * destination nodeID associated with that specified bit.
  */
+<<<<<<< HEAD
 struct bau_targ_hubmask {
+=======
+struct pnmask {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long		bits[BITS_TO_LONGS(UV_DISTRIBUTION_SIZE)];
 };
 
@@ -315,7 +340,11 @@ struct bau_msg_header {
  * Should be 64 bytes
  */
 struct bau_desc {
+<<<<<<< HEAD
 	struct bau_targ_hubmask	distribution;
+=======
+	struct pnmask			distribution;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * message template, consisting of header and payload:
 	 */
@@ -489,6 +518,10 @@ struct bau_control {
 	struct bau_control	*uvhub_master;
 	struct bau_control	*socket_master;
 	struct ptc_stats	*statp;
+<<<<<<< HEAD
+=======
+	cpumask_t		*cpumask;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long		timeout_interval;
 	unsigned long		set_bau_on_time;
 	atomic_t		active_descriptor_count;
@@ -527,76 +560,133 @@ struct bau_control {
 	struct hub_and_pnode	*thp;
 };
 
+<<<<<<< HEAD
 static unsigned long read_mmr_uv2_status(void)
+=======
+static inline unsigned long read_mmr_uv2_status(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return read_lmmr(UV2H_LB_BAU_SB_ACTIVATION_STATUS_2);
 }
 
+<<<<<<< HEAD
 static void write_mmr_data_broadcast(int pnode, unsigned long mmr_image)
+=======
+static inline void write_mmr_data_broadcast(int pnode, unsigned long mmr_image)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	write_gmmr(pnode, UVH_BAU_DATA_BROADCAST, mmr_image);
 }
 
+<<<<<<< HEAD
 static void write_mmr_descriptor_base(int pnode, unsigned long mmr_image)
+=======
+static inline void write_mmr_descriptor_base(int pnode, unsigned long mmr_image)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	write_gmmr(pnode, UVH_LB_BAU_SB_DESCRIPTOR_BASE, mmr_image);
 }
 
+<<<<<<< HEAD
 static void write_mmr_activation(unsigned long index)
+=======
+static inline void write_mmr_activation(unsigned long index)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	write_lmmr(UVH_LB_BAU_SB_ACTIVATION_CONTROL, index);
 }
 
+<<<<<<< HEAD
 static void write_gmmr_activation(int pnode, unsigned long mmr_image)
+=======
+static inline void write_gmmr_activation(int pnode, unsigned long mmr_image)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	write_gmmr(pnode, UVH_LB_BAU_SB_ACTIVATION_CONTROL, mmr_image);
 }
 
+<<<<<<< HEAD
 static void write_mmr_payload_first(int pnode, unsigned long mmr_image)
+=======
+static inline void write_mmr_payload_first(int pnode, unsigned long mmr_image)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	write_gmmr(pnode, UVH_LB_BAU_INTD_PAYLOAD_QUEUE_FIRST, mmr_image);
 }
 
+<<<<<<< HEAD
 static void write_mmr_payload_tail(int pnode, unsigned long mmr_image)
+=======
+static inline void write_mmr_payload_tail(int pnode, unsigned long mmr_image)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	write_gmmr(pnode, UVH_LB_BAU_INTD_PAYLOAD_QUEUE_TAIL, mmr_image);
 }
 
+<<<<<<< HEAD
 static void write_mmr_payload_last(int pnode, unsigned long mmr_image)
+=======
+static inline void write_mmr_payload_last(int pnode, unsigned long mmr_image)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	write_gmmr(pnode, UVH_LB_BAU_INTD_PAYLOAD_QUEUE_LAST, mmr_image);
 }
 
+<<<<<<< HEAD
 static void write_mmr_misc_control(int pnode, unsigned long mmr_image)
+=======
+static inline void write_mmr_misc_control(int pnode, unsigned long mmr_image)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	write_gmmr(pnode, UVH_LB_BAU_MISC_CONTROL, mmr_image);
 }
 
+<<<<<<< HEAD
 static unsigned long read_mmr_misc_control(int pnode)
+=======
+static inline unsigned long read_mmr_misc_control(int pnode)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return read_gmmr(pnode, UVH_LB_BAU_MISC_CONTROL);
 }
 
+<<<<<<< HEAD
 static void write_mmr_sw_ack(unsigned long mr)
+=======
+static inline void write_mmr_sw_ack(unsigned long mr)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	uv_write_local_mmr(UVH_LB_BAU_INTD_SOFTWARE_ACKNOWLEDGE_ALIAS, mr);
 }
 
+<<<<<<< HEAD
 static unsigned long read_mmr_sw_ack(void)
+=======
+static inline unsigned long read_mmr_sw_ack(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return read_lmmr(UVH_LB_BAU_INTD_SOFTWARE_ACKNOWLEDGE);
 }
 
+<<<<<<< HEAD
 static unsigned long read_gmmr_sw_ack(int pnode)
+=======
+static inline unsigned long read_gmmr_sw_ack(int pnode)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return read_gmmr(pnode, UVH_LB_BAU_INTD_SOFTWARE_ACKNOWLEDGE);
 }
 
+<<<<<<< HEAD
 static void write_mmr_data_config(int pnode, unsigned long mr)
+=======
+static inline void write_mmr_data_config(int pnode, unsigned long mr)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	uv_write_global_mmr64(pnode, UVH_BAU_DATA_CONFIG, mr);
 }
 
+<<<<<<< HEAD
 static inline int bau_uvhub_isset(int uvhub, struct bau_targ_hubmask *dstp)
 {
 	return constant_test_bit(uvhub, &dstp->bits[0]);
@@ -606,11 +696,26 @@ static inline void bau_uvhub_set(int pnode, struct bau_targ_hubmask *dstp)
 	__set_bit(pnode, &dstp->bits[0]);
 }
 static inline void bau_uvhubs_clear(struct bau_targ_hubmask *dstp,
+=======
+static inline int bau_uvhub_isset(int uvhub, struct pnmask *dstp)
+{
+	return constant_test_bit(uvhub, &dstp->bits[0]);
+}
+static inline void bau_uvhub_set(int pnode, struct pnmask *dstp)
+{
+	__set_bit(pnode, &dstp->bits[0]);
+}
+static inline void bau_uvhubs_clear(struct pnmask *dstp,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				    int nbits)
 {
 	bitmap_zero(&dstp->bits[0], nbits);
 }
+<<<<<<< HEAD
 static inline int bau_uvhub_weight(struct bau_targ_hubmask *dstp)
+=======
+static inline int bau_uvhub_weight(struct pnmask *dstp)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return bitmap_weight((unsigned long *)&dstp->bits[0],
 				UV_DISTRIBUTION_SIZE);

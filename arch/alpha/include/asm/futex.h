@@ -108,7 +108,11 @@ futex_atomic_cmpxchg_inatomic(u32 *uval, u32 __user *uaddr,
 	"	lda	$31,3b-2b(%0)\n"
 	"	.previous\n"
 	:	"+r"(ret), "=&r"(prev), "=&r"(cmp)
+<<<<<<< HEAD
 	:	"r"(uaddr), "r"((long)(int)oldval), "r"(newval)
+=======
+	:	"r"(uaddr), "r"((long)oldval), "r"(newval)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	:	"memory");
 
 	*uval = prev;

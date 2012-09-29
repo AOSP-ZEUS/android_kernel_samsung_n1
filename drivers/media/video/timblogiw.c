@@ -20,7 +20,10 @@
  * Timberdale FPGA LogiWin Video In
  */
 
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/platform_device.h>
 #include <linux/slab.h>
 #include <linux/dmaengine.h>
@@ -564,8 +567,13 @@ static void buffer_queue(struct videobuf_queue *vq, struct videobuf_buffer *vb)
 
 	spin_unlock_irq(&fh->queue_lock);
 
+<<<<<<< HEAD
 	desc = fh->chan->device->device_prep_slave_sg(fh->chan,
 		buf->sg, sg_elems, DMA_FROM_DEVICE,
+=======
+	desc = dmaengine_prep_slave_sg(fh->chan,
+		buf->sg, sg_elems, DMA_DEV_TO_MEM,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		DMA_PREP_INTERRUPT | DMA_COMPL_SKIP_SRC_UNMAP);
 	if (!desc) {
 		spin_lock_irq(&fh->queue_lock);

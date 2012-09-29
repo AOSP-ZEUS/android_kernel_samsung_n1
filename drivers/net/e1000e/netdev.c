@@ -36,6 +36,10 @@
 #include <linux/pagemap.h>
 #include <linux/delay.h>
 #include <linux/netdevice.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/tcp.h>
 #include <linux/ipv6.h>
 #include <linux/slab.h>
@@ -53,9 +57,15 @@
 
 #include "e1000.h"
 
+<<<<<<< HEAD
 #define DRV_EXTRAVERSION "-k2"
 
 #define DRV_VERSION "1.3.10" DRV_EXTRAVERSION
+=======
+#define DRV_EXTRAVERSION "-k"
+
+#define DRV_VERSION "1.4.4" DRV_EXTRAVERSION
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 char e1000e_driver_name[] = "e1000e";
 const char e1000e_driver_version[] = DRV_VERSION;
 
@@ -518,11 +528,75 @@ static void e1000_rx_checksum(struct e1000_adapter *adapter, u32 status_err,
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * e1000e_update_tail_wa - helper function for e1000e_update_[rt]dt_wa()
+ * @hw: pointer to the HW structure
+ * @tail: address of tail descriptor register
+ * @i: value to write to tail descriptor register
+ *
+ * When updating the tail register, the ME could be accessing Host CSR
+ * registers at the same time.  Normally, this is handled in h/w by an
+ * arbiter but on some parts there is a bug that acknowledges Host accesses
+ * later than it should which could result in the descriptor register to
+ * have an incorrect value.  Workaround this by checking the FWSM register
+ * which has bit 24 set while ME is accessing Host CSR registers, wait
+ * if it is set and try again a number of times.
+ **/
+static inline s32 e1000e_update_tail_wa(struct e1000_hw *hw, u8 __iomem * tail,
+					unsigned int i)
+{
+	unsigned int j = 0;
+
+	while ((j++ < E1000_ICH_FWSM_PCIM2PCI_COUNT) &&
+	       (er32(FWSM) & E1000_ICH_FWSM_PCIM2PCI))
+		udelay(50);
+
+	writel(i, tail);
+
+	if ((j == E1000_ICH_FWSM_PCIM2PCI_COUNT) && (i != readl(tail)))
+		return E1000_ERR_SWFW_SYNC;
+
+	return 0;
+}
+
+static void e1000e_update_rdt_wa(struct e1000_adapter *adapter, unsigned int i)
+{
+	u8 __iomem *tail = (adapter->hw.hw_addr + adapter->rx_ring->tail);
+	struct e1000_hw *hw = &adapter->hw;
+
+	if (e1000e_update_tail_wa(hw, tail, i)) {
+		u32 rctl = er32(RCTL);
+		ew32(RCTL, rctl & ~E1000_RCTL_EN);
+		e_err("ME firmware caused invalid RDT - resetting\n");
+		schedule_work(&adapter->reset_task);
+	}
+}
+
+static void e1000e_update_tdt_wa(struct e1000_adapter *adapter, unsigned int i)
+{
+	u8 __iomem *tail = (adapter->hw.hw_addr + adapter->tx_ring->tail);
+	struct e1000_hw *hw = &adapter->hw;
+
+	if (e1000e_update_tail_wa(hw, tail, i)) {
+		u32 tctl = er32(TCTL);
+		ew32(TCTL, tctl & ~E1000_TCTL_EN);
+		e_err("ME firmware caused invalid TDT - resetting\n");
+		schedule_work(&adapter->reset_task);
+	}
+}
+
+/**
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * e1000_alloc_rx_buffers - Replace used receive buffers; legacy & extended
  * @adapter: address of board private structure
  **/
 static void e1000_alloc_rx_buffers(struct e1000_adapter *adapter,
+<<<<<<< HEAD
 				   int cleaned_count)
+=======
+				   int cleaned_count, gfp_t gfp)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct net_device *netdev = adapter->netdev;
 	struct pci_dev *pdev = adapter->pdev;
@@ -543,7 +617,11 @@ static void e1000_alloc_rx_buffers(struct e1000_adapter *adapter,
 			goto map_skb;
 		}
 
+<<<<<<< HEAD
 		skb = netdev_alloc_skb_ip_align(netdev, bufsz);
+=======
+		skb = __netdev_alloc_skb_ip_align(netdev, bufsz, gfp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!skb) {
 			/* Better luck next round */
 			adapter->alloc_rx_buff_failed++;
@@ -572,7 +650,14 @@ map_skb:
 			 * such as IA-64).
 			 */
 			wmb();
+<<<<<<< HEAD
 			writel(i, adapter->hw.hw_addr + rx_ring->tail);
+=======
+			if (adapter->flags2 & FLAG2_PCIM2PCI_ARBITER_WA)
+				e1000e_update_rdt_wa(adapter, i);
+			else
+				writel(i, adapter->hw.hw_addr + rx_ring->tail);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		i++;
 		if (i == rx_ring->count)
@@ -588,7 +673,11 @@ map_skb:
  * @adapter: address of board private structure
  **/
 static void e1000_alloc_rx_buffers_ps(struct e1000_adapter *adapter,
+<<<<<<< HEAD
 				      int cleaned_count)
+=======
+				      int cleaned_count, gfp_t gfp)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct net_device *netdev = adapter->netdev;
 	struct pci_dev *pdev = adapter->pdev;
@@ -614,7 +703,11 @@ static void e1000_alloc_rx_buffers_ps(struct e1000_adapter *adapter,
 				continue;
 			}
 			if (!ps_page->page) {
+<<<<<<< HEAD
 				ps_page->page = alloc_page(GFP_ATOMIC);
+=======
+				ps_page->page = alloc_page(gfp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				if (!ps_page->page) {
 					adapter->alloc_rx_buff_failed++;
 					goto no_buffers;
@@ -640,8 +733,14 @@ static void e1000_alloc_rx_buffers_ps(struct e1000_adapter *adapter,
 			    cpu_to_le64(ps_page->dma);
 		}
 
+<<<<<<< HEAD
 		skb = netdev_alloc_skb_ip_align(netdev,
 						adapter->rx_ps_bsize0);
+=======
+		skb = __netdev_alloc_skb_ip_align(netdev,
+						  adapter->rx_ps_bsize0,
+						  gfp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (!skb) {
 			adapter->alloc_rx_buff_failed++;
@@ -671,7 +770,15 @@ static void e1000_alloc_rx_buffers_ps(struct e1000_adapter *adapter,
 			 * such as IA-64).
 			 */
 			wmb();
+<<<<<<< HEAD
 			writel(i << 1, adapter->hw.hw_addr + rx_ring->tail);
+=======
+			if (adapter->flags2 & FLAG2_PCIM2PCI_ARBITER_WA)
+				e1000e_update_rdt_wa(adapter, i << 1);
+			else
+				writel(i << 1,
+				       adapter->hw.hw_addr + rx_ring->tail);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 		i++;
@@ -691,7 +798,11 @@ no_buffers:
  **/
 
 static void e1000_alloc_jumbo_rx_buffers(struct e1000_adapter *adapter,
+<<<<<<< HEAD
                                          int cleaned_count)
+=======
+					 int cleaned_count, gfp_t gfp)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct net_device *netdev = adapter->netdev;
 	struct pci_dev *pdev = adapter->pdev;
@@ -712,7 +823,11 @@ static void e1000_alloc_jumbo_rx_buffers(struct e1000_adapter *adapter,
 			goto check_page;
 		}
 
+<<<<<<< HEAD
 		skb = netdev_alloc_skb_ip_align(netdev, bufsz);
+=======
+		skb = __netdev_alloc_skb_ip_align(netdev, bufsz, gfp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (unlikely(!skb)) {
 			/* Better luck next round */
 			adapter->alloc_rx_buff_failed++;
@@ -723,7 +838,11 @@ static void e1000_alloc_jumbo_rx_buffers(struct e1000_adapter *adapter,
 check_page:
 		/* allocate a new page if necessary */
 		if (!buffer_info->page) {
+<<<<<<< HEAD
 			buffer_info->page = alloc_page(GFP_ATOMIC);
+=======
+			buffer_info->page = alloc_page(gfp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (unlikely(!buffer_info->page)) {
 				adapter->alloc_rx_buff_failed++;
 				break;
@@ -754,7 +873,14 @@ check_page:
 		 * applicable for weak-ordered memory model archs,
 		 * such as IA-64). */
 		wmb();
+<<<<<<< HEAD
 		writel(i, adapter->hw.hw_addr + rx_ring->tail);
+=======
+		if (adapter->flags2 & FLAG2_PCIM2PCI_ARBITER_WA)
+			e1000e_update_rdt_wa(adapter, i);
+		else
+			writel(i, adapter->hw.hw_addr + rx_ring->tail);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -887,7 +1013,12 @@ next_desc:
 
 		/* return some buffers to hardware, one at a time is too slow */
 		if (cleaned_count >= E1000_RX_BUFFER_WRITE) {
+<<<<<<< HEAD
 			adapter->alloc_rx_buf(adapter, cleaned_count);
+=======
+			adapter->alloc_rx_buf(adapter, cleaned_count,
+					      GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			cleaned_count = 0;
 		}
 
@@ -899,7 +1030,11 @@ next_desc:
 
 	cleaned_count = e1000_desc_unused(rx_ring);
 	if (cleaned_count)
+<<<<<<< HEAD
 		adapter->alloc_rx_buf(adapter, cleaned_count);
+=======
+		adapter->alloc_rx_buf(adapter, cleaned_count, GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	adapter->total_rx_bytes += total_rx_bytes;
 	adapter->total_rx_packets += total_rx_packets;
@@ -930,7 +1065,10 @@ static void e1000_print_hw_hang(struct work_struct *work)
 	struct e1000_adapter *adapter = container_of(work,
 	                                             struct e1000_adapter,
 	                                             print_hang_task);
+<<<<<<< HEAD
 	struct net_device *netdev = adapter->netdev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct e1000_ring *tx_ring = adapter->tx_ring;
 	unsigned int i = tx_ring->next_to_clean;
 	unsigned int eop = tx_ring->buffer_info[i].next_to_watch;
@@ -942,6 +1080,7 @@ static void e1000_print_hw_hang(struct work_struct *work)
 	if (test_bit(__E1000_DOWN, &adapter->state))
 		return;
 
+<<<<<<< HEAD
 	if (!adapter->tx_hang_recheck &&
 	    (adapter->flags2 & FLAG2_DMA_BURST)) {
 		/* May be block on write-back, flush and detect again
@@ -957,6 +1096,8 @@ static void e1000_print_hw_hang(struct work_struct *work)
 	adapter->tx_hang_recheck = false;
 	netif_stop_queue(netdev);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	e1e_rphy(hw, PHY_STATUS, &phy_status);
 	e1e_rphy(hw, PHY_1000T_STATUS, &phy_1000t_status);
 	e1e_rphy(hw, PHY_EXT_STATUS, &phy_ext_status);
@@ -1070,10 +1211,17 @@ static bool e1000_clean_tx_irq(struct e1000_adapter *adapter)
 		if (tx_ring->buffer_info[i].time_stamp &&
 		    time_after(jiffies, tx_ring->buffer_info[i].time_stamp
 			       + (adapter->tx_timeout_factor * HZ)) &&
+<<<<<<< HEAD
 		    !(er32(STATUS) & E1000_STATUS_TXOFF))
 			schedule_work(&adapter->print_hang_task);
 		else
 			adapter->tx_hang_recheck = false;
+=======
+		    !(er32(STATUS) & E1000_STATUS_TXOFF)) {
+			schedule_work(&adapter->print_hang_task);
+			netif_stop_queue(netdev);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	adapter->total_tx_bytes += total_tx_bytes;
 	adapter->total_tx_packets += total_tx_packets;
@@ -1245,7 +1393,12 @@ next_desc:
 
 		/* return some buffers to hardware, one at a time is too slow */
 		if (cleaned_count >= E1000_RX_BUFFER_WRITE) {
+<<<<<<< HEAD
 			adapter->alloc_rx_buf(adapter, cleaned_count);
+=======
+			adapter->alloc_rx_buf(adapter, cleaned_count,
+					      GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			cleaned_count = 0;
 		}
 
@@ -1259,7 +1412,11 @@ next_desc:
 
 	cleaned_count = e1000_desc_unused(rx_ring);
 	if (cleaned_count)
+<<<<<<< HEAD
 		adapter->alloc_rx_buf(adapter, cleaned_count);
+=======
+		adapter->alloc_rx_buf(adapter, cleaned_count, GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	adapter->total_rx_bytes += total_rx_bytes;
 	adapter->total_rx_packets += total_rx_packets;
@@ -1426,7 +1583,12 @@ next_desc:
 
 		/* return some buffers to hardware, one at a time is too slow */
 		if (unlikely(cleaned_count >= E1000_RX_BUFFER_WRITE)) {
+<<<<<<< HEAD
 			adapter->alloc_rx_buf(adapter, cleaned_count);
+=======
+			adapter->alloc_rx_buf(adapter, cleaned_count,
+					      GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			cleaned_count = 0;
 		}
 
@@ -1438,7 +1600,11 @@ next_desc:
 
 	cleaned_count = e1000_desc_unused(rx_ring);
 	if (cleaned_count)
+<<<<<<< HEAD
 		adapter->alloc_rx_buf(adapter, cleaned_count);
+=======
+		adapter->alloc_rx_buf(adapter, cleaned_count, GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	adapter->total_rx_bytes += total_rx_bytes;
 	adapter->total_rx_packets += total_rx_packets;
@@ -2926,7 +3092,12 @@ static void e1000_configure_rx(struct e1000_adapter *adapter)
 
 	/* disable receives while setting up the descriptors */
 	rctl = er32(RCTL);
+<<<<<<< HEAD
 	ew32(RCTL, rctl & ~E1000_RCTL_EN);
+=======
+	if (!(adapter->flags2 & FLAG2_NO_DISABLE_RX))
+		ew32(RCTL, rctl & ~E1000_RCTL_EN);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	e1e_flush();
 	usleep_range(10000, 20000);
 
@@ -3120,7 +3291,12 @@ static void e1000_configure(struct e1000_adapter *adapter)
 	e1000_configure_tx(adapter);
 	e1000_setup_rctl(adapter);
 	e1000_configure_rx(adapter);
+<<<<<<< HEAD
 	adapter->alloc_rx_buf(adapter, e1000_desc_unused(adapter->rx_ring));
+=======
+	adapter->alloc_rx_buf(adapter, e1000_desc_unused(adapter->rx_ring),
+			      GFP_KERNEL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -3362,7 +3538,11 @@ int e1000e_up(struct e1000_adapter *adapter)
 		e1000_configure_msix(adapter);
 	e1000_irq_enable(adapter);
 
+<<<<<<< HEAD
 	netif_wake_queue(adapter->netdev);
+=======
+	netif_start_queue(adapter->netdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* fire a link change interrupt to start the watchdog */
 	if (adapter->msix_entries)
@@ -3404,7 +3584,12 @@ void e1000e_down(struct e1000_adapter *adapter)
 
 	/* disable receives in the hardware */
 	rctl = er32(RCTL);
+<<<<<<< HEAD
 	ew32(RCTL, rctl & ~E1000_RCTL_EN);
+=======
+	if (!(adapter->flags2 & FLAG2_NO_DISABLE_RX))
+		ew32(RCTL, rctl & ~E1000_RCTL_EN);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* flush and sleep below */
 
 	netif_stop_queue(netdev);
@@ -3413,6 +3598,10 @@ void e1000e_down(struct e1000_adapter *adapter)
 	tctl = er32(TCTL);
 	tctl &= ~E1000_TCTL_EN;
 	ew32(TCTL, tctl);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* flush both disables and wait for them to finish */
 	e1e_flush();
 	usleep_range(10000, 20000);
@@ -3429,17 +3618,27 @@ void e1000e_down(struct e1000_adapter *adapter)
 	e1000e_update_stats(adapter);
 	spin_unlock(&adapter->stats64_lock);
 
+<<<<<<< HEAD
+=======
+	e1000e_flush_descriptors(adapter);
+	e1000_clean_tx_ring(adapter);
+	e1000_clean_rx_ring(adapter);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	adapter->link_speed = 0;
 	adapter->link_duplex = 0;
 
 	if (!pci_channel_offline(adapter->pdev))
 		e1000e_reset(adapter);
 
+<<<<<<< HEAD
 	e1000e_flush_descriptors(adapter);
 
 	e1000_clean_tx_ring(adapter);
 	e1000_clean_rx_ring(adapter);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * TODO: for power management, we could drop the link and
 	 * pci_disable_device here.
@@ -3694,7 +3893,10 @@ static int e1000_open(struct net_device *netdev)
 
 	e1000_irq_enable(adapter);
 
+<<<<<<< HEAD
 	adapter->tx_hang_recheck = false;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	netif_start_queue(netdev);
 
 	adapter->idle_check = true;
@@ -3850,6 +4052,11 @@ static void e1000_update_phy_info(unsigned long data)
 /**
  * e1000e_update_phy_stats - Update the PHY statistics counters
  * @adapter: board private structure
+<<<<<<< HEAD
+=======
+ *
+ * Read/clear the upper 16-bit PHY registers and read/accumulate lower
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  **/
 static void e1000e_update_phy_stats(struct e1000_adapter *adapter)
 {
@@ -3861,26 +4068,40 @@ static void e1000e_update_phy_stats(struct e1000_adapter *adapter)
 	if (ret_val)
 		return;
 
+<<<<<<< HEAD
 	hw->phy.addr = 1;
 
 #define HV_PHY_STATS_PAGE	778
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * A page set is expensive so check if already on desired page.
 	 * If not, set to the page with the PHY status registers.
 	 */
+<<<<<<< HEAD
+=======
+	hw->phy.addr = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret_val = e1000e_read_phy_reg_mdic(hw, IGP01E1000_PHY_PAGE_SELECT,
 					   &phy_data);
 	if (ret_val)
 		goto release;
+<<<<<<< HEAD
 	if (phy_data != (HV_PHY_STATS_PAGE << IGP_PAGE_SHIFT)) {
 		ret_val = e1000e_write_phy_reg_mdic(hw,
 						    IGP01E1000_PHY_PAGE_SELECT,
 						    (HV_PHY_STATS_PAGE <<
 						     IGP_PAGE_SHIFT));
+=======
+	if (phy_data != (HV_STATS_PAGE << IGP_PAGE_SHIFT)) {
+		ret_val = hw->phy.ops.set_page(hw,
+					       HV_STATS_PAGE << IGP_PAGE_SHIFT);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret_val)
 			goto release;
 	}
 
+<<<<<<< HEAD
 	/* Read/clear the upper 16-bit registers and read/accumulate lower */
 
 	/* Single Collision Count */
@@ -3889,61 +4110,96 @@ static void e1000e_update_phy_stats(struct e1000_adapter *adapter)
 	ret_val = e1000e_read_phy_reg_mdic(hw,
 					   HV_SCC_LOWER & MAX_PHY_REG_ADDRESS,
 					   &phy_data);
+=======
+	/* Single Collision Count */
+	hw->phy.ops.read_reg_page(hw, HV_SCC_UPPER, &phy_data);
+	ret_val = hw->phy.ops.read_reg_page(hw, HV_SCC_LOWER, &phy_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ret_val)
 		adapter->stats.scc += phy_data;
 
 	/* Excessive Collision Count */
+<<<<<<< HEAD
 	e1000e_read_phy_reg_mdic(hw, HV_ECOL_UPPER & MAX_PHY_REG_ADDRESS,
 				 &phy_data);
 	ret_val = e1000e_read_phy_reg_mdic(hw,
 					   HV_ECOL_LOWER & MAX_PHY_REG_ADDRESS,
 					   &phy_data);
+=======
+	hw->phy.ops.read_reg_page(hw, HV_ECOL_UPPER, &phy_data);
+	ret_val = hw->phy.ops.read_reg_page(hw, HV_ECOL_LOWER, &phy_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ret_val)
 		adapter->stats.ecol += phy_data;
 
 	/* Multiple Collision Count */
+<<<<<<< HEAD
 	e1000e_read_phy_reg_mdic(hw, HV_MCC_UPPER & MAX_PHY_REG_ADDRESS,
 				 &phy_data);
 	ret_val = e1000e_read_phy_reg_mdic(hw,
 					   HV_MCC_LOWER & MAX_PHY_REG_ADDRESS,
 					   &phy_data);
+=======
+	hw->phy.ops.read_reg_page(hw, HV_MCC_UPPER, &phy_data);
+	ret_val = hw->phy.ops.read_reg_page(hw, HV_MCC_LOWER, &phy_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ret_val)
 		adapter->stats.mcc += phy_data;
 
 	/* Late Collision Count */
+<<<<<<< HEAD
 	e1000e_read_phy_reg_mdic(hw, HV_LATECOL_UPPER & MAX_PHY_REG_ADDRESS,
 				 &phy_data);
 	ret_val = e1000e_read_phy_reg_mdic(hw,
 					   HV_LATECOL_LOWER &
 					   MAX_PHY_REG_ADDRESS,
 					   &phy_data);
+=======
+	hw->phy.ops.read_reg_page(hw, HV_LATECOL_UPPER, &phy_data);
+	ret_val = hw->phy.ops.read_reg_page(hw, HV_LATECOL_LOWER, &phy_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ret_val)
 		adapter->stats.latecol += phy_data;
 
 	/* Collision Count - also used for adaptive IFS */
+<<<<<<< HEAD
 	e1000e_read_phy_reg_mdic(hw, HV_COLC_UPPER & MAX_PHY_REG_ADDRESS,
 				 &phy_data);
 	ret_val = e1000e_read_phy_reg_mdic(hw,
 					   HV_COLC_LOWER & MAX_PHY_REG_ADDRESS,
 					   &phy_data);
+=======
+	hw->phy.ops.read_reg_page(hw, HV_COLC_UPPER, &phy_data);
+	ret_val = hw->phy.ops.read_reg_page(hw, HV_COLC_LOWER, &phy_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ret_val)
 		hw->mac.collision_delta = phy_data;
 
 	/* Defer Count */
+<<<<<<< HEAD
 	e1000e_read_phy_reg_mdic(hw, HV_DC_UPPER & MAX_PHY_REG_ADDRESS,
 				 &phy_data);
 	ret_val = e1000e_read_phy_reg_mdic(hw,
 					   HV_DC_LOWER & MAX_PHY_REG_ADDRESS,
 					   &phy_data);
+=======
+	hw->phy.ops.read_reg_page(hw, HV_DC_UPPER, &phy_data);
+	ret_val = hw->phy.ops.read_reg_page(hw, HV_DC_LOWER, &phy_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ret_val)
 		adapter->stats.dc += phy_data;
 
 	/* Transmit with no CRS */
+<<<<<<< HEAD
 	e1000e_read_phy_reg_mdic(hw, HV_TNCRS_UPPER & MAX_PHY_REG_ADDRESS,
 				 &phy_data);
 	ret_val = e1000e_read_phy_reg_mdic(hw,
 					   HV_TNCRS_LOWER & MAX_PHY_REG_ADDRESS,
 					   &phy_data);
+=======
+	hw->phy.ops.read_reg_page(hw, HV_TNCRS_UPPER, &phy_data);
+	ret_val = hw->phy.ops.read_reg_page(hw, HV_TNCRS_LOWER, &phy_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ret_val)
 		adapter->stats.tncrs += phy_data;
 
@@ -4724,7 +4980,16 @@ static void e1000_tx_queue(struct e1000_adapter *adapter,
 	wmb();
 
 	tx_ring->next_to_use = i;
+<<<<<<< HEAD
 	writel(i, adapter->hw.hw_addr + tx_ring->tail);
+=======
+
+	if (adapter->flags2 & FLAG2_PCIM2PCI_ARBITER_WA)
+		e1000e_update_tdt_wa(adapter, i);
+	else
+		writel(i, adapter->hw.hw_addr + tx_ring->tail);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * we need this if more than one processor can write to our tail
 	 * at a time, it synchronizes IO on IA64/Altix systems
@@ -5171,12 +5436,17 @@ static int e1000_init_phy_wakeup(struct e1000_adapter *adapter, u32 wufc)
 {
 	struct e1000_hw *hw = &adapter->hw;
 	u32 i, mac_reg;
+<<<<<<< HEAD
 	u16 phy_reg;
+=======
+	u16 phy_reg, wuc_enable;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int retval = 0;
 
 	/* copy MAC RARs to PHY RARs */
 	e1000_copy_rx_addrs_to_phy_ich8lan(hw);
 
+<<<<<<< HEAD
 	/* copy MAC MTA to PHY MTA */
 	for (i = 0; i < adapter->hw.mac.mta_reg_count; i++) {
 		mac_reg = E1000_READ_REG_ARRAY(hw, E1000_MTA, i);
@@ -5186,6 +5456,30 @@ static int e1000_init_phy_wakeup(struct e1000_adapter *adapter, u32 wufc)
 
 	/* configure PHY Rx Control register */
 	e1e_rphy(&adapter->hw, BM_RCTL, &phy_reg);
+=======
+	retval = hw->phy.ops.acquire(hw);
+	if (retval) {
+		e_err("Could not acquire PHY\n");
+		return retval;
+	}
+
+	/* Enable access to wakeup registers on and set page to BM_WUC_PAGE */
+	retval = e1000_enable_phy_wakeup_reg_access_bm(hw, &wuc_enable);
+	if (retval)
+		goto out;
+
+	/* copy MAC MTA to PHY MTA - only needed for pchlan */
+	for (i = 0; i < adapter->hw.mac.mta_reg_count; i++) {
+		mac_reg = E1000_READ_REG_ARRAY(hw, E1000_MTA, i);
+		hw->phy.ops.write_reg_page(hw, BM_MTA(i),
+					   (u16)(mac_reg & 0xFFFF));
+		hw->phy.ops.write_reg_page(hw, BM_MTA(i) + 1,
+					   (u16)((mac_reg >> 16) & 0xFFFF));
+	}
+
+	/* configure PHY Rx Control register */
+	hw->phy.ops.read_reg_page(&adapter->hw, BM_RCTL, &phy_reg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mac_reg = er32(RCTL);
 	if (mac_reg & E1000_RCTL_UPE)
 		phy_reg |= BM_RCTL_UPE;
@@ -5202,13 +5496,18 @@ static int e1000_init_phy_wakeup(struct e1000_adapter *adapter, u32 wufc)
 	mac_reg = er32(CTRL);
 	if (mac_reg & E1000_CTRL_RFCE)
 		phy_reg |= BM_RCTL_RFCE;
+<<<<<<< HEAD
 	e1e_wphy(&adapter->hw, BM_RCTL, phy_reg);
+=======
+	hw->phy.ops.write_reg_page(&adapter->hw, BM_RCTL, phy_reg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* enable PHY wakeup in MAC register */
 	ew32(WUFC, wufc);
 	ew32(WUC, E1000_WUC_PHY_WAKE | E1000_WUC_PME_EN);
 
 	/* configure and enable PHY wakeup in PHY registers */
+<<<<<<< HEAD
 	e1e_wphy(&adapter->hw, BM_WUFC, wufc);
 	e1e_wphy(&adapter->hw, BM_WUC, E1000_WUC_PME_EN);
 
@@ -5227,6 +5526,14 @@ static int e1000_init_phy_wakeup(struct e1000_adapter *adapter, u32 wufc)
 	}
 	phy_reg |= BM_WUC_ENABLE_BIT | BM_WUC_HOST_WU_BIT;
 	retval = e1000e_write_phy_reg_mdic(hw, BM_WUC_ENABLE_REG, phy_reg);
+=======
+	hw->phy.ops.write_reg_page(&adapter->hw, BM_WUFC, wufc);
+	hw->phy.ops.write_reg_page(&adapter->hw, BM_WUC, E1000_WUC_PME_EN);
+
+	/* activate PHY wakeup */
+	wuc_enable |= BM_WUC_ENABLE_BIT | BM_WUC_HOST_WU_BIT;
+	retval = e1000_disable_phy_wakeup_reg_access_bm(hw, &wuc_enable);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (retval)
 		e_err("Could not set PHY Host Wakeup bit\n");
 out:
@@ -5294,7 +5601,11 @@ static int __e1000_shutdown(struct pci_dev *pdev, bool *enable_wake,
 		}
 
 		if (adapter->flags & FLAG_IS_ICH)
+<<<<<<< HEAD
 			e1000e_disable_gig_wol_ich8lan(&adapter->hw);
+=======
+			e1000_suspend_workarounds_ich8lan(&adapter->hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* Allow time for pending master requests to run */
 		e1000e_disable_pcie_master(&adapter->hw);
@@ -5360,7 +5671,11 @@ static void e1000_complete_shutdown(struct pci_dev *pdev, bool sleep,
 	 */
 	if (adapter->flags & FLAG_IS_QUAD_PORT) {
 		struct pci_dev *us_dev = pdev->bus->self;
+<<<<<<< HEAD
 		int pos = pci_find_capability(us_dev, PCI_CAP_ID_EXP);
+=======
+		int pos = pci_pcie_cap(us_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		u16 devctl;
 
 		pci_read_config_word(us_dev, pos + PCI_EXP_DEVCTL, &devctl);
@@ -5445,6 +5760,12 @@ static int __e1000_resume(struct pci_dev *pdev)
 			return err;
 	}
 
+<<<<<<< HEAD
+=======
+	if (hw->mac.type == e1000_pch2lan)
+		e1000_resume_workarounds_pchlan(&adapter->hw);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	e1000e_power_up_phy(adapter);
 
 	/* report the system wakeup cause from S3/S4 */

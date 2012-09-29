@@ -380,8 +380,12 @@ void flush_thread(void)
 #endif
 	}
 
+<<<<<<< HEAD
 	/* Now, this task is no longer a kernel thread. */
 	current->thread.current_ds = USER_DS;
+=======
+	/* This task is no longer a kernel thread. */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (current->thread.flags & SPARC_FLAG_KTHREAD) {
 		current->thread.flags &= ~SPARC_FLAG_KTHREAD;
 

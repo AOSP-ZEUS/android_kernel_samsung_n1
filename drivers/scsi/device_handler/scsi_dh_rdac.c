@@ -35,7 +35,11 @@
  * mode page were taken from the LSI RDAC 2.4 GPL'd
  * driver, and then converted to Linux conventions.
  */
+<<<<<<< HEAD
 #define RDAC_QUIESCENCE_TIME 20;
+=======
+#define RDAC_QUIESCENCE_TIME 20
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Page Codes
  */
@@ -128,6 +132,7 @@ struct c4_inquiry {
 	u8	reserved[2];
 };
 
+<<<<<<< HEAD
 struct rdac_controller {
 	u8			subsys_id[SUBSYS_ID_LEN];
 	u8			slot_id[SLOT_ID_LEN];
@@ -147,6 +152,9 @@ struct rdac_controller {
 	struct list_head	ms_head;
 };
 
+=======
+#define UNIQUE_ID_LEN 16
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct c8_inquiry {
 	u8	peripheral_info;
 	u8	page_code; /* 0xC8 */
@@ -159,12 +167,38 @@ struct c8_inquiry {
 	u8	vol_user_label_len;
 	u8	vol_user_label[60];
 	u8	array_uniq_id_len;
+<<<<<<< HEAD
 	u8	array_unique_id[16];
+=======
+	u8	array_unique_id[UNIQUE_ID_LEN];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8	array_user_label_len;
 	u8	array_user_label[60];
 	u8	lun[8];
 };
 
+<<<<<<< HEAD
+=======
+struct rdac_controller {
+	u8			array_id[UNIQUE_ID_LEN];
+	int			use_ms10;
+	struct kref		kref;
+	struct list_head	node; /* list of all controllers */
+	union			{
+		struct rdac_pg_legacy legacy;
+		struct rdac_pg_expanded expanded;
+	} mode_select;
+	u8	index;
+	u8	array_name[ARRAY_LABEL_LEN];
+	struct Scsi_Host	*host;
+	spinlock_t		ms_lock;
+	int			ms_queued;
+	struct work_struct	ms_work;
+	struct scsi_device	*ms_sdev;
+	struct list_head	ms_head;
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct c2_inquiry {
 	u8	peripheral_info;
 	u8	page_code;	/* 0xC2 */
@@ -369,16 +403,27 @@ static void release_controller(struct kref *kref)
 	kfree(ctlr);
 }
 
+<<<<<<< HEAD
 static struct rdac_controller *get_controller(u8 *subsys_id, u8 *slot_id,
 						char *array_name)
+=======
+static struct rdac_controller *get_controller(int index, char *array_name,
+			u8 *array_id, struct scsi_device *sdev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct rdac_controller *ctlr, *tmp;
 
 	spin_lock(&list_lock);
 
 	list_for_each_entry(tmp, &ctlr_list, node) {
+<<<<<<< HEAD
 		if ((memcmp(tmp->subsys_id, subsys_id, SUBSYS_ID_LEN) == 0) &&
 			  (memcmp(tmp->slot_id, slot_id, SLOT_ID_LEN) == 0)) {
+=======
+		if ((memcmp(tmp->array_id, array_id, UNIQUE_ID_LEN) == 0) &&
+			  (tmp->index == index) &&
+			  (tmp->host == sdev->host)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			kref_get(&tmp->kref);
 			spin_unlock(&list_lock);
 			return tmp;
@@ -389,6 +434,7 @@ static struct rdac_controller *get_controller(u8 *subsys_id, u8 *slot_id,
 		goto done;
 
 	/* initialize fields of controller */
+<<<<<<< HEAD
 	memcpy(ctlr->subsys_id, subsys_id, SUBSYS_ID_LEN);
 	memcpy(ctlr->slot_id, slot_id, SLOT_ID_LEN);
 	memcpy(ctlr->array_name, array_name, ARRAY_LABEL_LEN);
@@ -399,6 +445,13 @@ static struct rdac_controller *get_controller(u8 *subsys_id, u8 *slot_id,
 	else
 		ctlr->index = 1;
 
+=======
+	memcpy(ctlr->array_id, array_id, UNIQUE_ID_LEN);
+	ctlr->index = index;
+	ctlr->host = sdev->host;
+	memcpy(ctlr->array_name, array_name, ARRAY_LABEL_LEN);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kref_init(&ctlr->kref);
 	ctlr->use_ms10 = -1;
 	ctlr->ms_queued = 0;
@@ -444,7 +497,11 @@ done:
 }
 
 static int get_lun_info(struct scsi_device *sdev, struct rdac_dh_data *h,
+<<<<<<< HEAD
 			char *array_name)
+=======
+			char *array_name, u8 *array_id)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int err, i;
 	struct c8_inquiry *inqp;
@@ -463,6 +520,11 @@ static int get_lun_info(struct scsi_device *sdev, struct rdac_dh_data *h,
 			*(array_name+i) = inqp->array_user_label[(2*i)+1];
 
 		*(array_name+ARRAY_LABEL_LEN-1) = '\0';
+<<<<<<< HEAD
+=======
+		memset(array_id, 0, UNIQUE_ID_LEN);
+		memcpy(array_id, inqp->array_unique_id, inqp->array_uniq_id_len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return err;
 }
@@ -504,16 +566,31 @@ static int check_ownership(struct scsi_device *sdev, struct rdac_dh_data *h)
 }
 
 static int initialize_controller(struct scsi_device *sdev,
+<<<<<<< HEAD
 				 struct rdac_dh_data *h, char *array_name)
 {
 	int err;
+=======
+		struct rdac_dh_data *h, char *array_name, u8 *array_id)
+{
+	int err, index;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct c4_inquiry *inqp;
 
 	err = submit_inquiry(sdev, 0xC4, sizeof(struct c4_inquiry), h);
 	if (err == SCSI_DH_OK) {
 		inqp = &h->inq.c4;
+<<<<<<< HEAD
 		h->ctlr = get_controller(inqp->subsys_id, inqp->slot_id,
 					array_name);
+=======
+		/* get the controller index */
+		if (inqp->slot_id[1] == 0x31)
+			index = 0;
+		else
+			index = 1;
+		h->ctlr = get_controller(index, array_name, array_id, sdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!h->ctlr)
 			err = SCSI_DH_RES_TEMP_UNAVAIL;
 	}
@@ -835,6 +912,10 @@ static int rdac_bus_attach(struct scsi_device *sdev)
 	unsigned long flags;
 	int err;
 	char array_name[ARRAY_LABEL_LEN];
+<<<<<<< HEAD
+=======
+	char array_id[UNIQUE_ID_LEN];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	scsi_dh_data = kzalloc(sizeof(*scsi_dh_data)
 			       + sizeof(*h) , GFP_KERNEL);
@@ -849,11 +930,19 @@ static int rdac_bus_attach(struct scsi_device *sdev)
 	h->lun = UNINITIALIZED_LUN;
 	h->state = RDAC_STATE_ACTIVE;
 
+<<<<<<< HEAD
 	err = get_lun_info(sdev, h, array_name);
 	if (err != SCSI_DH_OK)
 		goto failed;
 
 	err = initialize_controller(sdev, h, array_name);
+=======
+	err = get_lun_info(sdev, h, array_name, array_id);
+	if (err != SCSI_DH_OK)
+		goto failed;
+
+	err = initialize_controller(sdev, h, array_name, array_id);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err != SCSI_DH_OK)
 		goto failed;
 

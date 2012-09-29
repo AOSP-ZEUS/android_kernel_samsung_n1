@@ -156,6 +156,7 @@ stack_max_size_write(struct file *filp, const char __user *ubuf,
 {
 	long *ptr = filp->private_data;
 	unsigned long val, flags;
+<<<<<<< HEAD
 	char buf[64];
 	int ret;
 	int cpu;
@@ -170,6 +171,13 @@ stack_max_size_write(struct file *filp, const char __user *ubuf,
 
 	ret = strict_strtoul(buf, 10, &val);
 	if (ret < 0)
+=======
+	int ret;
+	int cpu;
+
+	ret = kstrtoul_from_user(ubuf, count, 10, &val);
+	if (ret)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return ret;
 
 	local_irq_save(flags);

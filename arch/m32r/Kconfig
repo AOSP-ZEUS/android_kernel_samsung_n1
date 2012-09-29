@@ -268,6 +268,7 @@ config SCHED_OMIT_FRAME_POINTER
         bool
         default y
 
+<<<<<<< HEAD
 config PREEMPT
 	bool "Preemptible Kernel"
 	help
@@ -279,6 +280,9 @@ config PREEMPT
 
 	  Say Y here if you are building a kernel for a desktop, embedded
 	  or real-time system.  Say N if you are unsure.
+=======
+source "kernel/Kconfig.preempt"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 config SMP
 	bool "Symmetric multi-processing support"

@@ -66,6 +66,7 @@ static inline int udplite_checksum_init(struct sk_buff *skb, struct udphdr *uh)
 	return 0;
 }
 
+<<<<<<< HEAD
 static inline int udplite_sender_cscov(struct udp_sock *up, struct udphdr *uh)
 {
 	int cscov = up->len;
@@ -100,6 +101,36 @@ static inline __wsum udplite_csum_outgoing(struct sock *sk, struct sk_buff *skb)
 {
 	int cscov = udplite_sender_cscov(udp_sk(sk), udp_hdr(skb));
 	__wsum csum = 0;
+=======
+/* Slow-path computation of checksum. Socket is locked. */
+static inline __wsum udplite_csum_outgoing(struct sock *sk, struct sk_buff *skb)
+{
+	const struct udp_sock *up = udp_sk(skb->sk);
+	int cscov = up->len;
+	__wsum csum = 0;
+
+	if (up->pcflag & UDPLITE_SEND_CC) {
+		/*
+		 * Sender has set `partial coverage' option on UDP-Lite socket.
+		 * The special case "up->pcslen == 0" signifies full coverage.
+		 */
+		if (up->pcslen < up->len) {
+			if (0 < up->pcslen)
+				cscov = up->pcslen;
+			udp_hdr(skb)->len = htons(up->pcslen);
+		}
+		/*
+		 * NOTE: Causes for the error case  `up->pcslen > up->len':
+		 *        (i)  Application error (will not be penalized).
+		 *       (ii)  Payload too big for send buffer: data is split
+		 *             into several packets, each with its own header.
+		 *             In this case (e.g. last segment), coverage may
+		 *             exceed packet length.
+		 *       Since packets with coverage length > packet length are
+		 *       illegal, we fall back to the defaults here.
+		 */
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	skb->ip_summed = CHECKSUM_NONE;     /* no HW support for checksumming */
 
@@ -115,6 +146,7 @@ static inline __wsum udplite_csum_outgoing(struct sock *sk, struct sk_buff *skb)
 	return csum;
 }
 
+<<<<<<< HEAD
 static inline __wsum udplite_csum(struct sk_buff *skb)
 {
 	struct sock *sk = skb->sk;
@@ -125,6 +157,23 @@ static inline __wsum udplite_csum(struct sk_buff *skb)
 	skb->ip_summed = CHECKSUM_NONE;     /* no HW support for checksumming */
 
 	return skb_checksum(skb, off, min(cscov, len), 0);
+=======
+/* Fast-path computation of checksum. Socket may not be locked. */
+static inline __wsum udplite_csum(struct sk_buff *skb)
+{
+	const struct udp_sock *up = udp_sk(skb->sk);
+	const int off = skb_transport_offset(skb);
+	int len = skb->len - off;
+
+	if ((up->pcflag & UDPLITE_SEND_CC) && up->pcslen < len) {
+		if (0 < up->pcslen)
+			len = up->pcslen;
+		udp_hdr(skb)->len = htons(up->pcslen);
+	}
+	skb->ip_summed = CHECKSUM_NONE;     /* no HW support for checksumming */
+
+	return skb_checksum(skb, off, len, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 extern void	udplite4_register(void);

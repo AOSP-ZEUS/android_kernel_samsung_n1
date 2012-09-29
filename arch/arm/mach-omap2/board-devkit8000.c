@@ -58,7 +58,10 @@
 
 #include "mux.h"
 #include "hsmmc.h"
+<<<<<<< HEAD
 #include "timer-gp.h"
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "common-board-devices.h"
 
 #define OMAP_DM9000_GPIO_IRQ	25
@@ -130,6 +133,7 @@ static void devkit8000_panel_disable_dvi(struct omap_dss_device *dssdev)
 		gpio_set_value_cansleep(dssdev->reset_gpio, 0);
 }
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply devkit8000_vmmc1_supply =
 	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.0");
 
@@ -137,6 +141,16 @@ static struct regulator_consumer_supply devkit8000_vmmc1_supply =
 /* ads7846 on SPI */
 static struct regulator_consumer_supply devkit8000_vio_supply =
 	REGULATOR_SUPPLY("vcc", "spi2.0");
+=======
+static struct regulator_consumer_supply devkit8000_vmmc1_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.0"),
+};
+
+/* ads7846 on SPI */
+static struct regulator_consumer_supply devkit8000_vio_supply[] = {
+	REGULATOR_SUPPLY("vcc", "spi2.0"),
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct panel_generic_dpi_data lcd_panel = {
 	.name			= "generic",
@@ -186,9 +200,12 @@ static struct omap_dss_board_info devkit8000_dss_data = {
 	.default_device = &devkit8000_lcd_device,
 };
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply devkit8000_vdda_dac_supply =
 	REGULATOR_SUPPLY("vdda_dac", "omapdss_venc");
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static uint32_t board_keymap[] = {
 	KEY(0, 0, KEY_1),
 	KEY(1, 0, KEY_2),
@@ -284,6 +301,7 @@ static struct regulator_init_data devkit8000_vmmc1 = {
 					| REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies	= 1,
 	.consumer_supplies	= &devkit8000_vmmc1_supply,
 };
@@ -300,6 +318,10 @@ static struct regulator_init_data devkit8000_vdac = {
 	},
 	.num_consumer_supplies	= 1,
 	.consumer_supplies	= &devkit8000_vdda_dac_supply,
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(devkit8000_vmmc1_supply),
+	.consumer_supplies	= devkit8000_vmmc1_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* VPLL1 for digital video outputs */
@@ -327,6 +349,7 @@ static struct regulator_init_data devkit8000_vio = {
 		.valid_ops_mask         = REGULATOR_CHANGE_MODE
 			| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies  = 1,
 	.consumer_supplies      = &devkit8000_vio_supply,
 };
@@ -352,6 +375,16 @@ static struct twl4030_platform_data devkit8000_twldata = {
 	.codec		= &devkit8000_codec_data,
 	.vmmc1		= &devkit8000_vmmc1,
 	.vdac		= &devkit8000_vdac,
+=======
+	.num_consumer_supplies  = ARRAY_SIZE(devkit8000_vio_supply),
+	.consumer_supplies      = devkit8000_vio_supply,
+};
+
+static struct twl4030_platform_data devkit8000_twldata = {
+	/* platform_data for children goes here */
+	.gpio		= &devkit8000_gpio_data,
+	.vmmc1		= &devkit8000_vmmc1,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.vpll1		= &devkit8000_vpll1,
 	.vio		= &devkit8000_vio,
 	.keypad		= &devkit8000_kp_data,
@@ -359,6 +392,12 @@ static struct twl4030_platform_data devkit8000_twldata = {
 
 static int __init devkit8000_i2c_init(void)
 {
+<<<<<<< HEAD
+=======
+	omap3_pmic_get_config(&devkit8000_twldata,
+			  TWL_COMMON_PDATA_USB | TWL_COMMON_PDATA_AUDIO,
+			  TWL_COMMON_REGULATOR_VDAC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	omap3_pmic_init("tps65930", &devkit8000_twldata);
 	/* Bus 3 is attached to the DVI port where devices like the pico DLP
 	 * projector don't work reliably with 400kHz */
@@ -438,10 +477,14 @@ static void __init devkit8000_init_early(void)
 
 static void __init devkit8000_init_irq(void)
 {
+<<<<<<< HEAD
 	omap_init_irq();
 #ifdef CONFIG_OMAP_32K_TIMER
 	omap2_gp_clockevent_set_gptimer(12);
 #endif
+=======
+	omap3_init_irq();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #define OMAP_DM9000_BASE	0x2c000000
@@ -707,5 +750,9 @@ MACHINE_START(DEVKIT8000, "OMAP3 Devkit8000")
 	.init_early	= devkit8000_init_early,
 	.init_irq	= devkit8000_init_irq,
 	.init_machine	= devkit8000_init,
+<<<<<<< HEAD
 	.timer		= &omap_timer,
+=======
+	.timer		= &omap3_secure_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

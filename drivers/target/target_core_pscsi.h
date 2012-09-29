@@ -2,7 +2,10 @@
 #define TARGET_CORE_PSCSI_H
 
 #define PSCSI_VERSION		"v4.0"
+<<<<<<< HEAD
 #define PSCSI_VIRTUAL_HBA_DEPTH	2048
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* used in pscsi_find_alloc_len() */
 #ifndef INQUIRY_DATA_SIZE
@@ -24,13 +27,20 @@
 
 struct pscsi_plugin_task {
 	struct se_task pscsi_task;
+<<<<<<< HEAD
 	unsigned char *pscsi_cdb;
 	unsigned char __pscsi_cdb[TCM_MAX_COMMAND_SIZE];
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned char pscsi_sense[SCSI_SENSE_BUFFERSIZE];
 	int	pscsi_direction;
 	int	pscsi_result;
 	u32	pscsi_resid;
 	struct request *pscsi_req;
+<<<<<<< HEAD
+=======
+	unsigned char pscsi_cdb[0];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 } ____cacheline_aligned;
 
 #define PDF_HAS_CHANNEL_ID	0x01

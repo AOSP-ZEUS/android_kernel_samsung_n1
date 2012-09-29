@@ -5,7 +5,16 @@
 #include <linux/module.h>
 #include <linux/elf.h>
 
+<<<<<<< HEAD
 /* These must be implemented by the specific architecture */
+=======
+/* These may be implemented by architectures that need to hook into the
+ * module loader code.  Architectures that don't need to do anything special
+ * can just rely on the 'weak' default hooks defined in kernel/module.c.
+ * Note, however, that at least one of apply_relocate or apply_relocate_add
+ * must be implemented by each architecture.
+ */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Adjust arch-specific sections.  Return 0 on success.  */
 int module_frob_arch_sections(Elf_Ehdr *hdr,

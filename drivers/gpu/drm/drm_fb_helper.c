@@ -256,7 +256,10 @@ int drm_fb_helper_panic(struct notifier_block *n, unsigned long ununsed,
 {
 	printk(KERN_ERR "panic occurred, switching back to text console\n");
 	return drm_fb_helper_force_kernel_mode();
+<<<<<<< HEAD
 	return 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL(drm_fb_helper_panic);
 
@@ -610,6 +613,7 @@ int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
 		return -EINVAL;
 
 	/* Need to resize the fb object !!! */
+<<<<<<< HEAD
 	if (var->bits_per_pixel > fb->bits_per_pixel ||
 	    var->xres > fb->width || var->yres > fb->height ||
 	    var->xres_virtual > fb->width || var->yres_virtual > fb->height) {
@@ -617,6 +621,11 @@ int drm_fb_helper_check_var(struct fb_var_screeninfo *var,
 			  "request %dx%d-%d (virtual %dx%d) > %dx%d-%d\n",
 			  var->xres, var->yres, var->bits_per_pixel,
 			  var->xres_virtual, var->yres_virtual,
+=======
+	if (var->bits_per_pixel > fb->bits_per_pixel || var->xres > fb->width || var->yres > fb->height) {
+		DRM_DEBUG("fb userspace requested width/height/bpp is greater than current fb "
+			  "object %dx%d-%d > %dx%d-%d\n", var->xres, var->yres, var->bits_per_pixel,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			  fb->width, fb->height, fb->bits_per_pixel);
 		return -EINVAL;
 	}

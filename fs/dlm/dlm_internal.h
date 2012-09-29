@@ -37,6 +37,10 @@
 #include <linux/jhash.h>
 #include <linux/miscdevice.h>
 #include <linux/mutex.h>
+<<<<<<< HEAD
+=======
+#include <linux/idr.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/uaccess.h>
 
 #include <linux/dlm.h>
@@ -52,7 +56,10 @@ struct dlm_ls;
 struct dlm_lkb;
 struct dlm_rsb;
 struct dlm_member;
+<<<<<<< HEAD
 struct dlm_lkbtable;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct dlm_rsbtable;
 struct dlm_dirtable;
 struct dlm_direntry;
@@ -108,11 +115,14 @@ struct dlm_rsbtable {
 	spinlock_t		lock;
 };
 
+<<<<<<< HEAD
 struct dlm_lkbtable {
 	struct list_head	list;
 	rwlock_t		lock;
 	uint16_t		counter;
 };
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Lockspace member (per node in a ls)
@@ -248,17 +258,29 @@ struct dlm_lkb {
 	int8_t			lkb_wait_count;
 	int			lkb_wait_nodeid; /* for debugging */
 
+<<<<<<< HEAD
 	struct list_head	lkb_idtbl_list;	/* lockspace lkbtbl */
 	struct list_head	lkb_statequeue;	/* rsb g/c/w list */
 	struct list_head	lkb_rsb_lookup;	/* waiting for rsb lookup */
 	struct list_head	lkb_wait_reply;	/* waiting for remote reply */
 	struct list_head	lkb_astqueue;	/* need ast to be sent */
+=======
+	struct list_head	lkb_statequeue;	/* rsb g/c/w list */
+	struct list_head	lkb_rsb_lookup;	/* waiting for rsb lookup */
+	struct list_head	lkb_wait_reply;	/* waiting for remote reply */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct list_head	lkb_ownqueue;	/* list of locks for a process */
 	struct list_head	lkb_time_list;
 	ktime_t			lkb_timestamp;
 	ktime_t			lkb_wait_time;
 	unsigned long		lkb_timeout_cs;
 
+<<<<<<< HEAD
+=======
+	struct mutex		lkb_cb_mutex;
+	struct work_struct	lkb_cb_work;
+	struct list_head	lkb_cb_list; /* for ls_cb_delay or proc->asts */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct dlm_callback	lkb_callbacks[DLM_CALLBACKS_SIZE];
 	struct dlm_callback	lkb_last_cast;
 	struct dlm_callback	lkb_last_bast;
@@ -299,7 +321,11 @@ struct dlm_rsb {
 	int			res_recover_locks_count;
 
 	char			*res_lvbptr;
+<<<<<<< HEAD
 	char			res_name[1];
+=======
+	char			res_name[DLM_RESNAME_MAXLEN+1];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* find_rsb() flags */
@@ -465,12 +491,21 @@ struct dlm_ls {
 	unsigned long		ls_scan_time;
 	struct kobject		ls_kobj;
 
+<<<<<<< HEAD
 	struct dlm_rsbtable	*ls_rsbtbl;
 	uint32_t		ls_rsbtbl_size;
 
 	struct dlm_lkbtable	*ls_lkbtbl;
 	uint32_t		ls_lkbtbl_size;
 
+=======
+	struct idr		ls_lkbidr;
+	spinlock_t		ls_lkbidr_spin;
+
+	struct dlm_rsbtable	*ls_rsbtbl;
+	uint32_t		ls_rsbtbl_size;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct dlm_dirtable	*ls_dirtbl;
 	uint32_t		ls_dirtbl_size;
 
@@ -483,6 +518,13 @@ struct dlm_ls {
 	struct mutex		ls_timeout_mutex;
 	struct list_head	ls_timeout;
 
+<<<<<<< HEAD
+=======
+	spinlock_t		ls_new_rsb_spin;
+	int			ls_new_rsb_count;
+	struct list_head	ls_new_rsb;	/* new rsb structs */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct list_head	ls_nodes;	/* current nodes in ls */
 	struct list_head	ls_nodes_gone;	/* dead node list, recovery */
 	int			ls_num_nodes;	/* number of nodes in ls */
@@ -506,8 +548,17 @@ struct dlm_ls {
 
 	struct miscdevice       ls_device;
 
+<<<<<<< HEAD
 	/* recovery related */
 
+=======
+	struct workqueue_struct	*ls_callback_wq;
+
+	/* recovery related */
+
+	struct mutex		ls_cb_mutex;
+	struct list_head	ls_cb_delay; /* save for queue_work later */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct timer_list	ls_timer;
 	struct task_struct	*ls_recoverd_task;
 	struct mutex		ls_recoverd_active;
@@ -544,6 +595,10 @@ struct dlm_ls {
 #define LSFL_RCOM_WAIT		4
 #define LSFL_UEVENT_WAIT	5
 #define LSFL_TIMEWARN		6
+<<<<<<< HEAD
+=======
+#define LSFL_CB_DELAY		7
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* much of this is just saving user space pointers associated with the
    lock that we pass back to the user lib with an ast */

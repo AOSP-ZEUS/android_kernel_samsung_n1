@@ -22,6 +22,7 @@
 #include <mach/at91_rstc.h>
 #include <mach/at91_shdwc.h>
 
+<<<<<<< HEAD
 #include "generic.h"
 #include "clock.h"
 
@@ -52,6 +53,12 @@ static struct map_desc at91sam9g10_sram_desc[] __initdata = {
 	},
 };
 
+=======
+#include "soc.h"
+#include "generic.h"
+#include "clock.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* --------------------------------------------------------------------
  *  Clocks
  * -------------------------------------------------------------------- */
@@ -183,7 +190,11 @@ static struct clk_lookup periph_clocks_lookups[] = {
 	CLKDEV_CON_DEV_ID("spi_clk", "atmel_spi.1", &spi1_clk),
 	CLKDEV_CON_DEV_ID("t0_clk", "atmel_tcb.0", &tc0_clk),
 	CLKDEV_CON_DEV_ID("t1_clk", "atmel_tcb.0", &tc1_clk),
+<<<<<<< HEAD
 	CLKDEV_CON_DEV_ID("t2_clk", "atmel_tcb.0", &tc1_clk),
+=======
+	CLKDEV_CON_DEV_ID("t2_clk", "atmel_tcb.0", &tc2_clk),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	CLKDEV_CON_DEV_ID("pclk", "ssc.0", &ssc0_clk),
 	CLKDEV_CON_DEV_ID("pclk", "ssc.1", &ssc1_clk),
 	CLKDEV_CON_DEV_ID("pclk", "ssc.2", &ssc2_clk),
@@ -302,6 +313,7 @@ static void at91sam9261_poweroff(void)
  *  AT91SAM9261 processor initialization
  * -------------------------------------------------------------------- */
 
+<<<<<<< HEAD
 void __init at91sam9261_map_io(void)
 {
 	/* Map peripherals */
@@ -314,18 +326,32 @@ void __init at91sam9261_map_io(void)
 }
 
 void __init at91sam9261_initialize(unsigned long main_clock)
+=======
+static void __init at91sam9261_map_io(void)
+{
+	if (cpu_is_at91sam9g10())
+		at91_init_sram(0, AT91SAM9G10_SRAM_BASE, AT91SAM9G10_SRAM_SIZE);
+	else
+		at91_init_sram(0, AT91SAM9261_SRAM_BASE, AT91SAM9261_SRAM_SIZE);
+}
+
+static void __init at91sam9261_initialize(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	at91_arch_reset = at91sam9_alt_reset;
 	pm_power_off = at91sam9261_poweroff;
 	at91_extern_irq = (1 << AT91SAM9261_ID_IRQ0) | (1 << AT91SAM9261_ID_IRQ1)
 			| (1 << AT91SAM9261_ID_IRQ2);
 
+<<<<<<< HEAD
 	/* Init clock subsystem */
 	at91_clock_init(main_clock);
 
 	/* Register the processor-specific clocks */
 	at91sam9261_register_clocks();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Register GPIO subsystem */
 	at91_gpio_init(at91sam9261_gpio, 3);
 }
@@ -372,6 +398,7 @@ static unsigned int at91sam9261_default_irq_priority[NR_AIC_IRQS] __initdata = {
 	0,	/* Advanced Interrupt Controller */
 };
 
+<<<<<<< HEAD
 void __init at91sam9261_init_interrupts(unsigned int priority[NR_AIC_IRQS])
 {
 	if (!priority)
@@ -383,3 +410,11 @@ void __init at91sam9261_init_interrupts(unsigned int priority[NR_AIC_IRQS])
 	/* Enable GPIO interrupts */
 	at91_gpio_irq_setup();
 }
+=======
+struct at91_init_soc __initdata at91sam9261_soc = {
+	.map_io = at91sam9261_map_io,
+	.default_irq_priority = at91sam9261_default_irq_priority,
+	.register_clocks = at91sam9261_register_clocks,
+	.init = at91sam9261_initialize,
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

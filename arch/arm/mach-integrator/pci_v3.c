@@ -502,6 +502,12 @@ void __init pci_v3_preinit(void)
 	unsigned int temp;
 	int ret;
 
+<<<<<<< HEAD
+=======
+	pcibios_min_io = 0x6000;
+	pcibios_min_mem = 0x00100000;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Hook in our fault handler for PCI errors
 	 */

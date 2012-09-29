@@ -7,6 +7,10 @@
  * May 1999, Al Viro: proper release of /proc/net/bmac entry, switched to
  * dynamic procfs inode.
  */
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/netdevice.h>
@@ -1014,7 +1018,10 @@ static void bmac_set_multicast(struct net_device *dev)
 static void bmac_set_multicast(struct net_device *dev)
 {
 	struct netdev_hw_addr *ha;
+<<<<<<< HEAD
 	char *addrs;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int i;
 	unsigned short rx_cfg;
 	u32 crc;
@@ -1038,12 +1045,16 @@ static void bmac_set_multicast(struct net_device *dev)
 		for(i = 0; i < 4; i++) hash_table[i] = 0;
 
 		netdev_for_each_mc_addr(ha, dev) {
+<<<<<<< HEAD
 			addrs = ha->addr;
 
 			if(!(*addrs & 1))
 				continue;
 
 			crc = ether_crc_le(6, addrs);
+=======
+			crc = ether_crc_le(6, ha->addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			crc >>= 26;
 			hash_table[crc >> 4] |= 1 << (crc & 0xf);
 		}

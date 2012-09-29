@@ -45,6 +45,7 @@ struct platform_device s3c_device_ts = {
 
 void __init s3c24xx_ts_set_platdata(struct s3c2410_ts_mach_info *pd)
 {
+<<<<<<< HEAD
 	struct s3c2410_ts_mach_info *npd;
 
 	if (!pd) {
@@ -57,4 +58,8 @@ void __init s3c24xx_ts_set_platdata(struct s3c2410_ts_mach_info *pd)
 		printk(KERN_ERR "%s: no memory for platform data\n", __func__);
 
 	s3c_device_ts.dev.platform_data = npd;
+=======
+	s3c_set_platdata(pd, sizeof(struct s3c2410_ts_mach_info),
+			 &s3c_device_ts);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

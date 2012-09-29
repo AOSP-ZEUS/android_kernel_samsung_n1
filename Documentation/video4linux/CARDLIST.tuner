@@ -78,8 +78,16 @@ tuner=77 - TCL tuner MF02GIP-5N-E
 tuner=78 - Philips FMD1216MEX MK3 Hybrid Tuner
 tuner=79 - Philips PAL/SECAM multi (FM1216 MK5)
 tuner=80 - Philips FQ1216LME MK3 PAL/SECAM w/active loopthrough
+<<<<<<< HEAD
+=======
+tuner=81 - Xceive 4000 tuner
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 tuner=81 - Partsnic (Daewoo) PTI-5NF05
 tuner=82 - Philips CU1216L
 tuner=83 - NXP TDA18271
 tuner=84 - Sony BTF-Pxn01Z
 tuner=85 - Philips FQ1236 MK5
+<<<<<<< HEAD
+=======
+tuner=86 - Tena TNF5337 MFD
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

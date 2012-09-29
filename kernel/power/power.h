@@ -250,6 +250,11 @@ static inline void suspend_thaw_processes(void)
 /* kernel/power/wakelock.c */
 extern struct workqueue_struct *suspend_work_queue;
 extern struct wake_lock main_wake_lock;
+<<<<<<< HEAD
+=======
+extern struct workqueue_struct *sync_work_queue;
+extern struct wake_lock sync_wake_lock;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern suspend_state_t requested_suspend_state;
 #endif
 
@@ -264,6 +269,17 @@ ssize_t  wake_unlock_store(struct kobject *kobj, struct kobj_attribute *attr,
 			const char *buf, size_t n);
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_TEGRA_CPU_FREQ_LOCK
+#include <linux/cpufreq.h>
+int tegra_cpu_round(unsigned int cpu_freq);
+void tegra_cpu_lock_speed(int min_rate, int timeout_ms);
+void tegra_cpu_unlock_speed(void);
+#endif
+
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_EARLYSUSPEND
 /* kernel/power/earlysuspend.c */
 void request_suspend_state(suspend_state_t state);

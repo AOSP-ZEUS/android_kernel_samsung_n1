@@ -382,7 +382,11 @@ isa_irq_fixup(struct pci_dev *dev, int irq)
 }
 
 static int __init
+<<<<<<< HEAD
 dp264_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+dp264_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	static char irq_tab[6][5] __initdata = {
 		/*INT    INTA   INTB   INTC   INTD */
@@ -404,7 +408,11 @@ dp264_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
 }
 
 static int __init
+<<<<<<< HEAD
 monet_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+monet_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	static char irq_tab[13][5] __initdata = {
 		/*INT    INTA   INTB   INTC   INTD */
@@ -466,7 +474,11 @@ monet_swizzle(struct pci_dev *dev, u8 *pinp)
 }
 
 static int __init
+<<<<<<< HEAD
 webbrick_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+webbrick_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	static char irq_tab[13][5] __initdata = {
 		/*INT    INTA   INTB   INTC   INTD */
@@ -488,7 +500,11 @@ webbrick_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
 }
 
 static int __init
+<<<<<<< HEAD
 clipper_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+clipper_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	static char irq_tab[7][5] __initdata = {
 		/*INT    INTA   INTB   INTC   INTD */

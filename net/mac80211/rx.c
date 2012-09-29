@@ -334,15 +334,27 @@ static void ieee80211_parse_qos(struct ieee80211_rx_data *rx)
 {
 	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)rx->skb->data;
 	struct ieee80211_rx_status *status = IEEE80211_SKB_RXCB(rx->skb);
+<<<<<<< HEAD
 	int tid;
+=======
+	int tid, seqno_idx, security_idx;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* does the frame have a qos control field? */
 	if (ieee80211_is_data_qos(hdr->frame_control)) {
 		u8 *qc = ieee80211_get_qos_ctl(hdr);
 		/* frame has qos control */
 		tid = *qc & IEEE80211_QOS_CTL_TID_MASK;
+<<<<<<< HEAD
 		if (*qc & IEEE80211_QOS_CONTROL_A_MSDU_PRESENT)
 			status->rx_flags |= IEEE80211_RX_AMSDU;
+=======
+		if (*qc & IEEE80211_QOS_CTL_A_MSDU_PRESENT)
+			status->rx_flags |= IEEE80211_RX_AMSDU;
+
+		seqno_idx = tid;
+		security_idx = tid;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		/*
 		 * IEEE 802.11-2007, 7.1.3.4.1 ("Sequence Number field"):
@@ -355,10 +367,22 @@ static void ieee80211_parse_qos(struct ieee80211_rx_data *rx)
 		 *
 		 * We also use that counter for non-QoS STAs.
 		 */
+<<<<<<< HEAD
 		tid = NUM_RX_DATA_QUEUES - 1;
 	}
 
 	rx->queue = tid;
+=======
+		seqno_idx = NUM_RX_DATA_QUEUES;
+		security_idx = 0;
+		if (ieee80211_is_mgmt(hdr->frame_control))
+			security_idx = NUM_RX_DATA_QUEUES;
+		tid = 0;
+	}
+
+	rx->seqno_idx = seqno_idx;
+	rx->security_idx = security_idx;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Set skb->priority to 1d tag if highest order bit of TID is not set.
 	 * For now, set skb->priority to 0 for other cases. */
 	rx->skb->priority = (tid > 7) ? 0 : tid;
@@ -610,7 +634,11 @@ static void ieee80211_sta_reorder_release(struct ieee80211_hw *hw,
 	index = seq_sub(tid_agg_rx->head_seq_num, tid_agg_rx->ssn) %
 						tid_agg_rx->buf_size;
 	if (!tid_agg_rx->reorder_buf[index] &&
+<<<<<<< HEAD
 	    tid_agg_rx->stored_mpdu_num) {
+=======
+	    tid_agg_rx->stored_mpdu_num > 1) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * No buffers ready to be released, but check whether any
 		 * frames in the reorder buffer have timed out.
@@ -813,7 +841,11 @@ ieee80211_rx_h_check(struct ieee80211_rx_data *rx)
 	/* Drop duplicate 802.11 retransmissions (IEEE 802.11 Chap. 9.2.9) */
 	if (rx->sta && !is_multicast_ether_addr(hdr->addr1)) {
 		if (unlikely(ieee80211_has_retry(hdr->frame_control) &&
+<<<<<<< HEAD
 			     rx->sta->last_seq_ctrl[rx->queue] ==
+=======
+			     rx->sta->last_seq_ctrl[rx->seqno_idx] ==
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			     hdr->seq_ctrl)) {
 			if (status->rx_flags & IEEE80211_RX_RA_MATCH) {
 				rx->local->dot11FrameDuplicateCount++;
@@ -821,7 +853,11 @@ ieee80211_rx_h_check(struct ieee80211_rx_data *rx)
 			}
 			return RX_DROP_UNUSABLE;
 		} else
+<<<<<<< HEAD
 			rx->sta->last_seq_ctrl[rx->queue] = hdr->seq_ctrl;
+=======
+			rx->sta->last_seq_ctrl[rx->seqno_idx] = hdr->seq_ctrl;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (unlikely(rx->skb->len < 16)) {
@@ -1014,6 +1050,12 @@ ieee80211_rx_h_decrypt(struct ieee80211_rx_data *rx)
 	}
 
 	if (rx->key) {
+<<<<<<< HEAD
+=======
+		if (unlikely(rx->key->flags & KEY_FLAG_TAINTED))
+			return RX_DROP_MONITOR;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rx->key->tx_rx_count++;
 		/* TODO: add threshold stuff again */
 	} else {
@@ -1377,11 +1419,18 @@ ieee80211_rx_h_defragment(struct ieee80211_rx_data *rx)
 	if (frag == 0) {
 		/* This is the first fragment of a new frame. */
 		entry = ieee80211_reassemble_add(rx->sdata, frag, seq,
+<<<<<<< HEAD
 						 rx->queue, &(rx->skb));
 		if (rx->key && rx->key->conf.cipher == WLAN_CIPHER_SUITE_CCMP &&
 		    ieee80211_has_protected(fc)) {
 			int queue = ieee80211_is_mgmt(fc) ?
 				NUM_RX_DATA_QUEUES : rx->queue;
+=======
+						 rx->seqno_idx, &(rx->skb));
+		if (rx->key && rx->key->conf.cipher == WLAN_CIPHER_SUITE_CCMP &&
+		    ieee80211_has_protected(fc)) {
+			int queue = rx->security_idx;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* Store CCMP PN so that we can verify that the next
 			 * fragment has a sequential PN value. */
 			entry->ccmp = 1;
@@ -1395,7 +1444,12 @@ ieee80211_rx_h_defragment(struct ieee80211_rx_data *rx)
 	/* This is a fragment for a frame that should already be pending in
 	 * fragment cache. Add this fragment to the end of the pending entry.
 	 */
+<<<<<<< HEAD
 	entry = ieee80211_reassemble_find(rx->sdata, frag, seq, rx->queue, hdr);
+=======
+	entry = ieee80211_reassemble_find(rx->sdata, frag, seq,
+					  rx->seqno_idx, hdr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!entry) {
 		I802_DEBUG_INC(rx->local->rx_handlers_drop_defrag);
 		return RX_DROP_MONITOR;
@@ -1415,8 +1469,12 @@ ieee80211_rx_h_defragment(struct ieee80211_rx_data *rx)
 			if (pn[i])
 				break;
 		}
+<<<<<<< HEAD
 		queue = ieee80211_is_mgmt(fc) ?
 			NUM_RX_DATA_QUEUES : rx->queue;
+=======
+		queue = rx->security_idx;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rpn = rx->key->u.ccmp.rx_pn[queue];
 		if (memcmp(pn, rpn, CCMP_PN_LEN))
 			return RX_DROP_UNUSABLE;
@@ -2593,7 +2651,13 @@ void ieee80211_release_reorder_timeout(struct sta_info *sta, int tid)
 		.sta = sta,
 		.sdata = sta->sdata,
 		.local = sta->local,
+<<<<<<< HEAD
 		.queue = tid,
+=======
+		/* This is OK -- must be QoS data frame */
+		.security_idx = tid,
+		.seqno_idx = tid,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.flags = 0,
 	};
 	struct tid_ampdu_rx *tid_agg_rx;

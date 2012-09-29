@@ -51,7 +51,11 @@ static void __init omap_nokia770_init_irq(void)
 	omap_writew((omap_readw(0xfffb5004) & ~2), 0xfffb5004);
 
 	omap1_init_common_hw();
+<<<<<<< HEAD
 	omap_init_irq();
+=======
+	omap1_init_irq();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static const unsigned int nokia770_keymap[] = {
@@ -269,5 +273,9 @@ MACHINE_START(NOKIA770, "Nokia 770")
 	.reserve	= omap_reserve,
 	.init_irq	= omap_nokia770_init_irq,
 	.init_machine	= omap_nokia770_init,
+<<<<<<< HEAD
 	.timer		= &omap_timer,
+=======
+	.timer		= &omap1_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

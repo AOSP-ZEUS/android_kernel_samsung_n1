@@ -56,9 +56,17 @@
 struct rtnl_link {
 	rtnl_doit_func		doit;
 	rtnl_dumpit_func	dumpit;
+<<<<<<< HEAD
 };
 
 static DEFINE_MUTEX(rtnl_mutex);
+=======
+	rtnl_calcit_func 	calcit;
+};
+
+static DEFINE_MUTEX(rtnl_mutex);
+static u16 min_ifinfo_dump_size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void rtnl_lock(void)
 {
@@ -144,12 +152,34 @@ static rtnl_dumpit_func rtnl_get_dumpit(int protocol, int msgindex)
 	return tab ? tab[msgindex].dumpit : NULL;
 }
 
+<<<<<<< HEAD
+=======
+static rtnl_calcit_func rtnl_get_calcit(int protocol, int msgindex)
+{
+	struct rtnl_link *tab;
+
+	if (protocol <= RTNL_FAMILY_MAX)
+		tab = rtnl_msg_handlers[protocol];
+	else
+		tab = NULL;
+
+	if (tab == NULL || tab[msgindex].calcit == NULL)
+		tab = rtnl_msg_handlers[PF_UNSPEC];
+
+	return tab ? tab[msgindex].calcit : NULL;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * __rtnl_register - Register a rtnetlink message type
  * @protocol: Protocol family or PF_UNSPEC
  * @msgtype: rtnetlink message type
  * @doit: Function pointer called for each request message
  * @dumpit: Function pointer called for each dump request (NLM_F_DUMP) message
+<<<<<<< HEAD
+=======
+ * @calcit: Function pointer to calc size of dump message
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Registers the specified function pointers (at least one of them has
  * to be non-NULL) to be called whenever a request message for the
@@ -162,7 +192,12 @@ static rtnl_dumpit_func rtnl_get_dumpit(int protocol, int msgindex)
  * Returns 0 on success or a negative error code.
  */
 int __rtnl_register(int protocol, int msgtype,
+<<<<<<< HEAD
 		    rtnl_doit_func doit, rtnl_dumpit_func dumpit)
+=======
+		    rtnl_doit_func doit, rtnl_dumpit_func dumpit,
+		    rtnl_calcit_func calcit)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct rtnl_link *tab;
 	int msgindex;
@@ -185,6 +220,12 @@ int __rtnl_register(int protocol, int msgtype,
 	if (dumpit)
 		tab[msgindex].dumpit = dumpit;
 
+<<<<<<< HEAD
+=======
+	if (calcit)
+		tab[msgindex].calcit = calcit;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 EXPORT_SYMBOL_GPL(__rtnl_register);
@@ -199,9 +240,16 @@ EXPORT_SYMBOL_GPL(__rtnl_register);
  * of memory implies no sense in continuing.
  */
 void rtnl_register(int protocol, int msgtype,
+<<<<<<< HEAD
 		   rtnl_doit_func doit, rtnl_dumpit_func dumpit)
 {
 	if (__rtnl_register(protocol, msgtype, doit, dumpit) < 0)
+=======
+		   rtnl_doit_func doit, rtnl_dumpit_func dumpit,
+		   rtnl_calcit_func calcit)
+{
+	if (__rtnl_register(protocol, msgtype, doit, dumpit, calcit) < 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		panic("Unable to register rtnetlink message handler, "
 		      "protocol = %d, message type = %d\n",
 		      protocol, msgtype);
@@ -1009,6 +1057,11 @@ static int rtnl_dump_ifinfo(struct sk_buff *skb, struct netlink_callback *cb)
 	s_idx = cb->args[1];
 
 	rcu_read_lock();
+<<<<<<< HEAD
+=======
+	cb->seq = net->dev_base_seq;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (h = s_h; h < NETDEV_HASHENTRIES; h++, s_idx = 0) {
 		idx = 0;
 		head = &net->dev_index_head[h];
@@ -1020,6 +1073,11 @@ static int rtnl_dump_ifinfo(struct sk_buff *skb, struct netlink_callback *cb)
 					     cb->nlh->nlmsg_seq, 0,
 					     NLM_F_MULTI) <= 0)
 				goto out;
+<<<<<<< HEAD
+=======
+
+			nl_dump_check_consistent(cb, nlmsg_hdr(skb));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 cont:
 			idx++;
 		}
@@ -1818,6 +1876,14 @@ static int rtnl_getlink(struct sk_buff *skb, struct nlmsghdr* nlh, void *arg)
 	return err;
 }
 
+<<<<<<< HEAD
+=======
+static u16 rtnl_calcit(struct sk_buff *skb)
+{
+	return min_ifinfo_dump_size;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int rtnl_dump_all(struct sk_buff *skb, struct netlink_callback *cb)
 {
 	int idx;
@@ -1847,11 +1913,22 @@ void rtmsg_ifinfo(int type, struct net_device *dev, unsigned change)
 	struct net *net = dev_net(dev);
 	struct sk_buff *skb;
 	int err = -ENOBUFS;
+<<<<<<< HEAD
 
 	skb = nlmsg_new(if_nlmsg_size(dev), GFP_KERNEL);
 	if (skb == NULL)
 		goto errout;
 
+=======
+	size_t if_info_size;
+
+	skb = nlmsg_new((if_info_size = if_nlmsg_size(dev)), GFP_KERNEL);
+	if (skb == NULL)
+		goto errout;
+
+	min_ifinfo_dump_size = max_t(u16, if_info_size, min_ifinfo_dump_size);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	err = rtnl_fill_ifinfo(skb, dev, type, 0, 0, change, 0);
 	if (err < 0) {
 		/* -EMSGSIZE implies BUG in if_nlmsg_size() */
@@ -1902,14 +1979,30 @@ static int rtnetlink_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 	if (kind == 2 && nlh->nlmsg_flags&NLM_F_DUMP) {
 		struct sock *rtnl;
 		rtnl_dumpit_func dumpit;
+<<<<<<< HEAD
+=======
+		rtnl_calcit_func calcit;
+		u16 min_dump_alloc = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		dumpit = rtnl_get_dumpit(family, type);
 		if (dumpit == NULL)
 			return -EOPNOTSUPP;
+<<<<<<< HEAD
 
 		__rtnl_unlock();
 		rtnl = net->rtnl;
 		err = netlink_dump_start(rtnl, skb, nlh, dumpit, NULL);
+=======
+		calcit = rtnl_get_calcit(family, type);
+		if (calcit)
+			min_dump_alloc = calcit(skb);
+
+		__rtnl_unlock();
+		rtnl = net->rtnl;
+		err = netlink_dump_start(rtnl, skb, nlh, dumpit,
+					 NULL, min_dump_alloc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rtnl_lock();
 		return err;
 	}
@@ -2019,6 +2112,7 @@ void __init rtnetlink_init(void)
 	netlink_set_nonroot(NETLINK_ROUTE, NL_NONROOT_RECV);
 	register_netdevice_notifier(&rtnetlink_dev_notifier);
 
+<<<<<<< HEAD
 	rtnl_register(PF_UNSPEC, RTM_GETLINK, rtnl_getlink, rtnl_dump_ifinfo);
 	rtnl_register(PF_UNSPEC, RTM_SETLINK, rtnl_setlink, NULL);
 	rtnl_register(PF_UNSPEC, RTM_NEWLINK, rtnl_newlink, NULL);
@@ -2026,5 +2120,15 @@ void __init rtnetlink_init(void)
 
 	rtnl_register(PF_UNSPEC, RTM_GETADDR, NULL, rtnl_dump_all);
 	rtnl_register(PF_UNSPEC, RTM_GETROUTE, NULL, rtnl_dump_all);
+=======
+	rtnl_register(PF_UNSPEC, RTM_GETLINK, rtnl_getlink,
+		      rtnl_dump_ifinfo, rtnl_calcit);
+	rtnl_register(PF_UNSPEC, RTM_SETLINK, rtnl_setlink, NULL, NULL);
+	rtnl_register(PF_UNSPEC, RTM_NEWLINK, rtnl_newlink, NULL, NULL);
+	rtnl_register(PF_UNSPEC, RTM_DELLINK, rtnl_dellink, NULL, NULL);
+
+	rtnl_register(PF_UNSPEC, RTM_GETADDR, NULL, rtnl_dump_all, NULL);
+	rtnl_register(PF_UNSPEC, RTM_GETROUTE, NULL, rtnl_dump_all, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 

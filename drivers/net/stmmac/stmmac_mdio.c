@@ -27,6 +27,10 @@
 #include <linux/mii.h>
 #include <linux/phy.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <asm/io.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "stmmac.h"
 
@@ -112,9 +116,15 @@ static int stmmac_mdio_reset(struct mii_bus *bus)
 	struct stmmac_priv *priv = netdev_priv(ndev);
 	unsigned int mii_address = priv->hw->mii.addr;
 
+<<<<<<< HEAD
 	if (priv->phy_reset) {
 		pr_debug("stmmac_mdio_reset: calling phy_reset\n");
 		priv->phy_reset(priv->plat->bsp_priv);
+=======
+	if (priv->plat->mdio_bus_data->phy_reset) {
+		pr_debug("stmmac_mdio_reset: calling phy_reset\n");
+		priv->plat->mdio_bus_data->phy_reset(priv->plat->bsp_priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* This is a workaround for problems with the STE101P PHY.
@@ -137,12 +147,22 @@ int stmmac_mdio_register(struct net_device *ndev)
 	struct mii_bus *new_bus;
 	int *irqlist;
 	struct stmmac_priv *priv = netdev_priv(ndev);
+<<<<<<< HEAD
 	int addr, found;
 
+=======
+	struct stmmac_mdio_bus_data *mdio_bus_data = priv->plat->mdio_bus_data;
+	int addr, found;
+
+	if (!mdio_bus_data)
+		return 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	new_bus = mdiobus_alloc();
 	if (new_bus == NULL)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	irqlist = kzalloc(sizeof(int) * PHY_MAX_ADDR, GFP_KERNEL);
 	if (irqlist == NULL) {
 		err = -ENOMEM;
@@ -152,15 +172,28 @@ int stmmac_mdio_register(struct net_device *ndev)
 	/* Assign IRQ to phy at address phy_addr */
 	if (priv->phy_addr != -1)
 		irqlist[priv->phy_addr] = priv->phy_irq;
+=======
+	if (mdio_bus_data->irqs)
+		irqlist = mdio_bus_data->irqs;
+	else
+		irqlist = priv->mii_irq;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	new_bus->name = "STMMAC MII Bus";
 	new_bus->read = &stmmac_mdio_read;
 	new_bus->write = &stmmac_mdio_write;
 	new_bus->reset = &stmmac_mdio_reset;
+<<<<<<< HEAD
 	snprintf(new_bus->id, MII_BUS_ID_SIZE, "%x", priv->plat->bus_id);
 	new_bus->priv = ndev;
 	new_bus->irq = irqlist;
 	new_bus->phy_mask = priv->phy_mask;
+=======
+	snprintf(new_bus->id, MII_BUS_ID_SIZE, "%x", mdio_bus_data->bus_id);
+	new_bus->priv = ndev;
+	new_bus->irq = irqlist;
+	new_bus->phy_mask = mdio_bus_data->phy_mask;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	new_bus->parent = priv->device;
 	err = mdiobus_register(new_bus);
 	if (err != 0) {
@@ -171,6 +204,7 @@ int stmmac_mdio_register(struct net_device *ndev)
 	priv->mii = new_bus;
 
 	found = 0;
+<<<<<<< HEAD
 	for (addr = 0; addr < 32; addr++) {
 		struct phy_device *phydev = new_bus->phy_map[addr];
 		if (phydev) {
@@ -183,6 +217,52 @@ int stmmac_mdio_register(struct net_device *ndev)
 			       ndev->name, phydev->phy_id, addr,
 			       phydev->irq, dev_name(&phydev->dev),
 			       (addr == priv->phy_addr) ? " active" : "");
+=======
+	for (addr = 0; addr < PHY_MAX_ADDR; addr++) {
+		struct phy_device *phydev = new_bus->phy_map[addr];
+		if (phydev) {
+			int act = 0;
+			char irq_num[4];
+			char *irq_str;
+
+			/*
+			 * If an IRQ was provided to be assigned after
+			 * the bus probe, do it here.
+			 */
+			if ((mdio_bus_data->irqs == NULL) &&
+			    (mdio_bus_data->probed_phy_irq > 0)) {
+				irqlist[addr] = mdio_bus_data->probed_phy_irq;
+				phydev->irq = mdio_bus_data->probed_phy_irq;
+			}
+
+			/*
+			 * If we're  going to bind the MAC to this PHY bus,
+			 * and no PHY number was provided to the MAC,
+			 * use the one probed here.
+			 */
+			if ((priv->plat->bus_id == mdio_bus_data->bus_id) &&
+			    (priv->plat->phy_addr == -1))
+				priv->plat->phy_addr = addr;
+
+			act = (priv->plat->bus_id == mdio_bus_data->bus_id) &&
+				(priv->plat->phy_addr == addr);
+			switch (phydev->irq) {
+			case PHY_POLL:
+				irq_str = "POLL";
+				break;
+			case PHY_IGNORE_INTERRUPT:
+				irq_str = "IGNORE";
+				break;
+			default:
+				sprintf(irq_num, "%d", phydev->irq);
+				irq_str = irq_num;
+				break;
+			}
+			pr_info("%s: PHY ID %08x at %d IRQ %s (%s)%s\n",
+				ndev->name, phydev->phy_id, addr,
+				irq_str, dev_name(&phydev->dev),
+				act ? " active" : "");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			found = 1;
 		}
 	}
@@ -191,10 +271,16 @@ int stmmac_mdio_register(struct net_device *ndev)
 		pr_warning("%s: No PHY found\n", ndev->name);
 
 	return 0;
+<<<<<<< HEAD
 bus_register_fail:
 	kfree(irqlist);
 irqlist_alloc_fail:
 	kfree(new_bus);
+=======
+
+bus_register_fail:
+	mdiobus_free(new_bus);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return err;
 }
 
@@ -209,7 +295,12 @@ int stmmac_mdio_unregister(struct net_device *ndev)
 
 	mdiobus_unregister(priv->mii);
 	priv->mii->priv = NULL;
+<<<<<<< HEAD
 	kfree(priv->mii);
+=======
+	mdiobus_free(priv->mii);
+	priv->mii = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

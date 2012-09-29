@@ -231,6 +231,11 @@ enum
 	LINUX_MIB_TCPDEFERACCEPTDROP,
 	LINUX_MIB_IPRPFILTER, /* IP Reverse Path Filter (rp_filter) */
 	LINUX_MIB_TCPTIMEWAITOVERFLOW,		/* TCPTimeWaitOverflow */
+<<<<<<< HEAD
+=======
+	LINUX_MIB_TCPREQQFULLDOCOOKIES,		/* TCPReqQFullDoCookies */
+	LINUX_MIB_TCPREQQFULLDROP,		/* TCPReqQFullDrop */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__LINUX_MIB_MAX
 };
 

@@ -121,6 +121,7 @@ static inline int atomic_read(const atomic_t *v)
  */
 #define atomic_add_negative(i, v)	(atomic_add_return((i), (v)) < 0)
 
+<<<<<<< HEAD
 /**
  * atomic_inc_not_zero - increment unless the number is zero
  * @v: pointer of type atomic_t
@@ -130,6 +131,8 @@ static inline int atomic_read(const atomic_t *v)
  */
 #define atomic_inc_not_zero(v)		atomic_add_unless((v), 1, 0)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Nonexistent functions intended to cause link errors. */
 extern unsigned long __xchg_called_with_bad_pointer(void);
 extern unsigned long __cmpxchg_called_with_bad_pointer(void);
@@ -186,9 +189,12 @@ extern unsigned long __cmpxchg_called_with_bad_pointer(void);
 #include <asm/atomic_64.h>
 #endif
 
+<<<<<<< HEAD
 /* Provide the appropriate atomic_long_t definitions. */
 #ifndef __ASSEMBLY__
 #include <asm-generic/atomic-long.h>
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* _ASM_TILE_ATOMIC_H */

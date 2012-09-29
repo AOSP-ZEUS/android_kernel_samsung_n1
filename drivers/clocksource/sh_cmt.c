@@ -26,6 +26,10 @@
 #include <linux/clk.h>
 #include <linux/irq.h>
 #include <linux/err.h>
+<<<<<<< HEAD
+=======
+#include <linux/delay.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/clocksource.h>
 #include <linux/clockchips.h>
 #include <linux/sh_timer.h>
@@ -150,13 +154,21 @@ static void sh_cmt_start_stop_ch(struct sh_cmt_priv *p, int start)
 
 static int sh_cmt_enable(struct sh_cmt_priv *p, unsigned long *rate)
 {
+<<<<<<< HEAD
 	int ret;
+=======
+	int k, ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* enable clock */
 	ret = clk_enable(p->clk);
 	if (ret) {
 		dev_err(&p->pdev->dev, "cannot enable clock\n");
+<<<<<<< HEAD
 		return ret;
+=======
+		goto err0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* make sure channel is disabled */
@@ -174,9 +186,44 @@ static int sh_cmt_enable(struct sh_cmt_priv *p, unsigned long *rate)
 	sh_cmt_write(p, CMCOR, 0xffffffff);
 	sh_cmt_write(p, CMCNT, 0);
 
+<<<<<<< HEAD
 	/* enable channel */
 	sh_cmt_start_stop_ch(p, 1);
 	return 0;
+=======
+	/*
+	 * According to the sh73a0 user's manual, as CMCNT can be operated
+	 * only by the RCLK (Pseudo 32 KHz), there's one restriction on
+	 * modifying CMCNT register; two RCLK cycles are necessary before
+	 * this register is either read or any modification of the value
+	 * it holds is reflected in the LSI's actual operation.
+	 *
+	 * While at it, we're supposed to clear out the CMCNT as of this
+	 * moment, so make sure it's processed properly here.  This will
+	 * take RCLKx2 at maximum.
+	 */
+	for (k = 0; k < 100; k++) {
+		if (!sh_cmt_read(p, CMCNT))
+			break;
+		udelay(1);
+	}
+
+	if (sh_cmt_read(p, CMCNT)) {
+		dev_err(&p->pdev->dev, "cannot clear CMCNT\n");
+		ret = -ETIMEDOUT;
+		goto err1;
+	}
+
+	/* enable channel */
+	sh_cmt_start_stop_ch(p, 1);
+	return 0;
+ err1:
+	/* stop clock */
+	clk_disable(p->clk);
+
+ err0:
+	return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void sh_cmt_disable(struct sh_cmt_priv *p)

@@ -944,6 +944,13 @@ static int do_test(int m)
 		ret += tcrypt_test("rfc4309(ccm(aes))");
 		break;
 
+<<<<<<< HEAD
+=======
+	case 46:
+		ret += tcrypt_test("ofb(aes)");
+		break;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case 100:
 		ret += tcrypt_test("hmac(md5)");
 		break;
@@ -984,6 +991,13 @@ static int do_test(int m)
 		ret += tcrypt_test("vmac(aes)");
 		break;
 
+<<<<<<< HEAD
+=======
+	case 110:
+		ret += tcrypt_test("cmac(aes)");
+		break;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case 150:
 		ret += tcrypt_test("ansi_cprng");
 		break;

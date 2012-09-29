@@ -39,8 +39,11 @@ u32 iop13xx_atue_mem_base;
 u32 iop13xx_atux_mem_base;
 size_t iop13xx_atue_mem_size;
 size_t iop13xx_atux_mem_size;
+<<<<<<< HEAD
 unsigned long iop13xx_pcibios_min_io = 0;
 unsigned long iop13xx_pcibios_min_mem = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 EXPORT_SYMBOL(iop13xx_atue_mem_base);
 EXPORT_SYMBOL(iop13xx_atux_mem_base);
@@ -390,7 +393,11 @@ static int iop13xx_atue_pci_status(int clear)
 }
 
 static int
+<<<<<<< HEAD
 iop13xx_pcie_map_irq(struct pci_dev *dev, u8 idsel, u8 pin)
+=======
+iop13xx_pcie_map_irq(const struct pci_dev *dev, u8 idsel, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	WARN_ON(idsel != 0);
 
@@ -971,7 +978,12 @@ void __init iop13xx_pci_init(void)
 	__raw_writel(__raw_readl(IOP13XX_XBG_BECSR) & 3, IOP13XX_XBG_BECSR);
 
 	/* Setup the Min Address for PCI memory... */
+<<<<<<< HEAD
 	iop13xx_pcibios_min_mem = IOP13XX_PCIX_LOWER_MEM_BA;
+=======
+	pcibios_min_io = 0;
+	pcibios_min_mem = IOP13XX_PCIX_LOWER_MEM_BA;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* if Linux is given control of an ATU
 	 * clear out its prior configuration,

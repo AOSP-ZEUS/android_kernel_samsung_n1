@@ -85,11 +85,14 @@ static unsigned long isolate_freepages_block(struct zone *zone,
 
 		if (!pfn_valid_within(blockpfn))
 			continue;
+<<<<<<< HEAD
 
 		/* Watch for unexpected holes punched in the memmap */
 		if (!memmap_valid_within(blockpfn, page, zone))
 			continue;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		nr_scanned++;
 
 		if (!PageBuddy(page))
@@ -184,11 +187,14 @@ static void isolate_freepages(struct zone *zone,
 		 * pages do not belong to a single zone.
 		 */
 		page = pfn_to_page(pfn);
+<<<<<<< HEAD
 
 		/* Watch for unexpected holes punched in the memmap */
 		if (!memmap_valid_within(pfn, page, zone))
 			continue;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (page_zone(page) != zone)
 			continue;
 
@@ -330,6 +336,7 @@ static isolate_migrate_t isolate_migratepages(struct zone *zone,
 		} else if (!locked)
 			spin_lock_irq(&zone->lru_lock);
 
+<<<<<<< HEAD
 		/*
 		 * migrate_pfn does not necessarily start aligned to a
 		 * pageblock. Ensure that pfn_valid is called when moving
@@ -343,10 +350,13 @@ static isolate_migrate_t isolate_migratepages(struct zone *zone,
 			}
 		}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!pfn_valid_within(low_pfn))
 			continue;
 		nr_scanned++;
 
+<<<<<<< HEAD
 		/*
 		 * Get the page and ensure the page is within the same zone.
 		 * See the comment in isolate_freepages about overlapping
@@ -363,6 +373,10 @@ static isolate_migrate_t isolate_migratepages(struct zone *zone,
 			continue;
 
 		/* Skip if free */
+=======
+		/* Get the page and skip if free */
+		page = pfn_to_page(low_pfn);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (PageBuddy(page))
 			continue;
 

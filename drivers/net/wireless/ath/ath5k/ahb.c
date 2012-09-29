@@ -24,7 +24,10 @@
 #include "debug.h"
 #include "base.h"
 #include "reg.h"
+<<<<<<< HEAD
 #include "debug.h"
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* return bus cachesize in 4B word units */
 static void ath5k_ahb_read_cachesize(struct ath_common *common, int *csz)
@@ -35,8 +38,13 @@ static void ath5k_ahb_read_cachesize(struct ath_common *common, int *csz)
 static bool
 ath5k_ahb_eeprom_read(struct ath_common *common, u32 off, u16 *data)
 {
+<<<<<<< HEAD
 	struct ath5k_softc *sc = common->priv;
 	struct platform_device *pdev = to_platform_device(sc->dev);
+=======
+	struct ath5k_hw *ah = common->priv;
+	struct platform_device *pdev = to_platform_device(ah->dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ar231x_board_config *bcfg = pdev->dev.platform_data;
 	u16 *eeprom, *eeprom_end;
 
@@ -56,8 +64,12 @@ ath5k_ahb_eeprom_read(struct ath_common *common, u32 off, u16 *data)
 
 int ath5k_hw_read_srev(struct ath5k_hw *ah)
 {
+<<<<<<< HEAD
 	struct ath5k_softc *sc = ah->ah_sc;
 	struct platform_device *pdev = to_platform_device(sc->dev);
+=======
+	struct platform_device *pdev = to_platform_device(ah->dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ar231x_board_config *bcfg = pdev->dev.platform_data;
 	ah->ah_mac_srev = bcfg->devid;
 	return 0;
@@ -65,12 +77,20 @@ int ath5k_hw_read_srev(struct ath5k_hw *ah)
 
 static int ath5k_ahb_eeprom_read_mac(struct ath5k_hw *ah, u8 *mac)
 {
+<<<<<<< HEAD
 	struct ath5k_softc *sc = ah->ah_sc;
 	struct platform_device *pdev = to_platform_device(sc->dev);
 	struct ar231x_board_config *bcfg = pdev->dev.platform_data;
 	u8 *cfg_mac;
 
 	if (to_platform_device(sc->dev)->id == 0)
+=======
+	struct platform_device *pdev = to_platform_device(ah->dev);
+	struct ar231x_board_config *bcfg = pdev->dev.platform_data;
+	u8 *cfg_mac;
+
+	if (to_platform_device(ah->dev)->id == 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cfg_mac = bcfg->config->wlan0_mac;
 	else
 		cfg_mac = bcfg->config->wlan1_mac;
@@ -90,7 +110,11 @@ static const struct ath_bus_ops ath_ahb_bus_ops = {
 static int ath_ahb_probe(struct platform_device *pdev)
 {
 	struct ar231x_board_config *bcfg = pdev->dev.platform_data;
+<<<<<<< HEAD
 	struct ath5k_softc *sc;
+=======
+	struct ath5k_hw *ah;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ieee80211_hw *hw;
 	struct resource *res;
 	void __iomem *mem;
@@ -127,19 +151,32 @@ static int ath_ahb_probe(struct platform_device *pdev)
 
 	irq = res->start;
 
+<<<<<<< HEAD
 	hw = ieee80211_alloc_hw(sizeof(struct ath5k_softc), &ath5k_hw_ops);
+=======
+	hw = ieee80211_alloc_hw(sizeof(struct ath5k_hw), &ath5k_hw_ops);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (hw == NULL) {
 		dev_err(&pdev->dev, "no memory for ieee80211_hw\n");
 		ret = -ENOMEM;
 		goto err_out;
 	}
 
+<<<<<<< HEAD
 	sc = hw->priv;
 	sc->hw = hw;
 	sc->dev = &pdev->dev;
 	sc->iobase = mem;
 	sc->irq = irq;
 	sc->devid = bcfg->devid;
+=======
+	ah = hw->priv;
+	ah->hw = hw;
+	ah->dev = &pdev->dev;
+	ah->iobase = mem;
+	ah->irq = irq;
+	ah->devid = bcfg->devid;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (bcfg->devid >= AR5K_SREV_AR2315_R6) {
 		/* Enable WMAC AHB arbitration */
@@ -155,7 +192,11 @@ static int ath_ahb_probe(struct platform_device *pdev)
 		/* Enable WMAC DMA access (assuming 5312 or 231x*/
 		/* TODO: check other platforms */
 		reg = __raw_readl((void __iomem *) AR5K_AR5312_ENABLE);
+<<<<<<< HEAD
 		if (to_platform_device(sc->dev)->id == 0)
+=======
+		if (to_platform_device(ah->dev)->id == 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			reg |= AR5K_AR5312_ENABLE_WLAN0;
 		else
 			reg |= AR5K_AR5312_ENABLE_WLAN1;
@@ -166,6 +207,7 @@ static int ath_ahb_probe(struct platform_device *pdev)
 		 * used as pass-through. Disable 2 GHz support in the
 		 * driver for it
 		 */
+<<<<<<< HEAD
 		if (to_platform_device(sc->dev)->id == 0 &&
 		    (bcfg->config->flags & (BD_WLAN0|BD_WLAN1)) ==
 		     (BD_WLAN1|BD_WLAN0))
@@ -173,6 +215,15 @@ static int ath_ahb_probe(struct platform_device *pdev)
 	}
 
 	ret = ath5k_init_softc(sc, &ath_ahb_bus_ops);
+=======
+		if (to_platform_device(ah->dev)->id == 0 &&
+		    (bcfg->config->flags & (BD_WLAN0 | BD_WLAN1)) ==
+		     (BD_WLAN1 | BD_WLAN0))
+			__set_bit(ATH_STAT_2G_DISABLED, ah->status);
+	}
+
+	ret = ath5k_init_softc(ah, &ath_ahb_bus_ops);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret != 0) {
 		dev_err(&pdev->dev, "failed to attach device, err=%d\n", ret);
 		ret = -ENODEV;
@@ -194,13 +245,21 @@ static int ath_ahb_remove(struct platform_device *pdev)
 {
 	struct ar231x_board_config *bcfg = pdev->dev.platform_data;
 	struct ieee80211_hw *hw = platform_get_drvdata(pdev);
+<<<<<<< HEAD
 	struct ath5k_softc *sc;
+=======
+	struct ath5k_hw *ah;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 reg;
 
 	if (!hw)
 		return 0;
 
+<<<<<<< HEAD
 	sc = hw->priv;
+=======
+	ah = hw->priv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (bcfg->devid >= AR5K_SREV_AR2315_R6) {
 		/* Disable WMAC AHB arbitration */
@@ -210,15 +269,25 @@ static int ath_ahb_remove(struct platform_device *pdev)
 	} else {
 		/*Stop DMA access */
 		reg = __raw_readl((void __iomem *) AR5K_AR5312_ENABLE);
+<<<<<<< HEAD
 		if (to_platform_device(sc->dev)->id == 0)
+=======
+		if (to_platform_device(ah->dev)->id == 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			reg &= ~AR5K_AR5312_ENABLE_WLAN0;
 		else
 			reg &= ~AR5K_AR5312_ENABLE_WLAN1;
 		__raw_writel(reg, (void __iomem *) AR5K_AR5312_ENABLE);
 	}
 
+<<<<<<< HEAD
 	ath5k_deinit_softc(sc);
 	platform_set_drvdata(pdev, NULL);
+=======
+	ath5k_deinit_softc(ah);
+	platform_set_drvdata(pdev, NULL);
+	ieee80211_free_hw(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

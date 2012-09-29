@@ -101,6 +101,7 @@ static const int mxc_uart1_pins[] = {
 	PC12_PF_UART1_RXD,
 };
 
+<<<<<<< HEAD
 static int uart1_mxc_init(struct platform_device *pdev)
 {
 	return mxc_gpio_setup_multiple_pins(mxc_uart1_pins,
@@ -116,6 +117,9 @@ static void uart1_mxc_exit(struct platform_device *pdev)
 static const struct imxuart_platform_data uart_pdata __initconst = {
 	.init = uart1_mxc_init,
 	.exit = uart1_mxc_exit,
+=======
+static const struct imxuart_platform_data uart_pdata __initconst = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.flags = IMXUART_HAVE_RTSCTS,
 };
 
@@ -129,6 +133,14 @@ static struct platform_device *devices[] __initdata = {
  */
 static void __init scb9328_init(void)
 {
+<<<<<<< HEAD
+=======
+	imx1_soc_init();
+
+	mxc_gpio_setup_multiple_pins(mxc_uart1_pins,
+			ARRAY_SIZE(mxc_uart1_pins), "UART1");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	imx1_add_imx_uart0(&uart_pdata);
 
 	printk(KERN_INFO"Scb9328: Adding devices\n");

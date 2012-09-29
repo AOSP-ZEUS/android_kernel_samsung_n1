@@ -28,11 +28,14 @@ static void ar9002_hw_set_desc_link(void *ds, u32 ds_link)
 	((struct ath_desc*) ds)->ds_link = ds_link;
 }
 
+<<<<<<< HEAD
 static void ar9002_hw_get_desc_link(void *ds, u32 **ds_link)
 {
 	*ds_link = &((struct ath_desc *)ds)->ds_link;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static bool ar9002_hw_get_isr(struct ath_hw *ah, enum ath9k_int *masked)
 {
 	u32 isr = 0;
@@ -437,7 +440,10 @@ void ar9002_hw_attach_mac_ops(struct ath_hw *ah)
 
 	ops->rx_enable = ar9002_hw_rx_enable;
 	ops->set_desc_link = ar9002_hw_set_desc_link;
+<<<<<<< HEAD
 	ops->get_desc_link = ar9002_hw_get_desc_link;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ops->get_isr = ar9002_hw_get_isr;
 	ops->fill_txdesc = ar9002_hw_fill_txdesc;
 	ops->proc_txdesc = ar9002_hw_proc_txdesc;

@@ -23,6 +23,10 @@
 #define _NET_BATMAN_ADV_RING_BUFFER_H_
 
 void ring_buffer_set(uint8_t lq_recv[], uint8_t *lq_index, uint8_t value);
+<<<<<<< HEAD
 uint8_t ring_buffer_avg(uint8_t lq_recv[]);
+=======
+uint8_t ring_buffer_avg(const uint8_t lq_recv[]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _NET_BATMAN_ADV_RING_BUFFER_H_ */

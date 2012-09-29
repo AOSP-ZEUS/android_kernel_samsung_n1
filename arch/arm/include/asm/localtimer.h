@@ -10,6 +10,11 @@
 #ifndef __ASM_ARM_LOCALTIMER_H
 #define __ASM_ARM_LOCALTIMER_H
 
+<<<<<<< HEAD
+=======
+#include <linux/errno.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct clock_event_device;
 
 /*

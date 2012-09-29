@@ -10,6 +10,7 @@
 #include <linux/pci.h>
 #include <linux/list.h>
 #include <linux/ioport.h>
+<<<<<<< HEAD
 
 struct device_node;
 
@@ -35,6 +36,21 @@ enum {
 	/* ... except for domain 0 */
 	PCI_COMPAT_DOMAIN_0		= 0x00000020,
 };
+=======
+#include <asm-generic/pci-bridge.h>
+
+struct device_node;
+
+#ifdef CONFIG_PCI
+extern struct list_head hose_list;
+extern int pcibios_vaddr_is_ioport(void __iomem *address);
+#else
+static inline int pcibios_vaddr_is_ioport(void __iomem *address)
+{
+	return 0;
+}
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Structure of a PCI controller (host bridge)
@@ -110,6 +126,7 @@ static inline struct pci_controller *pci_bus_to_host(const struct pci_bus *bus)
 	return bus->sysdata;
 }
 
+<<<<<<< HEAD
 static inline struct device_node *pci_bus_to_OF_node(struct pci_bus *bus)
 {
 	struct pci_controller *host;
@@ -120,6 +137,8 @@ static inline struct device_node *pci_bus_to_OF_node(struct pci_bus *bus)
 	return host ? host->dn : NULL;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int isa_vaddr_is_ioport(void __iomem *address)
 {
 	/* No specific ISA handling on ppc32 at this stage, it
@@ -164,6 +183,7 @@ extern struct pci_controller *pcibios_alloc_controller(struct device_node *dev);
 extern void pcibios_free_controller(struct pci_controller *phb);
 extern void pcibios_setup_phb_resources(struct pci_controller *hose);
 
+<<<<<<< HEAD
 #ifdef CONFIG_PCI
 extern unsigned int pci_flags;
 
@@ -199,5 +219,7 @@ static inline int pci_has_flag(int flag)
 }
 #endif	/* CONFIG_PCI */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif	/* __KERNEL__ */
 #endif	/* _ASM_MICROBLAZE_PCI_BRIDGE_H */

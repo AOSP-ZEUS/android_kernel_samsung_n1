@@ -676,7 +676,11 @@ static int __devinit lis3l02dq_probe(struct spi_device *spi)
 	}
 	st = iio_priv(indio_dev);
 	/* this is only used tor removal purposes */
+<<<<<<< HEAD
 	spi_set_drvdata(spi, st);
+=======
+	spi_set_drvdata(spi, indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	st->us = spi;
 	mutex_init(&st->buf_lock);

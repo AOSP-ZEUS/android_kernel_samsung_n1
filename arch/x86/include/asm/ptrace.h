@@ -131,6 +131,12 @@ struct pt_regs {
 #ifdef __KERNEL__
 
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_PARAVIRT
+#include <asm/paravirt_types.h>
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct cpuinfo_x86;
 struct task_struct;
@@ -187,6 +193,25 @@ static inline int v8086_mode(struct pt_regs *regs)
 #endif
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_X86_64
+static inline bool user_64bit_mode(struct pt_regs *regs)
+{
+#ifndef CONFIG_PARAVIRT
+	/*
+	 * On non-paravirt systems, this is the only long mode CPL 3
+	 * selector.  We do not allow long mode selectors in the LDT.
+	 */
+	return regs->cs == __USER_CS;
+#else
+	/* Headers are too twisted for this to go in paravirt.h. */
+	return regs->cs == __USER_CS || regs->cs == pv_info.extra_user_64bit_cs;
+#endif
+}
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * X86_32 CPUs don't save ss and esp if the CPU is already in kernel mode
  * when it traps.  The previous stack will be directly underneath the saved

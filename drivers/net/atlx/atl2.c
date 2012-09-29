@@ -20,7 +20,11 @@
  * Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/crc32.h>
 #include <linux/dma-mapping.h>
 #include <linux/etherdevice.h>
@@ -311,8 +315,12 @@ static s32 atl2_setup_ring_resources(struct atl2_adapter *adapter)
 	adapter->txd_dma = adapter->ring_dma ;
 	offset = (adapter->txd_dma & 0x7) ? (8 - (adapter->txd_dma & 0x7)) : 0;
 	adapter->txd_dma += offset;
+<<<<<<< HEAD
 	adapter->txd_ring = (struct tx_pkt_header *) (adapter->ring_vir_addr +
 		offset);
+=======
+	adapter->txd_ring = adapter->ring_vir_addr + offset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Init TXS Ring */
 	adapter->txs_dma = adapter->txd_dma + adapter->txd_ring_size;
@@ -362,14 +370,30 @@ static inline void atl2_irq_disable(struct atl2_adapter *adapter)
     synchronize_irq(adapter->pdev->irq);
 }
 
+<<<<<<< HEAD
 #ifdef NETIF_F_HW_VLAN_TX
 static void atl2_vlan_rx_register(struct net_device *netdev,
 	struct vlan_group *grp)
+=======
+static void __atl2_vlan_mode(u32 features, u32 *ctrl)
+{
+	if (features & NETIF_F_HW_VLAN_RX) {
+		/* enable VLAN tag insert/strip */
+		*ctrl |= MAC_CTRL_RMV_VLAN;
+	} else {
+		/* disable VLAN tag insert/strip */
+		*ctrl &= ~MAC_CTRL_RMV_VLAN;
+	}
+}
+
+static void atl2_vlan_mode(struct net_device *netdev, u32 features)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct atl2_adapter *adapter = netdev_priv(netdev);
 	u32 ctrl;
 
 	atl2_irq_disable(adapter);
+<<<<<<< HEAD
 	adapter->vlgrp = grp;
 
 	if (grp) {
@@ -383,15 +407,50 @@ static void atl2_vlan_rx_register(struct net_device *netdev,
 		ctrl &= ~MAC_CTRL_RMV_VLAN;
 		ATL2_WRITE_REG(&adapter->hw, REG_MAC_CTRL, ctrl);
 	}
+=======
+
+	ctrl = ATL2_READ_REG(&adapter->hw, REG_MAC_CTRL);
+	__atl2_vlan_mode(features, &ctrl);
+	ATL2_WRITE_REG(&adapter->hw, REG_MAC_CTRL, ctrl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	atl2_irq_enable(adapter);
 }
 
 static void atl2_restore_vlan(struct atl2_adapter *adapter)
 {
+<<<<<<< HEAD
 	atl2_vlan_rx_register(adapter->netdev, adapter->vlgrp);
 }
 #endif
+=======
+	atl2_vlan_mode(adapter->netdev, adapter->netdev->features);
+}
+
+static u32 atl2_fix_features(struct net_device *netdev, u32 features)
+{
+	/*
+	 * Since there is no support for separate rx/tx vlan accel
+	 * enable/disable make sure tx flag is always in same state as rx.
+	 */
+	if (features & NETIF_F_HW_VLAN_RX)
+		features |= NETIF_F_HW_VLAN_TX;
+	else
+		features &= ~NETIF_F_HW_VLAN_TX;
+
+	return features;
+}
+
+static int atl2_set_features(struct net_device *netdev, u32 features)
+{
+	u32 changed = netdev->features ^ features;
+
+	if (changed & NETIF_F_HW_VLAN_RX)
+		atl2_vlan_mode(netdev, features);
+
+	return 0;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static void atl2_intr_rx(struct atl2_adapter *adapter)
 {
@@ -425,6 +484,7 @@ static void atl2_intr_rx(struct atl2_adapter *adapter)
 			memcpy(skb->data, rxd->packet, rx_size);
 			skb_put(skb, rx_size);
 			skb->protocol = eth_type_trans(skb, netdev);
+<<<<<<< HEAD
 #ifdef NETIF_F_HW_VLAN_TX
 			if (adapter->vlgrp && (rxd->status.vlan)) {
 				u16 vlan_tag = (rxd->status.vtag>>4) |
@@ -433,6 +493,15 @@ static void atl2_intr_rx(struct atl2_adapter *adapter)
 				vlan_hwaccel_rx(skb, adapter->vlgrp, vlan_tag);
 			} else
 #endif
+=======
+			if (rxd->status.vlan) {
+				u16 vlan_tag = (rxd->status.vtag>>4) |
+					((rxd->status.vtag&7) << 13) |
+					((rxd->status.vtag&8) << 9);
+
+				__vlan_hwaccel_put_tag(skb, vlan_tag);
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			netif_rx(skb);
 			netdev->stats.rx_bytes += rx_size;
 			netdev->stats.rx_packets++;
@@ -705,9 +774,13 @@ static int atl2_open(struct net_device *netdev)
 	atl2_set_multi(netdev);
 	init_ring_ptrs(adapter);
 
+<<<<<<< HEAD
 #ifdef NETIF_F_HW_VLAN_TX
 	atl2_restore_vlan(adapter);
 #endif
+=======
+	atl2_restore_vlan(adapter);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (atl2_configure(adapter)) {
 		err = -EIO;
@@ -1083,9 +1156,13 @@ static int atl2_up(struct atl2_adapter *adapter)
 	atl2_set_multi(netdev);
 	init_ring_ptrs(adapter);
 
+<<<<<<< HEAD
 #ifdef NETIF_F_HW_VLAN_TX
 	atl2_restore_vlan(adapter);
 #endif
+=======
+	atl2_restore_vlan(adapter);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (atl2_configure(adapter)) {
 		err = -EIO;
@@ -1146,8 +1223,12 @@ static void atl2_setup_mac_ctrl(struct atl2_adapter *adapter)
 		MAC_CTRL_PRMLEN_SHIFT);
 
 	/* vlan */
+<<<<<<< HEAD
 	if (adapter->vlgrp)
 		value |= MAC_CTRL_RMV_VLAN;
+=======
+	__atl2_vlan_mode(netdev->features, &value);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* filter mode */
 	value |= MAC_CTRL_BC_EN;
@@ -1313,9 +1394,16 @@ static const struct net_device_ops atl2_netdev_ops = {
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_set_mac_address	= atl2_set_mac,
 	.ndo_change_mtu		= atl2_change_mtu,
+<<<<<<< HEAD
 	.ndo_do_ioctl		= atl2_ioctl,
 	.ndo_tx_timeout		= atl2_tx_timeout,
 	.ndo_vlan_rx_register	= atl2_vlan_rx_register,
+=======
+	.ndo_fix_features	= atl2_fix_features,
+	.ndo_set_features	= atl2_set_features,
+	.ndo_do_ioctl		= atl2_ioctl,
+	.ndo_tx_timeout		= atl2_tx_timeout,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_NET_POLL_CONTROLLER
 	.ndo_poll_controller	= atl2_poll_controller,
 #endif
@@ -1411,7 +1499,11 @@ static int __devinit atl2_probe(struct pci_dev *pdev,
 
 	err = -EIO;
 
+<<<<<<< HEAD
 	netdev->hw_features = NETIF_F_SG;
+=======
+	netdev->hw_features = NETIF_F_SG | NETIF_F_HW_VLAN_RX;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	netdev->features |= (NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX);
 
 	/* Init PHY as early as possible due to power saving issue  */

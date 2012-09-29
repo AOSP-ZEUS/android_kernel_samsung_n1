@@ -161,6 +161,7 @@ xfs_ail_max_lsn(
 }
 
 /*
+<<<<<<< HEAD
  * AIL traversal cursor initialisation.
  *
  * The cursor keeps track of where our current traversal is up
@@ -172,6 +173,13 @@ xfs_ail_max_lsn(
  *
  * We don't link the push cursor because it is embedded in the struct
  * xfs_ail and hence easily findable.
+=======
+ * The cursor keeps track of where our current traversal is up to by tracking
+ * the next item in the list for us. However, for this to be safe, removing an
+ * object from the AIL needs to invalidate any cursor that points to it. hence
+ * the traversal cursor needs to be linked to the struct xfs_ail so that
+ * deletion can search all the active cursors for invalidation.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 STATIC void
 xfs_trans_ail_cursor_init(
@@ -179,6 +187,7 @@ xfs_trans_ail_cursor_init(
 	struct xfs_ail_cursor	*cur)
 {
 	cur->item = NULL;
+<<<<<<< HEAD
 	if (cur == &ailp->xa_cursors)
 		return;
 
@@ -204,6 +213,14 @@ xfs_trans_ail_cursor_set(
  * Get the next item in the traversal and advance the cursor.
  * If the cursor was invalidated (inidicated by a lip of 1),
  * restart the traversal.
+=======
+	list_add_tail(&cur->list, &ailp->xa_cursors);
+}
+
+/*
+ * Get the next item in the traversal and advance the cursor.  If the cursor
+ * was invalidated (indicated by a lip of 1), restart the traversal.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 struct xfs_log_item *
 xfs_trans_ail_cursor_next(
@@ -214,19 +231,30 @@ xfs_trans_ail_cursor_next(
 
 	if ((__psint_t)lip & 1)
 		lip = xfs_ail_min(ailp);
+<<<<<<< HEAD
 	xfs_trans_ail_cursor_set(ailp, cur, lip);
+=======
+	if (lip)
+		cur->item = xfs_ail_next(ailp, lip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return lip;
 }
 
 /*
+<<<<<<< HEAD
  * Now that the traversal is complete, we need to remove the cursor
  * from the list of traversing cursors. Avoid removing the embedded
  * push cursor, but use the fact it is always present to make the
  * list deletion simple.
+=======
+ * When the traversal is complete, we need to remove the cursor from the list
+ * of traversing cursors.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 void
 xfs_trans_ail_cursor_done(
 	struct xfs_ail		*ailp,
+<<<<<<< HEAD
 	struct xfs_ail_cursor	*done)
 {
 	struct xfs_ail_cursor	*prev = NULL;
@@ -253,6 +281,21 @@ xfs_trans_ail_cursor_done(
  * cursor item to a value of 1 so we can distinguish between an
  * invalidation and the end of the list when getting the next item
  * from the cursor.
+=======
+	struct xfs_ail_cursor	*cur)
+{
+	cur->item = NULL;
+	list_del_init(&cur->list);
+}
+
+/*
+ * Invalidate any cursor that is pointing to this item. This is called when an
+ * item is removed from the AIL. Any cursor pointing to this object is now
+ * invalid and the traversal needs to be terminated so it doesn't reference a
+ * freed object. We set the low bit of the cursor item pointer so we can
+ * distinguish between an invalidation and the end of the list when getting the
+ * next item from the cursor.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 STATIC void
 xfs_trans_ail_cursor_clear(
@@ -261,8 +304,12 @@ xfs_trans_ail_cursor_clear(
 {
 	struct xfs_ail_cursor	*cur;
 
+<<<<<<< HEAD
 	/* need to search all cursors */
 	for (cur = &ailp->xa_cursors; cur; cur = cur->next) {
+=======
+	list_for_each_entry(cur, &ailp->xa_cursors, list) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (cur->item == lip)
 			cur->item = (struct xfs_log_item *)
 					((__psint_t)cur->item | 1);
@@ -270,9 +317,16 @@ xfs_trans_ail_cursor_clear(
 }
 
 /*
+<<<<<<< HEAD
  * Initialise the cursor to the first item in the AIL with the given @lsn.
  * This searches the list from lowest LSN to highest. Pass a @lsn of zero
  * to initialise the cursor to the first item in the AIL.
+=======
+ * Find the first item in the AIL with the given @lsn by searching in ascending
+ * LSN order and initialise the cursor to point to the next item for a
+ * ascending traversal.  Pass a @lsn of zero to initialise the cursor to the
+ * first item in the AIL. Returns NULL if the list is empty.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 xfs_log_item_t *
 xfs_trans_ail_cursor_first(
@@ -283,14 +337,23 @@ xfs_trans_ail_cursor_first(
 	xfs_log_item_t		*lip;
 
 	xfs_trans_ail_cursor_init(ailp, cur);
+<<<<<<< HEAD
 	lip = xfs_ail_min(ailp);
 	if (lsn == 0)
 		goto out;
+=======
+
+	if (lsn == 0) {
+		lip = xfs_ail_min(ailp);
+		goto out;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	list_for_each_entry(lip, &ailp->xa_ail, li_ail) {
 		if (XFS_LSN_CMP(lip->li_lsn, lsn) >= 0)
 			goto out;
 	}
+<<<<<<< HEAD
 	lip = NULL;
 out:
 	xfs_trans_ail_cursor_set(ailp, cur, lip);
@@ -303,6 +366,16 @@ out:
  * the value of @lsn, then it sets the cursor to the last item with an LSN lower
  * than @lsn.
  */
+=======
+	return NULL;
+
+out:
+	if (lip)
+		cur->item = xfs_ail_next(ailp, lip);
+	return lip;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct xfs_log_item *
 __xfs_trans_ail_cursor_last(
 	struct xfs_ail		*ailp,
@@ -318,8 +391,15 @@ __xfs_trans_ail_cursor_last(
 }
 
 /*
+<<<<<<< HEAD
  * Initialise the cursor to the last item in the AIL with the given @lsn.
  * This searches the list from highest LSN to lowest.
+=======
+ * Find the last item in the AIL with the given @lsn by searching in descending
+ * LSN order and initialise the cursor to point to that item.  If there is no
+ * item with the value of @lsn, then it sets the cursor to the last item with an
+ * LSN lower than @lsn.  Returns NULL if the list is empty.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 struct xfs_log_item *
 xfs_trans_ail_cursor_last(
@@ -333,10 +413,17 @@ xfs_trans_ail_cursor_last(
 }
 
 /*
+<<<<<<< HEAD
  * splice the log item list into the AIL at the given LSN. We splice to the
  * tail of the given LSN to maintain insert order for push traversals. The
  * cursor is optional, allowing repeated updates to the same LSN to avoid
  * repeated traversals.
+=======
+ * Splice the log item list into the AIL at the given LSN. We splice to the
+ * tail of the given LSN to maintain insert order for push traversals. The
+ * cursor is optional, allowing repeated updates to the same LSN to avoid
+ * repeated traversals.  This should not be called with an empty list.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 static void
 xfs_ail_splice(
@@ -345,6 +432,7 @@ xfs_ail_splice(
 	struct list_head	*list,
 	xfs_lsn_t		lsn)
 {
+<<<<<<< HEAD
 	struct xfs_log_item	*lip = cur ? cur->item : NULL;
 	struct xfs_log_item	*next_lip;
 
@@ -389,6 +477,41 @@ xfs_ail_splice(
 		cur->item = next_lip;
 	}
 	list_splice(list, &lip->li_ail);
+=======
+	struct xfs_log_item	*lip;
+
+	ASSERT(!list_empty(list));
+
+	/*
+	 * Use the cursor to determine the insertion point if one is
+	 * provided.  If not, or if the one we got is not valid,
+	 * find the place in the AIL where the items belong.
+	 */
+	lip = cur ? cur->item : NULL;
+	if (!lip || (__psint_t) lip & 1)
+		lip = __xfs_trans_ail_cursor_last(ailp, lsn);
+
+	/*
+	 * If a cursor is provided, we know we're processing the AIL
+	 * in lsn order, and future items to be spliced in will
+	 * follow the last one being inserted now.  Update the
+	 * cursor to point to that last item, now while we have a
+	 * reliable pointer to it.
+	 */
+	if (cur)
+		cur->item = list_entry(list->prev, struct xfs_log_item, li_ail);
+
+	/*
+	 * Finally perform the splice.  Unless the AIL was empty,
+	 * lip points to the item in the AIL _after_ which the new
+	 * items should go.  If lip is null the AIL was empty, so
+	 * the new items go at the head of the AIL.
+	 */
+	if (lip)
+		list_splice(list, &lip->li_ail);
+	else
+		list_splice(list, &ailp->xa_ail);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -409,7 +532,11 @@ xfsaild_push(
 	struct xfs_ail		*ailp)
 {
 	xfs_mount_t		*mp = ailp->xa_mount;
+<<<<<<< HEAD
 	struct xfs_ail_cursor	*cur = &ailp->xa_cursors;
+=======
+	struct xfs_ail_cursor	cur;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	xfs_log_item_t		*lip;
 	xfs_lsn_t		lsn;
 	xfs_lsn_t		target;
@@ -421,13 +548,21 @@ xfsaild_push(
 
 	spin_lock(&ailp->xa_lock);
 	target = ailp->xa_target;
+<<<<<<< HEAD
 	xfs_trans_ail_cursor_init(ailp, cur);
 	lip = xfs_trans_ail_cursor_first(ailp, cur, ailp->xa_last_pushed_lsn);
+=======
+	lip = xfs_trans_ail_cursor_first(ailp, &cur, ailp->xa_last_pushed_lsn);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!lip || XFS_FORCED_SHUTDOWN(mp)) {
 		/*
 		 * AIL is empty or our push has reached the end.
 		 */
+<<<<<<< HEAD
 		xfs_trans_ail_cursor_done(ailp, cur);
+=======
+		xfs_trans_ail_cursor_done(ailp, &cur);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_unlock(&ailp->xa_lock);
 		goto out_done;
 	}
@@ -519,12 +654,20 @@ xfsaild_push(
 		if (stuck > 100)
 			break;
 
+<<<<<<< HEAD
 		lip = xfs_trans_ail_cursor_next(ailp, cur);
+=======
+		lip = xfs_trans_ail_cursor_next(ailp, &cur);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (lip == NULL)
 			break;
 		lsn = lip->li_lsn;
 	}
+<<<<<<< HEAD
 	xfs_trans_ail_cursor_done(ailp, cur);
+=======
+	xfs_trans_ail_cursor_done(ailp, &cur);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock(&ailp->xa_lock);
 
 	if (flush_log) {
@@ -726,6 +869,10 @@ xfs_trans_ail_update_bulk(
 	int			i;
 	LIST_HEAD(tmp);
 
+<<<<<<< HEAD
+=======
+	ASSERT(nr_items > 0);		/* Not required, but true. */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mlip = xfs_ail_min(ailp);
 
 	for (i = 0; i < nr_items; i++) {
@@ -745,7 +892,12 @@ xfs_trans_ail_update_bulk(
 		list_add(&lip->li_ail, &tmp);
 	}
 
+<<<<<<< HEAD
 	xfs_ail_splice(ailp, cur, &tmp, lsn);
+=======
+	if (!list_empty(&tmp))
+		xfs_ail_splice(ailp, cur, &tmp, lsn);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!mlip_changed) {
 		spin_unlock(&ailp->xa_lock);
@@ -864,6 +1016,10 @@ xfs_trans_ail_init(
 
 	ailp->xa_mount = mp;
 	INIT_LIST_HEAD(&ailp->xa_ail);
+<<<<<<< HEAD
+=======
+	INIT_LIST_HEAD(&ailp->xa_cursors);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_lock_init(&ailp->xa_lock);
 
 	ailp->xa_task = kthread_run(xfsaild, ailp, "xfsaild/%s",

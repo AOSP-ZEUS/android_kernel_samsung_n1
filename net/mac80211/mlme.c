@@ -752,7 +752,11 @@ void ieee80211_dynamic_ps_enable_work(struct work_struct *work)
 		container_of(work, struct ieee80211_local,
 			     dynamic_ps_enable_work);
 	struct ieee80211_sub_if_data *sdata = local->ps_sdata;
+<<<<<<< HEAD
 	struct ieee80211_if_managed *ifmgd = &sdata->u.mgd;
+=======
+	struct ieee80211_if_managed *ifmgd;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long flags;
 	int q;
 
@@ -760,6 +764,7 @@ void ieee80211_dynamic_ps_enable_work(struct work_struct *work)
 	if (!sdata)
 		return;
 
+<<<<<<< HEAD
 	if (local->hw.conf.flags & IEEE80211_CONF_PS)
 		return;
 
@@ -773,13 +778,46 @@ void ieee80211_dynamic_ps_enable_work(struct work_struct *work)
 		if (local->queue_stop_reasons[q]) {
 			spin_unlock_irqrestore(&local->queue_stop_reason_lock,
 					       flags);
+=======
+	ifmgd = &sdata->u.mgd;
+
+	if (local->hw.conf.flags & IEEE80211_CONF_PS)
+		return;
+
+	if (!local->disable_dynamic_ps &&
+	    local->hw.conf.dynamic_ps_timeout > 0) {
+		/* don't enter PS if TX frames are pending */
+		if (drv_tx_frames_pending(local)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			mod_timer(&local->dynamic_ps_timer, jiffies +
 				  msecs_to_jiffies(
 				  local->hw.conf.dynamic_ps_timeout));
 			return;
 		}
+<<<<<<< HEAD
 	}
 	spin_unlock_irqrestore(&local->queue_stop_reason_lock, flags);
+=======
+
+		/*
+		 * transmission can be stopped by others which leads to
+		 * dynamic_ps_timer expiry. Postpone the ps timer if it
+		 * is not the actual idle state.
+		 */
+		spin_lock_irqsave(&local->queue_stop_reason_lock, flags);
+		for (q = 0; q < local->hw.queues; q++) {
+			if (local->queue_stop_reasons[q]) {
+				spin_unlock_irqrestore(&local->queue_stop_reason_lock,
+						       flags);
+				mod_timer(&local->dynamic_ps_timer, jiffies +
+					  msecs_to_jiffies(
+					  local->hw.conf.dynamic_ps_timeout));
+				return;
+			}
+		}
+		spin_unlock_irqrestore(&local->queue_stop_reason_lock, flags);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if ((local->hw.flags & IEEE80211_HW_PS_NULLFUNC_STACK) &&
 	    (!(ifmgd->flags & IEEE80211_STA_NULLFUNC_ACKED))) {
@@ -804,7 +842,12 @@ void ieee80211_dynamic_ps_enable_work(struct work_struct *work)
 		ieee80211_hw_config(local, IEEE80211_CONF_CHANGE_PS);
 	}
 
+<<<<<<< HEAD
 	netif_tx_wake_all_queues(sdata->dev);
+=======
+	if (local->hw.flags & IEEE80211_HW_PS_NULLFUNC_STACK)
+		netif_tx_wake_all_queues(sdata->dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void ieee80211_dynamic_ps_timer(unsigned long data)
@@ -906,6 +949,10 @@ static void ieee80211_sta_wmm_params(struct ieee80211_local *local,
 			    params.aifs, params.cw_min, params.cw_max,
 			    params.txop, params.uapsd);
 #endif
+<<<<<<< HEAD
+=======
+		local->tx_conf[queue] = params;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (drv_conf_tx(local, queue, &params))
 			wiphy_debug(local->hw.wiphy,
 				    "failed to set TX queue parameters for queue %d\n",
@@ -1207,7 +1254,12 @@ static void ieee80211_mgd_probe_ap_send(struct ieee80211_sub_if_data *sdata)
 		ieee80211_send_nullfunc(sdata->local, sdata, 0);
 	} else {
 		ssid = ieee80211_bss_get_ie(ifmgd->associated, WLAN_EID_SSID);
+<<<<<<< HEAD
 		ieee80211_send_probe_req(sdata, dst, ssid + 2, ssid[1], NULL, 0);
+=======
+		ieee80211_send_probe_req(sdata, dst, ssid + 2, ssid[1], NULL, 0,
+					 (u32) -1, true);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	ifmgd->probe_send_count++;
@@ -1292,7 +1344,12 @@ struct sk_buff *ieee80211_ap_probereq_get(struct ieee80211_hw *hw,
 
 	ssid = ieee80211_bss_get_ie(ifmgd->associated, WLAN_EID_SSID);
 	skb = ieee80211_build_probe_req(sdata, ifmgd->associated->bssid,
+<<<<<<< HEAD
 					ssid + 2, ssid[1], NULL, 0);
+=======
+					(u32) -1, ssid + 2, ssid[1],
+					NULL, 0, true);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return skb;
 }
@@ -1762,6 +1819,10 @@ static void ieee80211_rx_mgmt_beacon(struct ieee80211_sub_if_data *sdata,
 		ifmgd->ave_beacon_signal = rx_status->signal * 16;
 		ifmgd->last_cqm_event_signal = 0;
 		ifmgd->count_beacon_signal = 1;
+<<<<<<< HEAD
+=======
+		ifmgd->last_ave_beacon_signal = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		ifmgd->ave_beacon_signal =
 			(IEEE80211_SIGNAL_AVE_WEIGHT * rx_status->signal * 16 +
@@ -1769,6 +1830,31 @@ static void ieee80211_rx_mgmt_beacon(struct ieee80211_sub_if_data *sdata,
 			 ifmgd->ave_beacon_signal) / 16;
 		ifmgd->count_beacon_signal++;
 	}
+<<<<<<< HEAD
+=======
+
+	if (ifmgd->rssi_min_thold != ifmgd->rssi_max_thold &&
+	    ifmgd->count_beacon_signal >= IEEE80211_SIGNAL_AVE_MIN_COUNT) {
+		int sig = ifmgd->ave_beacon_signal;
+		int last_sig = ifmgd->last_ave_beacon_signal;
+
+		/*
+		 * if signal crosses either of the boundaries, invoke callback
+		 * with appropriate parameters
+		 */
+		if (sig > ifmgd->rssi_max_thold &&
+		    (last_sig <= ifmgd->rssi_min_thold || last_sig == 0)) {
+			ifmgd->last_ave_beacon_signal = sig;
+			drv_rssi_callback(local, RSSI_EVENT_HIGH);
+		} else if (sig < ifmgd->rssi_min_thold &&
+			   (last_sig >= ifmgd->rssi_max_thold ||
+			   last_sig == 0)) {
+			ifmgd->last_ave_beacon_signal = sig;
+			drv_rssi_callback(local, RSSI_EVENT_LOW);
+		}
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (bss_conf->cqm_rssi_thold &&
 	    ifmgd->count_beacon_signal >= IEEE80211_SIGNAL_AVE_MIN_COUNT &&
 	    !(local->hw.flags & IEEE80211_HW_SUPPORTS_CQM_RSSI)) {
@@ -2028,7 +2114,11 @@ static void ieee80211_sta_timer(unsigned long data)
 }
 
 static void ieee80211_sta_connection_lost(struct ieee80211_sub_if_data *sdata,
+<<<<<<< HEAD
 					  u8 *bssid)
+=======
+					  u8 *bssid, u8 reason)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct ieee80211_local *local = sdata->local;
 	struct ieee80211_if_managed *ifmgd = &sdata->u.mgd;
@@ -2046,8 +2136,12 @@ static void ieee80211_sta_connection_lost(struct ieee80211_sub_if_data *sdata,
 	 * but that's not a problem.
 	 */
 	ieee80211_send_deauth_disassoc(sdata, bssid,
+<<<<<<< HEAD
 			IEEE80211_STYPE_DEAUTH,
 			WLAN_REASON_DISASSOC_DUE_TO_INACTIVITY,
+=======
+			IEEE80211_STYPE_DEAUTH, reason,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			NULL, true);
 	mutex_lock(&ifmgd->mtx);
 }
@@ -2093,7 +2187,12 @@ void ieee80211_sta_work(struct ieee80211_sub_if_data *sdata)
 					    " AP %pM, disconnecting.\n",
 					    sdata->name, bssid);
 #endif
+<<<<<<< HEAD
 				ieee80211_sta_connection_lost(sdata, bssid);
+=======
+				ieee80211_sta_connection_lost(sdata, bssid,
+					WLAN_REASON_DISASSOC_DUE_TO_INACTIVITY);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 		} else if (time_is_after_jiffies(ifmgd->probe_timeout))
 			run_again(ifmgd, ifmgd->probe_timeout);
@@ -2105,7 +2204,12 @@ void ieee80211_sta_work(struct ieee80211_sub_if_data *sdata)
 				    sdata->name,
 				    bssid, probe_wait_ms);
 #endif
+<<<<<<< HEAD
 			ieee80211_sta_connection_lost(sdata, bssid);
+=======
+			ieee80211_sta_connection_lost(sdata, bssid,
+				WLAN_REASON_DISASSOC_DUE_TO_INACTIVITY);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else if (ifmgd->probe_send_count < max_tries) {
 #ifdef CONFIG_MAC80211_VERBOSE_DEBUG
 			wiphy_debug(local->hw.wiphy,
@@ -2127,7 +2231,12 @@ void ieee80211_sta_work(struct ieee80211_sub_if_data *sdata)
 				    sdata->name,
 				    bssid, probe_wait_ms);
 
+<<<<<<< HEAD
 			ieee80211_sta_connection_lost(sdata, bssid);
+=======
+			ieee80211_sta_connection_lost(sdata, bssid,
+				WLAN_REASON_DISASSOC_DUE_TO_INACTIVITY);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -2217,12 +2326,37 @@ void ieee80211_sta_restart(struct ieee80211_sub_if_data *sdata)
 	if (!ifmgd->associated)
 		return;
 
+<<<<<<< HEAD
+=======
+	if (sdata->flags & IEEE80211_SDATA_DISCONNECT_RESUME) {
+		sdata->flags &= ~IEEE80211_SDATA_DISCONNECT_RESUME;
+		mutex_lock(&ifmgd->mtx);
+		if (ifmgd->associated) {
+#ifdef CONFIG_MAC80211_VERBOSE_DEBUG
+			wiphy_debug(sdata->local->hw.wiphy,
+				    "%s: driver requested disconnect after resume.\n",
+				    sdata->name);
+#endif
+			ieee80211_sta_connection_lost(sdata,
+				ifmgd->associated->bssid,
+				WLAN_REASON_UNSPECIFIED);
+			mutex_unlock(&ifmgd->mtx);
+			return;
+		}
+		mutex_unlock(&ifmgd->mtx);
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (test_and_clear_bit(TMR_RUNNING_TIMER, &ifmgd->timers_running))
 		add_timer(&ifmgd->timer);
 	if (test_and_clear_bit(TMR_RUNNING_CHANSW, &ifmgd->timers_running))
 		add_timer(&ifmgd->chswitch_timer);
 	ieee80211_sta_reset_beacon_monitor(sdata);
 	ieee80211_restart_sta_timer(sdata);
+<<<<<<< HEAD
+=======
+	ieee80211_queue_work(&sdata->local->hw, &sdata->u.mgd.monitor_work);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 #endif
 
@@ -2288,14 +2422,26 @@ static enum work_done_result
 ieee80211_probe_auth_done(struct ieee80211_work *wk,
 			  struct sk_buff *skb)
 {
+<<<<<<< HEAD
 	if (!skb) {
 		cfg80211_send_auth_timeout(wk->sdata->dev, wk->filter_ta);
 		return WORK_DONE_DESTROY;
+=======
+	struct ieee80211_local *local = wk->sdata->local;
+
+	if (!skb) {
+		cfg80211_send_auth_timeout(wk->sdata->dev, wk->filter_ta);
+		goto destroy;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (wk->type == IEEE80211_WORK_AUTH) {
 		cfg80211_send_rx_auth(wk->sdata->dev, skb->data, skb->len);
+<<<<<<< HEAD
 		return WORK_DONE_DESTROY;
+=======
+		goto destroy;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	mutex_lock(&wk->sdata->u.mgd.mtx);
@@ -2305,6 +2451,15 @@ ieee80211_probe_auth_done(struct ieee80211_work *wk,
 	wk->type = IEEE80211_WORK_AUTH;
 	wk->probe_auth.tries = 0;
 	return WORK_DONE_REQUEUE;
+<<<<<<< HEAD
+=======
+ destroy:
+	if (wk->probe_auth.synced)
+		drv_finish_tx_sync(local, wk->sdata, wk->filter_ta,
+				   IEEE80211_TX_SYNC_AUTH);
+
+	return WORK_DONE_DESTROY;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int ieee80211_mgd_auth(struct ieee80211_sub_if_data *sdata,
@@ -2377,6 +2532,10 @@ int ieee80211_mgd_auth(struct ieee80211_sub_if_data *sdata,
 static enum work_done_result ieee80211_assoc_done(struct ieee80211_work *wk,
 						  struct sk_buff *skb)
 {
+<<<<<<< HEAD
+=======
+	struct ieee80211_local *local = wk->sdata->local;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ieee80211_mgmt *mgmt;
 	struct ieee80211_rx_status *rx_status;
 	struct ieee802_11_elems elems;
@@ -2384,7 +2543,11 @@ static enum work_done_result ieee80211_assoc_done(struct ieee80211_work *wk,
 
 	if (!skb) {
 		cfg80211_send_assoc_timeout(wk->sdata->dev, wk->filter_ta);
+<<<<<<< HEAD
 		return WORK_DONE_DESTROY;
+=======
+		goto destroy;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (wk->type == IEEE80211_WORK_ASSOC_BEACON_WAIT) {
@@ -2404,6 +2567,13 @@ static enum work_done_result ieee80211_assoc_done(struct ieee80211_work *wk,
 	status = le16_to_cpu(mgmt->u.assoc_resp.status_code);
 
 	if (status == WLAN_STATUS_SUCCESS) {
+<<<<<<< HEAD
+=======
+		if (wk->assoc.synced)
+			drv_finish_tx_sync(local, wk->sdata, wk->filter_ta,
+					   IEEE80211_TX_SYNC_ASSOC);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		mutex_lock(&wk->sdata->u.mgd.mtx);
 		if (!ieee80211_assoc_success(wk, mgmt, skb->len)) {
 			mutex_unlock(&wk->sdata->u.mgd.mtx);
@@ -2417,6 +2587,14 @@ static enum work_done_result ieee80211_assoc_done(struct ieee80211_work *wk,
 	}
 
 	cfg80211_send_rx_assoc(wk->sdata->dev, skb->data, skb->len);
+<<<<<<< HEAD
+=======
+ destroy:
+	if (wk->assoc.synced)
+		drv_finish_tx_sync(local, wk->sdata, wk->filter_ta,
+				   IEEE80211_TX_SYNC_ASSOC);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return WORK_DONE_DESTROY;
 }
 
@@ -2669,3 +2847,13 @@ void ieee80211_cqm_rssi_notify(struct ieee80211_vif *vif,
 	cfg80211_cqm_rssi_notify(sdata->dev, rssi_event, gfp);
 }
 EXPORT_SYMBOL(ieee80211_cqm_rssi_notify);
+<<<<<<< HEAD
+=======
+
+unsigned char ieee80211_get_operstate(struct ieee80211_vif *vif)
+{
+	struct ieee80211_sub_if_data *sdata = vif_to_sdata(vif);
+	return sdata->dev->operstate;
+}
+EXPORT_SYMBOL(ieee80211_get_operstate);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

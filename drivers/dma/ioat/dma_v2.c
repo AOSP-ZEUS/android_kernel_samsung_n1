@@ -41,6 +41,11 @@
 #include "registers.h"
 #include "hw.h"
 
+<<<<<<< HEAD
+=======
+#include "../dmaengine.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int ioat_ring_alloc_order = 8;
 module_param(ioat_ring_alloc_order, int, 0644);
 MODULE_PARM_DESC(ioat_ring_alloc_order,
@@ -147,8 +152,12 @@ static void __cleanup(struct ioat2_dma_chan *ioat, unsigned long phys_complete)
 		dump_desc_dbg(ioat, desc);
 		if (tx->cookie) {
 			ioat_dma_unmap(chan, tx->flags, desc->len, desc->hw);
+<<<<<<< HEAD
 			chan->completed_cookie = tx->cookie;
 			tx->cookie = 0;
+=======
+			dma_cookie_complete(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (tx->callback) {
 				tx->callback(tx->callback_param);
 				tx->callback = NULL;
@@ -398,6 +407,7 @@ static dma_cookie_t ioat2_tx_submit_unlock(struct dma_async_tx_descriptor *tx)
 	struct dma_chan *c = tx->chan;
 	struct ioat2_dma_chan *ioat = to_ioat2_chan(c);
 	struct ioat_chan_common *chan = &ioat->base;
+<<<<<<< HEAD
 	dma_cookie_t cookie = c->cookie;
 
 	cookie++;
@@ -405,6 +415,11 @@ static dma_cookie_t ioat2_tx_submit_unlock(struct dma_async_tx_descriptor *tx)
 		cookie = 1;
 	tx->cookie = cookie;
 	c->cookie = cookie;
+=======
+	dma_cookie_t cookie;
+
+	cookie = dma_cookie_assign(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev_dbg(to_dev(&ioat->base), "%s: cookie: %d\n", __func__, cookie);
 
 	if (!test_and_set_bit(IOAT_COMPLETION_PENDING, &chan->state))

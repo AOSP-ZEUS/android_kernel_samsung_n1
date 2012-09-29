@@ -35,6 +35,10 @@ config PREEMPT_VOLUNTARY
 
 config PREEMPT
 	bool "Preemptible Kernel (Low-Latency Desktop)"
+<<<<<<< HEAD
+=======
+	select PREEMPT_COUNT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  This option reduces the latency of the kernel by making
 	  all kernel code (that is not executing in a critical section)
@@ -52,3 +56,8 @@ config PREEMPT
 
 endchoice
 
+<<<<<<< HEAD
+=======
+config PREEMPT_COUNT
+       bool
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

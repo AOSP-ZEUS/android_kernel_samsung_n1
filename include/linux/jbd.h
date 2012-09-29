@@ -940,7 +940,10 @@ extern int	   journal_force_commit(journal_t *);
  */
 struct journal_head *journal_add_journal_head(struct buffer_head *bh);
 struct journal_head *journal_grab_journal_head(struct buffer_head *bh);
+<<<<<<< HEAD
 void journal_remove_journal_head(struct buffer_head *bh);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void journal_put_journal_head(struct journal_head *jh);
 
 /*

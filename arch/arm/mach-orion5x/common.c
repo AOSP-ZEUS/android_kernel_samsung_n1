@@ -29,7 +29,10 @@
 #include <mach/hardware.h>
 #include <mach/orion5x.h>
 #include <plat/orion_nand.h>
+<<<<<<< HEAD
 #include <plat/ehci-orion.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <plat/time.h>
 #include <plat/common.h>
 #include "common.h"
@@ -73,8 +76,12 @@ void __init orion5x_map_io(void)
 void __init orion5x_ehci0_init(void)
 {
 	orion_ehci_init(&orion5x_mbus_dram_info,
+<<<<<<< HEAD
 			ORION5X_USB0_PHYS_BASE, IRQ_ORION5X_USB0_CTRL,
 			EHCI_PHY_ORION);
+=======
+			ORION5X_USB0_PHYS_BASE, IRQ_ORION5X_USB0_CTRL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 

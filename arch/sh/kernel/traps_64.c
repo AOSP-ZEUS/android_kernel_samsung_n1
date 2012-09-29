@@ -28,7 +28,11 @@
 #include <asm/system.h>
 #include <asm/uaccess.h>
 #include <asm/io.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/processor.h>
 #include <asm/pgtable.h>
 #include <asm/fpu.h>
@@ -434,7 +438,11 @@ static int misaligned_load(struct pt_regs *regs,
 		return error;
 	}
 
+<<<<<<< HEAD
 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, 0, regs, address);
+=======
+	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, address);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	destreg = (opcode >> 4) & 0x3f;
 	if (user_mode(regs)) {
@@ -512,7 +520,11 @@ static int misaligned_store(struct pt_regs *regs,
 		return error;
 	}
 
+<<<<<<< HEAD
 	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, 0, regs, address);
+=======
+	perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS, 1, regs, address);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	srcreg = (opcode >> 4) & 0x3f;
 	if (user_mode(regs)) {
@@ -588,7 +600,11 @@ static int misaligned_fpu_load(struct pt_regs *regs,
 		return error;
 	}
 
+<<<<<<< HEAD
 	perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS, 1, 0, regs, address);
+=======
+	perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS, 1, regs, address);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	destreg = (opcode >> 4) & 0x3f;
 	if (user_mode(regs)) {
@@ -665,7 +681,11 @@ static int misaligned_fpu_store(struct pt_regs *regs,
 		return error;
 	}
 
+<<<<<<< HEAD
 	perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS, 1, 0, regs, address);
+=======
+	perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS, 1, regs, address);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	srcreg = (opcode >> 4) & 0x3f;
 	if (user_mode(regs)) {

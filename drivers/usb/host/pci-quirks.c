@@ -824,6 +824,7 @@ static void __devinit quirk_usb_handoff_xhci(struct pci_dev *pdev)
 		}
 	}
 
+<<<<<<< HEAD
 	val = readl(base + ext_cap_offset + XHCI_LEGACY_CONTROL_OFFSET);
 	/* Mask off (turn off) any enabled SMIs */
 	val &= XHCI_LEGACY_DISABLE_SMI;
@@ -831,6 +832,11 @@ static void __devinit quirk_usb_handoff_xhci(struct pci_dev *pdev)
 	val |= XHCI_LEGACY_SMI_EVENTS;
 	/* Disable any BIOS SMIs and clear all SMI events*/
 	writel(val, base + ext_cap_offset + XHCI_LEGACY_CONTROL_OFFSET);
+=======
+	/* Disable any BIOS SMIs */
+	writel(XHCI_LEGACY_DISABLE_SMI,
+			base + ext_cap_offset + XHCI_LEGACY_CONTROL_OFFSET);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (usb_is_intel_switchable_xhci(pdev))
 		usb_enable_xhci_ports(pdev);
@@ -870,6 +876,7 @@ hc_init:
 
 static void __devinit quirk_usb_early_handoff(struct pci_dev *pdev)
 {
+<<<<<<< HEAD
 	/* Skip Netlogic mips SoC's internal PCI USB controller.
 	 * This device does not need/support EHCI/OHCI handoff
 	 */
@@ -886,6 +893,8 @@ static void __devinit quirk_usb_early_handoff(struct pci_dev *pdev)
 				"BIOS handoff failed.\n");
 		return;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (pdev->class == PCI_CLASS_SERIAL_USB_UHCI)
 		quirk_usb_handoff_uhci(pdev);
 	else if (pdev->class == PCI_CLASS_SERIAL_USB_OHCI)
@@ -894,6 +903,9 @@ static void __devinit quirk_usb_early_handoff(struct pci_dev *pdev)
 		quirk_usb_disable_ehci(pdev);
 	else if (pdev->class == PCI_CLASS_SERIAL_USB_XHCI)
 		quirk_usb_handoff_xhci(pdev);
+<<<<<<< HEAD
 	pci_disable_device(pdev);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 DECLARE_PCI_FIXUP_FINAL(PCI_ANY_ID, PCI_ANY_ID, quirk_usb_early_handoff);

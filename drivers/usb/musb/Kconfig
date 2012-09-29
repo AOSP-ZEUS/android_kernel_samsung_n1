@@ -3,12 +3,18 @@
 # for silicon based on Mentor Graphics INVENTRA designs
 #
 
+<<<<<<< HEAD
 comment "Enable Host or Gadget support to see Inventra options"
 	depends on !USB && USB_GADGET=n
 
 # (M)HDRC = (Multipoint) Highspeed Dual-Role Controller
 config USB_MUSB_HDRC
 	depends on (USB || USB_GADGET)
+=======
+# (M)HDRC = (Multipoint) Highspeed Dual-Role Controller
+config USB_MUSB_HDRC
+	depends on USB && USB_GADGET
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	depends on (ARM || (BF54x && !BF544) || (BF52x && !BF522 && !BF523))
 	select NOP_USB_XCEIV if (ARCH_DAVINCI || MACH_OMAP3EVM || BLACKFIN)
 	select TWL4030_USB if MACH_OMAP_3430SDP
@@ -67,6 +73,7 @@ config USB_MUSB_UX500
 
 endchoice
 
+<<<<<<< HEAD
 choice
 	prompt "Driver Mode"
 	depends on USB_MUSB_HDRC
@@ -140,6 +147,8 @@ config USB_MUSB_HDRC_HCD
 	default y
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config MUSB_PIO_ONLY
 	bool 'Disable DMA (always use PIO)'
 	depends on USB_MUSB_HDRC

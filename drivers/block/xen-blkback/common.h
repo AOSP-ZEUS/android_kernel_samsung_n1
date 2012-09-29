@@ -46,7 +46,11 @@
 
 #define DRV_PFX "xen-blkback:"
 #define DPRINTK(fmt, args...)				\
+<<<<<<< HEAD
 	pr_debug(DRV_PFX "(%s:%d) " fmt ".\n",	\
+=======
+	pr_debug(DRV_PFX "(%s:%d) " fmt ".\n",		\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 __func__, __LINE__, ##args)
 
 

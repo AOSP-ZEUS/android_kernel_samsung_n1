@@ -536,7 +536,11 @@ void falcon_reconfigure_mac_wrapper(struct efx_nic *efx)
 	efx_oword_t reg;
 	int link_speed, isolate;
 
+<<<<<<< HEAD
 	isolate = (efx->reset_pending != RESET_TYPE_NONE);
+=======
+	isolate = !!ACCESS_ONCE(efx->reset_pending);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (link_state->speed) {
 	case 10000: link_speed = 3; break;
@@ -1051,6 +1055,52 @@ static int falcon_b0_test_registers(struct efx_nic *efx)
  **************************************************************************
  */
 
+<<<<<<< HEAD
+=======
+static enum reset_type falcon_map_reset_reason(enum reset_type reason)
+{
+	switch (reason) {
+	case RESET_TYPE_RX_RECOVERY:
+	case RESET_TYPE_RX_DESC_FETCH:
+	case RESET_TYPE_TX_DESC_FETCH:
+	case RESET_TYPE_TX_SKIP:
+		/* These can occasionally occur due to hardware bugs.
+		 * We try to reset without disrupting the link.
+		 */
+		return RESET_TYPE_INVISIBLE;
+	default:
+		return RESET_TYPE_ALL;
+	}
+}
+
+static int falcon_map_reset_flags(u32 *flags)
+{
+	enum {
+		FALCON_RESET_INVISIBLE = (ETH_RESET_DMA | ETH_RESET_FILTER |
+					  ETH_RESET_OFFLOAD | ETH_RESET_MAC),
+		FALCON_RESET_ALL = FALCON_RESET_INVISIBLE | ETH_RESET_PHY,
+		FALCON_RESET_WORLD = FALCON_RESET_ALL | ETH_RESET_IRQ,
+	};
+
+	if ((*flags & FALCON_RESET_WORLD) == FALCON_RESET_WORLD) {
+		*flags &= ~FALCON_RESET_WORLD;
+		return RESET_TYPE_WORLD;
+	}
+
+	if ((*flags & FALCON_RESET_ALL) == FALCON_RESET_ALL) {
+		*flags &= ~FALCON_RESET_ALL;
+		return RESET_TYPE_ALL;
+	}
+
+	if ((*flags & FALCON_RESET_INVISIBLE) == FALCON_RESET_INVISIBLE) {
+		*flags &= ~FALCON_RESET_INVISIBLE;
+		return RESET_TYPE_INVISIBLE;
+	}
+
+	return -EINVAL;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Resets NIC to known state.  This routine must be called in process
  * context and is allowed to sleep. */
 static int __falcon_reset_hw(struct efx_nic *efx, enum reset_type method)
@@ -1709,6 +1759,11 @@ const struct efx_nic_type falcon_a1_nic_type = {
 	.init = falcon_init_nic,
 	.fini = efx_port_dummy_op_void,
 	.monitor = falcon_monitor,
+<<<<<<< HEAD
+=======
+	.map_reset_reason = falcon_map_reset_reason,
+	.map_reset_flags = falcon_map_reset_flags,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.reset = falcon_reset_hw,
 	.probe_port = falcon_probe_port,
 	.remove_port = falcon_remove_port,
@@ -1741,7 +1796,10 @@ const struct efx_nic_type falcon_a1_nic_type = {
 	.tx_dc_base = 0x130000,
 	.rx_dc_base = 0x100000,
 	.offload_features = NETIF_F_IP_CSUM,
+<<<<<<< HEAD
 	.reset_world_flags = ETH_RESET_IRQ,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 const struct efx_nic_type falcon_b0_nic_type = {
@@ -1750,6 +1808,11 @@ const struct efx_nic_type falcon_b0_nic_type = {
 	.init = falcon_init_nic,
 	.fini = efx_port_dummy_op_void,
 	.monitor = falcon_monitor,
+<<<<<<< HEAD
+=======
+	.map_reset_reason = falcon_map_reset_reason,
+	.map_reset_flags = falcon_map_reset_flags,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.reset = falcon_reset_hw,
 	.probe_port = falcon_probe_port,
 	.remove_port = falcon_remove_port,
@@ -1791,6 +1854,9 @@ const struct efx_nic_type falcon_b0_nic_type = {
 	.tx_dc_base = 0x130000,
 	.rx_dc_base = 0x100000,
 	.offload_features = NETIF_F_IP_CSUM | NETIF_F_RXHASH | NETIF_F_NTUPLE,
+<<<<<<< HEAD
 	.reset_world_flags = ETH_RESET_IRQ,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 

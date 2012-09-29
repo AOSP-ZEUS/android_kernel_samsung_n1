@@ -1,8 +1,18 @@
+<<<<<<< HEAD
 /*P:200 This contains all the /dev/lguest code, whereby the userspace launcher
  * controls and communicates with the Guest.  For example, the first write will
  * tell us the Guest's memory layout and entry point.  A read will run the
  * Guest until something happens, such as a signal or the Guest doing a NOTIFY
  * out to the Launcher.
+=======
+/*P:200 This contains all the /dev/lguest code, whereby the userspace
+ * launcher controls and communicates with the Guest.  For example,
+ * the first write will tell us the Guest's memory layout and entry
+ * point.  A read will run the Guest until something happens, such as
+ * a signal or the Guest doing a NOTIFY out to the Launcher.  There is
+ * also a way for the Launcher to attach eventfds to particular NOTIFY
+ * values instead of returning from the read() call.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 :*/
 #include <linux/uaccess.h>
 #include <linux/miscdevice.h>
@@ -357,8 +367,13 @@ static int initialize(struct file *file, const unsigned long __user *input)
 		goto free_eventfds;
 
 	/*
+<<<<<<< HEAD
 	 * Initialize the Guest's shadow page tables, using the toplevel
 	 * address the Launcher gave us.  This allocates memory, so can fail.
+=======
+	 * Initialize the Guest's shadow page tables.  This allocates
+	 * memory, so can fail.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 */
 	err = init_guest_pagetable(lg);
 	if (err)
@@ -516,6 +531,10 @@ static const struct file_operations lguest_fops = {
 	.read	 = read,
 	.llseek  = default_llseek,
 };
+<<<<<<< HEAD
+=======
+/*:*/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * This is a textbook example of a "misc" character device.  Populate a "struct

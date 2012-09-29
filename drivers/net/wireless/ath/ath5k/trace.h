@@ -12,22 +12,36 @@ static inline void trace_ ## name(proto) {}
 
 struct sk_buff;
 
+<<<<<<< HEAD
 #define PRIV_ENTRY  __field(struct ath5k_softc *, priv)
 #define PRIV_ASSIGN __entry->priv = priv
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #undef TRACE_SYSTEM
 #define TRACE_SYSTEM ath5k
 
 TRACE_EVENT(ath5k_rx,
+<<<<<<< HEAD
 	TP_PROTO(struct ath5k_softc *priv, struct sk_buff *skb),
 	TP_ARGS(priv, skb),
 	TP_STRUCT__entry(
 		PRIV_ENTRY
+=======
+	TP_PROTO(struct ath5k_hw *priv, struct sk_buff *skb),
+	TP_ARGS(priv, skb),
+	TP_STRUCT__entry(
+		__field(struct ath5k_hw *, priv)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__field(unsigned long, skbaddr)
 		__dynamic_array(u8, frame, skb->len)
 	),
 	TP_fast_assign(
+<<<<<<< HEAD
 		PRIV_ASSIGN;
+=======
+		__entry->priv = priv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__entry->skbaddr = (unsigned long) skb;
 		memcpy(__get_dynamic_array(frame), skb->data, skb->len);
 	),
@@ -37,20 +51,32 @@ TRACE_EVENT(ath5k_rx,
 );
 
 TRACE_EVENT(ath5k_tx,
+<<<<<<< HEAD
 	TP_PROTO(struct ath5k_softc *priv, struct sk_buff *skb,
+=======
+	TP_PROTO(struct ath5k_hw *priv, struct sk_buff *skb,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 struct ath5k_txq *q),
 
 	TP_ARGS(priv, skb, q),
 
 	TP_STRUCT__entry(
+<<<<<<< HEAD
 		PRIV_ENTRY
+=======
+		__field(struct ath5k_hw *, priv)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__field(unsigned long, skbaddr)
 		__field(u8, qnum)
 		__dynamic_array(u8, frame, skb->len)
 	),
 
 	TP_fast_assign(
+<<<<<<< HEAD
 		PRIV_ASSIGN;
+=======
+		__entry->priv = priv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__entry->skbaddr = (unsigned long) skb;
 		__entry->qnum = (u8) q->qnum;
 		memcpy(__get_dynamic_array(frame), skb->data, skb->len);
@@ -63,13 +89,21 @@ TRACE_EVENT(ath5k_tx,
 );
 
 TRACE_EVENT(ath5k_tx_complete,
+<<<<<<< HEAD
 	TP_PROTO(struct ath5k_softc *priv, struct sk_buff *skb,
+=======
+	TP_PROTO(struct ath5k_hw *priv, struct sk_buff *skb,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 struct ath5k_txq *q, struct ath5k_tx_status *ts),
 
 	TP_ARGS(priv, skb, q, ts),
 
 	TP_STRUCT__entry(
+<<<<<<< HEAD
 		PRIV_ENTRY
+=======
+		__field(struct ath5k_hw *, priv)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__field(unsigned long, skbaddr)
 		__field(u8, qnum)
 		__field(u8, ts_status)
@@ -78,7 +112,11 @@ TRACE_EVENT(ath5k_tx_complete,
 	),
 
 	TP_fast_assign(
+<<<<<<< HEAD
 		PRIV_ASSIGN;
+=======
+		__entry->priv = priv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__entry->skbaddr = (unsigned long) skb;
 		__entry->qnum = (u8) q->qnum;
 		__entry->ts_status = ts->ts_status;

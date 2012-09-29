@@ -32,7 +32,11 @@
 #include <linux/platform_device.h>
 #include <linux/serial_core.h>
 #include <linux/spi/spi.h>
+<<<<<<< HEAD
 #include <linux/spi/spi_bitbang.h>
+=======
+#include <linux/spi/spi_gpio.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/io.h>
 #include <linux/mtd/mtd.h>
 #include <linux/mtd/nand.h>
@@ -53,8 +57,11 @@
 #include <mach/fb.h>
 #include <plat/nand.h>
 #include <plat/udc.h>
+<<<<<<< HEAD
 #include <mach/spi.h>
 #include <mach/spi-gpio.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <plat/iic.h>
 
 #include <plat/common-smdk.h>
@@ -216,6 +223,7 @@ static struct platform_device qt2410_led = {
 
 /* SPI */
 
+<<<<<<< HEAD
 static void spi_gpio_cs(struct s3c2410_spigpio_info *spi, int cs)
 {
 	switch (cs) {
@@ -242,6 +250,18 @@ static struct platform_device qt2410_spi = {
 	.dev = {
 		.platform_data = &spi_gpio_cfg,
 	},
+=======
+static struct spi_gpio_platform_data spi_gpio_cfg = {
+	.sck		= S3C2410_GPG(7),
+	.mosi		= S3C2410_GPG(6),
+	.miso		= S3C2410_GPG(5),
+};
+
+static struct platform_device qt2410_spi = {
+	.name		= "spi-gpio",
+	.id		= 1,
+	.dev.platform_data = &spi_gpio_cfg,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* Board devices */

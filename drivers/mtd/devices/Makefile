@@ -1,6 +1,10 @@
 #
 # linux/drivers/mtd/devices/Makefile
 #
+<<<<<<< HEAD
+=======
+GCOV_PROFILE := y
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 obj-$(CONFIG_MTD_DOC2000)	+= doc2000.o
 obj-$(CONFIG_MTD_DOC2001)	+= doc2001.o
@@ -17,3 +21,7 @@ obj-$(CONFIG_MTD_BLOCK2MTD)	+= block2mtd.o
 obj-$(CONFIG_MTD_DATAFLASH)	+= mtd_dataflash.o
 obj-$(CONFIG_MTD_M25P80)	+= m25p80.o
 obj-$(CONFIG_MTD_SST25L)	+= sst25l.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_MTD_NAND_TEGRA)	+= tegra_nand.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

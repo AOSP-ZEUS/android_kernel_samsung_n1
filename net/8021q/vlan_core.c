@@ -63,6 +63,30 @@ bool vlan_do_receive(struct sk_buff **skbp)
 	return true;
 }
 
+<<<<<<< HEAD
+=======
+/* Must be invoked with rcu_read_lock or with RTNL. */
+struct net_device *__vlan_find_dev_deep(struct net_device *real_dev,
+					u16 vlan_id)
+{
+	struct vlan_group *grp = rcu_dereference_rtnl(real_dev->vlgrp);
+
+	if (grp) {
+		return vlan_group_get_device(grp, vlan_id);
+	} else {
+		/*
+		 * Bonding slaves do not have grp assigned to themselves.
+		 * Grp is assigned to bonding master instead.
+		 */
+		if (netif_is_bond_slave(real_dev))
+			return __vlan_find_dev_deep(real_dev->master, vlan_id);
+	}
+
+	return NULL;
+}
+EXPORT_SYMBOL(__vlan_find_dev_deep);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct net_device *vlan_dev_real_dev(const struct net_device *dev)
 {
 	return vlan_dev_info(dev)->real_dev;
@@ -75,6 +99,7 @@ u16 vlan_dev_vlan_id(const struct net_device *dev)
 }
 EXPORT_SYMBOL(vlan_dev_vlan_id);
 
+<<<<<<< HEAD
 /* VLAN rx hw acceleration helper.  This acts like netif_{rx,receive_skb}(). */
 int __vlan_hwaccel_rx(struct sk_buff *skb, struct vlan_group *grp,
 		      u16 vlan_tci, int polling)
@@ -100,6 +125,8 @@ gro_result_t vlan_gro_frags(struct napi_struct *napi, struct vlan_group *grp,
 }
 EXPORT_SYMBOL(vlan_gro_frags);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct sk_buff *vlan_reorder_header(struct sk_buff *skb)
 {
 	if (skb_cow(skb, skb_headroom(skb)) < 0)

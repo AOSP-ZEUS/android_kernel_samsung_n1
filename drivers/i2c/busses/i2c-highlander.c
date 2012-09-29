@@ -227,7 +227,11 @@ static int highlander_i2c_read(struct highlander_i2c_dev *dev)
 
 	/*
 	 * The R0P7780LC0011RL FPGA needs a significant delay between
+<<<<<<< HEAD
 	 * data read cycles, otherwise the transciever gets confused and
+=======
+	 * data read cycles, otherwise the transceiver gets confused and
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * garbage is returned when the read is subsequently aborted.
 	 *
 	 * It is not sufficient to wait for BBSY.

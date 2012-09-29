@@ -197,15 +197,25 @@ static __net_init int proc_net_ns_init(struct net *net)
 	int err;
 
 	err = -ENOMEM;
+<<<<<<< HEAD
 	netd = kzalloc(sizeof(*netd), GFP_KERNEL);
+=======
+	netd = kzalloc(sizeof(*netd) + 4, GFP_KERNEL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!netd)
 		goto out;
 
 	netd->data = net;
 	netd->nlink = 2;
+<<<<<<< HEAD
 	netd->name = "net";
 	netd->namelen = 3;
 	netd->parent = &proc_root;
+=======
+	netd->namelen = 3;
+	netd->parent = &proc_root;
+	memcpy(netd->name, "net", 4);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	err = -EEXIST;
 	net_statd = proc_net_mkdir(net, "stat", netd);

@@ -680,6 +680,12 @@ struct lpfc_hba {
 	uint32_t cfg_enable_rrq;
 	uint32_t cfg_topology;
 	uint32_t cfg_link_speed;
+<<<<<<< HEAD
+=======
+#define LPFC_FCF_FOV 1		/* Fast fcf failover */
+#define LPFC_FCF_PRIORITY 2	/* Priority fcf failover */
+	uint32_t cfg_fcf_failover_policy;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	uint32_t cfg_cr_delay;
 	uint32_t cfg_cr_count;
 	uint32_t cfg_multi_ring_support;
@@ -851,9 +857,19 @@ struct lpfc_hba {
 	/* iDiag debugfs sub-directory */
 	struct dentry *idiag_root;
 	struct dentry *idiag_pci_cfg;
+<<<<<<< HEAD
 	struct dentry *idiag_que_info;
 	struct dentry *idiag_que_acc;
 	struct dentry *idiag_drb_acc;
+=======
+	struct dentry *idiag_bar_acc;
+	struct dentry *idiag_que_info;
+	struct dentry *idiag_que_acc;
+	struct dentry *idiag_drb_acc;
+	struct dentry *idiag_ctl_acc;
+	struct dentry *idiag_mbx_acc;
+	struct dentry *idiag_ext_acc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 	/* Used for deferred freeing of ELS data buffers */

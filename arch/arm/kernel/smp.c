@@ -27,7 +27,11 @@
 #include <linux/clockchips.h>
 #include <linux/completion.h>
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/cacheflush.h>
 #include <asm/cpu.h>
 #include <asm/cputype.h>
@@ -211,6 +215,10 @@ static DECLARE_COMPLETION(cpu_died);
  */
 void __cpu_die(unsigned int cpu)
 {
+<<<<<<< HEAD
+=======
+	printk(KERN_INFO "%s is called\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!wait_for_completion_timeout(&cpu_died, msecs_to_jiffies(5000))) {
 		pr_err("CPU%u: cpu didn't die\n", cpu);
 		return;
@@ -320,6 +328,7 @@ asmlinkage void __cpuinit secondary_start_kernel(void)
 	 */
 	percpu_timer_setup();
 
+<<<<<<< HEAD
 	while (!cpu_active(cpu))
 		cpu_relax();
 
@@ -327,6 +336,8 @@ asmlinkage void __cpuinit secondary_start_kernel(void)
 	 * cpu_active bit is set, so it's safe to enable interrupts
 	 * now.
 	 */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	local_irq_enable();
 	local_fiq_enable();
 
@@ -369,8 +380,12 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
 	 */
 	if (max_cpus > ncores)
 		max_cpus = ncores;
+<<<<<<< HEAD
 
 	if (max_cpus > 1) {
+=======
+	if (ncores > 1 && max_cpus) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * Enable the local timer or broadcast device for the
 		 * boot CPU, but only if we have more than one CPU.
@@ -378,6 +393,17 @@ void __init smp_prepare_cpus(unsigned int max_cpus)
 		percpu_timer_setup();
 
 		/*
+<<<<<<< HEAD
+=======
+		 * Initialise the present map, which describes the set of CPUs
+		 * actually populated at the present time. A platform should
+		 * re-initialize the map in platform_smp_prepare_cpus() if
+		 * present != possible (e.g. physical hotplug).
+		 */
+		init_cpu_present(&cpu_possible_map);
+
+		/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 * Initialise the SCU if there are more than one CPU
 		 * and let them know where to start.
 		 */
@@ -633,6 +659,7 @@ asmlinkage void __exception_irq_entry do_IPI(int ipinr, struct pt_regs *regs)
 		break;
 
 	case IPI_CALL_FUNC:
+<<<<<<< HEAD
 		generic_smp_call_function_interrupt();
 		break;
 
@@ -642,6 +669,23 @@ asmlinkage void __exception_irq_entry do_IPI(int ipinr, struct pt_regs *regs)
 
 	case IPI_CPU_STOP:
 		ipi_cpu_stop(cpu);
+=======
+		irq_enter();
+		generic_smp_call_function_interrupt();
+		irq_exit();
+		break;
+
+	case IPI_CALL_FUNC_SINGLE:
+		irq_enter();
+		generic_smp_call_function_single_interrupt();
+		irq_exit();
+		break;
+
+	case IPI_CPU_STOP:
+		irq_enter();
+		ipi_cpu_stop(cpu);
+		irq_exit();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 
 	case IPI_CPU_BACKTRACE:

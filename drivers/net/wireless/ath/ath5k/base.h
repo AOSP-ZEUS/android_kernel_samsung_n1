@@ -45,11 +45,15 @@
 #include <linux/list.h>
 #include <linux/wireless.h>
 #include <linux/if_ether.h>
+<<<<<<< HEAD
 #include <linux/leds.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/rfkill.h>
 #include <linux/workqueue.h>
 
 #include "ath5k.h"
+<<<<<<< HEAD
 #include "debug.h"
 #include "ani.h"
 
@@ -62,6 +66,11 @@
 #define ATH5K_TXQ_LEN_MAX	(ATH_TXBUF / 4)		/* bufs per queue */
 #define ATH5K_TXQ_LEN_LOW	(ATH5K_TXQ_LEN_MAX / 2)	/* low mark */
 
+=======
+#include "../regd.h"
+#include "../ath.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct ath5k_buf {
 	struct list_head	list;
 	struct ath5k_desc	*desc;	/* virtual addr of desc */
@@ -70,6 +79,7 @@ struct ath5k_buf {
 	dma_addr_t		skbaddr;/* physical addr of skb data */
 };
 
+<<<<<<< HEAD
 /*
  * Data transmit queue state.  One of these exists for each
  * hardware transmit queue.  Packets sent to us from above
@@ -159,6 +169,8 @@ struct ath5k_statistics {
 #define ATH_CHAN_MAX	(14+14+14+252+20)
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct ath5k_vif {
 	bool			assoc; /* are we associated or not */
 	enum nl80211_iftype	opmode;
@@ -167,6 +179,7 @@ struct ath5k_vif {
 	u8			lladdr[ETH_ALEN];
 };
 
+<<<<<<< HEAD
 /* Software Carrier, keeps track of the driver state
  * associated with an instance of a device */
 struct ath5k_softc {
@@ -265,6 +278,8 @@ struct ath5k_softc {
 	struct survey_info	survey;		/* collected survey info */
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct ath5k_vif_iter_data {
 	const u8	*hw_macaddr;
 	u8		mask[ETH_ALEN];
@@ -278,9 +293,17 @@ struct ath5k_vif_iter_data {
 void ath5k_vif_iter(void *data, u8 *mac, struct ieee80211_vif *vif);
 
 
+<<<<<<< HEAD
 #define ath5k_hw_hasbssidmask(_ah) \
 	(ath5k_hw_get_capability(_ah, AR5K_CAP_BSSIDMASK, 0, NULL) == 0)
 #define ath5k_hw_hasveol(_ah) \
 	(ath5k_hw_get_capability(_ah, AR5K_CAP_VEOL, 0, NULL) == 0)
+=======
+/* Check whether BSSID mask is supported */
+#define ath5k_hw_hasbssidmask(_ah) (ah->ah_version == AR5K_AR5212)
+
+/* Check whether virtual EOL is supported */
+#define ath5k_hw_hasveol(_ah) (ah->ah_version != AR5K_AR5210)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif

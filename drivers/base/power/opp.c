@@ -453,7 +453,11 @@ int opp_add(struct device *dev, unsigned long freq, unsigned long u_volt)
 static int opp_set_availability(struct device *dev, unsigned long freq,
 		bool availability_req)
 {
+<<<<<<< HEAD
 	struct device_opp *tmp_dev_opp, *dev_opp = NULL;
+=======
+	struct device_opp *tmp_dev_opp, *dev_opp = ERR_PTR(-ENODEV);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct opp *new_opp, *tmp_opp, *opp = ERR_PTR(-ENODEV);
 	int r = 0;
 
@@ -625,4 +629,24 @@ int opp_init_cpufreq_table(struct device *dev,
 
 	return 0;
 }
+<<<<<<< HEAD
+=======
+
+/**
+ * opp_free_cpufreq_table() - free the cpufreq table
+ * @dev:	device for which we do this operation
+ * @table:	table to free
+ *
+ * Free up the table allocated by opp_init_cpufreq_table
+ */
+void opp_free_cpufreq_table(struct device *dev,
+				struct cpufreq_frequency_table **table)
+{
+	if (!table)
+		return;
+
+	kfree(*table);
+	*table = NULL;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif		/* CONFIG_CPU_FREQ */

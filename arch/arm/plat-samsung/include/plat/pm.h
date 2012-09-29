@@ -42,8 +42,12 @@ extern unsigned long s3c_irqwake_eintallow;
 /* per-cpu sleep functions */
 
 extern void (*pm_cpu_prep)(void);
+<<<<<<< HEAD
 extern void (*pm_cpu_sleep)(void);
 extern void (*pm_cpu_restore)(void);
+=======
+extern int (*pm_cpu_sleep)(unsigned long);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Flags for PM Control */
 
@@ -53,10 +57,16 @@ extern unsigned char pm_uart_udivslot;  /* true to save UART UDIVSLOT */
 
 /* from sleep.S */
 
+<<<<<<< HEAD
 extern int  s3c_cpu_save(unsigned long *saveblk, long);
 extern void s3c_cpu_resume(void);
 
 extern void s3c2410_cpu_suspend(void);
+=======
+extern void s3c_cpu_resume(void);
+
+extern int s3c2410_cpu_suspend(unsigned long);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* sleep save info */
 
@@ -129,7 +139,11 @@ extern void s3c_pm_dbg(const char *msg, ...);
 
 #define S3C_PMDBG(fmt...) s3c_pm_dbg(fmt)
 #else
+<<<<<<< HEAD
 #define S3C_PMDBG(fmt...) pr_debug(fmt)
+=======
+#define S3C_PMDBG(fmt...) printk(KERN_DEBUG fmt)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 #ifdef CONFIG_S3C_PM_DEBUG_LED_SMDK

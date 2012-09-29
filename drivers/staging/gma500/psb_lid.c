@@ -32,10 +32,17 @@ static void psb_lid_timer_func(unsigned long data)
 	u32 *lid_state = dev_priv->lid_state;
 	u32 pp_status;
 
+<<<<<<< HEAD
 	if (*lid_state == dev_priv->lid_last_state)
 		goto lid_timer_schedule;
 
 	if ((*lid_state) & 0x01) {
+=======
+	if (readl(lid_state) == dev_priv->lid_last_state)
+		goto lid_timer_schedule;
+
+	if ((readl(lid_state)) & 0x01) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*lid state is open*/
 		REG_WRITE(PP_CONTROL, REG_READ(PP_CONTROL) | POWER_TARGET_ON);
 		do {
@@ -54,7 +61,11 @@ static void psb_lid_timer_func(unsigned long data)
 	}
 		/* printk(KERN_INFO"%s: lid: closed\n", __FUNCTION__); */
 
+<<<<<<< HEAD
 	dev_priv->lid_last_state =  *lid_state;
+=======
+	dev_priv->lid_last_state =  readl(lid_state);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 lid_timer_schedule:
 	spin_lock_irqsave(&dev_priv->lid_lock, irq_flags);

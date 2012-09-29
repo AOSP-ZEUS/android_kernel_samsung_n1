@@ -57,8 +57,13 @@ static int __sigp_sense(struct kvm_vcpu *vcpu, u16 cpu_addr,
 	spin_lock(&fi->lock);
 	if (fi->local_int[cpu_addr] == NULL)
 		rc = 3; /* not operational */
+<<<<<<< HEAD
 	else if (atomic_read(fi->local_int[cpu_addr]->cpuflags)
 		 & CPUSTAT_RUNNING) {
+=======
+	else if (!(atomic_read(fi->local_int[cpu_addr]->cpuflags)
+		  & CPUSTAT_STOPPED)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		*reg &= 0xffffffff00000000UL;
 		rc = 1; /* status stored */
 	} else {
@@ -189,10 +194,15 @@ static int __sigp_set_prefix(struct kvm_vcpu *vcpu, u16 cpu_addr, u32 address,
 
 	/* make sure that the new value is valid memory */
 	address = address & 0x7fffe000u;
+<<<<<<< HEAD
 	if ((copy_from_user(&tmp, (void __user *)
 		(address + vcpu->arch.sie_block->gmsor) , 1)) ||
 	   (copy_from_user(&tmp, (void __user *)(address +
 			vcpu->arch.sie_block->gmsor + PAGE_SIZE), 1))) {
+=======
+	if (copy_from_guest_absolute(vcpu, &tmp, address, 1) ||
+	   copy_from_guest_absolute(vcpu, &tmp, address + PAGE_SIZE, 1)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		*reg |= SIGP_STAT_INVALID_PARAMETER;
 		return 1; /* invalid parameter */
 	}
@@ -214,7 +224,11 @@ static int __sigp_set_prefix(struct kvm_vcpu *vcpu, u16 cpu_addr, u32 address,
 
 	spin_lock_bh(&li->lock);
 	/* cpu must be in stopped state */
+<<<<<<< HEAD
 	if (atomic_read(li->cpuflags) & CPUSTAT_RUNNING) {
+=======
+	if (!(atomic_read(li->cpuflags) & CPUSTAT_STOPPED)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rc = 1; /* incorrect state */
 		*reg &= SIGP_STAT_INCORRECT_STATE;
 		kfree(inti);

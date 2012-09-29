@@ -189,6 +189,7 @@ static inline int qdisc_restart(struct Qdisc *q)
 
 void __qdisc_run(struct Qdisc *q)
 {
+<<<<<<< HEAD
 	unsigned long start_time = jiffies;
 
 	while (qdisc_restart(q)) {
@@ -198,6 +199,17 @@ void __qdisc_run(struct Qdisc *q)
 		 * 2. we've been doing it for too long.
 		 */
 		if (need_resched() || jiffies != start_time) {
+=======
+	int quota = weight_p;
+
+	while (qdisc_restart(q)) {
+		/*
+		 * Ordered by possible occurrence: Postpone processing if
+		 * 1. we've exceeded packet quota
+		 * 2. another process needs the CPU;
+		 */
+		if (--quota <= 0 || need_resched()) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			__netif_schedule(q);
 			break;
 		}

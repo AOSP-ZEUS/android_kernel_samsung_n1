@@ -39,8 +39,14 @@
 #define	PSTORE_NAMELEN	64
 
 struct pstore_private {
+<<<<<<< HEAD
 	u64	id;
 	int	(*erase)(u64);
+=======
+	struct pstore_info *psi;
+	enum pstore_type_id type;
+	u64	id;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ssize_t	size;
 	char	data[];
 };
@@ -73,7 +79,11 @@ static int pstore_unlink(struct inode *dir, struct dentry *dentry)
 {
 	struct pstore_private *p = dentry->d_inode->i_private;
 
+<<<<<<< HEAD
 	p->erase(p->id);
+=======
+	p->psi->erase(p->type, p->id, p->psi);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return simple_unlink(dir, dentry);
 }
@@ -175,8 +185,13 @@ int pstore_is_mounted(void)
  * Set the mtime & ctime to the date that this record was originally stored.
  */
 int pstore_mkfile(enum pstore_type_id type, char *psname, u64 id,
+<<<<<<< HEAD
 			      char *data, size_t size,
 			      struct timespec time, int (*erase)(u64))
+=======
+		  char *data, size_t size, struct timespec time,
+		  struct pstore_info *psi)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct dentry		*root = pstore_sb->s_root;
 	struct dentry		*dentry;
@@ -192,8 +207,14 @@ int pstore_mkfile(enum pstore_type_id type, char *psname, u64 id,
 	private = kmalloc(sizeof *private + size, GFP_KERNEL);
 	if (!private)
 		goto fail_alloc;
+<<<<<<< HEAD
 	private->id = id;
 	private->erase = erase;
+=======
+	private->type = type;
+	private->id = id;
+	private->psi = psi;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (type) {
 	case PSTORE_TYPE_DMESG:

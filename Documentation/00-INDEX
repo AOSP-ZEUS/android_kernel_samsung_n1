@@ -272,6 +272,11 @@ printk-formats.txt
 	- how to get printk format specifiers right
 prio_tree.txt
 	- info on radix-priority-search-tree use for indexing vmas.
+<<<<<<< HEAD
+=======
+ramoops.txt
+	- documentation of the ramoops oops/panic logging module.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 rbtree.txt
 	- info on what red-black trees are and what they are for.
 robust-futex-ABI.txt

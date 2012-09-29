@@ -14,6 +14,10 @@
 #include <linux/pci.h>
 #include <linux/slab.h>
 #include <linux/mbus.h>
+<<<<<<< HEAD
+=======
+#include <video/vga.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/irq.h>
 #include <asm/mach/pci.h>
 #include <plat/pcie.h>
@@ -560,6 +564,11 @@ int __init orion5x_pci_sys_setup(int nr, struct pci_sys_data *sys)
 {
 	int ret = 0;
 
+<<<<<<< HEAD
+=======
+	vga_base = ORION5X_PCIE_MEM_PHYS_BASE;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (nr == 0) {
 		orion_pcie_set_local_bus_nr(PCIE_BASE, sys->busnr);
 		ret = pcie_setup(sys);
@@ -587,7 +596,11 @@ struct pci_bus __init *orion5x_pci_sys_scan_bus(int nr, struct pci_sys_data *sys
 	return bus;
 }
 
+<<<<<<< HEAD
 int __init orion5x_pci_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+int __init orion5x_pci_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int bus = dev->bus->number;
 

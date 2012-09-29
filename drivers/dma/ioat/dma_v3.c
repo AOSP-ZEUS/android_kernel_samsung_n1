@@ -73,10 +73,17 @@
 /* provide a lookup table for setting the source address in the base or
  * extended descriptor of an xor or pq descriptor
  */
+<<<<<<< HEAD
 static const u8 xor_idx_to_desc __read_mostly = 0xd0;
 static const u8 xor_idx_to_field[] __read_mostly = { 1, 4, 5, 6, 7, 0, 1, 2 };
 static const u8 pq_idx_to_desc __read_mostly = 0xf8;
 static const u8 pq_idx_to_field[] __read_mostly = { 1, 4, 5, 0, 1, 2, 4, 5 };
+=======
+static const u8 xor_idx_to_desc = 0xe0;
+static const u8 xor_idx_to_field[] = { 1, 4, 5, 6, 7, 0, 1, 2 };
+static const u8 pq_idx_to_desc = 0xf8;
+static const u8 pq_idx_to_field[] = { 1, 4, 5, 0, 1, 2, 4, 5 };
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static dma_addr_t xor_get_src(struct ioat_raw_descriptor *descs[2], int idx)
 {
@@ -277,9 +284,14 @@ static void __cleanup(struct ioat2_dma_chan *ioat, unsigned long phys_complete)
 		dump_desc_dbg(ioat, desc);
 		tx = &desc->txd;
 		if (tx->cookie) {
+<<<<<<< HEAD
 			chan->completed_cookie = tx->cookie;
 			ioat3_dma_unmap(ioat, desc, idx + i);
 			tx->cookie = 0;
+=======
+			dma_cookie_complete(tx);
+			ioat3_dma_unmap(ioat, desc, idx + i);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (tx->callback) {
 				tx->callback(tx->callback_param);
 				tx->callback = NULL;
@@ -411,6 +423,7 @@ ioat3_tx_status(struct dma_chan *c, dma_cookie_t cookie,
 		struct dma_tx_state *txstate)
 {
 	struct ioat2_dma_chan *ioat = to_ioat2_chan(c);
+<<<<<<< HEAD
 
 	if (ioat_tx_status(c, cookie, txstate) == DMA_SUCCESS)
 		return DMA_SUCCESS;
@@ -418,6 +431,17 @@ ioat3_tx_status(struct dma_chan *c, dma_cookie_t cookie,
 	ioat3_cleanup(ioat);
 
 	return ioat_tx_status(c, cookie, txstate);
+=======
+	enum dma_status ret;
+
+	ret = dma_cookie_status(c, cookie, txstate);
+	if (ret == DMA_SUCCESS)
+		return ret;
+
+	ioat3_cleanup(ioat);
+
+	return dma_cookie_status(c, cookie, txstate);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct dma_async_tx_descriptor *

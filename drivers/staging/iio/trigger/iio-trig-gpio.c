@@ -7,7 +7,11 @@
  * under the terms of the GNU General Public License version 2 as published by
  * the Free Software Foundation.
  *
+<<<<<<< HEAD
  * Currently this is more of a functioning proof of concept that a fully
+=======
+ * Currently this is more of a functioning proof of concept than a full
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * fledged trigger driver.
  *
  * TODO:

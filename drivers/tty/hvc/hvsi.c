@@ -49,6 +49,10 @@
 #include <asm/uaccess.h>
 #include <asm/vio.h>
 #include <asm/param.h>
+<<<<<<< HEAD
+=======
+#include <asm/hvsi.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define HVSI_MAJOR	229
 #define HVSI_MINOR	128
@@ -109,6 +113,7 @@ enum HVSI_PROTOCOL_STATE {
 };
 #define HVSI_CONSOLE 0x1
 
+<<<<<<< HEAD
 #define VS_DATA_PACKET_HEADER           0xff
 #define VS_CONTROL_PACKET_HEADER        0xfe
 #define VS_QUERY_PACKET_HEADER          0xfd
@@ -171,6 +176,8 @@ struct hvsi_query_response {
 
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int is_console(struct hvsi_struct *hp)
 {
 	return hp->flags & HVSI_CONSOLE;
@@ -356,18 +363,32 @@ static int hvsi_version_respond(struct hvsi_struct *hp, uint16_t query_seqno)
 	struct hvsi_query_response packet __ALIGNED__;
 	int wrote;
 
+<<<<<<< HEAD
 	packet.type = VS_QUERY_RESPONSE_PACKET_HEADER;
 	packet.len = sizeof(struct hvsi_query_response);
 	packet.seqno = atomic_inc_return(&hp->seqno);
+=======
+	packet.hdr.type = VS_QUERY_RESPONSE_PACKET_HEADER;
+	packet.hdr.len = sizeof(struct hvsi_query_response);
+	packet.hdr.seqno = atomic_inc_return(&hp->seqno);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	packet.verb = VSV_SEND_VERSION_NUMBER;
 	packet.u.version = HVSI_VERSION;
 	packet.query_seqno = query_seqno+1;
 
+<<<<<<< HEAD
 	pr_debug("%s: sending %i bytes\n", __func__, packet.len);
 	dbg_dump_hex((uint8_t*)&packet, packet.len);
 
 	wrote = hvc_put_chars(hp->vtermno, (char *)&packet, packet.len);
 	if (wrote != packet.len) {
+=======
+	pr_debug("%s: sending %i bytes\n", __func__, packet.hdr.len);
+	dbg_dump_hex((uint8_t*)&packet, packet.hdr.len);
+
+	wrote = hvc_put_chars(hp->vtermno, (char *)&packet, packet.hdr.len);
+	if (wrote != packet.hdr.len) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		printk(KERN_ERR "hvsi%i: couldn't send query response!\n",
 			hp->index);
 		return -EIO;
@@ -382,7 +403,11 @@ static void hvsi_recv_query(struct hvsi_struct *hp, uint8_t *packet)
 
 	switch (hp->state) {
 		case HVSI_WAIT_FOR_VER_QUERY:
+<<<<<<< HEAD
 			hvsi_version_respond(hp, query->seqno);
+=======
+			hvsi_version_respond(hp, query->hdr.seqno);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			__set_state(hp, HVSI_OPEN);
 			break;
 		default:
@@ -640,6 +665,7 @@ static int hvsi_query(struct hvsi_struct *hp, uint16_t verb)
 	struct hvsi_query packet __ALIGNED__;
 	int wrote;
 
+<<<<<<< HEAD
 	packet.type = VS_QUERY_PACKET_HEADER;
 	packet.len = sizeof(struct hvsi_query);
 	packet.seqno = atomic_inc_return(&hp->seqno);
@@ -650,6 +676,18 @@ static int hvsi_query(struct hvsi_struct *hp, uint16_t verb)
 
 	wrote = hvc_put_chars(hp->vtermno, (char *)&packet, packet.len);
 	if (wrote != packet.len) {
+=======
+	packet.hdr.type = VS_QUERY_PACKET_HEADER;
+	packet.hdr.len = sizeof(struct hvsi_query);
+	packet.hdr.seqno = atomic_inc_return(&hp->seqno);
+	packet.verb = verb;
+
+	pr_debug("%s: sending %i bytes\n", __func__, packet.hdr.len);
+	dbg_dump_hex((uint8_t*)&packet, packet.hdr.len);
+
+	wrote = hvc_put_chars(hp->vtermno, (char *)&packet, packet.hdr.len);
+	if (wrote != packet.hdr.len) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		printk(KERN_ERR "hvsi%i: couldn't send query (%i)!\n", hp->index,
 			wrote);
 		return -EIO;
@@ -683,20 +721,34 @@ static int hvsi_set_mctrl(struct hvsi_struct *hp, uint16_t mctrl)
 	struct hvsi_control packet __ALIGNED__;
 	int wrote;
 
+<<<<<<< HEAD
 	packet.type = VS_CONTROL_PACKET_HEADER,
 	packet.seqno = atomic_inc_return(&hp->seqno);
 	packet.len = sizeof(struct hvsi_control);
+=======
+	packet.hdr.type = VS_CONTROL_PACKET_HEADER,
+	packet.hdr.seqno = atomic_inc_return(&hp->seqno);
+	packet.hdr.len = sizeof(struct hvsi_control);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	packet.verb = VSV_SET_MODEM_CTL;
 	packet.mask = HVSI_TSDTR;
 
 	if (mctrl & TIOCM_DTR)
 		packet.word = HVSI_TSDTR;
 
+<<<<<<< HEAD
 	pr_debug("%s: sending %i bytes\n", __func__, packet.len);
 	dbg_dump_hex((uint8_t*)&packet, packet.len);
 
 	wrote = hvc_put_chars(hp->vtermno, (char *)&packet, packet.len);
 	if (wrote != packet.len) {
+=======
+	pr_debug("%s: sending %i bytes\n", __func__, packet.hdr.len);
+	dbg_dump_hex((uint8_t*)&packet, packet.hdr.len);
+
+	wrote = hvc_put_chars(hp->vtermno, (char *)&packet, packet.hdr.len);
+	if (wrote != packet.hdr.len) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		printk(KERN_ERR "hvsi%i: couldn't set DTR!\n", hp->index);
 		return -EIO;
 	}
@@ -766,6 +818,7 @@ static int hvsi_put_chars(struct hvsi_struct *hp, const char *buf, int count)
 
 	BUG_ON(count > HVSI_MAX_OUTGOING_DATA);
 
+<<<<<<< HEAD
 	packet.type = VS_DATA_PACKET_HEADER;
 	packet.seqno = atomic_inc_return(&hp->seqno);
 	packet.len = count + sizeof(struct hvsi_header);
@@ -773,6 +826,15 @@ static int hvsi_put_chars(struct hvsi_struct *hp, const char *buf, int count)
 
 	ret = hvc_put_chars(hp->vtermno, (char *)&packet, packet.len);
 	if (ret == packet.len) {
+=======
+	packet.hdr.type = VS_DATA_PACKET_HEADER;
+	packet.hdr.seqno = atomic_inc_return(&hp->seqno);
+	packet.hdr.len = count + sizeof(struct hvsi_header);
+	memcpy(&packet.data, buf, count);
+
+	ret = hvc_put_chars(hp->vtermno, (char *)&packet, packet.hdr.len);
+	if (ret == packet.hdr.len) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* return the number of chars written, not the packet length */
 		return count;
 	}
@@ -783,6 +845,7 @@ static void hvsi_close_protocol(struct hvsi_struct *hp)
 {
 	struct hvsi_control packet __ALIGNED__;
 
+<<<<<<< HEAD
 	packet.type = VS_CONTROL_PACKET_HEADER;
 	packet.seqno = atomic_inc_return(&hp->seqno);
 	packet.len = 6;
@@ -792,6 +855,17 @@ static void hvsi_close_protocol(struct hvsi_struct *hp)
 	dbg_dump_hex((uint8_t*)&packet, packet.len);
 
 	hvc_put_chars(hp->vtermno, (char *)&packet, packet.len);
+=======
+	packet.hdr.type = VS_CONTROL_PACKET_HEADER;
+	packet.hdr.seqno = atomic_inc_return(&hp->seqno);
+	packet.hdr.len = 6;
+	packet.verb = VSV_CLOSE_PROTOCOL;
+
+	pr_debug("%s: sending %i bytes\n", __func__, packet.hdr.len);
+	dbg_dump_hex((uint8_t*)&packet, packet.hdr.len);
+
+	hvc_put_chars(hp->vtermno, (char *)&packet, packet.hdr.len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int hvsi_open(struct tty_struct *tty, struct file *filp)

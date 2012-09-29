@@ -19,6 +19,11 @@
 #include <asm/hardware/gic.h>
 #include <asm/hardware/cache-l2x0.h>
 
+<<<<<<< HEAD
+=======
+#include <plat/irqs.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/hardware.h>
 #include <mach/omap4-common.h>
 
@@ -31,17 +36,27 @@ void __iomem *gic_dist_base_addr;
 
 void __init gic_init_irq(void)
 {
+<<<<<<< HEAD
 	void __iomem *gic_cpu_base;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Static mapping, never released */
 	gic_dist_base_addr = ioremap(OMAP44XX_GIC_DIST_BASE, SZ_4K);
 	BUG_ON(!gic_dist_base_addr);
 
 	/* Static mapping, never released */
+<<<<<<< HEAD
 	gic_cpu_base = ioremap(OMAP44XX_GIC_CPU_BASE, SZ_512);
 	BUG_ON(!gic_cpu_base);
 
 	gic_init(0, 29, gic_dist_base_addr, gic_cpu_base);
+=======
+	omap_irq_base = ioremap(OMAP44XX_GIC_CPU_BASE, SZ_512);
+	BUG_ON(!omap_irq_base);
+
+	gic_init(0, 29, gic_dist_base_addr, omap_irq_base);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #ifdef CONFIG_CACHE_L2X0

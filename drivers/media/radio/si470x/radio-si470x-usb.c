@@ -29,7 +29,10 @@
 
 /* driver definitions */
 #define DRIVER_AUTHOR "Tobias Lorenz <tobias.lorenz@gmx.net>"
+<<<<<<< HEAD
 #define DRIVER_KERNEL_VERSION KERNEL_VERSION(1, 0, 10)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define DRIVER_CARD "Silicon Labs Si470x FM Radio Receiver"
 #define DRIVER_DESC "USB radio driver for Si470x FM Radio Receivers"
 #define DRIVER_VERSION "1.0.10"
@@ -626,7 +629,10 @@ int si470x_vidioc_querycap(struct file *file, void *priv,
 	strlcpy(capability->card, DRIVER_CARD, sizeof(capability->card));
 	usb_make_path(radio->usbdev, capability->bus_info,
 			sizeof(capability->bus_info));
+<<<<<<< HEAD
 	capability->version = DRIVER_KERNEL_VERSION;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	capability->capabilities = V4L2_CAP_HW_FREQ_SEEK |
 		V4L2_CAP_TUNER | V4L2_CAP_RADIO | V4L2_CAP_RDS_CAPTURE;
 
@@ -699,7 +705,11 @@ static int si470x_usb_driver_probe(struct usb_interface *intf,
 	radio->videodev = video_device_alloc();
 	if (!radio->videodev) {
 		retval = -ENOMEM;
+<<<<<<< HEAD
 		goto err_intbuffer;
+=======
+		goto err_urb;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	memcpy(radio->videodev, &si470x_viddev_template,
 			sizeof(si470x_viddev_template));
@@ -790,6 +800,11 @@ err_all:
 	kfree(radio->buffer);
 err_video:
 	video_device_release(radio->videodev);
+<<<<<<< HEAD
+=======
+err_urb:
+	usb_free_urb(radio->int_in_urb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_intbuffer:
 	kfree(radio->int_in_buffer);
 err_radio:

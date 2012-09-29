@@ -179,7 +179,10 @@ int mei_write_message(struct mei_device *dev,
 	if ((dev->me_hw_state & ME_RDY_HRA) != ME_RDY_HRA)
 		return 0;
 
+<<<<<<< HEAD
 	dev->write_hang = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 1;
 }
 
@@ -256,13 +259,21 @@ int mei_flow_ctrl_creds(struct mei_device *dev, struct mei_cl *cl)
 {
 	int i;
 
+<<<<<<< HEAD
 	if (!dev->num_mei_me_clients)
+=======
+	if (!dev->me_clients_num)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	if (cl->mei_flow_ctrl_creds > 0)
 		return 1;
 
+<<<<<<< HEAD
 	for (i = 0; i < dev->num_mei_me_clients; i++) {
+=======
+	for (i = 0; i < dev->me_clients_num; i++) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		struct mei_me_client  *me_cl = &dev->me_clients[i];
 		if (me_cl->client_id == cl->me_client_id) {
 			if (me_cl->mei_flow_ctrl_creds) {
@@ -291,10 +302,17 @@ int mei_flow_ctrl_reduce(struct mei_device *dev, struct mei_cl *cl)
 {
 	int i;
 
+<<<<<<< HEAD
 	if (!dev->num_mei_me_clients)
 		return -ENOENT;
 
 	for (i = 0; i < dev->num_mei_me_clients; i++) {
+=======
+	if (!dev->me_clients_num)
+		return -ENOENT;
+
+	for (i = 0; i < dev->me_clients_num; i++) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		struct mei_me_client  *me_cl = &dev->me_clients[i];
 		if (me_cl->client_id == cl->me_client_id) {
 			if (me_cl->props.single_recv_buf != 0) {

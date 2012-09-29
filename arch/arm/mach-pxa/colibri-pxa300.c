@@ -187,6 +187,10 @@ MACHINE_START(COLIBRI300, "Toradex Colibri PXA300")
 	.init_machine	= colibri_pxa300_init,
 	.map_io		= pxa3xx_map_io,
 	.init_irq	= pxa3xx_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa3xx_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 MACHINE_END
 

@@ -113,8 +113,15 @@ static int __devinit omap_rng_probe(struct platform_device *pdev)
 
 	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 
+<<<<<<< HEAD
 	if (!res)
 		return -ENOENT;
+=======
+	if (!res) {
+		ret = -ENOENT;
+		goto err_region;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!request_mem_region(res->start, resource_size(res), pdev->name)) {
 		ret = -EBUSY;

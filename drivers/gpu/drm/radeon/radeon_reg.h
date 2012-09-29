@@ -3295,7 +3295,11 @@
 #	define RADEON_RB_BUFSZ_MASK		(0x3f << 0)
 #	define RADEON_RB_BLKSZ_SHIFT		8
 #	define RADEON_RB_BLKSZ_MASK		(0x3f << 8)
+<<<<<<< HEAD
 #	define RADEON_BUF_SWAP_32BIT		(1 << 17)
+=======
+#	define RADEON_BUF_SWAP_32BIT		(2 << 16)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #	define RADEON_MAX_FETCH_SHIFT		18
 #	define RADEON_MAX_FETCH_MASK		(0x3 << 18)
 #	define RADEON_RB_NO_UPDATE		(1 << 27)

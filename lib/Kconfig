@@ -79,6 +79,16 @@ config LIBCRC32C
 	  require M here.  See Castagnoli93.
 	  Module will be libcrc32c.
 
+<<<<<<< HEAD
+=======
+config CRC8
+	tristate "CRC8 function"
+	help
+	  This option provides CRC8 function. Drivers may select this
+	  when they need to do cyclic redundancy check according CRC8
+	  algorithm. Module will be called crc8.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config AUDIT_GENERIC
 	bool
 	depends on AUDIT && !AUDIT_ARCH
@@ -262,4 +272,17 @@ config AVERAGE
 
 	  If unsure, say N.
 
+<<<<<<< HEAD
+=======
+config CORDIC
+	tristate "Cordic function"
+	help
+	  The option provides arithmetic function using cordic algorithm
+	  so its calculations are in fixed point. Modules can select this
+	  when they require this function. Module will be called cordic.
+
+config LLIST
+	bool
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endmenu

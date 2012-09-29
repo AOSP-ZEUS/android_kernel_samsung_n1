@@ -5,6 +5,10 @@ menu "Footbridge Implementations"
 config ARCH_CATS
 	bool "CATS"
 	select CLKSRC_I8253
+<<<<<<< HEAD
+=======
+	select CLKEVT_I8253
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select FOOTBRIDGE_HOST
 	select ISA
 	select ISA_DMA
@@ -61,6 +65,10 @@ config ARCH_EBSA285_HOST
 config ARCH_NETWINDER
 	bool "NetWinder"
 	select CLKSRC_I8253
+<<<<<<< HEAD
+=======
+	select CLKEVT_I8253
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select FOOTBRIDGE_HOST
 	select ISA
 	select ISA_DMA

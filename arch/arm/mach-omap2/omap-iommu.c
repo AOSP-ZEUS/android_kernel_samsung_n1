@@ -67,7 +67,11 @@ static struct iommu_device omap4_devices[] = {
 		.pdata = {
 			.name = "ducati",
 			.nr_tlb_entries = 32,
+<<<<<<< HEAD
 			.clk_name = "ducati_ick",
+=======
+			.clk_name = "ipu_fck",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			.da_start = 0x0,
 			.da_end = 0xFFFFF000,
 		},

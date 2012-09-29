@@ -176,7 +176,11 @@ static int cifs_debug_data_proc_show(struct seq_file *m, void *v)
 
 #ifdef CONFIG_CIFS_STATS2
 			seq_printf(m, " In Send: %d In MaxReq Wait: %d",
+<<<<<<< HEAD
 				atomic_read(&server->inSend),
+=======
+				atomic_read(&server->in_send),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				atomic_read(&server->num_waiters));
 #endif
 

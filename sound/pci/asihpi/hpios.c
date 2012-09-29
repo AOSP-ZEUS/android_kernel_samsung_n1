@@ -39,10 +39,13 @@ void hpios_delay_micro_seconds(u32 num_micro_sec)
 
 }
 
+<<<<<<< HEAD
 void hpios_locked_mem_init(void)
 {
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /** Allocated an area of locked memory for bus master DMA operations.
 
 On error, return -ENOMEM, and *pMemArea.size = 0
@@ -85,7 +88,10 @@ u16 hpios_locked_mem_free(struct consistent_dma_area *p_mem_area)
 		return 1;
 	}
 }
+<<<<<<< HEAD
 
 void hpios_locked_mem_free_all(void)
 {
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

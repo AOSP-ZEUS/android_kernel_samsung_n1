@@ -510,11 +510,14 @@ int hci_dev_open(__u16 dev)
 
 	hci_req_lock(hdev);
 
+<<<<<<< HEAD
 	if (test_bit(HCI_UNREGISTER, &hdev->flags)) {
 		ret = -ENODEV;
 		goto done;
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (hdev->rfkill && rfkill_blocked(hdev->rfkill)) {
 		ret = -ERFKILL;
 		goto done;
@@ -1568,8 +1571,11 @@ int hci_unregister_dev(struct hci_dev *hdev)
 
 	BT_DBG("%p name %s bus %d", hdev, hdev->name, hdev->bus);
 
+<<<<<<< HEAD
 	set_bit(HCI_UNREGISTER, &hdev->flags);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	write_lock_bh(&hci_dev_list_lock);
 	list_del(&hdev->list);
 	write_unlock_bh(&hci_dev_list_lock);

@@ -26,7 +26,11 @@
 #include <linux/rcupdate.h>
 #include <linux/pfn.h>
 #include <linux/kmemleak.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/uaccess.h>
 #include <asm/tlbflush.h>
 #include <asm/shmparam.h>
@@ -452,6 +456,7 @@ overflow:
 	return ERR_PTR(-EBUSY);
 }
 
+<<<<<<< HEAD
 static void rcu_free_va(struct rcu_head *head)
 {
 	struct vmap_area *va = container_of(head, struct vmap_area, rcu_head);
@@ -459,6 +464,8 @@ static void rcu_free_va(struct rcu_head *head)
 	kfree(va);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __free_vmap_area(struct vmap_area *va)
 {
 	BUG_ON(RB_EMPTY_NODE(&va->rb_node));
@@ -491,7 +498,11 @@ static void __free_vmap_area(struct vmap_area *va)
 	if (va->va_end > VMALLOC_START && va->va_end <= VMALLOC_END)
 		vmap_area_pcpu_hole = max(vmap_area_pcpu_hole, va->va_end);
 
+<<<<<<< HEAD
 	call_rcu(&va->rcu_head, rcu_free_va);
+=======
+	kfree_rcu(va, rcu_head);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -838,6 +849,7 @@ static struct vmap_block *new_vmap_block(gfp_t gfp_mask)
 	return vb;
 }
 
+<<<<<<< HEAD
 static void rcu_free_vb(struct rcu_head *head)
 {
 	struct vmap_block *vb = container_of(head, struct vmap_block, rcu_head);
@@ -845,6 +857,8 @@ static void rcu_free_vb(struct rcu_head *head)
 	kfree(vb);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void free_vmap_block(struct vmap_block *vb)
 {
 	struct vmap_block *tmp;
@@ -857,7 +871,11 @@ static void free_vmap_block(struct vmap_block *vb)
 	BUG_ON(tmp != vb);
 
 	free_vmap_area_noflush(vb->va);
+<<<<<<< HEAD
 	call_rcu(&vb->rcu_head, rcu_free_vb);
+=======
+	kfree_rcu(vb, rcu_head);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void purge_fragmented_blocks(int cpu)

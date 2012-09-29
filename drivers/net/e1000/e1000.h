@@ -215,7 +215,11 @@ struct e1000_adapter {
 	struct timer_list tx_fifo_stall_timer;
 	struct timer_list watchdog_timer;
 	struct timer_list phy_info_timer;
+<<<<<<< HEAD
 	struct vlan_group *vlgrp;
+=======
+	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16 mng_vlan_id;
 	u32 bd_number;
 	u32 rx_buffer_len;

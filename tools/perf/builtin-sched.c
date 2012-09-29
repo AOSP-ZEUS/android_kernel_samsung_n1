@@ -1637,23 +1637,45 @@ static struct perf_event_ops event_ops = {
 	.ordered_samples	= true,
 };
 
+<<<<<<< HEAD
 static int read_events(void)
+=======
+static void read_events(bool destroy, struct perf_session **psession)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int err = -EINVAL;
 	struct perf_session *session = perf_session__new(input_name, O_RDONLY,
 							 0, false, &event_ops);
 	if (session == NULL)
+<<<<<<< HEAD
 		return -ENOMEM;
 
 	if (perf_session__has_traces(session, "record -R")) {
 		err = perf_session__process_events(session, &event_ops);
+=======
+		die("No Memory");
+
+	if (perf_session__has_traces(session, "record -R")) {
+		err = perf_session__process_events(session, &event_ops);
+		if (err)
+			die("Failed to process events, error %d", err);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		nr_events      = session->hists.stats.nr_events[0];
 		nr_lost_events = session->hists.stats.total_lost;
 		nr_lost_chunks = session->hists.stats.nr_events[PERF_RECORD_LOST];
 	}
 
+<<<<<<< HEAD
 	perf_session__delete(session);
 	return err;
+=======
+	if (destroy)
+		perf_session__delete(session);
+
+	if (psession)
+		*psession = session;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void print_bad_events(void)
@@ -1689,9 +1711,16 @@ static void print_bad_events(void)
 static void __cmd_lat(void)
 {
 	struct rb_node *next;
+<<<<<<< HEAD
 
 	setup_pager();
 	read_events();
+=======
+	struct perf_session *session;
+
+	setup_pager();
+	read_events(false, &session);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sort_lat();
 
 	printf("\n ---------------------------------------------------------------------------------------------------------------\n");
@@ -1717,6 +1746,10 @@ static void __cmd_lat(void)
 	print_bad_events();
 	printf("\n");
 
+<<<<<<< HEAD
+=======
+	perf_session__delete(session);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct trace_sched_handler map_ops  = {
@@ -1731,7 +1764,11 @@ static void __cmd_map(void)
 	max_cpu = sysconf(_SC_NPROCESSORS_CONF);
 
 	setup_pager();
+<<<<<<< HEAD
 	read_events();
+=======
+	read_events(true, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	print_bad_events();
 }
 
@@ -1744,7 +1781,11 @@ static void __cmd_replay(void)
 
 	test_calibrations();
 
+<<<<<<< HEAD
 	read_events();
+=======
+	read_events(true, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	printf("nr_run_events:        %ld\n", nr_run_events);
 	printf("nr_sleep_events:      %ld\n", nr_sleep_events);
@@ -1769,7 +1810,11 @@ static void __cmd_replay(void)
 
 
 static const char * const sched_usage[] = {
+<<<<<<< HEAD
 	"perf sched [<options>] {record|latency|map|replay|trace}",
+=======
+	"perf sched [<options>] {record|latency|map|replay|script}",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	NULL
 };
 

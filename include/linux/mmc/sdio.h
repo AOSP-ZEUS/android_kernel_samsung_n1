@@ -9,8 +9,13 @@
  * your option) any later version.
  */
 
+<<<<<<< HEAD
 #ifndef MMC_SDIO_H
 #define MMC_SDIO_H
+=======
+#ifndef LINUX_MMC_SDIO_H
+#define LINUX_MMC_SDIO_H
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* SDIO commands                         type  argument     response */
 #define SD_IO_SEND_OP_COND          5 /* bcr  [23:0] OCR         R4  */
@@ -38,7 +43,12 @@
  *      [8:0] Byte/block count
  */
 
+<<<<<<< HEAD
 #define R4_MEMORY_PRESENT (1 << 27)
+=======
+#define R4_18V_PRESENT BIT(24)
+#define R4_MEMORY_PRESENT BIT(27)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
   SDIO status in R5
@@ -72,17 +82,29 @@
 #define  SDIO_CCCR_REV_1_00	0	/* CCCR/FBR Version 1.00 */
 #define  SDIO_CCCR_REV_1_10	1	/* CCCR/FBR Version 1.10 */
 #define  SDIO_CCCR_REV_1_20	2	/* CCCR/FBR Version 1.20 */
+<<<<<<< HEAD
+=======
+#define  SDIO_CCCR_REV_3_00	3	/* CCCR/FBR Version 3.00 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define  SDIO_SDIO_REV_1_00	0	/* SDIO Spec Version 1.00 */
 #define  SDIO_SDIO_REV_1_10	1	/* SDIO Spec Version 1.10 */
 #define  SDIO_SDIO_REV_1_20	2	/* SDIO Spec Version 1.20 */
 #define  SDIO_SDIO_REV_2_00	3	/* SDIO Spec Version 2.00 */
+<<<<<<< HEAD
+=======
+#define  SDIO_SDIO_REV_3_00	4	/* SDIO Spec Version 3.00 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define SDIO_CCCR_SD		0x01
 
 #define  SDIO_SD_REV_1_01	0	/* SD Physical Spec Version 1.01 */
 #define  SDIO_SD_REV_1_10	1	/* SD Physical Spec Version 1.10 */
 #define  SDIO_SD_REV_2_00	2	/* SD Physical Spec Version 2.00 */
+<<<<<<< HEAD
+=======
+#define  SDIO_SD_REV_3_00	3	/* SD Physical Spev Version 3.00 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define SDIO_CCCR_IOEx		0x02
 #define SDIO_CCCR_IORx		0x03
@@ -132,8 +154,36 @@
 #define SDIO_CCCR_SPEED		0x13
 
 #define  SDIO_SPEED_SHS		0x01	/* Supports High-Speed mode */
+<<<<<<< HEAD
 #define  SDIO_SPEED_EHS		0x02	/* Enable High-Speed mode */
 
+=======
+#define  SDIO_SPEED_BSS_SHIFT	1
+#define  SDIO_SPEED_BSS_MASK	(7 << SDIO_SPEED_BSS_SHIFT)
+#define  SDIO_SPEED_SDR12	(0 << SDIO_SPEED_BSS_SHIFT)
+#define  SDIO_SPEED_SDR25	(1 << SDIO_SPEED_BSS_SHIFT)
+#define  SDIO_SPEED_SDR50	(2 << SDIO_SPEED_BSS_SHIFT)
+#define  SDIO_SPEED_SDR104	(3 << SDIO_SPEED_BSS_SHIFT)
+#define  SDIO_SPEED_DDR50	(4 << SDIO_SPEED_BSS_SHIFT)
+#define  SDIO_SPEED_EHS		SDIO_SPEED_SDR25	/* Enable High-Speed */
+
+#define SDIO_CCCR_UHS		0x14
+#define  SDIO_UHS_SDR50		0x01
+#define  SDIO_UHS_SDR104	0x02
+#define  SDIO_UHS_DDR50		0x04
+
+#define SDIO_CCCR_DRIVE_STRENGTH 0x15
+#define  SDIO_SDTx_MASK		0x07
+#define  SDIO_DRIVE_SDTA	(1 << 0)
+#define  SDIO_DRIVE_SDTC	(1 << 1)
+#define  SDIO_DRIVE_SDTD	(1 << 2)
+#define  SDIO_DRIVE_DTSx_MASK	0x03
+#define  SDIO_DRIVE_DTSx_SHIFT	4
+#define  SDIO_DTSx_SET_TYPE_B	(0 << SDIO_DRIVE_DTSx_SHIFT)
+#define  SDIO_DTSx_SET_TYPE_A	(1 << SDIO_DRIVE_DTSx_SHIFT)
+#define  SDIO_DTSx_SET_TYPE_C	(2 << SDIO_DRIVE_DTSx_SHIFT)
+#define  SDIO_DTSx_SET_TYPE_D	(3 << SDIO_DRIVE_DTSx_SHIFT)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Function Basic Registers (FBR)
  */
@@ -161,5 +211,9 @@
 
 #define SDIO_FBR_BLKSIZE	0x10	/* block size (2 bytes) */
 
+<<<<<<< HEAD
 #endif
 
+=======
+#endif /* LINUX_MMC_SDIO_H */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

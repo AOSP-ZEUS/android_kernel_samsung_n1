@@ -1,4 +1,9 @@
+<<<<<<< HEAD
 /* linux/arch/arm/mach-s5pc100/gpiolib.c
+=======
+/*
+ * S5PC100 - GPIOlib support
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Copyright (c) 2010 Samsung Electronics Co., Ltd.
  *		http://www.samsung.com
@@ -6,8 +11,11 @@
  *  Copyright 2009 Samsung Electronics Co
  *  Kyungmin Park <kyungmin.park@samsung.com>
  *
+<<<<<<< HEAD
  * S5PC100 - GPIOlib support
  *
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.

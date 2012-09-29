@@ -53,7 +53,11 @@
 static void __init cap9adk_init_early(void)
 {
 	/* Initialize processor: 12 MHz crystal */
+<<<<<<< HEAD
 	at91cap9_initialize(12000000);
+=======
+	at91_initialize(12000000);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Setup the LEDs: USER1 and USER2 LED for cpu/timer... */
 	at91_init_leds(AT91_PIN_PA10, AT91_PIN_PA11);
@@ -65,12 +69,15 @@ static void __init cap9adk_init_early(void)
 	at91_set_serial_console(0);
 }
 
+<<<<<<< HEAD
 static void __init cap9adk_init_irq(void)
 {
 	at91cap9_init_interrupts(NULL);
 }
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * USB Host port
  */
@@ -397,8 +404,14 @@ static void __init cap9adk_board_init(void)
 MACHINE_START(AT91CAP9ADK, "Atmel AT91CAP9A-DK")
 	/* Maintainer: Stelian Pop <stelian.pop@leadtechdesign.com> */
 	.timer		= &at91sam926x_timer,
+<<<<<<< HEAD
 	.map_io		= at91cap9_map_io,
 	.init_early	= cap9adk_init_early,
 	.init_irq	= cap9adk_init_irq,
+=======
+	.map_io		= at91_map_io,
+	.init_early	= cap9adk_init_early,
+	.init_irq	= at91_init_irq_default,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine	= cap9adk_board_init,
 MACHINE_END

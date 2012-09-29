@@ -322,8 +322,13 @@ static int fl6_renew(struct ip6_flowlabel *fl, unsigned long linger, unsigned lo
 }
 
 static struct ip6_flowlabel *
+<<<<<<< HEAD
 fl_create(struct net *net, struct in6_flowlabel_req *freq, char __user *optval,
 	  int optlen, int *err_p)
+=======
+fl_create(struct net *net, struct sock *sk, struct in6_flowlabel_req *freq,
+	  char __user *optval, int optlen, int *err_p)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct ip6_flowlabel *fl = NULL;
 	int olen;
@@ -360,7 +365,11 @@ fl_create(struct net *net, struct in6_flowlabel_req *freq, char __user *optval,
 		msg.msg_control = (void*)(fl->opt+1);
 		memset(&flowi6, 0, sizeof(flowi6));
 
+<<<<<<< HEAD
 		err = datagram_send_ctl(net, &msg, &flowi6, fl->opt, &junk,
+=======
+		err = datagram_send_ctl(net, sk, &msg, &flowi6, fl->opt, &junk,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					&junk, &junk);
 		if (err)
 			goto done;
@@ -528,7 +537,11 @@ int ipv6_flowlabel_opt(struct sock *sk, char __user *optval, int optlen)
 		if (freq.flr_label & ~IPV6_FLOWLABEL_MASK)
 			return -EINVAL;
 
+<<<<<<< HEAD
 		fl = fl_create(net, &freq, optval, optlen, &err);
+=======
+		fl = fl_create(net, sk, &freq, optval, optlen, &err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (fl == NULL)
 			return err;
 		sfl1 = kmalloc(sizeof(*sfl1), GFP_KERNEL);

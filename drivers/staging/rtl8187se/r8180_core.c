@@ -33,6 +33,10 @@
 #include <linux/slab.h>
 #include <linux/syscalls.h>
 #include <linux/eeprom_93cx6.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "r8180_hw.h"
 #include "r8180.h"
@@ -306,7 +310,11 @@ static int proc_get_stats_tx(char *page, char **start,
 void rtl8180_proc_module_init(void)
 {
 	DMESG("Initializing proc filesystem");
+<<<<<<< HEAD
 	rtl8180_proc = create_proc_entry(RTL8180_MODULE_NAME, S_IFDIR, init_net.proc_net);
+=======
+	rtl8180_proc = proc_mkdir(RTL8180_MODULE_NAME, init_net.proc_net);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void rtl8180_proc_module_remove(void)

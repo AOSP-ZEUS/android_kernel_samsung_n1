@@ -113,15 +113,24 @@ vmxnet3_global_stats[] = {
 };
 
 
+<<<<<<< HEAD
 struct net_device_stats *
 vmxnet3_get_stats(struct net_device *netdev)
+=======
+struct rtnl_link_stats64 *
+vmxnet3_get_stats64(struct net_device *netdev,
+		   struct rtnl_link_stats64 *stats)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct vmxnet3_adapter *adapter;
 	struct vmxnet3_tq_driver_stats *drvTxStats;
 	struct vmxnet3_rq_driver_stats *drvRxStats;
 	struct UPT1_TxStats *devTxStats;
 	struct UPT1_RxStats *devRxStats;
+<<<<<<< HEAD
 	struct net_device_stats *net_stats = &netdev->stats;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long flags;
 	int i;
 
@@ -132,6 +141,7 @@ vmxnet3_get_stats(struct net_device *netdev)
 	VMXNET3_WRITE_BAR1_REG(adapter, VMXNET3_REG_CMD, VMXNET3_CMD_GET_STATS);
 	spin_unlock_irqrestore(&adapter->cmd_lock, flags);
 
+<<<<<<< HEAD
 	memset(net_stats, 0, sizeof(*net_stats));
 	for (i = 0; i < adapter->num_tx_queues; i++) {
 		devTxStats = &adapter->tqd_start[i].stats;
@@ -144,11 +154,25 @@ vmxnet3_get_stats(struct net_device *netdev)
 				      devTxStats->bcastBytesTxOK;
 		net_stats->tx_errors += devTxStats->pktsTxError;
 		net_stats->tx_dropped += drvTxStats->drop_total;
+=======
+	for (i = 0; i < adapter->num_tx_queues; i++) {
+		devTxStats = &adapter->tqd_start[i].stats;
+		drvTxStats = &adapter->tx_queue[i].stats;
+		stats->tx_packets += devTxStats->ucastPktsTxOK +
+				     devTxStats->mcastPktsTxOK +
+				     devTxStats->bcastPktsTxOK;
+		stats->tx_bytes += devTxStats->ucastBytesTxOK +
+				   devTxStats->mcastBytesTxOK +
+				   devTxStats->bcastBytesTxOK;
+		stats->tx_errors += devTxStats->pktsTxError;
+		stats->tx_dropped += drvTxStats->drop_total;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	for (i = 0; i < adapter->num_rx_queues; i++) {
 		devRxStats = &adapter->rqd_start[i].stats;
 		drvRxStats = &adapter->rx_queue[i].stats;
+<<<<<<< HEAD
 		net_stats->rx_packets += devRxStats->ucastPktsRxOK +
 					devRxStats->mcastPktsRxOK +
 					devRxStats->bcastPktsRxOK;
@@ -162,6 +186,22 @@ vmxnet3_get_stats(struct net_device *netdev)
 		net_stats->multicast +=  devRxStats->mcastPktsRxOK;
 	}
 	return net_stats;
+=======
+		stats->rx_packets += devRxStats->ucastPktsRxOK +
+				     devRxStats->mcastPktsRxOK +
+				     devRxStats->bcastPktsRxOK;
+
+		stats->rx_bytes += devRxStats->ucastBytesRxOK +
+				   devRxStats->mcastBytesRxOK +
+				   devRxStats->bcastBytesRxOK;
+
+		stats->rx_errors += devRxStats->pktsRxError;
+		stats->rx_dropped += drvRxStats->drop_total;
+		stats->multicast +=  devRxStats->mcastPktsRxOK;
+	}
+
+	return stats;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int
@@ -268,7 +308,11 @@ int vmxnet3_set_features(struct net_device *netdev, u32 features)
 	unsigned long flags;
 	u32 changed = features ^ netdev->features;
 
+<<<<<<< HEAD
 	if (changed & (NETIF_F_RXCSUM|NETIF_F_LRO)) {
+=======
+	if (changed & (NETIF_F_RXCSUM | NETIF_F_LRO | NETIF_F_HW_VLAN_RX)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (features & NETIF_F_RXCSUM)
 			adapter->shared->devRead.misc.uptFeatures |=
 			UPT1_F_RXCSUM;
@@ -284,6 +328,16 @@ int vmxnet3_set_features(struct net_device *netdev, u32 features)
 			adapter->shared->devRead.misc.uptFeatures &=
 							~UPT1_F_LRO;
 
+<<<<<<< HEAD
+=======
+		if (features & NETIF_F_HW_VLAN_RX)
+			adapter->shared->devRead.misc.uptFeatures |=
+			UPT1_F_RXVLAN;
+		else
+			adapter->shared->devRead.misc.uptFeatures &=
+			~UPT1_F_RXVLAN;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_lock_irqsave(&adapter->cmd_lock, flags);
 		VMXNET3_WRITE_BAR1_REG(adapter, VMXNET3_REG_CMD,
 				       VMXNET3_CMD_UPDATE_FEATURE);

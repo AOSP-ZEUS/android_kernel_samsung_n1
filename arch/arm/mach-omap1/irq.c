@@ -175,7 +175,11 @@ static struct irq_chip omap_irq_chip = {
 	.irq_set_wake	= omap_wake_irq,
 };
 
+<<<<<<< HEAD
 void __init omap_init_irq(void)
+=======
+void __init omap1_init_irq(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int i, j;
 

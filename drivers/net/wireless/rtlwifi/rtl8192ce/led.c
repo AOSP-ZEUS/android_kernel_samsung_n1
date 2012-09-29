@@ -84,7 +84,11 @@ void rtl92ce_sw_led_off(struct ieee80211_hw *hw, struct rtl_led *pled)
 		break;
 	case LED_PIN_LED0:
 		ledcfg &= 0xf0;
+<<<<<<< HEAD
 		if (pcipriv->ledctl.led_opendrain == true)
+=======
+		if (pcipriv->ledctl.led_opendrain)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			rtl_write_byte(rtlpriv, REG_LEDCFG2,
 				       (ledcfg | BIT(1) | BIT(5) | BIT(6)));
 		else

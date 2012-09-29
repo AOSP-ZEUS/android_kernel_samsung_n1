@@ -68,7 +68,11 @@ struct pcie_link_state {
 	struct aspm_latency acceptable[8];
 };
 
+<<<<<<< HEAD
 static int aspm_disabled, aspm_force;
+=======
+static int aspm_disabled, aspm_force, aspm_clear_state;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static bool aspm_support_enabled = true;
 static DEFINE_MUTEX(aspm_lock);
 static LIST_HEAD(link_list);
@@ -500,6 +504,12 @@ static int pcie_aspm_sanity_check(struct pci_dev *pdev)
 	int pos;
 	u32 reg32;
 
+<<<<<<< HEAD
+=======
+	if (aspm_clear_state)
+		return -EINVAL;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Some functions in a slot might not all be PCIe functions,
 	 * very strange. Disable ASPM for the whole slot
@@ -508,6 +518,7 @@ static int pcie_aspm_sanity_check(struct pci_dev *pdev)
 		pos = pci_pcie_cap(child);
 		if (!pos)
 			return -EINVAL;
+<<<<<<< HEAD
 
 		/*
 		 * If ASPM is disabled then we're not going to change
@@ -518,6 +529,8 @@ static int pcie_aspm_sanity_check(struct pci_dev *pdev)
 		if (aspm_disabled)
 			continue;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * Disable ASPM for pre-1.1 PCIe device, we follow MS to use
 		 * RBER bit to determine if a function is 1.1 version device
@@ -581,6 +594,12 @@ void pcie_aspm_init_link_state(struct pci_dev *pdev)
 	    pdev->pcie_type != PCI_EXP_TYPE_DOWNSTREAM)
 		return;
 
+<<<<<<< HEAD
+=======
+	if (aspm_disabled && !aspm_clear_state)
+		return;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* VIA has a strange chipset, root port is under a bridge */
 	if (pdev->pcie_type == PCI_EXP_TYPE_ROOT_PORT &&
 	    pdev->bus->self)
@@ -612,7 +631,11 @@ void pcie_aspm_init_link_state(struct pci_dev *pdev)
 	 * the BIOS's expectation, we'll do so once pci_enable_device() is
 	 * called.
 	 */
+<<<<<<< HEAD
 	if (aspm_policy != POLICY_POWERSAVE) {
+=======
+	if (aspm_policy != POLICY_POWERSAVE || aspm_clear_state) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pcie_config_aspm_path(link);
 		pcie_set_clkpm(link, policy_to_clkpm_state(link));
 	}
@@ -653,7 +676,12 @@ void pcie_aspm_exit_link_state(struct pci_dev *pdev)
 	struct pci_dev *parent = pdev->bus->self;
 	struct pcie_link_state *link, *root, *parent_link;
 
+<<<<<<< HEAD
 	if (!pci_is_pcie(pdev) || !parent || !parent->link_state)
+=======
+	if ((aspm_disabled && !aspm_clear_state) || !pci_is_pcie(pdev) ||
+	    !parent || !parent->link_state)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	if ((parent->pcie_type != PCI_EXP_TYPE_ROOT_PORT) &&
 	    (parent->pcie_type != PCI_EXP_TYPE_DOWNSTREAM))
@@ -737,18 +765,27 @@ void pcie_aspm_powersave_config_link(struct pci_dev *pdev)
  * pci_disable_link_state - disable pci device's link state, so the link will
  * never enter specific states
  */
+<<<<<<< HEAD
 static void __pci_disable_link_state(struct pci_dev *pdev, int state, bool sem,
 				     bool force)
+=======
+static void __pci_disable_link_state(struct pci_dev *pdev, int state, bool sem)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct pci_dev *parent = pdev->bus->self;
 	struct pcie_link_state *link;
 
+<<<<<<< HEAD
 	if (aspm_disabled && !force)
 		return;
 
 	if (!pci_is_pcie(pdev))
 		return;
 
+=======
+	if (aspm_disabled || !pci_is_pcie(pdev))
+		return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (pdev->pcie_type == PCI_EXP_TYPE_ROOT_PORT ||
 	    pdev->pcie_type == PCI_EXP_TYPE_DOWNSTREAM)
 		parent = pdev;
@@ -776,12 +813,17 @@ static void __pci_disable_link_state(struct pci_dev *pdev, int state, bool sem,
 
 void pci_disable_link_state_locked(struct pci_dev *pdev, int state)
 {
+<<<<<<< HEAD
 	__pci_disable_link_state(pdev, state, false, false);
+=======
+	__pci_disable_link_state(pdev, state, false);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL(pci_disable_link_state_locked);
 
 void pci_disable_link_state(struct pci_dev *pdev, int state)
 {
+<<<<<<< HEAD
 	__pci_disable_link_state(pdev, state, true, false);
 }
 EXPORT_SYMBOL(pci_disable_link_state);
@@ -801,6 +843,12 @@ void pcie_clear_aspm(struct pci_bus *bus)
 	}
 }
 
+=======
+	__pci_disable_link_state(pdev, state, true);
+}
+EXPORT_SYMBOL(pci_disable_link_state);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int pcie_aspm_set_policy(const char *val, struct kernel_param *kp)
 {
 	int i;
@@ -958,19 +1006,27 @@ void pcie_aspm_remove_sysfs_dev_files(struct pci_dev *pdev)
 static int __init pcie_aspm_disable(char *str)
 {
 	if (!strcmp(str, "off")) {
+<<<<<<< HEAD
 		aspm_policy = POLICY_DEFAULT;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		aspm_disabled = 1;
 		aspm_support_enabled = false;
 		printk(KERN_INFO "PCIe ASPM is disabled\n");
 	} else if (!strcmp(str, "force")) {
 		aspm_force = 1;
+<<<<<<< HEAD
 		printk(KERN_INFO "PCIe ASPM is forcedly enabled\n");
+=======
+		printk(KERN_INFO "PCIe ASPM is forcibly enabled\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return 1;
 }
 
 __setup("pcie_aspm=", pcie_aspm_disable);
 
+<<<<<<< HEAD
 void pcie_no_aspm(void)
 {
 	/*
@@ -983,6 +1039,18 @@ void pcie_no_aspm(void)
 		aspm_policy = POLICY_DEFAULT;
 		aspm_disabled = 1;
 	}
+=======
+void pcie_clear_aspm(void)
+{
+	if (!aspm_force)
+		aspm_clear_state = 1;
+}
+
+void pcie_no_aspm(void)
+{
+	if (!aspm_force)
+		aspm_disabled = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**

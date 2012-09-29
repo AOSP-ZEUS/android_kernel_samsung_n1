@@ -85,6 +85,7 @@
 /**
  * struct adis16260_state - device instance specific data
  * @us:			actual spi_device
+<<<<<<< HEAD
  * @indio_dev:		industrial I/O device structure
  * @trig:		data ready trigger registered with iio
  * @tx:			transmit buffer
@@ -100,6 +101,21 @@ struct adis16260_state {
 	u8				*rx;
 	struct mutex			buf_lock;
 	unsigned			negate:1;
+=======
+ * @trig:		data ready trigger registered with iio
+ * @buf_lock:		mutex to protect tx and rx
+ * @negate:		negate the scale parameter
+ * @tx:			transmit buffer
+ * @rx:			receive buffer
+ **/
+struct adis16260_state {
+	struct spi_device	*us;
+	struct iio_trigger	*trig;
+	struct mutex		buf_lock;
+	unsigned		negate:1;
+	u8			tx[ADIS16260_MAX_TX] ____cacheline_aligned;
+	u8			rx[ADIS16260_MAX_RX];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 int adis16260_set_irq(struct iio_dev *indio_dev, bool enable);

@@ -27,8 +27,11 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/init.h>
+<<<<<<< HEAD
 #include <linux/pci.h>
 #include <linux/dma-mapping.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/delay.h>
 #include <linux/skbuff.h>
 #include <linux/netdevice.h>
@@ -47,6 +50,10 @@
 #include "iwl-helpers.h"
 #include "iwl-agn-hw.h"
 #include "iwl-6000-hw.h"
+<<<<<<< HEAD
+=======
+#include "iwl-trans.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Highest firmware API version supported */
 #define IWL6000_UCODE_API_MAX 4
@@ -98,6 +105,7 @@ static void iwl6150_additional_nic_config(struct iwl_priv *priv)
 /* NIC configuration for 6000 series */
 static void iwl6000_nic_config(struct iwl_priv *priv)
 {
+<<<<<<< HEAD
 	u16 radio_cfg;
 
 	radio_cfg = iwl_eeprom_query16(priv, EEPROM_RADIO_CONFIG);
@@ -113,6 +121,9 @@ static void iwl6000_nic_config(struct iwl_priv *priv)
 	iwl_set_bit(priv, CSR_HW_IF_CONFIG_REG,
 		    CSR_HW_IF_CONFIG_REG_BIT_RADIO_SI |
 		    CSR_HW_IF_CONFIG_REG_BIT_MAC_SI);
+=======
+	iwl_rf_config(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* no locking required for register write */
 	if (priv->cfg->pa_type == IWL_PA_INTERNAL) {
@@ -121,10 +132,15 @@ static void iwl6000_nic_config(struct iwl_priv *priv)
 			     CSR_GP_DRIVER_REG_BIT_RADIO_SKU_2x2_IPA);
 	}
 	/* do additional nic configuration if needed */
+<<<<<<< HEAD
 	if (priv->cfg->ops->nic &&
 		priv->cfg->ops->nic->additional_nic_config) {
 			priv->cfg->ops->nic->additional_nic_config(priv);
 	}
+=======
+	if (priv->cfg->additional_nic_config)
+			priv->cfg->additional_nic_config(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct iwl_sensitivity_ranges iwl6000_sensitivity = {
@@ -160,7 +176,10 @@ static int iwl6000_hw_set_hw_params(struct iwl_priv *priv)
 			iwlagn_mod_params.num_of_queues;
 
 	priv->hw_params.max_txq_num = priv->cfg->base_params->num_of_queues;
+<<<<<<< HEAD
 	priv->hw_params.dma_chnl_num = FH50_TCSR_CHNL_NUM;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	priv->hw_params.scd_bc_tbls_size =
 			priv->cfg->base_params->num_of_queues *
 			sizeof(struct iwlagn_scd_bc_tbl);
@@ -173,7 +192,10 @@ static int iwl6000_hw_set_hw_params(struct iwl_priv *priv)
 
 	priv->hw_params.ht40_channel =  BIT(IEEE80211_BAND_2GHZ) |
 					BIT(IEEE80211_BAND_5GHZ);
+<<<<<<< HEAD
 	priv->hw_params.rx_wrt_ptr_reg = FH_RSCSR_CHNL0_WPTR;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	priv->hw_params.tx_chains_num = num_of_ant(priv->cfg->valid_tx_ant);
 	if (priv->cfg->rx_with_siso_diversity)
@@ -195,7 +217,11 @@ static int iwl6000_hw_set_hw_params(struct iwl_priv *priv)
 		BIT(IWL_CALIB_TX_IQ)		|
 		BIT(IWL_CALIB_BASE_BAND);
 	if (priv->cfg->need_dc_calib)
+<<<<<<< HEAD
 		priv->hw_params.calib_rt_cfg |= BIT(IWL_CALIB_CFG_DC_IDX);
+=======
+		priv->hw_params.calib_rt_cfg |= IWL_CALIB_CFG_DC_IDX;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (priv->cfg->need_temp_offset_calib)
 		priv->hw_params.calib_init_cfg |= BIT(IWL_CALIB_TEMP_OFFSET);
 
@@ -272,11 +298,16 @@ static int iwl6000_hw_channel_switch(struct iwl_priv *priv,
 		return -EFAULT;
 	}
 
+<<<<<<< HEAD
 	return iwl_send_cmd_sync(priv, &hcmd);
+=======
+	return trans_send_cmd(&priv->trans, &hcmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct iwl_lib_ops iwl6000_lib = {
 	.set_hw_params = iwl6000_hw_set_hw_params,
+<<<<<<< HEAD
 	.rx_handler_setup = iwlagn_rx_handler_setup,
 	.setup_deferred_work = iwlagn_setup_deferred_work,
 	.is_valid_rtc_data_addr = iwlagn_hw_valid_rtc_data_addr,
@@ -287,6 +318,10 @@ static struct iwl_lib_ops iwl6000_lib = {
 		.init = iwl_apm_init,
 		.config = iwl6000_nic_config,
 	},
+=======
+	.set_channel_switch = iwl6000_hw_channel_switch,
+	.nic_config = iwl6000_nic_config,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.eeprom_ops = {
 		.regulatory_bands = {
 			EEPROM_REG_BAND_1_CHANNELS,
@@ -297,6 +332,7 @@ static struct iwl_lib_ops iwl6000_lib = {
 			EEPROM_6000_REG_BAND_24_HT40_CHANNELS,
 			EEPROM_REG_BAND_52_HT40_CHANNELS
 		},
+<<<<<<< HEAD
 		.query_addr = iwlagn_eeprom_query_addr,
 		.update_enhanced_txpower = iwlcore_eeprom_enhanced_txpower,
 	},
@@ -305,10 +341,16 @@ static struct iwl_lib_ops iwl6000_lib = {
 	 },
 	.txfifo_flush = iwlagn_txfifo_flush,
 	.dev_txfifo_flush = iwlagn_dev_txfifo_flush,
+=======
+		.update_enhanced_txpower = iwlcore_eeprom_enhanced_txpower,
+	},
+	.temperature = iwlagn_temperature,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct iwl_lib_ops iwl6030_lib = {
 	.set_hw_params = iwl6000_hw_set_hw_params,
+<<<<<<< HEAD
 	.rx_handler_setup = iwlagn_bt_rx_handler_setup,
 	.setup_deferred_work = iwlagn_bt_setup_deferred_work,
 	.cancel_deferred_work = iwlagn_bt_cancel_deferred_work,
@@ -320,6 +362,13 @@ static struct iwl_lib_ops iwl6030_lib = {
 		.init = iwl_apm_init,
 		.config = iwl6000_nic_config,
 	},
+=======
+	.bt_rx_handler_setup = iwlagn_bt_rx_handler_setup,
+	.bt_setup_deferred_work = iwlagn_bt_setup_deferred_work,
+	.cancel_deferred_work = iwlagn_bt_cancel_deferred_work,
+	.set_channel_switch = iwl6000_hw_channel_switch,
+	.nic_config = iwl6000_nic_config,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.eeprom_ops = {
 		.regulatory_bands = {
 			EEPROM_REG_BAND_1_CHANNELS,
@@ -330,6 +379,7 @@ static struct iwl_lib_ops iwl6030_lib = {
 			EEPROM_6000_REG_BAND_24_HT40_CHANNELS,
 			EEPROM_REG_BAND_52_HT40_CHANNELS
 		},
+<<<<<<< HEAD
 		.query_addr = iwlagn_eeprom_query_addr,
 		.update_enhanced_txpower = iwlcore_eeprom_enhanced_txpower,
 	},
@@ -372,6 +422,11 @@ static const struct iwl_ops iwl6030_ops = {
 	.lib = &iwl6030_lib,
 	.hcmd = &iwlagn_bt_hcmd,
 	.utils = &iwlagn_hcmd_utils,
+=======
+		.update_enhanced_txpower = iwlcore_eeprom_enhanced_txpower,
+	},
+	.temperature = iwlagn_temperature,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct iwl_base_params iwl6000_base_params = {
@@ -447,7 +502,11 @@ static struct iwl_bt_params iwl6000_bt_params = {
 	.ucode_api_min = IWL6000G2_UCODE_API_MIN,		\
 	.eeprom_ver = EEPROM_6005_EEPROM_VERSION,		\
 	.eeprom_calib_ver = EEPROM_6005_TX_POWER_VERSION,	\
+<<<<<<< HEAD
 	.ops = &iwl6000_ops,					\
+=======
+	.lib = &iwl6000_lib,					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.base_params = &iwl6000_g2_base_params,			\
 	.need_dc_calib = true,					\
 	.need_temp_offset_calib = true,				\
@@ -475,7 +534,11 @@ struct iwl_cfg iwl6005_2bg_cfg = {
 	.ucode_api_min = IWL6000G2_UCODE_API_MIN,		\
 	.eeprom_ver = EEPROM_6030_EEPROM_VERSION,		\
 	.eeprom_calib_ver = EEPROM_6030_TX_POWER_VERSION,	\
+<<<<<<< HEAD
 	.ops = &iwl6030_ops,					\
+=======
+	.lib = &iwl6030_lib,					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.base_params = &iwl6000_g2_base_params,			\
 	.bt_params = &iwl6000_bt_params,			\
 	.need_dc_calib = true,					\
@@ -556,7 +619,11 @@ struct iwl_cfg iwl130_bg_cfg = {
 	.valid_rx_ant = ANT_BC,		/* .cfg overwrite */	\
 	.eeprom_ver = EEPROM_6000_EEPROM_VERSION,		\
 	.eeprom_calib_ver = EEPROM_6000_TX_POWER_VERSION,	\
+<<<<<<< HEAD
 	.ops = &iwl6000_ops,					\
+=======
+	.lib = &iwl6000_lib,					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.base_params = &iwl6000_base_params,			\
 	.pa_type = IWL_PA_INTERNAL,				\
 	.led_mode = IWL_LED_BLINK
@@ -583,7 +650,12 @@ struct iwl_cfg iwl6000i_2bg_cfg = {
 	.ucode_api_min = IWL6050_UCODE_API_MIN,			\
 	.valid_tx_ant = ANT_AB,		/* .cfg overwrite */	\
 	.valid_rx_ant = ANT_AB,		/* .cfg overwrite */	\
+<<<<<<< HEAD
 	.ops = &iwl6050_ops,					\
+=======
+	.lib = &iwl6000_lib,					\
+	.additional_nic_config = iwl6050_additional_nic_config,	\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.eeprom_ver = EEPROM_6050_EEPROM_VERSION,		\
 	.eeprom_calib_ver = EEPROM_6050_TX_POWER_VERSION,	\
 	.base_params = &iwl6050_base_params,			\
@@ -606,7 +678,12 @@ struct iwl_cfg iwl6050_2abg_cfg = {
 	.fw_name_pre = IWL6050_FW_PRE,				\
 	.ucode_api_max = IWL6050_UCODE_API_MAX,			\
 	.ucode_api_min = IWL6050_UCODE_API_MIN,			\
+<<<<<<< HEAD
 	.ops = &iwl6150_ops,					\
+=======
+	.lib = &iwl6000_lib,					\
+	.additional_nic_config = iwl6150_additional_nic_config,	\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.eeprom_ver = EEPROM_6150_EEPROM_VERSION,		\
 	.eeprom_calib_ver = EEPROM_6150_TX_POWER_VERSION,	\
 	.base_params = &iwl6050_base_params,			\
@@ -632,7 +709,11 @@ struct iwl_cfg iwl6000_3agn_cfg = {
 	.ucode_api_min = IWL6000_UCODE_API_MIN,
 	.eeprom_ver = EEPROM_6000_EEPROM_VERSION,
 	.eeprom_calib_ver = EEPROM_6000_TX_POWER_VERSION,
+<<<<<<< HEAD
 	.ops = &iwl6000_ops,
+=======
+	.lib = &iwl6000_lib,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.base_params = &iwl6000_base_params,
 	.ht_params = &iwl6000_ht_params,
 	.need_dc_calib = true,

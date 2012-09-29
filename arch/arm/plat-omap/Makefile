@@ -18,8 +18,11 @@ obj-$(CONFIG_ARCH_OMAP3) += omap_device.o
 obj-$(CONFIG_ARCH_OMAP4) += omap_device.o
 
 obj-$(CONFIG_OMAP_MCBSP) += mcbsp.o
+<<<<<<< HEAD
 obj-$(CONFIG_OMAP_IOMMU) += iommu.o iovmm.o
 obj-$(CONFIG_OMAP_IOMMU_DEBUG) += iommu-debug.o
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 obj-$(CONFIG_CPU_FREQ) += cpu-omap.o
 obj-$(CONFIG_OMAP_DM_TIMER) += dmtimer.o

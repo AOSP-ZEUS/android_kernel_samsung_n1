@@ -79,7 +79,11 @@ irqreturn_t t1_interrupt(int irq, void *cookie);
 int t1_poll(struct napi_struct *, int);
 
 netdev_tx_t t1_start_xmit(struct sk_buff *skb, struct net_device *dev);
+<<<<<<< HEAD
 void t1_set_vlan_accel(struct adapter *adapter, int on_off);
+=======
+void t1_vlan_mode(struct adapter *adapter, u32 features);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void t1_sge_start(struct sge *);
 void t1_sge_stop(struct sge *);
 int t1_sge_intr_error_handler(struct sge *);

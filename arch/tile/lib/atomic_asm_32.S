@@ -70,7 +70,11 @@
  */
 
 #include <linux/linkage.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <asm/atomic_32.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/page.h>
 #include <asm/processor.h>
 

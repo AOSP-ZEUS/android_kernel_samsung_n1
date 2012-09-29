@@ -21,6 +21,10 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/irq.h>
 #include <linux/module.h>
 #include <linux/crc7.h>
@@ -435,8 +439,11 @@ static int __devinit wl1271_probe(struct spi_device *spi)
 	if (ret)
 		goto out_irq;
 
+<<<<<<< HEAD
 	wl1271_notice("initialized");
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
  out_irq:
@@ -473,6 +480,7 @@ static struct spi_driver wl1271_spi_driver = {
 
 static int __init wl1271_init(void)
 {
+<<<<<<< HEAD
 	int ret;
 
 	ret = spi_register_driver(&wl1271_spi_driver);
@@ -483,13 +491,19 @@ static int __init wl1271_init(void)
 
 out:
 	return ret;
+=======
+	return spi_register_driver(&wl1271_spi_driver);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void __exit wl1271_exit(void)
 {
 	spi_unregister_driver(&wl1271_spi_driver);
+<<<<<<< HEAD
 
 	wl1271_notice("unloaded");
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 module_init(wl1271_init);

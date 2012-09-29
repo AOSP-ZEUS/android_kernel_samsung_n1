@@ -30,7 +30,10 @@
 #define atomic_inc_and_test(v)		(atomic_inc_return(v) == 0)
 #define atomic_sub_and_test(i,v)	(atomic_sub_return((i), (v)) == 0)
 #define atomic_dec_and_test(v)		(atomic_sub_return(1, (v)) == 0)
+<<<<<<< HEAD
 #define atomic_inc_not_zero(v)		atomic_add_unless((v), 1, 0)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define atomic_inc(v)			atomic_add(1, (v))
 #define atomic_dec(v)			atomic_sub(1, (v))
@@ -39,15 +42,25 @@
 #define atomic_cmpxchg(v, o, n)		(cmpxchg(&((v)->counter), (o), (n)))
 
 /**
+<<<<<<< HEAD
  * atomic_add_unless - add unless the number is a given value
+=======
+ * __atomic_add_unless - add unless the number is a given value
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @v: pointer of type atomic_t
  * @a: the amount to add to v...
  * @u: ...unless v is equal to u.
  *
  * Atomically adds @a to @v, so long as it was not @u.
+<<<<<<< HEAD
  * Returns non-zero if @v was not @u, and zero otherwise.
  */
 static inline int atomic_add_unless(atomic_t *v, int a, int u)
+=======
+ * Returns the old value of @v.
+ */
+static inline int __atomic_add_unless(atomic_t *v, int a, int u)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int c, old;
 	c = atomic_read(v);
@@ -60,7 +73,11 @@ static inline int atomic_add_unless(atomic_t *v, int a, int u)
 		c = old;
 	}
 
+<<<<<<< HEAD
 	return c != (u);
+=======
+	return c;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #define smp_mb__before_atomic_dec()	smp_mb()
@@ -68,7 +85,10 @@ static inline int atomic_add_unless(atomic_t *v, int a, int u)
 #define smp_mb__before_atomic_inc()	smp_mb()
 #define smp_mb__after_atomic_inc()	smp_mb()
 
+<<<<<<< HEAD
 #include <asm-generic/atomic-long.h>
 #include <asm-generic/atomic64.h>
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* __ASM_SH_ATOMIC_H */

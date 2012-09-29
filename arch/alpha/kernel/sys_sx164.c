@@ -95,7 +95,11 @@ sx164_init_irq(void)
  */
 
 static int __init
+<<<<<<< HEAD
 sx164_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+sx164_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	static char irq_tab[5][5] __initdata = {
 		/*INT    INTA   INTB   INTC   INTD */

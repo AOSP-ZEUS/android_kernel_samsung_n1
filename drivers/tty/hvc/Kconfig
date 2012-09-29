@@ -19,6 +19,14 @@ config HVC_CONSOLE
 	  console. This driver allows each pSeries partition to have a console
 	  which is accessed via the HMC.
 
+<<<<<<< HEAD
+=======
+config HVC_OLD_HVSI
+	bool "Old driver for pSeries serial port (/dev/hvsi*)"
+	depends on HVC_CONSOLE
+	default n
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config HVC_ISERIES
 	bool "iSeries Hypervisor Virtual Console support"
 	depends on PPC_ISERIES

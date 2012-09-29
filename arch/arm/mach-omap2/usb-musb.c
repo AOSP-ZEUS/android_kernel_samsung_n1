@@ -33,8 +33,11 @@
 #include <plat/omap_device.h>
 #include "mux.h"
 
+<<<<<<< HEAD
 #if defined(CONFIG_USB_MUSB_OMAP2PLUS) || defined (CONFIG_USB_MUSB_AM35X)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct musb_hdrc_config musb_config = {
 	.multipoint	= 1,
 	.dyn_fifo	= 1,
@@ -139,9 +142,12 @@ void __init usb_musb_init(struct omap_musb_board_data *musb_board_data)
 	musb_plat.mode = board_data->mode;
 	musb_plat.extvbus = board_data->extvbus;
 
+<<<<<<< HEAD
 	if (cpu_is_omap44xx())
 		omap4430_phy_init(dev);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (cpu_is_omap3517() || cpu_is_omap3505()) {
 		oh_name = "am35x_otg_hs";
 		name = "musb-am35x";
@@ -175,6 +181,7 @@ void __init usb_musb_init(struct omap_musb_board_data *musb_board_data)
 	if (cpu_is_omap44xx())
 		omap4430_phy_init(dev);
 }
+<<<<<<< HEAD
 
 #else
 void __init usb_musb_init(struct omap_musb_board_data *board_data)
@@ -183,3 +190,5 @@ void __init usb_musb_init(struct omap_musb_board_data *board_data)
 		omap4430_phy_init(NULL);
 }
 #endif /* CONFIG_USB_MUSB_SOC */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

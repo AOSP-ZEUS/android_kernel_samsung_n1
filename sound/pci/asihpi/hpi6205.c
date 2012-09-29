@@ -373,6 +373,10 @@ static void instream_message(struct hpi_adapter_obj *pao,
 /** Entry point to this HPI backend
  * All calls to the HPI start here
  */
+<<<<<<< HEAD
+=======
+static
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void _HPI_6205(struct hpi_adapter_obj *pao, struct hpi_message *phm,
 	struct hpi_response *phr)
 {
@@ -392,7 +396,11 @@ void _HPI_6205(struct hpi_adapter_obj *pao, struct hpi_message *phm,
 
 	HPI_DEBUG_LOG(VERBOSE, "start of switch\n");
 	switch (phm->type) {
+<<<<<<< HEAD
 	case HPI_TYPE_MESSAGE:
+=======
+	case HPI_TYPE_REQUEST:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		switch (phm->object) {
 		case HPI_OBJ_SUBSYSTEM:
 			subsys_message(pao, phm, phr);
@@ -402,7 +410,10 @@ void _HPI_6205(struct hpi_adapter_obj *pao, struct hpi_message *phm,
 			adapter_message(pao, phm, phr);
 			break;
 
+<<<<<<< HEAD
 		case HPI_OBJ_CONTROLEX:
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		case HPI_OBJ_CONTROL:
 			control_message(pao, phm, phr);
 			break;
@@ -634,11 +645,20 @@ static u16 create_adapter_obj(struct hpi_adapter_obj *pao,
 
 		HPI_DEBUG_LOG(VERBOSE, "init ADAPTER_GET_INFO\n");
 		memset(&hm, 0, sizeof(hm));
+<<<<<<< HEAD
 		hm.type = HPI_TYPE_MESSAGE;
 		hm.size = sizeof(hm);
 		hm.object = HPI_OBJ_ADAPTER;
 		hm.function = HPI_ADAPTER_GET_INFO;
 		hm.adapter_index = 0;
+=======
+		/* wAdapterIndex == version == 0 */
+		hm.type = HPI_TYPE_REQUEST;
+		hm.size = sizeof(hm);
+		hm.object = HPI_OBJ_ADAPTER;
+		hm.function = HPI_ADAPTER_GET_INFO;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		memset(&hr, 0, sizeof(hr));
 		hr.size = sizeof(hr);
 
@@ -658,9 +678,12 @@ static u16 create_adapter_obj(struct hpi_adapter_obj *pao,
 			hr.u.ax.info.num_outstreams +
 			hr.u.ax.info.num_instreams;
 
+<<<<<<< HEAD
 		hpios_locked_mem_prepare((max_streams * 6) / 10, max_streams,
 			65536, pao->pci.pci_dev);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		HPI_DEBUG_LOG(VERBOSE,
 			"got adapter info type %x index %d serial %d\n",
 			hr.u.ax.info.adapter_type, hr.u.ax.info.adapter_index,
@@ -709,9 +732,12 @@ static void delete_adapter_obj(struct hpi_adapter_obj *pao)
 				[i]);
 			phw->outstream_host_buffer_size[i] = 0;
 		}
+<<<<<<< HEAD
 
 	hpios_locked_mem_unprepare(pao->pci.pci_dev);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(phw);
 }
 
@@ -1371,9 +1397,14 @@ static u16 adapter_boot_load_dsp(struct hpi_adapter_obj *pao,
 			return err;
 
 		/* write the DSP code down into the DSPs memory */
+<<<<<<< HEAD
 		dsp_code.ps_dev = pao->pci.pci_dev;
 		err = hpi_dsp_code_open(boot_code_id[dsp], &dsp_code,
 			pos_error_code);
+=======
+		err = hpi_dsp_code_open(boot_code_id[dsp], pao->pci.pci_dev,
+			&dsp_code, pos_error_code);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (err)
 			return err;
 
@@ -2084,6 +2115,7 @@ static u16 message_response_sequence(struct hpi_adapter_obj *pao,
 	u16 err = 0;
 
 	message_count++;
+<<<<<<< HEAD
 	if (phm->size > sizeof(interface->u)) {
 		phr->error = HPI_ERROR_MESSAGE_BUFFER_TOO_SMALL;
 		phr->specific_error = sizeof(interface->u);
@@ -2091,6 +2123,15 @@ static u16 message_response_sequence(struct hpi_adapter_obj *pao,
 		HPI_DEBUG_LOG(ERROR,
 			"message len %d too big for buffer %zd \n", phm->size,
 			sizeof(interface->u));
+=======
+	if (phm->size > sizeof(interface->u.message_buffer)) {
+		phr->error = HPI_ERROR_MESSAGE_BUFFER_TOO_SMALL;
+		phr->specific_error = sizeof(interface->u.message_buffer);
+		phr->size = sizeof(struct hpi_response_header);
+		HPI_DEBUG_LOG(ERROR,
+			"message len %d too big for buffer %zd \n", phm->size,
+			sizeof(interface->u.message_buffer));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 	}
 
@@ -2122,6 +2163,7 @@ static u16 message_response_sequence(struct hpi_adapter_obj *pao,
 
 	/* read the result */
 	if (time_out) {
+<<<<<<< HEAD
 		if (interface->u.response_buffer.size <= phr->size)
 			memcpy(phr, &interface->u.response_buffer,
 				interface->u.response_buffer.size);
@@ -2129,11 +2171,25 @@ static u16 message_response_sequence(struct hpi_adapter_obj *pao,
 			HPI_DEBUG_LOG(ERROR,
 				"response len %d too big for buffer %d\n",
 				interface->u.response_buffer.size, phr->size);
+=======
+		if (interface->u.response_buffer.response.size <= phr->size)
+			memcpy(phr, &interface->u.response_buffer,
+				interface->u.response_buffer.response.size);
+		else {
+			HPI_DEBUG_LOG(ERROR,
+				"response len %d too big for buffer %d\n",
+				interface->u.response_buffer.response.size,
+				phr->size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			memcpy(phr, &interface->u.response_buffer,
 				sizeof(struct hpi_response_header));
 			phr->error = HPI_ERROR_RESPONSE_BUFFER_TOO_SMALL;
 			phr->specific_error =
+<<<<<<< HEAD
 				interface->u.response_buffer.size;
+=======
+				interface->u.response_buffer.response.size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			phr->size = sizeof(struct hpi_response_header);
 		}
 	}
@@ -2202,6 +2258,7 @@ static void hw_message(struct hpi_adapter_obj *pao, struct hpi_message *phm,
 			phm->u.d.u.data.data_size, H620_HIF_GET_DATA);
 		break;
 
+<<<<<<< HEAD
 	case HPI_CONTROL_SET_STATE:
 		if (phm->object == HPI_OBJ_CONTROLEX
 			&& phm->u.cx.attribute == HPI_COBRANET_SET_DATA)
@@ -2219,6 +2276,8 @@ static void hw_message(struct hpi_adapter_obj *pao, struct hpi_message *phm,
 				phr->u.cx.u.cobranet_data.byte_count,
 				H620_HIF_GET_DATA);
 		break;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	phr->error = err;
 

@@ -99,7 +99,10 @@ enum af9015_ir_mode {
 };
 
 struct af9015_state {
+<<<<<<< HEAD
 	struct i2c_adapter i2c_adap; /* I2C adapter for 2nd FE */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 rc_repeat;
 	u32 rc_keycode;
 	u8 rc_last[4];

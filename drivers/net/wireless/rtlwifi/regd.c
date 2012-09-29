@@ -303,6 +303,7 @@ static void _rtl_reg_apply_world_flags(struct wiphy *wiphy,
 	return;
 }
 
+<<<<<<< HEAD
 static void _rtl_dump_channel_map(struct wiphy *wiphy)
 {
 	enum ieee80211_band band;
@@ -319,6 +320,8 @@ static void _rtl_dump_channel_map(struct wiphy *wiphy)
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int _rtl_reg_notifier_apply(struct wiphy *wiphy,
 				   struct regulatory_request *request,
 				   struct rtl_regulatory *reg)
@@ -336,8 +339,11 @@ static int _rtl_reg_notifier_apply(struct wiphy *wiphy,
 		break;
 	}
 
+<<<<<<< HEAD
 	_rtl_dump_channel_map(wiphy);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

@@ -38,7 +38,11 @@ static int adxrs450_spi_read_reg_16(struct device *dev,
 {
 	struct spi_message msg;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adxrs450_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adxrs450_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 	struct spi_transfer xfers[] = {
 		{
@@ -92,7 +96,11 @@ static int adxrs450_spi_write_reg_16(struct device *dev,
 {
 	struct spi_message msg;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adxrs450_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adxrs450_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 	struct spi_transfer xfers = {
 		.tx_buf = st->tx,
@@ -130,7 +138,11 @@ static int adxrs450_spi_sensor_data(struct device *dev, s16 *val)
 {
 	struct spi_message msg;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adxrs450_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adxrs450_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 	struct spi_transfer xfers[] = {
 		{
@@ -267,12 +279,21 @@ static ssize_t adxrs450_read_sensor_data(struct device *dev,
 }
 
 /* Recommended Startup Sequence by spec */
+<<<<<<< HEAD
 static int adxrs450_initial_setup(struct adxrs450_state *st)
+=======
+static int adxrs450_initial_setup(struct iio_dev *indio_dev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u32 t;
 	u16 data;
 	int ret;
+<<<<<<< HEAD
 	struct device *dev = &st->indio_dev->dev;
+=======
+	struct device *dev = &indio_dev->dev;
+	struct adxrs450_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	msleep(ADXRS450_STARTUP_DELAY*2);
 	ret = adxrs450_spi_initial(st, &t, 1);
@@ -357,6 +378,7 @@ static const struct iio_info adxrs450_info = {
 static int __devinit adxrs450_probe(struct spi_device *spi)
 {
 	int ret, regdone = 0;
+<<<<<<< HEAD
 	struct adxrs450_state *st = kzalloc(sizeof *st, GFP_KERNEL);
 	if (!st) {
 		ret =  -ENOMEM;
@@ -391,12 +413,38 @@ static int __devinit adxrs450_probe(struct spi_device *spi)
 	st->indio_dev->modes = INDIO_DIRECT_MODE;
 
 	ret = iio_device_register(st->indio_dev);
+=======
+	struct adxrs450_state *st;
+	struct iio_dev *indio_dev;
+
+	/* setup the industrialio driver allocated elements */
+	indio_dev = iio_allocate_device(sizeof(*st));
+	if (indio_dev == NULL) {
+		ret = -ENOMEM;
+		goto error_ret;
+	}
+	st = iio_priv(indio_dev);
+	st->us = spi;
+	mutex_init(&st->buf_lock);
+	/* This is only used for removal purposes */
+	spi_set_drvdata(spi, indio_dev);
+
+	indio_dev->dev.parent = &spi->dev;
+	indio_dev->info = &adxrs450_info;
+	indio_dev->modes = INDIO_DIRECT_MODE;
+
+	ret = iio_device_register(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_free_dev;
 	regdone = 1;
 
 	/* Get the device into a sane initial state */
+<<<<<<< HEAD
 	ret = adxrs450_initial_setup(st);
+=======
+	ret = adxrs450_initial_setup(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_initial;
 	return 0;
@@ -404,6 +452,7 @@ static int __devinit adxrs450_probe(struct spi_device *spi)
 error_initial:
 error_free_dev:
 	if (regdone)
+<<<<<<< HEAD
 		iio_device_unregister(st->indio_dev);
 	else
 		iio_free_device(st->indio_dev);
@@ -413,18 +462,28 @@ error_free_rx:
 	kfree(st->rx);
 error_free_st:
 	kfree(st);
+=======
+		iio_device_unregister(indio_dev);
+	else
+		iio_free_device(indio_dev);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_ret:
 	return ret;
 }
 
 static int adxrs450_remove(struct spi_device *spi)
 {
+<<<<<<< HEAD
 	struct adxrs450_state *st = spi_get_drvdata(spi);
 
 	iio_device_unregister(st->indio_dev);
 	kfree(st->tx);
 	kfree(st->rx);
 	kfree(st);
+=======
+	iio_device_unregister(spi_get_drvdata(spi));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

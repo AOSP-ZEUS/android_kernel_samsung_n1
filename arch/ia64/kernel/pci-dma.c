@@ -14,7 +14,11 @@
 
 #include <asm/system.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_DMAR
+=======
+#ifdef CONFIG_INTEL_IOMMU
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <linux/kernel.h>
 
@@ -33,6 +37,10 @@ int force_iommu __read_mostly;
 #endif
 
 int iommu_pass_through;
+<<<<<<< HEAD
+=======
+int iommu_group_mf;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Dummy device used for NULL arguments (normally ISA). Better would
    be probably a smaller DMA mask, but this is bug-to-bug compatible

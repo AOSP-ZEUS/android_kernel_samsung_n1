@@ -74,6 +74,11 @@ void vnic_cq_init(struct vnic_cq *cq, unsigned int flow_control_enable,
 	iowrite32(cq_message_enable, &cq->ctrl->cq_message_enable);
 	iowrite32(interrupt_offset, &cq->ctrl->interrupt_offset);
 	writeq(cq_message_addr, &cq->ctrl->cq_message_addr);
+<<<<<<< HEAD
+=======
+
+	cq->interrupt_offset = interrupt_offset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void vnic_cq_clean(struct vnic_cq *cq)

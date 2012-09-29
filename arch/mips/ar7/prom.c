@@ -77,7 +77,11 @@ struct psp_env_chunk {
 	u16	csum;
 	u8	len;
 	char	data[11];
+<<<<<<< HEAD
 } __attribute__ ((packed));
+=======
+} __packed;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct psp_var_map_entry {
 	u8	num;

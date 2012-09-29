@@ -311,6 +311,12 @@ struct pci_bus * __init pci_versatile_scan_bus(int nr, struct pci_sys_data *sys)
 
 void __init pci_versatile_preinit(void)
 {
+<<<<<<< HEAD
+=======
+	pcibios_min_io = 0x44000000;
+	pcibios_min_mem = 0x50000000;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__raw_writel(VERSATILE_PCI_MEM_BASE0 >> 28, PCI_IMAP0);
 	__raw_writel(VERSATILE_PCI_MEM_BASE1 >> 28, PCI_IMAP1);
 	__raw_writel(VERSATILE_PCI_MEM_BASE2 >> 28, PCI_IMAP2);
@@ -325,7 +331,11 @@ void __init pci_versatile_preinit(void)
 /*
  * map the specified device/slot/pin to an IRQ.   Different backplanes may need to modify this.
  */
+<<<<<<< HEAD
 static int __init versatile_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int __init versatile_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int irq;
 	int devslot = PCI_SLOT(dev->devfn);

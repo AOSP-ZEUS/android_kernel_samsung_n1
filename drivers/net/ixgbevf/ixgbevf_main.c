@@ -30,6 +30,10 @@
  Copyright (c)2006 - 2007 Myricom, Inc. for some LRO specific code
 ******************************************************************************/
 #include <linux/types.h>
+<<<<<<< HEAD
+=======
+#include <linux/bitops.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/pci.h>
 #include <linux/netdevice.h>
@@ -52,7 +56,11 @@ char ixgbevf_driver_name[] = "ixgbevf";
 static const char ixgbevf_driver_string[] =
 	"Intel(R) 10 Gigabit PCI Express Virtual Function Network Driver";
 
+<<<<<<< HEAD
 #define DRV_VERSION "2.0.0-k2"
+=======
+#define DRV_VERSION "2.1.0-k"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 const char ixgbevf_driver_version[] = DRV_VERSION;
 static char ixgbevf_copyright[] =
 	"Copyright (c) 2009 - 2010 Intel Corporation.";
@@ -288,6 +296,7 @@ static void ixgbevf_receive_skb(struct ixgbevf_q_vector *q_vector,
 {
 	struct ixgbevf_adapter *adapter = q_vector->adapter;
 	bool is_vlan = (status & IXGBE_RXD_STAT_VP);
+<<<<<<< HEAD
 	u16 tag = le16_to_cpu(rx_desc->wb.upper.vlan);
 
 	if (!(adapter->flags & IXGBE_FLAG_IN_NETPOLL)) {
@@ -303,6 +312,19 @@ static void ixgbevf_receive_skb(struct ixgbevf_q_vector *q_vector,
 		else
 			netif_rx(skb);
 	}
+=======
+
+	if (is_vlan) {
+		u16 tag = le16_to_cpu(rx_desc->wb.upper.vlan);
+
+		__vlan_hwaccel_put_tag(skb, tag);
+	}
+
+	if (!(adapter->flags & IXGBE_FLAG_IN_NETPOLL))
+			napi_gro_receive(&q_vector->napi, skb);
+	else
+			netif_rx(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -1401,6 +1423,7 @@ static void ixgbevf_configure_rx(struct ixgbevf_adapter *adapter)
 	}
 }
 
+<<<<<<< HEAD
 static void ixgbevf_vlan_rx_register(struct net_device *netdev,
 				     struct vlan_group *grp)
 {
@@ -1419,6 +1442,8 @@ static void ixgbevf_vlan_rx_register(struct net_device *netdev,
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void ixgbevf_vlan_rx_add_vid(struct net_device *netdev, u16 vid)
 {
 	struct ixgbevf_adapter *adapter = netdev_priv(netdev);
@@ -1427,6 +1452,10 @@ static void ixgbevf_vlan_rx_add_vid(struct net_device *netdev, u16 vid)
 	/* add VID to filter table */
 	if (hw->mac.ops.set_vfta)
 		hw->mac.ops.set_vfta(hw, vid, 0, true);
+<<<<<<< HEAD
+=======
+	set_bit(vid, adapter->active_vlans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void ixgbevf_vlan_rx_kill_vid(struct net_device *netdev, u16 vid)
@@ -1434,6 +1463,7 @@ static void ixgbevf_vlan_rx_kill_vid(struct net_device *netdev, u16 vid)
 	struct ixgbevf_adapter *adapter = netdev_priv(netdev);
 	struct ixgbe_hw *hw = &adapter->hw;
 
+<<<<<<< HEAD
 	if (!test_bit(__IXGBEVF_DOWN, &adapter->state))
 		ixgbevf_irq_disable(adapter);
 
@@ -1445,10 +1475,17 @@ static void ixgbevf_vlan_rx_kill_vid(struct net_device *netdev, u16 vid)
 	/* remove VID from filter table */
 	if (hw->mac.ops.set_vfta)
 		hw->mac.ops.set_vfta(hw, vid, 0, false);
+=======
+	/* remove VID from filter table */
+	if (hw->mac.ops.set_vfta)
+		hw->mac.ops.set_vfta(hw, vid, 0, false);
+	clear_bit(vid, adapter->active_vlans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void ixgbevf_restore_vlan(struct ixgbevf_adapter *adapter)
 {
+<<<<<<< HEAD
 	ixgbevf_vlan_rx_register(adapter->netdev, adapter->vlgrp);
 
 	if (adapter->vlgrp) {
@@ -1459,6 +1496,12 @@ static void ixgbevf_restore_vlan(struct ixgbevf_adapter *adapter)
 			ixgbevf_vlan_rx_add_vid(adapter->netdev, vid);
 		}
 	}
+=======
+	u16 vid;
+
+	for_each_set_bit(vid, adapter->active_vlans, VLAN_N_VID)
+		ixgbevf_vlan_rx_add_vid(adapter->netdev, vid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int ixgbevf_write_uc_addr_list(struct net_device *netdev)
@@ -1648,7 +1691,11 @@ static int ixgbevf_up_complete(struct ixgbevf_adapter *adapter)
 	for (i = 0; i < num_rx_rings; i++) {
 		j = adapter->rx_ring[i].reg_idx;
 		rxdctl = IXGBE_READ_REG(hw, IXGBE_VFRXDCTL(j));
+<<<<<<< HEAD
 		rxdctl |= IXGBE_RXDCTL_ENABLE;
+=======
+		rxdctl |= IXGBE_RXDCTL_ENABLE | IXGBE_RXDCTL_VME;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (hw->mac.type == ixgbe_mac_X540_vf) {
 			rxdctl &= ~IXGBE_RXDCTL_RLPMLMASK;
 			rxdctl |= ((netdev->mtu + ETH_HLEN + ETH_FCS_LEN) |
@@ -3249,6 +3296,7 @@ static void ixgbevf_shutdown(struct pci_dev *pdev)
 }
 
 static const struct net_device_ops ixgbe_netdev_ops = {
+<<<<<<< HEAD
 	.ndo_open		= &ixgbevf_open,
 	.ndo_stop		= &ixgbevf_close,
 	.ndo_start_xmit		= &ixgbevf_xmit_frame,
@@ -3261,6 +3309,19 @@ static const struct net_device_ops ixgbe_netdev_ops = {
 	.ndo_vlan_rx_register	= &ixgbevf_vlan_rx_register,
 	.ndo_vlan_rx_add_vid	= &ixgbevf_vlan_rx_add_vid,
 	.ndo_vlan_rx_kill_vid	= &ixgbevf_vlan_rx_kill_vid,
+=======
+	.ndo_open		= ixgbevf_open,
+	.ndo_stop		= ixgbevf_close,
+	.ndo_start_xmit		= ixgbevf_xmit_frame,
+	.ndo_set_rx_mode	= ixgbevf_set_rx_mode,
+	.ndo_set_multicast_list	= ixgbevf_set_rx_mode,
+	.ndo_validate_addr	= eth_validate_addr,
+	.ndo_set_mac_address	= ixgbevf_set_mac,
+	.ndo_change_mtu		= ixgbevf_change_mtu,
+	.ndo_tx_timeout		= ixgbevf_tx_timeout,
+	.ndo_vlan_rx_add_vid	= ixgbevf_vlan_rx_add_vid,
+	.ndo_vlan_rx_kill_vid	= ixgbevf_vlan_rx_kill_vid,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void ixgbevf_assign_netdev_ops(struct net_device *dev)
@@ -3364,7 +3425,11 @@ static int __devinit ixgbevf_probe(struct pci_dev *pdev,
 	hw->mac.type  = ii->mac;
 
 	memcpy(&hw->mbx.ops, &ixgbevf_mbx_ops,
+<<<<<<< HEAD
 	       sizeof(struct ixgbe_mac_operations));
+=======
+	       sizeof(struct ixgbe_mbx_operations));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	adapter->flags &= ~IXGBE_FLAG_RX_PS_CAPABLE;
 	adapter->flags &= ~IXGBE_FLAG_RX_PS_ENABLED;

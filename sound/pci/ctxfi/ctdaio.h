@@ -33,6 +33,10 @@ enum DAIOTYP {
 	SPDIFOO,	/* S/PDIF Out (Flexijack/Optical) */
 	LINEIM,
 	SPDIFIO,	/* S/PDIF In (Flexijack/Optical) on the card */
+<<<<<<< HEAD
+=======
+	MIC,		/* Dedicated mic on Titanium HD */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	SPDIFI1,	/* S/PDIF In on internal Drive Bay */
 	NUM_DAIOTYP
 };

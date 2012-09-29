@@ -161,6 +161,10 @@ struct kvm_pit_config {
 #define KVM_EXIT_NMI              16
 #define KVM_EXIT_INTERNAL_ERROR   17
 #define KVM_EXIT_OSI              18
+<<<<<<< HEAD
+=======
+#define KVM_EXIT_PAPR_HCALL	  19
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* For KVM_EXIT_INTERNAL_ERROR */
 #define KVM_INTERNAL_ERROR_EMULATION 1
@@ -264,6 +268,14 @@ struct kvm_run {
 		struct {
 			__u64 gprs[32];
 		} osi;
+<<<<<<< HEAD
+=======
+		struct {
+			__u64 nr;
+			__u64 ret;
+			__u64 args[9];
+		} papr_hcall;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Fix the size of the union. */
 		char padding[256];
 	};
@@ -544,6 +556,13 @@ struct kvm_ppc_pvinfo {
 #define KVM_CAP_TSC_CONTROL 60
 #define KVM_CAP_GET_TSC_KHZ 61
 #define KVM_CAP_PPC_BOOKE_SREGS 62
+<<<<<<< HEAD
+=======
+#define KVM_CAP_SPAPR_TCE 63
+#define KVM_CAP_PPC_SMT 64
+#define KVM_CAP_PPC_RMA	65
+#define KVM_CAP_S390_GMAP 71
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef KVM_CAP_IRQ_ROUTING
 
@@ -746,6 +765,12 @@ struct kvm_clock_data {
 /* Available with KVM_CAP_XCRS */
 #define KVM_GET_XCRS		  _IOR(KVMIO,  0xa6, struct kvm_xcrs)
 #define KVM_SET_XCRS		  _IOW(KVMIO,  0xa7, struct kvm_xcrs)
+<<<<<<< HEAD
+=======
+#define KVM_CREATE_SPAPR_TCE	  _IOW(KVMIO,  0xa8, struct kvm_create_spapr_tce)
+/* Available with KVM_CAP_RMA */
+#define KVM_ALLOCATE_RMA	  _IOR(KVMIO,  0xa9, struct kvm_allocate_rma)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define KVM_DEV_ASSIGN_ENABLE_IOMMU	(1 << 0)
 
@@ -773,6 +798,7 @@ struct kvm_assigned_pci_dev {
 
 struct kvm_assigned_irq {
 	__u32 assigned_dev_id;
+<<<<<<< HEAD
 	__u32 host_irq;
 	__u32 guest_irq;
 	__u32 flags;
@@ -782,11 +808,20 @@ struct kvm_assigned_irq {
 			__u32 addr_hi;
 			__u32 data;
 		} guest_msi;
+=======
+	__u32 host_irq; /* ignored (legacy field) */
+	__u32 guest_irq;
+	__u32 flags;
+	union {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__u32 reserved[12];
 	};
 };
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct kvm_assigned_msix_nr {
 	__u32 assigned_dev_id;
 	__u16 entry_nr;

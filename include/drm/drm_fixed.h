@@ -37,6 +37,10 @@ typedef union dfixed {
 #define dfixed_init(A) { .full = dfixed_const((A)) }
 #define dfixed_init_half(A) { .full = dfixed_const_half((A)) }
 #define dfixed_trunc(A) ((A).full >> 12)
+<<<<<<< HEAD
+=======
+#define dfixed_frac(A) ((A).full & ((1 << 12) - 1))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline u32 dfixed_floor(fixed20_12 A)
 {

@@ -34,7 +34,11 @@
 #include <linux/timer.h>
 #include <linux/io.h>
 #include <linux/netdevice.h>
+<<<<<<< HEAD
 
+=======
+#include <linux/if_vlan.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "vf.h"
 
@@ -173,7 +177,11 @@ struct igbvf_adapter {
 
 	const struct igbvf_info *ei;
 
+<<<<<<< HEAD
 	struct vlan_group *vlgrp;
+=======
+	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 bd_number;
 	u32 rx_buffer_len;
 	u32 polling_interval;

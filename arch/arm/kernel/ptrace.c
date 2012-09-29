@@ -228,6 +228,7 @@ static struct undef_hook thumb_break_hook = {
 	.fn		= break_trap,
 };
 
+<<<<<<< HEAD
 static int thumb2_break_trap(struct pt_regs *regs, unsigned int instr)
 {
 	unsigned int instr2;
@@ -256,6 +257,14 @@ static struct undef_hook thumb2_break_hook = {
 	.cpsr_mask	= PSR_T_BIT,
 	.cpsr_val	= PSR_T_BIT,
 	.fn		= thumb2_break_trap,
+=======
+static struct undef_hook thumb2_break_hook = {
+	.instr_mask	= 0xffffffff,
+	.instr_val	= 0xf7f0a000,
+	.cpsr_mask	= PSR_T_BIT,
+	.cpsr_val	= PSR_T_BIT,
+	.fn		= break_trap,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __init ptrace_break_init(void)
@@ -396,7 +405,11 @@ static long ptrace_hbp_idx_to_num(int idx)
 /*
  * Handle hitting a HW-breakpoint.
  */
+<<<<<<< HEAD
 static void ptrace_hbptriggered(struct perf_event *bp, int unused,
+=======
+static void ptrace_hbptriggered(struct perf_event *bp,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				     struct perf_sample_data *data,
 				     struct pt_regs *regs)
 {
@@ -479,7 +492,12 @@ static struct perf_event *ptrace_hbp_create(struct task_struct *tsk, int type)
 	attr.bp_type	= type;
 	attr.disabled	= 1;
 
+<<<<<<< HEAD
 	return register_user_hw_breakpoint(&attr, ptrace_hbptriggered, tsk);
+=======
+	return register_user_hw_breakpoint(&attr, ptrace_hbptriggered, NULL,
+					   tsk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int ptrace_gethbpregs(struct task_struct *tsk, long num,
@@ -719,6 +737,7 @@ static int vfp_set(struct task_struct *target,
 {
 	int ret;
 	struct thread_info *thread = task_thread_info(target);
+<<<<<<< HEAD
 	struct vfp_hard_struct new_vfp;
 	const size_t user_fpregs_offset = offsetof(struct user_vfp, fpregs);
 	const size_t user_fpscr_offset = offsetof(struct user_vfp, fpscr);
@@ -726,6 +745,12 @@ static int vfp_set(struct task_struct *target,
 	vfp_sync_hwstate(thread);
 	new_vfp = thread->vfpstate.hard;
 
+=======
+	struct vfp_hard_struct new_vfp = thread->vfpstate.hard;
+	const size_t user_fpregs_offset = offsetof(struct user_vfp, fpregs);
+	const size_t user_fpscr_offset = offsetof(struct user_vfp, fpscr);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = user_regset_copyin(&pos, &count, &kbuf, &ubuf,
 				  &new_vfp.fpregs,
 				  user_fpregs_offset,
@@ -746,8 +771,14 @@ static int vfp_set(struct task_struct *target,
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
 	vfp_flush_hwstate(thread);
 	thread->vfpstate.hard = new_vfp;
+=======
+	vfp_sync_hwstate(thread);
+	thread->vfpstate.hard = new_vfp;
+	vfp_flush_hwstate(thread);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

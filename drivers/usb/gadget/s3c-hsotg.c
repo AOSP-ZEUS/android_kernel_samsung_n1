@@ -2574,7 +2574,11 @@ static int s3c_hsotg_corereset(struct s3c_hsotg *hsotg)
 	return 0;
 }
 
+<<<<<<< HEAD
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int s3c_hsotg_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	struct s3c_hsotg *hsotg = our_hsotg;
@@ -2745,9 +2749,14 @@ err:
 	hsotg->gadget.dev.driver = NULL;
 	return ret;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
 
 int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
+=======
+
+static int s3c_hsotg_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct s3c_hsotg *hsotg = our_hsotg;
 	int ep;
@@ -2775,7 +2784,10 @@ int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
 
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_unregister_driver);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int s3c_hsotg_gadget_getframe(struct usb_gadget *gadget)
 {
@@ -2784,6 +2796,11 @@ static int s3c_hsotg_gadget_getframe(struct usb_gadget *gadget)
 
 static struct usb_gadget_ops s3c_hsotg_gadget_ops = {
 	.get_frame	= s3c_hsotg_gadget_getframe,
+<<<<<<< HEAD
+=======
+	.start		= s3c_hsotg_start,
+	.stop		= s3c_hsotg_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /**
@@ -3403,6 +3420,13 @@ static int __devinit s3c_hsotg_probe(struct platform_device *pdev)
 	for (epnum = 0; epnum < S3C_HSOTG_EPS; epnum++)
 		s3c_hsotg_initep(hsotg, &hsotg->eps[epnum], epnum);
 
+<<<<<<< HEAD
+=======
+	ret = usb_add_gadget_udc(&pdev->dev, &hsotg->gadget);
+	if (ret)
+		goto err_add_udc;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	s3c_hsotg_create_debug(hsotg);
 
 	s3c_hsotg_dump(hsotg);
@@ -3410,6 +3434,14 @@ static int __devinit s3c_hsotg_probe(struct platform_device *pdev)
 	our_hsotg = hsotg;
 	return 0;
 
+<<<<<<< HEAD
+=======
+err_add_udc:
+	s3c_hsotg_gate(pdev, false);
+	clk_disable(hsotg->clk);
+	clk_put(hsotg->clk);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_regs:
 	iounmap(hsotg->regs);
 
@@ -3427,6 +3459,11 @@ static int __devexit s3c_hsotg_remove(struct platform_device *pdev)
 {
 	struct s3c_hsotg *hsotg = platform_get_drvdata(pdev);
 
+<<<<<<< HEAD
+=======
+	usb_del_gadget_udc(&hsotg->gadget);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	s3c_hsotg_delete_debug(hsotg);
 
 	usb_gadget_unregister_driver(hsotg->driver);

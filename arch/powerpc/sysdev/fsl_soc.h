@@ -36,5 +36,11 @@ struct platform_diu_data_ops {
 extern struct platform_diu_data_ops diu_ops;
 #endif
 
+<<<<<<< HEAD
+=======
+void fsl_hv_restart(char *cmd);
+void fsl_hv_halt(void);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 #endif

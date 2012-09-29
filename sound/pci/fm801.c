@@ -1201,7 +1201,11 @@ static int __devinit snd_fm801_create(struct snd_card *card,
 	chip->port = pci_resource_start(pci, 0);
 	if ((tea575x_tuner & TUNER_ONLY) == 0) {
 		if (request_irq(pci->irq, snd_fm801_interrupt, IRQF_SHARED,
+<<<<<<< HEAD
 				"FM801", chip)) {
+=======
+				KBUILD_MODNAME, chip)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			snd_printk(KERN_ERR "unable to grab IRQ %d\n", chip->irq);
 			snd_fm801_free(chip);
 			return -EBUSY;
@@ -1399,7 +1403,11 @@ static int snd_fm801_resume(struct pci_dev *pci)
 #endif
 
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name = "FM801",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_fm801_ids,
 	.probe = snd_card_fm801_probe,
 	.remove = __devexit_p(snd_card_fm801_remove),

@@ -339,6 +339,7 @@ ENTRY(arm1022_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(arm1022_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(arm1022_cache_fns)
 	.long	arm1022_flush_icache_all
 	.long	arm1022_flush_kern_cache_all
@@ -350,6 +351,10 @@ ENTRY(arm1022_cache_fns)
 	.long	arm1022_dma_map_area
 	.long	arm1022_dma_unmap_area
 	.long	arm1022_dma_flush_range
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions arm1022
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align	5
 ENTRY(cpu_arm1022_dcache_clean_area)
@@ -441,6 +446,7 @@ arm1022_crval:
 	crval	clear=0x00007f3f, mmuset=0x00003935, ucset=0x00001930
 
 	__INITDATA
+<<<<<<< HEAD
 
 /*
  * Purpose : Function pointers used to access above functions - all calls
@@ -478,6 +484,16 @@ cpu_elf_name:
 cpu_arm1022_name:
 	.asciz	"ARM1022"
 	.size	cpu_arm1022_name, . - cpu_arm1022_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions arm1022, dabort=v4t_early_abort, pabort=legacy_pabort
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv5te"
+	string	cpu_elf_name, "v5"
+	string	cpu_arm1022_name, "ARM1022"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 

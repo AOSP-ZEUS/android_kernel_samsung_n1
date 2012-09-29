@@ -647,12 +647,20 @@ int mesh_path_del(u8 *addr, struct ieee80211_sub_if_data *sdata)
 		mpath = node->mpath;
 		if (mpath->sdata == sdata &&
 		    memcmp(addr, mpath->dst, ETH_ALEN) == 0) {
+<<<<<<< HEAD
 			spin_lock_bh(&mpath->state_lock);
+=======
+			spin_lock(&mpath->state_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			mpath->flags |= MESH_PATH_RESOLVING;
 			hlist_del_rcu(&node->list);
 			call_rcu(&node->rcu, mesh_path_node_reclaim);
 			atomic_dec(&tbl->entries);
+<<<<<<< HEAD
 			spin_unlock_bh(&mpath->state_lock);
+=======
+			spin_unlock(&mpath->state_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto enddel;
 		}
 	}

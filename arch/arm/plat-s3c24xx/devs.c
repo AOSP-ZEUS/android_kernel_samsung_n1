@@ -150,9 +150,14 @@ void __init s3c24xx_fb_set_platdata(struct s3c2410fb_mach_info *pd)
 {
 	struct s3c2410fb_mach_info *npd;
 
+<<<<<<< HEAD
 	npd = kmemdup(pd, sizeof(*npd), GFP_KERNEL);
 	if (npd) {
 		s3c_device_lcd.dev.platform_data = npd;
+=======
+	npd = s3c_set_platdata(pd, sizeof(*npd), &s3c_device_lcd);
+	if (npd) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		npd->displays = kmemdup(pd->displays,
 			sizeof(struct s3c2410fb_display) * npd->num_displays,
 			GFP_KERNEL);
@@ -188,12 +193,19 @@ struct platform_device s3c_device_ts = {
 };
 EXPORT_SYMBOL(s3c_device_ts);
 
+<<<<<<< HEAD
 static struct s3c2410_ts_mach_info s3c2410ts_info;
 
 void __init s3c24xx_ts_set_platdata(struct s3c2410_ts_mach_info *hard_s3c2410ts_info)
 {
 	memcpy(&s3c2410ts_info, hard_s3c2410ts_info, sizeof(struct s3c2410_ts_mach_info));
 	s3c_device_ts.dev.platform_data = &s3c2410ts_info;
+=======
+void __init s3c24xx_ts_set_platdata(struct s3c2410_ts_mach_info *hard_s3c2410ts_info)
+{
+	s3c_set_platdata(hard_s3c2410ts_info,
+			 sizeof(struct s3c2410_ts_mach_info), &s3c_device_ts);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* USB Device (Gadget)*/
@@ -223,6 +235,7 @@ EXPORT_SYMBOL(s3c_device_usbgadget);
 
 void __init s3c24xx_udc_set_platdata(struct s3c2410_udc_mach_info *pd)
 {
+<<<<<<< HEAD
 	struct s3c2410_udc_mach_info *npd;
 
 	npd = kmalloc(sizeof(*npd), GFP_KERNEL);
@@ -232,6 +245,9 @@ void __init s3c24xx_udc_set_platdata(struct s3c2410_udc_mach_info *pd)
 	} else {
 		printk(KERN_ERR "no memory for udc platform data\n");
 	}
+=======
+	s3c_set_platdata(pd, sizeof(*pd), &s3c_device_usbgadget);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* USB High Speed 2.0 Device (Gadget) */
@@ -263,6 +279,7 @@ struct platform_device s3c_device_usb_hsudc = {
 
 void __init s3c24xx_hsudc_set_platdata(struct s3c24xx_hsudc_platdata *pd)
 {
+<<<<<<< HEAD
 	struct s3c24xx_hsudc_platdata *npd;
 
 	npd = kmalloc(sizeof(*npd), GFP_KERNEL);
@@ -272,6 +289,9 @@ void __init s3c24xx_hsudc_set_platdata(struct s3c24xx_hsudc_platdata *pd)
 	} else {
 		printk(KERN_ERR "no memory for udc platform data\n");
 	}
+=======
+	s3c_set_platdata(pd, sizeof(*pd), &s3c_device_usb_hsudc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* IIS */
@@ -383,6 +403,7 @@ EXPORT_SYMBOL(s3c_device_sdi);
 
 void __init s3c24xx_mci_set_platdata(struct s3c24xx_mci_pdata *pdata)
 {
+<<<<<<< HEAD
 	struct s3c24xx_mci_pdata *npd;
 
 	npd = kmemdup(pdata, sizeof(struct s3c24xx_mci_pdata), GFP_KERNEL);
@@ -390,6 +411,10 @@ void __init s3c24xx_mci_set_platdata(struct s3c24xx_mci_pdata *pdata)
 		printk(KERN_ERR "%s: no memory to copy pdata", __func__);
 
 	s3c_device_sdi.dev.platform_data = npd;
+=======
+	s3c_set_platdata(pdata, sizeof(struct s3c24xx_mci_pdata),
+			 &s3c_device_sdi);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 

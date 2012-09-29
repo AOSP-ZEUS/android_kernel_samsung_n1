@@ -88,6 +88,7 @@ int show_interrupts(struct seq_file *p, void *v)
 }
 
 /*
+<<<<<<< HEAD
  * For compatibilty only. S/390 specific setup of interrupts et al. is done
  * much later in init_channel_subsystem().
  */
@@ -97,6 +98,8 @@ void __init init_IRQ(void)
 }
 
 /*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Switch to the asynchronous interrupt stack for softirq execution.
  */
 asmlinkage void do_softirq(void)
@@ -144,6 +147,7 @@ void init_irq_proc(void)
 #endif
 
 /*
+<<<<<<< HEAD
  * ext_int_hash[index] is the start of the list for all external interrupts
  * that hash to this index. With the current set of external interrupts
  * (0x1202 external call, 0x1004 cpu timer, 0x2401 hwc console, 0x4000
@@ -157,15 +161,53 @@ struct ext_int_info {
 };
 
 static struct ext_int_info *ext_int_hash[256];
+=======
+ * ext_int_hash[index] is the list head for all external interrupts that hash
+ * to this index.
+ */
+static struct list_head ext_int_hash[256];
+
+struct ext_int_info {
+	ext_int_handler_t handler;
+	u16 code;
+	struct list_head entry;
+	struct rcu_head rcu;
+};
+
+/* ext_int_hash_lock protects the handler lists for external interrupts */
+DEFINE_SPINLOCK(ext_int_hash_lock);
+
+static void __init init_external_interrupts(void)
+{
+	int idx;
+
+	for (idx = 0; idx < ARRAY_SIZE(ext_int_hash); idx++)
+		INIT_LIST_HEAD(&ext_int_hash[idx]);
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline int ext_hash(u16 code)
 {
 	return (code + (code >> 9)) & 0xff;
 }
 
+<<<<<<< HEAD
 int register_external_interrupt(u16 code, ext_int_handler_t handler)
 {
 	struct ext_int_info *p;
+=======
+static void ext_int_hash_update(struct rcu_head *head)
+{
+	struct ext_int_info *p = container_of(head, struct ext_int_info, rcu);
+
+	kfree(p);
+}
+
+int register_external_interrupt(u16 code, ext_int_handler_t handler)
+{
+	struct ext_int_info *p;
+	unsigned long flags;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int index;
 
 	p = kmalloc(sizeof(*p), GFP_ATOMIC);
@@ -174,14 +216,22 @@ int register_external_interrupt(u16 code, ext_int_handler_t handler)
 	p->code = code;
 	p->handler = handler;
 	index = ext_hash(code);
+<<<<<<< HEAD
 	p->next = ext_int_hash[index];
 	ext_int_hash[index] = p;
+=======
+
+	spin_lock_irqsave(&ext_int_hash_lock, flags);
+	list_add_rcu(&p->entry, &ext_int_hash[index]);
+	spin_unlock_irqrestore(&ext_int_hash_lock, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 EXPORT_SYMBOL(register_external_interrupt);
 
 int unregister_external_interrupt(u16 code, ext_int_handler_t handler)
 {
+<<<<<<< HEAD
 	struct ext_int_info *p, *q;
 	int index;
 
@@ -201,6 +251,19 @@ int unregister_external_interrupt(u16 code, ext_int_handler_t handler)
 	else
 		ext_int_hash[index] = p->next;
 	kfree(p);
+=======
+	struct ext_int_info *p;
+	unsigned long flags;
+	int index = ext_hash(code);
+
+	spin_lock_irqsave(&ext_int_hash_lock, flags);
+	list_for_each_entry_rcu(p, &ext_int_hash[index], entry)
+		if (p->code == code && p->handler == handler) {
+			list_del_rcu(&p->entry);
+			call_rcu(&p->rcu, ext_int_hash_update);
+		}
+	spin_unlock_irqrestore(&ext_int_hash_lock, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 EXPORT_SYMBOL(unregister_external_interrupt);
@@ -224,15 +287,33 @@ void __irq_entry do_extint(struct pt_regs *regs, unsigned int ext_int_code,
 	kstat_cpu(smp_processor_id()).irqs[EXTERNAL_INTERRUPT]++;
 	if (code != 0x1004)
 		__get_cpu_var(s390_idle).nohz_delay = 1;
+<<<<<<< HEAD
 	index = ext_hash(code);
 	for (p = ext_int_hash[index]; p; p = p->next) {
 		if (likely(p->code == code))
 			p->handler(ext_int_code, param32, param64);
 	}
+=======
+
+	index = ext_hash(code);
+	rcu_read_lock();
+	list_for_each_entry_rcu(p, &ext_int_hash[index], entry)
+		if (likely(p->code == code))
+			p->handler(ext_int_code, param32, param64);
+	rcu_read_unlock();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	irq_exit();
 	set_irq_regs(old_regs);
 }
 
+<<<<<<< HEAD
+=======
+void __init init_IRQ(void)
+{
+	init_external_interrupts();
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static DEFINE_SPINLOCK(sc_irq_lock);
 static int sc_irq_refcount;
 

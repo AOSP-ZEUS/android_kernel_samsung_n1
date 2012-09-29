@@ -1254,6 +1254,12 @@ struct atom_context *atom_parse(struct card_info *card, void *bios)
 	char name[512];
 	int i;
 
+<<<<<<< HEAD
+=======
+	if (!ctx)
+		return NULL;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ctx->card = card;
 	ctx->bios = bios;
 
@@ -1301,11 +1307,16 @@ struct atom_context *atom_parse(struct card_info *card, void *bios)
 
 int atom_asic_init(struct atom_context *ctx)
 {
+<<<<<<< HEAD
 	struct radeon_device *rdev = ctx->card->dev->dev_private;
 	int hwi = CU16(ctx->data_table + ATOM_DATA_FWI_PTR);
 	uint32_t ps[16];
 	int ret;
 
+=======
+	int hwi = CU16(ctx->data_table + ATOM_DATA_FWI_PTR);
+	uint32_t ps[16];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	memset(ps, 0, 64);
 
 	ps[0] = cpu_to_le32(CU32(hwi + ATOM_FWI_DEFSCLK_PTR));
@@ -1315,6 +1326,7 @@ int atom_asic_init(struct atom_context *ctx)
 
 	if (!CU16(ctx->cmd_table + 4 + 2 * ATOM_CMD_INIT))
 		return 1;
+<<<<<<< HEAD
 	ret = atom_execute_table(ctx, ATOM_CMD_INIT, ps);
 	if (ret)
 		return ret;
@@ -1326,6 +1338,9 @@ int atom_asic_init(struct atom_context *ctx)
 			atom_execute_table(ctx, ATOM_CMD_SPDFANCNTL, ps);
 	}
 	return ret;
+=======
+	return atom_execute_table(ctx, ATOM_CMD_INIT, ps);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void atom_destroy(struct atom_context *ctx)

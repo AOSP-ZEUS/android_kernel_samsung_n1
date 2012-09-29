@@ -31,6 +31,7 @@
 #include "ixgbe_dcb_82599.h"
 
 /**
+<<<<<<< HEAD
  * ixgbe_dcb_config_packet_buffers_82599 - Configure DCB packet buffers
  * @hw: pointer to hardware structure
  * @rx_pba: method to distribute packet buffer
@@ -88,6 +89,8 @@ static s32 ixgbe_dcb_config_packet_buffers_82599(struct ixgbe_hw *hw, u8 rx_pba)
 }
 
 /**
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * ixgbe_dcb_config_rx_arbiter_82599 - Config Rx Data arbiter
  * @hw: pointer to hardware structure
  * @refill: refill credits index by traffic class
@@ -376,6 +379,7 @@ static s32 ixgbe_dcb_config_tc_stats_82599(struct ixgbe_hw *hw)
 }
 
 /**
+<<<<<<< HEAD
  * ixgbe_dcb_config_82599 - Configure general DCB parameters
  * @hw: pointer to hardware structure
  *
@@ -435,6 +439,10 @@ static s32 ixgbe_dcb_config_82599(struct ixgbe_hw *hw)
  * ixgbe_dcb_hw_config_82599 - Configure and enable DCB
  * @hw: pointer to hardware structure
  * @rx_pba: method to distribute packet buffer
+=======
+ * ixgbe_dcb_hw_config_82599 - Configure and enable DCB
+ * @hw: pointer to hardware structure
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @refill: refill credits index by traffic class
  * @max: max credits index by traffic class
  * @bwg_id: bandwidth grouping indexed by traffic class
@@ -443,12 +451,18 @@ static s32 ixgbe_dcb_config_82599(struct ixgbe_hw *hw)
  *
  * Configure dcb settings and enable dcb mode.
  */
+<<<<<<< HEAD
 s32 ixgbe_dcb_hw_config_82599(struct ixgbe_hw *hw,
 			      u8 rx_pba, u8 pfc_en, u16 *refill,
 			      u16 *max, u8 *bwg_id, u8 *prio_type, u8 *prio_tc)
 {
 	ixgbe_dcb_config_packet_buffers_82599(hw, rx_pba);
 	ixgbe_dcb_config_82599(hw);
+=======
+s32 ixgbe_dcb_hw_config_82599(struct ixgbe_hw *hw, u8 pfc_en, u16 *refill,
+			      u16 *max, u8 *bwg_id, u8 *prio_type, u8 *prio_tc)
+{
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ixgbe_dcb_config_rx_arbiter_82599(hw, refill, max, bwg_id,
 					  prio_type, prio_tc);
 	ixgbe_dcb_config_tx_desc_arbiter_82599(hw, refill, max,

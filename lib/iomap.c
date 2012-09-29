@@ -224,6 +224,10 @@ EXPORT_SYMBOL(iowrite8_rep);
 EXPORT_SYMBOL(iowrite16_rep);
 EXPORT_SYMBOL(iowrite32_rep);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_HAS_IOPORT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Create a virtual mapping cookie for an IO port range */
 void __iomem *ioport_map(unsigned long port, unsigned int nr)
 {
@@ -238,7 +242,13 @@ void ioport_unmap(void __iomem *addr)
 }
 EXPORT_SYMBOL(ioport_map);
 EXPORT_SYMBOL(ioport_unmap);
+<<<<<<< HEAD
 
+=======
+#endif /* CONFIG_HAS_IOPORT */
+
+#ifdef CONFIG_PCI
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * pci_iomap - create a virtual mapping cookie for a PCI BAR
  * @dev: PCI device that owns the BAR
@@ -280,3 +290,7 @@ void pci_iounmap(struct pci_dev *dev, void __iomem * addr)
 }
 EXPORT_SYMBOL(pci_iomap);
 EXPORT_SYMBOL(pci_iounmap);
+<<<<<<< HEAD
+=======
+#endif /* CONFIG_PCI */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

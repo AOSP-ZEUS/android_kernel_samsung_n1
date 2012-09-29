@@ -228,7 +228,11 @@ err_cont:
  * (pin - 1) converts from the PCI standard's [1:4] convention to
  * a normal [0:3] range.
  */
+<<<<<<< HEAD
 static int tile_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int tile_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct pci_controller *controller =
 		(struct pci_controller *)dev->sysdata;

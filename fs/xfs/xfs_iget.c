@@ -38,7 +38,10 @@
 #include "xfs_trans_priv.h"
 #include "xfs_inode_item.h"
 #include "xfs_bmap.h"
+<<<<<<< HEAD
 #include "xfs_btree_trace.h"
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "xfs_trace.h"
 
 
@@ -356,6 +359,7 @@ xfs_iget_cache_miss(
 			BUG();
 	}
 
+<<<<<<< HEAD
 	/*
 	 * These values must be set before inserting the inode into the radix
 	 * tree as the moment it is inserted a concurrent lookup (allowed by the
@@ -370,6 +374,11 @@ xfs_iget_cache_miss(
 
 	/* insert the new inode */
 	spin_lock(&pag->pag_ici_lock);
+=======
+	spin_lock(&pag->pag_ici_lock);
+
+	/* insert the new inode */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	error = radix_tree_insert(&pag->pag_ici_root, agino, ip);
 	if (unlikely(error)) {
 		WARN_ON(error != -EEXIST);
@@ -377,6 +386,14 @@ xfs_iget_cache_miss(
 		error = EAGAIN;
 		goto out_preload_end;
 	}
+<<<<<<< HEAD
+=======
+
+	/* These values _must_ be set before releasing the radix tree lock! */
+	ip->i_udquot = ip->i_gdquot = NULL;
+	xfs_iflags_set(ip, XFS_INEW);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock(&pag->pag_ici_lock);
 	radix_tree_preload_end();
 

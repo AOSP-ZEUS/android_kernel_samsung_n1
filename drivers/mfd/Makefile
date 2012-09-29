@@ -23,6 +23,10 @@ obj-$(CONFIG_MFD_TC6393XB)	+= tc6393xb.o tmio_core.o
 
 obj-$(CONFIG_MFD_WM8400)	+= wm8400-core.o
 wm831x-objs			:= wm831x-core.o wm831x-irq.o wm831x-otp.o
+<<<<<<< HEAD
+=======
+wm831x-objs			+= wm831x-auxadc.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_MFD_WM831X)	+= wm831x.o
 obj-$(CONFIG_MFD_WM831X_I2C)	+= wm831x-i2c.o
 obj-$(CONFIG_MFD_WM831X_SPI)	+= wm831x-spi.o
@@ -35,13 +39,27 @@ obj-$(CONFIG_MFD_WM8994)	+= wm8994-core.o wm8994-irq.o
 obj-$(CONFIG_TPS6105X)		+= tps6105x.o
 obj-$(CONFIG_TPS65010)		+= tps65010.o
 obj-$(CONFIG_TPS6507X)		+= tps6507x.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o tps65910-irq.o
+tps65912-objs                   := tps65912-core.o tps65912-irq.o
+obj-$(CONFIG_MFD_TPS65912)	+= tps65912.o
+obj-$(CONFIG_MFD_TPS65912_I2C)	+= tps65912-i2c.o
+obj-$(CONFIG_MFD_TPS65912_SPI)  += tps65912-spi.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_MENELAUS)		+= menelaus.o
 
 obj-$(CONFIG_TWL4030_CORE)	+= twl-core.o twl4030-irq.o twl6030-irq.o
 obj-$(CONFIG_TWL4030_MADC)      += twl4030-madc.o
 obj-$(CONFIG_TWL4030_POWER)    += twl4030-power.o
+<<<<<<< HEAD
 obj-$(CONFIG_TWL4030_CODEC)	+= twl4030-codec.o
 obj-$(CONFIG_TWL6030_PWM)	+= twl6030-pwm.o
+=======
+obj-$(CONFIG_MFD_TWL4030_AUDIO)	+= twl4030-audio.o
+obj-$(CONFIG_TWL6030_PWM)	+= twl6030-pwm.o
+obj-$(CONFIG_TWL6040_CORE)	+= twl6040-core.o twl6040-irq.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 obj-$(CONFIG_MFD_MC13XXX)	+= mc13xxx-core.o
 
@@ -93,5 +111,20 @@ obj-$(CONFIG_MFD_CS5535)	+= cs5535-mfd.o
 obj-$(CONFIG_MFD_OMAP_USB_HOST)	+= omap-usb-host.o
 obj-$(CONFIG_MFD_PM8921_CORE) 	+= pm8921-core.o
 obj-$(CONFIG_MFD_PM8XXX_IRQ) 	+= pm8xxx-irq.o
+<<<<<<< HEAD
 obj-$(CONFIG_MFD_TPS65910)	+= tps65910.o tps65910-irq.o
 obj-$(CONFIG_TPS65911_COMPARATOR)	+= tps65911-comparator.o
+=======
+obj-$(CONFIG_TPS65911_COMPARATOR)	+= tps65911-comparator.o
+obj-$(CONFIG_MFD_AAT2870_CORE)	+= aat2870-core.o
+obj-$(CONFIG_MFD_TPS6591X)	+= tps6591x.o
+obj-$(CONFIG_MFD_TPS65090)	+= tps65090.o
+obj-$(CONFIG_MFD_TPS80031)	+= tps80031.o
+obj-$(CONFIG_GPADC_TPS80031)	+= tps8003x-gpadc.o
+obj-$(CONFIG_MFD_MAX8907C)	+= max8907c.o
+obj-$(CONFIG_MFD_MAX8907C)	+= max8907c-irq.o
+obj-$(CONFIG_MFD_MAX8907C)	+= max8907c-adc.o
+obj-$(CONFIG_MFD_MAX77663)	+= max77663-core.o
+obj-$(CONFIG_MFD_RICOH583)	+= ricoh583.o
+obj-$(CONFIG_MFD_RC5T583)	+= rc5t583.o rc5t583-irq.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

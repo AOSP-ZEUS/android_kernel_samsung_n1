@@ -256,7 +256,11 @@ out:
 	return ret;
 }
 
+<<<<<<< HEAD
 static struct dev_power_domain default_power_domain = {
+=======
+static struct dev_pm_domain default_pm_domain = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ops = {
 		.runtime_suspend = default_platform_runtime_suspend,
 		.runtime_resume = default_platform_runtime_resume,
@@ -285,7 +289,11 @@ static int platform_bus_notify(struct notifier_block *nb,
 		hwblk_disable(hwblk_info, hwblk);
 		/* make sure driver re-inits itself once */
 		__set_bit(PDEV_ARCHDATA_FLAG_INIT, &pdev->archdata.flags);
+<<<<<<< HEAD
 		dev->pwr_domain = &default_power_domain;
+=======
+		dev->pm_domain = &default_pm_domain;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	/* TODO: add BUS_NOTIFY_BIND_DRIVER and increase idle count */
 	case BUS_NOTIFY_BOUND_DRIVER:
@@ -299,7 +307,11 @@ static int platform_bus_notify(struct notifier_block *nb,
 		__set_bit(PDEV_ARCHDATA_FLAG_INIT, &pdev->archdata.flags);
 		break;
 	case BUS_NOTIFY_DEL_DEVICE:
+<<<<<<< HEAD
 		dev->pwr_domain = NULL;
+=======
+		dev->pm_domain = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 	return 0;

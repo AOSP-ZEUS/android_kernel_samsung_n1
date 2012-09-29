@@ -477,6 +477,11 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
 		return AE_ERROR;
 	}
 
+<<<<<<< HEAD
+=======
+	return AE_OK;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  aux1_not_found:
 	if (status == AE_NOT_FOUND)
 		return AE_OK;

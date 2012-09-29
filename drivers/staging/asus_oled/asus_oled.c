@@ -355,6 +355,7 @@ static void send_data(struct asus_oled_dev *odev)
 
 static int append_values(struct asus_oled_dev *odev, uint8_t val, size_t count)
 {
+<<<<<<< HEAD
 	odev->last_val = val;
 
 	if (val == 0) {
@@ -363,6 +364,9 @@ static int append_values(struct asus_oled_dev *odev, uint8_t val, size_t count)
 	}
 
 	while (count-- > 0) {
+=======
+	while (count-- > 0 && val) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		size_t x = odev->buf_offs % odev->width;
 		size_t y = odev->buf_offs / odev->width;
 		size_t i;
@@ -413,6 +417,10 @@ static int append_values(struct asus_oled_dev *odev, uint8_t val, size_t count)
 			;
 		}
 
+<<<<<<< HEAD
+=======
+		odev->last_val = val;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		odev->buf_offs++;
 	}
 
@@ -811,9 +819,16 @@ error:
 
 static void __exit asus_oled_exit(void)
 {
+<<<<<<< HEAD
 	usb_deregister(&oled_driver);
 	class_remove_file(oled_class, &class_attr_version.attr);
 	class_destroy(oled_class);
+=======
+	class_remove_file(oled_class, &class_attr_version.attr);
+	class_destroy(oled_class);
+
+	usb_deregister(&oled_driver);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 module_init(asus_oled_init);

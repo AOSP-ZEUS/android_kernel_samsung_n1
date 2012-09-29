@@ -62,6 +62,12 @@
  *  The driver then cleans up the buffer.
  */
 
+<<<<<<< HEAD
+=======
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+#define DEBUG
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/kernel.h>
 #include <linux/string.h>
 #include <linux/errno.h>
@@ -137,8 +143,11 @@ int gfar_clean_rx_ring(struct gfar_priv_rx_q *rx_queue, int rx_work_limit);
 static int gfar_clean_tx_ring(struct gfar_priv_tx_q *tx_queue);
 static int gfar_process_frame(struct net_device *dev, struct sk_buff *skb,
 			      int amount_pull);
+<<<<<<< HEAD
 static void gfar_vlan_rx_register(struct net_device *netdev,
 		                struct vlan_group *grp);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void gfar_halt(struct net_device *dev);
 static void gfar_halt_nodisable(struct net_device *dev);
 void gfar_start(struct net_device *dev);
@@ -213,8 +222,12 @@ static int gfar_init_bds(struct net_device *ndev)
 			} else {
 				skb = gfar_new_skb(ndev);
 				if (!skb) {
+<<<<<<< HEAD
 					pr_err("%s: Can't allocate RX buffers\n",
 							ndev->name);
+=======
+					netdev_err(ndev, "Can't allocate RX buffers\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					goto err_rxalloc_fail;
 				}
 				rx_queue->rx_skbuff[j] = skb;
@@ -258,15 +271,24 @@ static int gfar_alloc_skb_resources(struct net_device *ndev)
 			sizeof(struct rxbd8) * priv->total_rx_ring_size,
 			&addr, GFP_KERNEL);
 	if (!vaddr) {
+<<<<<<< HEAD
 		if (netif_msg_ifup(priv))
 			pr_err("%s: Could not allocate buffer descriptors!\n",
 			       ndev->name);
+=======
+		netif_err(priv, ifup, ndev,
+			  "Could not allocate buffer descriptors!\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENOMEM;
 	}
 
 	for (i = 0; i < priv->num_tx_queues; i++) {
 		tx_queue = priv->tx_queue[i];
+<<<<<<< HEAD
 		tx_queue->tx_bd_base = (struct txbd8 *) vaddr;
+=======
+		tx_queue->tx_bd_base = vaddr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tx_queue->tx_bd_dma_base = addr;
 		tx_queue->dev = ndev;
 		/* enet DMA only understands physical addresses */
@@ -277,7 +299,11 @@ static int gfar_alloc_skb_resources(struct net_device *ndev)
 	/* Start the rx descriptor ring where the tx ring leaves off */
 	for (i = 0; i < priv->num_rx_queues; i++) {
 		rx_queue = priv->rx_queue[i];
+<<<<<<< HEAD
 		rx_queue->rx_bd_base = (struct rxbd8 *) vaddr;
+=======
+		rx_queue->rx_bd_base = vaddr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rx_queue->rx_bd_dma_base = addr;
 		rx_queue->dev = ndev;
 		addr    += sizeof (struct rxbd8) * rx_queue->rx_ring_size;
@@ -290,9 +316,14 @@ static int gfar_alloc_skb_resources(struct net_device *ndev)
 		tx_queue->tx_skbuff = kmalloc(sizeof(*tx_queue->tx_skbuff) *
 				  tx_queue->tx_ring_size, GFP_KERNEL);
 		if (!tx_queue->tx_skbuff) {
+<<<<<<< HEAD
 			if (netif_msg_ifup(priv))
 				pr_err("%s: Could not allocate tx_skbuff\n",
 						ndev->name);
+=======
+			netif_err(priv, ifup, ndev,
+				  "Could not allocate tx_skbuff\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto cleanup;
 		}
 
@@ -306,9 +337,14 @@ static int gfar_alloc_skb_resources(struct net_device *ndev)
 				  rx_queue->rx_ring_size, GFP_KERNEL);
 
 		if (!rx_queue->rx_skbuff) {
+<<<<<<< HEAD
 			if (netif_msg_ifup(priv))
 				pr_err("%s: Could not allocate rx_skbuff\n",
 				       ndev->name);
+=======
+			netif_err(priv, ifup, ndev,
+				  "Could not allocate rx_skbuff\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto cleanup;
 		}
 
@@ -391,11 +427,16 @@ static void gfar_init_mac(struct net_device *ndev)
 	if (priv->hwts_rx_en)
 		rctrl |= RCTRL_PRSDEP_INIT | RCTRL_TS_ENABLE;
 
+<<<<<<< HEAD
 	/* keep vlan related bits if it's enabled */
 	if (priv->vlgrp) {
 		rctrl |= RCTRL_VLEX | RCTRL_PRSDEP_INIT;
 		tctrl |= TCTRL_VLINS;
 	}
+=======
+	if (ndev->features & NETIF_F_HW_VLAN_RX)
+		rctrl |= RCTRL_VLEX | RCTRL_PRSDEP_INIT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Init rctrl based on our settings */
 	gfar_write(&regs->rctrl, rctrl);
@@ -468,7 +509,10 @@ static const struct net_device_ops gfar_netdev_ops = {
 	.ndo_tx_timeout = gfar_timeout,
 	.ndo_do_ioctl = gfar_ioctl,
 	.ndo_get_stats = gfar_get_stats,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register = gfar_vlan_rx_register,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ndo_set_mac_address = eth_mac_addr,
 	.ndo_validate_addr = eth_validate_addr,
 #ifdef CONFIG_NET_POLL_CONTROLLER
@@ -508,10 +552,24 @@ void unlock_tx_qs(struct gfar_private *priv)
 		spin_unlock(&priv->tx_queue[i]->txlock);
 }
 
+<<<<<<< HEAD
 /* Returns 1 if incoming frames use an FCB */
 static inline int gfar_uses_fcb(struct gfar_private *priv)
 {
 	return priv->vlgrp || (priv->ndev->features & NETIF_F_RXCSUM) ||
+=======
+static bool gfar_is_vlan_on(struct gfar_private *priv)
+{
+	return (priv->ndev->features & NETIF_F_HW_VLAN_RX) ||
+	       (priv->ndev->features & NETIF_F_HW_VLAN_TX);
+}
+
+/* Returns 1 if incoming frames use an FCB */
+static inline int gfar_uses_fcb(struct gfar_private *priv)
+{
+	return gfar_is_vlan_on(priv) ||
+		(priv->ndev->features & NETIF_F_RXCSUM) ||
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		(priv->device_flags & FSL_GIANFAR_DEV_HAS_TIMER);
 }
 
@@ -625,9 +683,15 @@ static int gfar_of_init(struct platform_device *ofdev, struct net_device **pdev)
 	num_tx_qs = tx_queues ? *tx_queues : 1;
 
 	if (num_tx_qs > MAX_TX_QS) {
+<<<<<<< HEAD
 		printk(KERN_ERR "num_tx_qs(=%d) greater than MAX_TX_QS(=%d)\n",
 				num_tx_qs, MAX_TX_QS);
 		printk(KERN_ERR "Cannot do alloc_etherdev, aborting\n");
+=======
+		pr_err("num_tx_qs(=%d) greater than MAX_TX_QS(=%d)\n",
+		       num_tx_qs, MAX_TX_QS);
+		pr_err("Cannot do alloc_etherdev, aborting\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 	}
 
@@ -635,9 +699,15 @@ static int gfar_of_init(struct platform_device *ofdev, struct net_device **pdev)
 	num_rx_qs = rx_queues ? *rx_queues : 1;
 
 	if (num_rx_qs > MAX_RX_QS) {
+<<<<<<< HEAD
 		printk(KERN_ERR "num_rx_qs(=%d) greater than MAX_RX_QS(=%d)\n",
 				num_tx_qs, MAX_TX_QS);
 		printk(KERN_ERR "Cannot do alloc_etherdev, aborting\n");
+=======
+		pr_err("num_rx_qs(=%d) greater than MAX_RX_QS(=%d)\n",
+		       num_rx_qs, MAX_RX_QS);
+		pr_err("Cannot do alloc_etherdev, aborting\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 	}
 
@@ -655,6 +725,14 @@ static int gfar_of_init(struct platform_device *ofdev, struct net_device **pdev)
 	priv->num_rx_queues = num_rx_qs;
 	priv->num_grps = 0x0;
 
+<<<<<<< HEAD
+=======
+	/* Init Rx queue filer rule set linked list*/
+	INIT_LIST_HEAD(&priv->rx_list.list);
+	priv->rx_list.count = 0;
+	mutex_init(&priv->rx_queue_access);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	model = of_get_property(np, "model", NULL);
 
 	for (i = 0; i < MAXGROUPS; i++)
@@ -1034,10 +1112,17 @@ static int gfar_probe(struct platform_device *ofdev)
 			NETIF_F_RXCSUM | NETIF_F_HIGHDMA;
 	}
 
+<<<<<<< HEAD
 	priv->vlgrp = NULL;
 
 	if (priv->device_flags & FSL_GIANFAR_DEV_HAS_VLAN)
 		dev->features |= NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX;
+=======
+	if (priv->device_flags & FSL_GIANFAR_DEV_HAS_VLAN) {
+		dev->hw_features |= NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX;
+		dev->features |= NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (priv->device_flags & FSL_GIANFAR_DEV_HAS_EXTENDED_HASH) {
 		priv->extended_hash = 1;
@@ -1148,9 +1233,14 @@ static int gfar_probe(struct platform_device *ofdev)
 		priv->rx_queue[i]->rxic = DEFAULT_RXIC;
 	}
 
+<<<<<<< HEAD
 	/* enable filer if using multiple RX queues*/
 	if(priv->num_rx_queues > 1)
 		priv->rx_filer_enable = 1;
+=======
+	/* always enable rx filer*/
+	priv->rx_filer_enable = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Enable most messages by default */
 	priv->msg_enable = (NETIF_MSG_IFUP << 1 ) - 1;
 
@@ -1160,8 +1250,12 @@ static int gfar_probe(struct platform_device *ofdev)
 	err = register_netdev(dev);
 
 	if (err) {
+<<<<<<< HEAD
 		printk(KERN_ERR "%s: Cannot register net device, aborting.\n",
 				dev->name);
+=======
+		pr_err("%s: Cannot register net device, aborting\n", dev->name);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto register_fail;
 	}
 
@@ -1212,6 +1306,7 @@ static int gfar_probe(struct platform_device *ofdev)
 	gfar_init_sysfs(dev);
 
 	/* Print out the device info */
+<<<<<<< HEAD
 	printk(KERN_INFO DEVICE_NAME "%pM\n", dev->name, dev->dev_addr);
 
 	/* Even more device info helps when determining which kernel */
@@ -1223,6 +1318,19 @@ static int gfar_probe(struct platform_device *ofdev)
 	for(i = 0; i < priv->num_tx_queues; i++)
 		 printk(KERN_INFO "%s: TX BD ring size for Q[%d]: %d\n",
 			dev->name, i, priv->tx_queue[i]->tx_ring_size);
+=======
+	netdev_info(dev, "mac: %pM\n", dev->dev_addr);
+
+	/* Even more device info helps when determining which kernel */
+	/* provided which set of benchmarks. */
+	netdev_info(dev, "Running with NAPI enabled\n");
+	for (i = 0; i < priv->num_rx_queues; i++)
+		netdev_info(dev, "RX BD ring size for Q[%d]: %d\n",
+			    i, priv->rx_queue[i]->rx_ring_size);
+	for(i = 0; i < priv->num_tx_queues; i++)
+		netdev_info(dev, "TX BD ring size for Q[%d]: %d\n",
+			    i, priv->tx_queue[i]->tx_ring_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 
@@ -1855,34 +1963,54 @@ static int register_grp_irqs(struct gfar_priv_grp *grp)
 		 * Transmit, and Receive */
 		if ((err = request_irq(grp->interruptError, gfar_error, 0,
 				grp->int_name_er,grp)) < 0) {
+<<<<<<< HEAD
 			if (netif_msg_intr(priv))
 				printk(KERN_ERR "%s: Can't get IRQ %d\n",
 					dev->name, grp->interruptError);
+=======
+			netif_err(priv, intr, dev, "Can't get IRQ %d\n",
+				  grp->interruptError);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			goto err_irq_fail;
 		}
 
 		if ((err = request_irq(grp->interruptTransmit, gfar_transmit,
 				0, grp->int_name_tx, grp)) < 0) {
+<<<<<<< HEAD
 			if (netif_msg_intr(priv))
 				printk(KERN_ERR "%s: Can't get IRQ %d\n",
 					dev->name, grp->interruptTransmit);
+=======
+			netif_err(priv, intr, dev, "Can't get IRQ %d\n",
+				  grp->interruptTransmit);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto tx_irq_fail;
 		}
 
 		if ((err = request_irq(grp->interruptReceive, gfar_receive, 0,
 				grp->int_name_rx, grp)) < 0) {
+<<<<<<< HEAD
 			if (netif_msg_intr(priv))
 				printk(KERN_ERR "%s: Can't get IRQ %d\n",
 					dev->name, grp->interruptReceive);
+=======
+			netif_err(priv, intr, dev, "Can't get IRQ %d\n",
+				  grp->interruptReceive);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto rx_irq_fail;
 		}
 	} else {
 		if ((err = request_irq(grp->interruptTransmit, gfar_interrupt, 0,
 				grp->int_name_tx, grp)) < 0) {
+<<<<<<< HEAD
 			if (netif_msg_intr(priv))
 				printk(KERN_ERR "%s: Can't get IRQ %d\n",
 					dev->name, grp->interruptTransmit);
+=======
+			netif_err(priv, intr, dev, "Can't get IRQ %d\n",
+				  grp->interruptTransmit);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto err_irq_fail;
 		}
 	}
@@ -2306,10 +2434,15 @@ void gfar_check_rx_parser_mode(struct gfar_private *priv)
 	gfar_write(&regs->rctrl, tempval);
 }
 
+<<<<<<< HEAD
 
 /* Enables and disables VLAN insertion/extraction */
 static void gfar_vlan_rx_register(struct net_device *dev,
 		struct vlan_group *grp)
+=======
+/* Enables and disables VLAN insertion/extraction */
+void gfar_vlan_mode(struct net_device *dev, u32 features)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct gfar_private *priv = netdev_priv(dev);
 	struct gfar __iomem *regs = NULL;
@@ -2320,6 +2453,7 @@ static void gfar_vlan_rx_register(struct net_device *dev,
 	local_irq_save(flags);
 	lock_rx_qs(priv);
 
+<<<<<<< HEAD
 	priv->vlgrp = grp;
 
 	if (grp) {
@@ -2333,12 +2467,30 @@ static void gfar_vlan_rx_register(struct net_device *dev,
 		tempval = gfar_read(&regs->rctrl);
 		tempval |= (RCTRL_VLEX | RCTRL_PRSDEP_INIT);
 		gfar_write(&regs->rctrl, tempval);
+=======
+	if (features & NETIF_F_HW_VLAN_TX) {
+		/* Enable VLAN tag insertion */
+		tempval = gfar_read(&regs->tctrl);
+		tempval |= TCTRL_VLINS;
+		gfar_write(&regs->tctrl, tempval);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		/* Disable VLAN tag insertion */
 		tempval = gfar_read(&regs->tctrl);
 		tempval &= ~TCTRL_VLINS;
 		gfar_write(&regs->tctrl, tempval);
+<<<<<<< HEAD
 
+=======
+	}
+
+	if (features & NETIF_F_HW_VLAN_RX) {
+		/* Enable VLAN tag extraction */
+		tempval = gfar_read(&regs->rctrl);
+		tempval |= (RCTRL_VLEX | RCTRL_PRSDEP_INIT);
+		gfar_write(&regs->rctrl, tempval);
+	} else {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Disable VLAN tag extraction */
 		tempval = gfar_read(&regs->rctrl);
 		tempval &= ~RCTRL_VLEX;
@@ -2361,6 +2513,7 @@ static int gfar_change_mtu(struct net_device *dev, int new_mtu)
 	int oldsize = priv->rx_buffer_size;
 	int frame_size = new_mtu + ETH_HLEN;
 
+<<<<<<< HEAD
 	if (priv->vlgrp)
 		frame_size += VLAN_HLEN;
 
@@ -2368,6 +2521,13 @@ static int gfar_change_mtu(struct net_device *dev, int new_mtu)
 		if (netif_msg_drv(priv))
 			printk(KERN_ERR "%s: Invalid MTU setting\n",
 					dev->name);
+=======
+	if (gfar_is_vlan_on(priv))
+		frame_size += VLAN_HLEN;
+
+	if ((frame_size < 64) || (frame_size > JUMBO_FRAME_SIZE)) {
+		netif_err(priv, drv, dev, "Invalid MTU setting\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 	}
 
@@ -2716,11 +2876,25 @@ static int gfar_process_frame(struct net_device *dev, struct sk_buff *skb,
 	/* Tell the skb what kind of packet this is */
 	skb->protocol = eth_type_trans(skb, dev);
 
+<<<<<<< HEAD
 	/* Send the packet up the stack */
 	if (unlikely(priv->vlgrp && (fcb->flags & RXFCB_VLN)))
 		ret = vlan_hwaccel_receive_skb(skb, priv->vlgrp, fcb->vlctl);
 	else
 		ret = netif_receive_skb(skb);
+=======
+	/*
+	 * There's need to check for NETIF_F_HW_VLAN_RX here.
+	 * Even if vlan rx accel is disabled, on some chips
+	 * RXFCB_VLN is pseudo randomly set.
+	 */
+	if (dev->features & NETIF_F_HW_VLAN_RX &&
+	    fcb->flags & RXFCB_VLN)
+		__vlan_hwaccel_put_tag(skb, fcb->vlctl);
+
+	/* Send the packet up the stack */
+	ret = netif_receive_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (NET_RX_DROP == ret)
 		priv->extra_stats.kernel_dropped++;
@@ -2787,9 +2961,13 @@ int gfar_clean_rx_ring(struct gfar_priv_rx_q *rx_queue, int rx_work_limit)
 				gfar_process_frame(dev, skb, amount_pull);
 
 			} else {
+<<<<<<< HEAD
 				if (netif_msg_rx_err(priv))
 					printk(KERN_WARNING
 					       "%s: Missing skb!\n", dev->name);
+=======
+				netif_warn(priv, rx_err, dev, "Missing skb!\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				rx_queue->stats.rx_dropped++;
 				priv->extra_stats.rx_skbmissing++;
 			}
@@ -2992,10 +3170,16 @@ static void adjust_link(struct net_device *dev)
 					ecntrl &= ~(ECNTRL_R100);
 				break;
 			default:
+<<<<<<< HEAD
 				if (netif_msg_link(priv))
 					printk(KERN_WARNING
 						"%s: Ack!  Speed (%d) is not 10/100/1000!\n",
 						dev->name, phydev->speed);
+=======
+				netif_warn(priv, link, dev,
+					   "Ack!  Speed (%d) is not 10/100/1000!\n",
+					   phydev->speed);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				break;
 			}
 
@@ -3200,8 +3384,13 @@ static irqreturn_t gfar_error(int irq, void *grp_id)
 
 	/* Hmm... */
 	if (netif_msg_rx_err(priv) || netif_msg_tx_err(priv))
+<<<<<<< HEAD
 		printk(KERN_DEBUG "%s: error interrupt (ievent=0x%08x imask=0x%08x)\n",
 		       dev->name, events, gfar_read(&regs->imask));
+=======
+		netdev_dbg(dev, "error interrupt (ievent=0x%08x imask=0x%08x)\n",
+			   events, gfar_read(&regs->imask));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Update the error counters */
 	if (events & IEVENT_TXE) {
@@ -3214,9 +3403,14 @@ static irqreturn_t gfar_error(int irq, void *grp_id)
 		if (events & IEVENT_XFUN) {
 			unsigned long flags;
 
+<<<<<<< HEAD
 			if (netif_msg_tx_err(priv))
 				printk(KERN_DEBUG "%s: TX FIFO underrun, "
 				       "packet dropped.\n", dev->name);
+=======
+			netif_dbg(priv, tx_err, dev,
+				  "TX FIFO underrun, packet dropped\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			dev->stats.tx_dropped++;
 			priv->extra_stats.tx_underrun++;
 
@@ -3229,8 +3423,12 @@ static irqreturn_t gfar_error(int irq, void *grp_id)
 			unlock_tx_qs(priv);
 			local_irq_restore(flags);
 		}
+<<<<<<< HEAD
 		if (netif_msg_tx_err(priv))
 			printk(KERN_DEBUG "%s: Transmit Error\n", dev->name);
+=======
+		netif_dbg(priv, tx_err, dev, "Transmit Error\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (events & IEVENT_BSY) {
 		dev->stats.rx_errors++;
@@ -3238,14 +3436,20 @@ static irqreturn_t gfar_error(int irq, void *grp_id)
 
 		gfar_receive(irq, grp_id);
 
+<<<<<<< HEAD
 		if (netif_msg_rx_err(priv))
 			printk(KERN_DEBUG "%s: busy error (rstat: %x)\n",
 			       dev->name, gfar_read(&regs->rstat));
+=======
+		netif_dbg(priv, rx_err, dev, "busy error (rstat: %x)\n",
+			  gfar_read(&regs->rstat));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (events & IEVENT_BABR) {
 		dev->stats.rx_errors++;
 		priv->extra_stats.rx_babr++;
 
+<<<<<<< HEAD
 		if (netif_msg_rx_err(priv))
 			printk(KERN_DEBUG "%s: babbling RX error\n", dev->name);
 	}
@@ -3261,6 +3465,20 @@ static irqreturn_t gfar_error(int irq, void *grp_id)
 		priv->extra_stats.tx_babt++;
 		if (netif_msg_tx_err(priv))
 			printk(KERN_DEBUG "%s: babbling TX error\n", dev->name);
+=======
+		netif_dbg(priv, rx_err, dev, "babbling RX error\n");
+	}
+	if (events & IEVENT_EBERR) {
+		priv->extra_stats.eberr++;
+		netif_dbg(priv, rx_err, dev, "bus error\n");
+	}
+	if (events & IEVENT_RXC)
+		netif_dbg(priv, rx_status, dev, "control frame\n");
+
+	if (events & IEVENT_BABT) {
+		priv->extra_stats.tx_babt++;
+		netif_dbg(priv, tx_err, dev, "babbling TX error\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return IRQ_HANDLED;
 }

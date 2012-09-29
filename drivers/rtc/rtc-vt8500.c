@@ -74,6 +74,11 @@
 #define VT8500_RTC_CR_SM_SEC	(1 << 3)	/* 0: 1Hz/60, 1: 1Hz */
 #define VT8500_RTC_CR_CALIB	(1 << 4)	/* Enable calibration */
 
+<<<<<<< HEAD
+=======
+#define VT8500_RTC_IS_ALARM	(1 << 0)	/* Alarm interrupt status */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct vt8500_rtc {
 	void __iomem		*regbase;
 	struct resource		*res;
@@ -96,7 +101,11 @@ static irqreturn_t vt8500_rtc_irq(int irq, void *dev_id)
 
 	spin_unlock(&vt8500_rtc->lock);
 
+<<<<<<< HEAD
 	if (isr & 1)
+=======
+	if (isr & VT8500_RTC_IS_ALARM)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		events |= RTC_AF | RTC_IRQF;
 
 	rtc_update_irq(vt8500_rtc->rtc, 1, events);
@@ -161,8 +170,13 @@ static int vt8500_rtc_read_alarm(struct device *dev, struct rtc_wkalrm *alrm)
 	alrm->time.tm_sec = bcd2bin((alarm & TIME_SEC_MASK));
 
 	alrm->enabled = (alarm & ALARM_ENABLE_MASK) ? 1 : 0;
+<<<<<<< HEAD
 
 	alrm->pending = (isr & 1) ? 1 : 0;
+=======
+	alrm->pending = (isr & VT8500_RTC_IS_ALARM) ? 1 : 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return rtc_valid_tm(&alrm->time);
 }
 

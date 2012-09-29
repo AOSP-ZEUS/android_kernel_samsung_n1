@@ -1,7 +1,11 @@
 /******************************************************************************
 
     AudioScience HPI driver
+<<<<<<< HEAD
     Copyright (C) 1997-2010  AudioScience Inc. <support@audioscience.com>
+=======
+    Copyright (C) 1997-2011  AudioScience Inc. <support@audioscience.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of version 2 of the GNU General Public License as
@@ -42,12 +46,20 @@ i.e 3.05.02 is a development version
 #define HPI_VER_MINOR(v) ((int)((v >> 8) & 0xFF))
 #define HPI_VER_RELEASE(v) ((int)(v & 0xFF))
 
+<<<<<<< HEAD
 /* Use single digits for versions less that 10 to avoid octal. */
 #define HPI_VER HPI_VERSION_CONSTRUCTOR(4L, 6, 0)
 #define HPI_VER_STRING "4.06.00"
 
 /* Library version as documented in hpi-api-versions.txt */
 #define HPI_LIB_VER  HPI_VERSION_CONSTRUCTOR(9, 0, 0)
+=======
+#define HPI_VER HPI_VERSION_CONSTRUCTOR(4L, 8, 0)
+#define HPI_VER_STRING "4.08.00"
+
+/* Library version as documented in hpi-api-versions.txt */
+#define HPI_LIB_VER  HPI_VERSION_CONSTRUCTOR(10, 0, 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <linux/types.h>
 #define HPI_BUILD_EXCLUDE_DEPRECATED
@@ -211,8 +223,17 @@ enum HPI_SOURCENODES {
 	HPI_SOURCENODE_COBRANET = 109,
 	HPI_SOURCENODE_ANALOG = 110,	     /**< analog input node. */
 	HPI_SOURCENODE_ADAPTER = 111,	     /**< adapter node. */
+<<<<<<< HEAD
 	/* !!!Update this  AND hpidebug.h if you add a new sourcenode type!!! */
 	HPI_SOURCENODE_LAST_INDEX = 111	     /**< largest ID */
+=======
+	/** RTP stream input node - This node is a destination for
+	    packets of RTP audio samples from other devices. */
+	HPI_SOURCENODE_RTP_DESTINATION = 112,
+	HPI_SOURCENODE_GP_IN = 113,	     /**< general purpose input. */
+	/* !!!Update this  AND hpidebug.h if you add a new sourcenode type!!! */
+	HPI_SOURCENODE_LAST_INDEX = 113	     /**< largest ID */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* AX6 max sourcenode types = 15 */
 };
 
@@ -228,7 +249,11 @@ enum HPI_DESTNODES {
 	HPI_DESTNODE_NONE = 200,
 	/** In Stream (Record) node. */
 	HPI_DESTNODE_ISTREAM = 201,
+<<<<<<< HEAD
 	HPI_DESTNODE_LINEOUT = 202,	    /**< line out node. */
+=======
+	HPI_DESTNODE_LINEOUT = 202,	     /**< line out node. */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	HPI_DESTNODE_AESEBU_OUT = 203,	     /**< AES/EBU output node. */
 	HPI_DESTNODE_RF = 204,		     /**< RF output node. */
 	HPI_DESTNODE_SPEAKER = 205,	     /**< speaker output node. */
@@ -236,9 +261,18 @@ enum HPI_DESTNODES {
 	    Audio samples from the device are sent out on the Cobranet network.*/
 	HPI_DESTNODE_COBRANET = 206,
 	HPI_DESTNODE_ANALOG = 207,	     /**< analog output node. */
+<<<<<<< HEAD
 
 	/* !!!Update this AND hpidebug.h if you add a new destnode type!!! */
 	HPI_DESTNODE_LAST_INDEX = 207	     /**< largest ID */
+=======
+	/** RTP stream output node - This node is a source for
+	    packets of RTP audio samples that are sent to other devices. */
+	HPI_DESTNODE_RTP_SOURCE = 208,
+	HPI_DESTNODE_GP_OUT = 209,	     /**< general purpose output node. */
+	/* !!!Update this AND hpidebug.h if you add a new destnode type!!! */
+	HPI_DESTNODE_LAST_INDEX = 209	     /**< largest ID */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* AX6 max destnode types = 15 */
 };
 

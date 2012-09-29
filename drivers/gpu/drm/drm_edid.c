@@ -197,8 +197,13 @@ drm_edid_block_valid(u8 *raw_edid)
 bad:
 	if (raw_edid) {
 		printk(KERN_ERR "Raw EDID:\n");
+<<<<<<< HEAD
 		print_hex_dump_bytes(KERN_ERR, DUMP_PREFIX_NONE, raw_edid, EDID_LENGTH);
 		printk(KERN_ERR "\n");
+=======
+		print_hex_dump(KERN_ERR, " \t", DUMP_PREFIX_NONE, 16, 1,
+			       raw_edid, EDID_LENGTH, false);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return 0;
 }
@@ -1451,6 +1456,11 @@ EXPORT_SYMBOL(drm_detect_monitor_audio);
 static void drm_add_display_info(struct edid *edid,
 				 struct drm_display_info *info)
 {
+<<<<<<< HEAD
+=======
+	u8 *edid_ext;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	info->width_mm = edid->width_cm * 10;
 	info->height_mm = edid->height_cm * 10;
 
@@ -1495,6 +1505,16 @@ static void drm_add_display_info(struct edid *edid,
 		info->color_formats = DRM_COLOR_FORMAT_YCRCB444;
 	if (info->color_formats & DRM_EDID_FEATURE_RGB_YCRCB422)
 		info->color_formats = DRM_COLOR_FORMAT_YCRCB422;
+<<<<<<< HEAD
+=======
+
+	/* Get data from CEA blocks if present */
+	edid_ext = drm_find_cea_extension(edid);
+	if (!edid_ext)
+		return;
+
+	info->cea_rev = edid_ext[1];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**

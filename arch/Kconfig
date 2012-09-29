@@ -178,4 +178,10 @@ config HAVE_ARCH_MUTEX_CPU_RELAX
 config HAVE_RCU_TABLE_FREE
 	bool
 
+<<<<<<< HEAD
+=======
+config ARCH_HAVE_NMI_SAFE_CMPXCHG
+	bool
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "kernel/gcov/Kconfig"

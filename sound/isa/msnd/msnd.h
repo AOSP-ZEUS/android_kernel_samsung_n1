@@ -249,7 +249,11 @@ struct snd_msnd {
 
 	/* State variables */
 	enum { msndClassic, msndPinnacle } type;
+<<<<<<< HEAD
 	mode_t mode;
+=======
+	fmode_t mode;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long flags;
 #define F_RESETTING			0
 #define F_HAVEDIGITAL			1

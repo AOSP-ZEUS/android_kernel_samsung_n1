@@ -22,6 +22,10 @@
 #include <linux/string.h>
 #include <linux/vmalloc.h>
 #include <linux/netdevice.h>
+<<<<<<< HEAD
+=======
+#include <asm/io.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/uaccess.h>
 #include "ft1000.h"
 
@@ -53,7 +57,11 @@ int ft1000ReadProc(char *page, char **start, off_t off,
 	struct net_device *dev;
 	int len;
 	int i;
+<<<<<<< HEAD
 	FT1000_INFO *info;
+=======
+	struct ft1000_info *info;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char *status[] =
 		{ "Idle (Disconnect)", "Searching", "Active (Connected)",
 		"Waiting for L2", "Sleep", "No Coverage", "", ""
@@ -75,6 +83,7 @@ int ft1000ReadProc(char *page, char **start, off_t off,
 	/* Wrap-around */
 
 	if (info->AsicID == ELECTRABUZZ_ID) {
+<<<<<<< HEAD
 		if (info->DspHibernateFlag == 0) {
 			if (info->ProgConStat != 0xFF) {
 				info->LedStat =
@@ -85,6 +94,16 @@ int ft1000ReadProc(char *page, char **start, off_t off,
 			} else {
 				info->ConStat = 0xf;
 			}
+=======
+		if (info->ProgConStat != 0xFF) {
+			info->LedStat =
+				ft1000_read_dpram(dev, FT1000_DSP_LED);
+			info->ConStat =
+				ft1000_read_dpram(dev,
+						  FT1000_DSP_CON_STATE);
+		} else {
+			info->ConStat = 0xf;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	} else {
 		if (info->ProgConStat != 0xFF) {
@@ -172,7 +191,11 @@ static int ft1000NotifyProc(struct notifier_block *this, unsigned long event,
 				void *ptr)
 {
 	struct net_device *dev = ptr;
+<<<<<<< HEAD
 	FT1000_INFO *info;
+=======
+	struct ft1000_info *info;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	info = netdev_priv(dev);
 
@@ -193,7 +216,11 @@ static struct notifier_block ft1000_netdev_notifier = {
 
 void ft1000InitProc(struct net_device *dev)
 {
+<<<<<<< HEAD
 	FT1000_INFO *info;
+=======
+	struct ft1000_info *info;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	info = netdev_priv(dev);
 
@@ -206,7 +233,11 @@ void ft1000InitProc(struct net_device *dev)
 
 void ft1000CleanupProc(struct net_device *dev)
 {
+<<<<<<< HEAD
 	FT1000_INFO *info;
+=======
+	struct ft1000_info *info;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	info = netdev_priv(dev);
 

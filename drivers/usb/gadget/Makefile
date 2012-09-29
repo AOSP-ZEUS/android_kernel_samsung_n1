@@ -1,9 +1,20 @@
 #
 # USB peripheral controller drivers
 #
+<<<<<<< HEAD
 ccflags-$(CONFIG_USB_GADGET_DEBUG) := -DDEBUG
 
 obj-$(CONFIG_USB_DUMMY_HCD)	+= dummy_hcd.o
+=======
+GCOV_PROFILE_fsl_tegra_udc.o := y
+GCOV_PROFILE_fsl_udc_core.o := y
+
+ccflags-$(CONFIG_USB_GADGET_DEBUG) := -DDEBUG
+
+obj-$(CONFIG_USB_GADGET)	+= udc-core.o
+obj-$(CONFIG_USB_DUMMY_HCD)	+= dummy_hcd.o
+obj-$(CONFIG_USB_NET2272)	+= net2272.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_USB_NET2280)	+= net2280.o
 obj-$(CONFIG_USB_AMD5536UDC)	+= amd5536udc.o
 obj-$(CONFIG_USB_PXA25X)	+= pxa25x_udc.o
@@ -12,12 +23,19 @@ obj-$(CONFIG_USB_IMX)		+= imx_udc.o
 obj-$(CONFIG_USB_GOKU)		+= goku_udc.o
 obj-$(CONFIG_USB_OMAP)		+= omap_udc.o
 obj-$(CONFIG_USB_S3C2410)	+= s3c2410_udc.o
+<<<<<<< HEAD
 obj-$(CONFIG_USB_S3C_OTGD)	+= s3c_udc_otg.o
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_USB_AT91)		+= at91_udc.o
 obj-$(CONFIG_USB_ATMEL_USBA)	+= atmel_usba_udc.o
 obj-$(CONFIG_USB_FSL_USB2)	+= fsl_usb2_udc.o
 fsl_usb2_udc-y			:= fsl_udc_core.o
 fsl_usb2_udc-$(CONFIG_ARCH_MXC)	+= fsl_mxc_udc.o
+<<<<<<< HEAD
+=======
+fsl_usb2_udc-$(CONFIG_ARCH_TEGRA) += fsl_tegra_udc.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_USB_M66592)	+= m66592-udc.o
 obj-$(CONFIG_USB_R8A66597)	+= r8a66597-udc.o
 obj-$(CONFIG_USB_FSL_QE)	+= fsl_qe_udc.o
@@ -70,3 +88,7 @@ obj-$(CONFIG_USB_G_NOKIA)	+= g_nokia.o
 obj-$(CONFIG_USB_G_WEBCAM)	+= g_webcam.o
 obj-$(CONFIG_USB_G_NCM)		+= g_ncm.o
 obj-$(CONFIG_USB_G_ANDROID)	+= g_android.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_USB_ANDROID_SAMSUNG_COMPOSITE)	+= multi_config.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

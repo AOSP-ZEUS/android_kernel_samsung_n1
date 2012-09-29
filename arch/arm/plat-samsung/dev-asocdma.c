@@ -23,3 +23,16 @@ struct platform_device samsung_asoc_dma = {
 	}
 };
 EXPORT_SYMBOL(samsung_asoc_dma);
+<<<<<<< HEAD
+=======
+
+struct platform_device samsung_asoc_idma = {
+	.name		= "samsung-idma",
+	.id		= -1,
+	.dev		= {
+		.dma_mask		= &audio_dmamask,
+		.coherent_dma_mask	= DMA_BIT_MASK(32),
+	}
+};
+EXPORT_SYMBOL(samsung_asoc_idma);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

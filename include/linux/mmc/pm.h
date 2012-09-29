@@ -28,4 +28,8 @@ typedef unsigned int mmc_pm_flag_t;
 #define MMC_PM_WAKE_SDIO_IRQ	(1 << 1)	/* wake up host system on SDIO IRQ assertion */
 #define MMC_PM_IGNORE_PM_NOTIFY	(1 << 2)	/* ignore mmc pm notify */
 
+<<<<<<< HEAD
 #endif
+=======
+#endif /* LINUX_MMC_PM_H */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

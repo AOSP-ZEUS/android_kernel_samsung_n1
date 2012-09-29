@@ -38,7 +38,11 @@ static long ceph_ioctl_get_layout(struct file *file, void __user *arg)
 static long ceph_ioctl_set_layout(struct file *file, void __user *arg)
 {
 	struct inode *inode = file->f_dentry->d_inode;
+<<<<<<< HEAD
 	struct inode *parent_inode = file->f_dentry->d_parent->d_inode;
+=======
+	struct inode *parent_inode;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ceph_mds_client *mdsc = ceph_sb_to_client(inode->i_sb)->mdsc;
 	struct ceph_mds_request *req;
 	struct ceph_ioctl_layout l;
@@ -87,7 +91,13 @@ static long ceph_ioctl_set_layout(struct file *file, void __user *arg)
 	req->r_args.setlayout.layout.fl_pg_preferred =
 		cpu_to_le32(l.preferred_osd);
 
+<<<<<<< HEAD
 	err = ceph_mdsc_do_request(mdsc, parent_inode, req);
+=======
+	parent_inode = ceph_get_dentry_parent_inode(file->f_dentry);
+	err = ceph_mdsc_do_request(mdsc, parent_inode, req);
+	iput(parent_inode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ceph_mdsc_put_request(req);
 	return err;
 }
@@ -231,6 +241,17 @@ static long ceph_ioctl_lazyio(struct file *file)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static long ceph_ioctl_syncio(struct file *file)
+{
+	struct ceph_file_info *fi = file->private_data;
+
+	fi->flags |= CEPH_F_SYNC;
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 long ceph_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 {
 	dout("ioctl file %p cmd %u arg %lu\n", file, cmd, arg);
@@ -249,6 +270,12 @@ long ceph_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 
 	case CEPH_IOC_LAZYIO:
 		return ceph_ioctl_lazyio(file);
+<<<<<<< HEAD
+=======
+
+	case CEPH_IOC_SYNCIO:
+		return ceph_ioctl_syncio(file);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return -ENOTTY;

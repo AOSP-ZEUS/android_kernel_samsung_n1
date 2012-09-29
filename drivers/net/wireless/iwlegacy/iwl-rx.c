@@ -227,6 +227,7 @@ void iwl_legacy_rx_spectrum_measure_notif(struct iwl_priv *priv,
 }
 EXPORT_SYMBOL(iwl_legacy_rx_spectrum_measure_notif);
 
+<<<<<<< HEAD
 void iwl_legacy_recover_from_statistics(struct iwl_priv *priv,
 				struct iwl_rx_packet *pkt)
 {
@@ -248,6 +249,8 @@ void iwl_legacy_recover_from_statistics(struct iwl_priv *priv,
 }
 EXPORT_SYMBOL(iwl_legacy_recover_from_statistics);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * returns non-zero if packet should be dropped
  */

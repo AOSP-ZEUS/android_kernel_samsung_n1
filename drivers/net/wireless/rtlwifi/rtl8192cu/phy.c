@@ -470,7 +470,10 @@ static bool _rtl92cu_phy_set_rf_power_state(struct ieee80211_hw *hw,
 	u8 i, queue_id;
 	struct rtl8192_tx_ring *ring = NULL;
 
+<<<<<<< HEAD
 	ppsc->set_rfpowerstate_inprogress = true;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (rfpwr_state) {
 	case ERFON:
 		if ((ppsc->rfpwr_state == ERFOFF) &&
@@ -549,7 +552,11 @@ static bool _rtl92cu_phy_set_rf_power_state(struct ieee80211_hw *hw,
 		break;
 	case ERFSLEEP:
 		if (ppsc->rfpwr_state == ERFOFF)
+<<<<<<< HEAD
 			break;
+=======
+			return false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		for (queue_id = 0, i = 0;
 		     queue_id < RTL_PCI_MAX_TX_QUEUE_COUNT;) {
 			ring = &pcipriv->dev.tx_ring[queue_id];
@@ -590,7 +597,10 @@ static bool _rtl92cu_phy_set_rf_power_state(struct ieee80211_hw *hw,
 	}
 	if (bresult)
 		ppsc->rfpwr_state = rfpwr_state;
+<<<<<<< HEAD
 	ppsc->set_rfpowerstate_inprogress = false;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return bresult;
 }
 

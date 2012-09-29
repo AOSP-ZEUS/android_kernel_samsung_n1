@@ -51,7 +51,11 @@
 #include <asm/bootparam.h>
 #include "../../../include/linux/lguest_launcher.h"
 /*L:110
+<<<<<<< HEAD
  * We can ignore the 42 include files we need for this program, but I do want
+=======
+ * We can ignore the 43 include files we need for this program, but I do want
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * to draw attention to the use of kernel-style types.
  *
  * As Linus said, "C is a Spartan language, and so should your naming be."  I
@@ -65,7 +69,10 @@ typedef uint16_t u16;
 typedef uint8_t u8;
 /*:*/
 
+<<<<<<< HEAD
 #define PAGE_PRESENT 0x7 	/* Present, RW, Execute */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define BRIDGE_PFX "bridge:"
 #ifndef SIOCBRADDIF
 #define SIOCBRADDIF	0x89a2		/* add interface to bridge      */
@@ -861,8 +868,15 @@ static void console_output(struct virtqueue *vq)
 	/* writev can return a partial write, so we loop here. */
 	while (!iov_empty(iov, out)) {
 		int len = writev(STDOUT_FILENO, iov, out);
+<<<<<<< HEAD
 		if (len <= 0)
 			err(1, "Write to stdout gave %i", len);
+=======
+		if (len <= 0) {
+			warn("Write to stdout gave %i (%d)", len, errno);
+			break;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		iov_consume(iov, out, len);
 	}
 
@@ -898,7 +912,11 @@ static void net_output(struct virtqueue *vq)
 	 * same format: what a coincidence!
 	 */
 	if (writev(net_info->tunfd, iov, out) < 0)
+<<<<<<< HEAD
 		errx(1, "Write to tun failed?");
+=======
+		warnx("Write to tun failed (%d)?", errno);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Done with that one; wait_for_vq_desc() will send the interrupt if
@@ -955,7 +973,11 @@ static void net_input(struct virtqueue *vq)
 	 */
 	len = readv(net_info->tunfd, iov, in);
 	if (len <= 0)
+<<<<<<< HEAD
 		err(1, "Failed to read from tun.");
+=======
+		warn("Failed to read from tun (%d).", errno);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Mark that packet buffer as used, but don't interrupt here.  We want
@@ -1093,9 +1115,16 @@ static void update_device_status(struct device *dev)
 		warnx("Device %s configuration FAILED", dev->name);
 		if (dev->running)
 			reset_device(dev);
+<<<<<<< HEAD
 	} else if (dev->desc->status & VIRTIO_CONFIG_S_DRIVER_OK) {
 		if (!dev->running)
 			start_device(dev);
+=======
+	} else {
+		if (dev->running)
+			err(1, "Device %s features finalized twice", dev->name);
+		start_device(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -1120,6 +1149,7 @@ static void handle_output(unsigned long addr)
 			return;
 		}
 
+<<<<<<< HEAD
 		/*
 		 * Devices *can* be used before status is set to DRIVER_OK.
 		 * The original plan was that they would never do this: they
@@ -1139,6 +1169,13 @@ static void handle_output(unsigned long addr)
 			/* This just calls create_thread() for each virtqueue */
 			start_device(i);
 			return;
+=======
+		/* Devices should not be used before features are finalized. */
+		for (vq = i->vq; vq; vq = vq->next) {
+			if (addr != vq->config.pfn*getpagesize())
+				continue;
+			errx(1, "Notification on %s before setup!", i->name);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -1370,7 +1407,11 @@ static void setup_console(void)
  * --sharenet=<name> option which opens or creates a named pipe.  This can be
  * used to send packets to another guest in a 1:1 manner.
  *
+<<<<<<< HEAD
  * More sopisticated is to use one of the tools developed for project like UML
+=======
+ * More sophisticated is to use one of the tools developed for project like UML
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * to do networking.
  *
  * Faster is to do virtio bonding in kernel.  Doing this 1:1 would be
@@ -1380,7 +1421,11 @@ static void setup_console(void)
  * multiple inter-guest channels behind one interface, although it would
  * require some manner of hotplugging new virtio channels.
  *
+<<<<<<< HEAD
  * Finally, we could implement a virtio network switch in the kernel.
+=======
+ * Finally, we could use a virtio network switch in the kernel, ie. vhost.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 :*/
 
 static u32 str2ip(const char *ipaddr)
@@ -2020,10 +2065,14 @@ int main(int argc, char *argv[])
 	/* Tell the entry path not to try to reload segment registers. */
 	boot->hdr.loadflags |= KEEP_SEGMENTS;
 
+<<<<<<< HEAD
 	/*
 	 * We tell the kernel to initialize the Guest: this returns the open
 	 * /dev/lguest file descriptor.
 	 */
+=======
+	/* We tell the kernel to initialize the Guest. */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tell_kernel(start);
 
 	/* Ensure that we terminate if a device-servicing child dies. */

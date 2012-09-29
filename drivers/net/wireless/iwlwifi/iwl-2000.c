@@ -27,8 +27,11 @@
 #include <linux/kernel.h>
 #include <linux/module.h>
 #include <linux/init.h>
+<<<<<<< HEAD
 #include <linux/pci.h>
 #include <linux/dma-mapping.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/delay.h>
 #include <linux/skbuff.h>
 #include <linux/netdevice.h>
@@ -52,11 +55,19 @@
 #define IWL2030_UCODE_API_MAX 5
 #define IWL2000_UCODE_API_MAX 5
 #define IWL105_UCODE_API_MAX 5
+<<<<<<< HEAD
+=======
+#define IWL135_UCODE_API_MAX 5
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Lowest firmware API version supported */
 #define IWL2030_UCODE_API_MIN 5
 #define IWL2000_UCODE_API_MIN 5
 #define IWL105_UCODE_API_MIN 5
+<<<<<<< HEAD
+=======
+#define IWL135_UCODE_API_MIN 5
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define IWL2030_FW_PRE "iwlwifi-2030-"
 #define IWL2030_MODULE_FIRMWARE(api) IWL2030_FW_PRE __stringify(api) ".ucode"
@@ -67,6 +78,12 @@
 #define IWL105_FW_PRE "iwlwifi-105-"
 #define IWL105_MODULE_FIRMWARE(api) IWL105_FW_PRE __stringify(api) ".ucode"
 
+<<<<<<< HEAD
+=======
+#define IWL135_FW_PRE "iwlwifi-135-"
+#define IWL135_MODULE_FIRMWARE(api) IWL135_FW_PRE #api ".ucode"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void iwl2000_set_ct_threshold(struct iwl_priv *priv)
 {
 	/* want Celsius */
@@ -77,6 +94,7 @@ static void iwl2000_set_ct_threshold(struct iwl_priv *priv)
 /* NIC configuration for 2000 series */
 static void iwl2000_nic_config(struct iwl_priv *priv)
 {
+<<<<<<< HEAD
 	u16 radio_cfg;
 
 	radio_cfg = iwl_eeprom_query16(priv, EEPROM_RADIO_CONFIG);
@@ -92,13 +110,19 @@ static void iwl2000_nic_config(struct iwl_priv *priv)
 	iwl_set_bit(priv, CSR_HW_IF_CONFIG_REG,
 		    CSR_HW_IF_CONFIG_REG_BIT_RADIO_SI |
 		    CSR_HW_IF_CONFIG_REG_BIT_MAC_SI);
+=======
+	iwl_rf_config(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (priv->cfg->iq_invert)
 		iwl_set_bit(priv, CSR_GP_DRIVER_REG,
 			    CSR_GP_DRIVER_REG_BIT_RADIO_IQ_INVER);
+<<<<<<< HEAD
 
 	if (priv->cfg->disable_otp_refresh)
 		iwl_write_prph(priv, APMG_ANALOG_SVR_REG, 0x80000010);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct iwl_sensitivity_ranges iwl2000_sensitivity = {
@@ -134,7 +158,10 @@ static int iwl2000_hw_set_hw_params(struct iwl_priv *priv)
 			iwlagn_mod_params.num_of_queues;
 
 	priv->hw_params.max_txq_num = priv->cfg->base_params->num_of_queues;
+<<<<<<< HEAD
 	priv->hw_params.dma_chnl_num = FH50_TCSR_CHNL_NUM;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	priv->hw_params.scd_bc_tbls_size =
 		priv->cfg->base_params->num_of_queues *
 		sizeof(struct iwlagn_scd_bc_tbl);
@@ -147,7 +174,10 @@ static int iwl2000_hw_set_hw_params(struct iwl_priv *priv)
 
 	priv->hw_params.ht40_channel =  BIT(IEEE80211_BAND_2GHZ) |
 					BIT(IEEE80211_BAND_5GHZ);
+<<<<<<< HEAD
 	priv->hw_params.rx_wrt_ptr_reg = FH_RSCSR_CHNL0_WPTR;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	priv->hw_params.tx_chains_num = num_of_ant(priv->cfg->valid_tx_ant);
 	if (priv->cfg->rx_with_siso_diversity)
@@ -169,7 +199,11 @@ static int iwl2000_hw_set_hw_params(struct iwl_priv *priv)
 		BIT(IWL_CALIB_TX_IQ)            |
 		BIT(IWL_CALIB_BASE_BAND);
 	if (priv->cfg->need_dc_calib)
+<<<<<<< HEAD
 		priv->hw_params.calib_rt_cfg |= BIT(IWL_CALIB_CFG_DC_IDX);
+=======
+		priv->hw_params.calib_rt_cfg |= IWL_CALIB_CFG_DC_IDX;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (priv->cfg->need_temp_offset_calib)
 		priv->hw_params.calib_init_cfg |= BIT(IWL_CALIB_TEMP_OFFSET);
 
@@ -180,6 +214,7 @@ static int iwl2000_hw_set_hw_params(struct iwl_priv *priv)
 
 static struct iwl_lib_ops iwl2000_lib = {
 	.set_hw_params = iwl2000_hw_set_hw_params,
+<<<<<<< HEAD
 	.rx_handler_setup = iwlagn_rx_handler_setup,
 	.setup_deferred_work = iwlagn_bt_setup_deferred_work,
 	.cancel_deferred_work = iwlagn_bt_cancel_deferred_work,
@@ -190,6 +225,9 @@ static struct iwl_lib_ops iwl2000_lib = {
 		.init = iwl_apm_init,
 		.config = iwl2000_nic_config,
 	},
+=======
+	.nic_config = iwl2000_nic_config,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.eeprom_ops = {
 		.regulatory_bands = {
 			EEPROM_REG_BAND_1_CHANNELS,
@@ -200,6 +238,7 @@ static struct iwl_lib_ops iwl2000_lib = {
 			EEPROM_6000_REG_BAND_24_HT40_CHANNELS,
 			EEPROM_REGULATORY_BAND_NO_HT40,
 		},
+<<<<<<< HEAD
 		.query_addr = iwlagn_eeprom_query_addr,
 		.update_enhanced_txpower = iwlcore_eeprom_enhanced_txpower,
 	},
@@ -232,6 +271,32 @@ static const struct iwl_ops iwl135_ops = {
 	.lib = &iwl2000_lib,
 	.hcmd = &iwlagn_bt_hcmd,
 	.utils = &iwlagn_hcmd_utils,
+=======
+		.update_enhanced_txpower = iwlcore_eeprom_enhanced_txpower,
+	},
+	.temperature = iwlagn_temperature,
+};
+
+static struct iwl_lib_ops iwl2030_lib = {
+	.set_hw_params = iwl2000_hw_set_hw_params,
+	.bt_rx_handler_setup = iwlagn_bt_rx_handler_setup,
+	.bt_setup_deferred_work = iwlagn_bt_setup_deferred_work,
+	.cancel_deferred_work = iwlagn_bt_cancel_deferred_work,
+	.nic_config = iwl2000_nic_config,
+	.eeprom_ops = {
+		.regulatory_bands = {
+			EEPROM_REG_BAND_1_CHANNELS,
+			EEPROM_REG_BAND_2_CHANNELS,
+			EEPROM_REG_BAND_3_CHANNELS,
+			EEPROM_REG_BAND_4_CHANNELS,
+			EEPROM_REG_BAND_5_CHANNELS,
+			EEPROM_6000_REG_BAND_24_HT40_CHANNELS,
+			EEPROM_REGULATORY_BAND_NO_HT40,
+		},
+		.update_enhanced_txpower = iwlcore_eeprom_enhanced_txpower,
+	},
+	.temperature = iwlagn_temperature,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct iwl_base_params iwl2000_base_params = {
@@ -292,13 +357,21 @@ static struct iwl_bt_params iwl2030_bt_params = {
 	.ucode_api_min = IWL2000_UCODE_API_MIN,			\
 	.eeprom_ver = EEPROM_2000_EEPROM_VERSION,		\
 	.eeprom_calib_ver = EEPROM_2000_TX_POWER_VERSION,	\
+<<<<<<< HEAD
 	.ops = &iwl2000_ops,					\
+=======
+	.lib = &iwl2000_lib,					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.base_params = &iwl2000_base_params,			\
 	.need_dc_calib = true,					\
 	.need_temp_offset_calib = true,				\
 	.led_mode = IWL_LED_RF_STATE,				\
+<<<<<<< HEAD
 	.iq_invert = true,					\
 	.disable_otp_refresh = true				\
+=======
+	.iq_invert = true					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct iwl_cfg iwl2000_2bgn_cfg = {
 	.name = "2000 Series 2x2 BGN",
@@ -317,7 +390,11 @@ struct iwl_cfg iwl2000_2bg_cfg = {
 	.ucode_api_min = IWL2030_UCODE_API_MIN,			\
 	.eeprom_ver = EEPROM_2000_EEPROM_VERSION,		\
 	.eeprom_calib_ver = EEPROM_2000_TX_POWER_VERSION,	\
+<<<<<<< HEAD
 	.ops = &iwl2030_ops,					\
+=======
+	.lib = &iwl2030_lib,					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.base_params = &iwl2030_base_params,			\
 	.bt_params = &iwl2030_bt_params,			\
 	.need_dc_calib = true,					\
@@ -343,13 +420,22 @@ struct iwl_cfg iwl2030_2bg_cfg = {
 	.ucode_api_min = IWL105_UCODE_API_MIN,			\
 	.eeprom_ver = EEPROM_2000_EEPROM_VERSION,		\
 	.eeprom_calib_ver = EEPROM_2000_TX_POWER_VERSION,	\
+<<<<<<< HEAD
 	.ops = &iwl105_ops,					\
+=======
+	.lib = &iwl2000_lib,					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.base_params = &iwl2000_base_params,			\
 	.need_dc_calib = true,					\
 	.need_temp_offset_calib = true,				\
 	.led_mode = IWL_LED_RF_STATE,				\
 	.adv_pm = true,						\
+<<<<<<< HEAD
 	.rx_with_siso_diversity = true				\
+=======
+	.rx_with_siso_diversity = true,				\
+	.iq_invert = true					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct iwl_cfg iwl105_bg_cfg = {
 	.name = "105 Series 1x1 BG",
@@ -363,27 +449,48 @@ struct iwl_cfg iwl105_bgn_cfg = {
 };
 
 #define IWL_DEVICE_135						\
+<<<<<<< HEAD
 	.fw_name_pre = IWL105_FW_PRE,				\
 	.ucode_api_max = IWL105_UCODE_API_MAX,			\
 	.ucode_api_min = IWL105_UCODE_API_MIN,			\
 	.eeprom_ver = EEPROM_2000_EEPROM_VERSION,		\
 	.eeprom_calib_ver = EEPROM_2000_TX_POWER_VERSION,	\
 	.ops = &iwl135_ops,					\
+=======
+	.fw_name_pre = IWL135_FW_PRE,				\
+	.ucode_api_max = IWL135_UCODE_API_MAX,			\
+	.ucode_api_min = IWL135_UCODE_API_MIN,			\
+	.eeprom_ver = EEPROM_2000_EEPROM_VERSION,		\
+	.eeprom_calib_ver = EEPROM_2000_TX_POWER_VERSION,	\
+	.lib = &iwl2030_lib,					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.base_params = &iwl2030_base_params,			\
 	.bt_params = &iwl2030_bt_params,			\
 	.need_dc_calib = true,					\
 	.need_temp_offset_calib = true,				\
 	.led_mode = IWL_LED_RF_STATE,				\
 	.adv_pm = true,						\
+<<<<<<< HEAD
 	.rx_with_siso_diversity = true				\
 
 struct iwl_cfg iwl135_bg_cfg = {
 	.name = "105 Series 1x1 BG/BT",
+=======
+	.rx_with_siso_diversity = true,				\
+	.iq_invert = true					\
+
+struct iwl_cfg iwl135_bg_cfg = {
+	.name = "135 Series 1x1 BG/BT",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	IWL_DEVICE_135,
 };
 
 struct iwl_cfg iwl135_bgn_cfg = {
+<<<<<<< HEAD
 	.name = "105 Series 1x1 BGN/BT",
+=======
+	.name = "135 Series 1x1 BGN/BT",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	IWL_DEVICE_135,
 	.ht_params = &iwl2000_ht_params,
 };
@@ -391,3 +498,7 @@ struct iwl_cfg iwl135_bgn_cfg = {
 MODULE_FIRMWARE(IWL2000_MODULE_FIRMWARE(IWL2000_UCODE_API_MAX));
 MODULE_FIRMWARE(IWL2030_MODULE_FIRMWARE(IWL2030_UCODE_API_MAX));
 MODULE_FIRMWARE(IWL105_MODULE_FIRMWARE(IWL105_UCODE_API_MAX));
+<<<<<<< HEAD
+=======
+MODULE_FIRMWARE(IWL135_MODULE_FIRMWARE(IWL135_UCODE_API_MAX));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

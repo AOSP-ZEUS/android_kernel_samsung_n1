@@ -354,7 +354,13 @@ MACHINE_START(OMAP_APOLLON, "OMAP24xx Apollon")
 	.reserve	= omap_reserve,
 	.map_io		= omap_apollon_map_io,
 	.init_early	= omap_apollon_init_early,
+<<<<<<< HEAD
 	.init_irq	= omap_init_irq,
 	.init_machine	= omap_apollon_init,
 	.timer		= &omap_timer,
+=======
+	.init_irq	= omap2_init_irq,
+	.init_machine	= omap_apollon_init,
+	.timer		= &omap2_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

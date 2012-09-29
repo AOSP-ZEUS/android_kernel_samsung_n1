@@ -70,7 +70,11 @@ static void omap_prcm_arch_reset(char mode, const char *cmd)
 		prcm_offs = OMAP3430_GR_MOD;
 		omap3_ctrl_write_boot_mode((cmd ? (u8)*cmd : 0));
 	} else if (cpu_is_omap44xx()) {
+<<<<<<< HEAD
 		omap4_prm_global_warm_sw_reset(); /* never returns */
+=======
+		omap4_prminst_global_warm_sw_reset(); /* never returns */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		WARN_ON(1);
 	}

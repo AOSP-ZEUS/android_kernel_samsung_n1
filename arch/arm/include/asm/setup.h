@@ -187,12 +187,24 @@ struct tagtable {
 
 #define __tag __used __attribute__((__section__(".taglist.init")))
 #define __tagtable(tag, fn) \
+<<<<<<< HEAD
 static struct tagtable __tagtable_##fn __tag = { tag, fn }
+=======
+static const struct tagtable __tagtable_##fn __tag = { tag, fn }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Memory map description
  */
+<<<<<<< HEAD
 #define NR_BANKS 8
+=======
+#ifdef CONFIG_ARCH_EP93XX
+# define NR_BANKS 16
+#else
+# define NR_BANKS 8
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct membank {
 	phys_addr_t start;

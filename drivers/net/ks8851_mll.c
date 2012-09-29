@@ -23,6 +23,10 @@
 
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/netdevice.h>
@@ -34,11 +38,19 @@
 #include <linux/platform_device.h>
 #include <linux/delay.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <asm/io.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define	DRV_NAME	"ks8851_mll"
 
 static u8 KS_DEFAULT_MAC_ADDRESS[] = { 0x00, 0x10, 0xA1, 0x86, 0x95, 0x11 };
+<<<<<<< HEAD
 #define MAX_RECV_FRAMES			255
+=======
+#define MAX_RECV_FRAMES			32
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define MAX_BUF_SIZE			2048
 #define TX_BUF_SIZE			2000
 #define RX_BUF_SIZE			2000
@@ -1188,8 +1200,11 @@ static void ks_set_rx_mode(struct net_device *netdev)
 			int i = 0;
 
 			netdev_for_each_mc_addr(ha, netdev) {
+<<<<<<< HEAD
 				if (!(*ha->addr & 1))
 					continue;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				if (i >= MAX_MCAST_LST)
 					break;
 				memcpy(ks->mcast_lst[i++], ha->addr, ETH_ALEN);

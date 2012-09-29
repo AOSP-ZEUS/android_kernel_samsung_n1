@@ -282,7 +282,11 @@ int dm_exception_store_init(void)
 	return 0;
 
 persistent_fail:
+<<<<<<< HEAD
 	dm_transient_snapshot_exit();
+=======
+	dm_persistent_snapshot_exit();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 transient_fail:
 	return r;
 }

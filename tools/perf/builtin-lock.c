@@ -942,10 +942,17 @@ static const char *record_args[] = {
 	"-f",
 	"-m", "1024",
 	"-c", "1",
+<<<<<<< HEAD
 	"-e", "lock:lock_acquire:r",
 	"-e", "lock:lock_acquired:r",
 	"-e", "lock:lock_contended:r",
 	"-e", "lock:lock_release:r",
+=======
+	"-e", "lock:lock_acquire",
+	"-e", "lock:lock_acquired",
+	"-e", "lock:lock_contended",
+	"-e", "lock:lock_release",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __cmd_record(int argc, const char **argv)

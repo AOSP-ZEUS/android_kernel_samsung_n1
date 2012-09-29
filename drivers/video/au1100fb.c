@@ -486,7 +486,11 @@ static int __devinit au1100fb_drv_probe(struct platform_device *dev)
 	}
 
 	au1100fb_fix.mmio_start = regs_res->start;
+<<<<<<< HEAD
 	au1100fb_fix.mmio_len = regs_res->end - regs_res->start + 1;
+=======
+	au1100fb_fix.mmio_len = resource_size(regs_res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!request_mem_region(au1100fb_fix.mmio_start, au1100fb_fix.mmio_len,
 				DRIVER_NAME)) {

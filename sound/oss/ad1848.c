@@ -458,7 +458,11 @@ static int ad1848_set_recmask(ad1848_info * devc, int mask)
 	return mask;
 }
 
+<<<<<<< HEAD
 static void change_bits(ad1848_info * devc, unsigned char *regval,
+=======
+static void oss_change_bits(ad1848_info *devc, unsigned char *regval,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			unsigned char *muteval, int dev, int chn, int newval)
 {
 	unsigned char mask;
@@ -516,10 +520,17 @@ static void ad1848_mixer_set_channel(ad1848_info *devc, int dev, int value, int 
 
 	if (muteregoffs != regoffs) {
 		muteval = ad_read(devc, muteregoffs);
+<<<<<<< HEAD
 		change_bits(devc, &val, &muteval, dev, channel, value);
 	}
 	else
 		change_bits(devc, &val, &val, dev, channel, value);
+=======
+		oss_change_bits(devc, &val, &muteval, dev, channel, value);
+	}
+	else
+		oss_change_bits(devc, &val, &val, dev, channel, value);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_lock_irqsave(&devc->lock,flags);
 	ad_write(devc, regoffs, val);

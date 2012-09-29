@@ -316,6 +316,7 @@ int omapfb_update_window(struct fb_info *fbi,
 }
 EXPORT_SYMBOL(omapfb_update_window);
 
+<<<<<<< HEAD
 static int omapfb_set_update_mode(struct fb_info *fbi,
 				   enum omapfb_update_mode mode)
 {
@@ -344,19 +345,71 @@ static int omapfb_set_update_mode(struct fb_info *fbi,
 	}
 
 	r = display->driver->set_update_mode(display, um);
+=======
+int omapfb_set_update_mode(struct fb_info *fbi,
+				   enum omapfb_update_mode mode)
+{
+	struct omap_dss_device *display = fb2display(fbi);
+	struct omapfb_info *ofbi = FB2OFB(fbi);
+	struct omapfb2_device *fbdev = ofbi->fbdev;
+	struct omapfb_display_data *d;
+	int r;
+
+	if (!display)
+		return -EINVAL;
+
+	if (mode != OMAPFB_AUTO_UPDATE && mode != OMAPFB_MANUAL_UPDATE)
+		return -EINVAL;
+
+	omapfb_lock(fbdev);
+
+	d = get_display_data(fbdev, display);
+
+	if (d->update_mode == mode) {
+		omapfb_unlock(fbdev);
+		return 0;
+	}
+
+	r = 0;
+
+	if (display->caps & OMAP_DSS_DISPLAY_CAP_MANUAL_UPDATE) {
+		if (mode == OMAPFB_AUTO_UPDATE)
+			omapfb_start_auto_update(fbdev, display);
+		else /* MANUAL_UPDATE */
+			omapfb_stop_auto_update(fbdev, display);
+
+		d->update_mode = mode;
+	} else { /* AUTO_UPDATE */
+		if (mode == OMAPFB_MANUAL_UPDATE)
+			r = -EINVAL;
+	}
+
+	omapfb_unlock(fbdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return r;
 }
 
+<<<<<<< HEAD
 static int omapfb_get_update_mode(struct fb_info *fbi,
 		enum omapfb_update_mode *mode)
 {
 	struct omap_dss_device *display = fb2display(fbi);
 	enum omap_dss_update_mode m;
+=======
+int omapfb_get_update_mode(struct fb_info *fbi,
+		enum omapfb_update_mode *mode)
+{
+	struct omap_dss_device *display = fb2display(fbi);
+	struct omapfb_info *ofbi = FB2OFB(fbi);
+	struct omapfb2_device *fbdev = ofbi->fbdev;
+	struct omapfb_display_data *d;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!display)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	if (!display->driver->get_update_mode) {
 		*mode = OMAPFB_AUTO_UPDATE;
 		return 0;
@@ -377,6 +430,15 @@ static int omapfb_get_update_mode(struct fb_info *fbi,
 	default:
 		BUG();
 	}
+=======
+	omapfb_lock(fbdev);
+
+	d = get_display_data(fbdev, display);
+
+	*mode = d->update_mode;
+
+	omapfb_unlock(fbdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

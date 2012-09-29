@@ -134,6 +134,11 @@ static void wdt_enable(void)
 	writel(INT_ENABLE | RESET_ENABLE, wdt->base + WDTCONTROL);
 	writel(LOCK, wdt->base + WDTLOCK);
 
+<<<<<<< HEAD
+=======
+	/* Flush posted writes. */
+	readl(wdt->base + WDTLOCK);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock(&wdt->lock);
 }
 
@@ -144,9 +149,16 @@ static void wdt_disable(void)
 
 	writel(UNLOCK, wdt->base + WDTLOCK);
 	writel(0, wdt->base + WDTCONTROL);
+<<<<<<< HEAD
 	writel(0, wdt->base + WDTLOAD);
 	writel(LOCK, wdt->base + WDTLOCK);
 
+=======
+	writel(LOCK, wdt->base + WDTLOCK);
+
+	/* Flush posted writes. */
+	readl(wdt->base + WDTLOCK);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock(&wdt->lock);
 }
 

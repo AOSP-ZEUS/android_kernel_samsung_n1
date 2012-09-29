@@ -58,10 +58,18 @@ void __init mpc85xx_rdb_pic_init(void)
 		return;
 	}
 
+<<<<<<< HEAD
 	if (of_flat_dt_is_compatible(root, "fsl,85XXRDB-CAMP")) {
 		mpic = mpic_alloc(np, r.start,
 			MPIC_PRIMARY |
 			MPIC_BIG_ENDIAN | MPIC_BROKEN_FRR_NIRQS,
+=======
+	if (of_flat_dt_is_compatible(root, "fsl,MPC85XXRDB-CAMP")) {
+		mpic = mpic_alloc(np, r.start,
+			MPIC_PRIMARY |
+			MPIC_BIG_ENDIAN | MPIC_BROKEN_FRR_NIRQS |
+			MPIC_SINGLE_DEST_CPU,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			0, 256, " OpenPIC  ");
 	} else {
 		mpic = mpic_alloc(np, r.start,

@@ -133,17 +133,24 @@ static int force_hwbrks;
 static int hwbreaks_ok;
 static int hw_break_val;
 static int hw_break_val2;
+<<<<<<< HEAD
 static int cont_instead_of_sstep;
 static unsigned long cont_thread_id;
 static unsigned long sstep_thread_id;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_ARM) || defined(CONFIG_MIPS) || defined(CONFIG_SPARC)
 static int arch_needs_sstep_emulation = 1;
 #else
 static int arch_needs_sstep_emulation;
 #endif
+<<<<<<< HEAD
 static unsigned long cont_addr;
 static unsigned long sstep_addr;
 static int restart_from_top_after_write;
+=======
+static unsigned long sstep_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int sstep_state;
 
 /* Storage for the registers, in GDB format. */
@@ -191,8 +198,12 @@ static int kgdbts_unreg_thread(void *ptr)
 	 */
 	while (!final_ack)
 		msleep_interruptible(1500);
+<<<<<<< HEAD
 	/* Pause for any other threads to exit after final ack. */
 	msleep_interruptible(1000);
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (configured)
 		kgdb_unregister_io_module(&kgdbts_io_ops);
 	configured = 0;
@@ -216,7 +227,11 @@ static unsigned long lookup_addr(char *arg)
 	if (!strcmp(arg, "kgdbts_break_test"))
 		addr = (unsigned long)kgdbts_break_test;
 	else if (!strcmp(arg, "sys_open"))
+<<<<<<< HEAD
 		addr = (unsigned long)do_sys_open;
+=======
+		addr = (unsigned long)sys_open;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	else if (!strcmp(arg, "do_fork"))
 		addr = (unsigned long)do_fork;
 	else if (!strcmp(arg, "hw_break_val"))
@@ -288,6 +303,7 @@ static void hw_break_val_write(void)
 	hw_break_val++;
 }
 
+<<<<<<< HEAD
 static int get_thread_id_continue(char *put_str, char *arg)
 {
 	char *ptr = &put_str[11];
@@ -298,6 +314,8 @@ static int get_thread_id_continue(char *put_str, char *arg)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int check_and_rewind_pc(char *put_str, char *arg)
 {
 	unsigned long addr = lookup_addr(arg);
@@ -314,6 +332,7 @@ static int check_and_rewind_pc(char *put_str, char *arg)
 	if (addr + BREAK_INSTR_SIZE == ip)
 		offset = -BREAK_INSTR_SIZE;
 #endif
+<<<<<<< HEAD
 
 	if (arch_needs_sstep_emulation && sstep_addr &&
 	    ip + offset == sstep_addr &&
@@ -322,13 +341,19 @@ static int check_and_rewind_pc(char *put_str, char *arg)
 		v2printk("Emul: rewind hit single step bp\n");
 		restart_from_top_after_write = 1;
 	} else if (strcmp(arg, "silent") && ip + offset != addr) {
+=======
+	if (strcmp(arg, "silent") && ip + offset != addr) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		eprintk("kgdbts: BP mismatch %lx expected %lx\n",
 			   ip + offset, addr);
 		return 1;
 	}
 	/* Readjust the instruction pointer if needed */
 	ip += offset;
+<<<<<<< HEAD
 	cont_addr = ip;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef GDB_ADJUSTS_BREAK_OFFSET
 	instruction_pointer_set(&kgdbts_regs, ip);
 #endif
@@ -338,8 +363,11 @@ static int check_and_rewind_pc(char *put_str, char *arg)
 static int check_single_step(char *put_str, char *arg)
 {
 	unsigned long addr = lookup_addr(arg);
+<<<<<<< HEAD
 	static int matched_id;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * From an arch indepent point of view the instruction pointer
 	 * should be on a different instruction
@@ -349,6 +377,7 @@ static int check_single_step(char *put_str, char *arg)
 	gdb_regs_to_pt_regs(kgdbts_gdb_regs, &kgdbts_regs);
 	v2printk("Singlestep stopped at IP: %lx\n",
 		   instruction_pointer(&kgdbts_regs));
+<<<<<<< HEAD
 
 	if (sstep_thread_id != cont_thread_id) {
 		/*
@@ -372,6 +401,8 @@ static int check_single_step(char *put_str, char *arg)
 	}
 continue_test:
 	matched_id = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (instruction_pointer(&kgdbts_regs) == addr) {
 		eprintk("kgdbts: SingleStep failed at %lx\n",
 			   instruction_pointer(&kgdbts_regs));
@@ -413,6 +444,7 @@ static int got_break(char *put_str, char *arg)
 	return 1;
 }
 
+<<<<<<< HEAD
 static void get_cont_catch(char *arg)
 {
 	/* Always send detach because the test is completed at this point */
@@ -447,6 +479,12 @@ static void emul_sstep_get(char *arg)
 		} else {
 			fill_get_buf(arg);
 		}
+=======
+static void emul_sstep_get(char *arg)
+{
+	if (!arch_needs_sstep_emulation) {
+		fill_get_buf(arg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	}
 	switch (sstep_state) {
@@ -476,11 +514,17 @@ static void emul_sstep_get(char *arg)
 static int emul_sstep_put(char *put_str, char *arg)
 {
 	if (!arch_needs_sstep_emulation) {
+<<<<<<< HEAD
 		char *ptr = &put_str[11];
 		if (put_str[1] != 'T' || put_str[2] != '0')
 			return 1;
 		kgdb_hex2long(&ptr, &sstep_thread_id);
 		return 0;
+=======
+		if (!strncmp(put_str+1, arg, 2))
+			return 0;
+		return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	switch (sstep_state) {
 	case 1:
@@ -491,7 +535,12 @@ static int emul_sstep_put(char *put_str, char *arg)
 		v2printk("Stopped at IP: %lx\n",
 			 instruction_pointer(&kgdbts_regs));
 		/* Want to stop at IP + break instruction size by default */
+<<<<<<< HEAD
 		sstep_addr = cont_addr + BREAK_INSTR_SIZE;
+=======
+		sstep_addr = instruction_pointer(&kgdbts_regs) +
+			BREAK_INSTR_SIZE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case 2:
 		if (strncmp(put_str, "$OK", 3)) {
@@ -503,9 +552,12 @@ static int emul_sstep_put(char *put_str, char *arg)
 		if (strncmp(put_str, "$T0", 3)) {
 			eprintk("kgdbts: failed continue sstep\n");
 			return 1;
+<<<<<<< HEAD
 		} else {
 			char *ptr = &put_str[11];
 			kgdb_hex2long(&ptr, &sstep_thread_id);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		break;
 	case 4:
@@ -584,10 +636,17 @@ static struct test_struct bad_read_test[] = {
 static struct test_struct singlestep_break_test[] = {
 	{ "?", "S0*" }, /* Clear break points */
 	{ "kgdbts_break_test", "OK", sw_break, }, /* set sw breakpoint */
+<<<<<<< HEAD
 	{ "c", "T0*", NULL, get_thread_id_continue }, /* Continue */
 	{ "kgdbts_break_test", "OK", sw_rem_break }, /*remove breakpoint */
 	{ "g", "kgdbts_break_test", NULL, check_and_rewind_pc },
 	{ "write", "OK", write_regs }, /* Write registers */
+=======
+	{ "c", "T0*", }, /* Continue */
+	{ "g", "kgdbts_break_test", NULL, check_and_rewind_pc },
+	{ "write", "OK", write_regs }, /* Write registers */
+	{ "kgdbts_break_test", "OK", sw_rem_break }, /*remove breakpoint */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ "s", "T0*", emul_sstep_get, emul_sstep_put }, /* Single step */
 	{ "g", "kgdbts_break_test", NULL, check_single_step },
 	{ "kgdbts_break_test", "OK", sw_break, }, /* set sw breakpoint */
@@ -605,16 +664,27 @@ static struct test_struct singlestep_break_test[] = {
 static struct test_struct do_fork_test[] = {
 	{ "?", "S0*" }, /* Clear break points */
 	{ "do_fork", "OK", sw_break, }, /* set sw breakpoint */
+<<<<<<< HEAD
 	{ "c", "T0*", NULL, get_thread_id_continue }, /* Continue */
 	{ "do_fork", "OK", sw_rem_break }, /*remove breakpoint */
 	{ "g", "do_fork", NULL, check_and_rewind_pc }, /* check location */
 	{ "write", "OK", write_regs, emul_reset }, /* Write registers */
+=======
+	{ "c", "T0*", }, /* Continue */
+	{ "g", "do_fork", NULL, check_and_rewind_pc }, /* check location */
+	{ "write", "OK", write_regs }, /* Write registers */
+	{ "do_fork", "OK", sw_rem_break }, /*remove breakpoint */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ "s", "T0*", emul_sstep_get, emul_sstep_put }, /* Single step */
 	{ "g", "do_fork", NULL, check_single_step },
 	{ "do_fork", "OK", sw_break, }, /* set sw breakpoint */
 	{ "7", "T0*", skip_back_repeat_test }, /* Loop based on repeat_test */
 	{ "D", "OK", NULL, final_ack_set }, /* detach and unregister I/O */
+<<<<<<< HEAD
 	{ "", "", get_cont_catch, put_cont_catch },
+=======
+	{ "", "" },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* Test for hitting a breakpoint at sys_open for what ever the number
@@ -623,16 +693,27 @@ static struct test_struct do_fork_test[] = {
 static struct test_struct sys_open_test[] = {
 	{ "?", "S0*" }, /* Clear break points */
 	{ "sys_open", "OK", sw_break, }, /* set sw breakpoint */
+<<<<<<< HEAD
 	{ "c", "T0*", NULL, get_thread_id_continue }, /* Continue */
 	{ "sys_open", "OK", sw_rem_break }, /*remove breakpoint */
 	{ "g", "sys_open", NULL, check_and_rewind_pc }, /* check location */
 	{ "write", "OK", write_regs, emul_reset }, /* Write registers */
+=======
+	{ "c", "T0*", }, /* Continue */
+	{ "g", "sys_open", NULL, check_and_rewind_pc }, /* check location */
+	{ "write", "OK", write_regs }, /* Write registers */
+	{ "sys_open", "OK", sw_rem_break }, /*remove breakpoint */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ "s", "T0*", emul_sstep_get, emul_sstep_put }, /* Single step */
 	{ "g", "sys_open", NULL, check_single_step },
 	{ "sys_open", "OK", sw_break, }, /* set sw breakpoint */
 	{ "7", "T0*", skip_back_repeat_test }, /* Loop based on repeat_test */
 	{ "D", "OK", NULL, final_ack_set }, /* detach and unregister I/O */
+<<<<<<< HEAD
 	{ "", "", get_cont_catch, put_cont_catch },
+=======
+	{ "", "" },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*
@@ -775,8 +856,13 @@ static int run_simple_test(int is_get_char, int chr)
 	/* This callback is a put char which is when kgdb sends data to
 	 * this I/O module.
 	 */
+<<<<<<< HEAD
 	if (ts.tst[ts.idx].get[0] == '\0' && ts.tst[ts.idx].put[0] == '\0' &&
 	    !ts.tst[ts.idx].get_handler) {
+=======
+	if (ts.tst[ts.idx].get[0] == '\0' &&
+		ts.tst[ts.idx].put[0] == '\0') {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		eprintk("kgdbts: ERROR: beyond end of test on"
 			   " '%s' line %i\n", ts.name, ts.idx);
 		return 0;
@@ -989,6 +1075,7 @@ static void kgdbts_run_tests(void)
 	if (ptr)
 		sstep_test = simple_strtol(ptr+1, NULL, 10);
 
+<<<<<<< HEAD
 	/* All HW break point tests */
 	if (arch_kgdb_ops.flags & KGDB_HW_BREAKPOINT) {
 		hwbreaks_ok = 1;
@@ -1000,6 +1087,8 @@ static void kgdbts_run_tests(void)
 		run_hw_break_test(0);
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* required internal KGDB tests */
 	v1printk("kgdbts:RUN plant and detach test\n");
 	run_plant_and_detach_test(0);
@@ -1017,11 +1106,41 @@ static void kgdbts_run_tests(void)
 
 	/* ===Optional tests=== */
 
+<<<<<<< HEAD
+=======
+	/* All HW break point tests */
+	if (arch_kgdb_ops.flags & KGDB_HW_BREAKPOINT) {
+		hwbreaks_ok = 1;
+		v1printk("kgdbts:RUN hw breakpoint test\n");
+		run_breakpoint_test(1);
+		v1printk("kgdbts:RUN hw write breakpoint test\n");
+		run_hw_break_test(1);
+		v1printk("kgdbts:RUN access write breakpoint test\n");
+		run_hw_break_test(0);
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (nmi_sleep) {
 		v1printk("kgdbts:RUN NMI sleep %i seconds test\n", nmi_sleep);
 		run_nmi_sleep_test(nmi_sleep);
 	}
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_DEBUG_RODATA
+	/* Until there is an api to write to read-only text segments, use
+	 * HW breakpoints for the remainder of any tests, else print a
+	 * failure message if hw breakpoints do not work.
+	 */
+	if (!(arch_kgdb_ops.flags & KGDB_HW_BREAKPOINT && hwbreaks_ok)) {
+		eprintk("kgdbts: HW breakpoints do not work,"
+			"skipping remaining tests\n");
+		return;
+	}
+	force_hwbrks = 1;
+#endif /* CONFIG_DEBUG_RODATA */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* If the do_fork test is run it will be the last test that is
 	 * executed because a kernel thread will be spawned at the very
 	 * end to unregister the debug hooks.

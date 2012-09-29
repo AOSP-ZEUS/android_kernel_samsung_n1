@@ -105,6 +105,11 @@ extern unsigned long __kernel_vsyscall;
 #define FIXADDR_USER_START      VSYSCALL_BASE
 #define FIXADDR_USER_END        VSYSCALL_END
 
+<<<<<<< HEAD
+=======
+#define __HAVE_ARCH_GATE_AREA 1
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Architecture-neutral AT_ values in 0-17, leave some room
  * for more of them, start the x86-specific ones at 32.

@@ -28,12 +28,20 @@
  * compare 2 element datas for their keys,
  * return 0 if same and not 0 if not
  * same */
+<<<<<<< HEAD
 typedef int (*hashdata_compare_cb)(struct hlist_node *, void *);
+=======
+typedef int (*hashdata_compare_cb)(const struct hlist_node *, const void *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* the hashfunction, should return an index
  * based on the key in the data of the first
  * argument and the size the second */
+<<<<<<< HEAD
 typedef int (*hashdata_choose_cb)(void *, int);
+=======
+typedef int (*hashdata_choose_cb)(const void *, int);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 typedef void (*hashdata_free_cb)(struct hlist_node *, void *);
 
 struct hashtable_t {
@@ -80,7 +88,11 @@ static inline void hash_delete(struct hashtable_t *hash,
 static inline int hash_add(struct hashtable_t *hash,
 			   hashdata_compare_cb compare,
 			   hashdata_choose_cb choose,
+<<<<<<< HEAD
 			   void *data, struct hlist_node *data_node)
+=======
+			   const void *data, struct hlist_node *data_node)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int index;
 	struct hlist_head *head;

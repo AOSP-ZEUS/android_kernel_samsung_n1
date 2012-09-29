@@ -315,6 +315,7 @@ ENTRY(arm920_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(arm920_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(arm920_cache_fns)
 	.long	arm920_flush_icache_all
 	.long	arm920_flush_kern_cache_all
@@ -327,6 +328,10 @@ ENTRY(arm920_cache_fns)
 	.long	arm920_dma_unmap_area
 	.long	arm920_dma_flush_range
 
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions arm920
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 
@@ -389,7 +394,11 @@ ENTRY(cpu_arm920_set_pte_ext)
 
 /* Suspend/resume support: taken from arch/arm/plat-s3c24xx/sleep.S */
 .globl	cpu_arm920_suspend_size
+<<<<<<< HEAD
 .equ	cpu_arm920_suspend_size, 4 * 3
+=======
+.equ	cpu_arm920_suspend_size, 4 * 4
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_PM_SLEEP
 ENTRY(cpu_arm920_do_suspend)
 	stmfd	sp!, {r4 - r7, lr}
@@ -416,9 +425,12 @@ ENTRY(cpu_arm920_do_resume)
 		     PMD_SECT_CACHEABLE | PMD_BIT4 | PMD_SECT_AP_WRITE
 	b	cpu_resume_mmu
 ENDPROC(cpu_arm920_do_resume)
+<<<<<<< HEAD
 #else
 #define cpu_arm920_do_suspend	0
 #define cpu_arm920_do_resume	0
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 	__CPUINIT
@@ -450,6 +462,7 @@ arm920_crval:
 	crval	clear=0x00003f3f, mmuset=0x00003135, ucset=0x00001130
 
 	__INITDATA
+<<<<<<< HEAD
 
 /*
  * Purpose : Function pointers used to access above functions - all calls
@@ -487,6 +500,16 @@ cpu_elf_name:
 cpu_arm920_name:
 	.asciz	"ARM920T"
 	.size	cpu_arm920_name, . - cpu_arm920_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions arm920, dabort=v4t_early_abort, pabort=legacy_pabort, suspend=1
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv4t"
+	string	cpu_elf_name, "v4"
+	string	cpu_arm920_name, "ARM920T"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 

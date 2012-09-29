@@ -86,6 +86,7 @@ extern mempool_t *cifs_sm_req_poolp;
 extern mempool_t *cifs_req_poolp;
 extern mempool_t *cifs_mid_poolp;
 
+<<<<<<< HEAD
 void
 cifs_sb_active(struct super_block *sb)
 {
@@ -104,6 +105,8 @@ cifs_sb_deactive(struct super_block *sb)
 		deactivate_super(sb);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int
 cifs_read_super(struct super_block *sb)
 {
@@ -224,7 +227,11 @@ cifs_statfs(struct dentry *dentry, struct kstatfs *buf)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int cifs_permission(struct inode *inode, int mask, unsigned int flags)
+=======
+static int cifs_permission(struct inode *inode, int mask)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct cifs_sb_info *cifs_sb;
 
@@ -239,7 +246,11 @@ static int cifs_permission(struct inode *inode, int mask, unsigned int flags)
 		on the client (above and beyond ACL on servers) for
 		servers which do not support setting and viewing mode bits,
 		so allowing client to check permissions is useful */
+<<<<<<< HEAD
 		return generic_permission(inode, mask, flags, NULL);
+=======
+		return generic_permission(inode, mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct kmem_cache *cifs_inode_cachep;
@@ -710,8 +721,16 @@ static ssize_t cifs_file_aio_write(struct kiocb *iocb, const struct iovec *iov,
 
 static loff_t cifs_llseek(struct file *file, loff_t offset, int origin)
 {
+<<<<<<< HEAD
 	/* origin == SEEK_END => we must revalidate the cached file length */
 	if (origin == SEEK_END) {
+=======
+	/*
+	 * origin == SEEK_END || SEEK_DATA || SEEK_HOLE => we must revalidate
+	 * the cached file length
+	 */
+	if (origin != SEEK_SET || origin != SEEK_CUR) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int rc;
 		struct inode *inode = file->f_path.dentry->d_inode;
 

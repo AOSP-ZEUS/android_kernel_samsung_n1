@@ -201,6 +201,11 @@ typedef struct page *pgtable_t;
 extern int pfn_valid(unsigned long);
 #endif
 
+<<<<<<< HEAD
+=======
+extern phys_addr_t lowmem_limit;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/memory.h>
 
 #endif /* !__ASSEMBLY__ */

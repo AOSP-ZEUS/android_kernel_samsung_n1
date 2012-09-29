@@ -33,6 +33,10 @@ struct line_driver {
 struct line {
 	struct tty_struct *tty;
 	spinlock_t count_lock;
+<<<<<<< HEAD
+=======
+	unsigned long count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int valid;
 
 	char *init_str;

@@ -186,10 +186,18 @@ void __init MMU_init_hw(void)
 unsigned long __init mmu_mapin_ram(unsigned long top)
 {
 	unsigned long addr;
+<<<<<<< HEAD
 
 	/* Pin in enough TLBs to cover any lowmem not covered by the
 	 * initial 256M mapping established in head_44x.S */
 	for (addr = PPC_PIN_SIZE; addr < lowmem_end_addr;
+=======
+	unsigned long memstart = memstart_addr & ~(PPC_PIN_SIZE - 1);
+
+	/* Pin in enough TLBs to cover any lowmem not covered by the
+	 * initial 256M mapping established in head_44x.S */
+	for (addr = memstart + PPC_PIN_SIZE; addr < lowmem_end_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	     addr += PPC_PIN_SIZE) {
 		if (mmu_has_feature(MMU_FTR_TYPE_47x))
 			ppc47x_pin_tlb(addr + PAGE_OFFSET, addr);
@@ -218,19 +226,37 @@ unsigned long __init mmu_mapin_ram(unsigned long top)
 void setup_initial_memory_limit(phys_addr_t first_memblock_base,
 				phys_addr_t first_memblock_size)
 {
+<<<<<<< HEAD
+=======
+	u64 size;
+
+#ifndef CONFIG_RELOCATABLE
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* We don't currently support the first MEMBLOCK not mapping 0
 	 * physical on those processors
 	 */
 	BUG_ON(first_memblock_base != 0);
+<<<<<<< HEAD
 
 	/* 44x has a 256M TLB entry pinned at boot */
 	memblock_set_current_limit(min_t(u64, first_memblock_size, PPC_PIN_SIZE));
+=======
+#endif
+
+	/* 44x has a 256M TLB entry pinned at boot */
+	size = (min_t(u64, first_memblock_size, PPC_PIN_SIZE));
+	memblock_set_current_limit(first_memblock_base + size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #ifdef CONFIG_SMP
 void __cpuinit mmu_init_secondary(int cpu)
 {
 	unsigned long addr;
+<<<<<<< HEAD
+=======
+	unsigned long memstart = memstart_addr & ~(PPC_PIN_SIZE - 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Pin in enough TLBs to cover any lowmem not covered by the
 	 * initial 256M mapping established in head_44x.S
@@ -241,7 +267,11 @@ void __cpuinit mmu_init_secondary(int cpu)
 	 * stack. current (r2) isn't initialized, smp_processor_id()
 	 * will not work, current thread info isn't accessible, ...
 	 */
+<<<<<<< HEAD
 	for (addr = PPC_PIN_SIZE; addr < lowmem_end_addr;
+=======
+	for (addr = memstart + PPC_PIN_SIZE; addr < lowmem_end_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	     addr += PPC_PIN_SIZE) {
 		if (mmu_has_feature(MMU_FTR_TYPE_47x))
 			ppc47x_pin_tlb(addr + PAGE_OFFSET, addr);

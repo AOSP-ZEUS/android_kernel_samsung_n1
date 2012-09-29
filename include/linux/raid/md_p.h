@@ -245,10 +245,23 @@ struct mdp_superblock_1 {
 	__u8	device_uuid[16]; /* user-space setable, ignored by kernel */
 	__u8	devflags;	/* per-device flags.  Only one defined...*/
 #define	WriteMostly1	1	/* mask for writemostly flag in above */
+<<<<<<< HEAD
 	__u8	pad2[64-57];	/* set to 0 when writing */
 
 	/* array state information - 64 bytes */
 	__le64	utime;		/* 40 bits second, 24 btes microseconds */
+=======
+	/* Bad block log.  If there are any bad blocks the feature flag is set.
+	 * If offset and size are non-zero, that space is reserved and available
+	 */
+	__u8	bblog_shift;	/* shift from sectors to block size */
+	__le16	bblog_size;	/* number of sectors reserved for list */
+	__le32	bblog_offset;	/* sector offset from superblock to bblog,
+				 * signed - not unsigned */
+
+	/* array state information - 64 bytes */
+	__le64	utime;		/* 40 bits second, 24 bits microseconds */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__le64	events;		/* incremented when superblock updated */
 	__le64	resync_offset;	/* data before this offset (from data_offset) known to be in sync */
 	__le32	sb_csum;	/* checksum up to devs[max_dev] */
@@ -270,8 +283,16 @@ struct mdp_superblock_1 {
 					   * must be honoured
 					   */
 #define	MD_FEATURE_RESHAPE_ACTIVE	4
+<<<<<<< HEAD
 
 #define	MD_FEATURE_ALL			(1|2|4)
 
 #endif 
 
+=======
+#define	MD_FEATURE_BAD_BLOCKS		8 /* badblock list is not empty */
+
+#define	MD_FEATURE_ALL			(1|2|4|8)
+
+#endif 
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

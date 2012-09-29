@@ -27,5 +27,10 @@
 
 void *tcm_alloc(size_t len);
 void tcm_free(void *addr, size_t len);
+<<<<<<< HEAD
+=======
+bool tcm_dtcm_present(void);
+bool tcm_itcm_present(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif

@@ -179,6 +179,7 @@ static void ar9002_hw_init_mode_regs(struct ath_hw *ah)
 		INIT_INI_ARRAY(&ah->iniAddac, ar5416Addac,
 			       ARRAY_SIZE(ar5416Addac), 2);
 	}
+<<<<<<< HEAD
 
 	/* iniAddac needs to be modified for these chips */
 	if (AR_SREV_9160(ah) || !AR_SREV_5416_22_OR_LATER(ah)) {
@@ -198,6 +199,8 @@ static void ar9002_hw_init_mode_regs(struct ath_hw *ah)
 			INI_RA(addac, 31,1) = 0;
 		}
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Support for Japan ch.14 (2484) spread */
@@ -514,6 +517,7 @@ void ar9002_hw_enable_async_fifo(struct ath_hw *ah)
 	}
 }
 
+<<<<<<< HEAD
 /*
  * If Async FIFO is enabled, the following counters change as MAC now runs
  * at 117 Mhz instead of 88/44MHz when async FIFO is disabled.
@@ -553,6 +557,8 @@ void ar9002_hw_enable_wep_aggregation(struct ath_hw *ah)
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Sets up the AR5008/AR9001/AR9002 hardware familiy callbacks */
 void ar9002_hw_attach_ops(struct ath_hw *ah)
 {

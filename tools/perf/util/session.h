@@ -162,14 +162,29 @@ static inline int perf_session__parse_sample(struct perf_session *session,
 {
 	return perf_event__parse_sample(event, session->sample_type,
 					session->sample_size,
+<<<<<<< HEAD
 					session->sample_id_all, sample);
+=======
+					session->sample_id_all, sample,
+					session->header.needs_swap);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 struct perf_evsel *perf_session__find_first_evtype(struct perf_session *session,
 					    unsigned int type);
 
+<<<<<<< HEAD
 void perf_session__print_symbols(union perf_event *event,
 				 struct perf_sample *sample,
 				 struct perf_session *session);
+=======
+void perf_session__print_ip(union perf_event *event,
+				 struct perf_sample *sample,
+				 struct perf_session *session,
+				 int print_sym, int print_dso);
+
+int perf_session__cpu_bitmap(struct perf_session *session,
+			     const char *cpu_list, unsigned long *cpu_bitmap);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* __PERF_SESSION_H */

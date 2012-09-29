@@ -449,7 +449,11 @@ exit:
 	return ret;
 }
 
+<<<<<<< HEAD
 int __devexit omap_mcpdm_remove(struct platform_device *pdev)
+=======
+int omap_mcpdm_remove(struct platform_device *pdev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct omap_mcpdm *mcpdm_ptr = platform_get_drvdata(pdev);
 

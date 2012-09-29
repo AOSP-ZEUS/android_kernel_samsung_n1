@@ -1912,7 +1912,11 @@ int __devinit snd_emu10k1_create(struct snd_card *card,
 
 	/* irq handler must be registered after I/O ports are activated */
 	if (request_irq(pci->irq, snd_emu10k1_interrupt, IRQF_SHARED,
+<<<<<<< HEAD
 			"EMU10K1", emu)) {
+=======
+			KBUILD_MODNAME, emu)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		err = -EBUSY;
 		goto error;
 	}

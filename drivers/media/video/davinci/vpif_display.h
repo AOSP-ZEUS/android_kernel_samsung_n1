@@ -18,7 +18,10 @@
 
 /* Header files */
 #include <linux/videodev2.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <media/v4l2-common.h>
 #include <media/v4l2-device.h>
 #include <media/videobuf-core.h>
@@ -27,12 +30,16 @@
 #include "vpif.h"
 
 /* Macros */
+<<<<<<< HEAD
 #define VPIF_MAJOR_RELEASE	(0)
 #define VPIF_MINOR_RELEASE	(0)
 #define VPIF_BUILD		(1)
 
 #define VPIF_DISPLAY_VERSION_CODE \
 	((VPIF_MAJOR_RELEASE << 16) | (VPIF_MINOR_RELEASE << 8) | VPIF_BUILD)
+=======
+#define VPIF_DISPLAY_VERSION	"0.0.2"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define VPIF_VALID_FIELD(field) \
 	(((V4L2_FIELD_ANY == field) || (V4L2_FIELD_NONE == field)) || \

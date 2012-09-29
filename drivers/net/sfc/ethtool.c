@@ -796,6 +796,7 @@ static int efx_ethtool_set_wol(struct net_device *net_dev,
 static int efx_ethtool_reset(struct net_device *net_dev, u32 *flags)
 {
 	struct efx_nic *efx = netdev_priv(net_dev);
+<<<<<<< HEAD
 	enum reset_type method;
 	enum {
 		ETH_RESET_EFX_INVISIBLE = (ETH_RESET_DMA | ETH_RESET_FILTER |
@@ -820,6 +821,15 @@ static int efx_ethtool_reset(struct net_device *net_dev, u32 *flags)
 	}
 
 	return efx_reset(efx, method);
+=======
+	int rc;
+
+	rc = efx->type->map_reset_flags(flags);
+	if (rc < 0)
+		return rc;
+
+	return efx_reset(efx, rc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int

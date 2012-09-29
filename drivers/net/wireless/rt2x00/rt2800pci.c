@@ -219,7 +219,11 @@ static void rt2800pci_start_queue(struct data_queue *queue)
 		break;
 	default:
 		break;
+<<<<<<< HEAD
 	};
+=======
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void rt2800pci_kick_queue(struct data_queue *queue)
@@ -426,6 +430,10 @@ static int rt2800pci_init_queues(struct rt2x00_dev *rt2x00dev)
 static void rt2800pci_toggle_irq(struct rt2x00_dev *rt2x00dev,
 				 enum dev_state state)
 {
+<<<<<<< HEAD
+=======
+	int mask = (state == STATE_RADIO_IRQ_ON);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 reg;
 	unsigned long flags;
 
@@ -447,6 +455,7 @@ static void rt2800pci_toggle_irq(struct rt2x00_dev *rt2x00dev,
 	}
 
 	spin_lock_irqsave(&rt2x00dev->irqmask_lock, flags);
+<<<<<<< HEAD
 	reg = 0;
 	if (state == STATE_RADIO_IRQ_ON) {
 		rt2x00_set_field32(&reg, INT_MASK_CSR_RX_DONE, 1);
@@ -455,6 +464,27 @@ static void rt2800pci_toggle_irq(struct rt2x00_dev *rt2x00dev,
 		rt2x00_set_field32(&reg, INT_MASK_CSR_TX_FIFO_STATUS, 1);
 		rt2x00_set_field32(&reg, INT_MASK_CSR_AUTO_WAKEUP, 1);
 	}
+=======
+	rt2x00pci_register_read(rt2x00dev, INT_MASK_CSR, &reg);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_RXDELAYINT, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_TXDELAYINT, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_RX_DONE, mask);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_AC0_DMA_DONE, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_AC1_DMA_DONE, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_AC2_DMA_DONE, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_AC3_DMA_DONE, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_HCCA_DMA_DONE, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_MGMT_DMA_DONE, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_MCU_COMMAND, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_RXTX_COHERENT, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_TBTT, mask);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_PRE_TBTT, mask);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_TX_FIFO_STATUS, mask);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_AUTO_WAKEUP, mask);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_GPTIMER, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_RX_COHERENT, 0);
+	rt2x00_set_field32(&reg, INT_MASK_CSR_TX_COHERENT, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	rt2x00pci_register_write(rt2x00dev, INT_MASK_CSR, reg);
 	spin_unlock_irqrestore(&rt2x00dev->irqmask_lock, flags);
 
@@ -489,7 +519,13 @@ static int rt2800pci_init_registers(struct rt2x00_dev *rt2x00dev)
 	rt2x00pci_register_write(rt2x00dev, PBF_SYS_CTRL, 0x00000e1f);
 	rt2x00pci_register_write(rt2x00dev, PBF_SYS_CTRL, 0x00000e00);
 
+<<<<<<< HEAD
 	if (rt2x00_rt(rt2x00dev, RT5390)) {
+=======
+	if (rt2x00_is_pcie(rt2x00dev) &&
+	    (rt2x00_rt(rt2x00dev, RT3572) ||
+	     rt2x00_rt(rt2x00dev, RT5390))) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rt2x00pci_register_read(rt2x00dev, AUX_CTRL, &reg);
 		rt2x00_set_field32(&reg, AUX_CTRL_FORCE_PCIE_CLK, 1);
 		rt2x00_set_field32(&reg, AUX_CTRL_WAKE_PCIE_EN, 1);
@@ -1017,6 +1053,10 @@ static const struct ieee80211_ops rt2800pci_mac80211_ops = {
 	.flush			= rt2x00mac_flush,
 	.get_survey		= rt2800_get_survey,
 	.get_ringparam		= rt2x00mac_get_ringparam,
+<<<<<<< HEAD
+=======
+	.tx_frames_pending	= rt2x00mac_tx_frames_pending,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const struct rt2800_ops rt2800pci_rt2800_ops = {

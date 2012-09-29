@@ -52,6 +52,7 @@ EXPORT_SYMBOL(plpar_hcall_norets);
 
 extern void pSeries_find_serial_port(void);
 
+<<<<<<< HEAD
 
 static int vtermno;	/* virtual terminal# for udbg  */
 
@@ -243,6 +244,8 @@ out:
 	of_node_put(stdout_node);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void vpa_init(int cpu)
 {
 	int hwcpu = get_hard_smp_processor_id(cpu);
@@ -258,9 +261,14 @@ void vpa_init(int cpu)
 	ret = register_vpa(hwcpu, addr);
 
 	if (ret) {
+<<<<<<< HEAD
 		printk(KERN_ERR "WARNING: vpa_init: VPA registration for "
 				"cpu %d (hw %d) of area %lx returns %ld\n",
 				cpu, hwcpu, addr, ret);
+=======
+		pr_err("WARNING: VPA registration for cpu %d (hw %d) of area "
+		       "%lx failed with %ld\n", cpu, hwcpu, addr, ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	}
 	/*
@@ -271,10 +279,16 @@ void vpa_init(int cpu)
 	if (firmware_has_feature(FW_FEATURE_SPLPAR)) {
 		ret = register_slb_shadow(hwcpu, addr);
 		if (ret)
+<<<<<<< HEAD
 			printk(KERN_ERR
 			       "WARNING: vpa_init: SLB shadow buffer "
 			       "registration for cpu %d (hw %d) of area %lx "
 			       "returns %ld\n", cpu, hwcpu, addr, ret);
+=======
+			pr_err("WARNING: SLB shadow buffer registration for "
+			       "cpu %d (hw %d) of area %lx failed with %ld\n",
+			       cpu, hwcpu, addr, ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/*
@@ -291,8 +305,14 @@ void vpa_init(int cpu)
 		dtl->enqueue_to_dispatch_time = DISPATCH_LOG_BYTES;
 		ret = register_dtl(hwcpu, __pa(dtl));
 		if (ret)
+<<<<<<< HEAD
 			pr_warn("DTL registration failed for cpu %d (%ld)\n",
 				cpu, ret);
+=======
+			pr_err("WARNING: DTL registration of cpu %d (hw %d) "
+			       "failed with %ld\n", smp_processor_id(),
+			       hwcpu, ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		lppaca_of(cpu).dtl_enable_mask = 2;
 	}
 }

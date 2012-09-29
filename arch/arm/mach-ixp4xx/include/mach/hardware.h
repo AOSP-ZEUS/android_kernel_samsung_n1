@@ -17,19 +17,28 @@
 #ifndef __ASM_ARCH_HARDWARE_H__
 #define __ASM_ARCH_HARDWARE_H__
 
+<<<<<<< HEAD
 #define PCIBIOS_MIN_IO		0x00001000
 #ifdef CONFIG_IXP4XX_INDIRECT_PCI
 #define PCIBIOS_MIN_MEM		0x10000000 /* 1 GB of indirect PCI MMIO space */
 #define PCIBIOS_MAX_MEM		0x4FFFFFFF
 #else
 #define PCIBIOS_MIN_MEM		0x48000000 /* 64 MB of PCI MMIO space */
+=======
+#ifdef CONFIG_IXP4XX_INDIRECT_PCI
+#define PCIBIOS_MAX_MEM		0x4FFFFFFF
+#else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PCIBIOS_MAX_MEM		0x4BFFFFFF
 #endif
 
 #define ARCH_HAS_DMA_SET_COHERENT_MASK
 
+<<<<<<< HEAD
 #define pcibios_assign_all_busses()	1
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Register locations and bits */
 #include "ixp4xx-regs.h"
 

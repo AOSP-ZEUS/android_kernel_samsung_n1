@@ -33,8 +33,12 @@
 #define MAX_SW_LPS_SLEEP_INTV	5
 
 bool rtl_ps_set_rf_state(struct ieee80211_hw *hw,
+<<<<<<< HEAD
 			 enum rf_pwrstate state_toset, u32 changesource,
 			 bool protect_or_not);
+=======
+			 enum rf_pwrstate state_toset, u32 changesource);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 bool rtl_ps_enable_nic(struct ieee80211_hw *hw);
 bool rtl_ps_disable_nic(struct ieee80211_hw *hw);
 void rtl_ips_nic_off(struct ieee80211_hw *hw);

@@ -2,7 +2,11 @@
  * Broadcom specific AMBA
  * ChipCommon Power Management Unit driver
  *
+<<<<<<< HEAD
  * Copyright 2009, Michael Buesch <mb@bu3sch.de>
+=======
+ * Copyright 2009, Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Copyright 2007, Broadcom Corporation
  *
  * Licensed under the GNU/GPL. See COPYING for details.
@@ -53,6 +57,10 @@ static void bcma_pmu_resources_init(struct bcma_drv_cc *cc)
 		max_msk = 0xFFFF;
 		break;
 	case 43224:
+<<<<<<< HEAD
+=======
+	case 43225:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		pr_err("PMU resource config unknown for device 0x%04X\n",
@@ -74,6 +82,10 @@ void bcma_pmu_swreg_init(struct bcma_drv_cc *cc)
 	case 0x4313:
 	case 0x4331:
 	case 43224:
+<<<<<<< HEAD
+=======
+	case 43225:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		pr_err("PMU switch/regulators init unknown for device "
@@ -96,11 +108,20 @@ void bcma_pmu_workarounds(struct bcma_drv_cc *cc)
 		if (bus->chipinfo.rev == 0) {
 			pr_err("Workarounds for 43224 rev 0 not fully "
 				"implemented\n");
+<<<<<<< HEAD
 			bcma_chipco_chipctl_maskset(cc, 0, ~0, 0xF0);
+=======
+			bcma_chipco_chipctl_maskset(cc, 0, ~0, 0x00F000F0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else {
 			bcma_chipco_chipctl_maskset(cc, 0, ~0, 0xF0);
 		}
 		break;
+<<<<<<< HEAD
+=======
+	case 43225:
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default:
 		pr_err("Workarounds unknown for device 0x%04X\n",
 			bus->chipinfo.id);

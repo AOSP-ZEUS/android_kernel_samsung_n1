@@ -24,6 +24,10 @@ config MIPS
 	select GENERIC_IRQ_PROBE
 	select GENERIC_IRQ_SHOW
 	select HAVE_ARCH_JUMP_LABEL
+<<<<<<< HEAD
+=======
+	select IRQ_FORCED_THREADING
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 menu "Machine selection"
 
@@ -185,6 +189,10 @@ config MACH_JAZZ
 	select CSRC_R4K
 	select DEFAULT_SGI_PARTITION if CPU_BIG_ENDIAN
 	select GENERIC_ISA_DMA
+<<<<<<< HEAD
+=======
+	select HAVE_PCSPKR_PLATFORM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select IRQ_CPU
 	select I8253
 	select I8259
@@ -266,6 +274,10 @@ config MIPS_MALTA
 	select CSRC_R4K
 	select DMA_NONCOHERENT
 	select GENERIC_ISA_DMA
+<<<<<<< HEAD
+=======
+	select HAVE_PCSPKR_PLATFORM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select IRQ_CPU
 	select IRQ_GIC
 	select HW_HAS_PCI
@@ -640,6 +652,10 @@ config SNI_RM
 	select DEFAULT_SGI_PARTITION if CPU_BIG_ENDIAN
 	select DMA_NONCOHERENT
 	select GENERIC_ISA_DMA
+<<<<<<< HEAD
+=======
+	select HAVE_PCSPKR_PLATFORM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select HW_HAS_EISA
 	select HW_HAS_PCI
 	select IRQ_CPU
@@ -719,6 +735,10 @@ config CAVIUM_OCTEON_SIMULATOR
 	select SYS_SUPPORTS_HIGHMEM
 	select SYS_SUPPORTS_HOTPLUG_CPU
 	select SYS_HAS_CPU_CAVIUM_OCTEON
+<<<<<<< HEAD
+=======
+	select HOLES_IN_ZONE
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  The Octeon simulator is software performance model of the Cavium
 	  Octeon Processor. It supports simulating Octeon processors on x86
@@ -741,6 +761,10 @@ config CAVIUM_OCTEON_REFERENCE_BOARD
 	select ZONE_DMA32
 	select USB_ARCH_HAS_OHCI
 	select USB_ARCH_HAS_EHCI
+<<<<<<< HEAD
+=======
+	select HOLES_IN_ZONE
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  This option supports all of the Octeon reference boards from Cavium
 	  Networks. It builds a kernel that dynamically determines the Octeon
@@ -970,6 +994,12 @@ config ISA_DMA_API
 config GENERIC_GPIO
 	bool
 
+<<<<<<< HEAD
+=======
+config HOLES_IN_ZONE
+	bool
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #
 # Endianess selection.  Sufficiently obscure so many users don't know what to
 # answer,so we try hard to limit the available choices.  Also the use of a
@@ -2388,6 +2418,10 @@ config MMU
 config I8253
 	bool
 	select CLKSRC_I8253
+<<<<<<< HEAD
+=======
+	select CLKEVT_I8253
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select MIPS_EXTERNAL_TIMER
 
 config ZONE_DMA32
@@ -2489,6 +2523,7 @@ source "security/Kconfig"
 
 source "crypto/Kconfig"
 
+<<<<<<< HEAD
 menuconfig VIRTUALIZATION
 	bool "Virtualization"
 	default n
@@ -2505,4 +2540,6 @@ source drivers/virtio/Kconfig
 
 endif # VIRTUALIZATION
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "lib/Kconfig"

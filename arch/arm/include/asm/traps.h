@@ -3,6 +3,12 @@
 
 #include <linux/list.h>
 
+<<<<<<< HEAD
+=======
+struct pt_regs;
+struct task_struct;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct undef_hook {
 	struct list_head node;
 	u32 instr_mask;

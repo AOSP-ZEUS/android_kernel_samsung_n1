@@ -14,6 +14,10 @@
 #define _ASM_FIXMAP_H
 
 #include <asm/page.h>
+<<<<<<< HEAD
+=======
+#include <spaces.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_HIGHMEM
 #include <linux/threads.h>
 #include <asm/kmap_types.h>
@@ -67,6 +71,7 @@ enum fixed_addresses {
  * the start of the fixmap, and leave one page empty
  * at the top of mem..
  */
+<<<<<<< HEAD
 #ifdef CONFIG_BCM63XX
 #define FIXADDR_TOP     ((unsigned long)(long)(int)0xff000000)
 #else
@@ -76,6 +81,8 @@ enum fixed_addresses {
 #define FIXADDR_TOP	((unsigned long)(long)(int)0xfffe0000)
 #endif
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define FIXADDR_SIZE	(__end_of_fixed_addresses << PAGE_SHIFT)
 #define FIXADDR_START	(FIXADDR_TOP - FIXADDR_SIZE)
 

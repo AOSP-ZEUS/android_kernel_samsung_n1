@@ -143,7 +143,11 @@
  * min : 0xFE : -115.0 dB
  * mute: 0xFF
  */
+<<<<<<< HEAD
 static const DECLARE_TLV_DB_SCALE(out_tlv, -11550, 50, 1);
+=======
+static const DECLARE_TLV_DB_SCALE(out_tlv, -11500, 50, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static const struct snd_kcontrol_new ak4642_snd_controls[] = {
 

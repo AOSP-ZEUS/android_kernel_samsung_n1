@@ -18,7 +18,11 @@
  * included with this package.                                     *
  *******************************************************************/
 
+<<<<<<< HEAD
 #define LPFC_DRIVER_VERSION "8.3.23"
+=======
+#define LPFC_DRIVER_VERSION "8.3.25"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define LPFC_DRIVER_NAME		"lpfc"
 #define LPFC_SP_DRIVER_HANDLER_NAME	"lpfc:sp"
 #define LPFC_FP_DRIVER_HANDLER_NAME	"lpfc:fp"

@@ -27,7 +27,10 @@
 #include <linux/slab.h>
 #include <linux/mm.h>
 #include <linux/sched.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/videodev2.h>
 #include <media/v4l2-common.h>
 #include <media/v4l2-device.h>
@@ -54,7 +57,11 @@
  */
 #define USE_INT		0	/* Don't modify */
 
+<<<<<<< HEAD
 #define VERSION	"0.04"
+=======
+#define VERSION	"0.0.5"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define ar_inl(addr) 		inl((unsigned long)(addr))
 #define ar_outl(val, addr)	outl((unsigned long)(val), (unsigned long)(addr))
@@ -404,7 +411,10 @@ static int ar_querycap(struct file *file, void  *priv,
 	strlcpy(vcap->driver, ar->vdev.name, sizeof(vcap->driver));
 	strlcpy(vcap->card, "Colour AR VGA", sizeof(vcap->card));
 	strlcpy(vcap->bus_info, "Platform", sizeof(vcap->bus_info));
+<<<<<<< HEAD
 	vcap->version = KERNEL_VERSION(0, 0, 4);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	vcap->capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE;
 	return 0;
 }
@@ -879,3 +889,7 @@ module_exit(ar_cleanup_module);
 MODULE_AUTHOR("Takeo Takahashi <takahashi.takeo@renesas.com>");
 MODULE_DESCRIPTION("Colour AR M64278(VGA) for Video4Linux");
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_VERSION(VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -45,6 +45,11 @@ struct mcp_gen_header {
 	unsigned bss_addr;	/* start of bss */
 	unsigned features;
 	unsigned ee_hdr_addr;
+<<<<<<< HEAD
+=======
+	unsigned led_pattern;
+	unsigned led_pattern_dflt;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* 8 */
 };
 

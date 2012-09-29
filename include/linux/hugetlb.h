@@ -231,6 +231,12 @@ struct hstate {
 struct huge_bootmem_page {
 	struct list_head list;
 	struct hstate *hstate;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_HIGHMEM
+	phys_addr_t phys;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct page *alloc_huge_page_node(struct hstate *h, int nid);

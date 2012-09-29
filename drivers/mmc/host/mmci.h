@@ -166,6 +166,15 @@ struct clk;
 struct variant_data;
 struct dma_chan;
 
+<<<<<<< HEAD
+=======
+struct mmci_host_next {
+	struct dma_async_tx_descriptor	*dma_desc;
+	struct dma_chan			*dma_chan;
+	s32				cookie;
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct mmci_host {
 	phys_addr_t		phybase;
 	void __iomem		*base;
@@ -203,6 +212,11 @@ struct mmci_host {
 	struct dma_chan		*dma_current;
 	struct dma_chan		*dma_rx_channel;
 	struct dma_chan		*dma_tx_channel;
+<<<<<<< HEAD
+=======
+	struct dma_async_tx_descriptor	*dma_desc_current;
+	struct mmci_host_next	next_data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define dma_inprogress(host)	((host)->dma_current)
 #else

@@ -7,6 +7,11 @@ config VIRTIO_RING
 	tristate
 	depends on VIRTIO
 
+<<<<<<< HEAD
+=======
+menu "Virtio drivers"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config VIRTIO_PCI
 	tristate "PCI driver for virtio devices (EXPERIMENTAL)"
 	depends on PCI && EXPERIMENTAL
@@ -33,3 +38,7 @@ config VIRTIO_BALLOON
 
 	 If unsure, say M.
 
+<<<<<<< HEAD
+=======
+endmenu
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

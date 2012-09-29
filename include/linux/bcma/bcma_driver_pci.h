@@ -85,5 +85,10 @@ struct bcma_drv_pci {
 #define pcicore_write32(pc, offset, val)	bcma_write32((pc)->core, offset, val)
 
 extern void bcma_core_pci_init(struct bcma_drv_pci *pc);
+<<<<<<< HEAD
+=======
+extern int bcma_core_pci_irq_ctl(struct bcma_drv_pci *pc,
+				 struct bcma_device *core, bool enable);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* LINUX_BCMA_DRIVER_PCI_H_ */

@@ -70,7 +70,11 @@ static int __devinit pxa2xx_flash_probe(struct platform_device *pdev)
 	info->map.name = (char *) flash->name;
 	info->map.bankwidth = flash->width;
 	info->map.phys = res->start;
+<<<<<<< HEAD
 	info->map.size = res->end - res->start + 1;
+=======
+	info->map.size = resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	info->parts = flash->parts;
 	info->nr_parts = flash->nr_parts;
 

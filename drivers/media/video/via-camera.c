@@ -1332,6 +1332,11 @@ static __devinit bool viacam_serial_is_enabled(void)
 	struct pci_bus *pbus = pci_find_bus(0, 0);
 	u8 cbyte;
 
+<<<<<<< HEAD
+=======
+	if (!pbus)
+		return false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pci_bus_read_config_byte(pbus, VIACAM_SERIAL_DEVFN,
 			VIACAM_SERIAL_CREG, &cbyte);
 	if ((cbyte & VIACAM_SERIAL_BIT) == 0)

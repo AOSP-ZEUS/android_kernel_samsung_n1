@@ -567,7 +567,11 @@ int fillin_formats(void)
 				default:
 					return -3;
 				}
+<<<<<<< HEAD
 				bytesperline = width * ((mask3 & 0x00F0) >> 4);
+=======
+				bytesperline = width * ((mask3 & 0x00E0) >> 5);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				sizeimage =  bytesperline * height;
 
 				for (m = 0; m < INTERLACE_MANY; m++) {

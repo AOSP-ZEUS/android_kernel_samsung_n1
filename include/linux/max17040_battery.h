@@ -14,10 +14,13 @@ struct max17040_platform_data {
 	int (*battery_online)(void);
 	int (*charger_online)(void);
 	int (*charger_enable)(void);
+<<<<<<< HEAD
 	int (*power_supply_register)(struct device *parent,
 		struct power_supply *psy);
 	void (*power_supply_unregister)(struct power_supply *psy);
 	u16 rcomp_value;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif

@@ -57,12 +57,26 @@ struct evdev_client {
 static struct evdev *evdev_table[EVDEV_MINORS];
 static DEFINE_MUTEX(evdev_table_mutex);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_MACH_N1
+static struct wake_lock evdev_wake_lock;
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void evdev_pass_event(struct evdev_client *client,
 			     struct input_event *event)
 {
 	/* Interrupts are disabled, just acquire the lock. */
 	spin_lock(&client->buffer_lock);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_MACH_N1
+	if (event->type == EV_KEY && event->code == KEY_POWER)
+		wake_lock_timeout(&evdev_wake_lock, 2 * HZ);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	client->buffer[client->head++] = *event;
 	client->head &= client->bufsize - 1;
 
@@ -1053,11 +1067,23 @@ static struct input_handler evdev_handler = {
 
 static int __init evdev_init(void)
 {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_MACH_N1
+	wake_lock_init(&evdev_wake_lock, WAKE_LOCK_SUSPEND, "evdev");
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return input_register_handler(&evdev_handler);
 }
 
 static void __exit evdev_exit(void)
 {
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_MACH_N1
+	wake_lock_destroy(&evdev_wake_lock);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	input_unregister_handler(&evdev_handler);
 }
 

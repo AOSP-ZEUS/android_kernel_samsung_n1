@@ -365,10 +365,17 @@ static struct tc_action_ops *tc_lookup_action_id(u32 type)
 }
 #endif
 
+<<<<<<< HEAD
 int tcf_action_exec(struct sk_buff *skb, struct tc_action *act,
 		    struct tcf_result *res)
 {
 	struct tc_action *a;
+=======
+int tcf_action_exec(struct sk_buff *skb, const struct tc_action *act,
+		    struct tcf_result *res)
+{
+	const struct tc_action *a;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret = -1;
 
 	if (skb->tc_verd & TC_NCLS) {
@@ -1115,9 +1122,16 @@ nlmsg_failure:
 
 static int __init tc_action_init(void)
 {
+<<<<<<< HEAD
 	rtnl_register(PF_UNSPEC, RTM_NEWACTION, tc_ctl_action, NULL);
 	rtnl_register(PF_UNSPEC, RTM_DELACTION, tc_ctl_action, NULL);
 	rtnl_register(PF_UNSPEC, RTM_GETACTION, tc_ctl_action, tc_dump_action);
+=======
+	rtnl_register(PF_UNSPEC, RTM_NEWACTION, tc_ctl_action, NULL, NULL);
+	rtnl_register(PF_UNSPEC, RTM_DELACTION, tc_ctl_action, NULL, NULL);
+	rtnl_register(PF_UNSPEC, RTM_GETACTION, tc_ctl_action, tc_dump_action,
+		      NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

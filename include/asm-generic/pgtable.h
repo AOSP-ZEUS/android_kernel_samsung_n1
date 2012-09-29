@@ -425,8 +425,11 @@ extern void untrack_pfn_vma(struct vm_area_struct *vma, unsigned long pfn,
 				unsigned long size);
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_MMU
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef CONFIG_TRANSPARENT_HUGEPAGE
 static inline int pmd_trans_huge(pmd_t pmd)
 {
@@ -443,6 +446,7 @@ static inline int pmd_write(pmd_t pmd)
 	return 0;
 }
 #endif /* __HAVE_ARCH_PMD_WRITE */
+<<<<<<< HEAD
 #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
 
 /*
@@ -503,6 +507,9 @@ static inline int pmd_trans_unstable(pmd_t *pmd)
 }
 
 #endif /* CONFIG_MMU */
+=======
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* !__ASSEMBLY__ */
 

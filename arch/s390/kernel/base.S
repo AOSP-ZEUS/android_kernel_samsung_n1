@@ -6,13 +6,21 @@
  *		 Michael Holzheu <holzheu@de.ibm.com>
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/linkage.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/asm-offsets.h>
 #include <asm/ptrace.h>
 
 #ifdef CONFIG_64BIT
 
+<<<<<<< HEAD
 	.globl	s390_base_mcck_handler
 s390_base_mcck_handler:
+=======
+ENTRY(s390_base_mcck_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	basr	%r13,0
 0:	lg	%r15,__LC_PANIC_STACK	# load panic stack
 	aghi	%r15,-STACK_FRAME_OVERHEAD
@@ -26,13 +34,21 @@ s390_base_mcck_handler:
 	lpswe	__LC_MCK_OLD_PSW
 
 	.section .bss
+<<<<<<< HEAD
+=======
+	.align 8
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.globl	s390_base_mcck_handler_fn
 s390_base_mcck_handler_fn:
 	.quad	0
 	.previous
 
+<<<<<<< HEAD
 	.globl	s390_base_ext_handler
 s390_base_ext_handler:
+=======
+ENTRY(s390_base_ext_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stmg	%r0,%r15,__LC_SAVE_AREA
 	basr	%r13,0
 0:	aghi	%r15,-STACK_FRAME_OVERHEAD
@@ -46,13 +62,21 @@ s390_base_ext_handler:
 	lpswe	__LC_EXT_OLD_PSW
 
 	.section .bss
+<<<<<<< HEAD
+=======
+	.align 8
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.globl s390_base_ext_handler_fn
 s390_base_ext_handler_fn:
 	.quad	0
 	.previous
 
+<<<<<<< HEAD
 	.globl	s390_base_pgm_handler
 s390_base_pgm_handler:
+=======
+ENTRY(s390_base_pgm_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stmg	%r0,%r15,__LC_SAVE_AREA
 	basr	%r13,0
 0:	aghi	%r15,-STACK_FRAME_OVERHEAD
@@ -70,15 +94,61 @@ disabled_wait_psw:
 	.quad	0x0002000180000000,0x0000000000000000 + s390_base_pgm_handler
 
 	.section .bss
+<<<<<<< HEAD
+=======
+	.align 8
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.globl s390_base_pgm_handler_fn
 s390_base_pgm_handler_fn:
 	.quad	0
 	.previous
 
+<<<<<<< HEAD
 #else /* CONFIG_64BIT */
 
 	.globl	s390_base_mcck_handler
 s390_base_mcck_handler:
+=======
+#
+# Calls diag 308 subcode 1 and continues execution
+#
+# The following conditions must be ensured before calling this function:
+# * Prefix register = 0
+# * Lowcore protection is disabled
+#
+ENTRY(diag308_reset)
+	larl	%r4,.Lctlregs		# Save control registers
+	stctg	%c0,%c15,0(%r4)
+	larl	%r4,.Lrestart_psw	# Setup restart PSW at absolute 0
+	lghi	%r3,0
+	lg	%r4,0(%r4)		# Save PSW
+	sturg	%r4,%r3			# Use sturg, because of large pages
+	lghi	%r1,1
+	diag	%r1,%r1,0x308
+.Lrestart_part2:
+	lhi	%r0,0			# Load r0 with zero
+	lhi	%r1,2			# Use mode 2 = ESAME (dump)
+	sigp	%r1,%r0,0x12		# Switch to ESAME mode
+	sam64				# Switch to 64 bit addressing mode
+	larl	%r4,.Lctlregs		# Restore control registers
+	lctlg	%c0,%c15,0(%r4)
+	br	%r14
+.align 16
+.Lrestart_psw:
+	.long	0x00080000,0x80000000 + .Lrestart_part2
+
+	.section .bss
+.align 8
+.Lctlregs:
+	.rept	16
+	.quad	0
+	.endr
+	.previous
+
+#else /* CONFIG_64BIT */
+
+ENTRY(s390_base_mcck_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	basr	%r13,0
 0:	l	%r15,__LC_PANIC_STACK	# load panic stack
 	ahi	%r15,-STACK_FRAME_OVERHEAD
@@ -93,13 +163,21 @@ s390_base_mcck_handler:
 2:	.long	s390_base_mcck_handler_fn
 
 	.section .bss
+<<<<<<< HEAD
+=======
+	.align 4
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.globl	s390_base_mcck_handler_fn
 s390_base_mcck_handler_fn:
 	.long	0
 	.previous
 
+<<<<<<< HEAD
 	.globl	s390_base_ext_handler
 s390_base_ext_handler:
+=======
+ENTRY(s390_base_ext_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stm	%r0,%r15,__LC_SAVE_AREA
 	basr	%r13,0
 0:	ahi	%r15,-STACK_FRAME_OVERHEAD
@@ -115,13 +193,21 @@ s390_base_ext_handler:
 2:	.long	s390_base_ext_handler_fn
 
 	.section .bss
+<<<<<<< HEAD
+=======
+	.align 4
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.globl	s390_base_ext_handler_fn
 s390_base_ext_handler_fn:
 	.long	0
 	.previous
 
+<<<<<<< HEAD
 	.globl	s390_base_pgm_handler
 s390_base_pgm_handler:
+=======
+ENTRY(s390_base_pgm_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stm	%r0,%r15,__LC_SAVE_AREA
 	basr	%r13,0
 0:	ahi	%r15,-STACK_FRAME_OVERHEAD
@@ -142,6 +228,10 @@ disabled_wait_psw:
 	.long	0x000a0000,0x00000000 + s390_base_pgm_handler
 
 	.section .bss
+<<<<<<< HEAD
+=======
+	.align 4
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.globl	s390_base_pgm_handler_fn
 s390_base_pgm_handler_fn:
 	.long	0

@@ -183,6 +183,7 @@ int bigendian(void)
 	return *ptr == 0x01020304;
 }
 
+<<<<<<< HEAD
 static unsigned long long copy_file_fd(int fd)
 {
 	unsigned long long size = 0;
@@ -204,10 +205,20 @@ static unsigned long long copy_file(const char *file)
 {
 	unsigned long long size = 0;
 	int fd;
+=======
+/* unfortunately, you can not stat debugfs or proc files for size */
+static void record_file(const char *file, size_t hdr_sz)
+{
+	unsigned long long size = 0;
+	char buf[BUFSIZ], *sizep;
+	off_t hdr_pos = lseek(output_fd, 0, SEEK_CUR);
+	int r, fd;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		die("Can't read '%s'", file);
+<<<<<<< HEAD
 	size = copy_file_fd(fd);
 	close(fd);
 
@@ -243,10 +254,33 @@ static unsigned long get_size(const char *file)
 	close(fd);
 
 	return size;
+=======
+
+	/* put in zeros for file size, then fill true size later */
+	write_or_die(&size, hdr_sz);
+
+	do {
+		r = read(fd, buf, BUFSIZ);
+		if (r > 0) {
+			size += r;
+			write_or_die(buf, r);
+		}
+	} while (r > 0);
+	close(fd);
+
+	/* ugh, handle big-endian hdr_size == 4 */
+	sizep = (char*)&size;
+	if (bigendian())
+		sizep += sizeof(u64) - hdr_sz;
+
+	if (pwrite(output_fd, sizep, hdr_sz, hdr_pos) < 0)
+		die("writing to %s", output_file);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void read_header_files(void)
 {
+<<<<<<< HEAD
 	unsigned long long size, check_size;
 	char *path;
 	int fd;
@@ -283,6 +317,26 @@ static void read_header_files(void)
 		die("wrong size for '%s'", path);
 	put_tracing_file(path);
 	close(fd);
+=======
+	char *path;
+	struct stat st;
+
+	path = get_tracing_file("events/header_page");
+	if (stat(path, &st) < 0)
+		die("can't read '%s'", path);
+
+	write_or_die("header_page", 12);
+	record_file(path, 8);
+	put_tracing_file(path);
+
+	path = get_tracing_file("events/header_event");
+	if (stat(path, &st) < 0)
+		die("can't read '%s'", path);
+
+	write_or_die("header_event", 13);
+	record_file(path, 8);
+	put_tracing_file(path);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static bool name_in_tp_list(char *sys, struct tracepoint_path *tps)
@@ -298,7 +352,10 @@ static bool name_in_tp_list(char *sys, struct tracepoint_path *tps)
 
 static void copy_event_system(const char *sys, struct tracepoint_path *tps)
 {
+<<<<<<< HEAD
 	unsigned long long size, check_size;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct dirent *dent;
 	struct stat st;
 	char *format;
@@ -338,6 +395,7 @@ static void copy_event_system(const char *sys, struct tracepoint_path *tps)
 		sprintf(format, "%s/%s/format", sys, dent->d_name);
 		ret = stat(format, &st);
 
+<<<<<<< HEAD
 		if (ret >= 0) {
 			/* unfortunately, you can not stat debugfs files for size */
 			size = get_size(format);
@@ -346,6 +404,10 @@ static void copy_event_system(const char *sys, struct tracepoint_path *tps)
 			if (size != check_size)
 				die("error in size of file '%s'", format);
 		}
+=======
+		if (ret >= 0)
+			record_file(format, 8);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		free(format);
 	}
@@ -426,7 +488,11 @@ static void read_event_files(struct tracepoint_path *tps)
 
 static void read_proc_kallsyms(void)
 {
+<<<<<<< HEAD
 	unsigned int size, check_size;
+=======
+	unsigned int size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	const char *path = "/proc/kallsyms";
 	struct stat st;
 	int ret;
@@ -438,17 +504,25 @@ static void read_proc_kallsyms(void)
 		write_or_die(&size, 4);
 		return;
 	}
+<<<<<<< HEAD
 	size = get_size(path);
 	write_or_die(&size, 4);
 	check_size = copy_file(path);
 	if (size != check_size)
 		die("error in size of file '%s'", path);
 
+=======
+	record_file(path, 4);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void read_ftrace_printk(void)
 {
+<<<<<<< HEAD
 	unsigned int size, check_size;
+=======
+	unsigned int size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char *path;
 	struct stat st;
 	int ret;
@@ -461,11 +535,16 @@ static void read_ftrace_printk(void)
 		write_or_die(&size, 4);
 		goto out;
 	}
+<<<<<<< HEAD
 	size = get_size(path);
 	write_or_die(&size, 4);
 	check_size = copy_file(path);
 	if (size != check_size)
 		die("error in size of file '%s'", path);
+=======
+	record_file(path, 4);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out:
 	put_tracing_file(path);
 }

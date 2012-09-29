@@ -700,9 +700,15 @@ static int __devinit pmic8xxx_kp_probe(struct platform_device *pdev)
 	return 0;
 
 err_pmic_reg_read:
+<<<<<<< HEAD
 	free_irq(kp->key_stuck_irq, NULL);
 err_req_stuck_irq:
 	free_irq(kp->key_sense_irq, NULL);
+=======
+	free_irq(kp->key_stuck_irq, kp);
+err_req_stuck_irq:
+	free_irq(kp->key_sense_irq, kp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_gpio_config:
 err_get_irq:
 	input_free_device(kp->input);
@@ -717,8 +723,13 @@ static int __devexit pmic8xxx_kp_remove(struct platform_device *pdev)
 	struct pmic8xxx_kp *kp = platform_get_drvdata(pdev);
 
 	device_init_wakeup(&pdev->dev, 0);
+<<<<<<< HEAD
 	free_irq(kp->key_stuck_irq, NULL);
 	free_irq(kp->key_sense_irq, NULL);
+=======
+	free_irq(kp->key_stuck_irq, kp);
+	free_irq(kp->key_sense_irq, kp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	input_unregister_device(kp->input);
 	kfree(kp);
 

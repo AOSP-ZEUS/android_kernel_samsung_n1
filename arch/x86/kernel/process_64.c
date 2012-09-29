@@ -37,6 +37,10 @@
 #include <linux/uaccess.h>
 #include <linux/io.h>
 #include <linux/ftrace.h>
+<<<<<<< HEAD
+=======
+#include <linux/cpuidle.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/pgtable.h>
 #include <asm/system.h>
@@ -122,7 +126,12 @@ void cpu_idle(void)
 			enter_idle();
 			/* Don't trace irqs off for idle */
 			stop_critical_timings();
+<<<<<<< HEAD
 			pm_idle();
+=======
+			if (cpuidle_idle_call())
+				pm_idle();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			start_critical_timings();
 
 			/* In many cases the interrupt that ended idle
@@ -363,9 +372,24 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 	int cpu = smp_processor_id();
 	struct tss_struct *tss = &per_cpu(init_tss, cpu);
 	unsigned fsindex, gsindex;
+<<<<<<< HEAD
 	fpu_switch_t fpu;
 
 	fpu = switch_fpu_prepare(prev_p, next_p);
+=======
+	bool preload_fpu;
+
+	/*
+	 * If the task has used fpu the last 5 timeslices, just do a full
+	 * restore of the math state immediately to avoid the trap; the
+	 * chances of needing FPU soon are obviously high now
+	 */
+	preload_fpu = tsk_used_math(next_p) && next_p->fpu_counter > 5;
+
+	/* we're going to use this soon, after a few expensive things */
+	if (preload_fpu)
+		prefetch(next->fpu.state);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Reload esp0, LDT and the page table pointer:
@@ -395,6 +419,16 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 
 	load_TLS(next, cpu);
 
+<<<<<<< HEAD
+=======
+	/* Must be after DS reload */
+	__unlazy_fpu(prev_p);
+
+	/* Make sure cpu is ready for new context */
+	if (preload_fpu)
+		clts();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Leave lazy mode, flushing any hypercalls made here.
 	 * This must be done before restoring TLS segments so
@@ -435,8 +469,11 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 		wrmsrl(MSR_KERNEL_GS_BASE, next->gs);
 	prev->gsindex = gsindex;
 
+<<<<<<< HEAD
 	switch_fpu_finish(next_p, fpu);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Switch the PDA and FPU contexts.
 	 */
@@ -455,6 +492,16 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
 		     task_thread_info(prev_p)->flags & _TIF_WORK_CTXSW_PREV))
 		__switch_to_xtra(prev_p, next_p, tss);
 
+<<<<<<< HEAD
+=======
+	/*
+	 * Preload the FPU context, now that we've determined that the
+	 * task is likely to be using it. 
+	 */
+	if (preload_fpu)
+		__math_state_restore();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return prev_p;
 }
 

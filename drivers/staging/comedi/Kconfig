@@ -841,6 +841,19 @@ config COMEDI_DT3000
 	  To compile this driver as a module, choose M here: the module will be
 	  called dt3000.
 
+<<<<<<< HEAD
+=======
+config COMEDI_DYNA_PCI10XX
+	tristate "Dynalog PCI DAQ series support"
+	default N
+	---help---
+	  Enable support for Dynalog PCI DAQ series
+	  PCI-1050
+
+	  To compile this driver as a module, choose M here: the module will be
+	  called dyna_pci10xx.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config COMEDI_UNIOXX5
 	tristate "Fastwel UNIOxx-5 analog and digital io board support"
 	default N

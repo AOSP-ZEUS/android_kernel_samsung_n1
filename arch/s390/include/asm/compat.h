@@ -172,6 +172,16 @@ static inline int is_compat_task(void)
 	return is_32bit_task();
 }
 
+<<<<<<< HEAD
+=======
+#else
+
+static inline int is_compat_task(void)
+{
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 static inline void __user *arch_compat_alloc_user_space(long len)

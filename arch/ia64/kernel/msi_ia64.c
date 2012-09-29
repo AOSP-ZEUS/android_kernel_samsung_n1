@@ -131,7 +131,11 @@ void arch_teardown_msi_irq(unsigned int irq)
 	return ia64_teardown_msi_irq(irq);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_DMAR
+=======
+#ifdef CONFIG_INTEL_IOMMU
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_SMP
 static int dmar_msi_set_affinity(struct irq_data *data,
 				 const struct cpumask *mask, bool force)
@@ -210,5 +214,9 @@ int arch_setup_dmar_msi(unsigned int irq)
 				      "edge");
 	return 0;
 }
+<<<<<<< HEAD
 #endif /* CONFIG_DMAR */
+=======
+#endif /* CONFIG_INTEL_IOMMU */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 

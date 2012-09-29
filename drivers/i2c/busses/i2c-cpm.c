@@ -662,11 +662,16 @@ static int __devinit cpm_i2c_probe(struct platform_device *ofdev)
 	/* register new adapter to i2c module... */
 
 	data = of_get_property(ofdev->dev.of_node, "linux,i2c-index", &len);
+<<<<<<< HEAD
 	if (data && len == 4) {
 		cpm->adap.nr = *data;
 		result = i2c_add_numbered_adapter(&cpm->adap);
 	} else
 		result = i2c_add_adapter(&cpm->adap);
+=======
+	cpm->adap.nr = (data && len == 4) ? be32_to_cpup(data) : -1;
+	result = i2c_add_numbered_adapter(&cpm->adap);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (result < 0) {
 		dev_err(&ofdev->dev, "Unable to register with I2C\n");

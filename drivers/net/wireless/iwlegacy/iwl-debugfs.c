@@ -391,6 +391,7 @@ static ssize_t iwl_legacy_dbgfs_nvm_read(struct file *file,
 	return ret;
 }
 
+<<<<<<< HEAD
 static ssize_t iwl_legacy_dbgfs_log_event_read(struct file *file,
 					 char __user *user_buf,
 					 size_t count, loff_t *ppos)
@@ -433,6 +434,8 @@ static ssize_t iwl_legacy_dbgfs_log_event_write(struct file *file,
 
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static ssize_t
 iwl_legacy_dbgfs_channels_read(struct file *file, char __user *user_buf,
 				       size_t count, loff_t *ppos)
@@ -706,7 +709,10 @@ static ssize_t iwl_legacy_dbgfs_disable_ht40_read(struct file *file,
 }
 
 DEBUGFS_READ_WRITE_FILE_OPS(sram);
+<<<<<<< HEAD
 DEBUGFS_READ_WRITE_FILE_OPS(log_event);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 DEBUGFS_READ_FILE_OPS(nvm);
 DEBUGFS_READ_FILE_OPS(stations);
 DEBUGFS_READ_FILE_OPS(channels);
@@ -1098,6 +1104,7 @@ static ssize_t iwl_legacy_dbgfs_clear_ucode_statistics_write(struct file *file,
 	return count;
 }
 
+<<<<<<< HEAD
 static ssize_t iwl_legacy_dbgfs_ucode_tracing_read(struct file *file,
 					char __user *user_buf,
 					size_t count, loff_t *ppos) {
@@ -1148,6 +1155,8 @@ static ssize_t iwl_legacy_dbgfs_ucode_tracing_write(struct file *file,
 	return count;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static ssize_t iwl_legacy_dbgfs_rxon_flags_read(struct file *file,
 					 char __user *user_buf,
 					 size_t count, loff_t *ppos) {
@@ -1236,6 +1245,7 @@ static ssize_t iwl_legacy_dbgfs_missed_beacon_write(struct file *file,
 	return count;
 }
 
+<<<<<<< HEAD
 static ssize_t iwl_legacy_dbgfs_plcp_delta_read(struct file *file,
 					char __user *user_buf,
 					size_t count, loff_t *ppos) {
@@ -1275,16 +1285,23 @@ static ssize_t iwl_legacy_dbgfs_plcp_delta_write(struct file *file,
 	return count;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static ssize_t iwl_legacy_dbgfs_force_reset_read(struct file *file,
 					char __user *user_buf,
 					size_t count, loff_t *ppos) {
 
 	struct iwl_priv *priv = file->private_data;
+<<<<<<< HEAD
 	int i, pos = 0;
+=======
+	int pos = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char buf[300];
 	const size_t bufsz = sizeof(buf);
 	struct iwl_force_reset *force_reset;
 
+<<<<<<< HEAD
 	for (i = 0; i < IWL_MAX_FORCE_RESET; i++) {
 		force_reset = &priv->force_reset[i];
 		pos += scnprintf(buf + pos, bufsz - pos,
@@ -1302,6 +1319,23 @@ static ssize_t iwl_legacy_dbgfs_force_reset_read(struct file *file,
 				"\treset duration: %lu\n",
 				force_reset->reset_duration);
 	}
+=======
+	force_reset = &priv->force_reset;
+
+	pos += scnprintf(buf + pos, bufsz - pos,
+			"\tnumber of reset request: %d\n",
+			force_reset->reset_request_count);
+	pos += scnprintf(buf + pos, bufsz - pos,
+			"\tnumber of reset request success: %d\n",
+			force_reset->reset_success_count);
+	pos += scnprintf(buf + pos, bufsz - pos,
+			"\tnumber of reset request reject: %d\n",
+			force_reset->reset_reject_count);
+	pos += scnprintf(buf + pos, bufsz - pos,
+			"\treset duration: %lu\n",
+			force_reset->reset_duration);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return simple_read_from_buffer(user_buf, count, ppos, buf, pos);
 }
 
@@ -1309,6 +1343,7 @@ static ssize_t iwl_legacy_dbgfs_force_reset_write(struct file *file,
 					const char __user *user_buf,
 					size_t count, loff_t *ppos) {
 
+<<<<<<< HEAD
 	struct iwl_priv *priv = file->private_data;
 	char buf[8];
 	int buf_size;
@@ -1328,6 +1363,13 @@ static ssize_t iwl_legacy_dbgfs_force_reset_write(struct file *file,
 	default:
 		return -EINVAL;
 	}
+=======
+	int ret;
+	struct iwl_priv *priv = file->private_data;
+
+	ret = iwl_legacy_force_reset(priv, true);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret ? ret : count;
 }
 
@@ -1367,10 +1409,15 @@ DEBUGFS_READ_FILE_OPS(chain_noise);
 DEBUGFS_READ_FILE_OPS(power_save_status);
 DEBUGFS_WRITE_FILE_OPS(clear_ucode_statistics);
 DEBUGFS_WRITE_FILE_OPS(clear_traffic_statistics);
+<<<<<<< HEAD
 DEBUGFS_READ_WRITE_FILE_OPS(ucode_tracing);
 DEBUGFS_READ_FILE_OPS(fh_reg);
 DEBUGFS_READ_WRITE_FILE_OPS(missed_beacon);
 DEBUGFS_READ_WRITE_FILE_OPS(plcp_delta);
+=======
+DEBUGFS_READ_FILE_OPS(fh_reg);
+DEBUGFS_READ_WRITE_FILE_OPS(missed_beacon);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 DEBUGFS_READ_WRITE_FILE_OPS(force_reset);
 DEBUGFS_READ_FILE_OPS(rxon_flags);
 DEBUGFS_READ_FILE_OPS(rxon_filter_flags);
@@ -1403,7 +1450,10 @@ int iwl_legacy_dbgfs_register(struct iwl_priv *priv, const char *name)
 
 	DEBUGFS_ADD_FILE(nvm, dir_data, S_IRUSR);
 	DEBUGFS_ADD_FILE(sram, dir_data, S_IWUSR | S_IRUSR);
+<<<<<<< HEAD
 	DEBUGFS_ADD_FILE(log_event, dir_data, S_IWUSR | S_IRUSR);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	DEBUGFS_ADD_FILE(stations, dir_data, S_IRUSR);
 	DEBUGFS_ADD_FILE(channels, dir_data, S_IRUSR);
 	DEBUGFS_ADD_FILE(status, dir_data, S_IRUSR);
@@ -1420,7 +1470,10 @@ int iwl_legacy_dbgfs_register(struct iwl_priv *priv, const char *name)
 	DEBUGFS_ADD_FILE(clear_traffic_statistics, dir_debug, S_IWUSR);
 	DEBUGFS_ADD_FILE(fh_reg, dir_debug, S_IRUSR);
 	DEBUGFS_ADD_FILE(missed_beacon, dir_debug, S_IWUSR);
+<<<<<<< HEAD
 	DEBUGFS_ADD_FILE(plcp_delta, dir_debug, S_IWUSR | S_IRUSR);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	DEBUGFS_ADD_FILE(force_reset, dir_debug, S_IWUSR | S_IRUSR);
 	DEBUGFS_ADD_FILE(ucode_rx_stats, dir_debug, S_IRUSR);
 	DEBUGFS_ADD_FILE(ucode_tx_stats, dir_debug, S_IRUSR);
@@ -1430,8 +1483,11 @@ int iwl_legacy_dbgfs_register(struct iwl_priv *priv, const char *name)
 		DEBUGFS_ADD_FILE(sensitivity, dir_debug, S_IRUSR);
 	if (priv->cfg->base_params->chain_noise_calib_by_driver)
 		DEBUGFS_ADD_FILE(chain_noise, dir_debug, S_IRUSR);
+<<<<<<< HEAD
 	if (priv->cfg->base_params->ucode_tracing)
 		DEBUGFS_ADD_FILE(ucode_tracing, dir_debug, S_IWUSR | S_IRUSR);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	DEBUGFS_ADD_FILE(rxon_flags, dir_debug, S_IWUSR);
 	DEBUGFS_ADD_FILE(rxon_filter_flags, dir_debug, S_IWUSR);
 	DEBUGFS_ADD_FILE(wd_timeout, dir_debug, S_IWUSR);

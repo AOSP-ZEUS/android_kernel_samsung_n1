@@ -431,9 +431,17 @@ int register_perf_hw_breakpoint(struct perf_event *bp)
 struct perf_event *
 register_user_hw_breakpoint(struct perf_event_attr *attr,
 			    perf_overflow_handler_t triggered,
+<<<<<<< HEAD
 			    struct task_struct *tsk)
 {
 	return perf_event_create_kernel_counter(attr, -1, tsk, triggered);
+=======
+			    void *context,
+			    struct task_struct *tsk)
+{
+	return perf_event_create_kernel_counter(attr, -1, tsk, triggered,
+						context);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(register_user_hw_breakpoint);
 
@@ -502,7 +510,12 @@ EXPORT_SYMBOL_GPL(unregister_hw_breakpoint);
  */
 struct perf_event * __percpu *
 register_wide_hw_breakpoint(struct perf_event_attr *attr,
+<<<<<<< HEAD
 			    perf_overflow_handler_t triggered)
+=======
+			    perf_overflow_handler_t triggered,
+			    void *context)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct perf_event * __percpu *cpu_events, **pevent, *bp;
 	long err;
@@ -515,7 +528,12 @@ register_wide_hw_breakpoint(struct perf_event_attr *attr,
 	get_online_cpus();
 	for_each_online_cpu(cpu) {
 		pevent = per_cpu_ptr(cpu_events, cpu);
+<<<<<<< HEAD
 		bp = perf_event_create_kernel_counter(attr, cpu, NULL, triggered);
+=======
+		bp = perf_event_create_kernel_counter(attr, cpu, NULL,
+						      triggered, context);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		*pevent = bp;
 

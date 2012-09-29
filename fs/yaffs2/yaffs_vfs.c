@@ -2375,12 +2375,21 @@ static int yaffs_internal_read_super_mtd(struct super_block *sb, void *data,
 }
 
 static struct dentry *yaffs_read_super(struct file_system_type *fs,
+<<<<<<< HEAD
 				       int flags, const char *dev_name,
 				       void *data)
 {
 
 	return mount_bdev(fs, flags, dev_name, data,
 			  yaffs_internal_read_super_mtd);
+=======
+			    int flags, const char *dev_name,
+			    void *data)
+{
+
+	return mount_bdev(fs, flags, dev_name, data,
+			   yaffs_internal_read_super_mtd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct file_system_type yaffs_fs_type = {
@@ -2399,11 +2408,19 @@ static int yaffs2_internal_read_super_mtd(struct super_block *sb, void *data,
 	return yaffs_internal_read_super(2, sb, data, silent) ? 0 : -EINVAL;
 }
 
+<<<<<<< HEAD
 static struct dentry *yaffs2_read_super(struct file_system_type *fs, int flags,
 					const char *dev_name, void *data)
 {
 	return mount_bdev(fs, flags, dev_name, data,
 			  yaffs2_internal_read_super_mtd);
+=======
+static struct dentry *yaffs2_read_super(struct file_system_type *fs,
+			     int flags, const char *dev_name, void *data)
+{
+	return mount_bdev(fs, flags, dev_name, data,
+			   yaffs2_internal_read_super_mtd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct file_system_type yaffs2_fs_type = {

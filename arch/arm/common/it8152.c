@@ -144,7 +144,11 @@ void it8152_irq_demux(unsigned int irq, struct irq_desc *desc)
 }
 
 /* mapping for on-chip devices */
+<<<<<<< HEAD
 int __init it8152_pci_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+int __init it8152_pci_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	if ((dev->vendor == PCI_VENDOR_ID_ITE) &&
 	    (dev->device == PCI_DEVICE_ID_ITE_8152)) {
@@ -243,6 +247,15 @@ static struct resource it8152_mem = {
  * ITE8152 chip can address up to 64MByte, so all the devices
  * connected to ITE8152 (PCI and USB) should have limited DMA window
  */
+<<<<<<< HEAD
+=======
+static int it8152_needs_bounce(struct device *dev, dma_addr_t dma_addr, size_t size)
+{
+	dev_dbg(dev, "%s: dma_addr %08x, size %08x\n",
+		__func__, dma_addr, size);
+	return (dma_addr + size - PHYS_OFFSET) >= SZ_64M;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Setup DMA mask to 64MB on devices connected to ITE8152. Ignore all
@@ -254,7 +267,11 @@ static int it8152_pci_platform_notify(struct device *dev)
 		if (dev->dma_mask)
 			*dev->dma_mask = (SZ_64M - 1) | PHYS_OFFSET;
 		dev->coherent_dma_mask = (SZ_64M - 1) | PHYS_OFFSET;
+<<<<<<< HEAD
 		dmabounce_register_dev(dev, 2048, 4096);
+=======
+		dmabounce_register_dev(dev, 2048, 4096, it8152_needs_bounce);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return 0;
 }
@@ -267,6 +284,7 @@ static int it8152_pci_platform_notify_remove(struct device *dev)
 	return 0;
 }
 
+<<<<<<< HEAD
 int dma_needs_bounce(struct device *dev, dma_addr_t dma_addr, size_t size)
 {
 	dev_dbg(dev, "%s: dma_addr %08x, size %08x\n",
@@ -275,6 +293,8 @@ int dma_needs_bounce(struct device *dev, dma_addr_t dma_addr, size_t size)
 		((dma_addr + size - PHYS_OFFSET) >= SZ_64M);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int dma_set_coherent_mask(struct device *dev, u64 mask)
 {
 	if (mask >= PHYS_OFFSET + SZ_64M - 1)

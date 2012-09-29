@@ -64,8 +64,15 @@ pte_alloc_one_kernel(struct mm_struct *mm, unsigned long addr)
 	pte_t *pte;
 
 	pte = (pte_t *)__get_free_page(PGALLOC_GFP);
+<<<<<<< HEAD
 	if (pte)
 		clean_pte_table(pte);
+=======
+#if !defined(CONFIG_CPU_CACHE_V7) || !defined(CONFIG_SMP)
+	if (pte)
+		clean_pte_table(pte);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return pte;
 }
@@ -81,8 +88,15 @@ pte_alloc_one(struct mm_struct *mm, unsigned long addr)
 	pte = alloc_pages(PGALLOC_GFP, 0);
 #endif
 	if (pte) {
+<<<<<<< HEAD
 		if (!PageHighMem(pte))
 			clean_pte_table(page_address(pte));
+=======
+#if !defined(CONFIG_CPU_CACHE_V7) || !defined(CONFIG_SMP)
+		if (!PageHighMem(pte))
+			clean_pte_table(page_address(pte));
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pgtable_page_ctor(pte);
 	}
 

@@ -345,6 +345,7 @@ void jbd2_journal_commit_transaction(journal_t *journal)
 		jbd_debug(3, "superblock not updated\n");
 	}
 
+<<<<<<< HEAD
 	if (journal->j_running_transaction == NULL) {
 		/* If we're going to trigger the J_ASSERT below, let's
 		   print some debugging information to figure out why
@@ -354,6 +355,8 @@ void jbd2_journal_commit_transaction(journal_t *journal)
 		       journal->j_commit_request);
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	J_ASSERT(journal->j_running_transaction != NULL);
 	J_ASSERT(journal->j_committing_transaction == NULL);
 
@@ -692,7 +695,11 @@ start_journal_io:
 	if (commit_transaction->t_need_data_flush &&
 	    (journal->j_fs_dev != journal->j_dev) &&
 	    (journal->j_flags & JBD2_BARRIER))
+<<<<<<< HEAD
 		blkdev_issue_flush(journal->j_fs_dev, GFP_NOFS, NULL);
+=======
+		blkdev_issue_flush(journal->j_fs_dev, GFP_KERNEL, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Done it all: now write the commit record asynchronously. */
 	if (JBD2_HAS_INCOMPAT_FEATURE(journal,
@@ -828,7 +835,11 @@ wait_for_iobuf:
 	if (JBD2_HAS_INCOMPAT_FEATURE(journal,
 				      JBD2_FEATURE_INCOMPAT_ASYNC_COMMIT) &&
 	    journal->j_flags & JBD2_BARRIER) {
+<<<<<<< HEAD
 		blkdev_issue_flush(journal->j_dev, GFP_NOFS, NULL);
+=======
+		blkdev_issue_flush(journal->j_dev, GFP_KERNEL, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (err)

@@ -48,12 +48,15 @@ static inline s3c_gpio_pull_t s3c_gpio_do_getpull(struct s3c_gpio_chip *chip,
 	return chip->config->get_pull(chip, off);
 }
 
+<<<<<<< HEAD
 static inline int s3c_gpio_do_setpin(struct s3c_gpio_chip *chip,
 				      unsigned int off, s3c_gpio_pull_t level)
 {
 	return (chip->config->set_pin)(chip, off, level);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * s3c_gpio_setcfg_s3c24xx - S3C24XX style GPIO configuration.
  * @chip: The gpio chip that is being configured.
@@ -146,7 +149,11 @@ extern unsigned s3c_gpio_getcfg_s3c64xx_4bit(struct s3c_gpio_chip *chip,
 
 /* Pull-{up,down} resistor controls.
  *
+<<<<<<< HEAD
  * S3C2410,S3C2440,S3C24A0 = Pull-UP,
+=======
+ * S3C2410,S3C2440 = Pull-UP,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * S3C2412,S3C2413 = Pull-Down
  * S3C6400,S3C6410 = Pull-Both [None,Down,Up,Undef]
  * S3C2443 = Pull-Both [not same as S3C6400]

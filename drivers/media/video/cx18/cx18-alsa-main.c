@@ -192,6 +192,10 @@ static int snd_cx18_init(struct v4l2_device *v4l2_dev)
 err_exit_free:
 	if (sc != NULL)
 		snd_card_free(sc);
+<<<<<<< HEAD
+=======
+	kfree(cxsc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_exit:
 	return ret;
 }

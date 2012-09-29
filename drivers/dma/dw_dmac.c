@@ -22,6 +22,10 @@
 #include <linux/slab.h>
 
 #include "dw_dmac_regs.h"
+<<<<<<< HEAD
+=======
+#include "dmaengine.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * This supports the Synopsys "DesignWare AHB Central DMA Controller",
@@ -151,6 +155,7 @@ static void dwc_desc_put(struct dw_dma_chan *dwc, struct dw_desc *desc)
 	}
 }
 
+<<<<<<< HEAD
 /* Called with dwc->lock held and bh disabled */
 static dma_cookie_t
 dwc_assign_cookie(struct dw_dma_chan *dwc, struct dw_desc *desc)
@@ -164,6 +169,38 @@ dwc_assign_cookie(struct dw_dma_chan *dwc, struct dw_desc *desc)
 	desc->txd.cookie = cookie;
 
 	return cookie;
+=======
+static void dwc_initialize(struct dw_dma_chan *dwc)
+{
+	struct dw_dma *dw = to_dw_dma(dwc->chan.device);
+	struct dw_dma_slave *dws = dwc->chan.private;
+	u32 cfghi = DWC_CFGH_FIFO_MODE;
+	u32 cfglo = DWC_CFGL_CH_PRIOR(dwc->priority);
+
+	if (dwc->initialized == true)
+		return;
+
+	if (dws) {
+		/*
+		 * We need controller-specific data to set up slave
+		 * transfers.
+		 */
+		BUG_ON(!dws->dma_dev || dws->dma_dev != dw->dma.dev);
+
+		cfghi = dws->cfg_hi;
+		cfglo |= dws->cfg_lo & ~DWC_CFGL_CH_PRIOR_MASK;
+	}
+
+	channel_writel(dwc, CFG_LO, cfglo);
+	channel_writel(dwc, CFG_HI, cfghi);
+
+	/* Enable interrupts */
+	channel_set_bit(dw, MASK.XFER, dwc->mask);
+	channel_set_bit(dw, MASK.BLOCK, dwc->mask);
+	channel_set_bit(dw, MASK.ERROR, dwc->mask);
+
+	dwc->initialized = true;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*----------------------------------------------------------------------*/
@@ -189,6 +226,11 @@ static void dwc_dostart(struct dw_dma_chan *dwc, struct dw_desc *first)
 		return;
 	}
 
+<<<<<<< HEAD
+=======
+	dwc_initialize(dwc);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	channel_writel(dwc, LLP, first->txd.phys);
 	channel_writel(dwc, CTL_LO,
 			DWC_CTLL_LLP_D_EN | DWC_CTLL_LLP_S_EN);
@@ -211,7 +253,11 @@ dwc_descriptor_complete(struct dw_dma_chan *dwc, struct dw_desc *desc,
 	dev_vdbg(chan2dev(&dwc->chan), "descriptor %u complete\n", txd->cookie);
 
 	spin_lock_irqsave(&dwc->lock, flags);
+<<<<<<< HEAD
 	dwc->completed = txd->cookie;
+=======
+	dma_cookie_complete(txd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (callback_required) {
 		callback = txd->callback;
 		param = txd->callback_param;
@@ -581,7 +627,11 @@ static dma_cookie_t dwc_tx_submit(struct dma_async_tx_descriptor *tx)
 	unsigned long		flags;
 
 	spin_lock_irqsave(&dwc->lock, flags);
+<<<<<<< HEAD
 	cookie = dwc_assign_cookie(dwc, desc);
+=======
+	cookie = dma_cookie_assign(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * REVISIT: We should attempt to chain as many descriptors as
@@ -696,8 +746,13 @@ err_desc_get:
 
 static struct dma_async_tx_descriptor *
 dwc_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
+<<<<<<< HEAD
 		unsigned int sg_len, enum dma_data_direction direction,
 		unsigned long flags)
+=======
+		unsigned int sg_len, enum dma_transfer_direction direction,
+		unsigned long flags, void *context)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct dw_dma_chan	*dwc = to_dw_dma_chan(chan);
 	struct dw_dma_slave	*dws = chan->private;
@@ -917,6 +972,7 @@ dwc_tx_status(struct dma_chan *chan,
 	      struct dma_tx_state *txstate)
 {
 	struct dw_dma_chan	*dwc = to_dw_dma_chan(chan);
+<<<<<<< HEAD
 	dma_cookie_t		last_used;
 	dma_cookie_t		last_complete;
 	int			ret;
@@ -939,6 +995,19 @@ dwc_tx_status(struct dma_chan *chan,
 				dwc_first_active(dwc)->len);
 	else
 		dma_set_tx_state(txstate, last_complete, last_used, 0);
+=======
+	enum dma_status		ret;
+
+	ret = dma_cookie_status(chan, cookie, txstate);
+	if (ret != DMA_SUCCESS) {
+		dwc_scan_descriptors(to_dw_dma(chan->device), dwc);
+
+		ret = dma_cookie_status(chan, cookie, txstate);
+	}
+
+	if (ret != DMA_SUCCESS)
+		dma_set_residue(txstate, dwc_first_active(dwc)->len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (dwc->paused)
 		return DMA_PAUSED;
@@ -959,10 +1028,14 @@ static int dwc_alloc_chan_resources(struct dma_chan *chan)
 	struct dw_dma_chan	*dwc = to_dw_dma_chan(chan);
 	struct dw_dma		*dw = to_dw_dma(chan->device);
 	struct dw_desc		*desc;
+<<<<<<< HEAD
 	struct dw_dma_slave	*dws;
 	int			i;
 	u32			cfghi;
 	u32			cfglo;
+=======
+	int			i;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long		flags;
 
 	dev_vdbg(chan2dev(chan), "alloc_chan_resources\n");
@@ -973,6 +1046,7 @@ static int dwc_alloc_chan_resources(struct dma_chan *chan)
 		return -EIO;
 	}
 
+<<<<<<< HEAD
 	dwc->completed = chan->cookie = 1;
 
 	cfghi = DWC_CFGH_FIFO_MODE;
@@ -994,6 +1068,9 @@ static int dwc_alloc_chan_resources(struct dma_chan *chan)
 
 	channel_writel(dwc, CFG_LO, cfglo);
 	channel_writel(dwc, CFG_HI, cfghi);
+=======
+	dma_cookie_init(chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * NOTE: some controllers may have additional features that we
@@ -1026,11 +1103,14 @@ static int dwc_alloc_chan_resources(struct dma_chan *chan)
 		i = ++dwc->descs_allocated;
 	}
 
+<<<<<<< HEAD
 	/* Enable interrupts */
 	channel_set_bit(dw, MASK.XFER, dwc->mask);
 	channel_set_bit(dw, MASK.BLOCK, dwc->mask);
 	channel_set_bit(dw, MASK.ERROR, dwc->mask);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock_irqrestore(&dwc->lock, flags);
 
 	dev_dbg(chan2dev(chan),
@@ -1058,6 +1138,10 @@ static void dwc_free_chan_resources(struct dma_chan *chan)
 	spin_lock_irqsave(&dwc->lock, flags);
 	list_splice_init(&dwc->free_list, &list);
 	dwc->descs_allocated = 0;
+<<<<<<< HEAD
+=======
+	dwc->initialized = false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Disable interrupts */
 	channel_clear_bit(dw, MASK.XFER, dwc->mask);
@@ -1335,6 +1419,11 @@ EXPORT_SYMBOL(dw_dma_cyclic_free);
 
 static void dw_dma_off(struct dw_dma *dw)
 {
+<<<<<<< HEAD
+=======
+	int i;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dma_writel(dw, CFG, 0);
 
 	channel_clear_bit(dw, MASK.XFER, dw->all_chan_mask);
@@ -1345,6 +1434,12 @@ static void dw_dma_off(struct dw_dma *dw)
 
 	while (dma_readl(dw, CFG) & DW_CFG_DMA_EN)
 		cpu_relax();
+<<<<<<< HEAD
+=======
+
+	for (i = 0; i < dw->dma.chancnt; i++)
+		dw->chan[i].initialized = false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int __init dw_probe(struct platform_device *pdev)
@@ -1411,8 +1506,13 @@ static int __init dw_probe(struct platform_device *pdev)
 		struct dw_dma_chan	*dwc = &dw->chan[i];
 
 		dwc->chan.device = &dw->dma;
+<<<<<<< HEAD
 		dwc->chan.cookie = dwc->completed = 1;
 		dwc->chan.chan_id = i;
+=======
+		dwc->chan.chan_id = i;
+		dma_cookie_init(&dwc->chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (pdata->chan_allocation_order == CHAN_ALLOCATION_ASCENDING)
 			list_add_tail(&dwc->chan.device_node,
 					&dw->dma.channels);
@@ -1534,6 +1634,10 @@ static int dw_suspend_noirq(struct device *dev)
 
 	dw_dma_off(platform_get_drvdata(pdev));
 	clk_disable(dw->clk);
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

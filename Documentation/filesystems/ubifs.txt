@@ -111,6 +111,7 @@ The following is an example of the kernel boot arguments to attach mtd0
 to UBI and mount volume "rootfs":
 ubi.mtd=0 root=ubi0:rootfs rootfstype=ubifs
 
+<<<<<<< HEAD
 
 Module Parameters for Debugging
 ===============================
@@ -139,6 +140,8 @@ debug_tsts	Selects a mode of testing, as follows:
 For example, set debug_chks to 3 to enable general and TNC checks.
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 References
 ==========
 

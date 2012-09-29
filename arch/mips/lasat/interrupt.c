@@ -105,6 +105,10 @@ asmlinkage void plat_irq_dispatch(void)
 static struct irqaction cascade = {
 	.handler	= no_action,
 	.name		= "cascade",
+<<<<<<< HEAD
+=======
+	.flags		= IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 void __init arch_init_irq(void)

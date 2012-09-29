@@ -58,7 +58,11 @@ typedef struct {
 
 #define	__FD_SET(d, set)	((set)->fds_bits[__FDELT(d)] |= __FDMASK(d))
 #define	__FD_CLR(d, set)	((set)->fds_bits[__FDELT(d)] &= ~__FDMASK(d))
+<<<<<<< HEAD
 #define	__FD_ISSET(d, set)	((set)->fds_bits[__FDELT(d)] & __FDMASK(d))
+=======
+#define	__FD_ISSET(d, set)	(!!((set)->fds_bits[__FDELT(d)] & __FDMASK(d)))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define	__FD_ZERO(set)	\
   ((void) memset ((void *) (set), 0, sizeof (__kernel_fd_set)))
 

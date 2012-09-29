@@ -1,8 +1,15 @@
 /*
+<<<<<<< HEAD
  * Copyright 2004-2009 Analog Devices Inc.
  *
  * Licensed under the GPL-2 or later.
  */
+=======
+ * Copyright 2004-2009 Analog Devices Inc.
+ *
+ * Licensed under the GPL-2 or later.
+ */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifndef __ARCH_BLACKFIN_ATOMIC__
 #define __ARCH_BLACKFIN_ATOMIC__
@@ -76,11 +83,14 @@ static inline void atomic_set_mask(int mask, atomic_t *v)
 	__raw_atomic_set_asm(&v->counter, mask);
 }
 
+<<<<<<< HEAD
 static inline int atomic_test_mask(int mask, atomic_t *v)
 {
 	return __raw_atomic_test_asm(&v->counter, mask);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Atomic operations are already serializing */
 #define smp_mb__before_atomic_dec()    barrier()
 #define smp_mb__after_atomic_dec() barrier()
@@ -94,15 +104,24 @@ static inline int atomic_test_mask(int mask, atomic_t *v)
 #define atomic_cmpxchg(v, o, n) ((int)cmpxchg(&((v)->counter), (o), (n)))
 #define atomic_xchg(v, new) (xchg(&((v)->counter), new))
 
+<<<<<<< HEAD
 #define atomic_add_unless(v, a, u)				\
+=======
+#define __atomic_add_unless(v, a, u)				\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 ({								\
 	int c, old;						\
 	c = atomic_read(v);					\
 	while (c != (u) && (old = atomic_cmpxchg((v), c, c + (a))) != c) \
 		c = old;					\
+<<<<<<< HEAD
 	c != (u);						\
 })
 #define atomic_inc_not_zero(v) atomic_add_unless((v), 1, 0)
+=======
+	c;							\
+})
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * atomic_inc_and_test - increment and test
@@ -117,10 +136,16 @@ static inline int atomic_test_mask(int mask, atomic_t *v)
 #define atomic_sub_and_test(i,v) (atomic_sub_return((i), (v)) == 0)
 #define atomic_dec_and_test(v) (atomic_sub_return(1, (v)) == 0)
 
+<<<<<<< HEAD
 #include <asm-generic/atomic-long.h>
 
 #endif
 
 #include <asm-generic/atomic64.h>
 
+=======
+
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif

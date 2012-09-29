@@ -832,14 +832,24 @@ ep_config (struct file *fd, const char __user *buf, size_t len, loff_t *ptr)
 	switch (data->dev->gadget->speed) {
 	case USB_SPEED_LOW:
 	case USB_SPEED_FULL:
+<<<<<<< HEAD
 		value = usb_ep_enable (ep, &data->desc);
+=======
+		ep->desc = &data->desc;
+		value = usb_ep_enable(ep);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (value == 0)
 			data->state = STATE_EP_ENABLED;
 		break;
 #ifdef	CONFIG_USB_GADGET_DUALSPEED
 	case USB_SPEED_HIGH:
 		/* fails if caller didn't provide that descriptor... */
+<<<<<<< HEAD
 		value = usb_ep_enable (ep, &data->hs_desc);
+=======
+		ep->desc = &data->hs_desc;
+		value = usb_ep_enable(ep);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (value == 0)
 			data->state = STATE_EP_ENABLED;
 		break;
@@ -1050,8 +1060,11 @@ ep0_read (struct file *fd, char __user *buf, size_t len, loff_t *ptr)
 // FIXME don't call this with the spinlock held ...
 				if (copy_to_user (buf, dev->req->buf, len))
 					retval = -EFAULT;
+<<<<<<< HEAD
 				else
 					retval = len;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				clean_req (dev->gadget->ep0, dev->req);
 				/* NOTE userspace can't yet choose to stall */
 			}
@@ -1347,7 +1360,11 @@ static void make_qualifier (struct dev_data *dev)
 	qual.bDeviceProtocol = desc->bDeviceProtocol;
 
 	/* assumes ep0 uses the same value for both speeds ... */
+<<<<<<< HEAD
 	qual.bMaxPacketSize0 = desc->bMaxPacketSize0;
+=======
+	qual.bMaxPacketSize0 = dev->gadget->ep0->maxpacket;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	qual.bNumConfigurations = 1;
 	qual.bRESERVED = 0;
@@ -1404,7 +1421,10 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 		}
 
 		dev->state = STATE_DEV_CONNECTED;
+<<<<<<< HEAD
 		dev->dev->bMaxPacketSize0 = gadget->ep0->maxpacket;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		INFO (dev, "connected\n");
 		event = next_event (dev, GADGETFS_CONNECT);
@@ -1432,6 +1452,10 @@ gadgetfs_setup (struct usb_gadget *gadget, const struct usb_ctrlrequest *ctrl)
 
 		case USB_DT_DEVICE:
 			value = min (w_length, (u16) sizeof *dev->dev);
+<<<<<<< HEAD
+=======
+			dev->dev->bMaxPacketSize0 = dev->gadget->ep0->maxpacket;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			req->buf = dev->dev;
 			break;
 #ifdef	CONFIG_USB_GADGET_DUALSPEED
@@ -1712,7 +1736,10 @@ gadgetfs_bind (struct usb_gadget *gadget)
 	set_gadget_data (gadget, dev);
 	dev->gadget = gadget;
 	gadget->ep0->driver_data = dev;
+<<<<<<< HEAD
 	dev->dev->bMaxPacketSize0 = gadget->ep0->maxpacket;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* preallocate control response and buffer */
 	dev->req = usb_ep_alloc_request (gadget->ep0, GFP_KERNEL);

@@ -788,6 +788,7 @@ static void quiesce_and_remove_host(struct us_data *us)
 	struct Scsi_Host *host = us_to_host(us);
 
 	/* If the device is really gone, cut short reset delays */
+<<<<<<< HEAD
 	if (us->pusb_dev->state == USB_STATE_NOTATTACHED) {
 		set_bit(US_FLIDX_DISCONNECTING, &us->dflags);
 		wake_up(&us->delay_wait);
@@ -801,6 +802,17 @@ static void quiesce_and_remove_host(struct us_data *us)
 	/* Balance autopm calls if scanning was cancelled */
 	if (test_bit(US_FLIDX_SCAN_PENDING, &us->dflags))
 		usb_autopm_put_interface_no_suspend(us->pusb_intf);
+=======
+	if (us->pusb_dev->state == USB_STATE_NOTATTACHED)
+		set_bit(US_FLIDX_DISCONNECTING, &us->dflags);
+
+	/* Prevent SCSI-scanning (if it hasn't started yet)
+	 * and wait for the SCSI-scanning thread to stop.
+	 */
+	set_bit(US_FLIDX_DONT_SCAN, &us->dflags);
+	wake_up(&us->delay_wait);
+	wait_for_completion(&us->scanning_done);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Removing the host will perform an orderly shutdown: caches
 	 * synchronized, disks spun down, etc.
@@ -827,6 +839,7 @@ static void release_everything(struct us_data *us)
 	scsi_host_put(us_to_host(us));
 }
 
+<<<<<<< HEAD
 /* Delayed-work routine to carry out SCSI-device scanning */
 static void usb_stor_scan_dwork(struct work_struct *work)
 {
@@ -849,6 +862,54 @@ static void usb_stor_scan_dwork(struct work_struct *work)
 
 	usb_autopm_put_interface(us->pusb_intf);
 	clear_bit(US_FLIDX_SCAN_PENDING, &us->dflags);
+=======
+/* Thread to carry out delayed SCSI-device scanning */
+static int usb_stor_scan_thread(void * __us)
+{
+	struct us_data *us = (struct us_data *)__us;
+	struct device *dev = &us->pusb_intf->dev;
+
+	dev_dbg(dev, "device found\n");
+
+	set_freezable_with_signal();
+	/*
+	 * Wait for the timeout to expire or for a disconnect
+	 *
+	 * We can't freeze in this thread or we risk causing khubd to
+	 * fail to freeze, but we can't be non-freezable either. Nor can
+	 * khubd freeze while waiting for scanning to complete as it may
+	 * hold the device lock, causing a hang when suspending devices.
+	 * So we request a fake signal when freezing and use
+	 * interruptible sleep to kick us out of our wait early when
+	 * freezing happens.
+	 */
+	if (delay_use > 0) {
+		dev_dbg(dev, "waiting for device to settle "
+				"before scanning\n");
+		wait_event_interruptible_timeout(us->delay_wait,
+				test_bit(US_FLIDX_DONT_SCAN, &us->dflags),
+				delay_use * HZ);
+	}
+
+	/* If the device is still connected, perform the scanning */
+	if (!test_bit(US_FLIDX_DONT_SCAN, &us->dflags)) {
+
+		/* For bulk-only devices, determine the max LUN value */
+		if (us->protocol == USB_PR_BULK &&
+				!(us->fflags & US_FL_SINGLE_LUN)) {
+			mutex_lock(&us->dev_mutex);
+			us->max_lun = usb_stor_Bulk_max_lun(us);
+			mutex_unlock(&us->dev_mutex);
+		}
+		scsi_scan_host(us_to_host(us));
+		dev_dbg(dev, "scan complete\n");
+
+		/* Should we unbind if no devices were detected? */
+	}
+
+	usb_autopm_put_interface(us->pusb_intf);
+	complete_and_exit(&us->scanning_done, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static unsigned int usb_stor_sg_tablesize(struct usb_interface *intf)
@@ -887,6 +948,12 @@ int usb_stor_probe1(struct us_data **pus,
 	/*
 	 * Allow 16-byte CDBs and thus > 2TB
 	 */
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_USB_HOST_NOTIFY
+	host->by_usb = 1;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	host->max_cmd_len = 16;
 	host->sg_tablesize = usb_stor_sg_tablesize(intf);
 	*pus = us = host_to_us(host);
@@ -895,7 +962,11 @@ int usb_stor_probe1(struct us_data **pus,
 	init_completion(&us->cmnd_ready);
 	init_completion(&(us->notify));
 	init_waitqueue_head(&us->delay_wait);
+<<<<<<< HEAD
 	INIT_DELAYED_WORK(&us->scan_dwork, usb_stor_scan_dwork);
+=======
+	init_completion(&us->scanning_done);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Associate the us_data structure with the USB device */
 	result = associate_dev(us, intf);
@@ -926,6 +997,10 @@ EXPORT_SYMBOL_GPL(usb_stor_probe1);
 /* Second part of general USB mass-storage probing */
 int usb_stor_probe2(struct us_data *us)
 {
+<<<<<<< HEAD
+=======
+	struct task_struct *th;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int result;
 	struct device *dev = &us->pusb_intf->dev;
 
@@ -966,6 +1041,7 @@ int usb_stor_probe2(struct us_data *us)
 		goto BadDevice;
 	}
 
+<<<<<<< HEAD
 	/* Submit the delayed_work for SCSI-device scanning */
 	usb_autopm_get_interface_no_resume(us->pusb_intf);
 	set_bit(US_FLIDX_SCAN_PENDING, &us->dflags);
@@ -974,6 +1050,22 @@ int usb_stor_probe2(struct us_data *us)
 		dev_dbg(dev, "waiting for device to settle before scanning\n");
 	queue_delayed_work(system_freezable_wq, &us->scan_dwork,
 			delay_use * HZ);
+=======
+	/* Start up the thread for delayed SCSI-device scanning */
+	th = kthread_create(usb_stor_scan_thread, us, "usb-stor-scan");
+	if (IS_ERR(th)) {
+		dev_warn(dev,
+				"Unable to start the device-scanning thread\n");
+		complete(&us->scanning_done);
+		quiesce_and_remove_host(us);
+		result = PTR_ERR(th);
+		goto BadDevice;
+	}
+
+	usb_autopm_get_interface_no_resume(us->pusb_intf);
+	wake_up_process(th);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
 	/* We come here if there are any problems */

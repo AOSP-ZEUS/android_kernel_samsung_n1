@@ -31,17 +31,28 @@
 #include <linux/can/platform/mcp251x.h>
 
 #include <asm/mach-types.h>
+<<<<<<< HEAD
 #include <asm/mach/arch.h>
 #include <asm/mach/map.h>
 
 #include <mach/pxa2xx-regs.h>
+=======
+#include <asm/suspend.h>
+#include <asm/mach/arch.h>
+#include <asm/mach/map.h>
+
+#include <mach/pxa27x.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/regs-uart.h>
 #include <mach/ohci.h>
 #include <mach/mmc.h>
 #include <mach/pxa27x-udc.h>
 #include <mach/udc.h>
 #include <mach/pxafb.h>
+<<<<<<< HEAD
 #include <mach/mfp-pxa27x.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/pm.h>
 #include <mach/audio.h>
 #include <mach/arcom-pcmcia.h>
@@ -676,7 +687,11 @@ static struct pxa2xx_udc_mach_info zeus_udc_info = {
 static void zeus_power_off(void)
 {
 	local_irq_disable();
+<<<<<<< HEAD
 	pxa27x_cpu_suspend(PWRMODE_DEEPSLEEP, PLAT_PHYS_OFFSET - PAGE_OFFSET);
+=======
+	cpu_suspend(PWRMODE_DEEPSLEEP, pxa27x_finish_suspend);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 #else
 #define zeus_power_off   NULL
@@ -908,6 +923,10 @@ MACHINE_START(ARCOM_ZEUS, "Arcom/Eurotech ZEUS")
 	.map_io		= zeus_map_io,
 	.nr_irqs	= ZEUS_NR_IRQS,
 	.init_irq	= zeus_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa27x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 	.init_machine	= zeus_init,
 MACHINE_END

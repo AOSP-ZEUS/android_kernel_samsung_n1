@@ -24,6 +24,10 @@
 
 #ifndef __JME_H_INCLUDED__
 #define __JME_H_INCLUDED__
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define DRV_NAME	"jme"
 #define DRV_VERSION	"1.0.8"
@@ -450,7 +454,10 @@ struct jme_adapter {
 	u32			msg_enable;
 	struct ethtool_cmd	old_ecmd;
 	unsigned int		old_mtu;
+<<<<<<< HEAD
 	struct vlan_group	*vlgrp;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct dynpcc_info	dpi;
 	atomic_t		intr_sem;
 	atomic_t		link_changing;
@@ -458,9 +465,12 @@ struct jme_adapter {
 	atomic_t		rx_cleaning;
 	atomic_t		rx_empty;
 	int			(*jme_rx)(struct sk_buff *skb);
+<<<<<<< HEAD
 	int			(*jme_vlan_rx)(struct sk_buff *skb,
 					  struct vlan_group *grp,
 					  unsigned short vlan_tag);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	DECLARE_NAPI_STRUCT
 	DECLARE_NET_DEVICE_STATS
 };
@@ -734,7 +744,11 @@ enum jme_rxcs_values {
 	RXCS_RETRYCNT_60	= 0x00000F00,
 
 	RXCS_DEFAULT		= RXCS_FIFOTHTP_128T |
+<<<<<<< HEAD
 				  RXCS_FIFOTHNP_16QW |
+=======
+				  RXCS_FIFOTHNP_128QW |
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				  RXCS_DMAREQSZ_128B |
 				  RXCS_RETRYGAP_256ns |
 				  RXCS_RETRYCNT_32,
@@ -851,6 +865,10 @@ enum jme_ghc_txmac_clk {
  * Power management control and status register
  */
 enum jme_pmcs_bit_masks {
+<<<<<<< HEAD
+=======
+	PMCS_STMASK	= 0xFFFF0000,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PMCS_WF7DET	= 0x80000000,
 	PMCS_WF6DET	= 0x40000000,
 	PMCS_WF5DET	= 0x20000000,
@@ -862,6 +880,10 @@ enum jme_pmcs_bit_masks {
 	PMCS_LFDET	= 0x00040000,
 	PMCS_LRDET	= 0x00020000,
 	PMCS_MFDET	= 0x00010000,
+<<<<<<< HEAD
+=======
+	PMCS_ENMASK	= 0x0000FFFF,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PMCS_WF7EN	= 0x00008000,
 	PMCS_WF6EN	= 0x00004000,
 	PMCS_WF5EN	= 0x00002000,

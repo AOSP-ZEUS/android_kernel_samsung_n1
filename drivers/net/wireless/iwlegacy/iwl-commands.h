@@ -2297,6 +2297,7 @@ struct iwl_spectrum_notification {
 #define IWL_POWER_VEC_SIZE 5
 
 #define IWL_POWER_DRIVER_ALLOW_SLEEP_MSK	cpu_to_le16(BIT(0))
+<<<<<<< HEAD
 #define IWL_POWER_POWER_SAVE_ENA_MSK		cpu_to_le16(BIT(0))
 #define IWL_POWER_POWER_MANAGEMENT_ENA_MSK	cpu_to_le16(BIT(1))
 #define IWL_POWER_SLEEP_OVER_DTIM_MSK		cpu_to_le16(BIT(2))
@@ -2305,6 +2306,9 @@ struct iwl_spectrum_notification {
 #define IWL_POWER_BEACON_FILTERING		cpu_to_le16(BIT(5))
 #define IWL_POWER_SHADOW_REG_ENA		cpu_to_le16(BIT(6))
 #define IWL_POWER_CT_KILL_SET			cpu_to_le16(BIT(7))
+=======
+#define IWL_POWER_PCI_PM_MSK			cpu_to_le16(BIT(3))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct iwl3945_powertable_cmd {
 	__le16 flags;
@@ -2624,8 +2628,13 @@ struct iwl_scanstart_notification {
 	__le32 status;
 } __packed;
 
+<<<<<<< HEAD
 #define  SCAN_OWNER_STATUS 0x1;
 #define  MEASURE_OWNER_STATUS 0x2;
+=======
+#define  SCAN_OWNER_STATUS 0x1
+#define  MEASURE_OWNER_STATUS 0x2
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define IWL_PROBE_STATUS_OK		0
 #define IWL_PROBE_STATUS_TX_FAILED	BIT(0)

@@ -161,6 +161,10 @@ struct ath_common {
 	const struct ath_bus_ops *bus_ops;
 
 	bool btcoex_enabled;
+<<<<<<< HEAD
+=======
+	bool disable_ani;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct sk_buff *ath_rxbuf_alloc(struct ath_common *common,

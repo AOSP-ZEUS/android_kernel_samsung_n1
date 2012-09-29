@@ -193,7 +193,12 @@ static int __init omap2430_i2c_init(void)
 {
 	omap_register_i2c_bus(1, 100, sdp2430_i2c1_boardinfo,
 			ARRAY_SIZE(sdp2430_i2c1_boardinfo));
+<<<<<<< HEAD
 	omap2_pmic_init("twl4030", &sdp2430_twldata);
+=======
+	omap_pmic_init(2, 100, "twl4030", INT_24XX_SYS_NIRQ,
+			&sdp2430_twldata);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -260,7 +265,13 @@ MACHINE_START(OMAP_2430SDP, "OMAP2430 sdp2430 board")
 	.reserve	= omap_reserve,
 	.map_io		= omap_2430sdp_map_io,
 	.init_early	= omap_2430sdp_init_early,
+<<<<<<< HEAD
 	.init_irq	= omap_init_irq,
 	.init_machine	= omap_2430sdp_init,
 	.timer		= &omap_timer,
+=======
+	.init_irq	= omap2_init_irq,
+	.init_machine	= omap_2430sdp_init,
+	.timer		= &omap2_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

@@ -25,6 +25,7 @@
 #include <mach/at91_rstc.h>
 #include <mach/at91_shdwc.h>
 
+<<<<<<< HEAD
 #include "generic.h"
 #include "clock.h"
 
@@ -42,6 +43,12 @@ static struct map_desc at91cap9_io_desc[] __initdata = {
 	},
 };
 
+=======
+#include "soc.h"
+#include "generic.h"
+#include "clock.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* --------------------------------------------------------------------
  *  Clocks
  * -------------------------------------------------------------------- */
@@ -339,6 +346,7 @@ static void at91cap9_poweroff(void)
  *  AT91CAP9 processor initialization
  * -------------------------------------------------------------------- */
 
+<<<<<<< HEAD
 void __init at91cap9_map_io(void)
 {
 	/* Map peripherals */
@@ -346,17 +354,28 @@ void __init at91cap9_map_io(void)
 }
 
 void __init at91cap9_initialize(unsigned long main_clock)
+=======
+static void __init at91cap9_map_io(void)
+{
+	at91_init_sram(0, AT91CAP9_SRAM_BASE, AT91CAP9_SRAM_SIZE);
+}
+
+static void __init at91cap9_initialize(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	at91_arch_reset = at91cap9_reset;
 	pm_power_off = at91cap9_poweroff;
 	at91_extern_irq = (1 << AT91CAP9_ID_IRQ0) | (1 << AT91CAP9_ID_IRQ1);
 
+<<<<<<< HEAD
 	/* Init clock subsystem */
 	at91_clock_init(main_clock);
 
 	/* Register the processor-specific clocks */
 	at91cap9_register_clocks();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Register GPIO subsystem */
 	at91_gpio_init(at91cap9_gpio, 4);
 
@@ -409,6 +428,7 @@ static unsigned int at91cap9_default_irq_priority[NR_AIC_IRQS] __initdata = {
 	0,	/* Advanced Interrupt Controller (IRQ1) */
 };
 
+<<<<<<< HEAD
 void __init at91cap9_init_interrupts(unsigned int priority[NR_AIC_IRQS])
 {
 	if (!priority)
@@ -420,3 +440,11 @@ void __init at91cap9_init_interrupts(unsigned int priority[NR_AIC_IRQS])
 	/* Enable GPIO interrupts */
 	at91_gpio_irq_setup();
 }
+=======
+struct at91_init_soc __initdata at91cap9_soc = {
+	.map_io = at91cap9_map_io,
+	.default_irq_priority = at91cap9_default_irq_priority,
+	.register_clocks = at91cap9_register_clocks,
+	.init = at91cap9_initialize,
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

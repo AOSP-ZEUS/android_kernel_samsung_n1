@@ -264,6 +264,7 @@ ENTRY(arm940_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(arm940_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(arm940_cache_fns)
 	.long	arm940_flush_icache_all
 	.long	arm940_flush_kern_cache_all
@@ -275,6 +276,10 @@ ENTRY(arm940_cache_fns)
 	.long	arm940_dma_map_area
 	.long	arm940_dma_unmap_area
 	.long	arm940_dma_flush_range
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions arm940
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	__CPUINIT
 
@@ -348,6 +353,7 @@ __arm940_setup:
 
 	__INITDATA
 
+<<<<<<< HEAD
 /*
  * Purpose : Function pointers used to access above functions - all calls
  *	     come through these
@@ -384,6 +390,16 @@ cpu_elf_name:
 cpu_arm940_name:
 	.ascii	"ARM940T"
 	.size	cpu_arm940_name, . - cpu_arm940_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions arm940, dabort=nommu_early_abort, pabort=legacy_pabort, nommu=1
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv4t"
+	string	cpu_elf_name, "v4"
+	string	cpu_arm940_name, "ARM940T"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 

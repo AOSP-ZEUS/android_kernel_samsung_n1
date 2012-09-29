@@ -65,7 +65,12 @@ static void ux500_tx_work(struct work_struct *data)
 	struct musb *musb = hw_ep->musb;
 	unsigned long flags;
 
+<<<<<<< HEAD
 	DBG(4, "DMA tx transfer done on hw_ep=%d\n", hw_ep->epnum);
+=======
+	dev_dbg(musb->controller, "DMA tx transfer done on hw_ep=%d\n",
+		hw_ep->epnum);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_lock_irqsave(&musb->lock, flags);
 	ux500_channel->channel.actual_len = ux500_channel->cur_len;
@@ -84,7 +89,12 @@ static void ux500_rx_work(struct work_struct *data)
 	struct musb *musb = hw_ep->musb;
 	unsigned long flags;
 
+<<<<<<< HEAD
 	DBG(4, "DMA rx transfer done on hw_ep=%d\n", hw_ep->epnum);
+=======
+	dev_dbg(musb->controller, "DMA rx transfer done on hw_ep=%d\n",
+		hw_ep->epnum);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_lock_irqsave(&musb->lock, flags);
 	ux500_channel->channel.actual_len = ux500_channel->cur_len;
@@ -116,9 +126,17 @@ static bool ux500_configure_channel(struct dma_channel *channel,
 	enum dma_slave_buswidth addr_width;
 	dma_addr_t usb_fifo_addr = (MUSB_FIFO_OFFSET(hw_ep->epnum) +
 					ux500_channel->controller->phy_base);
+<<<<<<< HEAD
 
 	DBG(4, "packet_sz=%d, mode=%d, dma_addr=0x%x, len=%d is_tx=%d\n",
 			packet_sz, mode, dma_addr, len, ux500_channel->is_tx);
+=======
+	struct musb *musb = ux500_channel->controller->private_data;
+
+	dev_dbg(musb->controller,
+		"packet_sz=%d, mode=%d, dma_addr=0x%x, len=%d is_tx=%d\n",
+		packet_sz, mode, dma_addr, len, ux500_channel->is_tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ux500_channel->cur_len = len;
 
@@ -133,6 +151,7 @@ static bool ux500_configure_channel(struct dma_channel *channel,
 					DMA_SLAVE_BUSWIDTH_4_BYTES;
 
 	slave_conf.direction = direction;
+<<<<<<< HEAD
 	if (direction == DMA_FROM_DEVICE) {
 		slave_conf.src_addr = usb_fifo_addr;
 		slave_conf.src_addr_width = addr_width;
@@ -147,6 +166,19 @@ static bool ux500_configure_channel(struct dma_channel *channel,
 
 	dma_desc = dma_chan->device->
 			device_prep_slave_sg(dma_chan, &sg, 1, direction,
+=======
+	slave_conf.src_addr = usb_fifo_addr;
+	slave_conf.src_addr_width = addr_width;
+	slave_conf.src_maxburst = 16;
+	slave_conf.dst_addr = usb_fifo_addr;
+	slave_conf.dst_addr_width = addr_width;
+	slave_conf.dst_maxburst = 16;
+
+	dma_chan->device->device_control(dma_chan, DMA_SLAVE_CONFIG,
+					     (unsigned long) &slave_conf);
+
+	dma_desc = dmaengine_prep_slave_sg(dma_chan, &sg, 1, direction,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					     DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
 	if (!dma_desc)
 		return false;
@@ -166,6 +198,10 @@ static struct dma_channel *ux500_dma_channel_allocate(struct dma_controller *c,
 	struct ux500_dma_controller *controller = container_of(c,
 			struct ux500_dma_controller, controller);
 	struct ux500_dma_channel *ux500_channel = NULL;
+<<<<<<< HEAD
+=======
+	struct musb *musb = controller->private_data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 ch_num = hw_ep->epnum - 1;
 	u32 max_ch;
 
@@ -192,7 +228,11 @@ static struct dma_channel *ux500_dma_channel_allocate(struct dma_controller *c,
 	ux500_channel->hw_ep = hw_ep;
 	ux500_channel->is_allocated = 1;
 
+<<<<<<< HEAD
 	DBG(7, "hw_ep=%d, is_tx=0x%x, channel=%d\n",
+=======
+	dev_dbg(musb->controller, "hw_ep=%d, is_tx=0x%x, channel=%d\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		hw_ep->epnum, is_tx, ch_num);
 
 	return &(ux500_channel->channel);
@@ -201,8 +241,14 @@ static struct dma_channel *ux500_dma_channel_allocate(struct dma_controller *c,
 static void ux500_dma_channel_release(struct dma_channel *channel)
 {
 	struct ux500_dma_channel *ux500_channel = channel->private_data;
+<<<<<<< HEAD
 
 	DBG(7, "channel=%d\n", ux500_channel->ch_num);
+=======
+	struct musb *musb = ux500_channel->controller->private_data;
+
+	dev_dbg(musb->controller, "channel=%d\n", ux500_channel->ch_num);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ux500_channel->is_allocated) {
 		ux500_channel->is_allocated = 0;
@@ -252,8 +298,13 @@ static int ux500_dma_channel_abort(struct dma_channel *channel)
 	void __iomem *epio = musb->endpoints[ux500_channel->hw_ep->epnum].regs;
 	u16 csr;
 
+<<<<<<< HEAD
 	DBG(4, "channel=%d, is_tx=%d\n", ux500_channel->ch_num,
 						ux500_channel->is_tx);
+=======
+	dev_dbg(musb->controller, "channel=%d, is_tx=%d\n",
+		ux500_channel->ch_num, ux500_channel->is_tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (channel->status == MUSB_DMA_STATUS_BUSY) {
 		if (ux500_channel->is_tx) {

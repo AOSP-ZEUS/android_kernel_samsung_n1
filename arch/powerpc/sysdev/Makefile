@@ -4,6 +4,10 @@ ccflags-$(CONFIG_PPC64)		:= -mno-minimal-toc
 
 mpic-msi-obj-$(CONFIG_PCI_MSI)	+= mpic_msi.o mpic_u3msi.o mpic_pasemi_msi.o
 obj-$(CONFIG_MPIC)		+= mpic.o $(mpic-msi-obj-y)
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_PPC_EPAPR_HV_PIC)	+= ehv_pic.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 fsl-msi-obj-$(CONFIG_PCI_MSI)	+= fsl_msi.o
 obj-$(CONFIG_PPC_MSI_BITMAP)	+= msi_bitmap.o
 

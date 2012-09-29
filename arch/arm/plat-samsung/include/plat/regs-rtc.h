@@ -28,6 +28,7 @@
 #define S3C64XX_RTCCON_TICMSK (0xF<<7)
 #define S3C64XX_RTCCON_TICSHT (7)
 
+<<<<<<< HEAD
 #if defined(CONFIG_CPU_S5PC100) || defined(CONFIG_CPU_S5PV210)
 #define S3C_MAX_CNT     32768
 #define S3C_RTCCON_TICEN        (1<<8)
@@ -44,6 +45,8 @@
 #define S3C_INTP_ALM    (1<<1)
 #define S3C_INTP_TIC    (1<<0)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define S3C2410_TICNT	      S3C2410_RTCREG(0x44)
 #define S3C2410_TICNT_ENABLE  (1<<7)
 
@@ -79,6 +82,10 @@
 #define S3C2410_RTCDAY	      S3C2410_RTCREG(0x80)
 #define S3C2410_RTCMON	      S3C2410_RTCREG(0x84)
 #define S3C2410_RTCYEAR	      S3C2410_RTCREG(0x88)
+<<<<<<< HEAD
 #define S3C2410_CURTICCNT     S3C2410_RTCREG(0x90)
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* __ASM_ARCH_REGS_RTC_H */

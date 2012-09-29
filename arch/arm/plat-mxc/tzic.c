@@ -49,6 +49,11 @@
 
 void __iomem *tzic_base; /* Used as irq controller base in entry-macro.S */
 
+<<<<<<< HEAD
+=======
+#define TZIC_NUM_IRQS 128
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_FIQ
 static int tzic_set_irq_fiq(unsigned int irq, unsigned int type)
 {
@@ -66,6 +71,7 @@ static int tzic_set_irq_fiq(unsigned int irq, unsigned int type)
 
 	return 0;
 }
+<<<<<<< HEAD
 #endif
 
 /**
@@ -138,6 +144,36 @@ static struct mxc_irq_chip mxc_tzic_chip = {
 #endif
 };
 
+=======
+#else
+#define tzic_set_irq_fiq NULL
+#endif
+
+static unsigned int *wakeup_intr[4];
+
+static __init void tzic_init_gc(unsigned int irq_start)
+{
+	struct irq_chip_generic *gc;
+	struct irq_chip_type *ct;
+	int idx = irq_start >> 5;
+
+	gc = irq_alloc_generic_chip("tzic", 1, irq_start, tzic_base,
+				    handle_level_irq);
+	gc->private = tzic_set_irq_fiq;
+	gc->wake_enabled = IRQ_MSK(32);
+	wakeup_intr[idx] = &gc->wake_active;
+
+	ct = gc->chip_types;
+	ct->chip.irq_mask = irq_gc_mask_disable_reg;
+	ct->chip.irq_unmask = irq_gc_unmask_enable_reg;
+	ct->chip.irq_set_wake = irq_gc_set_wake;
+	ct->regs.disable = TZIC_ENCLEAR0(idx);
+	ct->regs.enable = TZIC_ENSET0(idx);
+
+	irq_setup_generic_chip(gc, IRQ_MSK(32), 0, IRQ_NOREQUEST, 0);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * This function initializes the TZIC hardware and disables all the
  * interrupts. It registers the interrupt enable and disable functions
@@ -166,11 +202,16 @@ void __init tzic_init_irq(void __iomem *irqbase)
 
 	/* all IRQ no FIQ Warning :: No selection */
 
+<<<<<<< HEAD
 	for (i = 0; i < MXC_INTERNAL_IRQS; i++) {
 		irq_set_chip_and_handler(i, &mxc_tzic_chip.base,
 					 handle_level_irq);
 		set_irq_flags(i, IRQF_VALID);
 	}
+=======
+	for (i = 0; i < TZIC_NUM_IRQS; i += 32)
+		tzic_init_gc(i);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_FIQ
 	/* Initialize FIQ */
@@ -197,7 +238,11 @@ int tzic_enable_wake(int is_idle)
 
 	for (i = 0; i < 4; i++) {
 		v = is_idle ? __raw_readl(tzic_base + TZIC_ENSET0(i)) :
+<<<<<<< HEAD
 			wakeup_intr[i];
+=======
+			*wakeup_intr[i];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__raw_writel(v, tzic_base + TZIC_WAKEUP0(i));
 	}
 

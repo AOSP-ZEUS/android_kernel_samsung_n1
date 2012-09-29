@@ -39,7 +39,11 @@ static int adis16204_spi_write_reg_8(struct iio_dev *indio_dev,
 		u8 val)
 {
 	int ret;
+<<<<<<< HEAD
 	struct adis16204_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16204_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&st->buf_lock);
 	st->tx[0] = ADIS16204_WRITE_REG(reg_address);
@@ -64,7 +68,11 @@ static int adis16204_spi_write_reg_16(struct iio_dev *indio_dev,
 {
 	int ret;
 	struct spi_message msg;
+<<<<<<< HEAD
 	struct adis16204_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16204_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct spi_transfer xfers[] = {
 		{
 			.tx_buf = st->tx,
@@ -106,7 +114,11 @@ static int adis16204_spi_read_reg_16(struct iio_dev *indio_dev,
 				     u16 *val)
 {
 	struct spi_message msg;
+<<<<<<< HEAD
 	struct adis16204_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16204_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 	struct spi_transfer xfers[] = {
 		{
@@ -341,6 +353,7 @@ static int adis16204_read_raw(struct iio_dev *indio_dev,
 		mutex_lock(&indio_dev->mlock);
 		addr = adis16204_addresses[chan->address][0];
 		ret = adis16204_spi_read_reg_16(indio_dev, addr, &val16);
+<<<<<<< HEAD
 		if (ret)
 			return ret;
 
@@ -348,6 +361,19 @@ static int adis16204_read_raw(struct iio_dev *indio_dev,
 			ret = adis16204_check_status(indio_dev);
 			if (ret)
 				return ret;
+=======
+		if (ret) {
+			mutex_unlock(&indio_dev->mlock);
+			return ret;
+		}
+
+		if (val16 & ADIS16204_ERROR_ACTIVE) {
+			ret = adis16204_check_status(indio_dev);
+			if (ret) {
+				mutex_unlock(&indio_dev->mlock);
+				return ret;
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		val16 = val16 & ((1 << chan->scan_type.realbits) - 1);
 		if (chan->scan_type.sign == 's')
@@ -483,6 +509,7 @@ static const struct iio_info adis16204_info = {
 static int __devinit adis16204_probe(struct spi_device *spi)
 {
 	int ret, regdone = 0;
+<<<<<<< HEAD
 	struct adis16204_state *st = kzalloc(sizeof *st, GFP_KERNEL);
 	if (!st) {
 		ret =  -ENOMEM;
@@ -524,11 +551,44 @@ static int __devinit adis16204_probe(struct spi_device *spi)
 		goto error_free_dev;
 
 	ret = iio_device_register(st->indio_dev);
+=======
+	struct adis16204_state *st;
+	struct iio_dev *indio_dev;
+
+	/* setup the industrialio driver allocated elements */
+	indio_dev = iio_allocate_device(sizeof(*st));
+	if (indio_dev == NULL) {
+		ret = -ENOMEM;
+		goto error_ret;
+	}
+	st = iio_priv(indio_dev);
+	/* this is only used for removal purposes */
+	spi_set_drvdata(spi, indio_dev);
+	st->us = spi;
+	mutex_init(&st->buf_lock);
+
+	indio_dev->name = spi->dev.driver->name;
+	indio_dev->dev.parent = &spi->dev;
+	indio_dev->info = &adis16204_info;
+	indio_dev->channels = adis16204_channels;
+	indio_dev->num_channels = ARRAY_SIZE(adis16204_channels);
+	indio_dev->modes = INDIO_DIRECT_MODE;
+
+	ret = adis16204_configure_ring(indio_dev);
+	if (ret)
+		goto error_free_dev;
+
+	ret = iio_device_register(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_unreg_ring_funcs;
 	regdone = 1;
 
+<<<<<<< HEAD
 	ret = iio_ring_buffer_register_ex(st->indio_dev->ring, 0,
+=======
+	ret = iio_ring_buffer_register_ex(indio_dev->ring, 0,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					  adis16204_channels,
 					  ARRAY_SIZE(adis16204_channels));
 	if (ret) {
@@ -537,18 +597,27 @@ static int __devinit adis16204_probe(struct spi_device *spi)
 	}
 
 	if (spi->irq) {
+<<<<<<< HEAD
 		ret = adis16204_probe_trigger(st->indio_dev);
+=======
+		ret = adis16204_probe_trigger(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret)
 			goto error_uninitialize_ring;
 	}
 
 	/* Get the device into a sane initial state */
+<<<<<<< HEAD
 	ret = adis16204_initial_setup(st->indio_dev);
+=======
+	ret = adis16204_initial_setup(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_remove_trigger;
 	return 0;
 
 error_remove_trigger:
+<<<<<<< HEAD
 	adis16204_remove_trigger(st->indio_dev);
 error_uninitialize_ring:
 	iio_ring_buffer_unregister(st->indio_dev->ring);
@@ -565,12 +634,25 @@ error_free_rx:
 	kfree(st->rx);
 error_free_st:
 	kfree(st);
+=======
+	adis16204_remove_trigger(indio_dev);
+error_uninitialize_ring:
+	iio_ring_buffer_unregister(indio_dev->ring);
+error_unreg_ring_funcs:
+	adis16204_unconfigure_ring(indio_dev);
+error_free_dev:
+	if (regdone)
+		iio_device_unregister(indio_dev);
+	else
+		iio_free_device(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_ret:
 	return ret;
 }
 
 static int adis16204_remove(struct spi_device *spi)
 {
+<<<<<<< HEAD
 	struct adis16204_state *st = spi_get_drvdata(spi);
 	struct iio_dev *indio_dev = st->indio_dev;
 
@@ -581,6 +663,14 @@ static int adis16204_remove(struct spi_device *spi)
 	kfree(st->tx);
 	kfree(st->rx);
 	kfree(st);
+=======
+	struct iio_dev *indio_dev = spi_get_drvdata(spi);
+
+	adis16204_remove_trigger(indio_dev);
+	iio_ring_buffer_unregister(indio_dev->ring);
+	iio_device_unregister(indio_dev);
+	adis16204_unconfigure_ring(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

@@ -46,7 +46,11 @@ static int bat_socket_open(struct inode *inode, struct file *file)
 
 	nonseekable_open(inode, file);
 
+<<<<<<< HEAD
 	socket_client = kmalloc(sizeof(struct socket_client), GFP_KERNEL);
+=======
+	socket_client = kmalloc(sizeof(*socket_client), GFP_KERNEL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!socket_client)
 		return -ENOMEM;
@@ -310,7 +314,11 @@ static void bat_socket_add_packet(struct socket_client *socket_client,
 {
 	struct socket_packet *socket_packet;
 
+<<<<<<< HEAD
 	socket_packet = kmalloc(sizeof(struct socket_packet), GFP_ATOMIC);
+=======
+	socket_packet = kmalloc(sizeof(*socket_packet), GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!socket_packet)
 		return;

@@ -80,7 +80,11 @@ static inline void __tlb_flush_mm(struct mm_struct * mm)
 	 * on all cpus instead of doing a local flush if the mm
 	 * only ran on the local cpu.
 	 */
+<<<<<<< HEAD
 	if (MACHINE_HAS_IDTE)
+=======
+	if (MACHINE_HAS_IDTE && list_empty(&mm->context.gmap_list))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__tlb_flush_idte((unsigned long) mm->pgd |
 				 mm->context.asce_bits);
 	else

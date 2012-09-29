@@ -1607,6 +1607,7 @@ rgrp_error:
 }
 
 /**
+<<<<<<< HEAD
  * gfs2_free_data - free a contiguous run of data block(s)
  * @ip: the inode these blocks are being freed from
  * @bstart: first block of a run of contiguous blocks
@@ -1615,6 +1616,17 @@ rgrp_error:
  */
 
 void __gfs2_free_data(struct gfs2_inode *ip, u64 bstart, u32 blen)
+=======
+ * __gfs2_free_blocks - free a contiguous run of block(s)
+ * @ip: the inode these blocks are being freed from
+ * @bstart: first block of a run of contiguous blocks
+ * @blen: the length of the block run
+ * @meta: 1 if the blocks represent metadata
+ *
+ */
+
+void __gfs2_free_blocks(struct gfs2_inode *ip, u64 bstart, u32 blen, int meta)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
 	struct gfs2_rgrpd *rgd;
@@ -1631,11 +1643,16 @@ void __gfs2_free_data(struct gfs2_inode *ip, u64 bstart, u32 blen)
 	gfs2_trans_add_rg(rgd);
 
 	/* Directories keep their data in the metadata address space */
+<<<<<<< HEAD
 	if (ip->i_depth)
+=======
+	if (meta || ip->i_depth)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		gfs2_meta_wipe(ip, bstart, blen);
 }
 
 /**
+<<<<<<< HEAD
  * gfs2_free_data - free a contiguous run of data block(s)
  * @ip: the inode these blocks are being freed from
  * @bstart: first block of a run of contiguous blocks
@@ -1679,6 +1696,8 @@ void __gfs2_free_meta(struct gfs2_inode *ip, u64 bstart, u32 blen)
 }
 
 /**
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * gfs2_free_meta - free a contiguous run of data block(s)
  * @ip: the inode these blocks are being freed from
  * @bstart: first block of a run of contiguous blocks
@@ -1690,7 +1709,11 @@ void gfs2_free_meta(struct gfs2_inode *ip, u64 bstart, u32 blen)
 {
 	struct gfs2_sbd *sdp = GFS2_SB(&ip->i_inode);
 
+<<<<<<< HEAD
 	__gfs2_free_meta(ip, bstart, blen);
+=======
+	__gfs2_free_blocks(ip, bstart, blen, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	gfs2_statfs_change(sdp, 0, +blen, 0);
 	gfs2_quota_change(ip, -(s64)blen, ip->i_inode.i_uid, ip->i_inode.i_gid);
 }

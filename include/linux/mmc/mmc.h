@@ -21,8 +21,13 @@
  *          15 May 2002
  */
 
+<<<<<<< HEAD
 #ifndef MMC_MMC_H
 #define MMC_MMC_H
+=======
+#ifndef LINUX_MMC_MMC_H
+#define LINUX_MMC_MMC_H
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Standard MMC commands (4.1)           type  argument     response */
    /* class 1 */
@@ -138,6 +143,10 @@ static inline bool mmc_op_multi(u32 opcode)
 #define R1_CURRENT_STATE(x)	((x & 0x00001E00) >> 9)	/* sx, b (4 bits) */
 #define R1_READY_FOR_DATA	(1 << 8)	/* sx, a */
 #define R1_SWITCH_ERROR		(1 << 7)	/* sx, c */
+<<<<<<< HEAD
+=======
+#define R1_URGENT_BKOPS	(1 << 6)	/* sr, a */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define R1_APP_CMD		(1 << 5)	/* sr, c */
 
 #define R1_STATE_IDLE	0
@@ -272,6 +281,12 @@ struct _mmc_csd {
 
 #define EXT_CSD_PARTITION_ATTRIBUTE	156	/* R/W */
 #define EXT_CSD_PARTITION_SUPPORT	160	/* RO */
+<<<<<<< HEAD
+=======
+#define EXT_CSD_HPI_MGMT		161	/* R/W */
+#define EXT_CSD_BKOPS_EN		163	/* R/W */
+#define EXT_CSD_BKOPS_START		164	/* R/W */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define EXT_CSD_WR_REL_PARAM		166	/* RO */
 #define EXT_CSD_ERASE_GROUP_DEF		175	/* R/W */
 #define EXT_CSD_PART_CONFIG		179	/* R/W */
@@ -281,6 +296,10 @@ struct _mmc_csd {
 #define EXT_CSD_REV			192	/* RO */
 #define EXT_CSD_STRUCTURE		194	/* RO */
 #define EXT_CSD_CARD_TYPE		196	/* RO */
+<<<<<<< HEAD
+=======
+#define EXT_CSD_OUT_OF_INTERRUPT_TIME	198	/* RO */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define EXT_CSD_PART_SWITCH_TIME        199     /* RO */
 #define EXT_CSD_SEC_CNT			212	/* RO, 4 bytes */
 #define EXT_CSD_S_A_TIMEOUT		217	/* RO */
@@ -293,6 +312,12 @@ struct _mmc_csd {
 #define EXT_CSD_SEC_ERASE_MULT		230	/* RO */
 #define EXT_CSD_SEC_FEATURE_SUPPORT	231	/* RO */
 #define EXT_CSD_TRIM_MULT		232	/* RO */
+<<<<<<< HEAD
+=======
+#define EXT_CSD_BKOPS_STATUS		246	/* RO */
+#define EXT_CSD_BKOPS_SUPPORT		502	/* RO */
+#define EXT_CSD_HPI_FEATURES		503	/* RO */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * EXT_CSD field definitions
@@ -337,5 +362,9 @@ struct _mmc_csd {
 #define MMC_SWITCH_MODE_CLEAR_BITS	0x02	/* Clear bits which are 1 in value */
 #define MMC_SWITCH_MODE_WRITE_BYTE	0x03	/* Set target to value */
 
+<<<<<<< HEAD
 #endif  /* MMC_MMC_PROTOCOL_H */
 
+=======
+#endif /* LINUX_MMC_MMC_H */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

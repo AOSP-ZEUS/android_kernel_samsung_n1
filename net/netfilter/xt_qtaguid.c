@@ -26,10 +26,13 @@
 #include <net/tcp.h>
 #include <net/udp.h>
 
+<<<<<<< HEAD
 #if defined(CONFIG_IP6_NF_IPTABLES) || defined(CONFIG_IP6_NF_IPTABLES_MODULE)
 #include <linux/netfilter_ipv6/ip6_tables.h>
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/netfilter/xt_socket.h>
 #include "xt_qtaguid_internal.h"
 #include "xt_qtaguid_print.h"
@@ -114,6 +117,7 @@ module_param_named(debug_mask, qtaguid_debug_mask, uint, S_IRUGO | S_IWUSR);
 /*---------------------------------------------------------------------------*/
 static const char *iface_stat_procdirname = "iface_stat";
 static struct proc_dir_entry *iface_stat_procdir;
+<<<<<<< HEAD
 /*
  * The iface_stat_all* will go away once userspace gets use to the new fields
  * that have a format line.
@@ -123,6 +127,10 @@ static struct proc_dir_entry *iface_stat_all_procfile;
 static const char *iface_stat_fmt_procfilename = "iface_stat_fmt";
 static struct proc_dir_entry *iface_stat_fmt_procfile;
 
+=======
+static const char *iface_stat_all_procfilename = "iface_stat_all";
+static struct proc_dir_entry *iface_stat_all_procfile;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Ordering of locks:
@@ -135,9 +143,15 @@ static struct proc_dir_entry *iface_stat_fmt_procfile;
  * Notice how sock_tag_list_lock is held sometimes when uid_tag_data_tree_lock
  * is acquired.
  *
+<<<<<<< HEAD
  * Call tree with all lock holders as of 2012-04-27:
  *
  * iface_stat_fmt_proc_read()
+=======
+ * Call tree with all lock holders as of 2011-09-25:
+ *
+ * iface_stat_all_proc_read()
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *   iface_stat_list_lock
  *     (struct iface_stat)
  *
@@ -788,14 +802,21 @@ done:
 	return iface_entry;
 }
 
+<<<<<<< HEAD
 static int iface_stat_fmt_proc_read(char *page, char **num_items_returned,
+=======
+static int iface_stat_all_proc_read(char *page, char **num_items_returned,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				    off_t items_to_skip, int char_count,
 				    int *eof, void *data)
 {
 	char *outp = page;
 	int item_index = 0;
 	int len;
+<<<<<<< HEAD
 	int fmt = (int)data; /* The data is just 1 (old) or 2 (uses fmt) */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iface_stat *iface_entry;
 	struct rtnl_link_stats64 dev_stats, *stats;
 	struct rtnl_link_stats64 no_dev_stats = {0};
@@ -805,17 +826,24 @@ static int iface_stat_fmt_proc_read(char *page, char **num_items_returned,
 		return 0;
 	}
 
+<<<<<<< HEAD
 	CT_DEBUG("qtaguid:proc iface_stat_fmt "
 		 "pid=%u tgid=%u uid=%u "
 		 "page=%p *num_items_returned=%p off=%ld "
 		 "char_count=%d *eof=%d\n",
 		 current->pid, current->tgid, current_fsuid(),
 		 page, *num_items_returned,
+=======
+	CT_DEBUG("qtaguid:proc iface_stat_all "
+		 "page=%p *num_items_returned=%p off=%ld "
+		 "char_count=%d *eof=%d\n", page, *num_items_returned,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 items_to_skip, char_count, *eof);
 
 	if (*eof)
 		return 0;
 
+<<<<<<< HEAD
 	if (fmt == 2 && item_index++ >= items_to_skip) {
 		len = snprintf(outp, char_count,
 			       "ifname "
@@ -831,6 +859,8 @@ static int iface_stat_fmt_proc_read(char *page, char **num_items_returned,
 		(*num_items_returned)++;
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * This lock will prevent iface_stat_update() from changing active,
 	 * and in turn prevent an interface from unregistering itself.
@@ -846,6 +876,7 @@ static int iface_stat_fmt_proc_read(char *page, char **num_items_returned,
 		} else {
 			stats = &no_dev_stats;
 		}
+<<<<<<< HEAD
 		/*
 		 * If the meaning of the data changes, then update the fmtX
 		 * string.
@@ -877,6 +908,20 @@ static int iface_stat_fmt_proc_read(char *page, char **num_items_returned,
 				iface_entry->totals_via_skb[IFS_TX].packets
 				);
 		}
+=======
+		len = snprintf(outp, char_count,
+			       "%s %d "
+			       "%llu %llu %llu %llu "
+			       "%llu %llu %llu %llu\n",
+			       iface_entry->ifname,
+			       iface_entry->active,
+			       iface_entry->totals[IFS_RX].bytes,
+			       iface_entry->totals[IFS_RX].packets,
+			       iface_entry->totals[IFS_TX].bytes,
+			       iface_entry->totals[IFS_TX].packets,
+			       stats->rx_bytes, stats->rx_packets,
+			       stats->tx_bytes, stats->tx_packets);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (len >= char_count) {
 			spin_unlock_bh(&iface_stat_list_lock);
 			*outp = '\0';
@@ -910,6 +955,7 @@ static void iface_create_proc_worker(struct work_struct *work)
 	new_iface->proc_ptr = proc_entry;
 
 	create_proc_read_entry("tx_bytes", proc_iface_perms, proc_entry,
+<<<<<<< HEAD
 			       read_proc_u64,
 			       &new_iface->totals_via_dev[IFS_TX].bytes);
 	create_proc_read_entry("rx_bytes", proc_iface_perms, proc_entry,
@@ -921,6 +967,15 @@ static void iface_create_proc_worker(struct work_struct *work)
 	create_proc_read_entry("rx_packets", proc_iface_perms, proc_entry,
 			       read_proc_u64,
 			       &new_iface->totals_via_dev[IFS_RX].packets);
+=======
+			read_proc_u64, &new_iface->totals[IFS_TX].bytes);
+	create_proc_read_entry("rx_bytes", proc_iface_perms, proc_entry,
+			read_proc_u64, &new_iface->totals[IFS_RX].bytes);
+	create_proc_read_entry("tx_packets", proc_iface_perms, proc_entry,
+			read_proc_u64, &new_iface->totals[IFS_TX].packets);
+	create_proc_read_entry("rx_packets", proc_iface_perms, proc_entry,
+			read_proc_u64, &new_iface->totals[IFS_RX].packets);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	create_proc_read_entry("active", proc_iface_perms, proc_entry,
 			read_proc_bool, &new_iface->active);
 
@@ -1024,6 +1079,7 @@ static void iface_check_stats_reset_and_adjust(struct net_device *net_dev,
 			     "iface reset its stats unexpectedly\n", __func__,
 			     net_dev->name);
 
+<<<<<<< HEAD
 		iface->totals_via_dev[IFS_TX].bytes +=
 			iface->last_known[IFS_TX].bytes;
 		iface->totals_via_dev[IFS_TX].packets +=
@@ -1031,6 +1087,13 @@ static void iface_check_stats_reset_and_adjust(struct net_device *net_dev,
 		iface->totals_via_dev[IFS_RX].bytes +=
 			iface->last_known[IFS_RX].bytes;
 		iface->totals_via_dev[IFS_RX].packets +=
+=======
+		iface->totals[IFS_TX].bytes += iface->last_known[IFS_TX].bytes;
+		iface->totals[IFS_TX].packets +=
+			iface->last_known[IFS_TX].packets;
+		iface->totals[IFS_RX].bytes += iface->last_known[IFS_RX].bytes;
+		iface->totals[IFS_RX].packets +=
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			iface->last_known[IFS_RX].packets;
 		iface->last_known_valid = false;
 		IF_DEBUG("qtaguid: %s(%s): iface=%p "
@@ -1198,6 +1261,7 @@ static struct sock_tag *get_sock_stat(const struct sock *sk)
 	return sock_tag_entry;
 }
 
+<<<<<<< HEAD
 static int ipx_proto(const struct sk_buff *skb,
 		     struct xt_action_param *par)
 {
@@ -1219,6 +1283,8 @@ static int ipx_proto(const struct sk_buff *skb,
 	return tproto;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void
 data_counters_update(struct data_counters *dc, int set,
 		     enum ifs_tx_rx direction, int proto, int bytes)
@@ -1279,10 +1345,17 @@ static void iface_stat_update(struct net_device *net_dev, bool stash_only)
 		spin_unlock_bh(&iface_stat_list_lock);
 		return;
 	}
+<<<<<<< HEAD
 	entry->totals_via_dev[IFS_TX].bytes += stats->tx_bytes;
 	entry->totals_via_dev[IFS_TX].packets += stats->tx_packets;
 	entry->totals_via_dev[IFS_RX].bytes += stats->rx_bytes;
 	entry->totals_via_dev[IFS_RX].packets += stats->rx_packets;
+=======
+	entry->totals[IFS_TX].bytes += stats->tx_bytes;
+	entry->totals[IFS_TX].packets += stats->tx_packets;
+	entry->totals[IFS_RX].bytes += stats->rx_bytes;
+	entry->totals[IFS_RX].packets += stats->rx_packets;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* We don't need the last_known[] anymore */
 	entry->last_known_valid = false;
 	_iface_stat_set_active(entry, net_dev, false);
@@ -1292,6 +1365,7 @@ static void iface_stat_update(struct net_device *net_dev, bool stash_only)
 	spin_unlock_bh(&iface_stat_list_lock);
 }
 
+<<<<<<< HEAD
 /*
  * Update stats for the specified interface from the skb.
  * Do nothing if the entry
@@ -1353,6 +1427,8 @@ static void iface_stat_update_from_skb(const struct sk_buff *skb,
 	spin_unlock_bh(&iface_stat_list_lock);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void tag_stat_update(struct tag_stat *tag_entry,
 			enum ifs_tx_rx direction, int proto, int bytes)
 {
@@ -1402,7 +1478,11 @@ static void if_tag_stat_update(const char *ifname, uid_t uid,
 	struct data_counters *uid_tag_counters;
 	struct sock_tag *sock_tag_entry;
 	struct iface_stat *iface_entry;
+<<<<<<< HEAD
 	struct tag_stat *new_tag_stat = NULL;
+=======
+	struct tag_stat *new_tag_stat;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	MT_DEBUG("qtaguid: if_tag_stat_update(ifname=%s "
 		"uid=%u sk=%p dir=%d proto=%d bytes=%d)\n",
 		 ifname, uid, sk, direction, proto, bytes);
@@ -1467,6 +1547,7 @@ static void if_tag_stat_update(const char *ifname, uid_t uid,
 	}
 
 	if (acct_tag) {
+<<<<<<< HEAD
 		/* Create the child {acct_tag, uid_tag} and hook up parent. */
 		new_tag_stat = create_if_tag_stat(iface_entry, tag);
 		new_tag_stat->parent_counters = uid_tag_counters;
@@ -1480,6 +1561,10 @@ static void if_tag_stat_update(const char *ifname, uid_t uid,
 		 * below will always be assigned.
 		 */
 		BUG_ON(!new_tag_stat);
+=======
+		new_tag_stat = create_if_tag_stat(iface_entry, tag);
+		new_tag_stat->parent_counters = uid_tag_counters;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	tag_stat_update(new_tag_stat, direction, proto, bytes);
 	spin_unlock_bh(&iface_entry->tag_stat_list_lock);
@@ -1600,6 +1685,7 @@ static int __init iface_stat_init(struct proc_dir_entry *parent_procdir)
 						    parent_procdir);
 	if (!iface_stat_all_procfile) {
 		pr_err("qtaguid: iface_stat: init "
+<<<<<<< HEAD
 		       " failed to create stat_old proc entry\n");
 		err = -1;
 		goto err_zap_entry;
@@ -1618,13 +1704,24 @@ static int __init iface_stat_init(struct proc_dir_entry *parent_procdir)
 	}
 	iface_stat_fmt_procfile->read_proc = iface_stat_fmt_proc_read;
 	iface_stat_fmt_procfile->data = (void *)2; /* fmt2 */
+=======
+		       " failed to create stat_all proc entry\n");
+		err = -1;
+		goto err_zap_entry;
+	}
+	iface_stat_all_procfile->read_proc = iface_stat_all_proc_read;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 	err = register_netdevice_notifier(&iface_netdev_notifier_blk);
 	if (err) {
 		pr_err("qtaguid: iface_stat: init "
 		       "failed to register dev event handler\n");
+<<<<<<< HEAD
 		goto err_zap_all_stats_entries;
+=======
+		goto err_zap_all_stats_entry;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	err = register_inetaddr_notifier(&iface_inetaddr_notifier_blk);
 	if (err) {
@@ -1645,8 +1742,11 @@ err_unreg_ip4_addr:
 	unregister_inetaddr_notifier(&iface_inetaddr_notifier_blk);
 err_unreg_nd:
 	unregister_netdevice_notifier(&iface_netdev_notifier_blk);
+<<<<<<< HEAD
 err_zap_all_stats_entries:
 	remove_proc_entry(iface_stat_fmt_procfilename, parent_procdir);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_zap_all_stats_entry:
 	remove_proc_entry(iface_stat_all_procfilename, parent_procdir);
 err_zap_entry:
@@ -1724,15 +1824,26 @@ static void account_for_uid(const struct sk_buff *skb,
 	} else if (unlikely(!el_dev->name)) {
 		pr_info("qtaguid[%d]: no dev->name?!!\n", par->hooknum);
 	} else {
+<<<<<<< HEAD
 		int proto = ipx_proto(skb, par);
 		MT_DEBUG("qtaguid[%d]: dev name=%s type=%d fam=%d proto=%d\n",
 			 par->hooknum, el_dev->name, el_dev->type,
 			 par->family, proto);
+=======
+		MT_DEBUG("qtaguid[%d]: dev name=%s type=%d\n",
+			 par->hooknum,
+			 el_dev->name,
+			 el_dev->type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if_tag_stat_update(el_dev->name, uid,
 				skb->sk ? skb->sk : alternate_sk,
 				par->in ? IFS_RX : IFS_TX,
+<<<<<<< HEAD
 				proto, skb->len);
+=======
+				ip_hdr(skb)->protocol, skb->len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -1757,6 +1868,7 @@ static bool qtaguid_mt(const struct sk_buff *skb, struct xt_action_param *par)
 		goto ret_res;
 	}
 
+<<<<<<< HEAD
 	switch (par->hooknum) {
 	case NF_INET_PRE_ROUTING:
 	case NF_INET_POST_ROUTING:
@@ -1773,6 +1885,10 @@ static bool qtaguid_mt(const struct sk_buff *skb, struct xt_action_param *par)
 	}
 
 	sk = skb->sk;
+=======
+	sk = skb->sk;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (sk == NULL) {
 		/*
 		 * A missing sk->sk_socket happens when packets are in-flight
@@ -1791,8 +1907,13 @@ static bool qtaguid_mt(const struct sk_buff *skb, struct xt_action_param *par)
 	} else {
 		atomic64_inc(&qtu_events.match_found_sk);
 	}
+<<<<<<< HEAD
 	MT_DEBUG("qtaguid[%d]: sk=%p got_sock=%d fam=%d proto=%d\n",
 		 par->hooknum, sk, got_sock, par->family, ipx_proto(skb, par));
+=======
+	MT_DEBUG("qtaguid[%d]: sk=%p got_sock=%d proto=%d\n",
+		par->hooknum, sk, got_sock, ip_hdr(skb)->protocol);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (sk != NULL) {
 		MT_DEBUG("qtaguid[%d]: sk=%p->sk_socket=%p->file=%p\n",
 			par->hooknum, sk, sk->sk_socket,
@@ -1947,10 +2068,15 @@ static int qtaguid_ctrl_proc_read(char *page, char **num_items_returned,
 	if (*eof)
 		return 0;
 
+<<<<<<< HEAD
 	CT_DEBUG("qtaguid: proc ctrl pid=%u tgid=%u uid=%u "
 		 "page=%p off=%ld char_count=%d *eof=%d\n",
 		 current->pid, current->tgid, current_fsuid(),
 		 page, items_to_skip, char_count, *eof);
+=======
+	CT_DEBUG("qtaguid: proc ctrl page=%p off=%ld char_count=%d *eof=%d\n",
+		page, items_to_skip, char_count, *eof);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_lock_bh(&sock_tag_list_lock);
 	for (node = rb_first(&sock_tag_tree);
@@ -1994,7 +2120,10 @@ static int qtaguid_ctrl_proc_read(char *page, char **num_items_returned,
 			       "delete_cmds=%llu "
 			       "iface_events=%llu "
 			       "match_calls=%llu "
+<<<<<<< HEAD
 			       "match_calls_prepost=%llu "
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			       "match_found_sk=%llu "
 			       "match_found_sk_in_ct=%llu "
 			       "match_found_no_sk_in_ct=%llu "
@@ -2006,7 +2135,10 @@ static int qtaguid_ctrl_proc_read(char *page, char **num_items_returned,
 			       atomic64_read(&qtu_events.delete_cmds),
 			       atomic64_read(&qtu_events.iface_events),
 			       atomic64_read(&qtu_events.match_calls),
+<<<<<<< HEAD
 			       atomic64_read(&qtu_events.match_calls_prepost),
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			       atomic64_read(&qtu_events.match_found_sk),
 			       atomic64_read(&qtu_events.match_found_sk_in_ct),
 			       atomic64_read(
@@ -2280,9 +2412,13 @@ static int ctrl_cmd_tag(const char *input)
 	el_socket = sockfd_lookup(sock_fd, &res);  /* This locks the file */
 	if (!el_socket) {
 		pr_info("qtaguid: ctrl_tag(%s): failed to lookup"
+<<<<<<< HEAD
 			" sock_fd=%d err=%d pid=%u tgid=%u uid=%u\n",
 			input, sock_fd, res, current->pid, current->tgid,
 			current_fsuid());
+=======
+			" sock_fd=%d err=%d\n", input, sock_fd, res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto err;
 	}
 	CT_DEBUG("qtaguid: ctrl_tag(%s): socket->...->f_count=%ld ->sk=%p\n",
@@ -2427,9 +2563,13 @@ static int ctrl_cmd_untag(const char *input)
 	el_socket = sockfd_lookup(sock_fd, &res);  /* This locks the file */
 	if (!el_socket) {
 		pr_info("qtaguid: ctrl_untag(%s): failed to lookup"
+<<<<<<< HEAD
 			" sock_fd=%d err=%d pid=%u tgid=%u uid=%u\n",
 			input, sock_fd, res, current->pid, current->tgid,
 			current_fsuid());
+=======
+			" sock_fd=%d err=%d\n", input, sock_fd, res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto err;
 	}
 	CT_DEBUG("qtaguid: ctrl_untag(%s): socket->...->f_count=%ld ->sk=%p\n",
@@ -2505,9 +2645,12 @@ static int qtaguid_ctrl_parse(const char *input, int count)
 	char cmd;
 	int res;
 
+<<<<<<< HEAD
 	CT_DEBUG("qtaguid: ctrl(%s): pid=%u tgid=%u uid=%u\n",
 		 input, current->pid, current->tgid, current_fsuid());
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cmd = input[0];
 	/* Collect params for commands */
 	switch (cmd) {
@@ -2684,12 +2827,18 @@ static int qtaguid_stats_proc_read(char *page, char **num_items_returned,
 		return len;
 	}
 
+<<<<<<< HEAD
 	CT_DEBUG("qtaguid:proc stats pid=%u tgid=%u uid=%u "
 		 "page=%p *num_items_returned=%p off=%ld "
 		 "char_count=%d *eof=%d\n",
 		 current->pid, current->tgid, current_fsuid(),
 		 page, *num_items_returned,
 		 items_to_skip, char_count, *eof);
+=======
+	CT_DEBUG("qtaguid:proc stats page=%p *num_items_returned=%p off=%ld "
+		"char_count=%d *eof=%d\n", page, *num_items_returned,
+		items_to_skip, char_count, *eof);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (*eof)
 		return 0;

@@ -66,6 +66,10 @@ void __init pxa168_init_irq(void)
 /* APB peripheral clocks */
 static APBC_CLK(uart1, PXA168_UART1, 1, 14745600);
 static APBC_CLK(uart2, PXA168_UART2, 1, 14745600);
+<<<<<<< HEAD
+=======
+static APBC_CLK(uart3, PXA168_UART3, 1, 14745600);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static APBC_CLK(twsi0, PXA168_TWSI0, 1, 33000000);
 static APBC_CLK(twsi1, PXA168_TWSI1, 1, 33000000);
 static APBC_CLK(pwm1, PXA168_PWM1, 1, 13000000);
@@ -81,11 +85,19 @@ static APBC_CLK(keypad, PXA168_KPC, 0, 32000);
 
 static APMU_CLK(nand, NAND, 0x19b, 156000000);
 static APMU_CLK(lcd, LCD, 0x7f, 312000000);
+<<<<<<< HEAD
+=======
+static APMU_CLK(eth, ETH, 0x09, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* device and clock bindings */
 static struct clk_lookup pxa168_clkregs[] = {
 	INIT_CLKREG(&clk_uart1, "pxa2xx-uart.0", NULL),
 	INIT_CLKREG(&clk_uart2, "pxa2xx-uart.1", NULL),
+<<<<<<< HEAD
+=======
+	INIT_CLKREG(&clk_uart3, "pxa2xx-uart.2", NULL),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	INIT_CLKREG(&clk_twsi0, "pxa2xx-i2c.0", NULL),
 	INIT_CLKREG(&clk_twsi1, "pxa2xx-i2c.1", NULL),
 	INIT_CLKREG(&clk_pwm1, "pxa168-pwm.0", NULL),
@@ -100,6 +112,10 @@ static struct clk_lookup pxa168_clkregs[] = {
 	INIT_CLKREG(&clk_nand, "pxa3xx-nand", NULL),
 	INIT_CLKREG(&clk_lcd, "pxa168-fb", NULL),
 	INIT_CLKREG(&clk_keypad, "pxa27x-keypad", NULL),
+<<<<<<< HEAD
+=======
+	INIT_CLKREG(&clk_eth, "pxa168-eth", "MFUCLK"),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __init pxa168_init(void)
@@ -149,6 +165,10 @@ void pxa168_clear_keypad_wakeup(void)
 /* on-chip devices */
 PXA168_DEVICE(uart1, "pxa2xx-uart", 0, UART1, 0xd4017000, 0x30, 21, 22);
 PXA168_DEVICE(uart2, "pxa2xx-uart", 1, UART2, 0xd4018000, 0x30, 23, 24);
+<<<<<<< HEAD
+=======
+PXA168_DEVICE(uart3, "pxa2xx-uart", 2, UART3, 0xd4026000, 0x30, 23, 24);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 PXA168_DEVICE(twsi0, "pxa2xx-i2c", 0, TWSI0, 0xd4011000, 0x28);
 PXA168_DEVICE(twsi1, "pxa2xx-i2c", 1, TWSI1, 0xd4025000, 0x28);
 PXA168_DEVICE(pwm1, "pxa168-pwm", 0, NONE, 0xd401a000, 0x10);
@@ -163,3 +183,7 @@ PXA168_DEVICE(ssp4, "pxa168-ssp", 3, SSP4, 0xd4020000, 0x40, 58, 59);
 PXA168_DEVICE(ssp5, "pxa168-ssp", 4, SSP5, 0xd4021000, 0x40, 60, 61);
 PXA168_DEVICE(fb, "pxa168-fb", -1, LCD, 0xd420b000, 0x1c8);
 PXA168_DEVICE(keypad, "pxa27x-keypad", -1, KEYPAD, 0xd4012000, 0x4c);
+<<<<<<< HEAD
+=======
+PXA168_DEVICE(eth, "pxa168-eth", -1, MFU, 0xc0800000, 0x0fff);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

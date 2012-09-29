@@ -46,6 +46,7 @@
 #define MSM_DMOV_PHYS         0xA9700000
 #define MSM_DMOV_SIZE         SZ_4K
 
+<<<<<<< HEAD
 #define MSM_GPIO1_BASE        IOMEM(0xE0003000)
 #define MSM_GPIO1_PHYS        0xA9000000
 #define MSM_GPIO1_SIZE        SZ_4K
@@ -53,6 +54,13 @@
 #define MSM_GPIO2_BASE        IOMEM(0xE0004000)
 #define MSM_GPIO2_PHYS        0xA9100000
 #define MSM_GPIO2_SIZE        SZ_4K
+=======
+#define QSD8X50_GPIO1_PHYS        0xA9000000
+#define QSD8X50_GPIO1_SIZE        SZ_4K
+
+#define QSD8X50_GPIO2_PHYS        0xA9100000
+#define QSD8X50_GPIO2_SIZE        SZ_4K
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define MSM_CLK_CTL_BASE      IOMEM(0xE0005000)
 #define MSM_CLK_CTL_PHYS      0xA8600000

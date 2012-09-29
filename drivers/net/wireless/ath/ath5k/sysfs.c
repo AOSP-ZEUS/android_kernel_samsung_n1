@@ -11,8 +11,13 @@ static ssize_t ath5k_attr_show_##name(struct device *dev,		\
 			char *buf)					\
 {									\
 	struct ieee80211_hw *hw = dev_get_drvdata(dev);			\
+<<<<<<< HEAD
 	struct ath5k_softc *sc = hw->priv;				\
 	return snprintf(buf, PAGE_SIZE, "%d\n", get); 			\
+=======
+	struct ath5k_hw *ah = hw->priv;				\
+	return snprintf(buf, PAGE_SIZE, "%d\n", get);			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }									\
 									\
 static ssize_t ath5k_attr_store_##name(struct device *dev,		\
@@ -20,11 +25,21 @@ static ssize_t ath5k_attr_store_##name(struct device *dev,		\
 			const char *buf, size_t count)			\
 {									\
 	struct ieee80211_hw *hw = dev_get_drvdata(dev);			\
+<<<<<<< HEAD
 	struct ath5k_softc *sc = hw->priv;				\
 	int val;							\
 									\
 	val = (int)simple_strtoul(buf, NULL, 10);			\
 	set(sc->ah, val);						\
+=======
+	struct ath5k_hw *ah = hw->priv;				\
+	int val, ret;							\
+									\
+	ret = kstrtoint(buf, 10, &val);					\
+	if (ret < 0)							\
+		return ret;						\
+	set(ah, val);						\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return count;							\
 }									\
 static DEVICE_ATTR(name, S_IRUGO | S_IWUSR,				\
@@ -36,13 +51,19 @@ static ssize_t ath5k_attr_show_##name(struct device *dev,		\
 			char *buf)					\
 {									\
 	struct ieee80211_hw *hw = dev_get_drvdata(dev);			\
+<<<<<<< HEAD
 	struct ath5k_softc *sc = hw->priv;				\
 	return snprintf(buf, PAGE_SIZE, "%d\n", get); 			\
+=======
+	struct ath5k_hw *ah = hw->priv;				\
+	return snprintf(buf, PAGE_SIZE, "%d\n", get);			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }									\
 static DEVICE_ATTR(name, S_IRUGO, ath5k_attr_show_##name, NULL)
 
 /*** ANI ***/
 
+<<<<<<< HEAD
 SIMPLE_SHOW_STORE(ani_mode, sc->ani_state.ani_mode, ath5k_ani_init);
 SIMPLE_SHOW_STORE(noise_immunity_level, sc->ani_state.noise_imm_level,
 			ath5k_ani_set_noise_immunity_level);
@@ -55,6 +76,20 @@ SIMPLE_SHOW_STORE(ofdm_weak_signal_detection, sc->ani_state.ofdm_weak_sig,
 SIMPLE_SHOW_STORE(cck_weak_signal_detection, sc->ani_state.cck_weak_sig,
 			ath5k_ani_set_cck_weak_signal_detection);
 SIMPLE_SHOW(spur_level_max, sc->ani_state.max_spur_level);
+=======
+SIMPLE_SHOW_STORE(ani_mode, ah->ani_state.ani_mode, ath5k_ani_init);
+SIMPLE_SHOW_STORE(noise_immunity_level, ah->ani_state.noise_imm_level,
+			ath5k_ani_set_noise_immunity_level);
+SIMPLE_SHOW_STORE(spur_level, ah->ani_state.spur_level,
+			ath5k_ani_set_spur_immunity_level);
+SIMPLE_SHOW_STORE(firstep_level, ah->ani_state.firstep_level,
+			ath5k_ani_set_firstep_level);
+SIMPLE_SHOW_STORE(ofdm_weak_signal_detection, ah->ani_state.ofdm_weak_sig,
+			ath5k_ani_set_ofdm_weak_signal_detection);
+SIMPLE_SHOW_STORE(cck_weak_signal_detection, ah->ani_state.cck_weak_sig,
+			ath5k_ani_set_cck_weak_signal_detection);
+SIMPLE_SHOW(spur_level_max, ah->ani_state.max_spur_level);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static ssize_t ath5k_attr_show_noise_immunity_level_max(struct device *dev,
 			struct device_attribute *attr,
@@ -96,14 +131,24 @@ static struct attribute_group ath5k_attribute_group_ani = {
 /*** register / unregister ***/
 
 int
+<<<<<<< HEAD
 ath5k_sysfs_register(struct ath5k_softc *sc)
 {
 	struct device *dev = sc->dev;
+=======
+ath5k_sysfs_register(struct ath5k_hw *ah)
+{
+	struct device *dev = ah->dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int err;
 
 	err = sysfs_create_group(&dev->kobj, &ath5k_attribute_group_ani);
 	if (err) {
+<<<<<<< HEAD
 		ATH5K_ERR(sc, "failed to create sysfs group\n");
+=======
+		ATH5K_ERR(ah, "failed to create sysfs group\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return err;
 	}
 
@@ -111,9 +156,15 @@ ath5k_sysfs_register(struct ath5k_softc *sc)
 }
 
 void
+<<<<<<< HEAD
 ath5k_sysfs_unregister(struct ath5k_softc *sc)
 {
 	struct device *dev = sc->dev;
+=======
+ath5k_sysfs_unregister(struct ath5k_hw *ah)
+{
+	struct device *dev = ah->dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	sysfs_remove_group(&dev->kobj, &ath5k_attribute_group_ani);
 }

@@ -26,6 +26,10 @@ struct dst_ops {
 	void			(*link_failure)(struct sk_buff *);
 	void			(*update_pmtu)(struct dst_entry *dst, u32 mtu);
 	int			(*local_out)(struct sk_buff *skb);
+<<<<<<< HEAD
+=======
+	struct neighbour *	(*neigh_lookup)(const struct dst_entry *dst, const void *daddr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	struct kmem_cache	*kmem_cachep;
 

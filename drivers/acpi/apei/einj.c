@@ -46,7 +46,12 @@
  * Some BIOSes allow parameters to the SET_ERROR_TYPE entries in the
  * EINJ table through an unpublished extension. Use with caution as
  * most will ignore the parameter and make their own choice of address
+<<<<<<< HEAD
  * for error injection.
+=======
+ * for error injection.  This extension is used only if
+ * param_extension module parameter is specified.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 struct einj_parameter {
 	u64 type;
@@ -65,6 +70,12 @@ struct einj_parameter {
 	((struct acpi_whea_header *)((char *)(tab) +			\
 				    sizeof(struct acpi_table_einj)))
 
+<<<<<<< HEAD
+=======
+static bool param_extension;
+module_param(param_extension, bool, 0);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct acpi_table_einj *einj_tab;
 
 static struct apei_resources einj_resources;
@@ -285,7 +296,11 @@ static int __einj_error_inject(u32 type, u64 param1, u64 param2)
 
 	einj_exec_ctx_init(&ctx);
 
+<<<<<<< HEAD
 	rc = apei_exec_run(&ctx, ACPI_EINJ_BEGIN_OPERATION);
+=======
+	rc = apei_exec_run_optional(&ctx, ACPI_EINJ_BEGIN_OPERATION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (rc)
 		return rc;
 	apei_exec_ctx_set_input(&ctx, type);
@@ -323,7 +338,11 @@ static int __einj_error_inject(u32 type, u64 param1, u64 param2)
 	rc = __einj_error_trigger(trigger_paddr);
 	if (rc)
 		return rc;
+<<<<<<< HEAD
 	rc = apei_exec_run(&ctx, ACPI_EINJ_END_OPERATION);
+=======
+	rc = apei_exec_run_optional(&ctx, ACPI_EINJ_END_OPERATION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return rc;
 }
@@ -489,6 +508,7 @@ static int __init einj_init(void)
 				     einj_debug_dir, NULL, &error_type_fops);
 	if (!fentry)
 		goto err_cleanup;
+<<<<<<< HEAD
 	fentry = debugfs_create_x64("param1", S_IRUSR | S_IWUSR,
 				    einj_debug_dir, &error_param1);
 	if (!fentry)
@@ -497,6 +517,8 @@ static int __init einj_init(void)
 				    einj_debug_dir, &error_param2);
 	if (!fentry)
 		goto err_cleanup;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	fentry = debugfs_create_file("error_inject", S_IWUSR,
 				     einj_debug_dir, NULL, &error_inject_fops);
 	if (!fentry)
@@ -513,12 +535,32 @@ static int __init einj_init(void)
 	rc = apei_exec_pre_map_gars(&ctx);
 	if (rc)
 		goto err_release;
+<<<<<<< HEAD
 	param_paddr = einj_get_parameter_address();
 	if (param_paddr) {
 		einj_param = ioremap(param_paddr, sizeof(*einj_param));
 		rc = -ENOMEM;
 		if (!einj_param)
 			goto err_unmap;
+=======
+	if (param_extension) {
+		param_paddr = einj_get_parameter_address();
+		if (param_paddr) {
+			einj_param = ioremap(param_paddr, sizeof(*einj_param));
+			rc = -ENOMEM;
+			if (!einj_param)
+				goto err_unmap;
+			fentry = debugfs_create_x64("param1", S_IRUSR | S_IWUSR,
+						    einj_debug_dir, &error_param1);
+			if (!fentry)
+				goto err_unmap;
+			fentry = debugfs_create_x64("param2", S_IRUSR | S_IWUSR,
+						    einj_debug_dir, &error_param2);
+			if (!fentry)
+				goto err_unmap;
+		} else
+			pr_warn(EINJ_PFX "Parameter extension is not supported.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	pr_info(EINJ_PFX "Error INJection is initialized.\n");
@@ -526,6 +568,11 @@ static int __init einj_init(void)
 	return 0;
 
 err_unmap:
+<<<<<<< HEAD
+=======
+	if (einj_param)
+		iounmap(einj_param);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	apei_exec_post_unmap_gars(&ctx);
 err_release:
 	apei_resources_release(&einj_resources);

@@ -26,6 +26,15 @@ struct regulator_init_data;
  * @gpio:		GPIO to use for enable control
  * 			set to -EINVAL if not used
  * @startup_delay:	Start-up time in microseconds
+<<<<<<< HEAD
+=======
+ * @gpio_is_open_drain: Gpio pin is open drain or normal type.
+ *			If it is open drain type then HIGH will be set
+ *			through PULL-UP with setting gpio as input
+ *			and low will be set as gpio-output with driven
+ *			to low. For non-open-drain case, the gpio will
+ *			will be in output and drive to low/high accordingly.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @enable_high:	Polarity of enable GPIO
  *			1 = Active high, 0 = Active low
  * @enabled_at_boot:	Whether regulator has been enabled at
@@ -43,6 +52,10 @@ struct fixed_voltage_config {
 	int microvolts;
 	int gpio;
 	unsigned startup_delay;
+<<<<<<< HEAD
+=======
+	unsigned gpio_is_open_drain:1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned enable_high:1;
 	unsigned enabled_at_boot:1;
 	struct regulator_init_data *init_data;

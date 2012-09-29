@@ -81,11 +81,15 @@ void prop_inc_percpu(struct prop_descriptor *pd, struct prop_local_percpu *pl)
  * Limit the time part in order to ensure there are some bits left for the
  * cycle counter and fraction multiply.
  */
+<<<<<<< HEAD
 #if BITS_PER_LONG == 32
 #define PROP_MAX_SHIFT (3*BITS_PER_LONG/4)
 #else
 #define PROP_MAX_SHIFT (BITS_PER_LONG/2)
 #endif
+=======
+#define PROP_MAX_SHIFT (3*BITS_PER_LONG/4)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define PROP_FRAC_SHIFT		(BITS_PER_LONG - PROP_MAX_SHIFT - 1)
 #define PROP_FRAC_BASE		(1UL << PROP_FRAC_SHIFT)

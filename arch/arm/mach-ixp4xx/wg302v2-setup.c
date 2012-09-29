@@ -102,5 +102,11 @@ MACHINE_START(WG302V2, "Netgear WG302 v2 / WAG302 v2")
 	.timer		= &ixp4xx_timer,
 	.boot_params	= 0x0100,
 	.init_machine	= wg302v2_init,
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_PCI)
+	.dma_zone_size	= SZ_64M,
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END
 #endif

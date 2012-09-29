@@ -150,7 +150,11 @@ struct wl1271_tx_hw_res_descr {
 	   (from 1st EDCA AIFS counter until TX Complete). */
 	__le32 medium_delay;
 	/* LS-byte of last TKIP seq-num (saved per AC for recovery). */
+<<<<<<< HEAD
 	u8 lsb_security_sequence_number;
+=======
+	u8 tx_security_sequence_number_lsb;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Retry count - number of transmissions without successful ACK.*/
 	u8 ack_failures;
 	/* The rate that succeeded getting ACK
@@ -182,6 +186,35 @@ static inline int wl1271_tx_get_queue(int queue)
 	}
 }
 
+<<<<<<< HEAD
+=======
+static inline int wl1271_tx_get_mac80211_queue(int queue)
+{
+	switch (queue) {
+	case CONF_TX_AC_VO:
+		return 0;
+	case CONF_TX_AC_VI:
+		return 1;
+	case CONF_TX_AC_BE:
+		return 2;
+	case CONF_TX_AC_BK:
+		return 3;
+	default:
+		return 2;
+	}
+}
+
+static inline int wl1271_tx_total_queue_count(struct wl1271 *wl)
+{
+	int i, count = 0;
+
+	for (i = 0; i < NUM_TX_QUEUES; i++)
+		count += wl->tx_queue_count[i];
+
+	return count;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void wl1271_tx_work(struct work_struct *work);
 void wl1271_tx_work_locked(struct wl1271 *wl);
 void wl1271_tx_complete(struct wl1271 *wl);

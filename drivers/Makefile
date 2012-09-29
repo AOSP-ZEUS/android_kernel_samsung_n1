@@ -117,9 +117,26 @@ obj-$(CONFIG_BCMA)		+= bcma/
 obj-$(CONFIG_VHOST_NET)		+= vhost/
 obj-$(CONFIG_VLYNQ)		+= vlynq/
 obj-$(CONFIG_STAGING)		+= staging/
+<<<<<<< HEAD
 obj-y				+= platform/
 obj-y				+= ieee802154/
+=======
+obj-$(CONFIG_ACCESSORY)		+= accessory/
+obj-y				+= platform/
+obj-y				+= ieee802154/
+obj-$(CONFIG_SENSORS)		+= sensors/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #common clk code
 obj-y				+= clk/
 
 obj-$(CONFIG_HWSPINLOCK)	+= hwspinlock/
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_NFC)		+= nfc/
+obj-$(CONFIG_IOMMU_SUPPORT)	+= iommu/
+
+# Virtualization drivers
+obj-$(CONFIG_VIRT_DRIVERS)	+= virt/
+
+obj-$(CONFIG_KERNEL_DEBUG_SEC)  += level/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

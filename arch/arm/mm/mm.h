@@ -23,5 +23,14 @@ extern void __flush_dcache_page(struct address_space *mapping, struct page *page
 
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_ZONE_DMA
+extern u32 arm_dma_limit;
+#else
+#define arm_dma_limit ((u32)~0)
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init bootmem_init(void);
 void arm_mm_memblock_reserve(void);

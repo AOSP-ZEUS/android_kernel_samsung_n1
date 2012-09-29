@@ -23,6 +23,10 @@ struct pt_regs;
 extern void migrate_irqs(void);
 
 extern void asm_do_IRQ(unsigned int, struct pt_regs *);
+<<<<<<< HEAD
+=======
+void handle_IRQ(unsigned int, struct pt_regs *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void init_IRQ(void);
 
 void arch_trigger_all_cpu_backtrace(void);

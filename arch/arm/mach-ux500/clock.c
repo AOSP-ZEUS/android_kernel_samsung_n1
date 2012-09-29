@@ -14,6 +14,10 @@
 #include <linux/clk.h>
 #include <linux/io.h>
 #include <linux/clkdev.h>
+<<<<<<< HEAD
+=======
+#include <linux/cpufreq.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <plat/mtu.h>
 #include <mach/hardware.h>
@@ -635,6 +639,7 @@ static const struct file_operations set_rate_fops = {
 static struct dentry *clk_debugfs_register_dir(struct clk *c,
 						struct dentry *p_dentry)
 {
+<<<<<<< HEAD
 	struct dentry *d, *clk_d, *child, *child_tmp;
 	char s[255];
 	char *p = s;
@@ -645,6 +650,15 @@ static struct dentry *clk_debugfs_register_dir(struct clk *c,
 		p += sprintf(p, "%s", c->name);
 
 	clk_d = debugfs_create_dir(s, p_dentry);
+=======
+	struct dentry *d, *clk_d;
+	const char *p = c->name;
+
+	if (!p)
+		p = "BUG";
+
+	clk_d = debugfs_create_dir(p, p_dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!clk_d)
 		return NULL;
 
@@ -666,6 +680,7 @@ static struct dentry *clk_debugfs_register_dir(struct clk *c,
 	return clk_d;
 
 err_out:
+<<<<<<< HEAD
 	d = clk_d;
 	list_for_each_entry_safe(child, child_tmp, &d->d_subdirs, d_u.d_child)
 		debugfs_remove(child);
@@ -684,6 +699,12 @@ static void clk_debugfs_remove_dir(struct dentry *cdentry)
 	return ;
 }
 
+=======
+	debugfs_remove_recursive(clk_d);
+	return NULL;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int clk_debugfs_register_one(struct clk *c)
 {
 	struct clk *pa = c->parent_periph;
@@ -700,7 +721,11 @@ static int clk_debugfs_register_one(struct clk *c)
 		c->dent_bus = clk_debugfs_register_dir(c,
 				bpa->dent_bus ? bpa->dent_bus : bpa->dent);
 		if ((!c->dent_bus) &&  (c->dent)) {
+<<<<<<< HEAD
 			clk_debugfs_remove_dir(c->dent);
+=======
+			debugfs_remove_recursive(c->dent);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			c->dent = NULL;
 			return -ENOMEM;
 		}
@@ -759,6 +784,54 @@ err_out:
 late_initcall(clk_debugfs_init);
 #endif /* defined(CONFIG_DEBUG_FS) */
 
+<<<<<<< HEAD
+=======
+unsigned long clk_smp_twd_rate = 400000000;
+
+unsigned long clk_smp_twd_get_rate(struct clk *clk)
+{
+	return clk_smp_twd_rate;
+}
+
+static struct clk clk_smp_twd = {
+	.get_rate = clk_smp_twd_get_rate,
+	.name =  "smp_twd",
+};
+
+static struct clk_lookup clk_smp_twd_lookup = {
+	.dev_id = "smp_twd",
+	.clk = &clk_smp_twd,
+};
+
+#ifdef CONFIG_CPU_FREQ
+
+static int clk_twd_cpufreq_transition(struct notifier_block *nb,
+				      unsigned long state, void *data)
+{
+	struct cpufreq_freqs *f = data;
+
+	if (state == CPUFREQ_PRECHANGE) {
+		/* Save frequency in simple Hz */
+		clk_smp_twd_rate = f->new * 1000;
+	}
+
+	return NOTIFY_OK;
+}
+
+static struct notifier_block clk_twd_cpufreq_nb = {
+	.notifier_call = clk_twd_cpufreq_transition,
+};
+
+static int clk_init_smp_twd_cpufreq(void)
+{
+	return cpufreq_register_notifier(&clk_twd_cpufreq_nb,
+				  CPUFREQ_TRANSITION_NOTIFIER);
+}
+late_initcall(clk_init_smp_twd_cpufreq);
+
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int __init clk_init(void)
 {
 	if (cpu_is_u8500ed()) {
@@ -779,6 +852,11 @@ int __init clk_init(void)
 	else
 		clkdev_add_table(u8500_v1_clks, ARRAY_SIZE(u8500_v1_clks));
 
+<<<<<<< HEAD
+=======
+	clkdev_add(&clk_smp_twd_lookup);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_DEBUG_FS
 	clk_debugfs_add_table(u8500_common_clks, ARRAY_SIZE(u8500_common_clks));
 	if (cpu_is_u8500ed())

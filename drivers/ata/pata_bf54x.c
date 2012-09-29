@@ -1129,7 +1129,11 @@ static int bfin_softreset(struct ata_link *link, unsigned int *classes,
 	/* issue bus reset */
 	err_mask = bfin_bus_softreset(ap, devmask);
 	if (err_mask) {
+<<<<<<< HEAD
 		ata_port_printk(ap, KERN_ERR, "SRST failed (err_mask=0x%x)\n",
+=======
+		ata_port_err(ap, "SRST failed (err_mask=0x%x)\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				err_mask);
 		return -EIO;
 	}
@@ -1382,7 +1386,11 @@ idle_irq:
 #ifdef ATA_IRQ_TRAP
 	if ((ap->stats.idle_irq % 1000) == 0) {
 		ap->ops->irq_ack(ap, 0); /* debug trap */
+<<<<<<< HEAD
 		ata_port_printk(ap, KERN_WARNING, "irq trap\n");
+=======
+		ata_port_warn(ap, "irq trap\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 1;
 	}
 #endif

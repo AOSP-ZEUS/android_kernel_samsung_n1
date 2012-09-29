@@ -1552,6 +1552,13 @@ static int s3c2410_vbus_draw(struct usb_gadget *_gadget, unsigned ma)
 	return -ENOTSUPP;
 }
 
+<<<<<<< HEAD
+=======
+static int s3c2410_udc_start(struct usb_gadget_driver *driver,
+		int (*bind)(struct usb_gadget *));
+static int s3c2410_udc_stop(struct usb_gadget_driver *driver);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct usb_gadget_ops s3c2410_ops = {
 	.get_frame		= s3c2410_udc_get_frame,
 	.wakeup			= s3c2410_udc_wakeup,
@@ -1559,6 +1566,11 @@ static const struct usb_gadget_ops s3c2410_ops = {
 	.pullup			= s3c2410_udc_pullup,
 	.vbus_session		= s3c2410_udc_vbus_session,
 	.vbus_draw		= s3c2410_vbus_draw,
+<<<<<<< HEAD
+=======
+	.start			= s3c2410_udc_start,
+	.stop			= s3c2410_udc_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void s3c2410_udc_command(enum s3c2410_udc_cmd_e cmd)
@@ -1567,7 +1579,11 @@ static void s3c2410_udc_command(enum s3c2410_udc_cmd_e cmd)
 		return;
 
 	if (udc_info->udc_command) {
+<<<<<<< HEAD
 		udc_info->udc_command(S3C2410_UDC_P_DISABLE);
+=======
+		udc_info->udc_command(cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else if (gpio_is_valid(udc_info->pullup_pin)) {
 		int value;
 
@@ -1672,10 +1688,14 @@ static void s3c2410_udc_enable(struct s3c2410_udc *dev)
 	s3c2410_udc_command(S3C2410_UDC_P_ENABLE);
 }
 
+<<<<<<< HEAD
 /*
  *	usb_gadget_probe_driver
  */
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int s3c2410_udc_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	struct s3c2410_udc *udc = the_controller;
@@ -1730,12 +1750,17 @@ register_error:
 	udc->gadget.dev.driver = NULL;
 	return retval;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
 
 /*
  *	usb_gadget_unregister_driver
  */
 int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
+=======
+
+static int s3c2410_udc_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct s3c2410_udc *udc = the_controller;
 
@@ -1955,6 +1980,13 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
 			goto err_vbus_irq;
 	}
 
+<<<<<<< HEAD
+=======
+	retval = usb_add_gadget_udc(&pdev->dev, &udc->gadget);
+	if (retval)
+		goto err_add_udc;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (s3c2410_udc_debugfs_root) {
 		udc->regs_info = debugfs_create_file("registers", S_IRUGO,
 				s3c2410_udc_debugfs_root,
@@ -1967,6 +1999,13 @@ static int s3c2410_udc_probe(struct platform_device *pdev)
 
 	return 0;
 
+<<<<<<< HEAD
+=======
+err_add_udc:
+	if (udc_info && !udc_info->udc_command &&
+			gpio_is_valid(udc_info->pullup_pin))
+		gpio_free(udc_info->pullup_pin);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_vbus_irq:
 	if (udc_info && udc_info->vbus_pin > 0)
 		free_irq(gpio_to_irq(udc_info->vbus_pin), udc);
@@ -1992,6 +2031,11 @@ static int s3c2410_udc_remove(struct platform_device *pdev)
 	unsigned int irq;
 
 	dev_dbg(&pdev->dev, "%s()\n", __func__);
+<<<<<<< HEAD
+=======
+
+	usb_del_gadget_udc(&udc->gadget);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (udc->driver)
 		return -EBUSY;
 
@@ -2048,6 +2092,7 @@ static int s3c2410_udc_resume(struct platform_device *pdev)
 #define s3c2410_udc_resume	NULL
 #endif
 
+<<<<<<< HEAD
 static struct platform_driver udc_driver_2410 = {
 	.driver		= {
 		.name	= "s3c2410-usbgadget",
@@ -2062,12 +2107,28 @@ static struct platform_driver udc_driver_2410 = {
 static struct platform_driver udc_driver_2440 = {
 	.driver		= {
 		.name	= "s3c2440-usbgadget",
+=======
+static const struct platform_device_id s3c_udc_ids[] = {
+	{ "s3c2410-usbgadget", },
+	{ "s3c2440-usbgadget", },
+	{ }
+};
+MODULE_DEVICE_TABLE(platform, s3c_udc_ids);
+
+static struct platform_driver udc_driver_24x0 = {
+	.driver		= {
+		.name	= "s3c24x0-usbgadget",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.owner	= THIS_MODULE,
 	},
 	.probe		= s3c2410_udc_probe,
 	.remove		= s3c2410_udc_remove,
 	.suspend	= s3c2410_udc_suspend,
 	.resume		= s3c2410_udc_resume,
+<<<<<<< HEAD
+=======
+	.id_table	= s3c_udc_ids,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __init udc_init(void)
@@ -2083,11 +2144,15 @@ static int __init udc_init(void)
 		s3c2410_udc_debugfs_root = NULL;
 	}
 
+<<<<<<< HEAD
 	retval = platform_driver_register(&udc_driver_2410);
 	if (retval)
 		goto err;
 
 	retval = platform_driver_register(&udc_driver_2440);
+=======
+	retval = platform_driver_register(&udc_driver_24x0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (retval)
 		goto err;
 
@@ -2100,6 +2165,7 @@ err:
 
 static void __exit udc_exit(void)
 {
+<<<<<<< HEAD
 	platform_driver_unregister(&udc_driver_2410);
 	platform_driver_unregister(&udc_driver_2440);
 	debugfs_remove(s3c2410_udc_debugfs_root);
@@ -2107,6 +2173,12 @@ static void __exit udc_exit(void)
 
 EXPORT_SYMBOL(usb_gadget_unregister_driver);
 
+=======
+	platform_driver_unregister(&udc_driver_24x0);
+	debugfs_remove(s3c2410_udc_debugfs_root);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 module_init(udc_init);
 module_exit(udc_exit);
 
@@ -2114,5 +2186,8 @@ MODULE_AUTHOR(DRIVER_AUTHOR);
 MODULE_DESCRIPTION(DRIVER_DESC);
 MODULE_VERSION(DRIVER_VERSION);
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
 MODULE_ALIAS("platform:s3c2410-usbgadget");
 MODULE_ALIAS("platform:s3c2440-usbgadget");
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

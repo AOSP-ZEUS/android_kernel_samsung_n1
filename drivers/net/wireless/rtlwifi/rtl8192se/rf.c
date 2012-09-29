@@ -27,6 +27,11 @@
  *
  *****************************************************************************/
 
+<<<<<<< HEAD
+=======
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "../wifi.h"
 #include "reg.h"
 #include "def.h"
@@ -410,7 +415,11 @@ void rtl92s_phy_rf6052_set_ccktxpower(struct ieee80211_hw *hw, u8 pwrlevel)
 	      (rtlefuse->eeprom_regulatory != 0)))
 		dont_inc_cck_or_turboscanoff = true;
 
+<<<<<<< HEAD
 	if (mac->act_scanning == true) {
+=======
+	if (mac->act_scanning) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		txagc = 0x3f;
 		if (dont_inc_cck_or_turboscanoff)
 			txagc = pwrlevel;
@@ -507,7 +516,11 @@ bool rtl92s_phy_rf6052_config(struct ieee80211_hw *hw)
 		}
 
 		if (rtstatus != true) {
+<<<<<<< HEAD
 			printk(KERN_ERR "Radio[%d] Fail!!", rfpath);
+=======
+			pr_err("Radio[%d] Fail!!\n", rfpath);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto fail;
 		}
 

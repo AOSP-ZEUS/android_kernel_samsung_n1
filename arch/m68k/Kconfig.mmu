@@ -372,12 +372,15 @@ config AMIGA_PCMCIA
 	  Include support in the kernel for pcmcia on Amiga 1200 and Amiga
 	  600. If you intend to use pcmcia cards say Y; otherwise say N.
 
+<<<<<<< HEAD
 config STRAM_PROC
 	bool "ST-RAM statistics in /proc"
 	depends on ATARI
 	help
 	  Say Y here to report ST-RAM usage statistics in /proc/stram.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config HEARTBEAT
 	bool "Use power LED as a heartbeat" if AMIGA || APOLLO || ATARI || MAC ||Q40
 	default y if !AMIGA && !APOLLO && !ATARI && !MAC && !Q40 && HP300

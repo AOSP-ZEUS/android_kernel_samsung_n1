@@ -611,11 +611,22 @@ int mlx4_en_process_rx_cq(struct net_device *dev, struct mlx4_en_cq *cq, int bud
 					gro_skb->truesize += length;
 					gro_skb->ip_summed = CHECKSUM_UNNECESSARY;
 
+<<<<<<< HEAD
 					if (priv->vlgrp && (cqe->vlan_my_qpn &
 							    cpu_to_be32(MLX4_CQE_VLAN_PRESENT_MASK)))
 						vlan_gro_frags(&cq->napi, priv->vlgrp, be16_to_cpu(cqe->sl_vid));
 					else
 						napi_gro_frags(&cq->napi);
+=======
+					if (cqe->vlan_my_qpn &
+					    cpu_to_be32(MLX4_CQE_VLAN_PRESENT_MASK)) {
+						u16 vid = be16_to_cpu(cqe->sl_vid);
+
+						__vlan_hwaccel_put_tag(gro_skb, vid);
+					}
+
+					napi_gro_frags(&cq->napi);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 					goto next;
 				}
@@ -647,6 +658,7 @@ int mlx4_en_process_rx_cq(struct net_device *dev, struct mlx4_en_cq *cq, int bud
 		skb->protocol = eth_type_trans(skb, dev);
 		skb_record_rx_queue(skb, cq->ring);
 
+<<<<<<< HEAD
 		/* Push it up the stack */
 		if (priv->vlgrp && (be32_to_cpu(cqe->vlan_my_qpn) &
 				    MLX4_CQE_VLAN_PRESENT_MASK)) {
@@ -654,6 +666,14 @@ int mlx4_en_process_rx_cq(struct net_device *dev, struct mlx4_en_cq *cq, int bud
 						be16_to_cpu(cqe->sl_vid));
 		} else
 			netif_receive_skb(skb);
+=======
+		if (be32_to_cpu(cqe->vlan_my_qpn) &
+		    MLX4_CQE_VLAN_PRESENT_MASK)
+			__vlan_hwaccel_put_tag(skb, be16_to_cpu(cqe->sl_vid));
+
+		/* Push it up the stack */
+		netif_receive_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 next:
 		++cq->mcq.cons_index;
@@ -859,7 +879,11 @@ int mlx4_en_config_rss_steer(struct mlx4_en_priv *priv)
 				priv->rx_ring[0].cqn, &context);
 
 	ptr = ((void *) &context) + 0x3c;
+<<<<<<< HEAD
 	rss_context = (struct mlx4_en_rss_context *) ptr;
+=======
+	rss_context = ptr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	rss_context->base_qpn = cpu_to_be32(ilog2(priv->rx_ring_num) << 24 |
 					    (rss_map->base_qpn));
 	rss_context->default_qpn = cpu_to_be32(rss_map->base_qpn);

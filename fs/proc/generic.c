@@ -620,8 +620,12 @@ static struct proc_dir_entry *__proc_create(struct proc_dir_entry **parent,
 	if (!ent) goto out;
 
 	memset(ent, 0, sizeof(struct proc_dir_entry));
+<<<<<<< HEAD
 	memcpy(((char *) ent) + sizeof(struct proc_dir_entry), fn, len + 1);
 	ent->name = ((char *) ent) + sizeof(*ent);
+=======
+	memcpy(ent->name, fn, len + 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ent->namelen = len;
 	ent->mode = mode;
 	ent->nlink = nlink;

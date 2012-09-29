@@ -14,7 +14,16 @@
 
 #include <linux/slab.h>
 
+<<<<<<< HEAD
 #include <mach/clkdev.h>
+=======
+#ifdef CONFIG_HAVE_MACH_CLKDEV
+#include <mach/clkdev.h>
+#else
+#define __clk_get(clk)	({ 1; })
+#define __clk_put(clk)	do { } while (0)
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline struct clk_lookup_alloc *__clkdev_alloc(size_t size)
 {

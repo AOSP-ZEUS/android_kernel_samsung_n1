@@ -3,7 +3,11 @@
 #
 
 # Common support
+<<<<<<< HEAD
 obj-y := clock.o gpio.o time.o devices.o cpu.o system.o irq-common.o
+=======
+obj-y := clock.o time.o devices.o cpu.o system.o irq-common.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 # MX51 uses the TZIC interrupt controller, older platforms use AVIC
 obj-$(CONFIG_MXC_TZIC) += tzic.o

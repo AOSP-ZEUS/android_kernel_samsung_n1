@@ -93,7 +93,11 @@ static inline unsigned int u32_hash_fold(__be32 key,
 	return h;
 }
 
+<<<<<<< HEAD
 static int u32_classify(struct sk_buff *skb, struct tcf_proto *tp, struct tcf_result *res)
+=======
+static int u32_classify(struct sk_buff *skb, const struct tcf_proto *tp, struct tcf_result *res)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct {
 		struct tc_u_knode *knode;

@@ -63,7 +63,11 @@ static inline int put_stack_long(struct task_struct *task, int offset,
 	return 0;
 }
 
+<<<<<<< HEAD
 void ptrace_triggered(struct perf_event *bp, int nmi,
+=======
+void ptrace_triggered(struct perf_event *bp,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		      struct perf_sample_data *data, struct pt_regs *regs)
 {
 	struct perf_event_attr attr;
@@ -91,7 +95,12 @@ static int set_single_step(struct task_struct *tsk, unsigned long addr)
 		attr.bp_len = HW_BREAKPOINT_LEN_2;
 		attr.bp_type = HW_BREAKPOINT_R;
 
+<<<<<<< HEAD
 		bp = register_user_hw_breakpoint(&attr, ptrace_triggered, tsk);
+=======
+		bp = register_user_hw_breakpoint(&attr, ptrace_triggered,
+						 NULL, tsk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (IS_ERR(bp))
 			return PTR_ERR(bp);
 

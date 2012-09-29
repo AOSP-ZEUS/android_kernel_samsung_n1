@@ -16,8 +16,11 @@
 #include <linux/init.h>
 #include <linux/device.h>
 #include <linux/platform_device.h>
+<<<<<<< HEAD
 #include <linux/wait.h>
 #include <linux/completion.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/interrupt.h>
 #include <linux/err.h>
 #include <linux/clk.h>
@@ -25,7 +28,10 @@
 #include <linux/io.h>
 #include <linux/slab.h>
 
+<<<<<<< HEAD
 #include <plat/dma.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <plat/mcbsp.h>
 #include <plat/omap_device.h>
 #include <linux/pm_runtime.h>
@@ -136,8 +142,11 @@ static irqreturn_t omap_mcbsp_tx_irq_handler(int irq, void *dev_id)
 			irqst_spcr2);
 		/* Writing zero to XSYNC_ERR clears the IRQ */
 		MCBSP_WRITE(mcbsp_tx, SPCR2, MCBSP_READ_CACHE(mcbsp_tx, SPCR2));
+<<<<<<< HEAD
 	} else {
 		complete(&mcbsp_tx->tx_irq_completion);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return IRQ_HANDLED;
@@ -156,13 +165,17 @@ static irqreturn_t omap_mcbsp_rx_irq_handler(int irq, void *dev_id)
 			irqst_spcr1);
 		/* Writing zero to RSYNC_ERR clears the IRQ */
 		MCBSP_WRITE(mcbsp_rx, SPCR1, MCBSP_READ_CACHE(mcbsp_rx, SPCR1));
+<<<<<<< HEAD
 	} else {
 		complete(&mcbsp_rx->rx_irq_completion);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return IRQ_HANDLED;
 }
 
+<<<<<<< HEAD
 static void omap_mcbsp_tx_dma_callback(int lch, u16 ch_status, void *data)
 {
 	struct omap_mcbsp *mcbsp_dma_tx = data;
@@ -191,6 +204,8 @@ static void omap_mcbsp_rx_dma_callback(int lch, u16 ch_status, void *data)
 	complete(&mcbsp_dma_rx->rx_dma_completion);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * omap_mcbsp_config simply write a config to the
  * appropriate McBSP.
@@ -758,6 +773,7 @@ static inline void omap_st_start(struct omap_mcbsp *mcbsp) {}
 static inline void omap_st_stop(struct omap_mcbsp *mcbsp) {}
 #endif
 
+<<<<<<< HEAD
 /*
  * We can choose between IRQ based or polled IO.
  * This needs to be called before omap_mcbsp_request().
@@ -789,6 +805,8 @@ int omap_mcbsp_set_io_type(unsigned int id, omap_mcbsp_io_type_t io_type)
 }
 EXPORT_SYMBOL(omap_mcbsp_set_io_type);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int omap_mcbsp_request(unsigned int id)
 {
 	struct omap_mcbsp *mcbsp;
@@ -833,6 +851,7 @@ int omap_mcbsp_request(unsigned int id)
 	MCBSP_WRITE(mcbsp, SPCR1, 0);
 	MCBSP_WRITE(mcbsp, SPCR2, 0);
 
+<<<<<<< HEAD
 	if (mcbsp->io_type == OMAP_MCBSP_IRQ_IO) {
 		/* We need to get IRQs here */
 		init_completion(&mcbsp->tx_irq_completion);
@@ -856,6 +875,26 @@ int omap_mcbsp_request(unsigned int id)
 						mcbsp->id);
 				goto err_free_irq;
 			}
+=======
+	err = request_irq(mcbsp->tx_irq, omap_mcbsp_tx_irq_handler,
+				0, "McBSP", (void *)mcbsp);
+	if (err != 0) {
+		dev_err(mcbsp->dev, "Unable to request TX IRQ %d "
+				"for McBSP%d\n", mcbsp->tx_irq,
+				mcbsp->id);
+		goto err_clk_disable;
+	}
+
+	if (mcbsp->rx_irq) {
+		err = request_irq(mcbsp->rx_irq,
+				omap_mcbsp_rx_irq_handler,
+				0, "McBSP", (void *)mcbsp);
+		if (err != 0) {
+			dev_err(mcbsp->dev, "Unable to request RX IRQ %d "
+					"for McBSP%d\n", mcbsp->rx_irq,
+					mcbsp->id);
+			goto err_free_irq;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -901,12 +940,18 @@ void omap_mcbsp_free(unsigned int id)
 
 	pm_runtime_put_sync(mcbsp->dev);
 
+<<<<<<< HEAD
 	if (mcbsp->io_type == OMAP_MCBSP_IRQ_IO) {
 		/* Free IRQs */
 		if (mcbsp->rx_irq)
 			free_irq(mcbsp->rx_irq, (void *)mcbsp);
 		free_irq(mcbsp->tx_irq, (void *)mcbsp);
 	}
+=======
+	if (mcbsp->rx_irq)
+		free_irq(mcbsp->rx_irq, (void *)mcbsp);
+	free_irq(mcbsp->tx_irq, (void *)mcbsp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	reg_cache = mcbsp->reg_cache;
 
@@ -943,9 +988,12 @@ void omap_mcbsp_start(unsigned int id, int tx, int rx)
 	if (cpu_is_omap34xx())
 		omap_st_start(mcbsp);
 
+<<<<<<< HEAD
 	mcbsp->rx_word_length = (MCBSP_READ_CACHE(mcbsp, RCR1) >> 5) & 0x7;
 	mcbsp->tx_word_length = (MCBSP_READ_CACHE(mcbsp, XCR1) >> 5) & 0x7;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Only enable SRG, if McBSP is master */
 	w = MCBSP_READ_CACHE(mcbsp, PCR0);
 	if (w & (FSXM | FSRM | CLKXM | CLKRM))
@@ -1043,6 +1091,7 @@ void omap_mcbsp_stop(unsigned int id, int tx, int rx)
 }
 EXPORT_SYMBOL(omap_mcbsp_stop);
 
+<<<<<<< HEAD
 /* polled mcbsp i/o operations */
 int omap_mcbsp_pollwrite(unsigned int id, u16 buf)
 {
@@ -1521,6 +1570,34 @@ void omap_mcbsp_set_spi_mode(unsigned int id,
 	omap_mcbsp_config(id, &mcbsp_cfg);
 }
 EXPORT_SYMBOL(omap_mcbsp_set_spi_mode);
+=======
+/*
+ * The following functions are only required on an OMAP1-only build.
+ * mach-omap2/mcbsp.c contains the real functions
+ */
+#ifndef CONFIG_ARCH_OMAP2PLUS
+int omap2_mcbsp_set_clks_src(u8 id, u8 fck_src_id)
+{
+	WARN(1, "%s: should never be called on an OMAP1-only kernel\n",
+	     __func__);
+	return -EINVAL;
+}
+
+void omap2_mcbsp1_mux_clkr_src(u8 mux)
+{
+	WARN(1, "%s: should never be called on an OMAP1-only kernel\n",
+	     __func__);
+	return;
+}
+
+void omap2_mcbsp1_mux_fsr_src(u8 mux)
+{
+	WARN(1, "%s: should never be called on an OMAP1-only kernel\n",
+	     __func__);
+	return;
+}
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_ARCH_OMAP3
 #define max_thres(m)			(mcbsp->pdata->buffer_size)
@@ -1833,8 +1910,11 @@ static int __devinit omap_mcbsp_probe(struct platform_device *pdev)
 	spin_lock_init(&mcbsp->lock);
 	mcbsp->id = id + 1;
 	mcbsp->free = true;
+<<<<<<< HEAD
 	mcbsp->dma_tx_lch = -1;
 	mcbsp->dma_rx_lch = -1;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "mpu");
 	if (!res) {
@@ -1860,9 +1940,12 @@ static int __devinit omap_mcbsp_probe(struct platform_device *pdev)
 	else
 		mcbsp->phys_dma_base = res->start;
 
+<<<<<<< HEAD
 	/* Default I/O is IRQ based */
 	mcbsp->io_type = OMAP_MCBSP_IRQ_IO;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mcbsp->tx_irq = platform_get_irq_byname(pdev, "tx");
 	mcbsp->rx_irq = platform_get_irq_byname(pdev, "rx");
 

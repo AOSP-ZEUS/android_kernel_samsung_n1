@@ -603,6 +603,7 @@ out:
 	return err;
 }
 
+<<<<<<< HEAD
 static ssize_t
 gss_pipe_upcall(struct file *filp, struct rpc_pipe_msg *msg,
 		char __user *dst, size_t buflen)
@@ -623,6 +624,8 @@ gss_pipe_upcall(struct file *filp, struct rpc_pipe_msg *msg,
 	return mlen;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define MSG_BUF_MAXSIZE 1024
 
 static ssize_t
@@ -1421,6 +1424,7 @@ gss_wrap_req(struct rpc_task *task,
 		goto out;
 	}
 	switch (gss_cred->gc_service) {
+<<<<<<< HEAD
 		case RPC_GSS_SVC_NONE:
 			gss_wrap_req_encode(encode, rqstp, p, obj);
 			status = 0;
@@ -1433,6 +1437,18 @@ gss_wrap_req(struct rpc_task *task,
 			status = gss_wrap_req_priv(cred, ctx, encode,
 					rqstp, p, obj);
 			break;
+=======
+	case RPC_GSS_SVC_NONE:
+		gss_wrap_req_encode(encode, rqstp, p, obj);
+		status = 0;
+		break;
+	case RPC_GSS_SVC_INTEGRITY:
+		status = gss_wrap_req_integ(cred, ctx, encode, rqstp, p, obj);
+		break;
+	case RPC_GSS_SVC_PRIVACY:
+		status = gss_wrap_req_priv(cred, ctx, encode, rqstp, p, obj);
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 out:
 	gss_put_ctx(ctx);
@@ -1531,6 +1547,7 @@ gss_unwrap_resp(struct rpc_task *task,
 	if (ctx->gc_proc != RPC_GSS_PROC_DATA)
 		goto out_decode;
 	switch (gss_cred->gc_service) {
+<<<<<<< HEAD
 		case RPC_GSS_SVC_NONE:
 			break;
 		case RPC_GSS_SVC_INTEGRITY:
@@ -1543,6 +1560,20 @@ gss_unwrap_resp(struct rpc_task *task,
 			if (status)
 				goto out;
 			break;
+=======
+	case RPC_GSS_SVC_NONE:
+		break;
+	case RPC_GSS_SVC_INTEGRITY:
+		status = gss_unwrap_resp_integ(cred, ctx, rqstp, &p);
+		if (status)
+			goto out;
+		break;
+	case RPC_GSS_SVC_PRIVACY:
+		status = gss_unwrap_resp_priv(cred, ctx, rqstp, &p);
+		if (status)
+			goto out;
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	/* take into account extra slack for integrity and privacy cases: */
 	cred->cr_auth->au_rslack = cred->cr_auth->au_verfsize + (p - savedp)
@@ -1592,7 +1623,11 @@ static const struct rpc_credops gss_nullops = {
 };
 
 static const struct rpc_pipe_ops gss_upcall_ops_v0 = {
+<<<<<<< HEAD
 	.upcall		= gss_pipe_upcall,
+=======
+	.upcall		= rpc_pipe_generic_upcall,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.downcall	= gss_pipe_downcall,
 	.destroy_msg	= gss_pipe_destroy_msg,
 	.open_pipe	= gss_pipe_open_v0,
@@ -1600,7 +1635,11 @@ static const struct rpc_pipe_ops gss_upcall_ops_v0 = {
 };
 
 static const struct rpc_pipe_ops gss_upcall_ops_v1 = {
+<<<<<<< HEAD
 	.upcall		= gss_pipe_upcall,
+=======
+	.upcall		= rpc_pipe_generic_upcall,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.downcall	= gss_pipe_downcall,
 	.destroy_msg	= gss_pipe_destroy_msg,
 	.open_pipe	= gss_pipe_open_v1,

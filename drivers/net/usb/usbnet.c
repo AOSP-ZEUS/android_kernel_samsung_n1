@@ -585,6 +585,7 @@ static int unlink_urbs (struct usbnet *dev, struct sk_buff_head *q)
 		entry = (struct skb_data *) skb->cb;
 		urb = entry->urb;
 
+<<<<<<< HEAD
 		/*
 		 * Get reference count of the URB to avoid it to be
 		 * freed during usb_unlink_urb, which may trigger
@@ -594,6 +595,8 @@ static int unlink_urbs (struct usbnet *dev, struct sk_buff_head *q)
 		 */
 		usb_get_urb(urb);
 		spin_unlock_irqrestore(&q->lock, flags);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		// during some PM-driven resume scenarios,
 		// these (async) unlinks complete immediately
 		retval = usb_unlink_urb (urb);
@@ -601,8 +604,11 @@ static int unlink_urbs (struct usbnet *dev, struct sk_buff_head *q)
 			netdev_dbg(dev->net, "unlink urb err, %d\n", retval);
 		else
 			count++;
+<<<<<<< HEAD
 		usb_put_urb(urb);
 		spin_lock_irqsave(&q->lock, flags);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	spin_unlock_irqrestore (&q->lock, flags);
 	return count;
@@ -1033,6 +1039,10 @@ static void tx_complete (struct urb *urb)
 	}
 
 	usb_autopm_put_interface_async(dev->intf);
+<<<<<<< HEAD
+=======
+	urb->dev = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	entry->state = tx_done;
 	defer_bh(dev, skb, &dev->txq);
 }
@@ -1404,6 +1414,12 @@ usbnet_probe (struct usb_interface *udev, const struct usb_device_id *prod)
 		/* WWAN devices should always be named "wwan%d" */
 		if ((dev->driver_info->flags & FLAG_WWAN) != 0)
 			strcpy(net->name, "wwan%d");
+<<<<<<< HEAD
+=======
+		/* RMNET devices should always be named "rmnet%d" */
+		if ((dev->driver_info->flags & FLAG_RMNET) != 0)
+			strcpy(net->name, "rmnet%d");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* maybe the remote can't receive an Ethernet MTU */
 		if (net->mtu > (dev->hard_mtu - net->hard_header_len))

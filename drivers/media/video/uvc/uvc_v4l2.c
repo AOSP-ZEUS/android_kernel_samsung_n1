@@ -21,7 +21,11 @@
 #include <linux/vmalloc.h>
 #include <linux/mm.h>
 #include <linux/wait.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <media/v4l2-common.h>
 #include <media/v4l2-ioctl.h>
@@ -65,6 +69,7 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
 			goto done;
 		}
 
+<<<<<<< HEAD
 		/* Prevent excessive memory consumption, as well as integer
 		 * overflows.
 		 */
@@ -74,6 +79,8 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
 			goto done;
 		}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		size = xmap->menu_count * sizeof(*map->menu_info);
 		map->menu_info = kmalloc(size, GFP_KERNEL);
 		if (map->menu_info == NULL) {
@@ -92,7 +99,11 @@ static int uvc_ioctl_ctrl_map(struct uvc_video_chain *chain,
 	default:
 		uvc_trace(UVC_TRACE_CONTROL, "Unsupported V4L2 control type "
 			  "%u.\n", xmap->v4l2_type);
+<<<<<<< HEAD
 		ret = -EINVAL;
+=======
+		ret = -ENOTTY;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto done;
 	}
 
@@ -580,7 +591,11 @@ static long uvc_v4l2_do_ioctl(struct file *file, unsigned int cmd, void *arg)
 		strlcpy(cap->card, vdev->name, sizeof cap->card);
 		usb_make_path(stream->dev->udev,
 			      cap->bus_info, sizeof(cap->bus_info));
+<<<<<<< HEAD
 		cap->version = DRIVER_VERSION_NUMBER;
+=======
+		cap->version = LINUX_VERSION_CODE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (stream->type == V4L2_BUF_TYPE_VIDEO_CAPTURE)
 			cap->capabilities = V4L2_CAP_VIDEO_CAPTURE
 					  | V4L2_CAP_STREAMING;

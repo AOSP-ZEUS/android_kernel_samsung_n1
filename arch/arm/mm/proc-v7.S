@@ -58,9 +58,23 @@ ENDPROC(cpu_v7_proc_fin)
  *	to what would be the reset vector.
  *
  *	- loc   - location to jump to for soft reset
+<<<<<<< HEAD
  */
 	.align	5
 ENTRY(cpu_v7_reset)
+=======
+ *
+ *	This code must be executed using a flat identity mapping with
+ *      caches disabled.
+ */
+	.align	5
+ENTRY(cpu_v7_reset)
+	mrc	p15, 0, r1, c1, c0, 0		@ ctrl register
+	bic	r1, r1, #0x1			@ ...............m
+ THUMB(	bic	r1, r1, #1 << 30 )		@ SCTLR.TE (Thumb exceptions)
+	mcr	p15, 0, r1, c1, c0, 0		@ disable MMU
+	isb
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mov	pc, r0
 ENDPROC(cpu_v7_reset)
 
@@ -168,13 +182,23 @@ ENTRY(cpu_v7_set_pte_ext)
  ARM(	str	r3, [r0, #2048]! )
  THUMB(	add	r0, r0, #2048 )
  THUMB(	str	r3, [r0] )
+<<<<<<< HEAD
 	mcr	p15, 0, r0, c7, c10, 1		@ flush_pte
+=======
+	mrc     p15, 0, r3, c0, c1, 7           @ read ID_MMFR3
+	tst     r3, #0xf << 20                  @ check the coherent walk bits
+	mcreq   p15, 0, r0, c7, c10, 1          @ flush_pte
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 	mov	pc, lr
 ENDPROC(cpu_v7_set_pte_ext)
 
+<<<<<<< HEAD
 cpu_v7_name:
 	.ascii	"ARMv7 Processor"
+=======
+	string	cpu_v7_name, "ARMv7 Processor"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.align
 
 	/*
@@ -205,6 +229,7 @@ cpu_v7_name:
 	 *   NS1 = PRRR[19] = 1		- normal shareable property
 	 *   NOS = PRRR[24+n] = 1	- not outer shareable
 	 */
+<<<<<<< HEAD
 .equ	PRRR,	0xff0a81a8
 .equ	NMRR,	0x40e040e0
 
@@ -218,36 +243,276 @@ ENTRY(cpu_v7_do_suspend)
 	mrc	p15, 0, r5, c13, c0, 1	@ Context ID
 	mrc	p15, 0, r6, c13, c0, 3	@ User r/o thread ID
 	stmia	r0!, {r4 - r6}
+=======
+.equ	PRRR,	0xff0a89a8
+.equ	NMRR,	0xc0e044e0
+
+/* Suspend/resume support: derived from arch/arm/mach-s5pv210/sleep.S */
+.local	cpu_v7_debug_suspend_size
+#ifdef CONFIG_ARM_SAVE_DEBUG_CONTEXT
+/*
+ * Debug context:
+ *	8 CP14 registers
+ *	16x2 CP14 breakpoint registers (maximum)
+ *	16x2 CP14 watchpoint registers (maximum)
+ */
+.equ	cpu_v7_debug_suspend_size, (4 * (8 + (16 * 2) + (16 * 2)))
+
+.macro  save_brkpt cm
+	mrc	p14, 0, r4, c0, \cm, 4
+	mrc	p14, 0, r5, c0, \cm, 5
+	stmia	r0!, {r4 - r5}
+.endm
+
+.macro  restore_brkpt cm
+	ldmia	r0!, {r4 - r5}
+	mcr	p14, 0, r4, c0, \cm, 4
+	mcr	p14, 0, r5, c0, \cm, 5
+.endm
+
+.macro  save_wpt cm
+	mrc	p14, 0, r4, c0, \cm, 6
+	mrc	p14, 0, r5, c0, \cm, 7
+	stmia	r0!, {r4 - r5}
+.endm
+
+.macro  restore_wpt cm
+	ldmia	r0!, {r4 - r5}
+	mcr	p14, 0, r4, c0, \cm, 6
+	mcr	p14, 0, r5, c0, \cm, 7
+.endm
+
+#else
+.equ	cpu_v7_debug_suspend_size, 0
+#endif
+
+.globl	cpu_v7_suspend_size
+.equ	cpu_v7_suspend_size, (4 * 10) + cpu_v7_debug_suspend_size
+#ifdef CONFIG_PM_SLEEP
+ENTRY(cpu_v7_do_suspend)
+	stmfd	sp!, {r0, r3 - r11, lr}
+	mrc	p15, 0, r3, c15, c0, 1	@ diag
+	mrc	p15, 0, r4, c13, c0, 0	@ FCSE/PID
+	mrc	p15, 0, r5, c13, c0, 1	@ Context ID
+	mrc	p15, 0, r6, c13, c0, 3	@ User r/o thread ID
+	stmia	r0!, {r3 - r6}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mrc	p15, 0, r6, c3, c0, 0	@ Domain ID
 	mrc	p15, 0, r7, c2, c0, 0	@ TTB 0
 	mrc	p15, 0, r8, c2, c0, 1	@ TTB 1
 	mrc	p15, 0, r9, c1, c0, 0	@ Control register
 	mrc	p15, 0, r10, c1, c0, 1	@ Auxiliary control register
 	mrc	p15, 0, r11, c1, c0, 2	@ Co-processor access control
+<<<<<<< HEAD
 	stmia	r0, {r6 - r11}
 	ldmfd	sp!, {r4 - r11, pc}
+=======
+	stmia	r0!, {r6 - r11}
+
+#ifdef CONFIG_ARM_SAVE_DEBUG_CONTEXT
+	/* Save CP14 debug controller context */
+
+	mrc	p14, 0, r4, c0, c2, 2	@ DBGDSCRext
+	mrc	p14, 0, r5, c0, c6, 0	@ DBGWFAR
+	mrc	p14, 0, r6, c0, c7, 0	@ DBGVCR
+	mrc	p14, 0, r7, c7, c9, 6	@ DBGCLAIMCLR
+	stmia	r0!, {r4-r7}
+
+	mrc	p14, 0, r4, c0, c10, 0	@ DBGDSCCR
+	mrc	p14, 0, r5, c0, c11, 0	@ DBGDSMCR
+	stmia	r0!, {r4-r5}
+
+	tst	r4, #(1 << 29)		@ DBGDSCRext.TXfull
+	mrcne	p14, 0, r4, c0, c3, 2	@ DBGDTRTXext
+	strne	r4, [r0], #4
+
+	tst	r4, #(1 << 30)		@ DBGDSCRext.RXfull
+	mrcne	p14, 0, r4, c0, c0, 2	@ DBGDTRRXext
+	strne	r4, [r0], #4
+
+	mrc	p14, 0, r8, c0, c0, 0   @ read IDR
+	mov	r3, r8, lsr #24
+	and	r3, r3, #0xf            @ r3 has the number of brkpt
+	rsb	r3, r3, #0xf
+
+	/* r3 = (15 - #of brkpt) ;
+	   switch offset = r3*12 - 4 = (r3*3 - 1)<<2
+	*/
+	add	r3, r3, r3, lsl #1
+	sub	r3, r3, #1
+	add	pc, pc, r3, lsl #2
+
+	save_brkpt	c15
+	save_brkpt	c14
+	save_brkpt	c13
+	save_brkpt	c12
+	save_brkpt	c11
+	save_brkpt	c10
+	save_brkpt	c9
+	save_brkpt	c8
+	save_brkpt	c7
+	save_brkpt	c6
+	save_brkpt	c5
+	save_brkpt	c4
+	save_brkpt	c3
+	save_brkpt	c2
+	save_brkpt	c1
+	save_brkpt	c0
+
+	mov	r3, r8, lsr #28         @ r3 has the number of wpt
+	rsb	r3, r3, #0xf
+
+	/* r3 = (15 - #of wpt) ;
+	   switch offset = r3*12 - 4 = (r3*3 - 1)<<2
+	*/
+	add	r3, r3, r3, lsl #1
+	sub	r3, r3, #1
+	add	pc, pc, r3, lsl #2
+
+	save_wpt	c15
+	save_wpt	c14
+	save_wpt	c13
+	save_wpt	c12
+	save_wpt	c11
+	save_wpt	c10
+	save_wpt	c9
+	save_wpt	c8
+	save_wpt	c7
+	save_wpt	c6
+	save_wpt	c5
+	save_wpt	c4
+	save_wpt	c3
+	save_wpt	c2
+	save_wpt	c1
+	save_wpt	c0
+#endif
+	ldmfd	sp!, {r0, r3 - r11, pc}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 ENDPROC(cpu_v7_do_suspend)
 
 ENTRY(cpu_v7_do_resume)
 	mov	ip, #0
 	mcr	p15, 0, ip, c8, c7, 0	@ invalidate TLBs
 	mcr	p15, 0, ip, c7, c5, 0	@ invalidate I cache
+<<<<<<< HEAD
 	ldmia	r0!, {r4 - r6}
 	mcr	p15, 0, r4, c13, c0, 0	@ FCSE/PID
 	mcr	p15, 0, r5, c13, c0, 1	@ Context ID
 	mcr	p15, 0, r6, c13, c0, 3	@ User r/o thread ID
 	ldmia	r0, {r6 - r11}
+=======
+	ldmia	r0!, {r3 - r6}
+#ifndef CONFIG_TRUSTED_FOUNDATIONS
+	mcr	p15, 0, r3, c15, c0, 1	@ diag
+#endif
+	mcr	p15, 0, r4, c13, c0, 0	@ FCSE/PID
+	mcr	p15, 0, r5, c13, c0, 1	@ Context ID
+	mcr	p15, 0, r6, c13, c0, 3	@ User r/o thread ID
+	ldmia	r0!, {r6 - r11}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mcr	p15, 0, r6, c3, c0, 0	@ Domain ID
 	mcr	p15, 0, r7, c2, c0, 0	@ TTB 0
 	mcr	p15, 0, r8, c2, c0, 1	@ TTB 1
 	mcr	p15, 0, ip, c2, c0, 2	@ TTB control register
+<<<<<<< HEAD
 	mcr	p15, 0, r10, c1, c0, 1	@ Auxiliary control register
+=======
+	mrc	p15, 0, r4, c1, c0, 1	@ Read Auxiliary control register
+	teq	r4, r10			@ Is it already set?
+	mcrne	p15, 0, r10, c1, c0, 1	@ No, so write it
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mcr	p15, 0, r11, c1, c0, 2	@ Co-processor access control
 	ldr	r4, =PRRR		@ PRRR
 	ldr	r5, =NMRR		@ NMRR
 	mcr	p15, 0, r4, c10, c2, 0	@ write PRRR
 	mcr	p15, 0, r5, c10, c2, 1	@ write NMRR
 	isb
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_ARM_SAVE_DEBUG_CONTEXT
+	/* Restore CP14 debug controller context */
+
+	ldmia	r0!, {r2 - r5}
+	mcr	p14, 0, r3, c0, c6, 0	@ DBGWFAR
+	mcr	p14, 0, r4, c0, c7, 0	@ DBGVCR
+	mcr	p14, 0, r5, c7, c8, 6	@ DBGCLAIMSET
+
+	ldmia	r0!, {r4-r5}
+	mcr	p14, 0, r4, c0, c10, 0	@ DBGDSCCR
+	mcr	p14, 0, r5, c0, c11, 0	@ DBGDSMCR
+
+	tst	r2, #(1 << 29)		@ DBGDSCRext.TXfull
+	ldrne	r4, [r0], #4
+	mcrne	p14, 0, r4, c0, c3, 2	@ DBGDTRTXext
+
+	tst	r2, #(1 << 30)		@ DBGDSCRext.RXfull
+	ldrne	r4, [r0], #4
+	mcrne	p14, 0, r4, c0, c0, 2	@ DBGDTRRXext
+
+	mrc	p14, 0, r8, c0, c0, 0   @ read IDR
+	mov	r3, r8, lsr #24
+	and	r3, r3, #0xf            @ r3 has the number of brkpt
+	rsb	r3, r3, #0xf
+
+	/* r3 = (15 - #of wpt) ;
+	   switch offset = r3*12 - 4 = (r3*3 - 1)<<2
+	*/
+	add     r3, r3, r3, lsl #1
+	sub	r3, r3, #1
+	add	pc, pc, r3, lsl #2
+
+	restore_brkpt	c15
+	restore_brkpt	c14
+	restore_brkpt	c13
+	restore_brkpt	c12
+	restore_brkpt	c11
+	restore_brkpt	c10
+	restore_brkpt	c9
+	restore_brkpt	c8
+	restore_brkpt	c7
+	restore_brkpt	c6
+	restore_brkpt	c5
+	restore_brkpt	c4
+	restore_brkpt	c3
+	restore_brkpt	c2
+	restore_brkpt	c1
+	restore_brkpt	c0
+
+	mov	r3, r8, lsr #28         @ r3 has the number of wpt
+	rsb	r3, r3, #0xf
+
+	/* r3 = (15 - #of wpt) ;
+	   switch offset = r3*12 - 4 = (r3*3 - 1)<<2
+	*/
+	add     r3, r3, r3, lsl #1
+	sub	r3, r3, #1
+	add	pc, pc, r3, lsl #2
+
+start_restore_wpt:
+	restore_wpt	c15
+	restore_wpt	c14
+	restore_wpt	c13
+	restore_wpt	c12
+	restore_wpt	c11
+	restore_wpt	c10
+	restore_wpt	c9
+	restore_wpt	c8
+	restore_wpt	c7
+	restore_wpt	c6
+	restore_wpt	c5
+	restore_wpt	c4
+	restore_wpt	c3
+	restore_wpt	c2
+	restore_wpt	c1
+	restore_wpt	c0
+	isb
+
+	mcr	p14, 0, r2, c0, c2, 2	@ DSCR
+	isb
+#endif
+	dsb
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mov	r0, r9			@ control register
 	mov	r2, r7, lsr #14		@ get TTB0 base
 	mov	r2, r2, lsl #14
@@ -257,9 +522,12 @@ ENDPROC(cpu_v7_do_resume)
 cpu_resume_l1_flags:
 	ALT_SMP(.long PMD_TYPE_SECT | PMD_SECT_AP_WRITE | PMD_FLAGS_SMP)
 	ALT_UP(.long  PMD_TYPE_SECT | PMD_SECT_AP_WRITE | PMD_FLAGS_UP)
+<<<<<<< HEAD
 #else
 #define cpu_v7_do_suspend	0
 #define cpu_v7_do_resume	0
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 	__CPUINIT
@@ -275,13 +543,29 @@ cpu_resume_l1_flags:
  *	It is assumed that:
  *	- cache type register is implemented
  */
+<<<<<<< HEAD
 __v7_ca9mp_setup:
+=======
+__v7_ca5mp_setup:
+__v7_ca9mp_setup:
+	mov	r10, #(1 << 0)			@ TLB ops broadcasting
+	b	1f
+__v7_ca15mp_setup:
+	mov	r10, #0
+1:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_SMP
 	ALT_SMP(mrc	p15, 0, r0, c1, c0, 1)
 	ALT_UP(mov	r0, #(1 << 6))		@ fake it for UP
 	tst	r0, #(1 << 6)			@ SMP/nAMP mode enabled?
+<<<<<<< HEAD
 	orreq	r0, r0, #(1 << 6) | (1 << 0)	@ Enable SMP/nAMP mode and
 	mcreq	p15, 0, r0, c1, c0, 1		@ TLB ops broadcasting
+=======
+	orreq	r0, r0, #(1 << 6)		@ Enable SMP/nAMP mode
+	orreq	r0, r0, r10			@ Enable CPU-specific SMP bits
+	mcreq	p15, 0, r0, c1, c0, 1
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 __v7_setup:
 	adr	r12, __v7_setup_stack		@ the local stack
@@ -328,6 +612,26 @@ __v7_setup:
 2:	ldr	r10, =0x00000c09		@ Cortex-A9 primary part number
 	teq	r0, r10
 	bne	3f
+<<<<<<< HEAD
+=======
+#ifndef CONFIG_TRUSTED_FOUNDATIONS
+	cmp	r6, #0x10			@ power ctrl reg added r1p0
+	mrcge	p15, 0, r10, c15, c0, 0		@ read power control register
+	orrge	r10, r10, #1			@ enable dynamic clock gating
+	mcrge	p15, 0, r10, c15, c0, 0		@ write power control register
+#ifdef CONFIG_ARM_ERRATA_716044
+	cmp     r6, #0x12                       @ present in r1p0 - r1p2
+	mrcle   p15, 0, r10, c1, c0, 0
+	orrle   r10, r10, #(1 << 14)            @ set SCTLR.RR
+	mcrle   p15, 0, r10, c1, c0, 0
+#endif
+#ifdef CONFIG_ARM_ERRATA_720791
+	teq	r5, #0x00100000			@ only present in r1p*
+	mrceq	p15, 0, r10, c15, c0, 2		@ read "chicken power ctrl" reg
+	orreq	r10, r10, #0x30			@ disable core clk gate on
+	mcreq	p15, 0, r10, c15, c0, 2		@ instr-side waits
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_ARM_ERRATA_742230
 	cmp	r6, #0x22			@ only present up to r2p2
 	mrcle	p15, 0, r10, c15, c0, 1		@ read diagnostic register
@@ -344,7 +648,15 @@ __v7_setup:
 	mcreq	p15, 0, r10, c15, c0, 1		@ write diagnostic register
 #endif
 #ifdef CONFIG_ARM_ERRATA_743622
+<<<<<<< HEAD
 	teq	r5, #0x00200000			@ only present in r2p*
+=======
+	teq	r6, #0x20			@ present in r2p0
+	teqne	r6, #0x21			@ present in r2p1
+	teqne	r6, #0x22			@ present in r2p2
+	teqne	r6, #0x27			@ present in r2p7
+	teqne	r6, #0x29			@ present in r2p9
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mrceq	p15, 0, r10, c15, c0, 1		@ read diagnostic register
 	orreq	r10, r10, #1 << 6		@ set bit #6
 	mcreq	p15, 0, r10, c15, c0, 1		@ write diagnostic register
@@ -355,6 +667,16 @@ __v7_setup:
 	orrlt	r10, r10, #1 << 11		@ set bit #11
 	mcrlt	p15, 0, r10, c15, c0, 1		@ write diagnostic register
 #endif
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_ARM_ERRATA_752520
+	cmp	r6, #0x29			@ present prior to r2p9
+	mrclt	p15, 0, r10, c15, c0, 1		@ read diagnostic register
+	orrlt	r10, r10, #1 << 20		@ set bit #20
+	mcrlt	p15, 0, r10, c15, c0, 1		@ write diagnostic register
+#endif
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 3:	mov	r10, #0
 	mcr	p15, 0, r10, c7, c5, 0		@ I+BTB cache invalidate
@@ -372,6 +694,7 @@ __v7_setup:
 	mcr	p15, 0, r5, c10, c2, 0		@ write PRRR
 	mcr	p15, 0, r6, c10, c2, 1		@ write NMRR
 #endif
+<<<<<<< HEAD
 #ifndef CONFIG_ARM_THUMBEE
 	mrc	p15, 0, r0, c0, c1, 0		@ read ID_PFR0 for ThumbEE
 	and	r0, r0, #(0xf << 12)		@ ThumbEE enabled field
@@ -384,6 +707,8 @@ __v7_setup:
 	mcr	p14, 6, r0, c0, c0, 0		@ stop userspace TEEHBR access
 1:
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	adr	r5, v7_crval
 	ldmia	r5, {r5, r6}
 #ifdef CONFIG_CPU_ENDIAN_BE8
@@ -415,6 +740,7 @@ __v7_setup_stack:
 
 	__INITDATA
 
+<<<<<<< HEAD
 	.type	v7_processor_functions, #object
 ENTRY(v7_processor_functions)
 	.word	v7_early_abort
@@ -442,10 +768,20 @@ cpu_arch_name:
 cpu_elf_name:
 	.asciz	"v7"
 	.size	cpu_elf_name, . - cpu_elf_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions v7, dabort=v7_early_abort, pabort=v7_pabort, suspend=1
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv7"
+	string	cpu_elf_name, "v7"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.align
 
 	.section ".proc.info.init", #alloc, #execinstr
 
+<<<<<<< HEAD
 	.type   __v7_ca9mp_proc_info, #object
 __v7_ca9mp_proc_info:
 	.long	0x410fc090		@ Required ID value
@@ -468,20 +804,74 @@ __v7_ca9mp_proc_info:
 	.long	cpu_arch_name
 	.long	cpu_elf_name
 	.long	HWCAP_SWP|HWCAP_HALF|HWCAP_THUMB|HWCAP_FAST_MULT|HWCAP_EDSP|HWCAP_TLS
+=======
+	/*
+	 * Standard v7 proc info content
+	 */
+.macro __v7_proc initfunc, mm_mmuflags = 0, io_mmuflags = 0, hwcaps = 0
+	ALT_SMP(.long	PMD_TYPE_SECT | PMD_SECT_AP_WRITE | PMD_SECT_AP_READ | \
+			PMD_FLAGS_SMP | \mm_mmuflags)
+	ALT_UP(.long	PMD_TYPE_SECT | PMD_SECT_AP_WRITE | PMD_SECT_AP_READ | \
+			PMD_FLAGS_UP | \mm_mmuflags)
+	.long	PMD_TYPE_SECT | PMD_SECT_XN | PMD_SECT_AP_WRITE | \
+		PMD_SECT_AP_READ | \io_mmuflags
+	W(b)	\initfunc
+	.long	cpu_arch_name
+	.long	cpu_elf_name
+	.long	HWCAP_SWP | HWCAP_HALF | HWCAP_THUMB | HWCAP_FAST_MULT | \
+		HWCAP_EDSP | HWCAP_TLS | \hwcaps
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.long	cpu_v7_name
 	.long	v7_processor_functions
 	.long	v7wbi_tlb_fns
 	.long	v6_user_fns
 	.long	v7_cache_fns
+<<<<<<< HEAD
 	.size	__v7_ca9mp_proc_info, . - __v7_ca9mp_proc_info
 
 	/*
+=======
+.endm
+
+	/*
+	 * ARM Ltd. Cortex A5 processor.
+	 */
+	.type   __v7_ca5mp_proc_info, #object
+__v7_ca5mp_proc_info:
+	.long	0x410fc050
+	.long	0xff0ffff0
+	__v7_proc __v7_ca5mp_setup
+	.size	__v7_ca5mp_proc_info, . - __v7_ca5mp_proc_info
+
+	/*
+	 * ARM Ltd. Cortex A9 processor.
+	 */
+	.type   __v7_ca9mp_proc_info, #object
+__v7_ca9mp_proc_info:
+	.long	0x410fc090
+	.long	0xff0ffff0
+	__v7_proc __v7_ca9mp_setup
+	.size	__v7_ca9mp_proc_info, . - __v7_ca9mp_proc_info
+
+	/*
+	 * ARM Ltd. Cortex A15 processor.
+	 */
+	.type	__v7_ca15mp_proc_info, #object
+__v7_ca15mp_proc_info:
+	.long	0x410fc0f0
+	.long	0xff0ffff0
+	__v7_proc __v7_ca15mp_setup, hwcaps = HWCAP_IDIV
+	.size	__v7_ca15mp_proc_info, . - __v7_ca15mp_proc_info
+
+	/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * Match any ARMv7 processor core.
 	 */
 	.type	__v7_proc_info, #object
 __v7_proc_info:
 	.long	0x000f0000		@ Required ID value
 	.long	0x000f0000		@ Mask for ID
+<<<<<<< HEAD
 	ALT_SMP(.long \
 		PMD_TYPE_SECT | \
 		PMD_SECT_AP_WRITE | \
@@ -505,4 +895,7 @@ __v7_proc_info:
 	.long	v7wbi_tlb_fns
 	.long	v6_user_fns
 	.long	v7_cache_fns
+=======
+	__v7_proc __v7_setup
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.size	__v7_proc_info, . - __v7_proc_info

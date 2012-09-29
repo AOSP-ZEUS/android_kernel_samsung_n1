@@ -1,7 +1,11 @@
 /*******************************************************************************
 
     AudioScience HPI driver
+<<<<<<< HEAD
     Copyright (C) 1997-2010  AudioScience Inc. <support@audioscience.com>
+=======
+    Copyright (C) 1997-2011  AudioScience Inc. <support@audioscience.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of version 2 of the GNU General Public License as
@@ -107,7 +111,10 @@ long asihpi_hpi_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	union hpi_response_buffer_v1 *hr;
 	u16 res_max_size;
 	u32 uncopied_bytes;
+<<<<<<< HEAD
 	struct hpi_adapter *pa = NULL;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int err = 0;
 
 	if (cmd != HPI_IOCTL_LINUX)
@@ -157,11 +164,14 @@ long asihpi_hpi_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 		goto out;
 	}
 
+<<<<<<< HEAD
 	if (hm->h.adapter_index >= HPI_MAX_ADAPTERS) {
 		err = -EINVAL;
 		goto out;
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (hm->h.function) {
 	case HPI_SUBSYS_CREATE_ADAPTER:
 	case HPI_ADAPTER_DELETE:
@@ -183,6 +193,7 @@ long asihpi_hpi_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 	} else {
 		u16 __user *ptr = NULL;
 		u32 size = 0;
+<<<<<<< HEAD
 
 		/* -1=no data 0=read from user mem, 1=write to user mem */
 		int wrflag = -1;
@@ -193,6 +204,23 @@ long asihpi_hpi_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			hpi_init_response(&hr->r0, HPI_OBJ_ADAPTER,
 				HPI_ADAPTER_OPEN,
 				HPI_ERROR_BAD_ADAPTER_NUMBER);
+=======
+		u32 adapter_present;
+		/* -1=no data 0=read from user mem, 1=write to user mem */
+		int wrflag = -1;
+		struct hpi_adapter *pa;
+
+		if (hm->h.adapter_index < HPI_MAX_ADAPTERS) {
+			pa = &adapters[hm->h.adapter_index];
+			adapter_present = pa->type;
+		} else {
+			adapter_present = 0;
+		}
+
+		if (!adapter_present) {
+			hpi_init_response(&hr->r0, hm->h.object,
+				hm->h.function, HPI_ERROR_BAD_ADAPTER_NUMBER);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			uncopied_bytes =
 				copy_to_user(puhr, hr, sizeof(hr->h));
@@ -203,7 +231,11 @@ long asihpi_hpi_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 			goto out;
 		}
 
+<<<<<<< HEAD
 		if (mutex_lock_interruptible(&adapters[adapter].mutex)) {
+=======
+		if (mutex_lock_interruptible(&pa->mutex)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			err = -EINTR;
 			goto out;
 		}
@@ -239,8 +271,12 @@ long asihpi_hpi_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 							"stream buffer size %d\n",
 							size);
 
+<<<<<<< HEAD
 						mutex_unlock(&adapters
 							[adapter].mutex);
+=======
+						mutex_unlock(&pa->mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 						err = -EINVAL;
 						goto out;
 					}
@@ -281,7 +317,11 @@ long asihpi_hpi_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 					uncopied_bytes, size);
 		}
 
+<<<<<<< HEAD
 		mutex_unlock(&adapters[adapter].mutex);
+=======
+		mutex_unlock(&pa->mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* on return response size must be set */

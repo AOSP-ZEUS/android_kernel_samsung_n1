@@ -267,6 +267,11 @@ static struct platform_device *devices[] __initdata = {
  */
 static void __init vpr200_board_init(void)
 {
+<<<<<<< HEAD
+=======
+	imx35_soc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mxc_iomux_v3_setup_multiple_pads(vpr200_pads, ARRAY_SIZE(vpr200_pads));
 
 	imx35_add_fec(NULL);

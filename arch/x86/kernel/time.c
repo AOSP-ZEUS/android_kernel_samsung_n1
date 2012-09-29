@@ -11,13 +11,20 @@
 
 #include <linux/clockchips.h>
 #include <linux/interrupt.h>
+<<<<<<< HEAD
+=======
+#include <linux/i8253.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/time.h>
 #include <linux/mca.h>
 
 #include <asm/vsyscall.h>
 #include <asm/x86_init.h>
 #include <asm/i8259.h>
+<<<<<<< HEAD
 #include <asm/i8253.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/timer.h>
 #include <asm/hpet.h>
 #include <asm/time.h>

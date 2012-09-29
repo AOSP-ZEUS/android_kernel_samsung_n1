@@ -1447,6 +1447,7 @@ static void convertEndian(B_UINT8 rwFlag, PUINT puiBuffer, UINT uiByteCount)
 
 int rdm(PMINI_ADAPTER Adapter, UINT uiAddress, PCHAR pucBuff, size_t sSize)
 {
+<<<<<<< HEAD
 	INT uiRetVal =0;
 
 	uiRetVal = Adapter->interface_rdm(Adapter->pvInterfaceAdapter,
@@ -1457,6 +1458,12 @@ int rdm(PMINI_ADAPTER Adapter, UINT uiAddress, PCHAR pucBuff, size_t sSize)
 
 	return uiRetVal;
 }
+=======
+	return Adapter->interface_rdm(Adapter->pvInterfaceAdapter,
+			uiAddress, pucBuff, sSize);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int wrm(PMINI_ADAPTER Adapter, UINT uiAddress, PCHAR pucBuff, size_t sSize)
 {
 	int iRetVal;

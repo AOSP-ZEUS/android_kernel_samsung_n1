@@ -950,9 +950,12 @@ int __init mac_platform_init(void)
 {
 	u8 *swim_base;
 
+<<<<<<< HEAD
 	if (!MACH_IS_MAC)
 		return -ENODEV;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Serial devices
 	 */

@@ -188,18 +188,28 @@ struct regulator_dev {
 
 	/* lists we belong to */
 	struct list_head list; /* list of all regulators */
+<<<<<<< HEAD
 	struct list_head slist; /* list of supplied regulators */
 
 	/* lists we own */
 	struct list_head consumer_list; /* consumers we supply */
 	struct list_head supply_list; /* regulators we supply */
+=======
+
+	/* lists we own */
+	struct list_head consumer_list; /* consumers we supply */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	struct blocking_notifier_head notifier;
 	struct mutex mutex; /* consumer lock */
 	struct module *owner;
 	struct device dev;
 	struct regulation_constraints *constraints;
+<<<<<<< HEAD
 	struct regulator_dev *supply;	/* for tree */
+=======
+	struct regulator *supply;	/* for tree */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	void *reg_data;		/* regulator_dev data */
 

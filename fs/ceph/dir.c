@@ -40,6 +40,7 @@ int ceph_init_dentry(struct dentry *dentry)
 	if (dentry->d_fsdata)
 		return 0;
 
+<<<<<<< HEAD
 	if (dentry->d_parent == NULL ||   /* nfs fh_to_dentry */
 	    ceph_snap(dentry->d_parent->d_inode) == CEPH_NOSNAP)
 		d_set_d_op(dentry, &ceph_dentry_ops);
@@ -48,6 +49,8 @@ int ceph_init_dentry(struct dentry *dentry)
 	else
 		d_set_d_op(dentry, &ceph_snap_dentry_ops);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	di = kmem_cache_alloc(ceph_dentry_cachep, GFP_NOFS | __GFP_ZERO);
 	if (!di)
 		return -ENOMEM;          /* oh well */
@@ -58,16 +61,52 @@ int ceph_init_dentry(struct dentry *dentry)
 		kmem_cache_free(ceph_dentry_cachep, di);
 		goto out_unlock;
 	}
+<<<<<<< HEAD
 	di->dentry = dentry;
 	di->lease_session = NULL;
 	dentry->d_fsdata = di;
 	dentry->d_time = jiffies;
+=======
+
+	if (dentry->d_parent == NULL ||   /* nfs fh_to_dentry */
+	    ceph_snap(dentry->d_parent->d_inode) == CEPH_NOSNAP)
+		d_set_d_op(dentry, &ceph_dentry_ops);
+	else if (ceph_snap(dentry->d_parent->d_inode) == CEPH_SNAPDIR)
+		d_set_d_op(dentry, &ceph_snapdir_dentry_ops);
+	else
+		d_set_d_op(dentry, &ceph_snap_dentry_ops);
+
+	di->dentry = dentry;
+	di->lease_session = NULL;
+	dentry->d_time = jiffies;
+	/* avoid reordering d_fsdata setup so that the check above is safe */
+	smp_mb();
+	dentry->d_fsdata = di;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ceph_dentry_lru_add(dentry);
 out_unlock:
 	spin_unlock(&dentry->d_lock);
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+struct inode *ceph_get_dentry_parent_inode(struct dentry *dentry)
+{
+	struct inode *inode = NULL;
+
+	if (!dentry)
+		return NULL;
+
+	spin_lock(&dentry->d_lock);
+	if (dentry->d_parent) {
+		inode = dentry->d_parent->d_inode;
+		ihold(inode);
+	}
+	spin_unlock(&dentry->d_lock);
+	return inode;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /*
@@ -133,7 +172,11 @@ more:
 		     d_unhashed(dentry) ? "!hashed" : "hashed",
 		     parent->d_subdirs.prev, parent->d_subdirs.next);
 		if (p == &parent->d_subdirs) {
+<<<<<<< HEAD
 			fi->at_end = 1;
+=======
+			fi->flags |= CEPH_F_ATEND;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto out_unlock;
 		}
 		spin_lock_nested(&dentry->d_lock, DENTRY_D_LOCK_NESTED);
@@ -234,7 +277,11 @@ static int ceph_readdir(struct file *filp, void *dirent, filldir_t filldir)
 	const int max_bytes = fsc->mount_options->max_readdir_bytes;
 
 	dout("readdir %p filp %p frag %u off %u\n", inode, filp, frag, off);
+<<<<<<< HEAD
 	if (fi->at_end)
+=======
+	if (fi->flags & CEPH_F_ATEND)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	/* always start with . and .. */
@@ -252,7 +299,11 @@ static int ceph_readdir(struct file *filp, void *dirent, filldir_t filldir)
 		off = 1;
 	}
 	if (filp->f_pos == 1) {
+<<<<<<< HEAD
 		ino_t ino = filp->f_dentry->d_parent->d_inode->i_ino;
+=======
+		ino_t ino = parent_ino(filp->f_dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dout("readdir off 1 -> '..'\n");
 		if (filldir(dirent, "..", 2, ceph_make_fpos(0, 1),
 			    ceph_translate_ino(inode->i_sb, ino),
@@ -403,7 +454,11 @@ more:
 		dout("readdir next frag is %x\n", frag);
 		goto more;
 	}
+<<<<<<< HEAD
 	fi->at_end = 1;
+=======
+	fi->flags |= CEPH_F_ATEND;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * if dir_release_count still matches the dir, no dentries
@@ -435,7 +490,11 @@ static void reset_readdir(struct ceph_file_info *fi)
 		dput(fi->dentry);
 		fi->dentry = NULL;
 	}
+<<<<<<< HEAD
 	fi->at_end = 0;
+=======
+	fi->flags &= ~CEPH_F_ATEND;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static loff_t ceph_dir_llseek(struct file *file, loff_t offset, int origin)
@@ -446,19 +505,36 @@ static loff_t ceph_dir_llseek(struct file *file, loff_t offset, int origin)
 	loff_t retval;
 
 	mutex_lock(&inode->i_mutex);
+<<<<<<< HEAD
+=======
+	retval = -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (origin) {
 	case SEEK_END:
 		offset += inode->i_size + 2;   /* FIXME */
 		break;
 	case SEEK_CUR:
 		offset += file->f_pos;
+<<<<<<< HEAD
 	}
 	retval = -EINVAL;
+=======
+	case SEEK_SET:
+		break;
+	default:
+		goto out;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (offset >= 0 && offset <= inode->i_sb->s_maxbytes) {
 		if (offset != file->f_pos) {
 			file->f_pos = offset;
 			file->f_version = 0;
+<<<<<<< HEAD
 			fi->at_end = 0;
+=======
+			fi->flags &= ~CEPH_F_ATEND;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		retval = offset;
 
@@ -477,11 +553,16 @@ static loff_t ceph_dir_llseek(struct file *file, loff_t offset, int origin)
 		if (offset > old_offset)
 			fi->dir_release_count--;
 	}
+<<<<<<< HEAD
+=======
+out:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mutex_unlock(&inode->i_mutex);
 	return retval;
 }
 
 /*
+<<<<<<< HEAD
  * Process result of a lookup/open request.
  *
  * Mainly, make sure we return the final req->r_dentry (if it already
@@ -497,6 +578,15 @@ struct dentry *ceph_finish_lookup(struct ceph_mds_request *req,
 {
 	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
 	struct inode *parent = dentry->d_parent->d_inode;
+=======
+ * Handle lookups for the hidden .snap directory.
+ */
+int ceph_handle_snapdir(struct ceph_mds_request *req,
+			struct dentry *dentry, int err)
+{
+	struct ceph_fs_client *fsc = ceph_sb_to_client(dentry->d_sb);
+	struct inode *parent = dentry->d_parent->d_inode; /* we hold i_mutex */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* .snap dir? */
 	if (err == -ENOENT &&
@@ -510,7 +600,27 @@ struct dentry *ceph_finish_lookup(struct ceph_mds_request *req,
 		d_add(dentry, inode);
 		err = 0;
 	}
+<<<<<<< HEAD
 
+=======
+	return err;
+}
+
+/*
+ * Figure out final result of a lookup/open request.
+ *
+ * Mainly, make sure we return the final req->r_dentry (if it already
+ * existed) in place of the original VFS-provided dentry when they
+ * differ.
+ *
+ * Gracefully handle the case where the MDS replies with -ENOENT and
+ * no trace (which it may do, at its discretion, e.g., if it doesn't
+ * care to issue a lease on the negative dentry).
+ */
+struct dentry *ceph_finish_lookup(struct ceph_mds_request *req,
+				  struct dentry *dentry, int err)
+{
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err == -ENOENT) {
 		/* no trace? */
 		err = 0;
@@ -566,7 +676,10 @@ static struct dentry *ceph_lookup(struct inode *dir, struct dentry *dentry,
 	/* open (but not create!) intent? */
 	if (nd &&
 	    (nd->flags & LOOKUP_OPEN) &&
+<<<<<<< HEAD
 	    (nd->flags & LOOKUP_CONTINUE) == 0 && /* only open last component */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    !(nd->intent.open.flags & O_CREAT)) {
 		int mode = nd->intent.open.create_mode & ~current->fs->umask;
 		return ceph_lookup_open(dir, dentry, nd, mode, 1);
@@ -605,6 +718,10 @@ static struct dentry *ceph_lookup(struct inode *dir, struct dentry *dentry,
 	req->r_args.getattr.mask = cpu_to_le32(CEPH_STAT_CAP_INODE);
 	req->r_locked_dir = dir;
 	err = ceph_mdsc_do_request(mdsc, NULL, req);
+<<<<<<< HEAD
+=======
+	err = ceph_handle_snapdir(req, dentry, err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dentry = ceph_finish_lookup(req, dentry, err);
 	ceph_mdsc_put_request(req);  /* will dput(dentry) */
 	dout("lookup result=%p\n", dentry);
@@ -784,6 +901,10 @@ static int ceph_link(struct dentry *old_dentry, struct inode *dir,
 	req->r_dentry = dget(dentry);
 	req->r_num_caps = 2;
 	req->r_old_dentry = dget(old_dentry); /* or inode? hrm. */
+<<<<<<< HEAD
+=======
+	req->r_old_dentry_dir = ceph_get_dentry_parent_inode(old_dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	req->r_locked_dir = dir;
 	req->r_dentry_drop = CEPH_CAP_FILE_SHARED;
 	req->r_dentry_unless = CEPH_CAP_FILE_EXCL;
@@ -882,6 +1003,10 @@ static int ceph_rename(struct inode *old_dir, struct dentry *old_dentry,
 	req->r_dentry = dget(new_dentry);
 	req->r_num_caps = 2;
 	req->r_old_dentry = dget(old_dentry);
+<<<<<<< HEAD
+=======
+	req->r_old_dentry_dir = ceph_get_dentry_parent_inode(old_dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	req->r_locked_dir = new_dir;
 	req->r_old_dentry_drop = CEPH_CAP_FILE_SHARED;
 	req->r_old_dentry_unless = CEPH_CAP_FILE_EXCL;
@@ -997,21 +1122,34 @@ static int dir_lease_is_valid(struct inode *dir, struct dentry *dentry)
  */
 static int ceph_d_revalidate(struct dentry *dentry, struct nameidata *nd)
 {
+<<<<<<< HEAD
+=======
+	int valid = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct inode *dir;
 
 	if (nd && nd->flags & LOOKUP_RCU)
 		return -ECHILD;
 
+<<<<<<< HEAD
 	dir = dentry->d_parent->d_inode;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dout("d_revalidate %p '%.*s' inode %p offset %lld\n", dentry,
 	     dentry->d_name.len, dentry->d_name.name, dentry->d_inode,
 	     ceph_dentry(dentry)->offset);
 
+<<<<<<< HEAD
+=======
+	dir = ceph_get_dentry_parent_inode(dentry);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* always trust cached snapped dentries, snapdir dentry */
 	if (ceph_snap(dir) != CEPH_NOSNAP) {
 		dout("d_revalidate %p '%.*s' inode %p is SNAPPED\n", dentry,
 		     dentry->d_name.len, dentry->d_name.name, dentry->d_inode);
+<<<<<<< HEAD
 		goto out_touch;
 	}
 	if (dentry->d_inode && ceph_snap(dentry->d_inode) == CEPH_SNAPDIR)
@@ -1027,6 +1165,24 @@ static int ceph_d_revalidate(struct dentry *dentry, struct nameidata *nd)
 out_touch:
 	ceph_dentry_lru_touch(dentry);
 	return 1;
+=======
+		valid = 1;
+	} else if (dentry->d_inode &&
+		   ceph_snap(dentry->d_inode) == CEPH_SNAPDIR) {
+		valid = 1;
+	} else if (dentry_lease_is_valid(dentry) ||
+		   dir_lease_is_valid(dir, dentry)) {
+		valid = 1;
+	}
+
+	dout("d_revalidate %p %s\n", dentry, valid ? "valid" : "invalid");
+	if (valid)
+		ceph_dentry_lru_touch(dentry);
+	else
+		d_drop(dentry);
+	iput(dir);
+	return valid;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -1113,7 +1269,12 @@ static ssize_t ceph_read_dir(struct file *file, char __user *buf, size_t size,
  * an fsync() on a dir will wait for any uncommitted directory
  * operations to commit.
  */
+<<<<<<< HEAD
 static int ceph_dir_fsync(struct file *file, int datasync)
+=======
+static int ceph_dir_fsync(struct file *file, loff_t start, loff_t end,
+			  int datasync)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct inode *inode = file->f_path.dentry->d_inode;
 	struct ceph_inode_info *ci = ceph_inode(inode);
@@ -1123,6 +1284,14 @@ static int ceph_dir_fsync(struct file *file, int datasync)
 	int ret = 0;
 
 	dout("dir_fsync %p\n", inode);
+<<<<<<< HEAD
+=======
+	ret = filemap_write_and_wait_range(inode->i_mapping, start, end);
+	if (ret)
+		return ret;
+	mutex_lock(&inode->i_mutex);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_lock(&ci->i_unsafe_lock);
 	if (list_empty(head))
 		goto out;
@@ -1156,6 +1325,11 @@ static int ceph_dir_fsync(struct file *file, int datasync)
 	} while (req->r_tid < last_tid);
 out:
 	spin_unlock(&ci->i_unsafe_lock);
+<<<<<<< HEAD
+=======
+	mutex_unlock(&inode->i_mutex);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
@@ -1215,9 +1389,14 @@ void ceph_dentry_lru_del(struct dentry *dn)
  * Return name hash for a given dentry.  This is dependent on
  * the parent directory's hash function.
  */
+<<<<<<< HEAD
 unsigned ceph_dentry_hash(struct dentry *dn)
 {
 	struct inode *dir = dn->d_parent->d_inode;
+=======
+unsigned ceph_dentry_hash(struct inode *dir, struct dentry *dn)
+{
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ceph_inode_info *dci = ceph_inode(dir);
 
 	switch (dci->i_dir_layout.dl_dir_hash) {

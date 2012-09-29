@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 /* linux/arch/arm/mach-s5pv210/gpiolib.c
+=======
+/*
+ * S5PV210 - GPIOlib support
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Copyright (c) 2010 Samsung Electronics Co., Ltd.
  *		http://www.samsung.com/
  *
+<<<<<<< HEAD
  * S5PV210 - GPIOlib support
  *
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
@@ -14,7 +22,10 @@
 #include <linux/irq.h>
 #include <linux/io.h>
 #include <linux/gpio.h>
+<<<<<<< HEAD
 #include <linux/module.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <plat/gpio-core.h>
 #include <plat/gpio-cfg.h>
 #include <plat/gpio-cfg-helpers.h>
@@ -223,6 +234,7 @@ static struct s3c_gpio_chip s5pv210_gpio_4bit[] = {
 			.label	= "MP05",
 		},
 	}, {
+<<<<<<< HEAD
 		.config	= &gpio_cfg_noint,
 		.chip	= {
 			.base	= S5PV210_MP06(0),
@@ -391,6 +403,8 @@ static struct s3c_gpio_chip s5pv210_gpio_4bit[] = {
 			.label	= "ETC4",
 		},
 	}, {
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.base	= (S5P_VA_GPIO + 0xC00),
 		.config	= &gpio_cfg_noint,
 		.irq_base = IRQ_EINT(0),
@@ -433,6 +447,7 @@ static struct s3c_gpio_chip s5pv210_gpio_4bit[] = {
 	},
 };
 
+<<<<<<< HEAD
 /* S5PV210 machine dependent GPIO help function */
 int s3c_gpio_slp_cfgpin(unsigned int pin, unsigned int config)
 {
@@ -607,6 +622,9 @@ int s3c_gpio_set_slewrate(unsigned int pin, unsigned int config)
 }
 
 __init int s5pv210_gpiolib_init(void)
+=======
+static __init int s5pv210_gpiolib_init(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct s3c_gpio_chip *chip = s5pv210_gpio_4bit;
 	int nr_chips = ARRAY_SIZE(s5pv210_gpio_4bit);
@@ -627,3 +645,7 @@ __init int s5pv210_gpiolib_init(void)
 
 	return 0;
 }
+<<<<<<< HEAD
+=======
+core_initcall(s5pv210_gpiolib_init);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

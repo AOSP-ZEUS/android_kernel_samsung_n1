@@ -64,6 +64,7 @@ struct max8998_regulator_data {
 	struct regulator_init_data	*initdata;
 };
 
+<<<<<<< HEAD
 enum cable_type_t {
 	CABLE_TYPE_NONE = 0,
 	CABLE_TYPE_USB,
@@ -97,6 +98,8 @@ struct max8998_charger_data {
 	int adc_array_size;
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * struct max8998_board - packages regulator init data
  * @regulators: array of defined regulators
@@ -120,6 +123,18 @@ struct max8998_charger_data {
  * @wakeup: Allow to wake up from suspend
  * @rtc_delay: LP3974 RTC chip bug that requires delay after a register
  * write before reading it.
+<<<<<<< HEAD
+=======
+ * @eoc: End of Charge Level in percent: 10% ~ 45% by 5% step
+ *   If it equals 0, leave it unchanged.
+ *   Otherwise, it is a invalid value.
+ * @restart: Restart Level in mV: 100, 150, 200, and -1 for disable.
+ *   If it equals 0, leave it unchanged.
+ *   Otherwise, it is a invalid value.
+ * @timeout: Full Timeout in hours: 5, 6, 7, and -1 for disable.
+ *   If it equals 0, leave it unchanged.
+ *   Otherwise, leave it unchanged.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 struct max8998_platform_data {
 	struct max8998_regulator_data	*regulators;
@@ -140,7 +155,13 @@ struct max8998_platform_data {
 	int				buck2_default_idx;
 	bool				wakeup;
 	bool				rtc_delay;
+<<<<<<< HEAD
 	struct max8998_charger_data	*charger;
+=======
+	int				eoc;
+	int				restart;
+	int				timeout;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif /*  __LINUX_MFD_MAX8998_H */

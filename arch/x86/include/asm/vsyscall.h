@@ -16,10 +16,13 @@ enum vsyscall_num {
 #ifdef __KERNEL__
 #include <linux/seqlock.h>
 
+<<<<<<< HEAD
 /* Definitions for CONFIG_GENERIC_TIME definitions */
 #define __vsyscall_fn \
 	__attribute__ ((unused, __section__(".vsyscall_fn"))) notrace
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define VGETCPU_RDTSCP	1
 #define VGETCPU_LSL	2
 
@@ -31,6 +34,15 @@ extern struct timezone sys_tz;
 
 extern void map_vsyscall(void);
 
+<<<<<<< HEAD
+=======
+/*
+ * Called on instruction fetch fault in vsyscall page.
+ * Returns true if handled.
+ */
+extern bool emulate_vsyscall(struct pt_regs *regs, unsigned long address);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* __KERNEL__ */
 
 #endif /* _ASM_X86_VSYSCALL_H */

@@ -22,6 +22,7 @@
 #ifndef __TWL6040_H__
 #define __TWL6040_H__
 
+<<<<<<< HEAD
 #define TWL6040_REG_ASICID		0x01
 #define TWL6040_REG_ASICREV		0x02
 #define TWL6040_REG_INTID		0x03
@@ -142,5 +143,10 @@
 
 void twl6040_hs_jack_detect(struct snd_soc_codec *codec,
 			    struct snd_soc_jack *jack, int report);
+=======
+void twl6040_hs_jack_detect(struct snd_soc_codec *codec,
+			    struct snd_soc_jack *jack, int report);
+int twl6040_get_clk_id(struct snd_soc_codec *codec);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* End of __TWL6040_H__ */

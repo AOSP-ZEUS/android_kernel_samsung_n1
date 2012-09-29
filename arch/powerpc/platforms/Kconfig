@@ -24,7 +24,11 @@ source "arch/powerpc/platforms/wsp/Kconfig"
 
 config KVM_GUEST
 	bool "KVM Guest support"
+<<<<<<< HEAD
 	default y
+=======
+	default n
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	---help---
 	  This option enables various optimizations for running under the KVM
 	  hypervisor. Overhead for the kernel when not running inside KVM should
@@ -78,6 +82,13 @@ config MPIC
 	bool
 	default n
 
+<<<<<<< HEAD
+=======
+config PPC_EPAPR_HV_PIC
+	bool
+	default n
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config MPIC_WEIRD
 	bool
 	default n
@@ -266,7 +277,11 @@ config TAU_AVERAGE
 
 config QUICC_ENGINE
 	bool "Freescale QUICC Engine (QE) Support"
+<<<<<<< HEAD
 	depends on FSL_SOC
+=======
+	depends on FSL_SOC && PPC32
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select PPC_LIB_RHEAP
 	select CRC32
 	help

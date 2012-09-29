@@ -17,7 +17,10 @@
 #define DEBUG
 #endif
 
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/netdevice.h>
 #include <linux/etherdevice.h>
 #include <linux/ethtool.h>
@@ -645,7 +648,11 @@ struct efx_filter_state;
  * @irq_rx_moderation: IRQ moderation time for RX event queues
  * @msg_enable: Log message enable flags
  * @state: Device state flag. Serialised by the rtnl_lock.
+<<<<<<< HEAD
  * @reset_pending: Pending reset method (normally RESET_TYPE_NONE)
+=======
+ * @reset_pending: Bitmask for pending resets
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @tx_queue: TX DMA queues
  * @rx_queue: RX DMA queues
  * @channel: Channels
@@ -728,7 +735,11 @@ struct efx_nic {
 	u32 msg_enable;
 
 	enum nic_state state;
+<<<<<<< HEAD
 	enum reset_type reset_pending;
+=======
+	unsigned long reset_pending;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	struct efx_channel *channel[EFX_MAX_CHANNELS];
 	char channel_name[EFX_MAX_CHANNELS][IFNAMSIZ + 6];
@@ -828,6 +839,11 @@ static inline unsigned int efx_port_num(struct efx_nic *efx)
  * @init: Initialise the controller
  * @fini: Shut down the controller
  * @monitor: Periodic function for polling link state and hardware monitor
+<<<<<<< HEAD
+=======
+ * @map_reset_reason: Map ethtool reset reason to a reset method
+ * @map_reset_flags: Map ethtool reset flags to a reset method, if possible
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @reset: Reset the controller hardware and possibly the PHY.  This will
  *	be called while the controller is uninitialised.
  * @probe_port: Probe the MAC and PHY
@@ -865,8 +881,11 @@ static inline unsigned int efx_port_num(struct efx_nic *efx)
  * @rx_dc_base: Base address in SRAM of RX queue descriptor caches
  * @offload_features: net_device feature flags for protocol offload
  *	features implemented in hardware
+<<<<<<< HEAD
  * @reset_world_flags: Flags for additional components covered by
  *	reset method RESET_TYPE_WORLD
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 struct efx_nic_type {
 	int (*probe)(struct efx_nic *efx);
@@ -874,6 +893,11 @@ struct efx_nic_type {
 	int (*init)(struct efx_nic *efx);
 	void (*fini)(struct efx_nic *efx);
 	void (*monitor)(struct efx_nic *efx);
+<<<<<<< HEAD
+=======
+	enum reset_type (*map_reset_reason)(enum reset_type reason);
+	int (*map_reset_flags)(u32 *flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int (*reset)(struct efx_nic *efx, enum reset_type method);
 	int (*probe_port)(struct efx_nic *efx);
 	void (*remove_port)(struct efx_nic *efx);
@@ -908,7 +932,10 @@ struct efx_nic_type {
 	unsigned int tx_dc_base;
 	unsigned int rx_dc_base;
 	u32 offload_features;
+<<<<<<< HEAD
 	u32 reset_world_flags;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /**************************************************************************

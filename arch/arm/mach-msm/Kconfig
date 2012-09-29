@@ -11,6 +11,10 @@ config ARCH_MSM7X00A
 	select MSM_SMD
 	select MSM_SMD_PKG3
 	select CPU_V6
+<<<<<<< HEAD
+=======
+	select GPIO_MSM_V1
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select MSM_PROC_COMM
 	select HAS_MSM_DEBUG_UART_PHYS
 
@@ -22,6 +26,10 @@ config ARCH_MSM7X30
 	select MSM_VIC
 	select CPU_V7
 	select MSM_GPIOMUX
+<<<<<<< HEAD
+=======
+	select GPIO_MSM_V1
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select MSM_PROC_COMM
 	select HAS_MSM_DEBUG_UART_PHYS
 
@@ -33,6 +41,10 @@ config ARCH_QSD8X50
 	select MSM_VIC
 	select CPU_V7
 	select MSM_GPIOMUX
+<<<<<<< HEAD
+=======
+	select GPIO_MSM_V1
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select MSM_PROC_COMM
 	select HAS_MSM_DEBUG_UART_PHYS
 
@@ -44,6 +56,10 @@ config ARCH_MSM8X60
 	select ARM_GIC
 	select CPU_V7
 	select MSM_V2_TLMM
+<<<<<<< HEAD
+=======
+	select GPIO_MSM_V2
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select MSM_GPIOMUX
 	select MSM_SCM if SMP
 
@@ -148,6 +164,7 @@ config MACH_MSM8960_RUMI3
 
 endmenu
 
+<<<<<<< HEAD
 config MSM_IOMMU
 	bool "MSM IOMMU Support"
 	depends on ARCH_MSM8X60 || ARCH_MSM8960
@@ -164,6 +181,8 @@ config IOMMU_PGTABLES_L2
 	def_bool y
 	depends on MSM_IOMMU && MMU && SMP && CPU_DCACHE_DISABLE=n
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config MSM_DEBUG_UART
 	int
 	default 1 if MSM_DEBUG_UART1
@@ -205,9 +224,12 @@ config MSM_GPIOMUX
 config MSM_V2_TLMM
 	bool
 
+<<<<<<< HEAD
 config IOMMU_API
 	bool
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config MSM_SCM
 	bool
 endif

@@ -20,8 +20,13 @@
 #include <linux/regset.h>
 #include <linux/tracehook.h>
 #include <linux/seccomp.h>
+<<<<<<< HEAD
 #include <linux/compat.h>
 #include <trace/syscall.h>
+=======
+#include <trace/syscall.h>
+#include <asm/compat.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/segment.h>
 #include <asm/page.h>
 #include <asm/pgtable.h>

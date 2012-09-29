@@ -805,6 +805,10 @@ void __init omap_serial_init_port(struct omap_board_data *bdata)
 	WARN(IS_ERR(od), "Could not build omap_device for %s: %s.\n",
 	     name, oh->name);
 
+<<<<<<< HEAD
+=======
+	omap_device_disable_idle_on_suspend(od);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	oh->mux = omap_hwmod_mux_init(bdata->pads, bdata->pads_cnt);
 
 	uart->irq = oh->mpu_irqs[0].irq;

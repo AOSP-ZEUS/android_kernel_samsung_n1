@@ -218,7 +218,11 @@ static long madvise_remove(struct vm_area_struct *vma,
 	endoff = (loff_t)(end - vma->vm_start - 1)
 			+ ((loff_t)vma->vm_pgoff << PAGE_SHIFT);
 
+<<<<<<< HEAD
 	/* vmtruncate_range needs to take i_mutex and i_alloc_sem */
+=======
+	/* vmtruncate_range needs to take i_mutex */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	up_read(&current->mm->mmap_sem);
 	error = vmtruncate_range(mapping->host, offset, endoff);
 	down_read(&current->mm->mmap_sem);

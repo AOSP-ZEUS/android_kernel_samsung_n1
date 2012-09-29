@@ -222,7 +222,10 @@ static void _rtl92s_dm_refresh_rateadaptive_mask(struct ieee80211_hw *hw)
 	u32 low_rssi_thresh = 0;
 	u32 middle_rssi_thresh = 0;
 	u32 high_rssi_thresh = 0;
+<<<<<<< HEAD
 	u8 rssi_level;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ieee80211_sta *sta = NULL;
 
 	if (is_hal_stop(rtlhal))
@@ -272,6 +275,7 @@ static void _rtl92s_dm_refresh_rateadaptive_mask(struct ieee80211_hw *hw)
 		if (rtlpriv->dm.undecorated_smoothed_pwdb >
 		    (long)high_rssi_thresh) {
 			ra->ratr_state = DM_RATR_STA_HIGH;
+<<<<<<< HEAD
 			rssi_level = 1;
 		} else if (rtlpriv->dm.undecorated_smoothed_pwdb >
 			   (long)middle_rssi_thresh) {
@@ -284,6 +288,16 @@ static void _rtl92s_dm_refresh_rateadaptive_mask(struct ieee80211_hw *hw)
 		} else {
 			ra->ratr_state = DM_RATR_STA_ULTRALOW;
 			rssi_level = 6;
+=======
+		} else if (rtlpriv->dm.undecorated_smoothed_pwdb >
+			   (long)middle_rssi_thresh) {
+			ra->ratr_state = DM_RATR_STA_LOW;
+		} else if (rtlpriv->dm.undecorated_smoothed_pwdb >
+			   (long)low_rssi_thresh) {
+			ra->ratr_state = DM_RATR_STA_LOW;
+		} else {
+			ra->ratr_state = DM_RATR_STA_ULTRALOW;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 		if (ra->pre_ratr_state != ra->ratr_state) {
@@ -457,7 +471,11 @@ static void _rtl92s_dm_initial_gain_sta_beforeconnect(struct ieee80211_hw *hw)
 			if (rtlpriv->psc.rfpwr_state != ERFON)
 				return;
 
+<<<<<<< HEAD
 			if (digtable.backoff_enable_flag == true)
+=======
+			if (digtable.backoff_enable_flag)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				rtl92s_backoff_enable_flag(hw);
 			else
 				digtable.backoff_val = DM_DIG_BACKOFF;

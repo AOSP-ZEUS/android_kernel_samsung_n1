@@ -11,6 +11,11 @@
 #include <linux/init.h>
 #include <linux/amba/bus.h>
 
+<<<<<<< HEAD
+=======
+extern struct device mxs_apbh_bus;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct platform_device *mxs_add_platform_device_dmamask(
 		const char *name, int id,
 		const struct resource *res, unsigned int num_resources,

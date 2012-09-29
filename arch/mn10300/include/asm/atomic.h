@@ -260,16 +260,26 @@ static inline void atomic_dec(atomic_t *v)
 #define atomic_dec_and_test(v)		(atomic_sub_return(1, (v)) == 0)
 #define atomic_inc_and_test(v)		(atomic_add_return(1, (v)) == 0)
 
+<<<<<<< HEAD
 #define atomic_add_unless(v, a, u)				\
+=======
+#define __atomic_add_unless(v, a, u)				\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 ({								\
 	int c, old;						\
 	c = atomic_read(v);					\
 	while (c != (u) && (old = atomic_cmpxchg((v), c, c + (a))) != c) \
 		c = old;					\
+<<<<<<< HEAD
 	c != (u);						\
 })
 
 #define atomic_inc_not_zero(v) atomic_add_unless((v), 1, 0)
+=======
+	c;							\
+})
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * atomic_clear_mask - Atomically clear bits in memory
@@ -344,8 +354,11 @@ static inline void atomic_set_mask(unsigned long mask, unsigned long *addr)
 #define smp_mb__before_atomic_inc()	barrier()
 #define smp_mb__after_atomic_inc()	barrier()
 
+<<<<<<< HEAD
 #include <asm-generic/atomic-long.h>
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* __KERNEL__ */
 #endif /* CONFIG_SMP */
 #endif /* _ASM_ATOMIC_H */

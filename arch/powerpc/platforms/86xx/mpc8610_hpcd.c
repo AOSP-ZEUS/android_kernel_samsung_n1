@@ -39,12 +39,25 @@
 #include <sysdev/fsl_pci.h>
 #include <sysdev/fsl_soc.h>
 #include <sysdev/simple_gpio.h>
+<<<<<<< HEAD
+=======
+#include <asm/fsl_guts.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "mpc86xx.h"
 
 static struct device_node *pixis_node;
 static unsigned char *pixis_bdcfg0, *pixis_arch;
 
+<<<<<<< HEAD
+=======
+/* DIU Pixel Clock bits of the CLKDVDR Global Utilities register */
+#define CLKDVDR_PXCKEN		0x80000000
+#define CLKDVDR_PXCKINV		0x10000000
+#define CLKDVDR_PXCKDLY		0x06000000
+#define CLKDVDR_PXCLK_MASK	0x001F0000
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_SUSPEND
 static irqreturn_t mpc8610_sw9_irq(int irq, void *data)
 {
@@ -205,6 +218,7 @@ void mpc8610hpcd_set_monitor_port(int monitor_port)
 			     bdcfg[monitor_port]);
 }
 
+<<<<<<< HEAD
 void mpc8610hpcd_set_pixel_clock(unsigned int pixclock)
 {
 	u32 __iomem *clkdvdr;
@@ -271,6 +285,56 @@ void mpc8610hpcd_set_pixel_clock(unsigned int pixclock)
 	*clkdvdr = temp | 0x80000000 | (((bestval) & 0x1F) << 16);
 	pr_debug("DIU: Modified value of CLKDVDR = 0x%08x\n", (*clkdvdr));
 	iounmap(clkdvdr);
+=======
+/**
+ * mpc8610hpcd_set_pixel_clock: program the DIU's clock
+ *
+ * @pixclock: the wavelength, in picoseconds, of the clock
+ */
+void mpc8610hpcd_set_pixel_clock(unsigned int pixclock)
+{
+	struct device_node *guts_np = NULL;
+	struct ccsr_guts_86xx __iomem *guts;
+	unsigned long freq;
+	u64 temp;
+	u32 pxclk;
+
+	/* Map the global utilities registers. */
+	guts_np = of_find_compatible_node(NULL, NULL, "fsl,mpc8610-guts");
+	if (!guts_np) {
+		pr_err("mpc8610hpcd: missing global utilties device node\n");
+		return;
+	}
+
+	guts = of_iomap(guts_np, 0);
+	of_node_put(guts_np);
+	if (!guts) {
+		pr_err("mpc8610hpcd: could not map global utilties device\n");
+		return;
+	}
+
+	/* Convert pixclock from a wavelength to a frequency */
+	temp = 1000000000000ULL;
+	do_div(temp, pixclock);
+	freq = temp;
+
+	/*
+	 * 'pxclk' is the ratio of the platform clock to the pixel clock.
+	 * On the MPC8610, the value programmed into CLKDVDR is the ratio
+	 * minus one.  The valid range of values is 2-31.
+	 */
+	pxclk = DIV_ROUND_CLOSEST(fsl_get_sys_freq(), freq) - 1;
+	pxclk = clamp_t(u32, pxclk, 2, 31);
+
+	/* Disable the pixel clock, and set it to non-inverted and no delay */
+	clrbits32(&guts->clkdvdr,
+		  CLKDVDR_PXCKEN | CLKDVDR_PXCKDLY | CLKDVDR_PXCLK_MASK);
+
+	/* Enable the clock and set the pxclk */
+	setbits32(&guts->clkdvdr, CLKDVDR_PXCKEN | (pxclk << 16));
+
+	iounmap(guts);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 ssize_t mpc8610hpcd_show_monitor_port(int monitor_port, char *buf)

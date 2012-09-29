@@ -232,6 +232,10 @@ void ceph_destroy_options(struct ceph_options *opt)
 		ceph_crypto_key_destroy(opt->key);
 		kfree(opt->key);
 	}
+<<<<<<< HEAD
+=======
+	kfree(opt->mon_addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(opt);
 }
 EXPORT_SYMBOL(ceph_destroy_options);

@@ -20,9 +20,12 @@ config SND_S3C2412_SOC_I2S
 	select SND_S3C_I2SV2_SOC
 	select S3C2410_DMA
 
+<<<<<<< HEAD
 config SND_S5PC1XX_I2S
 	tristate
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SND_SAMSUNG_PCM
 	tristate
 
@@ -37,12 +40,15 @@ config SND_SAMSUNG_SPDIF
 config SND_SAMSUNG_I2S
 	tristate
 
+<<<<<<< HEAD
 config S5P_INTERNAL_DMA
 	tristate
 
 config SND_S5P_WM8994_MASTER
 	bool
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SND_SOC_SAMSUNG_NEO1973_WM8753
 	tristate "Audio support for Openmoko Neo1973 Smartphones (GTA01/GTA02)"
 	depends on SND_SOC_SAMSUNG && (MACH_NEO1973_GTA01 || MACH_NEO1973_GTA02)
@@ -134,6 +140,7 @@ config SND_SOC_SAMSUNG_H1940_UDA1380
 	help
 	  This driver provides audio support for HP iPAQ h1940 PDA.
 
+<<<<<<< HEAD
 config SND_SOC_SAMSUNG_HERRING_WM8994
 	tristate "SoC I2S Audio support for HERRING - WM8994"
 	depends on SND_SOC_SAMSUNG && (MACH_HERRING)
@@ -145,6 +152,8 @@ config SND_SOC_SAMSUNG_HERRING_WM8994
 	  Say Y if you want to add support for SoC audio on herring
 	  with the WM8994.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SND_SOC_SAMSUNG_RX1950_UDA1380
 	tristate "Audio support for the HP iPAQ RX1950"
 	depends on SND_SOC_SAMSUNG && MACH_RX1950
@@ -178,7 +187,11 @@ config SND_SOC_GONI_AQUILA_WM8994
 
 config SND_SOC_SAMSUNG_SMDK_SPDIF
 	tristate "SoC S/PDIF Audio support for SMDK"
+<<<<<<< HEAD
 	depends on SND_SOC_SAMSUNG && (MACH_SMDKC100 || MACH_SMDKC110 || MACH_SMDKV210)
+=======
+	depends on SND_SOC_SAMSUNG && (MACH_SMDKC100 || MACH_SMDKC110 || MACH_SMDKV210 || MACH_SMDKV310)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select SND_SAMSUNG_SPDIF
 	help
 	  Say Y if you want to add support for SoC S/PDIF audio on the SMDK.
@@ -191,9 +204,32 @@ config SND_SOC_SMDK_WM8580_PCM
 	help
 	  Say Y if you want to add support for SoC audio on the SMDK.
 
+<<<<<<< HEAD
+=======
+config SND_SOC_SMDK_WM8994_PCM
+	tristate "SoC PCM Audio support for WM8994 on SMDK"
+	depends on SND_SOC_SAMSUNG && (MACH_SMDKC210 || MACH_SMDKV310)
+	select SND_SOC_WM8994
+	select SND_SAMSUNG_PCM
+	help
+	  Say Y if you want to add support for SoC audio on the SMDK
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SND_SOC_SPEYSIDE
 	tristate "Audio support for Wolfson Speyside"
 	depends on SND_SOC_SAMSUNG && MACH_WLF_CRAGG_6410
 	select SND_SAMSUNG_I2S
+<<<<<<< HEAD
 	select SND_SOC_WM8915
 	select SND_SOC_WM9081
+=======
+	select SND_SOC_WM8996
+	select SND_SOC_WM9081
+	select SND_SOC_WM1250_EV1
+
+config SND_SOC_SPEYSIDE_WM8962
+	tristate "Audio support for Wolfson Speyside with WM8962"
+	depends on SND_SOC_SAMSUNG && MACH_WLF_CRAGG_6410
+	select SND_SAMSUNG_I2S
+	select SND_SOC_WM8962
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

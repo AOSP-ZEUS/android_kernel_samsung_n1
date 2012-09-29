@@ -127,7 +127,11 @@ static struct platform_device kfr2r09_sh_keysc_device = {
 	},
 };
 
+<<<<<<< HEAD
 const static struct fb_videomode kfr2r09_lcdc_modes[] = {
+=======
+static const struct fb_videomode kfr2r09_lcdc_modes[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		.name = "TX07D34VM0AAA",
 		.xres = 240,

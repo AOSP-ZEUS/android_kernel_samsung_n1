@@ -1,7 +1,11 @@
 #ifndef __LINUX_DCACHE_H
 #define __LINUX_DCACHE_H
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/list.h>
 #include <linux/rculist.h>
 #include <linux/rculist_bl.h>
@@ -180,12 +184,21 @@ struct dentry_operations {
  */
 
 /* d_flags entries */
+<<<<<<< HEAD
 #define DCACHE_AUTOFS_PENDING 0x0001    /* autofs: "under construction" */
 #define DCACHE_NFSFS_RENAMED  0x0002
      /* this dentry has been "silly renamed" and has to be deleted on the last
       * dput() */
 
 #define	DCACHE_DISCONNECTED	0x0004
+=======
+#define DCACHE_OP_HASH		0x0001
+#define DCACHE_OP_COMPARE	0x0002
+#define DCACHE_OP_REVALIDATE	0x0004
+#define DCACHE_OP_DELETE	0x0008
+
+#define	DCACHE_DISCONNECTED	0x0010
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
      /* This dentry is possibly not currently connected to the dcache tree, in
       * which case its parent will either be itself, or will have this flag as
       * well.  nfsd will not use a dentry with this bit set, but will first
@@ -196,6 +209,7 @@ struct dentry_operations {
       * dentry into place and return that dentry rather than the passed one,
       * typically using d_splice_alias. */
 
+<<<<<<< HEAD
 #define DCACHE_REFERENCED	0x0008  /* Recently used, don't discard. */
 #define DCACHE_RCUACCESS	0x0010	/* Entry has ever been RCU-visible */
 #define DCACHE_INOTIFY_PARENT_WATCHED 0x0020
@@ -213,10 +227,28 @@ struct dentry_operations {
 #define DCACHE_OP_COMPARE	0x2000
 #define DCACHE_OP_REVALIDATE	0x4000
 #define DCACHE_OP_DELETE	0x8000
+=======
+#define DCACHE_REFERENCED	0x0020  /* Recently used, don't discard. */
+#define DCACHE_RCUACCESS	0x0040	/* Entry has ever been RCU-visible */
+
+#define DCACHE_CANT_MOUNT	0x0100
+#define DCACHE_GENOCIDE		0x0200
+
+#define DCACHE_NFSFS_RENAMED	0x1000
+     /* this dentry has been "silly renamed" and has to be deleted on the last
+      * dput() */
+#define DCACHE_COOKIE		0x2000	/* For use by dcookie subsystem */
+#define DCACHE_FSNOTIFY_PARENT_WATCHED 0x4000
+     /* Parent inode is watched by some fsnotify listener */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define DCACHE_MOUNTED		0x10000	/* is a mountpoint */
 #define DCACHE_NEED_AUTOMOUNT	0x20000	/* handle automount on this dir */
 #define DCACHE_MANAGE_TRANSIT	0x40000	/* manage transit from this dirent */
+<<<<<<< HEAD
+=======
+#define DCACHE_NEED_LOOKUP	0x80000 /* dentry requires i_op->lookup */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define DCACHE_MANAGED_DENTRY \
 	(DCACHE_MOUNTED|DCACHE_NEED_AUTOMOUNT|DCACHE_MANAGE_TRANSIT)
 
@@ -418,7 +450,16 @@ static inline bool d_mountpoint(struct dentry *dentry)
 	return dentry->d_flags & DCACHE_MOUNTED;
 }
 
+<<<<<<< HEAD
 extern struct dentry *lookup_create(struct nameidata *nd, int is_dir);
+=======
+static inline bool d_need_lookup(struct dentry *dentry)
+{
+	return dentry->d_flags & DCACHE_NEED_LOOKUP;
+}
+
+extern void d_clear_need_lookup(struct dentry *dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern int sysctl_vfs_cache_pressure;
 

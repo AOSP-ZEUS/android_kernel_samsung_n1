@@ -692,7 +692,11 @@ static int au8522_g_tuner(struct v4l2_subdev *sd, struct v4l2_tuner *vt)
 	/* Interrogate the decoder to see if we are getting a real signal */
 	lock_status = au8522_readreg(state, 0x00);
 	if (lock_status == 0xa2)
+<<<<<<< HEAD
 		vt->signal = 0x01;
+=======
+		vt->signal = 0xffff;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	else
 		vt->signal = 0x00;
 

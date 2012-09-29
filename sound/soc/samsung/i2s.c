@@ -14,7 +14,10 @@
 #include <linux/slab.h>
 #include <linux/clk.h>
 #include <linux/io.h>
+<<<<<<< HEAD
 #include <linux/regulator/consumer.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <sound/soc.h>
 #include <sound/pcm_params.h>
@@ -22,6 +25,7 @@
 #include <plat/audio.h>
 
 #include "dma.h"
+<<<<<<< HEAD
 #include "i2s.h"
 
 #define I2SCON		0x0
@@ -126,6 +130,11 @@
 #define FIC_TXCOUNT(x)		(((x) >>  8) & 0xf)
 #define FIC_RXCOUNT(x)		(((x) >>  0) & 0xf)
 #define FICS_TXCOUNT(x)		(((x) >>  8) & 0x7f)
+=======
+#include "idma.h"
+#include "i2s.h"
+#include "i2s-regs.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define msecs_to_loops(t) (loops_per_jiffy / 1000 * HZ * t)
 
@@ -147,8 +156,11 @@ struct i2s_dai {
 	unsigned rfs, bfs;
 	/* I2S Controller's core clock */
 	struct clk *clk;
+<<<<<<< HEAD
 	/* I2S Controller's power domain */
 	struct regulator *regulator;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Clock for generating I2S signals */
 	struct clk *op_clk;
 	/* Array of clock names for op_clk */
@@ -165,6 +177,10 @@ struct i2s_dai {
 	/* DMA parameters */
 	struct s3c_dma_params dma_playback;
 	struct s3c_dma_params dma_capture;
+<<<<<<< HEAD
+=======
+	struct s3c_dma_params idma_playback;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32	quirks;
 	u32	suspend_i2smod;
 	u32	suspend_i2scon;
@@ -575,6 +591,7 @@ static int i2s_set_fmt(struct snd_soc_dai *dai,
 	unsigned int fmt)
 {
 	struct i2s_dai *i2s = to_info(dai);
+<<<<<<< HEAD
 	u32 mod;
 	u32 tmp = 0;
 
@@ -582,6 +599,11 @@ static int i2s_set_fmt(struct snd_soc_dai *dai,
 	
 	mod = readl(i2s->addr + I2SMOD);
 
+=======
+	u32 mod = readl(i2s->addr + I2SMOD);
+	u32 tmp = 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Format is priority */
 	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
 	case SND_SOC_DAIFMT_RIGHT_J:
@@ -958,9 +980,12 @@ static int i2s_resume(struct snd_soc_dai *dai)
 
 static int samsung_i2s_dai_probe(struct snd_soc_dai *dai)
 {
+<<<<<<< HEAD
 	struct clk *fout_epll, *mout_epll;
 	struct clk *mout_audss = NULL;
 	struct clk *sclk_audio, *iis_clk, *iis_busclk, *iis_ipclk; /* these belong shomewhere else */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct i2s_dai *i2s = to_info(dai);
 	struct i2s_dai *other = i2s->pri_dai ? : i2s->sec_dai;
 
@@ -981,6 +1006,7 @@ static int samsung_i2s_dai_probe(struct snd_soc_dai *dai)
 	}
 	clk_enable(i2s->clk);
 
+<<<<<<< HEAD
 	/* Get i2s power domain regulator */
 	i2s->regulator = regulator_get(&i2s->pdev->dev, "pd");
 	if (IS_ERR(i2s->regulator)) {
@@ -1034,6 +1060,8 @@ static int samsung_i2s_dai_probe(struct snd_soc_dai *dai)
 	}
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (other) {
 		other->addr = i2s->addr;
 		other->clk = i2s->clk;
@@ -1042,6 +1070,13 @@ static int samsung_i2s_dai_probe(struct snd_soc_dai *dai)
 	if (i2s->quirks & QUIRK_NEED_RSTCLR)
 		writel(CON_RSTCLR, i2s->addr + I2SCON);
 
+<<<<<<< HEAD
+=======
+	if (i2s->quirks & QUIRK_SEC_DAI)
+		idma_reg_addr_init((void *)i2s->addr,
+					i2s->sec_dai->idma_playback.dma_addr);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 probe_exit:
 	/* Reset any constraint on RFS and BFS */
 	i2s->rfs = 0;
@@ -1242,6 +1277,10 @@ static __devinit int samsung_i2s_probe(struct platform_device *pdev)
 		sec_dai->dma_playback.dma_size = 4;
 		sec_dai->base = regs_base;
 		sec_dai->quirks = quirks;
+<<<<<<< HEAD
+=======
+		sec_dai->idma_playback.dma_addr = i2s_cfg->idma_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		sec_dai->pri_dai = pri_dai;
 		pri_dai->sec_dai = sec_dai;
 	}

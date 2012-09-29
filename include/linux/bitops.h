@@ -26,6 +26,15 @@ extern unsigned long __sw_hweight64(__u64 w);
 	     (bit) < (size); \
 	     (bit) = find_next_bit((addr), (size), (bit) + 1))
 
+<<<<<<< HEAD
+=======
+/* same as for_each_set_bit() but use bit as value to start with */
+#define for_each_set_bit_from(bit, addr, size) \
+	for ((bit) = find_next_bit((addr), (size), (bit));	\
+	     (bit) < (size);					\
+	     (bit) = find_next_bit((addr), (size), (bit) + 1))
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static __inline__ int get_bitmask_order(unsigned int count)
 {
 	int order;
@@ -50,6 +59,7 @@ static inline unsigned long hweight_long(unsigned long w)
 }
 
 /**
+<<<<<<< HEAD
  * rol64 - rotate a 64-bit value left
  * @word: value to rotate
  * @shift: bits to roll
@@ -70,6 +80,8 @@ static inline __u64 ror64(__u64 word, unsigned int shift)
 }
 
 /**
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * rol32 - rotate a 32-bit value left
  * @word: value to rotate
  * @shift: bits to roll

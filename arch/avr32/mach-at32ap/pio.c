@@ -461,7 +461,11 @@ void __init at32_init_pio(struct platform_device *pdev)
 		clk_enable(pio->clk);
 
 	pio->pdev = pdev;
+<<<<<<< HEAD
 	pio->regs = ioremap(regs->start, regs->end - regs->start + 1);
+=======
+	pio->regs = ioremap(regs->start, resource_size(regs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* start with irqs disabled and acked */
 	pio_writel(pio, IDR, ~0UL);

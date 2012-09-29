@@ -540,6 +540,7 @@ static Elf_Addr get_stub(struct module *me, unsigned long value, long addend,
 	return (Elf_Addr)stub;
 }
 
+<<<<<<< HEAD
 int apply_relocate(Elf_Shdr *sechdrs,
 		   const char *strtab,
 		   unsigned int symindex,
@@ -552,6 +553,8 @@ int apply_relocate(Elf_Shdr *sechdrs,
 	return -ENOEXEC;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef CONFIG_64BIT
 int apply_relocate_add(Elf_Shdr *sechdrs,
 		       const char *strtab,

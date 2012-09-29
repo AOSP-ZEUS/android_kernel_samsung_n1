@@ -16,6 +16,10 @@
 #include <linux/kobject.h>
 #include <linux/moduleparam.h>
 #include <linux/tracepoint.h>
+<<<<<<< HEAD
+=======
+#include <linux/export.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <linux/percpu.h>
 #include <asm/module.h>
@@ -25,6 +29,7 @@
 /* Not Yet Implemented */
 #define MODULE_SUPPORTED_DEVICE(name)
 
+<<<<<<< HEAD
 /* Some toolchains use a `_' prefix for all user symbols. */
 #ifdef CONFIG_SYMBOL_PREFIX
 #define MODULE_SYMBOL_PREFIX CONFIG_SYMBOL_PREFIX
@@ -40,6 +45,10 @@ struct kernel_symbol
 	const char *name;
 };
 
+=======
+#define MODULE_NAME_LEN MAX_PARAM_PREFIX_LEN
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct modversion_info
 {
 	unsigned long crc;
@@ -48,10 +57,25 @@ struct modversion_info
 
 struct module;
 
+<<<<<<< HEAD
 struct module_attribute {
         struct attribute attr;
         ssize_t (*show)(struct module_attribute *, struct module *, char *);
         ssize_t (*store)(struct module_attribute *, struct module *,
+=======
+struct module_kobject {
+	struct kobject kobj;
+	struct module *mod;
+	struct kobject *drivers_dir;
+	struct module_param_attrs *mp;
+};
+
+struct module_attribute {
+	struct attribute attr;
+	ssize_t (*show)(struct module_attribute *, struct module_kobject *,
+			char *);
+	ssize_t (*store)(struct module_attribute *, struct module_kobject *,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			 const char *, size_t count);
 	void (*setup)(struct module *, const char *);
 	int (*test)(struct module *);
@@ -65,6 +89,7 @@ struct module_version_attribute {
 } __attribute__ ((__aligned__(sizeof(void *))));
 
 extern ssize_t __modver_version_show(struct module_attribute *,
+<<<<<<< HEAD
 				     struct module *, char *);
 
 struct module_kobject
@@ -74,6 +99,11 @@ struct module_kobject
 	struct kobject *drivers_dir;
 	struct module_param_attrs *mp;
 };
+=======
+				     struct module_kobject *, char *);
+
+extern struct module_attribute module_uevent;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* These are either module local, or the kernel's dummy ones. */
 extern int init_module(void);
@@ -96,11 +126,16 @@ void trim_init_extable(struct module *m);
 extern const struct gtype##_id __mod_##gtype##_table		\
   __attribute__ ((unused, alias(__stringify(name))))
 
+<<<<<<< HEAD
 extern struct module __this_module;
 #define THIS_MODULE (&__this_module)
 #else  /* !MODULE */
 #define MODULE_GENERIC_TABLE(gtype,name)
 #define THIS_MODULE ((struct module *)0)
+=======
+#else  /* !MODULE */
+#define MODULE_GENERIC_TABLE(gtype,name)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 /* Generic info of form tag = "info" */
@@ -216,6 +251,7 @@ struct module_use {
 	struct module *source, *target;
 };
 
+<<<<<<< HEAD
 #ifndef __GENKSYMS__
 #ifdef CONFIG_MODVERSIONS
 /* Mark the CRC weak since genksyms apparently decides not to
@@ -262,6 +298,8 @@ struct module_use {
 
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 enum module_state
 {
 	MODULE_STATE_LIVE,
@@ -582,11 +620,14 @@ extern void module_update_tracepoints(void);
 extern int module_get_iter_tracepoints(struct tracepoint_iter *iter);
 
 #else /* !CONFIG_MODULES... */
+<<<<<<< HEAD
 #define EXPORT_SYMBOL(sym)
 #define EXPORT_SYMBOL_GPL(sym)
 #define EXPORT_SYMBOL_GPL_FUTURE(sym)
 #define EXPORT_UNUSED_SYMBOL(sym)
 #define EXPORT_UNUSED_SYMBOL_GPL(sym)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Given an address, look for it in the exception tables. */
 static inline const struct exception_table_entry *

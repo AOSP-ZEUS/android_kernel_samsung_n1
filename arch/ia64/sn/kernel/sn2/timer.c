@@ -54,7 +54,11 @@ ia64_sn_udelay (unsigned long usecs)
 
 void __init sn_timer_init(void)
 {
+<<<<<<< HEAD
 	clocksource_sn2.fsys_mmio = RTC_COUNTER_ADDR;
+=======
+	clocksource_sn2.archdata.fsys_mmio = RTC_COUNTER_ADDR;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	clocksource_register_hz(&clocksource_sn2, sn_rtc_cycles_per_second);
 
 	ia64_udelay = &ia64_sn_udelay;

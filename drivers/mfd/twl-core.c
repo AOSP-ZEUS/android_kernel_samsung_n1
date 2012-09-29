@@ -58,6 +58,17 @@
 
 #define DRIVER_NAME			"twl"
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_TWL4030_BCI_BATTERY) || \
+	defined(CONFIG_TWL4030_BCI_BATTERY_MODULE) || \
+	defined(CONFIG_TWL6030_BCI_BATTERY) || \
+	defined(CONFIG_TWL6030_BCI_BATTERY_MODULE)
+#define twl_has_bci()		true
+#else
+#define twl_has_bci()		false
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_KEYBOARD_TWL4030) || defined(CONFIG_KEYBOARD_TWL4030_MODULE)
 #define twl_has_keypad()	true
 #else
@@ -77,7 +88,12 @@
 #define twl_has_regulator()	false
 #endif
 
+<<<<<<< HEAD
 #if defined(CONFIG_TWL4030_MADC) || defined(CONFIG_TWL4030_MADC_MODULE)
+=======
+#if defined(CONFIG_TWL4030_MADC) || defined(CONFIG_TWL4030_MADC_MODULE) ||\
+    defined(CONFIG_TWL6030_GPADC) || defined(CONFIG_TWL6030_GPADC_MODULE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define twl_has_madc()	true
 #else
 #define twl_has_madc()	false
@@ -109,8 +125,13 @@
 #define twl_has_watchdog()        false
 #endif
 
+<<<<<<< HEAD
 #if defined(CONFIG_TWL4030_CODEC) || defined(CONFIG_TWL4030_CODEC_MODULE) ||\
 	defined(CONFIG_SND_SOC_TWL6040) || defined(CONFIG_SND_SOC_TWL6040_MODULE)
+=======
+#if defined(CONFIG_MFD_TWL4030_AUDIO) || defined(CONFIG_MFD_TWL4030_AUDIO_MODULE) ||\
+	defined(CONFIG_TWL6040_CORE) || defined(CONFIG_TWL6040_CORE_MODULE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define twl_has_codec()	true
 #else
 #define twl_has_codec()	false
@@ -125,7 +146,11 @@
 /* Triton Core internal information (BEGIN) */
 
 /* Last - for index max*/
+<<<<<<< HEAD
 #define TWL4030_MODULE_LAST		TWL4030_MODULE_SECURED_REG
+=======
+#define TWL4030_MODULE_LAST		TWL6025_MODULE_CHARGER
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define TWL_NUM_SLAVES		4
 
@@ -208,6 +233,14 @@
 #define TWL6030_BASEADD_RSV		0x0000
 #define TWL6030_BASEADD_ZERO		0x0000
 
+<<<<<<< HEAD
+=======
+/* twl6030 SMPS EPROM values */
+#define TWL6030_SMPS_OFFSET		0xB0
+#define TWL6030_SMPS_MULT		0xB3
+
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Few power values */
 #define R_CFG_BOOT			0x05
 
@@ -218,6 +251,12 @@
 #define HIGH_PERF_SQ			(1 << 3)
 #define CK32K_LOWPWR_EN			(1 << 7)
 
+<<<<<<< HEAD
+=======
+/* MPU80031 specific clock32 generation register */
+#define REG_CLK32KG_CFG_TRANS 0x8D
+#define REG_CLK32KG_CFG_STATE 0x8E
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* chip-specific feature flags, for i2c_device_id.driver_data */
 #define TWL4030_VAUX2		BIT(0)	/* pre-5030 voltage ranges */
@@ -240,6 +279,36 @@ unsigned int twl_rev(void)
 }
 EXPORT_SYMBOL(twl_rev);
 
+<<<<<<< HEAD
+=======
+static unsigned int twl_feat;
+unsigned int twl_features(void)
+{
+	return twl_feat;
+}
+EXPORT_SYMBOL(twl_features);
+
+u8 twl_get_smps_offset(void)
+{
+	u8 value;
+
+	twl_i2c_read_u8(TWL_MODULE_PM_RECEIVER, &value,
+			TWL6030_SMPS_OFFSET);
+	return value;
+}
+EXPORT_SYMBOL(twl_get_smps_offset);
+
+u8 twl_get_smps_mult(void)
+{
+	u8 value;
+
+	twl_i2c_read_u8(TWL_MODULE_PM_RECEIVER, &value,
+			TWL6030_SMPS_MULT);
+	return value;
+}
+EXPORT_SYMBOL(twl_get_smps_mult);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Structure for each TWL4030/TWL6030 Slave */
 struct twl_client {
 	struct i2c_client *client;
@@ -490,6 +559,22 @@ int twl_i2c_read_u8(u8 mod_no, u8 *value, u8 reg)
 }
 EXPORT_SYMBOL(twl_i2c_read_u8);
 
+<<<<<<< HEAD
+=======
+
+void twl_reg_dump(int module, int start, int end)
+{
+	int i;
+	u8 val;
+
+	for (i = start; i < end; i++) {
+		twl_i2c_read_u8(module, &val, i);
+		printk(KERN_ERR "reg 0x%2x val 0x%2x\n", i, val);
+	}
+}
+EXPORT_SYMBOL(twl_reg_dump);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*----------------------------------------------------------------------*/
 
 /**
@@ -660,8 +745,21 @@ add_children(struct twl4030_platform_data *pdata, unsigned long features)
 		if (IS_ERR(child))
 			return PTR_ERR(child);
 	}
+<<<<<<< HEAD
 
 	if (twl_has_madc() && pdata->madc) {
+=======
+	if (twl_has_bci() && pdata->bci &&
+	    (features & TWL6030_CLASS)) {
+		child = add_child(1, "twl6030_bci",
+				pdata->bci, sizeof(*pdata->bci),
+				false,
+				pdata->irq_base + CHARGER_INTR_OFFSET,
+				pdata->irq_base + CHARGERFAULT_INTR_OFFSET);
+	}
+
+	if (twl_has_madc() && pdata->madc && twl_class_is_4030()) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		child = add_child(2, "twl4030_madc",
 				pdata->madc, sizeof(*pdata->madc),
 				true, pdata->irq_base + MADC_INTR_OFFSET, 0);
@@ -669,6 +767,18 @@ add_children(struct twl4030_platform_data *pdata, unsigned long features)
 			return PTR_ERR(child);
 	}
 
+<<<<<<< HEAD
+=======
+	if (twl_has_madc() && pdata->madc && twl_class_is_6030()) {
+		child = add_child(1, "twl6030_gpadc",
+				pdata->madc, sizeof(*pdata->madc),
+				true, pdata->irq_base + MADC_INTR_OFFSET,
+				pdata->irq_base + GPADCSW_INTR_OFFSET);
+		if (IS_ERR(child))
+			return PTR_ERR(child);
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (twl_has_rtc()) {
 		/*
 		 * REVISIT platform_data here currently might expose the
@@ -815,20 +925,34 @@ add_children(struct twl4030_platform_data *pdata, unsigned long features)
 			return PTR_ERR(child);
 	}
 
+<<<<<<< HEAD
 	if (twl_has_codec() && pdata->codec && twl_class_is_4030()) {
 		sub_chip_id = twl_map[TWL_MODULE_AUDIO_VOICE].sid;
 		child = add_child(sub_chip_id, "twl4030-audio",
 				pdata->codec, sizeof(*pdata->codec),
+=======
+	if (twl_has_codec() && pdata->audio && twl_class_is_4030()) {
+		sub_chip_id = twl_map[TWL_MODULE_AUDIO_VOICE].sid;
+		child = add_child(sub_chip_id, "twl4030-audio",
+				pdata->audio, sizeof(*pdata->audio),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				false, 0, 0);
 		if (IS_ERR(child))
 			return PTR_ERR(child);
 	}
 
+<<<<<<< HEAD
 	/* Phoenix codec driver is probed directly atm */
 	if (twl_has_codec() && pdata->codec && twl_class_is_6030()) {
 		sub_chip_id = twl_map[TWL_MODULE_AUDIO_VOICE].sid;
 		child = add_child(sub_chip_id, "twl6040-codec",
 				pdata->codec, sizeof(*pdata->codec),
+=======
+	if (twl_has_codec() && pdata->audio && twl_class_is_6030()) {
+		sub_chip_id = twl_map[TWL_MODULE_AUDIO_VOICE].sid;
+		child = add_child(sub_chip_id, "twl6040",
+				pdata->audio, sizeof(*pdata->audio),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				false, 0, 0);
 		if (IS_ERR(child))
 			return PTR_ERR(child);
@@ -1085,13 +1209,36 @@ static inline int __init unprotect_pm_master(void)
 }
 
 static void clocks_init(struct device *dev,
+<<<<<<< HEAD
 			struct twl4030_clock_init_data *clock)
+=======
+			struct twl4030_clock_init_data *clock,
+			unsigned long features)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int e = 0;
 	struct clk *osc;
 	u32 rate;
 	u8 ctrl = HFCLK_FREQ_26_MHZ;
 
+<<<<<<< HEAD
+=======
+	if (features & MPU80031_SUBCLASS) {
+		if (clock && clock->clk32_active_state_on) {
+			e = twl_i2c_write_u8(TWL_MODULE_PM_RECEIVER, 0x1,
+					REG_CLK32KG_CFG_TRANS);
+			if (!e)
+				e = twl_i2c_write_u8(TWL_MODULE_PM_RECEIVER, 0x1,
+					REG_CLK32KG_CFG_STATE);
+			if (e) {
+				dev_err(dev, "Error in initialization"
+						" of 32K output\n");
+				return;
+			}
+		}
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_ARCH_OMAP2) || defined(CONFIG_ARCH_OMAP3)
 	if (cpu_is_omap2430())
 		osc = clk_get(dev, "osc_ck");
@@ -1229,7 +1376,11 @@ twl_probe(struct i2c_client *client, const struct i2c_device_id *id)
 	}
 
 	/* setup clock framework */
+<<<<<<< HEAD
 	clocks_init(&client->dev, pdata->clock);
+=======
+	clocks_init(&client->dev, pdata->clock, id->driver_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* read TWL IDCODE Register */
 	if (twl_id == TWL4030_CLASS_ID) {
@@ -1270,7 +1421,20 @@ twl_probe(struct i2c_client *client, const struct i2c_device_id *id)
 		twl_i2c_write_u8(TWL4030_MODULE_INTBR, temp, REG_GPPUPDCTR1);
 	}
 
+<<<<<<< HEAD
 	status = add_children(pdata, id->driver_data);
+=======
+	twl_feat = id->driver_data;
+
+	status = add_children(pdata, id->driver_data);
+	if (status < 0 )
+		goto fail;
+
+	/* Board Specific Init Callback */
+	if(pdata->init)
+		status = pdata->init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 fail:
 	if (status < 0)
 		twl_remove(client);
@@ -1284,8 +1448,16 @@ static const struct i2c_device_id twl_ids[] = {
 	{ "tps65950", 0 },		/* catalog version of twl5030 */
 	{ "tps65930", TPS_SUBSET },	/* fewer LDOs and DACs; no charger */
 	{ "tps65920", TPS_SUBSET },	/* fewer LDOs; no codec or charger */
+<<<<<<< HEAD
 	{ "twl6030", TWL6030_CLASS },	/* "Phoenix power chip" */
 	{ "twl6025", TWL6030_CLASS | TWL6025_SUBCLASS }, /* "Phoenix lite" */
+=======
+	{ "tps65921", TPS_SUBSET },	/* fewer LDOs; no codec, no LED
+					   and vibrator. Charger in USB module*/
+	{ "twl6030", TWL6030_CLASS },	/* "Phoenix power chip" */
+	{ "twl6025", TWL6030_CLASS | TWL6025_SUBCLASS }, /* "Phoenix lite" */
+	{ "mpu80031", TWL6030_CLASS | TWL6025_SUBCLASS | MPU80031_SUBCLASS},
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ /* end of list */ },
 };
 MODULE_DEVICE_TABLE(i2c, twl_ids);

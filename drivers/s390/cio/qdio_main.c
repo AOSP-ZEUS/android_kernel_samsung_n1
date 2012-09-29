@@ -15,7 +15,11 @@
 #include <linux/delay.h>
 #include <linux/gfp.h>
 #include <linux/kernel_stat.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/debug.h>
 #include <asm/qdio.h>
 
@@ -313,7 +317,11 @@ static int qdio_siga_output(struct qdio_q *q, unsigned int *busy_bit)
 	unsigned long schid = *((u32 *) &q->irq_ptr->schid);
 	unsigned int fc = QDIO_SIGA_WRITE;
 	u64 start_time = 0;
+<<<<<<< HEAD
 	int cc;
+=======
+	int retries = 0, cc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (is_qebsm(q)) {
 		schid = q->irq_ptr->sch_token;
@@ -325,6 +333,10 @@ again:
 	/* hipersocket busy condition */
 	if (unlikely(*busy_bit)) {
 		WARN_ON(queue_type(q) != QDIO_IQDIO_QFMT || cc != 2);
+<<<<<<< HEAD
+=======
+		retries++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (!start_time) {
 			start_time = get_clock();
@@ -333,6 +345,14 @@ again:
 		if ((get_clock() - start_time) < QDIO_BUSY_BIT_PATIENCE)
 			goto again;
 	}
+<<<<<<< HEAD
+=======
+	if (retries) {
+		DBF_DEV_EVENT(DBF_WARN, q->irq_ptr,
+			      "%4x cc2 BB1:%1d", SCH_NO(q), q->nr);
+		DBF_DEV_EVENT(DBF_WARN, q->irq_ptr, "count:%u", retries);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return cc;
 }
 
@@ -728,13 +748,22 @@ static inline int qdio_outbound_q_moved(struct qdio_q *q)
 
 static int qdio_kick_outbound_q(struct qdio_q *q)
 {
+<<<<<<< HEAD
 	unsigned int busy_bit;
 	int cc;
+=======
+	int retries = 0, cc;
+	unsigned int busy_bit;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!need_siga_out(q))
 		return 0;
 
 	DBF_DEV_EVENT(DBF_INFO, q->irq_ptr, "siga-w:%1d", q->nr);
+<<<<<<< HEAD
+=======
+retry:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	qperf_inc(q, siga_write);
 
 	cc = qdio_siga_output(q, &busy_bit);
@@ -743,7 +772,15 @@ static int qdio_kick_outbound_q(struct qdio_q *q)
 		break;
 	case 2:
 		if (busy_bit) {
+<<<<<<< HEAD
 			DBF_ERROR("%4x cc2 REP:%1d", SCH_NO(q), q->nr);
+=======
+			while (++retries < QDIO_BUSY_BIT_RETRIES) {
+				mdelay(QDIO_BUSY_BIT_RETRY_DELAY);
+				goto retry;
+			}
+			DBF_ERROR("%4x cc2 BBC:%1d", SCH_NO(q), q->nr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			cc |= QDIO_ERROR_SIGA_BUSY;
 		} else
 			DBF_DEV_EVENT(DBF_INFO, q->irq_ptr, "siga-w cc2:%1d", q->nr);
@@ -753,6 +790,13 @@ static int qdio_kick_outbound_q(struct qdio_q *q)
 		DBF_ERROR("%4x SIGA-W:%1d", SCH_NO(q), cc);
 		break;
 	}
+<<<<<<< HEAD
+=======
+	if (retries) {
+		DBF_ERROR("%4x cc2 BB2:%1d", SCH_NO(q), q->nr);
+		DBF_ERROR("count:%u", retries);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return cc;
 }
 

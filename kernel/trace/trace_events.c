@@ -515,6 +515,7 @@ event_enable_write(struct file *filp, const char __user *ubuf, size_t cnt,
 		   loff_t *ppos)
 {
 	struct ftrace_event_call *call = filp->private_data;
+<<<<<<< HEAD
 	char buf[64];
 	unsigned long val;
 	int ret;
@@ -529,6 +530,13 @@ event_enable_write(struct file *filp, const char __user *ubuf, size_t cnt,
 
 	ret = strict_strtoul(buf, 10, &val);
 	if (ret < 0)
+=======
+	unsigned long val;
+	int ret;
+
+	ret = kstrtoul_from_user(ubuf, cnt, 10, &val);
+	if (ret)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return ret;
 
 	ret = tracing_update_buffers();
@@ -601,6 +609,7 @@ system_enable_write(struct file *filp, const char __user *ubuf, size_t cnt,
 	struct event_subsystem *system = filp->private_data;
 	const char *name = NULL;
 	unsigned long val;
+<<<<<<< HEAD
 	char buf[64];
 	ssize_t ret;
 
@@ -614,6 +623,12 @@ system_enable_write(struct file *filp, const char __user *ubuf, size_t cnt,
 
 	ret = strict_strtoul(buf, 10, &val);
 	if (ret < 0)
+=======
+	ssize_t ret;
+
+	ret = kstrtoul_from_user(ubuf, cnt, 10, &val);
+	if (ret)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return ret;
 
 	ret = tracing_update_buffers();

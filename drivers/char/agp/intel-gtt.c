@@ -30,10 +30,17 @@
 /*
  * If we have Intel graphics, we're not going to have anything other than
  * an Intel IOMMU. So make the correct use of the PCI DMA API contingent
+<<<<<<< HEAD
  * on the Intel IOMMU support (CONFIG_DMAR).
  * Only newer chipsets need to bother with this, of course.
  */
 #ifdef CONFIG_DMAR
+=======
+ * on the Intel IOMMU support (CONFIG_INTEL_IOMMU).
+ * Only newer chipsets need to bother with this, of course.
+ */
+#ifdef CONFIG_INTEL_IOMMU
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define USE_PCI_DMA_API 1
 #else
 #define USE_PCI_DMA_API 0

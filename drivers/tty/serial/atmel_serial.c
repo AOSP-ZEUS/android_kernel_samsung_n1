@@ -1610,9 +1610,17 @@ static struct console atmel_console = {
 static int __init atmel_console_init(void)
 {
 	if (atmel_default_console_device) {
+<<<<<<< HEAD
 		add_preferred_console(ATMEL_DEVICENAME,
 				      atmel_default_console_device->id, NULL);
 		atmel_init_port(&atmel_ports[atmel_default_console_device->id],
+=======
+		struct atmel_uart_data *pdata =
+			atmel_default_console_device->dev.platform_data;
+
+		add_preferred_console(ATMEL_DEVICENAME, pdata->num, NULL);
+		atmel_init_port(&atmel_ports[pdata->num],
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				atmel_default_console_device);
 		register_console(&atmel_console);
 	}

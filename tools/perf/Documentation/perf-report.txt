@@ -80,15 +80,34 @@ OPTIONS
 --dump-raw-trace::
         Dump raw trace in ASCII.
 
+<<<<<<< HEAD
 -g [type,min]::
 --call-graph::
         Display call chains using type and min percent threshold.
+=======
+-g [type,min,order]::
+--call-graph::
+        Display call chains using type, min percent threshold and order.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	type can be either:
 	- flat: single column, linear exposure of call chains.
 	- graph: use a graph tree, displaying absolute overhead rates.
 	- fractal: like graph, but displays relative rates. Each branch of
 		 the tree is considered as a new profiled object. +
+<<<<<<< HEAD
 	Default: fractal,0.5.
+=======
+
+	order can be either:
+	- callee: callee based call graph.
+	- caller: inverted caller based call graph.
+
+	Default: fractal,0.5,callee.
+
+-G::
+--inverted::
+        alias for inverted caller based call graph.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 --pretty=<key>::
         Pretty printing style.  key: normal, raw
@@ -119,6 +138,15 @@ OPTIONS
 --symfs=<directory>::
         Look for files with symbols relative to this directory.
 
+<<<<<<< HEAD
+=======
+-c::
+--cpu:: Only report samples for the list of CPUs provided. Multiple CPUs can
+	be provided as a comma-separated list with no space: 0,1. Ranges of
+	CPUs are specified with -: 0-2. Default is to report samples on all
+	CPUs.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 SEE ALSO
 --------
 linkperf:perf-stat[1]

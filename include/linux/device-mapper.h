@@ -197,6 +197,14 @@ struct dm_target {
 	 * whether or not its underlying devices have support.
 	 */
 	unsigned discards_supported:1;
+<<<<<<< HEAD
+=======
+
+	/*
+	 * Set if this target does not return zeroes on discarded blocks.
+	 */
+	unsigned discard_zeroes_data_unsupported:1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* Each target can link one of these into the table */
@@ -208,6 +216,52 @@ struct dm_target_callbacks {
 int dm_register_target(struct target_type *t);
 void dm_unregister_target(struct target_type *t);
 
+<<<<<<< HEAD
+=======
+/*
+ * Target argument parsing.
+ */
+struct dm_arg_set {
+	unsigned argc;
+	char **argv;
+};
+
+/*
+ * The minimum and maximum value of a numeric argument, together with
+ * the error message to use if the number is found to be outside that range.
+ */
+struct dm_arg {
+	unsigned min;
+	unsigned max;
+	char *error;
+};
+
+/*
+ * Validate the next argument, either returning it as *value or, if invalid,
+ * returning -EINVAL and setting *error.
+ */
+int dm_read_arg(struct dm_arg *arg, struct dm_arg_set *arg_set,
+		unsigned *value, char **error);
+
+/*
+ * Process the next argument as the start of a group containing between
+ * arg->min and arg->max further arguments. Either return the size as
+ * *num_args or, if invalid, return -EINVAL and set *error.
+ */
+int dm_read_arg_group(struct dm_arg *arg, struct dm_arg_set *arg_set,
+		      unsigned *num_args, char **error);
+
+/*
+ * Return the current argument and shift to the next.
+ */
+const char *dm_shift_arg(struct dm_arg_set *as);
+
+/*
+ * Move through num_args arguments.
+ */
+void dm_consume_args(struct dm_arg_set *as, unsigned num_args);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*-----------------------------------------------------------------
  * Functions for creating and manipulating mapped devices.
  * Drop the reference with dm_put when you finish with the object.

@@ -100,6 +100,22 @@ void clk_put(struct clk *clk)
 }
 EXPORT_SYMBOL(clk_put);
 
+<<<<<<< HEAD
+=======
+int clk_enable(struct clk *clk)
+{
+	/* not used */
+	return 0;
+}
+EXPORT_SYMBOL(clk_enable);
+
+void clk_disable(struct clk *clk)
+{
+	/* not used */
+}
+EXPORT_SYMBOL(clk_disable);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline u32 ltq_get_counter_resolution(void)
 {
 	u32 res;

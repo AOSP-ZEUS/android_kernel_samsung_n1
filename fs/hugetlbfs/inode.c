@@ -94,7 +94,11 @@ static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
 	vma->vm_flags |= VM_HUGETLB | VM_RESERVED;
 	vma->vm_ops = &hugetlb_vm_ops;
 
+<<<<<<< HEAD
 	if (vma->vm_pgoff & ~(huge_page_mask(h) >> PAGE_SHIFT))
+=======
+	if (vma->vm_pgoff & (~huge_page_mask(h) >> PAGE_SHIFT))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 
 	vma_len = (loff_t)(vma->vm_end - vma->vm_start);
@@ -238,10 +242,23 @@ static ssize_t hugetlbfs_read(struct file *filp, char __user *buf,
 	loff_t isize;
 	ssize_t retval = 0;
 
+<<<<<<< HEAD
+=======
+	mutex_lock(&inode->i_mutex);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* validate length */
 	if (len == 0)
 		goto out;
 
+<<<<<<< HEAD
+=======
+	isize = i_size_read(inode);
+	if (!isize)
+		goto out;
+
+	end_index = (isize - 1) >> huge_page_shift(h);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (;;) {
 		struct page *page;
 		unsigned long nr, ret;
@@ -249,21 +266,34 @@ static ssize_t hugetlbfs_read(struct file *filp, char __user *buf,
 
 		/* nr is the maximum number of bytes to copy from this page */
 		nr = huge_page_size(h);
+<<<<<<< HEAD
 		isize = i_size_read(inode);
 		if (!isize)
 			goto out;
 		end_index = (isize - 1) >> huge_page_shift(h);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (index >= end_index) {
 			if (index > end_index)
 				goto out;
 			nr = ((isize - 1) & ~huge_page_mask(h)) + 1;
+<<<<<<< HEAD
 			if (nr <= offset)
 				goto out;
+=======
+			if (nr <= offset) {
+				goto out;
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		nr = nr - offset;
 
 		/* Find the page */
+<<<<<<< HEAD
 		page = find_lock_page(mapping, index);
+=======
+		page = find_get_page(mapping, index);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (unlikely(page == NULL)) {
 			/*
 			 * We have a HOLE, zero out the user-buffer for the
@@ -275,18 +305,29 @@ static ssize_t hugetlbfs_read(struct file *filp, char __user *buf,
 			else
 				ra = 0;
 		} else {
+<<<<<<< HEAD
 			unlock_page(page);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/*
 			 * We have the page, copy it to user space buffer.
 			 */
 			ra = hugetlbfs_read_actor(page, offset, buf, len, nr);
 			ret = ra;
+<<<<<<< HEAD
 			page_cache_release(page);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		if (ra < 0) {
 			if (retval == 0)
 				retval = ra;
+<<<<<<< HEAD
+=======
+			if (page)
+				page_cache_release(page);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto out;
 		}
 
@@ -296,12 +337,22 @@ static ssize_t hugetlbfs_read(struct file *filp, char __user *buf,
 		index += offset >> huge_page_shift(h);
 		offset &= ~huge_page_mask(h);
 
+<<<<<<< HEAD
+=======
+		if (page)
+			page_cache_release(page);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* short read or no more work */
 		if ((ret != nr) || (len == 0))
 			break;
 	}
 out:
 	*ppos = ((loff_t)index << huge_page_shift(h)) + offset;
+<<<<<<< HEAD
+=======
+	mutex_unlock(&inode->i_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return retval;
 }
 
@@ -484,6 +535,10 @@ static struct inode *hugetlbfs_get_inode(struct super_block *sb, uid_t uid,
 			inode->i_op = &page_symlink_inode_operations;
 			break;
 		}
+<<<<<<< HEAD
+=======
+		lockdep_annotate_inode_mutex_key(inode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return inode;
 }
@@ -1023,6 +1078,10 @@ static int __init init_hugetlbfs_fs(void)
 static void __exit exit_hugetlbfs_fs(void)
 {
 	kmem_cache_destroy(hugetlbfs_inode_cachep);
+<<<<<<< HEAD
+=======
+	kern_unmount(hugetlbfs_vfsmount);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unregister_filesystem(&hugetlbfs_fs_type);
 	bdi_destroy(&hugetlbfs_backing_dev_info);
 }

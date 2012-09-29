@@ -37,12 +37,19 @@
 
 extern void s3c2412_sleep_enter(void);
 
+<<<<<<< HEAD
 static void s3c2412_cpu_suspend(void)
 {
 	unsigned long tmp;
 
 	flush_cache_all();
 
+=======
+static int s3c2412_cpu_suspend(unsigned long arg)
+{
+	unsigned long tmp;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* set our standby method to sleep */
 
 	tmp = __raw_readl(S3C2412_PWRCFG);
@@ -50,6 +57,11 @@ static void s3c2412_cpu_suspend(void)
 	__raw_writel(tmp, S3C2412_PWRCFG);
 
 	s3c2412_sleep_enter();
+<<<<<<< HEAD
+=======
+
+	panic("sleep resumed to originator?");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void s3c2412_pm_prepare(void)

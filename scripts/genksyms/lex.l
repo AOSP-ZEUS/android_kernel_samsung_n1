@@ -29,7 +29,11 @@
 #include <ctype.h>
 
 #include "genksyms.h"
+<<<<<<< HEAD
 #include "parse.h"
+=======
+#include "parse.tab.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* We've got a two-level lexer here.  We let flex do basic tokenization
    and then we categorize those basic tokens in the second stage.  */
@@ -94,7 +98,11 @@ MC_TOKEN		([~%^&*+=|<>/-]=)|(&&)|("||")|(->)|(<<)|(>>)
 
 /* Bring in the keyword recognizer.  */
 
+<<<<<<< HEAD
 #include "keywords.c"
+=======
+#include "keywords.hash.c"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /* Macros to append to our phrase collection list.  */

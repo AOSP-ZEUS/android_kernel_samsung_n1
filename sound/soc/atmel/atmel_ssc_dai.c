@@ -402,7 +402,11 @@ static int atmel_ssc_hw_params(struct snd_pcm_substream *substream,
 	if ((ssc_p->daifmt & SND_SOC_DAIFMT_FORMAT_MASK) == SND_SOC_DAIFMT_I2S
 		&& bits > 16) {
 		printk(KERN_WARNING
+<<<<<<< HEAD
 				"atmel_ssc_dai: sample size %d"
+=======
+				"atmel_ssc_dai: sample size %d "
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				"is too large for I2S\n", bits);
 		return -EINVAL;
 	}
@@ -838,10 +842,15 @@ int atmel_ssc_set_audio(int ssc_id)
 	}
 
 	ssc_pdev = platform_device_alloc("atmel-ssc-dai", ssc_id);
+<<<<<<< HEAD
 	if (!ssc_pdev) {
 		ssc_free(ssc);
 		return -ENOMEM;
 	}
+=======
+	if (!ssc_pdev)
+		return -ENOMEM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* If we can grab the SSC briefly to parent the DAI device off it */
 	ssc = ssc_request(ssc_id);

@@ -271,7 +271,11 @@ struct qi_desc {
 };
 
 struct q_inval {
+<<<<<<< HEAD
 	spinlock_t      q_lock;
+=======
+	raw_spinlock_t  q_lock;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct qi_desc  *desc;          /* invalidation queue */
 	int             *desc_status;   /* desc status */
 	int             free_head;      /* first free entry */
@@ -279,7 +283,11 @@ struct q_inval {
 	int             free_cnt;
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_INTR_REMAP
+=======
+#ifdef CONFIG_IRQ_REMAP
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* 1MB - maximum possible interrupt remapping table size */
 #define INTR_REMAP_PAGE_ORDER	8
 #define INTR_REMAP_TABLE_REG_SIZE	0xf
@@ -311,14 +319,22 @@ struct intel_iommu {
 	u64		cap;
 	u64		ecap;
 	u32		gcmd; /* Holds TE, EAFL. Don't need SRTP, SFL, WBF */
+<<<<<<< HEAD
 	spinlock_t	register_lock; /* protect register handling */
+=======
+	raw_spinlock_t	register_lock; /* protect register handling */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int		seq_id;	/* sequence id of the iommu */
 	int		agaw; /* agaw of this iommu */
 	int		msagaw; /* max sagaw of this iommu */
 	unsigned int 	irq;
 	unsigned char 	name[13];    /* Device Name */
 
+<<<<<<< HEAD
 #ifdef CONFIG_DMAR
+=======
+#ifdef CONFIG_INTEL_IOMMU
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long 	*domain_ids; /* bitmap of domains */
 	struct dmar_domain **domains; /* ptr to domains */
 	spinlock_t	lock; /* protect context, domain ids */
@@ -329,7 +345,11 @@ struct intel_iommu {
 	struct q_inval  *qi;            /* Queued invalidation info */
 	u32 *iommu_state; /* Store iommu states between suspend and resume.*/
 
+<<<<<<< HEAD
 #ifdef CONFIG_INTR_REMAP
+=======
+#ifdef CONFIG_IRQ_REMAP
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ir_table *ir_table;	/* Interrupt remapping info */
 #endif
 	int		node;

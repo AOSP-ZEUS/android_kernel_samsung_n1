@@ -21,8 +21,11 @@
 #include <linux/list.h>
 #include <linux/kobject.h>
 #include <linux/device.h>
+<<<<<<< HEAD
 #include <linux/platform_device.h>
 #include <asm/atomic.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define DISPC_IRQ_FRAMEDONE		(1 << 0)
 #define DISPC_IRQ_VSYNC			(1 << 1)
@@ -136,12 +139,15 @@ enum omap_display_caps {
 	OMAP_DSS_DISPLAY_CAP_TEAR_ELIM		= 1 << 1,
 };
 
+<<<<<<< HEAD
 enum omap_dss_update_mode {
 	OMAP_DSS_UPDATE_DISABLED = 0,
 	OMAP_DSS_UPDATE_AUTO,
 	OMAP_DSS_UPDATE_MANUAL,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 enum omap_dss_display_state {
 	OMAP_DSS_DISPLAY_DISABLED = 0,
 	OMAP_DSS_DISPLAY_ACTIVE,
@@ -246,7 +252,11 @@ int dsi_vc_send_bta_sync(struct omap_dss_device *dssdev, int channel);
 
 /* Board specific data */
 struct omap_dss_board_info {
+<<<<<<< HEAD
 	int (*get_last_off_on_transaction_id)(struct device *dev);
+=======
+	int (*get_context_loss_count)(struct device *dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int num_devices;
 	struct omap_dss_device **devices;
 	struct omap_dss_device *default_device;
@@ -266,8 +276,11 @@ static inline int omap_display_init(struct omap_dss_board_info *board_data)
 struct omap_display_platform_data {
 	struct omap_dss_board_info *board_data;
 	/* TODO: Additional members to be added when PM is considered */
+<<<<<<< HEAD
 
 	bool (*opt_clock_available)(const char *clk_role);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct omap_video_timings {
@@ -300,6 +313,15 @@ extern const struct omap_video_timings omap_dss_pal_timings;
 extern const struct omap_video_timings omap_dss_ntsc_timings;
 #endif
 
+<<<<<<< HEAD
+=======
+struct omap_dss_cpr_coefs {
+	s16 rr, rg, rb;
+	s16 gr, gg, gb;
+	s16 br, bg, bb;
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct omap_overlay_info {
 	bool enabled;
 
@@ -359,6 +381,12 @@ struct omap_overlay_manager_info {
 	bool trans_enabled;
 
 	bool alpha_enabled;
+<<<<<<< HEAD
+=======
+
+	bool cpr_enable;
+	struct omap_dss_cpr_coefs cpr_coefs;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct omap_overlay_manager {
@@ -514,11 +542,14 @@ struct omap_dss_device {
 	int (*get_backlight)(struct omap_dss_device *dssdev);
 };
 
+<<<<<<< HEAD
 struct omap_dss_hdmi_data
 {
 	int hpd_gpio;
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct omap_dss_driver {
 	struct device_driver driver;
 
@@ -531,11 +562,14 @@ struct omap_dss_driver {
 	int (*resume)(struct omap_dss_device *display);
 	int (*run_test)(struct omap_dss_device *display, int test);
 
+<<<<<<< HEAD
 	int (*set_update_mode)(struct omap_dss_device *dssdev,
 			enum omap_dss_update_mode);
 	enum omap_dss_update_mode (*get_update_mode)(
 			struct omap_dss_device *dssdev);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int (*update)(struct omap_dss_device *dssdev,
 			       u16 x, u16 y, u16 w, u16 h);
 	int (*sync)(struct omap_dss_device *dssdev);

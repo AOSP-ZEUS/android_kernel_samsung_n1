@@ -48,7 +48,11 @@
 	(~(unsigned long)(X86_CR4_VME | X86_CR4_PVI | X86_CR4_TSD | X86_CR4_DE\
 			  | X86_CR4_PSE | X86_CR4_PAE | X86_CR4_MCE     \
 			  | X86_CR4_PGE | X86_CR4_PCE | X86_CR4_OSFXSR  \
+<<<<<<< HEAD
 			  | X86_CR4_OSXSAVE \
+=======
+			  | X86_CR4_OSXSAVE | X86_CR4_SMEP | X86_CR4_RDWRGSFS \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			  | X86_CR4_OSXMMEXCPT | X86_CR4_VMXE))
 
 #define CR8_RESERVED_BITS (~(unsigned long)X86_CR8_TPR)
@@ -205,6 +209,10 @@ union kvm_mmu_page_role {
 		unsigned invalid:1;
 		unsigned nxe:1;
 		unsigned cr0_wp:1;
+<<<<<<< HEAD
+=======
+		unsigned smep_andnot_wp:1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	};
 };
 
@@ -227,6 +235,7 @@ struct kvm_mmu_page {
 	 * in this shadow page.
 	 */
 	DECLARE_BITMAP(slot_bitmap, KVM_MEMORY_SLOTS + KVM_PRIVATE_MEM_SLOTS);
+<<<<<<< HEAD
 	bool multimapped;         /* More than one parent_pte? */
 	bool unsync;
 	int root_count;          /* Currently serving as active root */
@@ -236,6 +245,19 @@ struct kvm_mmu_page {
 		struct hlist_head parent_ptes; /* multimapped, kvm_pte_chain */
 	};
 	DECLARE_BITMAP(unsync_child_bitmap, 512);
+=======
+	bool unsync;
+	int root_count;          /* Currently serving as active root */
+	unsigned int unsync_children;
+	unsigned long parent_ptes;	/* Reverse mapping for parent_pte */
+	DECLARE_BITMAP(unsync_child_bitmap, 512);
+
+#ifdef CONFIG_X86_32
+	int clear_spte_count;
+#endif
+
+	struct rcu_head rcu;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct kvm_pv_mmu_op_buffer {
@@ -269,8 +291,11 @@ struct kvm_mmu {
 	gpa_t (*gva_to_gpa)(struct kvm_vcpu *vcpu, gva_t gva, u32 access,
 			    struct x86_exception *exception);
 	gpa_t (*translate_gpa)(struct kvm_vcpu *vcpu, gpa_t gpa, u32 access);
+<<<<<<< HEAD
 	void (*prefetch_page)(struct kvm_vcpu *vcpu,
 			      struct kvm_mmu_page *page);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int (*sync_page)(struct kvm_vcpu *vcpu,
 			 struct kvm_mmu_page *sp);
 	void (*invlpg)(struct kvm_vcpu *vcpu, gva_t gva);
@@ -346,8 +371,12 @@ struct kvm_vcpu_arch {
 	 * put it here to avoid allocation */
 	struct kvm_pv_mmu_op_buffer mmu_op_buffer;
 
+<<<<<<< HEAD
 	struct kvm_mmu_memory_cache mmu_pte_chain_cache;
 	struct kvm_mmu_memory_cache mmu_rmap_desc_cache;
+=======
+	struct kvm_mmu_memory_cache mmu_pte_list_desc_cache;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct kvm_mmu_memory_cache mmu_page_cache;
 	struct kvm_mmu_memory_cache mmu_page_header_cache;
 
@@ -393,6 +422,18 @@ struct kvm_vcpu_arch {
 	unsigned int hw_tsc_khz;
 	unsigned int time_offset;
 	struct page *time_page;
+<<<<<<< HEAD
+=======
+
+	struct {
+		u64 msr_val;
+		u64 last_steal;
+		u64 accum_steal;
+		struct gfn_to_hva_cache stime;
+		struct kvm_steal_time steal;
+	} st;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u64 last_guest_tsc;
 	u64 last_kernel_ns;
 	u64 last_tsc_nsec;
@@ -419,6 +460,14 @@ struct kvm_vcpu_arch {
 	u64 mcg_ctl;
 	u64 *mce_banks;
 
+<<<<<<< HEAD
+=======
+	/* Cache MMIO info */
+	u64 mmio_gva;
+	unsigned access;
+	gfn_t mmio_gfn;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* used for guest single stepping over the given code position */
 	unsigned long singlestep_rip;
 
@@ -441,6 +490,10 @@ struct kvm_arch {
 	unsigned int n_used_mmu_pages;
 	unsigned int n_requested_mmu_pages;
 	unsigned int n_max_mmu_pages;
+<<<<<<< HEAD
+=======
+	unsigned int indirect_shadow_pages;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	atomic_t invlpg_counter;
 	struct hlist_head mmu_page_hash[KVM_NUM_MMU_PAGES];
 	/*
@@ -477,6 +530,11 @@ struct kvm_arch {
 	u64 hv_guest_os_id;
 	u64 hv_hypercall;
 
+<<<<<<< HEAD
+=======
+	atomic_t reader_counter;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	#ifdef CONFIG_KVM_MMU_AUDIT
 	int audit_point;
 	#endif
@@ -559,7 +617,11 @@ struct kvm_x86_ops {
 	void (*decache_cr4_guest_bits)(struct kvm_vcpu *vcpu);
 	void (*set_cr0)(struct kvm_vcpu *vcpu, unsigned long cr0);
 	void (*set_cr3)(struct kvm_vcpu *vcpu, unsigned long cr3);
+<<<<<<< HEAD
 	void (*set_cr4)(struct kvm_vcpu *vcpu, unsigned long cr4);
+=======
+	int (*set_cr4)(struct kvm_vcpu *vcpu, unsigned long cr4);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	void (*set_efer)(struct kvm_vcpu *vcpu, u64 efer);
 	void (*get_idt)(struct kvm_vcpu *vcpu, struct desc_ptr *dt);
 	void (*set_idt)(struct kvm_vcpu *vcpu, struct desc_ptr *dt);
@@ -636,7 +698,10 @@ void kvm_mmu_module_exit(void);
 void kvm_mmu_destroy(struct kvm_vcpu *vcpu);
 int kvm_mmu_create(struct kvm_vcpu *vcpu);
 int kvm_mmu_setup(struct kvm_vcpu *vcpu);
+<<<<<<< HEAD
 void kvm_mmu_set_nonpresent_ptes(u64 trap_pte, u64 notrap_pte);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void kvm_mmu_set_mask_ptes(u64 user_mask, u64 accessed_mask,
 		u64 dirty_mask, u64 nx_mask, u64 x_mask);
 
@@ -830,11 +895,19 @@ enum {
 asmlinkage void kvm_spurious_fault(void);
 extern bool kvm_rebooting;
 
+<<<<<<< HEAD
 #define __kvm_handle_fault_on_reboot(insn) \
+=======
+#define ____kvm_handle_fault_on_reboot(insn, cleanup_insn)	\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	"666: " insn "\n\t" \
 	"668: \n\t"                           \
 	".pushsection .fixup, \"ax\" \n" \
 	"667: \n\t" \
+<<<<<<< HEAD
+=======
+	cleanup_insn "\n\t"		      \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	"cmpb $0, kvm_rebooting \n\t"	      \
 	"jne 668b \n\t"      		      \
 	__ASM_SIZE(push) " $666b \n\t"	      \
@@ -844,6 +917,12 @@ extern bool kvm_rebooting;
 	_ASM_PTR " 666b, 667b \n\t" \
 	".popsection"
 
+<<<<<<< HEAD
+=======
+#define __kvm_handle_fault_on_reboot(insn)		\
+	____kvm_handle_fault_on_reboot(insn, "")
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define KVM_ARCH_WANT_MMU_NOTIFIER
 int kvm_unmap_hva(struct kvm *kvm, unsigned long hva);
 int kvm_age_hva(struct kvm *kvm, unsigned long hva);

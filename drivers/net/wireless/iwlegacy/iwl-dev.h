@@ -32,6 +32,10 @@
 #ifndef __iwl_legacy_dev_h__
 #define __iwl_legacy_dev_h__
 
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/pci.h> /* for struct pci_device_id */
 #include <linux/kernel.h>
 #include <linux/leds.h>
@@ -855,6 +859,7 @@ struct traffic_stats {
 };
 
 /*
+<<<<<<< HEAD
  * schedule the timer to wake up every UCODE_TRACE_PERIOD milliseconds
  * to perform continuous uCode event logging operation if enabled
  */
@@ -881,6 +886,8 @@ struct iwl_event_log {
 };
 
 /*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * host interrupt timeout value
  * used with setting interrupt coalescing timer
  * the CSR_INT_COALESCING is an 8 bit register in 32-usec unit
@@ -895,6 +902,7 @@ struct iwl_event_log {
 #define IWL_HOST_INT_CALIB_TIMEOUT_DEF	(0x10)
 #define IWL_HOST_INT_CALIB_TIMEOUT_MIN	(0x0)
 
+<<<<<<< HEAD
 /*
  * This is the threshold value of plcp error rate per 100mSecs.  It is
  * used to set and check for the validity of plcp_delta.
@@ -907,6 +915,8 @@ struct iwl_event_log {
 #define IWL_MAX_PLCP_ERR_THRESHOLD_DISABLE	(0)
 
 #define IWL_DELAY_NEXT_FORCE_RF_RESET  (HZ*3)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define IWL_DELAY_NEXT_FORCE_FW_RELOAD (HZ*5)
 
 /* TX queue watchdog timeouts in mSecs */
@@ -914,12 +924,15 @@ struct iwl_event_log {
 #define IWL_LONG_WD_TIMEOUT	(10000)
 #define IWL_MAX_WD_TIMEOUT	(120000)
 
+<<<<<<< HEAD
 enum iwl_reset {
 	IWL_RF_RESET = 0,
 	IWL_FW_RESET,
 	IWL_MAX_FORCE_RESET,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct iwl_force_reset {
 	int reset_request_count;
 	int reset_success_count;
@@ -1032,11 +1045,16 @@ struct iwl_priv {
 	/* track IBSS manager (last beacon) status */
 	u32 ibss_manager;
 
+<<<<<<< HEAD
 	/* storing the jiffies when the plcp error rate is received */
 	unsigned long plcp_jiffies;
 
 	/* force reset */
 	struct iwl_force_reset force_reset[IWL_MAX_FORCE_RESET];
+=======
+	/* force reset */
+	struct iwl_force_reset force_reset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* we allocate array of iwl_channel_info for NIC's valid channels.
 	 *    Access via channel # using indirect index array */
@@ -1057,7 +1075,10 @@ struct iwl_priv {
 	enum ieee80211_band scan_band;
 	struct cfg80211_scan_request *scan_request;
 	struct ieee80211_vif *scan_vif;
+<<<<<<< HEAD
 	bool is_internal_short_scan;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 scan_tx_ant[IEEE80211_NUM_BANDS];
 	u8 mgmt_tx_ant;
 
@@ -1212,12 +1233,15 @@ struct iwl_priv {
 #endif
 #if defined(CONFIG_IWL4965) || defined(CONFIG_IWL4965_MODULE)
 		struct {
+<<<<<<< HEAD
 			/*
 			 * reporting the number of tids has AGG on. 0 means
 			 * no AGGREGATION
 			 */
 			u8 agg_tids_count;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			struct iwl_rx_phy_res last_phy_res;
 			bool last_phy_res_valid;
 
@@ -1256,7 +1280,10 @@ struct iwl_priv {
 	struct iwl_rxon_context *beacon_ctx;
 	struct sk_buff *beacon_skb;
 
+<<<<<<< HEAD
 	struct work_struct start_internal_scan;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct work_struct tx_flush;
 
 	struct tasklet_struct irq_tasklet;
@@ -1293,12 +1320,18 @@ struct iwl_priv {
 	u32 disable_tx_power_cal;
 	struct work_struct run_time_calib_work;
 	struct timer_list statistics_periodic;
+<<<<<<< HEAD
 	struct timer_list ucode_trace;
 	struct timer_list watchdog;
 	bool hw_ready;
 
 	struct iwl_event_log event_log;
 
+=======
+	struct timer_list watchdog;
+	bool hw_ready;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct led_classdev led;
 	unsigned long blink_on, blink_off;
 	bool led_registered;

@@ -424,7 +424,11 @@ einval:	li	v0, -ENOSYS
 	sys	sys_getresuid		3
 	sys	sys_ni_syscall		0	/* was sys_query_module */
 	sys	sys_poll		3
+<<<<<<< HEAD
 	sys	sys_nfsservctl		3
+=======
+	sys	sys_ni_syscall		0	/* was nfsservctl */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sys	sys_setresgid		3	/* 4190 */
 	sys	sys_getresgid		3
 	sys	sys_prctl		5
@@ -589,6 +593,10 @@ einval:	li	v0, -ENOSYS
 	sys	sys_open_by_handle_at	3	/* 4340 */
 	sys	sys_clock_adjtime	2
 	sys	sys_syncfs		1
+<<<<<<< HEAD
+=======
+	sys	sys_sendmmsg		4
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sys	sys_setns		2
 	.endm
 

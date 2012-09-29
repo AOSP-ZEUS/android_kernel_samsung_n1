@@ -201,6 +201,10 @@ enum em28xx_chip_id {
 	CHIP_ID_EM2870 = 35,
 	CHIP_ID_EM2883 = 36,
 	CHIP_ID_EM2874 = 65,
+<<<<<<< HEAD
+=======
+	CHIP_ID_EM2884 = 68,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	CHIP_ID_EM28174 = 113,
 };
 

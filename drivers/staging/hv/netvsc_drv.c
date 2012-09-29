@@ -21,6 +21,10 @@
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/highmem.h>
 #include <linux/device.h>
@@ -45,8 +49,13 @@
 struct net_device_context {
 	/* point back to our device context */
 	struct hv_device *device_ctx;
+<<<<<<< HEAD
 	unsigned long avail;
 	struct work_struct work;
+=======
+	atomic_t avail;
+	struct delayed_work dwork;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 
@@ -118,9 +127,16 @@ static void netvsc_xmit_completion(void *context)
 
 		dev_kfree_skb_any(skb);
 
+<<<<<<< HEAD
 		net_device_ctx->avail += num_pages;
 		if (net_device_ctx->avail >= PACKET_PAGES_HIWATER)
  			netif_wake_queue(net);
+=======
+		atomic_add(num_pages, &net_device_ctx->avail);
+		if (atomic_read(&net_device_ctx->avail) >=
+				PACKET_PAGES_HIWATER)
+			netif_wake_queue(net);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -133,7 +149,11 @@ static int netvsc_start_xmit(struct sk_buff *skb, struct net_device *net)
 
 	/* Add 1 for skb->data and additional one for RNDIS */
 	num_pages = skb_shinfo(skb)->nr_frags + 1 + 1;
+<<<<<<< HEAD
 	if (num_pages > net_device_ctx->avail)
+=======
+	if (num_pages > atomic_read(&net_device_ctx->avail))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return NETDEV_TX_BUSY;
 
 	/* Allocate a netvsc packet based on # of frags. */
@@ -156,9 +176,12 @@ static int netvsc_start_xmit(struct sk_buff *skb, struct net_device *net)
 	/* Setup the rndis header */
 	packet->page_buf_cnt = num_pages;
 
+<<<<<<< HEAD
 	/* TODO: Flush all write buffers/ memory fence ??? */
 	/* wmb(); */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Initialize it from the skb */
 	packet->total_data_buflen	= skb->len;
 
@@ -188,8 +211,13 @@ static int netvsc_start_xmit(struct sk_buff *skb, struct net_device *net)
 		net->stats.tx_bytes += skb->len;
 		net->stats.tx_packets++;
 
+<<<<<<< HEAD
 		net_device_ctx->avail -= num_pages;
 		if (net_device_ctx->avail < PACKET_PAGES_LOWATER)
+=======
+		atomic_sub(num_pages, &net_device_ctx->avail);
+		if (atomic_read(&net_device_ctx->avail) < PACKET_PAGES_LOWATER)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			netif_stop_queue(net);
 	} else {
 		/* we are shutting down or bus overloaded, just drop packet */
@@ -218,9 +246,15 @@ void netvsc_linkstatus_callback(struct hv_device *device_obj,
 	if (status == 1) {
 		netif_carrier_on(net);
 		netif_wake_queue(net);
+<<<<<<< HEAD
 		netif_notify_peers(net);
 		ndev_ctx = netdev_priv(net);
 		schedule_work(&ndev_ctx->work);
+=======
+		ndev_ctx = netdev_priv(net);
+		schedule_delayed_work(&ndev_ctx->dwork, 0);
+		schedule_delayed_work(&ndev_ctx->dwork, msecs_to_jiffies(20));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		netif_carrier_off(net);
 		netif_stop_queue(net);
@@ -318,7 +352,11 @@ static const struct net_device_ops device_ops = {
  * Send GARP packet to network peers after migrations.
  * After Quick Migration, the network is not immediately operational in the
  * current context when receiving RNDIS_STATUS_MEDIA_CONNECT event. So, add
+<<<<<<< HEAD
  * another netif_notify_peers() into a scheduled work, otherwise GARP packet
+=======
+ * another netif_notify_peers() into a delayed work, otherwise GARP packet
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * will not be sent after quick migration, and cause network disconnection.
  */
 static void netvsc_send_garp(struct work_struct *w)
@@ -326,8 +364,12 @@ static void netvsc_send_garp(struct work_struct *w)
 	struct net_device_context *ndev_ctx;
 	struct net_device *net;
 
+<<<<<<< HEAD
 	msleep(20);
 	ndev_ctx = container_of(w, struct net_device_context, work);
+=======
+	ndev_ctx = container_of(w, struct net_device_context, dwork.work);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	net = dev_get_drvdata(&ndev_ctx->device_ctx->device);
 	netif_notify_peers(net);
 }
@@ -349,6 +391,7 @@ static int netvsc_probe(struct hv_device *dev)
 
 	net_device_ctx = netdev_priv(net);
 	net_device_ctx->device_ctx = dev;
+<<<<<<< HEAD
 	net_device_ctx->avail = ring_size;
 	dev_set_drvdata(&dev->device, net);
 	INIT_WORK(&net_device_ctx->work, netvsc_send_garp);
@@ -356,6 +399,15 @@ static int netvsc_probe(struct hv_device *dev)
 	/* Notify the netvsc driver of the new device */
 	device_info.ring_size = ring_size;
 	ret = rndis_filte_device_add(dev, &device_info);
+=======
+	atomic_set(&net_device_ctx->avail, ring_size);
+	dev_set_drvdata(&dev->device, net);
+	INIT_DELAYED_WORK(&net_device_ctx->dwork, netvsc_send_garp);
+
+	/* Notify the netvsc driver of the new device */
+	device_info.ring_size = ring_size;
+	ret = rndis_filter_device_add(dev, &device_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret != 0) {
 		free_netdev(net);
 		dev_set_drvdata(&dev->device, NULL);
@@ -364,6 +416,7 @@ static int netvsc_probe(struct hv_device *dev)
 		return ret;
 	}
 
+<<<<<<< HEAD
 	/*
 	 * If carrier is still off ie we did not get a link status callback,
 	 * update it if necessary
@@ -375,6 +428,9 @@ static int netvsc_probe(struct hv_device *dev)
 	if (!netif_carrier_ok(net))
 		if (!device_info.link_state)
 			netif_carrier_on(net);
+=======
+	netif_carrier_on(net);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	memcpy(net->dev_addr, device_info.mac_adr, ETH_ALEN);
 
@@ -400,16 +456,28 @@ static int netvsc_probe(struct hv_device *dev)
 static int netvsc_remove(struct hv_device *dev)
 {
 	struct net_device *net = dev_get_drvdata(&dev->device);
+<<<<<<< HEAD
 	int ret;
+=======
+	struct net_device_context *ndev_ctx;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (net == NULL) {
 		dev_err(&dev->device, "No net device to remove\n");
 		return 0;
 	}
 
+<<<<<<< HEAD
 	/* Stop outbound asap */
 	netif_stop_queue(net);
 	/* netif_carrier_off(net); */
+=======
+	ndev_ctx = netdev_priv(net);
+	cancel_delayed_work_sync(&ndev_ctx->dwork);
+
+	/* Stop outbound asap */
+	netif_stop_queue(net);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	unregister_netdev(net);
 
@@ -417,6 +485,7 @@ static int netvsc_remove(struct hv_device *dev)
 	 * Call to the vsc driver to let it know that the device is being
 	 * removed
 	 */
+<<<<<<< HEAD
 	ret = rndis_filter_device_remove(dev);
 	if (ret != 0) {
 		/* TODO: */
@@ -425,6 +494,12 @@ static int netvsc_remove(struct hv_device *dev)
 
 	free_netdev(net);
 	return ret;
+=======
+	rndis_filter_device_remove(dev);
+
+	free_netdev(net);
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* The one and only one */

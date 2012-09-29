@@ -129,6 +129,10 @@ static void p1022ds_set_gamma_table(int monitor_port, char *gamma_table_base)
 static void p1022ds_set_monitor_port(int monitor_port)
 {
 	struct device_node *pixis_node;
+<<<<<<< HEAD
+=======
+	void __iomem *pixis;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 __iomem *brdcfg1;
 
 	pixis_node = of_find_compatible_node(NULL, NULL, "fsl,p1022ds-pixis");
@@ -137,12 +141,21 @@ static void p1022ds_set_monitor_port(int monitor_port)
 		return;
 	}
 
+<<<<<<< HEAD
 	brdcfg1 = of_iomap(pixis_node, 0);
 	if (!brdcfg1) {
 		pr_err("p1022ds: could not map ngPIXIS registers\n");
 		return;
 	}
 	brdcfg1 += 9;	/* BRDCFG1 is at offset 9 in the ngPIXIS */
+=======
+	pixis = of_iomap(pixis_node, 0);
+	if (!pixis) {
+		pr_err("p1022ds: could not map ngPIXIS registers\n");
+		return;
+	}
+	brdcfg1 = pixis + 9;	/* BRDCFG1 is at offset 9 in the ngPIXIS */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (monitor_port) {
 	case 0: /* DVI */
@@ -158,6 +171,11 @@ static void p1022ds_set_monitor_port(int monitor_port)
 	default:
 		pr_err("p1022ds: unsupported monitor port %i\n", monitor_port);
 	}
+<<<<<<< HEAD
+=======
+
+	iounmap(pixis);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -192,8 +210,18 @@ void p1022ds_set_pixel_clock(unsigned int pixclock)
 	do_div(temp, pixclock);
 	freq = temp;
 
+<<<<<<< HEAD
 	/* pixclk is the ratio of the platform clock to the pixel clock */
 	pxclk = DIV_ROUND_CLOSEST(fsl_get_sys_freq(), freq);
+=======
+	/*
+	 * 'pxclk' is the ratio of the platform clock to the pixel clock.
+	 * This number is programmed into the CLKDVDR register, and the valid
+	 * range of values is 2-255.
+	 */
+	pxclk = DIV_ROUND_CLOSEST(fsl_get_sys_freq(), freq);
+	pxclk = clamp_t(u32, pxclk, 2, 255);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Disable the pixel clock, and set it to non-inverted and no delay */
 	clrbits32(&guts->clkdvdr,
@@ -201,6 +229,11 @@ void p1022ds_set_pixel_clock(unsigned int pixclock)
 
 	/* Enable the clock and set the pxclk */
 	setbits32(&guts->clkdvdr, CLKDVDR_PXCKEN | (pxclk << 16));
+<<<<<<< HEAD
+=======
+
+	iounmap(guts);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**

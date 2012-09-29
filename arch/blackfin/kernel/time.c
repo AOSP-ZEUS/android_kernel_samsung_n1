@@ -51,7 +51,11 @@ void __init setup_core_timer(void)
 	u32 tcount;
 
 	/* power up the timer, but don't enable it just yet */
+<<<<<<< HEAD
 	bfin_write_TCNTL(1);
+=======
+	bfin_write_TCNTL(TMPWR);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	CSYNC();
 
 	/* the TSCALE prescaler counter */
@@ -64,7 +68,11 @@ void __init setup_core_timer(void)
 	/* now enable the timer */
 	CSYNC();
 
+<<<<<<< HEAD
 	bfin_write_TCNTL(7);
+=======
+	bfin_write_TCNTL(TAUTORLD | TMREN | TMPWR);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 #endif
 

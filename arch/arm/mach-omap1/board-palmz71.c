@@ -61,7 +61,11 @@ static void __init
 omap_palmz71_init_irq(void)
 {
 	omap1_init_common_hw();
+<<<<<<< HEAD
 	omap_init_irq();
+=======
+	omap1_init_irq();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static const unsigned int palmz71_keymap[] = {
@@ -346,5 +350,9 @@ MACHINE_START(OMAP_PALMZ71, "OMAP310 based Palm Zire71")
 	.reserve	= omap_reserve,
 	.init_irq	= omap_palmz71_init_irq,
 	.init_machine	= omap_palmz71_init,
+<<<<<<< HEAD
 	.timer		= &omap_timer,
+=======
+	.timer		= &omap1_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

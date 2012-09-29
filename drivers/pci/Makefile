@@ -29,11 +29,14 @@ obj-$(CONFIG_PCI_MSI) += msi.o
 # Build the Hypertransport interrupt support
 obj-$(CONFIG_HT_IRQ) += htirq.o
 
+<<<<<<< HEAD
 # Build Intel IOMMU support
 obj-$(CONFIG_DMAR) += dmar.o iova.o intel-iommu.o
 
 obj-$(CONFIG_INTR_REMAP) += dmar.o intr_remapping.o
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_PCI_IOV) += iov.o
 
 #
@@ -71,4 +74,9 @@ obj-$(CONFIG_PCI_STUB) += pci-stub.o
 
 obj-$(CONFIG_XEN_PCIDEV_FRONTEND) += xen-pcifront.o
 
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_OF) += of.o
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 ccflags-$(CONFIG_PCI_DEBUG) := -DDEBUG

@@ -47,6 +47,10 @@ void suspend_set_ops(const struct platform_suspend_ops *ops)
 	suspend_ops = ops;
 	mutex_unlock(&pm_mutex);
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(suspend_set_ops);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 bool valid_state(suspend_state_t state)
 {
@@ -68,6 +72,10 @@ int suspend_valid_only_mem(suspend_state_t state)
 {
 	return state == PM_SUSPEND_MEM;
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(suspend_valid_only_mem);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int suspend_test(int level)
 {
@@ -129,12 +137,22 @@ void __attribute__ ((weak)) arch_suspend_enable_irqs(void)
 }
 
 /**
+<<<<<<< HEAD
  *	suspend_enter - enter the desired system sleep state.
  *	@state:		state to enter
  *
  *	This function should be called after devices have been suspended.
  */
 static int suspend_enter(suspend_state_t state)
+=======
+ * suspend_enter - enter the desired system sleep state.
+ * @state: State to enter
+ * @wakeup: Returns information that suspend should not be entered again.
+ *
+ * This function should be called after devices have been suspended.
+ */
+static int suspend_enter(suspend_state_t state, bool *wakeup)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int error;
 
@@ -168,7 +186,12 @@ static int suspend_enter(suspend_state_t state)
 
 	error = syscore_suspend();
 	if (!error) {
+<<<<<<< HEAD
 		if (!(suspend_test(TEST_CORE) || pm_wakeup_pending())) {
+=======
+		*wakeup = pm_wakeup_pending();
+		if (!(suspend_test(TEST_CORE) || *wakeup)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			error = suspend_ops->enter(state);
 			events_check_enabled = false;
 		}
@@ -202,6 +225,10 @@ static int suspend_enter(suspend_state_t state)
 int suspend_devices_and_enter(suspend_state_t state)
 {
 	int error;
+<<<<<<< HEAD
+=======
+	bool wakeup = false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!suspend_ops)
 		return -ENOSYS;
@@ -223,7 +250,14 @@ int suspend_devices_and_enter(suspend_state_t state)
 	if (suspend_test(TEST_DEVICES))
 		goto Recover_platform;
 
+<<<<<<< HEAD
 	error = suspend_enter(state);
+=======
+	do {
+		error = suspend_enter(state, &wakeup);
+	} while (!error && !wakeup
+		&& suspend_ops->suspend_again && suspend_ops->suspend_again());
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
  Resume_devices:
 	suspend_test_start();

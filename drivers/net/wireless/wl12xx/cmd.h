@@ -70,6 +70,12 @@ int wl1271_cmd_start_bss(struct wl1271 *wl);
 int wl1271_cmd_stop_bss(struct wl1271 *wl);
 int wl1271_cmd_add_sta(struct wl1271 *wl, struct ieee80211_sta *sta, u8 hlid);
 int wl1271_cmd_remove_sta(struct wl1271 *wl, u8 hlid);
+<<<<<<< HEAD
+=======
+int wl12xx_cmd_config_fwlog(struct wl1271 *wl);
+int wl12xx_cmd_start_fwlog(struct wl1271 *wl);
+int wl12xx_cmd_stop_fwlog(struct wl1271 *wl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 enum wl1271_commands {
 	CMD_INTERROGATE     = 1,    /*use this to read information elements*/
@@ -107,6 +113,12 @@ enum wl1271_commands {
 	CMD_START_PERIODIC_SCAN      = 50,
 	CMD_STOP_PERIODIC_SCAN       = 51,
 	CMD_SET_STA_STATE            = 52,
+<<<<<<< HEAD
+=======
+	CMD_CONFIG_FWLOGGER          = 53,
+	CMD_START_FWLOGGER           = 54,
+	CMD_STOP_FWLOGGER            = 55,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* AP mode commands */
 	CMD_BSS_START                = 60,
@@ -575,4 +587,63 @@ struct wl1271_cmd_remove_sta {
 	u8 padding1;
 } __packed;
 
+<<<<<<< HEAD
+=======
+/*
+ * Continuous mode - packets are transferred to the host periodically
+ * via the data path.
+ * On demand - Log messages are stored in a cyclic buffer in the
+ * firmware, and only transferred to the host when explicitly requested
+ */
+enum wl12xx_fwlogger_log_mode {
+	WL12XX_FWLOG_CONTINUOUS,
+	WL12XX_FWLOG_ON_DEMAND
+};
+
+/* Include/exclude timestamps from the log messages */
+enum wl12xx_fwlogger_timestamp {
+	WL12XX_FWLOG_TIMESTAMP_DISABLED,
+	WL12XX_FWLOG_TIMESTAMP_ENABLED
+};
+
+/*
+ * Logs can be routed to the debug pinouts (where available), to the host bus
+ * (SDIO/SPI), or dropped
+ */
+enum wl12xx_fwlogger_output {
+	WL12XX_FWLOG_OUTPUT_NONE,
+	WL12XX_FWLOG_OUTPUT_DBG_PINS,
+	WL12XX_FWLOG_OUTPUT_HOST,
+};
+
+struct wl12xx_cmd_config_fwlog {
+	struct wl1271_cmd_header header;
+
+	/* See enum wl12xx_fwlogger_log_mode */
+	u8 logger_mode;
+
+	/* Minimum log level threshold */
+	u8 log_severity;
+
+	/* Include/exclude timestamps from the log messages */
+	u8 timestamp;
+
+	/* See enum wl1271_fwlogger_output */
+	u8 output;
+
+	/* Regulates the frequency of log messages */
+	u8 threshold;
+
+	u8 padding[3];
+} __packed;
+
+struct wl12xx_cmd_start_fwlog {
+	struct wl1271_cmd_header header;
+} __packed;
+
+struct wl12xx_cmd_stop_fwlog {
+	struct wl1271_cmd_header header;
+} __packed;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* __WL1271_CMD_H__ */

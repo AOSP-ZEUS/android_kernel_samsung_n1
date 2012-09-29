@@ -42,6 +42,11 @@ static const unsigned int bug_pins[] __initconst = {
 
 static void __init bug_board_init(void)
 {
+<<<<<<< HEAD
+=======
+	imx31_soc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mxc_iomux_setup_multiple_pins(bug_pins,
 				      ARRAY_SIZE(bug_pins), "uart-4");
 	imx31_add_imx_uart4(&uart_pdata);

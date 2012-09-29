@@ -271,9 +271,13 @@ jme_reset_mac_processor(struct jme_adapter *jme)
 static inline void
 jme_clear_pm(struct jme_adapter *jme)
 {
+<<<<<<< HEAD
 	jwrite32(jme, JME_PMCS, 0xFFFF0000 | jme->reg_pmcs);
 	pci_set_power_state(jme->pdev, PCI_D0);
 	device_set_wakeup_enable(&jme->pdev->dev, false);
+=======
+	jwrite32(jme, JME_PMCS, PMCS_STMASK | jme->reg_pmcs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int
@@ -1058,6 +1062,7 @@ jme_alloc_and_feed_skb(struct jme_adapter *jme, int idx)
 			skb_checksum_none_assert(skb);
 
 		if (rxdesc->descwb.flags & cpu_to_le16(RXWBFLAG_TAGON)) {
+<<<<<<< HEAD
 			if (jme->vlgrp) {
 				jme->jme_vlan_rx(skb, jme->vlgrp,
 					le16_to_cpu(rxdesc->descwb.vlan));
@@ -1068,6 +1073,14 @@ jme_alloc_and_feed_skb(struct jme_adapter *jme, int idx)
 		} else {
 			jme->jme_rx(skb);
 		}
+=======
+			u16 vid = le16_to_cpu(rxdesc->descwb.vlan);
+
+			__vlan_hwaccel_put_tag(skb, vid);
+			NET_STAT(jme).rx_bytes += 4;
+		}
+		jme->jme_rx(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if ((rxdesc->descwb.flags & cpu_to_le16(RXWBFLAG_DEST)) ==
 		    cpu_to_le16(RXWBFLAG_DEST_MUL))
@@ -1825,11 +1838,17 @@ jme_powersave_phy(struct jme_adapter *jme)
 {
 	if (jme->reg_pmcs) {
 		jme_set_100m_half(jme);
+<<<<<<< HEAD
 
 		if (jme->reg_pmcs & (PMCS_LFEN | PMCS_LREN))
 			jme_wait_link(jme);
 
 		jwrite32(jme, JME_PMCS, jme->reg_pmcs);
+=======
+		if (jme->reg_pmcs & (PMCS_LFEN | PMCS_LREN))
+			jme_wait_link(jme);
+		jme_clear_pm(jme);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		jme_phy_off(jme);
 	}
@@ -2228,11 +2247,26 @@ jme_change_mtu(struct net_device *netdev, int new_mtu)
 		((new_mtu) < IPV6_MIN_MTU))
 		return -EINVAL;
 
+<<<<<<< HEAD
+=======
+	if (new_mtu > 4000) {
+		jme->reg_rxcs &= ~RXCS_FIFOTHNP;
+		jme->reg_rxcs |= RXCS_FIFOTHNP_64QW;
+		jme_restart_rx_engine(jme);
+	} else {
+		jme->reg_rxcs &= ~RXCS_FIFOTHNP;
+		jme->reg_rxcs |= RXCS_FIFOTHNP_128QW;
+		jme_restart_rx_engine(jme);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	netdev->mtu = new_mtu;
 	netdev_update_features(netdev);
 
+<<<<<<< HEAD
 	jme_restart_rx_engine(jme);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	jme_reset_link(jme);
 
 	return 0;
@@ -2286,6 +2320,7 @@ static inline void jme_resume_rx(struct jme_adapter *jme)
 }
 
 static void
+<<<<<<< HEAD
 jme_vlan_rx_register(struct net_device *netdev, struct vlan_group *grp)
 {
 	struct jme_adapter *jme = netdev_priv(netdev);
@@ -2296,6 +2331,8 @@ jme_vlan_rx_register(struct net_device *netdev, struct vlan_group *grp)
 }
 
 static void
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 jme_get_drvinfo(struct net_device *netdev,
 		     struct ethtool_drvinfo *info)
 {
@@ -2405,7 +2442,10 @@ jme_set_coalesce(struct net_device *netdev, struct ethtool_coalesce *ecmd)
 	    test_bit(JME_FLAG_POLL, &jme->flags)) {
 		clear_bit(JME_FLAG_POLL, &jme->flags);
 		jme->jme_rx = netif_rx;
+<<<<<<< HEAD
 		jme->jme_vlan_rx = vlan_hwaccel_rx;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dpi->cur		= PCC_P1;
 		dpi->attempt		= PCC_P1;
 		dpi->cnt		= 0;
@@ -2415,7 +2455,10 @@ jme_set_coalesce(struct net_device *netdev, struct ethtool_coalesce *ecmd)
 		   !(test_bit(JME_FLAG_POLL, &jme->flags))) {
 		set_bit(JME_FLAG_POLL, &jme->flags);
 		jme->jme_rx = netif_receive_skb;
+<<<<<<< HEAD
 		jme->jme_vlan_rx = vlan_hwaccel_receive_skb;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		jme_interrupt_mode(jme);
 	}
 
@@ -2529,8 +2572,12 @@ jme_set_wol(struct net_device *netdev,
 		jme->reg_pmcs |= PMCS_MFEN;
 
 	jwrite32(jme, JME_PMCS, jme->reg_pmcs);
+<<<<<<< HEAD
 
 	device_set_wakeup_enable(&jme->pdev->dev, jme->reg_pmcs);
+=======
+	device_set_wakeup_enable(&jme->pdev->dev, !!(jme->reg_pmcs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -2855,7 +2902,10 @@ static const struct net_device_ops jme_netdev_ops = {
 	.ndo_set_multicast_list	= jme_set_multi,
 	.ndo_change_mtu		= jme_change_mtu,
 	.ndo_tx_timeout		= jme_tx_timeout,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register	= jme_vlan_rx_register,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ndo_fix_features       = jme_fix_features,
 	.ndo_set_features       = jme_set_features,
 };
@@ -2938,7 +2988,10 @@ jme_init_one(struct pci_dev *pdev,
 	jme->pdev = pdev;
 	jme->dev = netdev;
 	jme->jme_rx = netif_rx;
+<<<<<<< HEAD
 	jme->jme_vlan_rx = vlan_hwaccel_rx;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	jme->old_mtu = netdev->mtu = 1500;
 	jme->phylink = 0;
 	jme->tx_ring_size = 1 << 10;
@@ -3058,6 +3111,12 @@ jme_init_one(struct pci_dev *pdev,
 	jme->mii_if.mdio_write = jme_mdio_write;
 
 	jme_clear_pm(jme);
+<<<<<<< HEAD
+=======
+	pci_set_power_state(jme->pdev, PCI_D0);
+	device_set_wakeup_enable(&pdev->dev, true);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	jme_set_phyfifo_5level(jme);
 	jme->pcirev = pdev->revision;
 	if (!jme->fpgaver)
@@ -3135,8 +3194,14 @@ jme_shutdown(struct pci_dev *pdev)
 	pci_pme_active(pdev, true);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM
 static int jme_suspend(struct device *dev)
+=======
+#ifdef CONFIG_PM_SLEEP
+static int
+jme_suspend(struct device *dev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct pci_dev *pdev = to_pci_dev(dev);
 	struct net_device *netdev = pci_get_drvdata(pdev);
@@ -3175,14 +3240,23 @@ static int jme_suspend(struct device *dev)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int jme_resume(struct device *dev)
+=======
+static int
+jme_resume(struct device *dev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct pci_dev *pdev = to_pci_dev(dev);
 	struct net_device *netdev = pci_get_drvdata(pdev);
 	struct jme_adapter *jme = netdev_priv(netdev);
 
+<<<<<<< HEAD
 	jwrite32(jme, JME_PMCS, 0xFFFF0000 | jme->reg_pmcs);
 
+=======
+	jme_clear_pm(jme);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	jme_phy_on(jme);
 	if (test_bit(JME_FLAG_SSET, &jme->flags))
 		jme_set_settings(netdev, &jme->old_ecmd);

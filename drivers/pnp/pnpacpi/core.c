@@ -320,6 +320,7 @@ static int __init acpi_pnp_match(struct device *dev, void *_pnp)
 {
 	struct acpi_device *acpi = to_acpi_device(dev);
 	struct pnp_dev *pnp = _pnp;
+<<<<<<< HEAD
 	struct device *physical_device;
 
 	physical_device = acpi_get_physical_device(acpi->handle);
@@ -328,6 +329,11 @@ static int __init acpi_pnp_match(struct device *dev, void *_pnp)
 
 	/* true means it matched */
 	return !physical_device
+=======
+
+	/* true means it matched */
+	return !acpi_get_physical_device(acpi->handle)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    && compare_pnp_id(pnp->id, acpi_device_hid(acpi));
 }
 

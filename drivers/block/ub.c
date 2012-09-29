@@ -1744,11 +1744,19 @@ static int ub_bd_release(struct gendisk *disk, fmode_t mode)
 static int ub_bd_ioctl(struct block_device *bdev, fmode_t mode,
     unsigned int cmd, unsigned long arg)
 {
+<<<<<<< HEAD
+=======
+	struct gendisk *disk = bdev->bd_disk;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	void __user *usermem = (void __user *) arg;
 	int ret;
 
 	mutex_lock(&ub_mutex);
+<<<<<<< HEAD
 	ret = scsi_cmd_blk_ioctl(bdev, mode, cmd, usermem);
+=======
+	ret = scsi_cmd_ioctl(disk->queue, disk, mode, cmd, usermem);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mutex_unlock(&ub_mutex);
 
 	return ret;

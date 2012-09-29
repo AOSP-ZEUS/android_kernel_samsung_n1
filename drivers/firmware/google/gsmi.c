@@ -420,7 +420,11 @@ static efi_status_t gsmi_get_next_variable(unsigned long *name_size,
 
 static efi_status_t gsmi_set_variable(efi_char16_t *name,
 				      efi_guid_t *vendor,
+<<<<<<< HEAD
 				      unsigned long attr,
+=======
+				      u32 attr,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				      unsigned long data_size,
 				      void *data)
 {
@@ -869,8 +873,11 @@ static __init int gsmi_init(void)
 		goto out_err;
 	}
 
+<<<<<<< HEAD
 	printk(KERN_INFO "gsmi version " DRIVER_VERSION " loaded\n");
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Register in the firmware directory */
 	ret = -ENOMEM;
 	gsmi_kobj = kobject_create_and_add("gsmi", firmware_kobj);
@@ -890,12 +897,22 @@ static __init int gsmi_init(void)
 	ret = sysfs_create_files(gsmi_kobj, gsmi_attrs);
 	if (ret) {
 		printk(KERN_INFO "gsmi: Failed to add attrs");
+<<<<<<< HEAD
 		goto out_err;
 	}
 
 	if (register_efivars(&efivars, &efivar_ops, gsmi_kobj)) {
 		printk(KERN_INFO "gsmi: Failed to register efivars\n");
 		goto out_err;
+=======
+		goto out_remove_bin_file;
+	}
+
+	ret = register_efivars(&efivars, &efivar_ops, gsmi_kobj);
+	if (ret) {
+		printk(KERN_INFO "gsmi: Failed to register efivars\n");
+		goto out_remove_sysfs_files;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	register_reboot_notifier(&gsmi_reboot_notifier);
@@ -903,9 +920,21 @@ static __init int gsmi_init(void)
 	atomic_notifier_chain_register(&panic_notifier_list,
 				       &gsmi_panic_notifier);
 
+<<<<<<< HEAD
 	return 0;
 
  out_err:
+=======
+	printk(KERN_INFO "gsmi version " DRIVER_VERSION " loaded\n");
+
+	return 0;
+
+out_remove_sysfs_files:
+	sysfs_remove_files(gsmi_kobj, gsmi_attrs);
+out_remove_bin_file:
+	sysfs_remove_bin_file(gsmi_kobj, &eventlog_bin_attr);
+out_err:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kobject_put(gsmi_kobj);
 	gsmi_buf_free(gsmi_dev.param_buf);
 	gsmi_buf_free(gsmi_dev.data_buf);
@@ -925,6 +954,11 @@ static void __exit gsmi_exit(void)
 					 &gsmi_panic_notifier);
 	unregister_efivars(&efivars);
 
+<<<<<<< HEAD
+=======
+	sysfs_remove_files(gsmi_kobj, gsmi_attrs);
+	sysfs_remove_bin_file(gsmi_kobj, &eventlog_bin_attr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kobject_put(gsmi_kobj);
 	gsmi_buf_free(gsmi_dev.param_buf);
 	gsmi_buf_free(gsmi_dev.data_buf);

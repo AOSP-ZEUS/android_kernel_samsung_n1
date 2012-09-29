@@ -164,5 +164,9 @@ subsys_initcall(ab8500_pwm_init);
 module_exit(ab8500_pwm_exit);
 MODULE_AUTHOR("Arun MURTHY <arun.murthy@stericsson.com>");
 MODULE_DESCRIPTION("AB8500 Pulse Width Modulation Driver");
+<<<<<<< HEAD
 MODULE_ALIAS("AB8500 PWM driver");
+=======
+MODULE_ALIAS("platform:ab8500-pwm");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_LICENSE("GPL v2");

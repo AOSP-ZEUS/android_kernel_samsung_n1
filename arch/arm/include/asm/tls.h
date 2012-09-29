@@ -7,8 +7,11 @@
 
 	.macro set_tls_v6k, tp, tmp1, tmp2
 	mcr	p15, 0, \tp, c13, c0, 3		@ set TLS register
+<<<<<<< HEAD
 	mov	\tmp1, #0
 	mcr	p15, 0, \tmp1, c13, c0, 2	@ clear user r/w TLS register
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.endm
 
 	.macro set_tls_v6, tp, tmp1, tmp2
@@ -17,8 +20,11 @@
 	mov	\tmp2, #0xffff0fff
 	tst	\tmp1, #HWCAP_TLS		@ hardware TLS available?
 	mcrne	p15, 0, \tp, c13, c0, 3		@ yes, set TLS register
+<<<<<<< HEAD
 	movne	\tmp1, #0
 	mcrne	p15, 0, \tmp1, c13, c0, 2	@ clear user r/w TLS register
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	streq	\tp, [\tmp2, #-15]		@ set TLS value at 0xffff0ff0
 	.endm
 

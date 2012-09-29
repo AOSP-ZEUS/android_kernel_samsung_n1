@@ -14,7 +14,11 @@
 #include <linux/radix-tree.h>
 
 #include <asm/types.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /* Define a way to iterate across irqs. */
@@ -330,5 +334,10 @@ extern int call_handle_irq(int irq, void *p1,
 			   struct thread_info *tp, void *func);
 extern void do_IRQ(struct pt_regs *regs);
 
+<<<<<<< HEAD
+=======
+int irq_choose_cpu(const struct cpumask *mask);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* _ASM_IRQ_H */
 #endif /* __KERNEL__ */

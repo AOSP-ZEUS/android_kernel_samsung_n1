@@ -46,10 +46,15 @@
 #include <target/target_core_device.h>
 #include <target/target_core_tpg.h>
 #include <target/target_core_configfs.h>
+<<<<<<< HEAD
 #include <target/target_core_base.h>
 #include <target/configfs_macros.h>
 
 #include <scsi/libfc.h>
+=======
+#include <target/configfs_macros.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "tcm_fc.h"
 
 static void ft_sess_delete_all(struct ft_tport *);
@@ -198,13 +203,21 @@ static struct ft_sess *ft_sess_get(struct fc_lport *lport, u32 port_id)
 		if (sess->port_id == port_id) {
 			kref_get(&sess->kref);
 			rcu_read_unlock();
+<<<<<<< HEAD
 			FT_SESS_DBG("port_id %x found %p\n", port_id, sess);
+=======
+			pr_debug("port_id %x found %p\n", port_id, sess);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return sess;
 		}
 	}
 out:
 	rcu_read_unlock();
+<<<<<<< HEAD
 	FT_SESS_DBG("port_id %x not found\n", port_id);
+=======
+	pr_debug("port_id %x not found\n", port_id);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return NULL;
 }
 
@@ -240,7 +253,11 @@ static struct ft_sess *ft_sess_create(struct ft_tport *tport, u32 port_id,
 	hlist_add_head_rcu(&sess->hash, head);
 	tport->sess_count++;
 
+<<<<<<< HEAD
 	FT_SESS_DBG("port_id %x sess %p\n", port_id, sess);
+=======
+	pr_debug("port_id %x sess %p\n", port_id, sess);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	transport_register_session(&tport->tpg->se_tpg, &acl->se_node_acl,
 				   sess->se_sess, sess);
@@ -314,7 +331,11 @@ int ft_sess_shutdown(struct se_session *se_sess)
 {
 	struct ft_sess *sess = se_sess->fabric_sess_ptr;
 
+<<<<<<< HEAD
 	FT_SESS_DBG("port_id %x\n", sess->port_id);
+=======
+	pr_debug("port_id %x\n", sess->port_id);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 1;
 }
 
@@ -335,7 +356,11 @@ void ft_sess_close(struct se_session *se_sess)
 		mutex_unlock(&ft_lport_lock);
 		return;
 	}
+<<<<<<< HEAD
 	FT_SESS_DBG("port_id %x\n", port_id);
+=======
+	pr_debug("port_id %x\n", port_id);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ft_sess_unhash(sess);
 	mutex_unlock(&ft_lport_lock);
 	transport_deregister_session_configfs(se_sess);
@@ -348,7 +373,11 @@ void ft_sess_stop(struct se_session *se_sess, int sess_sleep, int conn_sleep)
 {
 	struct ft_sess *sess = se_sess->fabric_sess_ptr;
 
+<<<<<<< HEAD
 	FT_SESS_DBG("port_id %x\n", sess->port_id);
+=======
+	pr_debug("port_id %x\n", sess->port_id);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int ft_sess_logged_in(struct se_session *se_sess)
@@ -458,7 +487,11 @@ static int ft_prli(struct fc_rport_priv *rdata, u32 spp_len,
 	mutex_lock(&ft_lport_lock);
 	ret = ft_prli_locked(rdata, spp_len, rspp, spp);
 	mutex_unlock(&ft_lport_lock);
+<<<<<<< HEAD
 	FT_SESS_DBG("port_id %x flags %x ret %x\n",
+=======
+	pr_debug("port_id %x flags %x ret %x\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	       rdata->ids.port_id, rspp ? rspp->spp_flags : 0, ret);
 	return ret;
 }
@@ -518,11 +551,19 @@ static void ft_recv(struct fc_lport *lport, struct fc_frame *fp)
 	struct ft_sess *sess;
 	u32 sid = fc_frame_sid(fp);
 
+<<<<<<< HEAD
 	FT_SESS_DBG("sid %x\n", sid);
 
 	sess = ft_sess_get(lport, sid);
 	if (!sess) {
 		FT_SESS_DBG("sid %x sess lookup failed\n", sid);
+=======
+	pr_debug("sid %x\n", sid);
+
+	sess = ft_sess_get(lport, sid);
+	if (!sess) {
+		pr_debug("sid %x sess lookup failed\n", sid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* TBD XXX - if FCP_CMND, send PRLO */
 		fc_frame_free(fp);
 		return;

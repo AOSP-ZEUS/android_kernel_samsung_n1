@@ -1269,4 +1269,8 @@ static int __init ds_init(void)
 	return vio_register_driver(&ds_driver);
 }
 
+<<<<<<< HEAD
 fs_initcall(ds_init);
+=======
+subsys_initcall(ds_init);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

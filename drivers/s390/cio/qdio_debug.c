@@ -188,11 +188,15 @@ static ssize_t qperf_seq_write(struct file *file, const char __user *ubuf,
 	struct qdio_irq *irq_ptr = seq->private;
 	struct qdio_q *q;
 	unsigned long val;
+<<<<<<< HEAD
 	char buf[8];
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret, i;
 
 	if (!irq_ptr)
 		return 0;
+<<<<<<< HEAD
 	if (count >= sizeof(buf))
 		return -EINVAL;
 	if (copy_from_user(&buf, ubuf, count))
@@ -201,6 +205,11 @@ static ssize_t qperf_seq_write(struct file *file, const char __user *ubuf,
 
 	ret = strict_strtoul(buf, 10, &val);
 	if (ret < 0)
+=======
+
+	ret = kstrtoul_from_user(ubuf, count, 10, &val);
+	if (ret)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return ret;
 
 	switch (val) {

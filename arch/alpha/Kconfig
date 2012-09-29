@@ -6,6 +6,10 @@ config ALPHA
 	select HAVE_OPROFILE
 	select HAVE_SYSCALL_WRAPPERS
 	select HAVE_IRQ_WORK
+<<<<<<< HEAD
+=======
+	select HAVE_PCSPKR_PLATFORM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select HAVE_PERF_EVENTS
 	select HAVE_DMA_ATTRS
 	select HAVE_GENERIC_HARDIRQS
@@ -13,6 +17,10 @@ config ALPHA
 	select AUTO_IRQ_AFFINITY if SMP
 	select GENERIC_IRQ_SHOW
 	select ARCH_WANT_OPTIONAL_GPIOLIB
+<<<<<<< HEAD
+=======
+	select ARCH_HAVE_NMI_SAFE_CMPXCHG
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  The Alpha is a 64-bit general-purpose processor designed and
 	  marketed by the Digital Equipment Corporation of blessed memory,
@@ -49,7 +57,11 @@ config GENERIC_CMOS_UPDATE
         def_bool y
 
 config GENERIC_GPIO
+<<<<<<< HEAD
 	def_bool y
+=======
+	bool
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 config ZONE_DMA
 	bool

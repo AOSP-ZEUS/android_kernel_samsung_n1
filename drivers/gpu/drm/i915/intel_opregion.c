@@ -227,7 +227,10 @@ void intel_opregion_asle_intr(struct drm_device *dev)
 	asle->aslc = asle_stat;
 }
 
+<<<<<<< HEAD
 /* Only present on Ironlake+ */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void intel_opregion_gse_intr(struct drm_device *dev)
 {
 	struct drm_i915_private *dev_priv = dev->dev_private;
@@ -297,19 +300,40 @@ static int intel_opregion_video_event(struct notifier_block *nb,
 	/* The only video events relevant to opregion are 0x80. These indicate
 	   either a docking event, lid switch or display switch request. In
 	   Linux, these are handled by the dock, button and video drivers.
+<<<<<<< HEAD
 	   We might want to fix the video driver to be opregion-aware in
 	   future, but right now we just indicate to the firmware that the
 	   request has been handled */
 
 	struct opregion_acpi *acpi;
+=======
+	*/
+
+	struct opregion_acpi *acpi;
+	struct acpi_bus_event *event = data;
+	int ret = NOTIFY_OK;
+
+	if (strcmp(event->device_class, ACPI_VIDEO_CLASS) != 0)
+		return NOTIFY_DONE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!system_opregion)
 		return NOTIFY_DONE;
 
 	acpi = system_opregion->acpi;
+<<<<<<< HEAD
 	acpi->csts = 0;
 
 	return NOTIFY_OK;
+=======
+
+	if (event->type == 0x80 && !(acpi->cevt & 0x1))
+		ret = NOTIFY_BAD;
+
+	acpi->csts = 0;
+
+	return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct notifier_block intel_opregion_notifier = {

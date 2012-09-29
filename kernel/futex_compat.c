@@ -10,7 +10,10 @@
 #include <linux/compat.h>
 #include <linux/nsproxy.h>
 #include <linux/futex.h>
+<<<<<<< HEAD
 #include <linux/ptrace.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/uaccess.h>
 
@@ -137,11 +140,16 @@ compat_sys_get_robust_list(int pid, compat_uptr_t __user *head_ptr,
 {
 	struct compat_robust_list_head __user *head;
 	unsigned long ret;
+<<<<<<< HEAD
 	struct task_struct *p;
+=======
+	const struct cred *cred = current_cred(), *pcred;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!futex_cmpxchg_enabled)
 		return -ENOSYS;
 
+<<<<<<< HEAD
 	rcu_read_lock();
 
 	ret = -ESRCH;
@@ -160,6 +168,37 @@ compat_sys_get_robust_list(int pid, compat_uptr_t __user *head_ptr,
 	head = p->compat_robust_list;
 	rcu_read_unlock();
 
+=======
+	if (!pid)
+		head = current->compat_robust_list;
+	else {
+		struct task_struct *p;
+
+		ret = -ESRCH;
+		rcu_read_lock();
+		p = find_task_by_vpid(pid);
+		if (!p)
+			goto err_unlock;
+		ret = -EPERM;
+		pcred = __task_cred(p);
+		/* If victim is in different user_ns, then uids are not
+		   comparable, so we must have CAP_SYS_PTRACE */
+		if (cred->user->user_ns != pcred->user->user_ns) {
+			if (!ns_capable(pcred->user->user_ns, CAP_SYS_PTRACE))
+				goto err_unlock;
+			goto ok;
+		}
+		/* If victim is in same user_ns, then uids are comparable */
+		if (cred->euid != pcred->euid &&
+		    cred->euid != pcred->uid &&
+		    !ns_capable(pcred->user->user_ns, CAP_SYS_PTRACE))
+			goto err_unlock;
+ok:
+		head = p->compat_robust_list;
+		rcu_read_unlock();
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (put_user(sizeof(*head), len_ptr))
 		return -EFAULT;
 	return put_user(ptr_to_compat(head), head_ptr);

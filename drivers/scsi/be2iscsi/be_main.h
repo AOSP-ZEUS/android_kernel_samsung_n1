@@ -397,7 +397,11 @@ struct amap_pdu_data_out {
 };
 
 struct be_cmd_bhs {
+<<<<<<< HEAD
 	struct iscsi_cmd iscsi_hdr;
+=======
+	struct iscsi_scsi_req iscsi_hdr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned char pad1[16];
 	struct pdu_data_out iscsi_data_pdu;
 	unsigned char pad2[BE_SENSE_INFO_SIZE -
@@ -428,7 +432,11 @@ struct be_nonio_bhs {
 };
 
 struct be_status_bhs {
+<<<<<<< HEAD
 	struct iscsi_cmd iscsi_hdr;
+=======
+	struct iscsi_scsi_req iscsi_hdr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned char pad1[16];
 	/**
 	 * The plus 2 below is to hold the sense info length that gets

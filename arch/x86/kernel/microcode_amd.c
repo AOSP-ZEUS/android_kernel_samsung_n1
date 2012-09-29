@@ -66,8 +66,13 @@ struct microcode_amd {
 	unsigned int			mpb[0];
 };
 
+<<<<<<< HEAD
 #define UCODE_CONTAINER_SECTION_HDR	8
 #define UCODE_CONTAINER_HEADER_SIZE	12
+=======
+#define SECTION_HDR_SIZE	8
+#define CONTAINER_HDR_SZ	12
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct equiv_cpu_entry *equiv_cpu_table;
 
@@ -157,7 +162,11 @@ static int apply_microcode_amd(int cpu)
 static unsigned int verify_ucode_size(int cpu, const u8 *buf, unsigned int size)
 {
 	struct cpuinfo_x86 *c = &cpu_data(cpu);
+<<<<<<< HEAD
 	unsigned int max_size, actual_size;
+=======
+	u32 max_size, actual_size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define F1XH_MPB_MAX_SIZE 2048
 #define F14H_MPB_MAX_SIZE 1824
@@ -175,9 +184,15 @@ static unsigned int verify_ucode_size(int cpu, const u8 *buf, unsigned int size)
 		break;
 	}
 
+<<<<<<< HEAD
 	actual_size = buf[4] + (buf[5] << 8);
 
 	if (actual_size > size || actual_size > max_size) {
+=======
+	actual_size = *(u32 *)(buf + 4);
+
+	if (actual_size + SECTION_HDR_SIZE > size || actual_size > max_size) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pr_err("section size mismatch\n");
 		return 0;
 	}
@@ -191,7 +206,11 @@ get_next_ucode(int cpu, const u8 *buf, unsigned int size, unsigned int *mc_size)
 	struct microcode_header_amd *mc = NULL;
 	unsigned int actual_size = 0;
 
+<<<<<<< HEAD
 	if (buf[0] != UCODE_UCODE_TYPE) {
+=======
+	if (*(u32 *)buf != UCODE_UCODE_TYPE) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pr_err("invalid type field in container file section header\n");
 		goto out;
 	}
@@ -204,8 +223,13 @@ get_next_ucode(int cpu, const u8 *buf, unsigned int size, unsigned int *mc_size)
 	if (!mc)
 		goto out;
 
+<<<<<<< HEAD
 	get_ucode_data(mc, buf + UCODE_CONTAINER_SECTION_HDR, actual_size);
 	*mc_size = actual_size + UCODE_CONTAINER_SECTION_HDR;
+=======
+	get_ucode_data(mc, buf + SECTION_HDR_SIZE, actual_size);
+	*mc_size = actual_size + SECTION_HDR_SIZE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 out:
 	return mc;
@@ -229,9 +253,16 @@ static int install_equiv_cpu_table(const u8 *buf)
 		return -ENOMEM;
 	}
 
+<<<<<<< HEAD
 	get_ucode_data(equiv_cpu_table, buf + UCODE_CONTAINER_HEADER_SIZE, size);
 
 	return size + UCODE_CONTAINER_HEADER_SIZE; /* add header length */
+=======
+	get_ucode_data(equiv_cpu_table, buf + CONTAINER_HDR_SZ, size);
+
+	/* add header length */
+	return size + CONTAINER_HDR_SZ;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void free_equiv_cpu_table(void)
@@ -298,6 +329,7 @@ free_table:
 	return state;
 }
 
+<<<<<<< HEAD
 /*
  * AMD microcode firmware naming convention, up to family 15h they are in
  * the legacy file:
@@ -325,6 +357,15 @@ static enum ucode_state request_microcode_amd(int cpu, struct device *device)
 		snprintf(fw_name, sizeof(fw_name), "amd-ucode/microcode_amd_fam%.2xh.bin", c->x86);
 
 	if (request_firmware(&fw, (const char *)fw_name, device)) {
+=======
+static enum ucode_state request_microcode_amd(int cpu, struct device *device)
+{
+	const char *fw_name = "amd-ucode/microcode_amd.bin";
+	const struct firmware *fw;
+	enum ucode_state ret = UCODE_NFOUND;
+
+	if (request_firmware(&fw, fw_name, device)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pr_err("failed to load file %s\n", fw_name);
 		goto out;
 	}

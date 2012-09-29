@@ -158,11 +158,26 @@ int
 nouveau_mm_fini(struct nouveau_mm **prmm)
 {
 	struct nouveau_mm *rmm = *prmm;
+<<<<<<< HEAD
 	struct nouveau_mm_node *heap =
 		list_first_entry(&rmm->nodes, struct nouveau_mm_node, nl_entry);
 
 	if (!list_is_singular(&rmm->nodes))
 		return -EBUSY;
+=======
+	struct nouveau_mm_node *node, *heap =
+		list_first_entry(&rmm->nodes, struct nouveau_mm_node, nl_entry);
+
+	if (!list_is_singular(&rmm->nodes)) {
+		printk(KERN_ERR "nouveau_mm not empty at destroy time!\n");
+		list_for_each_entry(node, &rmm->nodes, nl_entry) {
+			printk(KERN_ERR "0x%02x: 0x%08x 0x%08x\n",
+			       node->type, node->offset, node->length);
+		}
+		WARN_ON(1);
+		return -EBUSY;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	kfree(heap);
 	kfree(rmm);

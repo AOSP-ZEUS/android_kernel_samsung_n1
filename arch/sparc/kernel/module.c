@@ -70,12 +70,15 @@ void *module_alloc(unsigned long size)
 	return ret;
 }
 
+<<<<<<< HEAD
 /* Free memory returned from module_core_alloc/module_init_alloc */
 void module_free(struct module *mod, void *module_region)
 {
 	vfree(module_region);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Make generic code ignore STT_REGISTER dummy undefined symbols.  */
 int module_frob_arch_sections(Elf_Ehdr *hdr,
 			      Elf_Shdr *sechdrs,
@@ -109,6 +112,7 @@ int module_frob_arch_sections(Elf_Ehdr *hdr,
 	return 0;
 }
 
+<<<<<<< HEAD
 int apply_relocate(Elf_Shdr *sechdrs,
 		   const char *strtab,
 		   unsigned int symindex,
@@ -120,6 +124,8 @@ int apply_relocate(Elf_Shdr *sechdrs,
 	return -ENOEXEC;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int apply_relocate_add(Elf_Shdr *sechdrs,
 		       const char *strtab,
 		       unsigned int symindex,
@@ -266,6 +272,7 @@ int module_finalize(const Elf_Ehdr *hdr,
 
 	return 0;
 }
+<<<<<<< HEAD
 #else
 int module_finalize(const Elf_Ehdr *hdr,
                     const Elf_Shdr *sechdrs,
@@ -278,3 +285,6 @@ int module_finalize(const Elf_Ehdr *hdr,
 void module_arch_cleanup(struct module *mod)
 {
 }
+=======
+#endif /* CONFIG_SPARC64 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

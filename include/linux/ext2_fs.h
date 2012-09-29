@@ -18,6 +18,10 @@
 
 #include <linux/types.h>
 #include <linux/magic.h>
+<<<<<<< HEAD
+=======
+#include <linux/fs.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * The second extended filesystem constants/structures

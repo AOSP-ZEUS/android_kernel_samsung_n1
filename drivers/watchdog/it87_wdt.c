@@ -137,7 +137,10 @@
 
 static	unsigned int base, gpact, ciract, max_units, chip_type;
 static	unsigned long wdt_status;
+<<<<<<< HEAD
 static	DEFINE_SPINLOCK(spinlock);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static	int nogameport = DEFAULT_NOGAMEPORT;
 static	int exclusive  = DEFAULT_EXCLUSIVE;
@@ -163,18 +166,37 @@ MODULE_PARM_DESC(nowayout, "Watchdog cannot be stopped once started, default="
 
 /* Superio Chip */
 
+<<<<<<< HEAD
 static inline void superio_enter(void)
 {
+=======
+static inline int superio_enter(void)
+{
+	/*
+	 * Try to reserve REG and REG + 1 for exclusive access.
+	 */
+	if (!request_muxed_region(REG, 2, WATCHDOG_NAME))
+		return -EBUSY;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	outb(0x87, REG);
 	outb(0x01, REG);
 	outb(0x55, REG);
 	outb(0x55, REG);
+<<<<<<< HEAD
+=======
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline void superio_exit(void)
 {
 	outb(0x02, REG);
 	outb(0x02, VAL);
+<<<<<<< HEAD
+=======
+	release_region(REG, 2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline void superio_select(int ldn)
@@ -255,12 +277,20 @@ static void wdt_keepalive(void)
 	set_bit(WDTS_KEEPALIVE, &wdt_status);
 }
 
+<<<<<<< HEAD
 static void wdt_start(void)
 {
 	unsigned long flags;
 
 	spin_lock_irqsave(&spinlock, flags);
 	superio_enter();
+=======
+static int wdt_start(void)
+{
+	int ret = superio_enter();
+	if (ret)
+		return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	superio_select(GPIO);
 	if (test_bit(WDTS_USE_GP, &wdt_status))
@@ -270,6 +300,7 @@ static void wdt_start(void)
 	wdt_update_timeout();
 
 	superio_exit();
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&spinlock, flags);
 }
 
@@ -279,6 +310,17 @@ static void wdt_stop(void)
 
 	spin_lock_irqsave(&spinlock, flags);
 	superio_enter();
+=======
+
+	return 0;
+}
+
+static int wdt_stop(void)
+{
+	int ret = superio_enter();
+	if (ret)
+		return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	superio_select(GPIO);
 	superio_outb(0x00, WDTCTRL);
@@ -288,7 +330,11 @@ static void wdt_stop(void)
 		superio_outb(0x00, WDTVALMSB);
 
 	superio_exit();
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&spinlock, flags);
+=======
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -303,8 +349,11 @@ static void wdt_stop(void)
 
 static int wdt_set_timeout(int t)
 {
+<<<<<<< HEAD
 	unsigned long flags;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (t < 1 || t > max_units * 60)
 		return -EINVAL;
 
@@ -313,14 +362,25 @@ static int wdt_set_timeout(int t)
 	else
 		timeout = t;
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&spinlock, flags);
 	if (test_bit(WDTS_TIMER_RUN, &wdt_status)) {
 		superio_enter();
+=======
+	if (test_bit(WDTS_TIMER_RUN, &wdt_status)) {
+		int ret = superio_enter();
+		if (ret)
+			return ret;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		superio_select(GPIO);
 		wdt_update_timeout();
 		superio_exit();
 	}
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&spinlock, flags);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -339,12 +399,21 @@ static int wdt_set_timeout(int t)
 
 static int wdt_get_status(int *status)
 {
+<<<<<<< HEAD
 	unsigned long flags;
 
 	*status = 0;
 	if (testmode) {
 		spin_lock_irqsave(&spinlock, flags);
 		superio_enter();
+=======
+	*status = 0;
+	if (testmode) {
+		int ret = superio_enter();
+		if (ret)
+			return ret;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		superio_select(GPIO);
 		if (superio_inb(WDTCTRL) & WDT_ZERO) {
 			superio_outb(0x00, WDTCTRL);
@@ -353,7 +422,10 @@ static int wdt_get_status(int *status)
 		}
 
 		superio_exit();
+<<<<<<< HEAD
 		spin_unlock_irqrestore(&spinlock, flags);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (test_and_clear_bit(WDTS_KEEPALIVE, &wdt_status))
 		*status |= WDIOF_KEEPALIVEPING;
@@ -379,9 +451,23 @@ static int wdt_open(struct inode *inode, struct file *file)
 	if (exclusive && test_and_set_bit(WDTS_DEV_OPEN, &wdt_status))
 		return -EBUSY;
 	if (!test_and_set_bit(WDTS_TIMER_RUN, &wdt_status)) {
+<<<<<<< HEAD
 		if (nowayout && !test_and_set_bit(WDTS_LOCKED, &wdt_status))
 			__module_get(THIS_MODULE);
 		wdt_start();
+=======
+		int ret;
+		if (nowayout && !test_and_set_bit(WDTS_LOCKED, &wdt_status))
+			__module_get(THIS_MODULE);
+
+		ret = wdt_start();
+		if (ret) {
+			clear_bit(WDTS_LOCKED, &wdt_status);
+			clear_bit(WDTS_TIMER_RUN, &wdt_status);
+			clear_bit(WDTS_DEV_OPEN, &wdt_status);
+			return ret;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return nonseekable_open(inode, file);
 }
@@ -403,7 +489,20 @@ static int wdt_release(struct inode *inode, struct file *file)
 {
 	if (test_bit(WDTS_TIMER_RUN, &wdt_status)) {
 		if (test_and_clear_bit(WDTS_EXPECTED, &wdt_status)) {
+<<<<<<< HEAD
 			wdt_stop();
+=======
+			int ret = wdt_stop();
+			if (ret) {
+				/*
+				 * Stop failed. Just keep the watchdog alive
+				 * and hope nothing bad happens.
+				 */
+				set_bit(WDTS_EXPECTED, &wdt_status);
+				wdt_keepalive();
+				return ret;
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			clear_bit(WDTS_TIMER_RUN, &wdt_status);
 		} else {
 			wdt_keepalive();
@@ -484,7 +583,13 @@ static long wdt_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 				    &ident, sizeof(ident)) ? -EFAULT : 0;
 
 	case WDIOC_GETSTATUS:
+<<<<<<< HEAD
 		wdt_get_status(&status);
+=======
+		rc = wdt_get_status(&status);
+		if (rc)
+			return rc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return put_user(status, uarg.i);
 
 	case WDIOC_GETBOOTSTATUS:
@@ -500,14 +605,32 @@ static long wdt_ioctl(struct file *file, unsigned int cmd, unsigned long arg)
 
 		switch (new_options) {
 		case WDIOS_DISABLECARD:
+<<<<<<< HEAD
 			if (test_bit(WDTS_TIMER_RUN, &wdt_status))
 				wdt_stop();
+=======
+			if (test_bit(WDTS_TIMER_RUN, &wdt_status)) {
+				rc = wdt_stop();
+				if (rc)
+					return rc;
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			clear_bit(WDTS_TIMER_RUN, &wdt_status);
 			return 0;
 
 		case WDIOS_ENABLECARD:
+<<<<<<< HEAD
 			if (!test_and_set_bit(WDTS_TIMER_RUN, &wdt_status))
 				wdt_start();
+=======
+			if (!test_and_set_bit(WDTS_TIMER_RUN, &wdt_status)) {
+				rc = wdt_start();
+				if (rc) {
+					clear_bit(WDTS_TIMER_RUN, &wdt_status);
+					return rc;
+				}
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return 0;
 
 		default:
@@ -560,6 +683,7 @@ static int __init it87_wdt_init(void)
 	int rc = 0;
 	int try_gameport = !nogameport;
 	u8  chip_rev;
+<<<<<<< HEAD
 	unsigned long flags;
 
 	wdt_status = 0;
@@ -570,6 +694,19 @@ static int __init it87_wdt_init(void)
 	chip_rev  = superio_inb(CHIPREV) & 0x0f;
 	superio_exit();
 	spin_unlock_irqrestore(&spinlock, flags);
+=======
+	int gp_rreq_fail = 0;
+
+	wdt_status = 0;
+
+	rc = superio_enter();
+	if (rc)
+		return rc;
+
+	chip_type = superio_inw(CHIPID);
+	chip_rev  = superio_inb(CHIPREV) & 0x0f;
+	superio_exit();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (chip_type) {
 	case IT8702_ID:
@@ -603,8 +740,14 @@ static int __init it87_wdt_init(void)
 		return -ENODEV;
 	}
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&spinlock, flags);
 	superio_enter();
+=======
+	rc = superio_enter();
+	if (rc)
+		return rc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	superio_select(GPIO);
 	superio_outb(WDT_TOV1, WDTCFG);
@@ -620,6 +763,7 @@ static int __init it87_wdt_init(void)
 		}
 		gpact = superio_inb(ACTREG);
 		superio_outb(0x01, ACTREG);
+<<<<<<< HEAD
 		superio_exit();
 		spin_unlock_irqrestore(&spinlock, flags);
 		if (request_region(base, 1, WATCHDOG_NAME))
@@ -629,12 +773,22 @@ static int __init it87_wdt_init(void)
 	} else {
 		superio_exit();
 		spin_unlock_irqrestore(&spinlock, flags);
+=======
+		if (request_region(base, 1, WATCHDOG_NAME))
+			set_bit(WDTS_USE_GP, &wdt_status);
+		else
+			gp_rreq_fail = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* If we haven't Gameport support, try to get CIR support */
 	if (!test_bit(WDTS_USE_GP, &wdt_status)) {
 		if (!request_region(CIR_BASE, 8, WATCHDOG_NAME)) {
+<<<<<<< HEAD
 			if (rc == -EIO)
+=======
+			if (gp_rreq_fail)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				printk(KERN_ERR PFX
 					"I/O Address 0x%04x and 0x%04x"
 					" already in use\n", base, CIR_BASE);
@@ -646,14 +800,18 @@ static int __init it87_wdt_init(void)
 			goto err_out;
 		}
 		base = CIR_BASE;
+<<<<<<< HEAD
 		spin_lock_irqsave(&spinlock, flags);
 		superio_enter();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		superio_select(CIR);
 		superio_outw(base, BASEREG);
 		superio_outb(0x00, CIR_ILS);
 		ciract = superio_inb(ACTREG);
 		superio_outb(0x01, ACTREG);
+<<<<<<< HEAD
 		if (rc == -EIO) {
 			superio_select(GAMEPORT);
 			superio_outb(gpact, ACTREG);
@@ -661,6 +819,12 @@ static int __init it87_wdt_init(void)
 
 		superio_exit();
 		spin_unlock_irqrestore(&spinlock, flags);
+=======
+		if (gp_rreq_fail) {
+			superio_select(GAMEPORT);
+			superio_outb(gpact, ACTREG);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (timeout < 1 || timeout > max_units * 60) {
@@ -704,6 +868,10 @@ static int __init it87_wdt_init(void)
 		"nogameport=%d)\n", chip_type, chip_rev, timeout,
 		nowayout, testmode, exclusive, nogameport);
 
+<<<<<<< HEAD
+=======
+	superio_exit();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
 err_out_reboot:
@@ -711,6 +879,7 @@ err_out_reboot:
 err_out_region:
 	release_region(base, test_bit(WDTS_USE_GP, &wdt_status) ? 1 : 8);
 	if (!test_bit(WDTS_USE_GP, &wdt_status)) {
+<<<<<<< HEAD
 		spin_lock_irqsave(&spinlock, flags);
 		superio_enter();
 		superio_select(CIR);
@@ -728,11 +897,24 @@ err_out:
 		spin_unlock_irqrestore(&spinlock, flags);
 	}
 
+=======
+		superio_select(CIR);
+		superio_outb(ciract, ACTREG);
+	}
+err_out:
+	if (try_gameport) {
+		superio_select(GAMEPORT);
+		superio_outb(gpact, ACTREG);
+	}
+
+	superio_exit();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return rc;
 }
 
 static void __exit it87_wdt_exit(void)
 {
+<<<<<<< HEAD
 	unsigned long flags;
 	int nolock;
 
@@ -754,6 +936,24 @@ static void __exit it87_wdt_exit(void)
 	superio_exit();
 	if (!nolock)
 		spin_unlock_irqrestore(&spinlock, flags);
+=======
+	if (superio_enter() == 0) {
+		superio_select(GPIO);
+		superio_outb(0x00, WDTCTRL);
+		superio_outb(0x00, WDTCFG);
+		superio_outb(0x00, WDTVALLSB);
+		if (max_units > 255)
+			superio_outb(0x00, WDTVALMSB);
+		if (test_bit(WDTS_USE_GP, &wdt_status)) {
+			superio_select(GAMEPORT);
+			superio_outb(gpact, ACTREG);
+		} else {
+			superio_select(CIR);
+			superio_outb(ciract, ACTREG);
+		}
+		superio_exit();
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	misc_deregister(&wdt_miscdev);
 	unregister_reboot_notifier(&wdt_notifier);

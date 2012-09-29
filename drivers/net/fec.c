@@ -44,6 +44,13 @@
 #include <linux/platform_device.h>
 #include <linux/phy.h>
 #include <linux/fec.h>
+<<<<<<< HEAD
+=======
+#include <linux/of.h>
+#include <linux/of_device.h>
+#include <linux/of_gpio.h>
+#include <linux/of_net.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/cacheflush.h>
 
@@ -66,6 +73,7 @@
 #define FEC_QUIRK_ENET_MAC		(1 << 0)
 /* Controller needs driver to swap frame */
 #define FEC_QUIRK_SWAP_FRAME		(1 << 1)
+<<<<<<< HEAD
 
 static struct platform_device_id fec_devtype[] = {
 	{
@@ -77,6 +85,44 @@ static struct platform_device_id fec_devtype[] = {
 	},
 	{ }
 };
+=======
+/* Controller uses gasket */
+#define FEC_QUIRK_USE_GASKET		(1 << 2)
+
+static struct platform_device_id fec_devtype[] = {
+	{
+		/* keep it for coldfire */
+		.name = DRIVER_NAME,
+		.driver_data = 0,
+	}, {
+		.name = "imx25-fec",
+		.driver_data = FEC_QUIRK_USE_GASKET,
+	}, {
+		.name = "imx27-fec",
+		.driver_data = 0,
+	}, {
+		.name = "imx28-fec",
+		.driver_data = FEC_QUIRK_ENET_MAC | FEC_QUIRK_SWAP_FRAME,
+	}, {
+		/* sentinel */
+	}
+};
+MODULE_DEVICE_TABLE(platform, fec_devtype);
+
+enum imx_fec_type {
+	IMX25_FEC = 1, 	/* runs on i.mx25/50/53 */
+	IMX27_FEC,	/* runs on i.mx27/35/51 */
+	IMX28_FEC,
+};
+
+static const struct of_device_id fec_dt_ids[] = {
+	{ .compatible = "fsl,imx25-fec", .data = &fec_devtype[IMX25_FEC], },
+	{ .compatible = "fsl,imx27-fec", .data = &fec_devtype[IMX27_FEC], },
+	{ .compatible = "fsl,imx28-fec", .data = &fec_devtype[IMX28_FEC], },
+	{ /* sentinel */ }
+};
+MODULE_DEVICE_TABLE(of, fec_dt_ids);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static unsigned char macaddr[ETH_ALEN];
 module_param_array(macaddr, byte, NULL, 0);
@@ -324,6 +370,11 @@ fec_enet_start_xmit(struct sk_buff *skb, struct net_device *ndev)
 
 	fep->cur_tx = bdp;
 
+<<<<<<< HEAD
+=======
+	skb_tx_timestamp(skb);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock_irqrestore(&fep->hw_lock, flags);
 
 	return NETDEV_TX_OK;
@@ -425,7 +476,11 @@ fec_restart(struct net_device *ndev, int duplex)
 
 	} else {
 #ifdef FEC_MIIGSK_ENR
+<<<<<<< HEAD
 		if (fep->phy_interface == PHY_INTERFACE_MODE_RMII) {
+=======
+		if (id_entry->driver_data & FEC_QUIRK_USE_GASKET) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* disable the gasket and wait */
 			writel(0, fep->hwp + FEC_MIIGSK_ENR);
 			while (readl(fep->hwp + FEC_MIIGSK_ENR) & 4)
@@ -434,8 +489,16 @@ fec_restart(struct net_device *ndev, int duplex)
 			/*
 			 * configure the gasket:
 			 *   RMII, 50 MHz, no loopback, no echo
+<<<<<<< HEAD
 			 */
 			writel(1, fep->hwp + FEC_MIIGSK_CFGR);
+=======
+			 *   MII, 25 MHz, no loopback, no echo
+			 */
+			writel((fep->phy_interface == PHY_INTERFACE_MODE_RMII) ?
+					1 : 0, fep->hwp + FEC_MIIGSK_CFGR);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			/* re-enable the gasket */
 			writel(2, fep->hwp + FEC_MIIGSK_ENR);
@@ -650,7 +713,12 @@ fec_enet_rx(struct net_device *ndev)
 			skb_put(skb, pkt_len - 4);	/* Make room */
 			skb_copy_to_linear_data(skb, data, pkt_len - 4);
 			skb->protocol = eth_type_trans(skb, ndev);
+<<<<<<< HEAD
 			netif_rx(skb);
+=======
+			if (!skb_defer_rx_timestamp(skb))
+				netif_rx(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 		bdp->cbd_bufaddr = dma_map_single(&fep->pdev->dev, data,
@@ -731,8 +799,27 @@ static void __inline__ fec_get_mac(struct net_device *ndev)
 	 */
 	iap = macaddr;
 
+<<<<<<< HEAD
 	/*
 	 * 2) from flash or fuse (via platform data)
+=======
+#ifdef CONFIG_OF
+	/*
+	 * 2) from device tree data
+	 */
+	if (!is_valid_ether_addr(iap)) {
+		struct device_node *np = fep->pdev->dev.of_node;
+		if (np) {
+			const char *mac = of_get_mac_address(np);
+			if (mac)
+				iap = (unsigned char *) mac;
+		}
+	}
+#endif
+
+	/*
+	 * 3) from flash or fuse (via platform data)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 */
 	if (!is_valid_ether_addr(iap)) {
 #ifdef CONFIG_M5272
@@ -745,7 +832,11 @@ static void __inline__ fec_get_mac(struct net_device *ndev)
 	}
 
 	/*
+<<<<<<< HEAD
 	 * 3) FEC mac registers set by bootloader
+=======
+	 * 4) FEC mac registers set by bootloader
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 */
 	if (!is_valid_ether_addr(iap)) {
 		*((unsigned long *) &tmpaddr[0]) =
@@ -1224,10 +1315,13 @@ static void set_multicast_list(struct net_device *ndev)
 	writel(0, fep->hwp + FEC_GRP_HASH_TABLE_LOW);
 
 	netdev_for_each_mc_addr(ha, ndev) {
+<<<<<<< HEAD
 		/* Only support group multicast for now */
 		if (!(ha->addr[0] & 1))
 			continue;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* calculate crc32 value of mac address */
 		crc = 0xffffffff;
 
@@ -1355,6 +1449,55 @@ static int fec_enet_init(struct net_device *ndev)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_OF
+static int __devinit fec_get_phy_mode_dt(struct platform_device *pdev)
+{
+	struct device_node *np = pdev->dev.of_node;
+
+	if (np)
+		return of_get_phy_mode(np);
+
+	return -ENODEV;
+}
+
+static int __devinit fec_reset_phy(struct platform_device *pdev)
+{
+	int err, phy_reset;
+	struct device_node *np = pdev->dev.of_node;
+
+	if (!np)
+		return -ENODEV;
+
+	phy_reset = of_get_named_gpio(np, "phy-reset-gpios", 0);
+	err = gpio_request_one(phy_reset, GPIOF_OUT_INIT_LOW, "phy-reset");
+	if (err) {
+		pr_warn("FEC: failed to get gpio phy-reset: %d\n", err);
+		return err;
+	}
+	msleep(1);
+	gpio_set_value(phy_reset, 1);
+
+	return 0;
+}
+#else /* CONFIG_OF */
+static inline int fec_get_phy_mode_dt(struct platform_device *pdev)
+{
+	return -ENODEV;
+}
+
+static inline int fec_reset_phy(struct platform_device *pdev)
+{
+	/*
+	 * In case of platform probe, the reset has been done
+	 * by machine code.
+	 */
+	return 0;
+}
+#endif /* CONFIG_OF */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __devinit
 fec_probe(struct platform_device *pdev)
 {
@@ -1363,6 +1506,14 @@ fec_probe(struct platform_device *pdev)
 	struct net_device *ndev;
 	int i, irq, ret = 0;
 	struct resource *r;
+<<<<<<< HEAD
+=======
+	const struct of_device_id *of_id;
+
+	of_id = of_match_device(fec_dt_ids, &pdev->dev);
+	if (of_id)
+		pdev->id_entry = of_id->data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
 	if (!r)
@@ -1394,9 +1545,24 @@ fec_probe(struct platform_device *pdev)
 
 	platform_set_drvdata(pdev, ndev);
 
+<<<<<<< HEAD
 	pdata = pdev->dev.platform_data;
 	if (pdata)
 		fep->phy_interface = pdata->phy;
+=======
+	ret = fec_get_phy_mode_dt(pdev);
+	if (ret < 0) {
+		pdata = pdev->dev.platform_data;
+		if (pdata)
+			fep->phy_interface = pdata->phy;
+		else
+			fep->phy_interface = PHY_INTERFACE_MODE_MII;
+	} else {
+		fep->phy_interface = ret;
+	}
+
+	fec_reset_phy(pdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* This device has up to three irqs on some platforms */
 	for (i = 0; i < 3; i++) {
@@ -1531,6 +1697,10 @@ static struct platform_driver fec_driver = {
 #ifdef CONFIG_PM
 		.pm	= &fec_pm_ops,
 #endif
+<<<<<<< HEAD
+=======
+		.of_match_table = fec_dt_ids,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 	.id_table = fec_devtype,
 	.probe	= fec_probe,

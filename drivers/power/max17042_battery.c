@@ -29,6 +29,7 @@
 #include <linux/power_supply.h>
 #include <linux/power/max17042_battery.h>
 
+<<<<<<< HEAD
 enum max17042_register {
 	MAX17042_STATUS		= 0x00,
 	MAX17042_VALRT_Th	= 0x01,
@@ -97,6 +98,8 @@ enum max17042_register {
 	MAX17042_QL		= 0x4E,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct max17042_chip {
 	struct i2c_client *client;
 	struct power_supply battery;
@@ -123,10 +126,34 @@ static int max17042_read_reg(struct i2c_client *client, u8 reg)
 	return ret;
 }
 
+<<<<<<< HEAD
 static enum power_supply_property max17042_battery_props[] = {
 	POWER_SUPPLY_PROP_VOLTAGE_NOW,
 	POWER_SUPPLY_PROP_VOLTAGE_AVG,
 	POWER_SUPPLY_PROP_CAPACITY,
+=======
+static void max17042_set_reg(struct i2c_client *client,
+			     struct max17042_reg_data *data, int size)
+{
+	int i;
+
+	for (i = 0; i < size; i++)
+		max17042_write_reg(client, data[i].addr, data[i].data);
+}
+
+static enum power_supply_property max17042_battery_props[] = {
+	POWER_SUPPLY_PROP_PRESENT,
+	POWER_SUPPLY_PROP_CYCLE_COUNT,
+	POWER_SUPPLY_PROP_VOLTAGE_MAX,
+	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
+	POWER_SUPPLY_PROP_VOLTAGE_NOW,
+	POWER_SUPPLY_PROP_VOLTAGE_AVG,
+	POWER_SUPPLY_PROP_CAPACITY,
+	POWER_SUPPLY_PROP_CHARGE_FULL,
+	POWER_SUPPLY_PROP_TEMP,
+	POWER_SUPPLY_PROP_CURRENT_NOW,
+	POWER_SUPPLY_PROP_CURRENT_AVG,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int max17042_get_property(struct power_supply *psy,
@@ -137,6 +164,33 @@ static int max17042_get_property(struct power_supply *psy,
 				struct max17042_chip, battery);
 
 	switch (psp) {
+<<<<<<< HEAD
+=======
+	case POWER_SUPPLY_PROP_PRESENT:
+		val->intval = max17042_read_reg(chip->client,
+				MAX17042_STATUS);
+		if (val->intval & MAX17042_STATUS_BattAbsent)
+			val->intval = 0;
+		else
+			val->intval = 1;
+		break;
+	case POWER_SUPPLY_PROP_CYCLE_COUNT:
+		val->intval = max17042_read_reg(chip->client,
+				MAX17042_Cycles);
+		break;
+	case POWER_SUPPLY_PROP_VOLTAGE_MAX:
+		val->intval = max17042_read_reg(chip->client,
+				MAX17042_MinMaxVolt);
+		val->intval >>= 8;
+		val->intval *= 20000; /* Units of LSB = 20mV */
+		break;
+	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
+		val->intval = max17042_read_reg(chip->client,
+				MAX17042_V_empty);
+		val->intval >>= 7;
+		val->intval *= 10000; /* Units of LSB = 10mV */
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
 		val->intval = max17042_read_reg(chip->client,
 				MAX17042_VCELL) * 83; /* 1000 / 12 = 83 */
@@ -149,6 +203,60 @@ static int max17042_get_property(struct power_supply *psy,
 		val->intval = max17042_read_reg(chip->client,
 				MAX17042_SOC) / 256;
 		break;
+<<<<<<< HEAD
+=======
+	case POWER_SUPPLY_PROP_CHARGE_FULL:
+		val->intval = max17042_read_reg(chip->client,
+				MAX17042_RepSOC);
+		if ((val->intval / 256) >= MAX17042_BATTERY_FULL)
+			val->intval = 1;
+		else if (val->intval >= 0)
+			val->intval = 0;
+		break;
+	case POWER_SUPPLY_PROP_TEMP:
+		val->intval = max17042_read_reg(chip->client,
+				MAX17042_TEMP);
+		/* The value is signed. */
+		if (val->intval & 0x8000) {
+			val->intval = (0x7fff & ~val->intval) + 1;
+			val->intval *= -1;
+		}
+		/* The value is converted into deci-centigrade scale */
+		/* Units of LSB = 1 / 256 degree Celsius */
+		val->intval = val->intval * 10 / 256;
+		break;
+	case POWER_SUPPLY_PROP_CURRENT_NOW:
+		if (chip->pdata->enable_current_sense) {
+			val->intval = max17042_read_reg(chip->client,
+					MAX17042_Current);
+			if (val->intval & 0x8000) {
+				/* Negative */
+				val->intval = ~val->intval & 0x7fff;
+				val->intval++;
+				val->intval *= -1;
+			}
+			val->intval >>= 4;
+			val->intval *= 1000000 * 25 / chip->pdata->r_sns;
+		} else {
+			return -EINVAL;
+		}
+		break;
+	case POWER_SUPPLY_PROP_CURRENT_AVG:
+		if (chip->pdata->enable_current_sense) {
+			val->intval = max17042_read_reg(chip->client,
+					MAX17042_AvgCurrent);
+			if (val->intval & 0x8000) {
+				/* Negative */
+				val->intval = ~val->intval & 0x7fff;
+				val->intval++;
+				val->intval *= -1;
+			}
+			val->intval *= 1562500 / chip->pdata->r_sns;
+		} else {
+			return -EINVAL;
+		}
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default:
 		return -EINVAL;
 	}
@@ -180,18 +288,43 @@ static int __devinit max17042_probe(struct i2c_client *client,
 	chip->battery.properties	= max17042_battery_props;
 	chip->battery.num_properties	= ARRAY_SIZE(max17042_battery_props);
 
+<<<<<<< HEAD
 	ret = power_supply_register(&client->dev, &chip->battery);
 	if (ret) {
 		dev_err(&client->dev, "failed: power supply register\n");
 		i2c_set_clientdata(client, NULL);
+=======
+	/* When current is not measured,
+	 * CURRENT_NOW and CURRENT_AVG properties should be invisible. */
+	if (!chip->pdata->enable_current_sense)
+		chip->battery.num_properties -= 2;
+
+	ret = power_supply_register(&client->dev, &chip->battery);
+	if (ret) {
+		dev_err(&client->dev, "failed: power supply register\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		kfree(chip);
 		return ret;
 	}
 
+<<<<<<< HEAD
+=======
+	/* Initialize registers according to values from the platform data */
+	if (chip->pdata->init_data)
+		max17042_set_reg(client, chip->pdata->init_data,
+				 chip->pdata->num_init_data);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!chip->pdata->enable_current_sense) {
 		max17042_write_reg(client, MAX17042_CGAIN, 0x0000);
 		max17042_write_reg(client, MAX17042_MiscCFG, 0x0003);
 		max17042_write_reg(client, MAX17042_LearnCFG, 0x0007);
+<<<<<<< HEAD
+=======
+	} else {
+		if (chip->pdata->r_sns == 0)
+			chip->pdata->r_sns = MAX17042_DEFAULT_SNS_RESISTOR;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return 0;
@@ -202,7 +335,10 @@ static int __devexit max17042_remove(struct i2c_client *client)
 	struct max17042_chip *chip = i2c_get_clientdata(client);
 
 	power_supply_unregister(&chip->battery);
+<<<<<<< HEAD
 	i2c_set_clientdata(client, NULL);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(chip);
 	return 0;
 }

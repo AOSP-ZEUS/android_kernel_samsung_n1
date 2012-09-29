@@ -57,6 +57,10 @@ struct vnic_cq {
 	struct vnic_dev_ring ring;
 	unsigned int to_clean;
 	unsigned int last_color;
+<<<<<<< HEAD
+=======
+	unsigned int interrupt_offset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static inline unsigned int vnic_cq_service(struct vnic_cq *cq,

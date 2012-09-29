@@ -804,5 +804,15 @@ static void __exit cleanup_netconsole(void)
 	}
 }
 
+<<<<<<< HEAD
 module_init(init_netconsole);
+=======
+/*
+ * Use late_initcall to ensure netconsole is
+ * initialized after network device driver if built-in.
+ *
+ * late_initcall() and module_init() are identical if built as module.
+ */
+late_initcall(init_netconsole);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 module_exit(cleanup_netconsole);

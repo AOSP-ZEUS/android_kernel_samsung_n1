@@ -182,7 +182,11 @@ void gf128mul_lle(be128 *r, const be128 *b)
 	for (i = 0; i < 7; ++i)
 		gf128mul_x_lle(&p[i + 1], &p[i]);
 
+<<<<<<< HEAD
 	memset(r, 0, sizeof(r));
+=======
+	memset(r, 0, sizeof(*r));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (i = 0;;) {
 		u8 ch = ((u8 *)b)[15 - i];
 
@@ -220,7 +224,11 @@ void gf128mul_bbe(be128 *r, const be128 *b)
 	for (i = 0; i < 7; ++i)
 		gf128mul_x_bbe(&p[i + 1], &p[i]);
 
+<<<<<<< HEAD
 	memset(r, 0, sizeof(r));
+=======
+	memset(r, 0, sizeof(*r));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (i = 0;;) {
 		u8 ch = ((u8 *)b)[i];
 

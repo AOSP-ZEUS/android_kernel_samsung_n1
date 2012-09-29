@@ -347,7 +347,11 @@ void __init qe_ic_init(struct device_node *node, unsigned int flags,
 		return;
 	}
 
+<<<<<<< HEAD
 	qe_ic->regs = ioremap(res.start, res.end - res.start + 1);
+=======
+	qe_ic->regs = ioremap(res.start, resource_size(&res));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	qe_ic->irqhost->host_data = qe_ic;
 	qe_ic->hc_irq = qe_ic_irq_chip;

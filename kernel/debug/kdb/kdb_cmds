@@ -18,16 +18,22 @@ defcmd dumpcommon "" "Common kdb debugging"
 endefcmd
 
 defcmd dumpall "" "First line debugging"
+<<<<<<< HEAD
   set BTSYMARG 1
   set BTARGS 9
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
   pid R
   -dumpcommon
   -bta
 endefcmd
 
 defcmd dumpcpu "" "Same as dumpall but only tasks on cpus"
+<<<<<<< HEAD
   set BTSYMARG 1
   set BTARGS 9
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
   pid R
   -dumpcommon
   -btc

@@ -1065,6 +1065,11 @@
 #define  RCVLSC_STATUS_ERROR_ATTN	 0x00000004
 /* 0x3408 --> 0x3600 unused */
 
+<<<<<<< HEAD
+=======
+#define TG3_CPMU_DRV_STATUS		0x0000344c
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* CPMU registers */
 #define TG3_CPMU_CTRL			0x00003600
 #define  CPMU_CTRL_LINK_IDLE_MODE	 0x00000200
@@ -1118,10 +1123,17 @@
 #define  TG3_CPMU_EEEMD_EEE_ENABLE	 0x00100000
 #define TG3_CPMU_EEE_DBTMR1		0x000036b4
 #define  TG3_CPMU_DBTMR1_PCIEXIT_2047US	 0x07ff0000
+<<<<<<< HEAD
 #define  TG3_CPMU_DBTMR1_LNKIDLE_2047US	 0x000070ff
 #define TG3_CPMU_EEE_DBTMR2		0x000036b8
 #define  TG3_CPMU_DBTMR2_APE_TX_2047US	 0x07ff0000
 #define  TG3_CPMU_DBTMR2_TXIDXEQ_2047US	 0x000070ff
+=======
+#define  TG3_CPMU_DBTMR1_LNKIDLE_2047US	 0x000007ff
+#define TG3_CPMU_EEE_DBTMR2		0x000036b8
+#define  TG3_CPMU_DBTMR2_APE_TX_2047US	 0x07ff0000
+#define  TG3_CPMU_DBTMR2_TXIDXEQ_2047US	 0x000007ff
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define TG3_CPMU_EEE_LNKIDL_CTRL	0x000036bc
 #define  TG3_CPMU_EEE_LNKIDL_PCIE_NL0	 0x01000000
 #define  TG3_CPMU_EEE_LNKIDL_UART_IDL	 0x00000004
@@ -2152,6 +2164,7 @@
 
 
 /*** Tigon3 specific PHY MII registers. ***/
+<<<<<<< HEAD
 #define  TG3_BMCR_SPEED1000		0x0040
 
 #define MII_TG3_CTRL			0x09 /* 1000-baseT control register */
@@ -2160,6 +2173,8 @@
 #define  MII_TG3_CTRL_AS_MASTER		0x0800
 #define  MII_TG3_CTRL_ENABLE_AS_MASTER	0x1000
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define MII_TG3_MMD_CTRL		0x0d /* MMD Access Control register */
 #define MII_TG3_MMD_CTRL_DATA_NOINC	0x4000
 #define MII_TG3_MMD_ADDRESS		0x0e /* MMD Address Data register */
@@ -2186,7 +2201,11 @@
 #define  MII_TG3_DSP_TAP26_OPCSINPT	0x0004
 #define MII_TG3_DSP_AADJ1CH0		0x001f
 #define MII_TG3_DSP_CH34TP2		0x4022
+<<<<<<< HEAD
 #define MII_TG3_DSP_CH34TP2_HIBW01	0x017b
+=======
+#define MII_TG3_DSP_CH34TP2_HIBW01	0x01ff
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define MII_TG3_DSP_AADJ1CH3		0x601f
 #define  MII_TG3_DSP_AADJ1CH3_ADCCKADJ	0x0002
 #define MII_TG3_DSP_EXP1_INT_STAT	0x0f01
@@ -2285,6 +2304,11 @@
 
 
 /* APE registers.  Accessible through BAR1 */
+<<<<<<< HEAD
+=======
+#define TG3_APE_GPIO_MSG		0x0008
+#define TG3_APE_GPIO_MSG_SHIFT		4
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define TG3_APE_EVENT			0x000c
 #define  APE_EVENT_1			 0x00000001
 #define TG3_APE_LOCK_REQ		0x002c
@@ -2347,6 +2371,10 @@
 /* APE convenience enumerations. */
 #define TG3_APE_LOCK_GRC                1
 #define TG3_APE_LOCK_MEM                4
+<<<<<<< HEAD
+=======
+#define TG3_APE_LOCK_GPIO               7
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define TG3_EEPROM_SB_F1R2_MBA_OFF	0x10
 
@@ -2655,6 +2683,15 @@ struct ring_info {
 	DEFINE_DMA_UNMAP_ADDR(mapping);
 };
 
+<<<<<<< HEAD
+=======
+struct tg3_tx_ring_info {
+	struct sk_buff			*skb;
+	DEFINE_DMA_UNMAP_ADDR(mapping);
+	bool				fragmented;
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct tg3_link_config {
 	/* Describes what we're trying to get. */
 	u32				advertising;
@@ -2800,6 +2837,10 @@ struct tg3_napi {
 	struct tg3			*tp;
 	struct tg3_hw_status		*hw_status;
 
+<<<<<<< HEAD
+=======
+	u32				chk_msi_cnt;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32				last_tag;
 	u32				last_irq_tag;
 	u32				int_mbox;
@@ -2807,6 +2848,10 @@ struct tg3_napi {
 
 	u32				consmbox ____cacheline_aligned;
 	u32				rx_rcb_ptr;
+<<<<<<< HEAD
+=======
+	u32				last_rx_cons;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16				*rx_rcb_prod_idx;
 	struct tg3_rx_prodring_set	prodring;
 	struct tg3_rx_buffer_desc	*rx_rcb;
@@ -2814,9 +2859,16 @@ struct tg3_napi {
 	u32				tx_prod	____cacheline_aligned;
 	u32				tx_cons;
 	u32				tx_pending;
+<<<<<<< HEAD
 	u32				prodmbox;
 	struct tg3_tx_buffer_desc	*tx_ring;
 	struct ring_info		*tx_buffers;
+=======
+	u32				last_tx_cons;
+	u32				prodmbox;
+	struct tg3_tx_buffer_desc	*tx_ring;
+	struct tg3_tx_ring_info		*tx_buffers;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	dma_addr_t			status_mapping;
 	dma_addr_t			rx_rcb_mapping;
@@ -2862,7 +2914,11 @@ enum TG3_FLAGS {
 	TG3_FLAG_IS_5788,
 	TG3_FLAG_MAX_RXPEND_64,
 	TG3_FLAG_TSO_CAPABLE,
+<<<<<<< HEAD
 	TG3_FLAG_PCI_EXPRESS,
+=======
+	TG3_FLAG_PCI_EXPRESS, /* BCM5785 + pci_is_pcie() */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	TG3_FLAG_ASF_NEW_HANDSHAKE,
 	TG3_FLAG_HW_AUTONEG,
 	TG3_FLAG_IS_NIC,
@@ -2893,14 +2949,21 @@ enum TG3_FLAGS {
 	TG3_FLAG_NO_NVRAM,
 	TG3_FLAG_ENABLE_RSS,
 	TG3_FLAG_ENABLE_TSS,
+<<<<<<< HEAD
 	TG3_FLAG_4G_DMA_BNDRY_BUG,
 	TG3_FLAG_40BIT_DMA_LIMIT_BUG,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	TG3_FLAG_SHORT_DMA_BUG,
 	TG3_FLAG_USE_JUMBO_BDFLAG,
 	TG3_FLAG_L1PLLPD_EN,
 	TG3_FLAG_57765_PLUS,
 	TG3_FLAG_APE_HAS_NCSI,
 	TG3_FLAG_5717_PLUS,
+<<<<<<< HEAD
+=======
+	TG3_FLAG_4K_FIFO_LIMIT,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Add new flags before this comment and TG3_FLAG_NUMBER_OF_FLAGS */
 	TG3_FLAG_NUMBER_OF_FLAGS,	/* Last entry in enum TG3_FLAGS */
@@ -3027,12 +3090,19 @@ struct tg3 {
 	u8				pci_cacheline_sz;
 	u8				pci_lat_timer;
 
+<<<<<<< HEAD
 	int				pm_cap;
 	int				msi_cap;
 	union {
 	int				pcix_cap;
 	int				pcie_cap;
 	};
+=======
+	int				pci_fn;
+	int				pm_cap;
+	int				msi_cap;
+	int				pcix_cap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int				pcie_readrq;
 
 	struct mii_bus			*mdio_bus;

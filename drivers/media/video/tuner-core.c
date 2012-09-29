@@ -39,6 +39,10 @@
 #include "tda9887.h"
 #include "xc5000.h"
 #include "tda18271.h"
+<<<<<<< HEAD
+=======
+#include "xc4000.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define UNSET (-1U)
 
@@ -391,6 +395,26 @@ static void set_type(struct i2c_client *c, unsigned int type,
 		tune_now = 0;
 		break;
 	}
+<<<<<<< HEAD
+=======
+	case TUNER_XC4000:
+	{
+		struct xc4000_config xc4000_cfg = {
+			.i2c_address	  = t->i2c->addr,
+			/* FIXME: the correct parameters will be set */
+			/* only when the digital dvb_attach() occurs */
+			.default_pm	  = 0,
+			.dvb_amplitude	  = 0,
+			.set_smoothedcvbs = 0,
+			.if_khz		  = 0
+		};
+		if (!dvb_attach(xc4000_attach,
+				&t->fe, t->i2c->adapter, &xc4000_cfg))
+			goto attach_failed;
+		tune_now = 0;
+		break;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default:
 		if (!dvb_attach(simple_tuner_attach, &t->fe,
 				t->i2c->adapter, t->i2c->addr, t->type))

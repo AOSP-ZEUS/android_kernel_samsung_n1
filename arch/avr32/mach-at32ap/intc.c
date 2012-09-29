@@ -107,7 +107,11 @@ void __init init_IRQ(void)
 
 	clk_enable(pclk);
 
+<<<<<<< HEAD
 	intc0.regs = ioremap(regs->start, regs->end - regs->start + 1);
+=======
+	intc0.regs = ioremap(regs->start, resource_size(regs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!intc0.regs) {
 		printk(KERN_EMERG "intc: failed to map registers (0x%08lx)\n",
 		       (unsigned long)regs->start);

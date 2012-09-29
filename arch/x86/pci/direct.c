@@ -22,7 +22,11 @@ static int pci_conf1_read(unsigned int seg, unsigned int bus,
 {
 	unsigned long flags;
 
+<<<<<<< HEAD
 	if ((bus > 255) || (devfn > 255) || (reg > 4095)) {
+=======
+	if (seg || (bus > 255) || (devfn > 255) || (reg > 4095)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		*value = -1;
 		return -EINVAL;
 	}
@@ -53,7 +57,11 @@ static int pci_conf1_write(unsigned int seg, unsigned int bus,
 {
 	unsigned long flags;
 
+<<<<<<< HEAD
 	if ((bus > 255) || (devfn > 255) || (reg > 4095))
+=======
+	if (seg || (bus > 255) || (devfn > 255) || (reg > 4095))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 
 	raw_spin_lock_irqsave(&pci_config_lock, flags);
@@ -97,6 +105,10 @@ static int pci_conf2_read(unsigned int seg, unsigned int bus,
 	unsigned long flags;
 	int dev, fn;
 
+<<<<<<< HEAD
+=======
+	WARN_ON(seg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if ((bus > 255) || (devfn > 255) || (reg > 255)) {
 		*value = -1;
 		return -EINVAL;
@@ -138,6 +150,10 @@ static int pci_conf2_write(unsigned int seg, unsigned int bus,
 	unsigned long flags;
 	int dev, fn;
 
+<<<<<<< HEAD
+=======
+	WARN_ON(seg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if ((bus > 255) || (devfn > 255) || (reg > 255)) 
 		return -EINVAL;
 

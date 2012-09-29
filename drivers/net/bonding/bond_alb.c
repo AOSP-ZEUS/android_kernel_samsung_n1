@@ -635,7 +635,11 @@ static struct slave *rlb_choose_channel(struct sk_buff *skb, struct bonding *bon
 			client_info->ntt = 0;
 		}
 
+<<<<<<< HEAD
 		if (bond->vlgrp) {
+=======
+		if (bond_vlan_used(bond)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (!vlan_get_tag(skb, &client_info->vlan_id))
 				client_info->tag = 1;
 		}
@@ -847,7 +851,11 @@ static void alb_send_learning_packets(struct slave *slave, u8 mac_addr[])
 		skb->priority = TC_PRIO_CONTROL;
 		skb->dev = slave->dev;
 
+<<<<<<< HEAD
 		if (bond->vlgrp) {
+=======
+		if (bond_vlan_used(bond)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			struct vlan_entry *vlan;
 
 			vlan = bond_next_vlan(bond,
@@ -1434,7 +1442,12 @@ void bond_alb_monitor(struct work_struct *work)
 	}
 
 re_arm:
+<<<<<<< HEAD
 	queue_delayed_work(bond->wq, &bond->alb_work, alb_delta_in_ticks);
+=======
+	if (!bond->kill_timers)
+		queue_delayed_work(bond->wq, &bond->alb_work, alb_delta_in_ticks);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out:
 	read_unlock(&bond->lock);
 }

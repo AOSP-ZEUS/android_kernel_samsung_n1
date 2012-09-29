@@ -9,7 +9,11 @@
 
 struct kconf_id;
 
+<<<<<<< HEAD
 static struct kconf_id *kconf_id_lookup(register const char *str, register unsigned int len);
+=======
+static const struct kconf_id *kconf_id_lookup(register const char *str, register unsigned int len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 %%
 mainmenu,	T_MAINMENU,	TF_COMMAND

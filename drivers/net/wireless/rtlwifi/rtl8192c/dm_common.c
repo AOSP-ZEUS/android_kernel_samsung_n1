@@ -474,7 +474,11 @@ static void rtl92c_dm_ctrl_initgain_by_twoport(struct ieee80211_hw *hw)
 {
 	struct rtl_mac *mac = rtl_mac(rtl_priv(hw));
 
+<<<<<<< HEAD
 	if (mac->act_scanning == true)
+=======
+	if (mac->act_scanning)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 
 	if (mac->link_state >= MAC80211_LINKED)
@@ -523,10 +527,13 @@ void rtl92c_dm_write_dig(struct ieee80211_hw *hw)
 		  dm_digtable.cur_igvalue, dm_digtable.pre_igvalue,
 		  dm_digtable.backoff_val));
 
+<<<<<<< HEAD
 	dm_digtable.cur_igvalue += 2;
 	if (dm_digtable.cur_igvalue > 0x3f)
 		dm_digtable.cur_igvalue = 0x3f;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (dm_digtable.pre_igvalue != dm_digtable.cur_igvalue) {
 		rtl_set_bbreg(hw, ROFDM0_XAAGCCORE1, 0x7f,
 			      dm_digtable.cur_igvalue);
@@ -674,7 +681,11 @@ static void rtl92c_dm_txpower_tracking_callback_thermalmeter(struct ieee80211_hw
 	u8 ofdm_index[2], cck_index = 0, ofdm_index_old[2], cck_index_old = 0;
 	int i;
 	bool is2t = IS_92C_SERIAL(rtlhal->version);
+<<<<<<< HEAD
 	u8 txpwr_level[2] = {0, 0};
+=======
+	s8 txpwr_level[2] = {0, 0};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 ofdm_min_index = 6, rf;
 
 	rtlpriv->dm.txpower_trackinginit = true;
@@ -1222,18 +1233,27 @@ static void rtl92c_dm_refresh_rate_adaptive_mask(struct ieee80211_hw *hw)
 				 ("PreState = %d, CurState = %d\n",
 				  p_ra->pre_ratr_state, p_ra->ratr_state));
 
+<<<<<<< HEAD
 			/* Only the PCI card uses sta in the update rate table
 			 * callback routine */
 			if (rtlhal->interface == INTF_PCI) {
 				rcu_read_lock();
 				sta = ieee80211_find_sta(mac->vif, mac->bssid);
 			}
+=======
+			rcu_read_lock();
+			sta = ieee80211_find_sta(mac->vif, mac->bssid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			rtlpriv->cfg->ops->update_rate_tbl(hw, sta,
 					p_ra->ratr_state);
 
 			p_ra->pre_ratr_state = p_ra->ratr_state;
+<<<<<<< HEAD
 			if (rtlhal->interface == INTF_PCI)
 				rcu_read_unlock();
+=======
+			rcu_read_unlock();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 }

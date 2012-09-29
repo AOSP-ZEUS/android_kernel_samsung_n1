@@ -262,6 +262,10 @@ IOMAP
   devm_ioremap()
   devm_ioremap_nocache()
   devm_iounmap()
+<<<<<<< HEAD
+=======
+  devm_request_and_ioremap() : checks resource, requests region, ioremaps
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
   pcim_iomap()
   pcim_iounmap()
   pcim_iomap_table()	: array of mapped addresses indexed by BAR

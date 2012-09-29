@@ -24,7 +24,10 @@
 #ifndef __ASM_ARCH_OMAP_MCBSP_H
 #define __ASM_ARCH_OMAP_MCBSP_H
 
+<<<<<<< HEAD
 #include <linux/completion.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/spinlock.h>
 
 #include <mach/hardware.h>
@@ -34,7 +37,11 @@
 #define OMAP_MCBSP_PLATFORM_DEVICE(port_nr)		\
 static struct platform_device omap_mcbsp##port_nr = {	\
 	.name	= "omap-mcbsp-dai",			\
+<<<<<<< HEAD
 	.id	= OMAP_MCBSP##port_nr,			\
+=======
+	.id	= port_nr - 1,			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #define MCBSP_CONFIG_TYPE2	0x2
@@ -333,6 +340,7 @@ struct omap_mcbsp_reg_cfg {
 };
 
 typedef enum {
+<<<<<<< HEAD
 	OMAP_MCBSP1 = 0,
 	OMAP_MCBSP2,
 	OMAP_MCBSP3,
@@ -345,6 +353,8 @@ typedef int __bitwise omap_mcbsp_io_type_t;
 #define OMAP_MCBSP_POLL_IO ((__force omap_mcbsp_io_type_t) 2)
 
 typedef enum {
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	OMAP_MCBSP_WORD_8 = 0,
 	OMAP_MCBSP_WORD_12,
 	OMAP_MCBSP_WORD_16,
@@ -353,6 +363,7 @@ typedef enum {
 	OMAP_MCBSP_WORD_32,
 } omap_mcbsp_word_length;
 
+<<<<<<< HEAD
 typedef enum {
 	OMAP_MCBSP_CLK_RISING = 0,
 	OMAP_MCBSP_CLK_FALLING,
@@ -385,6 +396,8 @@ struct omap_mcbsp_spi_cfg {
 	omap_mcbsp_word_length		word_length;
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Platform specific configuration */
 struct omap_mcbsp_ops {
 	void (*request)(unsigned int);
@@ -422,16 +435,21 @@ struct omap_mcbsp {
 	void __iomem *io_base;
 	u8 id;
 	u8 free;
+<<<<<<< HEAD
 	omap_mcbsp_word_length rx_word_length;
 	omap_mcbsp_word_length tx_word_length;
 
 	omap_mcbsp_io_type_t io_type; /* IRQ or poll */
 	/* IRQ based TX/RX */
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int rx_irq;
 	int tx_irq;
 
 	/* DMA stuff */
 	u8 dma_rx_sync;
+<<<<<<< HEAD
 	short dma_rx_lch;
 	u8 dma_tx_sync;
 	short dma_tx_lch;
@@ -441,6 +459,9 @@ struct omap_mcbsp {
 	struct completion rx_irq_completion;
 	struct completion tx_dma_completion;
 	struct completion rx_dma_completion;
+=======
+	u8 dma_tx_sync;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Protect the field .free, while checking if the mcbsp is in use */
 	spinlock_t lock;
@@ -499,6 +520,7 @@ int omap_mcbsp_request(unsigned int id);
 void omap_mcbsp_free(unsigned int id);
 void omap_mcbsp_start(unsigned int id, int tx, int rx);
 void omap_mcbsp_stop(unsigned int id, int tx, int rx);
+<<<<<<< HEAD
 void omap_mcbsp_xmit_word(unsigned int id, u32 word);
 u32 omap_mcbsp_recv_word(unsigned int id);
 
@@ -517,6 +539,11 @@ void omap_mcbsp_set_spi_mode(unsigned int id, const struct omap_mcbsp_spi_cfg * 
 int omap_mcbsp_pollread(unsigned int id, u16 * buf);
 int omap_mcbsp_pollwrite(unsigned int id, u16 buf);
 int omap_mcbsp_set_io_type(unsigned int id, omap_mcbsp_io_type_t io_type);
+=======
+
+/* McBSP functional clock source changing function */
+extern int omap2_mcbsp_set_clks_src(u8 id, u8 fck_src_id);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* McBSP signal muxing API */
 void omap2_mcbsp1_mux_clkr_src(u8 mux);

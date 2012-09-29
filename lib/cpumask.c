@@ -30,7 +30,11 @@ int __any_online_cpu(const cpumask_t *mask)
 {
 	int cpu;
 
+<<<<<<< HEAD
 	for_each_cpu_mask(cpu, *mask) {
+=======
+	for_each_cpu(cpu, mask) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (cpu_online(cpu))
 			break;
 	}
@@ -131,7 +135,11 @@ EXPORT_SYMBOL(zalloc_cpumask_var_node);
  */
 bool alloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
 {
+<<<<<<< HEAD
 	return alloc_cpumask_var_node(mask, flags, numa_node_id());
+=======
+	return alloc_cpumask_var_node(mask, flags, NUMA_NO_NODE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL(alloc_cpumask_var);
 

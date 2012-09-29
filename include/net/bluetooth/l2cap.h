@@ -23,7 +23,13 @@
    COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS, RELATING TO USE OF THIS
    SOFTWARE IS DISCLAIMED.
 */
+<<<<<<< HEAD
 
+=======
+#ifdef CONFIG_BT_MGMT
+#include "l2cap_mgmt.h"
+#else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef __L2CAP_H
 #define __L2CAP_H
 
@@ -498,3 +504,8 @@ int l2cap_chan_send(struct l2cap_chan *chan, struct msghdr *msg, size_t len);
 void l2cap_chan_busy(struct l2cap_chan *chan, int busy);
 
 #endif /* __L2CAP_H */
+<<<<<<< HEAD
+=======
+
+#endif /* BT_MGMT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

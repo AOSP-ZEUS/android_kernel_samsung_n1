@@ -116,6 +116,10 @@ struct ath_tx_stats {
 	u32 tx_bytes_all;
 	u32 queued;
 	u32 completed;
+<<<<<<< HEAD
+=======
+	u32 xretries;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 a_aggr;
 	u32 a_queued_hw;
 	u32 a_queued_sw;

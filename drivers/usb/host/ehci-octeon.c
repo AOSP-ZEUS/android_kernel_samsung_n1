@@ -124,7 +124,11 @@ static int ehci_octeon_drv_probe(struct platform_device *pdev)
 		return -ENOMEM;
 
 	hcd->rsrc_start = res_mem->start;
+<<<<<<< HEAD
 	hcd->rsrc_len = res_mem->end - res_mem->start + 1;
+=======
+	hcd->rsrc_len = resource_size(res_mem);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!request_mem_region(hcd->rsrc_start, hcd->rsrc_len,
 				OCTEON_EHCI_HCD_NAME)) {

@@ -3,7 +3,11 @@ menu "GCOV-based kernel profiling"
 config GCOV_KERNEL
 	bool "Enable gcov-based kernel profiling"
 	depends on DEBUG_FS
+<<<<<<< HEAD
 	select CONSTRUCTORS
+=======
+	select CONSTRUCTORS if !UML
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default n
 	---help---
 	This option enables gcov-based code profiling (e.g. for code coverage
@@ -35,7 +39,11 @@ config GCOV_KERNEL
 config GCOV_PROFILE_ALL
 	bool "Profile entire Kernel"
 	depends on GCOV_KERNEL
+<<<<<<< HEAD
 	depends on SUPERH || S390 || X86 || (PPC && EXPERIMENTAL) || MICROBLAZE
+=======
+	depends on SUPERH || S390 || X86 || (PPC && EXPERIMENTAL) || MICROBLAZE || ARM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default n
 	---help---
 	This options activates profiling for the entire kernel.
@@ -46,4 +54,13 @@ config GCOV_PROFILE_ALL
 	larger and run slower. Also be sure to exclude files from profiling
 	which are not linked to the kernel image to prevent linker errors.
 
+<<<<<<< HEAD
+=======
+config GCOV_CTORS
+	string
+	depends on CONSTRUCTORS
+	default ".init_array" if ARM && AEABI
+	default ".ctors"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endmenu

@@ -8778,6 +8778,7 @@ static int __devinit ipr_probe_ioa(struct pci_dev *pdev,
 	if (rc != PCIBIOS_SUCCESSFUL) {
 		dev_err(&pdev->dev, "Failed to save PCI config space\n");
 		rc = -EIO;
+<<<<<<< HEAD
 		goto cleanup_nomem;
 	}
 
@@ -8786,6 +8787,16 @@ static int __devinit ipr_probe_ioa(struct pci_dev *pdev,
 
 	if ((rc = ipr_set_pcix_cmd_reg(ioa_cfg)))
 		goto cleanup_nomem;
+=======
+		goto out_msi_disable;
+	}
+
+	if ((rc = ipr_save_pcix_cmd_reg(ioa_cfg)))
+		goto out_msi_disable;
+
+	if ((rc = ipr_set_pcix_cmd_reg(ioa_cfg)))
+		goto out_msi_disable;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ioa_cfg->sis64)
 		ioa_cfg->cfg_table_size = (sizeof(struct ipr_config_table_hdr64)
@@ -8800,7 +8811,11 @@ static int __devinit ipr_probe_ioa(struct pci_dev *pdev,
 	if (rc < 0) {
 		dev_err(&pdev->dev,
 			"Couldn't allocate enough memory for device driver!\n");
+<<<<<<< HEAD
 		goto cleanup_nomem;
+=======
+		goto out_msi_disable;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/*
@@ -8845,10 +8860,17 @@ out:
 
 cleanup_nolog:
 	ipr_free_mem(ioa_cfg);
+<<<<<<< HEAD
 cleanup_nomem:
 	iounmap(ipr_regs);
 out_msi_disable:
 	pci_disable_msi(pdev);
+=======
+out_msi_disable:
+	pci_disable_msi(pdev);
+cleanup_nomem:
+	iounmap(ipr_regs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out_release_regions:
 	pci_release_regions(pdev);
 out_scsi_host_put:

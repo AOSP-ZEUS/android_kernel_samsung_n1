@@ -38,7 +38,10 @@ void flush_thread(void)
 
 void start_thread(struct pt_regs *regs, unsigned long eip, unsigned long esp)
 {
+<<<<<<< HEAD
 	set_fs(USER_DS);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PT_REGS_IP(regs) = eip;
 	PT_REGS_SP(regs) = esp;
 }

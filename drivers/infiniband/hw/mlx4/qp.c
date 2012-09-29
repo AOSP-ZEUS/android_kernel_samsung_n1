@@ -893,7 +893,10 @@ static int mlx4_set_path(struct mlx4_ib_dev *dev, const struct ib_ah_attr *ah,
 			--path->static_rate;
 	} else
 		path->static_rate = 0;
+<<<<<<< HEAD
 	path->counter_index = 0xff;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ah->ah_flags & IB_AH_GRH) {
 		if (ah->grh.sgid_index >= dev->dev->caps.gid_table_len[port]) {
@@ -1034,6 +1037,18 @@ static int __mlx4_ib_modify_qp(struct ib_qp *ibqp,
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	if (cur_state == IB_QPS_INIT && new_state == IB_QPS_RTR) {
+		if (dev->counters[qp->port - 1] != -1) {
+			context->pri_path.counter_index =
+						dev->counters[qp->port - 1];
+			optpar |= MLX4_QP_OPTPAR_COUNTER_INDEX;
+		} else
+			context->pri_path.counter_index = 0xff;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (attr_mask & IB_QP_PKEY_INDEX) {
 		context->pri_path.pkey_index = attr->pkey_index;
 		optpar |= MLX4_QP_OPTPAR_PKEY_INDEX;

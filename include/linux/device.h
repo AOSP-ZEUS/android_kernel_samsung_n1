@@ -22,7 +22,11 @@
 #include <linux/types.h>
 #include <linux/module.h>
 #include <linux/pm.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/device.h>
 
 struct device;
@@ -33,6 +37,10 @@ struct class;
 struct subsys_private;
 struct bus_type;
 struct device_node;
+<<<<<<< HEAD
+=======
+struct iommu_ops;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct bus_attribute {
 	struct attribute	attr;
@@ -67,6 +75,12 @@ extern void bus_remove_file(struct bus_type *, struct bus_attribute *);
  * @resume:	Called to bring a device on this bus out of sleep mode.
  * @pm:		Power management operations of this bus, callback the specific
  *		device driver's pm-ops.
+<<<<<<< HEAD
+=======
+ * @iommu_ops   IOMMU specific operations for this bus, used to attach IOMMU
+ *              driver implementations to a bus and allow the driver to do
+ *              bus-specific setup
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @p:		The private data of the driver core, only the driver core can
  *		touch this.
  *
@@ -96,6 +110,11 @@ struct bus_type {
 
 	const struct dev_pm_ops *pm;
 
+<<<<<<< HEAD
+=======
+	struct iommu_ops *iommu_ops;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct subsys_private *p;
 };
 
@@ -481,6 +500,12 @@ extern int devres_release_group(struct device *dev, void *id);
 extern void *devm_kzalloc(struct device *dev, size_t size, gfp_t gfp);
 extern void devm_kfree(struct device *dev, void *p);
 
+<<<<<<< HEAD
+=======
+void __iomem *devm_request_and_ioremap(struct device *dev,
+			struct resource *res);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct device_dma_parameters {
 	/*
 	 * a low level driver may set these to teach IOMMU code about
@@ -516,7 +541,11 @@ struct device_dma_parameters {
  * 		minimizes board-specific #ifdefs in drivers.
  * @power:	For device power management.
  * 		See Documentation/power/devices.txt for details.
+<<<<<<< HEAD
  * @pwr_domain:	Provide callbacks that are executed during system suspend,
+=======
+ * @pm_domain:	Provide callbacks that are executed during system suspend,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * 		hibernation, system resume and during runtime PM transitions
  * 		along with subsystem-level and driver-level callbacks.
  * @numa_node:	NUMA node this device is close to.
@@ -567,7 +596,11 @@ struct device {
 	void		*platform_data;	/* Platform specific data, device
 					   core doesn't touch it */
 	struct dev_pm_info	power;
+<<<<<<< HEAD
 	struct dev_power_domain	*pwr_domain;
+=======
+	struct dev_pm_domain	*pm_domain;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_NUMA
 	int		numa_node;	/* NUMA node this device is close to */
@@ -904,4 +937,28 @@ extern long sysfs_deprecated;
 #define sysfs_deprecated 0
 #endif
 
+<<<<<<< HEAD
+=======
+/**
+ * module_driver() - Helper macro for drivers that don't do anything
+ * special in module init/exit. This eliminates a lot of boilerplate.
+ * Each module may only use this macro once, and calling it replaces
+ * module_init() and module_exit().
+ *
+ * Use this macro to construct bus specific macros for registering
+ * drivers, and do not use it on its own.
+ */
+#define module_driver(__driver, __register, __unregister) \
+static int __init __driver##_init(void) \
+{ \
+	return __register(&(__driver)); \
+} \
+module_init(__driver##_init); \
+static void __exit __driver##_exit(void) \
+{ \
+	__unregister(&(__driver)); \
+} \
+module_exit(__driver##_exit);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* _DEVICE_H_ */

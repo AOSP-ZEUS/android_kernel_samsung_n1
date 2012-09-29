@@ -57,6 +57,10 @@ ixgb_raise_clock(struct ixgb_hw *hw,
 	 */
 	*eecd_reg = *eecd_reg | IXGB_EECD_SK;
 	IXGB_WRITE_REG(hw, EECD, *eecd_reg);
+<<<<<<< HEAD
+=======
+	IXGB_WRITE_FLUSH(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udelay(50);
 }
 
@@ -75,6 +79,10 @@ ixgb_lower_clock(struct ixgb_hw *hw,
 	 */
 	*eecd_reg = *eecd_reg & ~IXGB_EECD_SK;
 	IXGB_WRITE_REG(hw, EECD, *eecd_reg);
+<<<<<<< HEAD
+=======
+	IXGB_WRITE_FLUSH(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udelay(50);
 }
 
@@ -112,6 +120,10 @@ ixgb_shift_out_bits(struct ixgb_hw *hw,
 			eecd_reg |= IXGB_EECD_DI;
 
 		IXGB_WRITE_REG(hw, EECD, eecd_reg);
+<<<<<<< HEAD
+=======
+		IXGB_WRITE_FLUSH(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		udelay(50);
 
@@ -206,21 +218,37 @@ ixgb_standby_eeprom(struct ixgb_hw *hw)
 	/*  Deselect EEPROM  */
 	eecd_reg &= ~(IXGB_EECD_CS | IXGB_EECD_SK);
 	IXGB_WRITE_REG(hw, EECD, eecd_reg);
+<<<<<<< HEAD
+=======
+	IXGB_WRITE_FLUSH(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udelay(50);
 
 	/*  Clock high  */
 	eecd_reg |= IXGB_EECD_SK;
 	IXGB_WRITE_REG(hw, EECD, eecd_reg);
+<<<<<<< HEAD
+=======
+	IXGB_WRITE_FLUSH(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udelay(50);
 
 	/*  Select EEPROM  */
 	eecd_reg |= IXGB_EECD_CS;
 	IXGB_WRITE_REG(hw, EECD, eecd_reg);
+<<<<<<< HEAD
+=======
+	IXGB_WRITE_FLUSH(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udelay(50);
 
 	/*  Clock low  */
 	eecd_reg &= ~IXGB_EECD_SK;
 	IXGB_WRITE_REG(hw, EECD, eecd_reg);
+<<<<<<< HEAD
+=======
+	IXGB_WRITE_FLUSH(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udelay(50);
 }
 
@@ -239,11 +267,19 @@ ixgb_clock_eeprom(struct ixgb_hw *hw)
 	/*  Rising edge of clock  */
 	eecd_reg |= IXGB_EECD_SK;
 	IXGB_WRITE_REG(hw, EECD, eecd_reg);
+<<<<<<< HEAD
+=======
+	IXGB_WRITE_FLUSH(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udelay(50);
 
 	/*  Falling edge of clock  */
 	eecd_reg &= ~IXGB_EECD_SK;
 	IXGB_WRITE_REG(hw, EECD, eecd_reg);
+<<<<<<< HEAD
+=======
+	IXGB_WRITE_FLUSH(hw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udelay(50);
 }
 

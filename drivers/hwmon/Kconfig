@@ -179,6 +179,19 @@ config SENSORS_ADT7411
 	  This driver can also be built as a module. If so, the module
 	  will be called adt7411.
 
+<<<<<<< HEAD
+=======
+config SENSORS_ADT7461
+	tristate "Analog Devices ADT7461"
+	depends on I2C && EXPERIMENTAL
+	help
+	  If you say yes here you get support for the Analog Devices
+	  ADT7461 temperature monitoring chips.
+
+	  This driver can also be built as a module. If so, the module
+	  will be called adt7461.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SENSORS_ADT7462
 	tristate "Analog Devices ADT7462"
 	depends on I2C && EXPERIMENTAL
@@ -474,9 +487,14 @@ config SENSORS_JC42
 	  If you say yes here, you get support for JEDEC JC42.4 compliant
 	  temperature sensors, which are used on many DDR3 memory modules for
 	  mobile devices and servers.  Support will include, but not be limited
+<<<<<<< HEAD
 	  to, ADT7408, AT30TS00, CAT34TS02, CAT6095, MAX6604, MCP9804, MCP9805,
 	  MCP98242, MCP98243, MCP9843, SE97, SE98, STTS424(E), STTS2002,
 	  STTS3000, TSE2002B3, TSE2002GB2, TS3000B3, and TS3000GB2.
+=======
+	  to, ADT7408, CAT34TS02, CAT6095, MAX6604, MCP9805, MCP98242, MCP98243,
+	  MCP9843, SE97, SE98, STTS424(E), TSE2002B3, and TS3000B3.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	  This driver can also be built as a module.  If so, the module
 	  will be called jc42.
@@ -624,7 +642,11 @@ config SENSORS_LM90
 	  LM86, LM89 and LM99, Analog Devices ADM1032, ADT7461, and ADT7461A,
 	  Maxim MAX6646, MAX6647, MAX6648, MAX6649, MAX6657, MAX6658, MAX6659,
 	  MAX6680, MAX6681, MAX6692, MAX6695, MAX6696, ON Semiconductor NCT1008,
+<<<<<<< HEAD
 	  and Winbond/Nuvoton W83L771W/G/AWG/ASG sensor chips.
+=======
+	  Winbond/Nuvoton W83L771W/G/AWG/ASG and Philips SA56004 sensor chips.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	  This driver can also be built as a module.  If so, the module
 	  will be called lm90.
@@ -695,14 +717,34 @@ config SENSORS_LTC4261
 	  be called ltc4261.
 
 config SENSORS_LM95241
+<<<<<<< HEAD
 	tristate "National Semiconductor LM95241 sensor chip"
 	depends on I2C
 	help
 	  If you say yes here you get support for LM95241 sensor chip.
+=======
+	tristate "National Semiconductor LM95241 and compatibles"
+	depends on I2C
+	help
+	  If you say yes here you get support for LM95231 and LM95241 sensor
+	  chips.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	  This driver can also be built as a module.  If so, the module
 	  will be called lm95241.
 
+<<<<<<< HEAD
+=======
+config SENSORS_LM95245
+	tristate "National Semiconductor LM95245 sensor chip"
+	depends on I2C && EXPERIMENTAL
+	help
+	  If you say yes here you get support for LM95245 sensor chip.
+
+	  This driver can also be built as a module.  If so, the module
+	  will be called lm95245.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SENSORS_MAX1111
 	tristate "Maxim MAX1111 Multichannel, Serial 8-bit ADC chip"
 	depends on SPI_MASTER
@@ -737,6 +779,19 @@ config SENSORS_MAX1619
 	  This driver can also be built as a module.  If so, the module
 	  will be called max1619.
 
+<<<<<<< HEAD
+=======
+config SENSORS_MAX1668
+	tristate "Maxim MAX1668 and compatibles"
+	depends on I2C && EXPERIMENTAL
+	help
+	  If you say yes here you get support for MAX1668, MAX1989 and
+	  MAX1805 chips.
+
+	  This driver can also be built as a module.  If so, the module
+	  will be called max1668.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SENSORS_MAX6639
 	tristate "Maxim MAX6639 sensor chip"
 	depends on I2C && EXPERIMENTAL
@@ -768,6 +823,23 @@ config SENSORS_MAX6650
 	  This driver can also be built as a module.  If so, the module
 	  will be called max6650.
 
+<<<<<<< HEAD
+=======
+config SENSORS_NTC_THERMISTOR
+	tristate "NTC thermistor support"
+	depends on EXPERIMENTAL
+	help
+	  This driver supports NTC thermistors sensor reading and its
+	  interpretation. The driver can also monitor the temperature and
+	  send notifications about the temperature.
+
+	  Currently, this driver supports
+	  NCP15WB473, NCP18WB473, NCP21WB473, NCP03WB473, and NCP15WL333.
+
+	  This driver can also be built as a module.  If so, the module
+	  will be called ntc-thermistor.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SENSORS_PC87360
 	tristate "National Semiconductor PC87360 family"
 	select HWMON_VID
@@ -808,6 +880,7 @@ config SENSORS_PCF8591
 	  These devices are hard to detect and rarely found on mainstream
 	  hardware.  If unsure, say N.
 
+<<<<<<< HEAD
 config PMBUS
 	tristate "PMBus support"
 	depends on I2C && EXPERIMENTAL
@@ -894,6 +967,9 @@ config SENSORS_UCD9200
 	  be called ucd9200.
 
 endif # PMBUS
+=======
+source drivers/hwmon/pmbus/Kconfig
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 config SENSORS_SHT15
 	tristate "Sensiron humidity and temperature sensors. SHT15 and compat."
@@ -1042,8 +1118,18 @@ config SENSORS_SMSC47B397
 	  This driver can also be built as a module.  If so, the module
 	  will be called smsc47b397.
 
+<<<<<<< HEAD
 config SENSORS_SCH5627
 	tristate "SMSC SCH5627"
+=======
+config SENSORS_SCH56XX_COMMON
+	tristate
+	default n
+
+config SENSORS_SCH5627
+	tristate "SMSC SCH5627"
+	select SENSORS_SCH56XX_COMMON
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  If you say yes here you get support for the hardware monitoring
 	  features of the SMSC SCH5627 Super-I/O chip.
@@ -1051,6 +1137,24 @@ config SENSORS_SCH5627
 	  This driver can also be built as a module.  If so, the module
 	  will be called sch5627.
 
+<<<<<<< HEAD
+=======
+config SENSORS_SCH5636
+	tristate "SMSC SCH5636"
+	select SENSORS_SCH56XX_COMMON
+	help
+	  SMSC SCH5636 Super I/O chips include an embedded microcontroller for
+	  hardware monitoring solutions, allowing motherboard manufacturers to
+	  create their own custom hwmon solution based upon the SCH5636.
+
+	  Currently this driver only supports the Fujitsu Theseus SCH5636 based
+	  hwmon solution. Say yes here if you want support for the Fujitsu
+	  Theseus' hardware monitoring features.
+
+	  This driver can also be built as a module.  If so, the module
+	  will be called sch5636.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SENSORS_ADS1015
 	tristate "Texas Instruments ADS1015"
 	depends on I2C
@@ -1090,6 +1194,17 @@ config SENSORS_AMC6821
 	  This driver can also be build as a module.  If so, the module
 	  will be called amc6821.
 
+<<<<<<< HEAD
+=======
+config SENSORS_TEGRA_TSENSOR
+	tristate "Nvidia Tegra Integrated temperature sensor"
+	depends on ARCH_TEGRA_3x_SOC
+	default n
+	help
+	  If you say yes here you get support for integrated
+	  temperature sensor in Nvidia tegra chipset.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SENSORS_THMC50
 	tristate "Texas Instruments THMC50 / Analog Devices ADM1022"
 	depends on I2C
@@ -1143,6 +1258,10 @@ config SENSORS_TWL4030_MADC
 config SENSORS_VIA_CPUTEMP
 	tristate "VIA CPU temperature sensor"
 	depends on X86
+<<<<<<< HEAD
+=======
+	select HWMON_VID
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  If you say yes here you get support for the temperature
 	  sensor inside your CPU. Supported are all known variants of
@@ -1358,6 +1477,24 @@ config SENSORS_MC13783_ADC
         help
           Support for the A/D converter on MC13783 PMIC.
 
+<<<<<<< HEAD
+=======
+config SENSORS_INA219
+	tristate "Texas Instruments INA219 POWER MONITOR SENSOR DRIVER"
+	depends on I2C
+	default n
+	help
+		Support for the TI INA219 power monitor sensor.
+
+config SENSORS_INA230
+	tristate "Texas Instruments INA230 POWER MONITOR SENSOR DRIVER"
+	depends on I2C
+	help
+	  Support for the TI INA230 power monitor sensor.
+	  (also works for TI INA226)
+
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 if ACPI
 
 comment "ACPI drivers"

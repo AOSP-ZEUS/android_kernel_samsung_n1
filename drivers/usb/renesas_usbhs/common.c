@@ -21,6 +21,32 @@
 #include <linux/sysfs.h>
 #include "./common.h"
 
+<<<<<<< HEAD
+=======
+/*
+ *		image of renesas_usbhs
+ *
+ * ex) gadget case
+
+ * mod.c
+ * mod_gadget.c
+ * mod_host.c		pipe.c		fifo.c
+ *
+ *			+-------+	+-----------+
+ *			| pipe0 |------>| fifo pio  |
+ * +------------+	+-------+	+-----------+
+ * | mod_gadget |=====> | pipe1 |--+
+ * +------------+	+-------+  |	+-----------+
+ *			| pipe2 |  |  +-| fifo dma0 |
+ * +------------+	+-------+  |  |	+-----------+
+ * | mod_host   |	| pipe3 |<-|--+
+ * +------------+	+-------+  |	+-----------+
+ *			| ....  |  +--->| fifo dma1 |
+ *			| ....  |	+-----------+
+ */
+
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define USBHSF_RUNTIME_PWCTRL	(1 << 0)
 
 /* status */
@@ -304,6 +330,11 @@ static int __devinit usbhs_probe(struct platform_device *pdev)
 		priv->dparam->pipe_type = usbhsc_default_pipe_type;
 		priv->dparam->pipe_size = ARRAY_SIZE(usbhsc_default_pipe_type);
 	}
+<<<<<<< HEAD
+=======
+	if (!priv->dparam->pio_dma_border)
+		priv->dparam->pio_dma_border = 64; /* 64byte */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* FIXME */
 	/* runtime power control ? */
@@ -323,10 +354,21 @@ static int __devinit usbhs_probe(struct platform_device *pdev)
 	if (ret < 0)
 		goto probe_end_iounmap;
 
+<<<<<<< HEAD
 	ret = usbhs_mod_probe(priv);
 	if (ret < 0)
 		goto probe_end_pipe_exit;
 
+=======
+	ret = usbhs_fifo_probe(priv);
+	if (ret < 0)
+		goto probe_end_pipe_exit;
+
+	ret = usbhs_mod_probe(priv);
+	if (ret < 0)
+		goto probe_end_fifo_exit;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* dev_set_drvdata should be called after usbhs_mod_init */
 	dev_set_drvdata(&pdev->dev, priv);
 
@@ -374,6 +416,11 @@ probe_end_call_remove:
 	usbhs_platform_call(priv, hardware_exit, pdev);
 probe_end_mod_exit:
 	usbhs_mod_remove(priv);
+<<<<<<< HEAD
+=======
+probe_end_fifo_exit:
+	usbhs_fifo_remove(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 probe_end_pipe_exit:
 	usbhs_pipe_remove(priv);
 probe_end_iounmap:
@@ -404,6 +451,10 @@ static int __devexit usbhs_remove(struct platform_device *pdev)
 
 	usbhs_platform_call(priv, hardware_exit, pdev);
 	usbhs_mod_remove(priv);
+<<<<<<< HEAD
+=======
+	usbhs_fifo_remove(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	usbhs_pipe_remove(priv);
 	iounmap(priv->base);
 	kfree(priv);

@@ -1410,11 +1410,23 @@ static int net2280_pullup(struct usb_gadget *_gadget, int is_on)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int net2280_start(struct usb_gadget_driver *driver,
+		int (*bind)(struct usb_gadget *));
+static int net2280_stop(struct usb_gadget_driver *driver);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct usb_gadget_ops net2280_ops = {
 	.get_frame	= net2280_get_frame,
 	.wakeup		= net2280_wakeup,
 	.set_selfpowered = net2280_set_selfpowered,
 	.pullup		= net2280_pullup,
+<<<<<<< HEAD
+=======
+	.start		= net2280_start,
+	.stop		= net2280_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*-------------------------------------------------------------------------*/
@@ -1738,6 +1750,7 @@ static void set_fifo_mode (struct net2280 *dev, int mode)
 	list_add_tail (&dev->ep [6].ep.ep_list, &dev->gadget.ep_list);
 }
 
+<<<<<<< HEAD
 /* just declare this in any driver that really need it */
 extern int net2280_set_fifo_mode (struct usb_gadget *gadget, int mode);
 
@@ -1794,6 +1807,8 @@ EXPORT_SYMBOL (net2280_set_fifo_mode);
 
 /*-------------------------------------------------------------------------*/
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* keeping it simple:
  * - one bus driver, initted first;
  * - one function driver, initted second
@@ -1930,7 +1945,11 @@ static void ep0_start (struct net2280 *dev)
  * disconnect is reported.  then a host may connect again, or
  * the driver might get unbound.
  */
+<<<<<<< HEAD
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int net2280_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	struct net2280		*dev = the_controller;
@@ -1994,7 +2013,10 @@ err_unbind:
 	dev->driver = NULL;
 	return retval;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static void
 stop_activity (struct net2280 *dev, struct usb_gadget_driver *driver)
@@ -2022,7 +2044,11 @@ stop_activity (struct net2280 *dev, struct usb_gadget_driver *driver)
 	usb_reinit (dev);
 }
 
+<<<<<<< HEAD
 int usb_gadget_unregister_driver (struct usb_gadget_driver *driver)
+=======
+static int net2280_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct net2280	*dev = the_controller;
 	unsigned long	flags;
@@ -2049,8 +2075,11 @@ int usb_gadget_unregister_driver (struct usb_gadget_driver *driver)
 	DEBUG (dev, "unregistered driver '%s'\n", driver->driver.name);
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL (usb_gadget_unregister_driver);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*-------------------------------------------------------------------------*/
 
@@ -2732,6 +2761,11 @@ static void net2280_remove (struct pci_dev *pdev)
 {
 	struct net2280		*dev = pci_get_drvdata (pdev);
 
+<<<<<<< HEAD
+=======
+	usb_del_gadget_udc(&dev->gadget);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	BUG_ON(dev->driver);
 
 	/* then clean up the resources we allocated during probe() */
@@ -2916,6 +2950,12 @@ static int net2280_probe (struct pci_dev *pdev, const struct pci_device_id *id)
 	retval = device_create_file (&pdev->dev, &dev_attr_registers);
 	if (retval) goto done;
 
+<<<<<<< HEAD
+=======
+	retval = usb_add_gadget_udc(&pdev->dev, &dev->gadget);
+	if (retval)
+		goto done;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
 done:

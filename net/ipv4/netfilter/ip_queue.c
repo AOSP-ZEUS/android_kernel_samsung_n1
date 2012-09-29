@@ -218,6 +218,10 @@ ipq_build_packet_message(struct nf_queue_entry *entry, int *errp)
 	return skb;
 
 nlmsg_failure:
+<<<<<<< HEAD
+=======
+	kfree_skb(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	*errp = -EINVAL;
 	printk(KERN_ERR "ip_queue: error creating packet message\n");
 	return NULL;
@@ -313,7 +317,11 @@ ipq_set_verdict(struct ipq_verdict_msg *vmsg, unsigned int len)
 {
 	struct nf_queue_entry *entry;
 
+<<<<<<< HEAD
 	if (vmsg->value > NF_MAX_VERDICT)
+=======
+	if (vmsg->value > NF_MAX_VERDICT || vmsg->value == NF_STOLEN)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 
 	entry = ipq_find_dequeue_entry(vmsg->id);
@@ -358,12 +366,18 @@ ipq_receive_peer(struct ipq_peer_msg *pmsg,
 		break;
 
 	case IPQM_VERDICT:
+<<<<<<< HEAD
 		if (pmsg->msg.verdict.value > NF_MAX_VERDICT)
 			status = -EINVAL;
 		else
 			status = ipq_set_verdict(&pmsg->msg.verdict,
 						 len - sizeof(*pmsg));
 			break;
+=======
+		status = ipq_set_verdict(&pmsg->msg.verdict,
+					 len - sizeof(*pmsg));
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default:
 		status = -EINVAL;
 	}

@@ -45,8 +45,11 @@ static struct omap_board_config_kernel am3517_crane_config[] __initdata = {
 static struct omap_board_mux board_mux[] __initdata = {
 	{ .reg_offset = OMAP_MUX_TERMINATOR },
 };
+<<<<<<< HEAD
 #else
 #define board_mux	NULL
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 static void __init am3517_crane_init_early(void)
@@ -104,7 +107,13 @@ MACHINE_START(CRANEBOARD, "AM3517/05 CRANEBOARD")
 	.reserve	= omap_reserve,
 	.map_io		= omap3_map_io,
 	.init_early	= am3517_crane_init_early,
+<<<<<<< HEAD
 	.init_irq	= omap_init_irq,
 	.init_machine	= am3517_crane_init,
 	.timer		= &omap_timer,
+=======
+	.init_irq	= omap3_init_irq,
+	.init_machine	= am3517_crane_init,
+	.timer		= &omap3_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

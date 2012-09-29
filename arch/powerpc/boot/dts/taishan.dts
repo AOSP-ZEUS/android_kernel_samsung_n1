@@ -337,7 +337,11 @@
 				rx-fifo-size = <4096>;
 				tx-fifo-size = <2048>;
 				phy-mode = "rgmii";
+<<<<<<< HEAD
 				phy-map = <0x00000001>;
+=======
+				phy-address = <1>;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				rgmii-device = <&RGMII0>;
 				rgmii-channel = <0>;
  				zmii-device = <&ZMII0>;
@@ -361,7 +365,11 @@
 				rx-fifo-size = <4096>;
 				tx-fifo-size = <2048>;
 				phy-mode = "rgmii";
+<<<<<<< HEAD
 				phy-map = <0x00000003>;
+=======
+				phy-address = <3>;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				rgmii-device = <&RGMII0>;
 				rgmii-channel = <1>;
  				zmii-device = <&ZMII0>;

@@ -40,15 +40,28 @@
 #include <linux/mutex.h>
 #include <linux/pci.h>
 #include <linux/videodev2.h>
+<<<<<<< HEAD
 #include <linux/version.h>      /* for KERNEL_VERSION MACRO     */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/io.h>
 #include <linux/slab.h>
 #include <media/v4l2-device.h>
 #include <media/v4l2-ioctl.h>
 
+<<<<<<< HEAD
 MODULE_AUTHOR("Dimitromanolakis Apostolos, apdim@grecian.net");
 MODULE_DESCRIPTION("Radio driver for the Guillemot Maxi Radio FM2000 radio.");
 MODULE_LICENSE("GPL");
+=======
+#define DRIVER_VERSION	"0.7.8"
+
+
+MODULE_AUTHOR("Dimitromanolakis Apostolos, apdim@grecian.net");
+MODULE_DESCRIPTION("Radio driver for the Guillemot Maxi Radio FM2000 radio.");
+MODULE_LICENSE("GPL");
+MODULE_VERSION(DRIVER_VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int radio_nr = -1;
 module_param(radio_nr, int, 0);
@@ -58,10 +71,13 @@ static int debug;
 module_param(debug, int, 0644);
 MODULE_PARM_DESC(debug, "activates debug info");
 
+<<<<<<< HEAD
 #define DRIVER_VERSION	"0.77"
 
 #define RADIO_VERSION KERNEL_VERSION(0, 7, 7)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define dprintk(dev, num, fmt, arg...) \
 	v4l2_dbg(num, debug, &dev->v4l2_dev, fmt, ## arg)
 
@@ -195,7 +211,10 @@ static int vidioc_querycap(struct file *file, void  *priv,
 	strlcpy(v->driver, "radio-maxiradio", sizeof(v->driver));
 	strlcpy(v->card, "Maxi Radio FM2000 radio", sizeof(v->card));
 	snprintf(v->bus_info, sizeof(v->bus_info), "PCI:%s", pci_name(dev->pdev));
+<<<<<<< HEAD
 	v->version = RADIO_VERSION;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	v->capabilities = V4L2_CAP_TUNER | V4L2_CAP_RADIO;
 	return 0;
 }

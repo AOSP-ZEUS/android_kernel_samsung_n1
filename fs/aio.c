@@ -228,6 +228,15 @@ static void __put_ioctx(struct kioctx *ctx)
 	call_rcu(&ctx->rcu_head, ctx_rcu_free);
 }
 
+<<<<<<< HEAD
+=======
+static inline void get_ioctx(struct kioctx *kioctx)
+{
+	BUG_ON(atomic_read(&kioctx->users) <= 0);
+	atomic_inc(&kioctx->users);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int try_get_ioctx(struct kioctx *kioctx)
 {
 	return atomic_inc_not_zero(&kioctx->users);
@@ -267,7 +276,11 @@ static struct kioctx *ioctx_alloc(unsigned nr_events)
 	mm = ctx->mm = current->mm;
 	atomic_inc(&mm->mm_count);
 
+<<<<<<< HEAD
 	atomic_set(&ctx->users, 2);
+=======
+	atomic_set(&ctx->users, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_lock_init(&ctx->ctx_lock);
 	spin_lock_init(&ctx->ring_info.ring_lock);
 	init_waitqueue_head(&ctx->wait);
@@ -521,6 +534,7 @@ static void aio_fput_routine(struct work_struct *data)
 			fput(req->ki_filp);
 
 		/* Link the iocb into the context's free list */
+<<<<<<< HEAD
 		rcu_read_lock();
 		spin_lock_irq(&ctx->ctx_lock);
 		really_put_req(ctx, req);
@@ -531,6 +545,13 @@ static void aio_fput_routine(struct work_struct *data)
 		spin_unlock_irq(&ctx->ctx_lock);
 		rcu_read_unlock();
 
+=======
+		spin_lock_irq(&ctx->ctx_lock);
+		really_put_req(ctx, req);
+		spin_unlock_irq(&ctx->ctx_lock);
+
+		put_ioctx(ctx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_lock_irq(&fput_lock);
 	}
 	spin_unlock_irq(&fput_lock);
@@ -561,6 +582,10 @@ static int __aio_put_req(struct kioctx *ctx, struct kiocb *req)
 	 * this function will be executed w/out any aio kthread wakeup.
 	 */
 	if (unlikely(!fput_atomic(req->ki_filp))) {
+<<<<<<< HEAD
+=======
+		get_ioctx(ctx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_lock(&fput_lock);
 		list_add(&req->ki_list, &fput_head);
 		spin_unlock(&fput_lock);
@@ -1254,10 +1279,17 @@ SYSCALL_DEFINE2(io_setup, unsigned, nr_events, aio_context_t __user *, ctxp)
 	ret = PTR_ERR(ioctx);
 	if (!IS_ERR(ioctx)) {
 		ret = put_user(ioctx->user_id, ctxp);
+<<<<<<< HEAD
 		if (!ret) {
 			put_ioctx(ioctx);
 			return 0;
 		}
+=======
+		if (!ret)
+			return 0;
+
+		get_ioctx(ioctx); /* io_destroy() expects us to hold a ref */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		io_destroy(ioctx);
 	}
 

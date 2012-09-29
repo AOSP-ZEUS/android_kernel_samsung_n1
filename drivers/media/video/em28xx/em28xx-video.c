@@ -32,7 +32,10 @@
 #include <linux/bitmap.h>
 #include <linux/usb.h>
 #include <linux/i2c.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/mm.h>
 #include <linux/mutex.h>
 #include <linux/slab.h>
@@ -50,7 +53,12 @@
 		      "Sascha Sommer <saschasommer@freenet.de>"
 
 #define DRIVER_DESC         "Empia em28xx based USB video device driver"
+<<<<<<< HEAD
 #define EM28XX_VERSION_CODE  KERNEL_VERSION(0, 1, 2)
+=======
+
+#define EM28XX_VERSION "0.1.3"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define em28xx_videodbg(fmt, arg...) do {\
 	if (video_debug) \
@@ -72,6 +80,10 @@ do {\
 MODULE_AUTHOR(DRIVER_AUTHOR);
 MODULE_DESCRIPTION(DRIVER_DESC);
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_VERSION(EM28XX_VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static unsigned int video_nr[] = {[0 ... (EM28XX_MAXBOARDS - 1)] = UNSET };
 static unsigned int vbi_nr[]   = {[0 ... (EM28XX_MAXBOARDS - 1)] = UNSET };
@@ -1757,8 +1769,11 @@ static int vidioc_querycap(struct file *file, void  *priv,
 	strlcpy(cap->card, em28xx_boards[dev->model].name, sizeof(cap->card));
 	usb_make_path(dev->udev, cap->bus_info, sizeof(cap->bus_info));
 
+<<<<<<< HEAD
 	cap->version = EM28XX_VERSION_CODE;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cap->capabilities =
 			V4L2_CAP_SLICED_VBI_CAPTURE |
 			V4L2_CAP_VIDEO_CAPTURE |
@@ -1976,7 +1991,10 @@ static int radio_querycap(struct file *file, void  *priv,
 	strlcpy(cap->card, em28xx_boards[dev->model].name, sizeof(cap->card));
 	usb_make_path(dev->udev, cap->bus_info, sizeof(cap->bus_info));
 
+<<<<<<< HEAD
 	cap->version = EM28XX_VERSION_CODE;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cap->capabilities = V4L2_CAP_TUNER;
 	return 0;
 }
@@ -2450,10 +2468,15 @@ int em28xx_register_analog_devices(struct em28xx *dev)
       u8 val;
 	int ret;
 
+<<<<<<< HEAD
 	printk(KERN_INFO "%s: v4l2 driver version %d.%d.%d\n",
 		dev->name,
 		(EM28XX_VERSION_CODE >> 16) & 0xff,
 		(EM28XX_VERSION_CODE >> 8) & 0xff, EM28XX_VERSION_CODE & 0xff);
+=======
+	printk(KERN_INFO "%s: v4l2 driver version %s\n",
+		dev->name, EM28XX_VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* set default norm */
 	dev->norm = em28xx_video_template.current_norm;

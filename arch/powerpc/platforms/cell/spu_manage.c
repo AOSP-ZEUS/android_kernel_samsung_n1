@@ -222,7 +222,11 @@ static int spu_map_resource(struct spu *spu, int nr,
 		return ret;
 	if (phys)
 		*phys = resource.start;
+<<<<<<< HEAD
 	len = resource.end - resource.start + 1;
+=======
+	len = resource_size(&resource);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	*virt = ioremap(resource.start, len);
 	if (!*virt)
 		return -EINVAL;

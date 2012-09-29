@@ -1079,7 +1079,11 @@ static int i2c_pxa_probe(struct platform_device *dev)
 	 * The reason to do so is to avoid sysfs names that only make
 	 * sense when there are multiple adapters.
 	 */
+<<<<<<< HEAD
 	i2c->adap.nr = dev->id != -1 ? dev->id : 0;
+=======
+	i2c->adap.nr = dev->id;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	snprintf(i2c->adap.name, sizeof(i2c->adap.name), "pxa_i2c-i2c.%u",
 		 i2c->adap.nr);
 
@@ -1142,10 +1146,14 @@ static int i2c_pxa_probe(struct platform_device *dev)
 	i2c->adap.dev.of_node = dev->dev.of_node;
 #endif
 
+<<<<<<< HEAD
 	if (i2c_type == REGS_CE4100)
 		ret = i2c_add_adapter(&i2c->adap);
 	else
 		ret = i2c_add_numbered_adapter(&i2c->adap);
+=======
+	ret = i2c_add_numbered_adapter(&i2c->adap);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret < 0) {
 		printk(KERN_INFO "I2C: Failed to add bus\n");
 		goto eadapt;

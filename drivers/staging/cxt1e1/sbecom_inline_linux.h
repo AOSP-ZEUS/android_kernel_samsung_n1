@@ -47,7 +47,10 @@
 #include <sys/types.h>
 #else
 #include <linux/types.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_SMP) && ! defined(__SMP__)
 #define __SMP__
 #endif

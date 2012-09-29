@@ -20,9 +20,19 @@
 #ifndef __ASM_KVM_BOOK3S_64_H__
 #define __ASM_KVM_BOOK3S_64_H__
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KVM_BOOK3S_PR
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline struct kvmppc_book3s_shadow_vcpu *to_svcpu(struct kvm_vcpu *vcpu)
 {
 	return &get_paca()->shadow_vcpu;
 }
+<<<<<<< HEAD
+=======
+#endif
+
+#define SPAPR_TCE_SHIFT		12
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* __ASM_KVM_BOOK3S_64_H__ */

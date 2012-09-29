@@ -226,6 +226,22 @@ struct fb_bitfield {
 #define FB_VMODE_SMOOTH_XPAN	512	/* smooth xpan possible (internally used) */
 #define FB_VMODE_CONUPDATE	512	/* don't update x/yoffset	*/
 
+<<<<<<< HEAD
+=======
+#define FB_FLAG_RATIO_4_3	64
+#define FB_FLAG_RATIO_16_9	128
+#define FB_FLAG_PIXEL_REPEAT	256
+
+/*
+ * Stereo modes
+ */
+#define FB_VMODE_STEREO_NONE        0x00000000  /* not stereo */
+#define FB_VMODE_STEREO_FRAME_PACK  0x01000000  /* frame packing */
+#define FB_VMODE_STEREO_TOP_BOTTOM  0x02000000  /* top-bottom */
+#define FB_VMODE_STEREO_LEFT_RIGHT  0x04000000  /* left-right */
+#define FB_VMODE_STEREO_MASK        0xFF000000
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Display rotation support
  */
@@ -439,6 +455,11 @@ struct file;
 
 #define FB_MISC_PRIM_COLOR	1
 #define FB_MISC_1ST_DETAIL	2	/* First Detailed Timing is preferred */
+<<<<<<< HEAD
+=======
+#define FB_MISC_HDMI		4	/* display supports HDMI signaling */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct fb_chroma {
 	__u32 redx;	/* in fraction of 1024 */
 	__u32 greenx;
@@ -997,7 +1018,10 @@ extern ssize_t fb_sys_write(struct fb_info *info, const char __user *buf,
 /* drivers/video/fbmem.c */
 extern int register_framebuffer(struct fb_info *fb_info);
 extern int unregister_framebuffer(struct fb_info *fb_info);
+<<<<<<< HEAD
 extern int unlink_framebuffer(struct fb_info *fb_info);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void remove_conflicting_framebuffers(struct apertures_struct *a,
 				const char *name, bool primary);
 extern int fb_prepare_logo(struct fb_info *fb_info, int rotate);
@@ -1044,7 +1068,12 @@ extern void fb_deferred_io_open(struct fb_info *info,
 				struct inode *inode,
 				struct file *file);
 extern void fb_deferred_io_cleanup(struct fb_info *info);
+<<<<<<< HEAD
 extern int fb_deferred_io_fsync(struct file *file, int datasync);
+=======
+extern int fb_deferred_io_fsync(struct file *file, loff_t start,
+				loff_t end, int datasync);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline bool fb_be_math(struct fb_info *info)
 {
@@ -1104,6 +1133,10 @@ extern unsigned char *fb_ddc_read(struct i2c_adapter *adapter);
 
 /* drivers/video/modedb.c */
 #define VESA_MODEDB_SIZE 34
+<<<<<<< HEAD
+=======
+#define CEA_MODEDB_SIZE 65
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void fb_var_to_videomode(struct fb_videomode *mode,
 				const struct fb_var_screeninfo *var);
 extern void fb_videomode_to_var(struct fb_var_screeninfo *var,
@@ -1156,7 +1189,11 @@ struct fb_videomode {
 
 extern const char *fb_mode_option;
 extern const struct fb_videomode vesa_modes[];
+<<<<<<< HEAD
 extern const struct fb_videomode cea_modes[64];
+=======
+extern const struct fb_videomode cea_modes[];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct fb_modelist {
 	struct list_head list;

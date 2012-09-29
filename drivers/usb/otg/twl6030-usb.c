@@ -95,11 +95,21 @@ struct twl6030_usb {
 
 	struct regulator		*usb3v3;
 
+<<<<<<< HEAD
+=======
+	/* used to set vbus, in atomic path */
+	struct work_struct	set_vbus_work;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int			irq1;
 	int			irq2;
 	u8			linkstat;
 	u8			asleep;
 	bool			irq_enabled;
+<<<<<<< HEAD
+=======
+	bool			vbus_enable;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long		features;
 };
 
@@ -370,20 +380,46 @@ static int twl6030_enable_irq(struct otg_transceiver *x)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int twl6030_set_vbus(struct otg_transceiver *x, bool enabled)
 {
 	struct twl6030_usb *twl = xceiv_to_twl(x);
+=======
+static void otg_set_vbus_work(struct work_struct *data)
+{
+	struct twl6030_usb *twl = container_of(data, struct twl6030_usb,
+								set_vbus_work);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Start driving VBUS. Set OPA_MODE bit in CHARGERUSB_CTRL1
 	 * register. This enables boost mode.
 	 */
+<<<<<<< HEAD
 	if (enabled)
 		twl6030_writeb(twl, TWL_MODULE_MAIN_CHARGE , 0x40,
 						CHARGERUSB_CTRL1);
 	 else
 		twl6030_writeb(twl, TWL_MODULE_MAIN_CHARGE , 0x00,
 						CHARGERUSB_CTRL1);
+=======
+
+	if (twl->vbus_enable)
+		twl6030_writeb(twl, TWL_MODULE_MAIN_CHARGE , 0x40,
+							CHARGERUSB_CTRL1);
+	else
+		twl6030_writeb(twl, TWL_MODULE_MAIN_CHARGE , 0x00,
+							CHARGERUSB_CTRL1);
+}
+
+static int twl6030_set_vbus(struct otg_transceiver *x, bool enabled)
+{
+	struct twl6030_usb *twl = xceiv_to_twl(x);
+
+	twl->vbus_enable = enabled;
+	schedule_work(&twl->set_vbus_work);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -444,6 +480,11 @@ static int __devinit twl6030_usb_probe(struct platform_device *pdev)
 
 	ATOMIC_INIT_NOTIFIER_HEAD(&twl->otg.notifier);
 
+<<<<<<< HEAD
+=======
+	INIT_WORK(&twl->set_vbus_work, otg_set_vbus_work);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	twl->irq_enabled = true;
 	status = request_threaded_irq(twl->irq1, NULL, twl6030_usbotg_irq,
 			IRQF_TRIGGER_FALLING | IRQF_TRIGGER_RISING,
@@ -494,6 +535,10 @@ static int __exit twl6030_usb_remove(struct platform_device *pdev)
 	regulator_put(twl->usb3v3);
 	pdata->phy_exit(twl->dev);
 	device_remove_file(twl->dev, &dev_attr_vbus);
+<<<<<<< HEAD
+=======
+	cancel_work_sync(&twl->set_vbus_work);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(twl);
 
 	return 0;

@@ -403,7 +403,11 @@ static void ips_cpu_raise(struct ips_driver *ips)
 
 	thm_writew(THM_MPCPC, (new_tdp_limit * 10) / 8);
 
+<<<<<<< HEAD
 	turbo_override |= TURBO_TDC_OVR_EN | TURBO_TDC_OVR_EN;
+=======
+	turbo_override |= TURBO_TDC_OVR_EN | TURBO_TDP_OVR_EN;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wrmsrl(TURBO_POWER_CURRENT_LIMIT, turbo_override);
 
 	turbo_override &= ~TURBO_TDP_MASK;
@@ -438,7 +442,11 @@ static void ips_cpu_lower(struct ips_driver *ips)
 
 	thm_writew(THM_MPCPC, (new_limit * 10) / 8);
 
+<<<<<<< HEAD
 	turbo_override |= TURBO_TDC_OVR_EN | TURBO_TDC_OVR_EN;
+=======
+	turbo_override |= TURBO_TDC_OVR_EN | TURBO_TDP_OVR_EN;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wrmsrl(TURBO_POWER_CURRENT_LIMIT, turbo_override);
 
 	turbo_override &= ~TURBO_TDP_MASK;

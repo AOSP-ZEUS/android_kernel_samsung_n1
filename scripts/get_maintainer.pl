@@ -328,7 +328,12 @@ sub read_mailmap {
 	# name1 <mail1> <mail2>
 	# name1 <mail1> name2 <mail2>
 	# (see man git-shortlog)
+<<<<<<< HEAD
 	if (/^(.+)<(.+)>$/) {
+=======
+
+	if (/^([^<]+)<([^>]+)>$/) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    my $real_name = $1;
 	    my $address = $2;
 
@@ -336,13 +341,21 @@ sub read_mailmap {
 	    ($real_name, $address) = parse_email("$real_name <$address>");
 	    $mailmap->{names}->{$address} = $real_name;
 
+<<<<<<< HEAD
 	} elsif (/^<([^\s]+)>\s*<([^\s]+)>$/) {
+=======
+	} elsif (/^<([^>]+)>\s*<([^>]+)>$/) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    my $real_address = $1;
 	    my $wrong_address = $2;
 
 	    $mailmap->{addresses}->{$wrong_address} = $real_address;
 
+<<<<<<< HEAD
 	} elsif (/^(.+)<([^\s]+)>\s*<([^\s]+)>$/) {
+=======
+	} elsif (/^(.+)<([^>]+)>\s*<([^>]+)>$/) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    my $real_name = $1;
 	    my $real_address = $2;
 	    my $wrong_address = $3;
@@ -353,7 +366,11 @@ sub read_mailmap {
 	    $mailmap->{names}->{$wrong_address} = $real_name;
 	    $mailmap->{addresses}->{$wrong_address} = $real_address;
 
+<<<<<<< HEAD
 	} elsif (/^(.+)<([^\s]+)>\s*([^\s].*)<([^\s]+)>$/) {
+=======
+	} elsif (/^(.+)<([^>]+)>\s*(.+)\s*<([^>]+)>$/) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    my $real_name = $1;
 	    my $real_address = $2;
 	    my $wrong_name = $3;
@@ -1388,7 +1405,11 @@ sub vcs_exists {
 	warn("$P: No supported VCS found.  Add --nogit to options?\n");
 	warn("Using a git repository produces better results.\n");
 	warn("Try Linus Torvalds' latest git repository using:\n");
+<<<<<<< HEAD
 	warn("git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux-2.6.git\n");
+=======
+	warn("git clone git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	$printed_novcs = 1;
     }
     return 0;

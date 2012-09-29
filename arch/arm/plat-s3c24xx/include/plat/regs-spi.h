@@ -67,7 +67,10 @@
 
 #define S3C2410_SPPIN_ENMUL	  (1<<2)	/* Multi Master Error detect */
 #define S3C2410_SPPIN_RESERVED	  (1<<1)
+<<<<<<< HEAD
 #define S3C2400_SPPIN_nCS     	  (1<<1)	/* SPI Card Select */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define S3C2410_SPPIN_KEEP	  (1<<0)	/* Master Out keep */
 
 #define S3C2410_SPPRE	 (0x0C)

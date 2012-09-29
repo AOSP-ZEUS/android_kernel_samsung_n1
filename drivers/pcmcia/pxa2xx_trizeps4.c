@@ -55,10 +55,13 @@ static int trizeps_pcmcia_hw_init(struct soc_pcmcia_socket *skt)
 		}
 		skt->socket.pci_irq = IRQ_GPIO(GPIO_PRDY);
 		break;
+<<<<<<< HEAD
 
 #ifndef CONFIG_MACH_TRIZEPS_CONXS
 	case 1:
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default:
 		break;
 	}

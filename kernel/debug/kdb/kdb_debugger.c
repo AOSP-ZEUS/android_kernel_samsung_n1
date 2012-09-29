@@ -30,6 +30,11 @@ EXPORT_SYMBOL_GPL(kdb_poll_funcs);
 int kdb_poll_idx = 1;
 EXPORT_SYMBOL_GPL(kdb_poll_idx);
 
+<<<<<<< HEAD
+=======
+static struct kgdb_state *kdb_ks;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int kdb_stub(struct kgdb_state *ks)
 {
 	int error = 0;
@@ -39,6 +44,10 @@ int kdb_stub(struct kgdb_state *ks)
 	kdb_dbtrap_t db_result = KDB_DB_NOBPT;
 	int i;
 
+<<<<<<< HEAD
+=======
+	kdb_ks = ks;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (KDB_STATE(REENTRY)) {
 		reason = KDB_REASON_SWITCH;
 		KDB_STATE_CLEAR(REENTRY);
@@ -123,6 +132,7 @@ int kdb_stub(struct kgdb_state *ks)
 	KDB_STATE_CLEAR(PAGER);
 	kdbnearsym_cleanup();
 	if (error == KDB_CMD_KGDB) {
+<<<<<<< HEAD
 		if (KDB_STATE(DOING_KGDB) || KDB_STATE(DOING_KGDB2)) {
 	/*
 	 * This inteface glue which allows kdb to transition in into
@@ -137,6 +147,10 @@ int kdb_stub(struct kgdb_state *ks)
 			KDB_STATE_CLEAR(DOING_KGDB);
 			KDB_STATE_CLEAR(DOING_KGDB2);
 		}
+=======
+		if (KDB_STATE(DOING_KGDB))
+			KDB_STATE_CLEAR(DOING_KGDB);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return DBG_PASS_EVENT;
 	}
 	kdb_bp_install(ks->linux_regs);
@@ -166,3 +180,10 @@ int kdb_stub(struct kgdb_state *ks)
 	return kgdb_info[ks->cpu].ret_state;
 }
 
+<<<<<<< HEAD
+=======
+void kdb_gdb_state_pass(char *buf)
+{
+	gdbstub_state(kdb_ks, buf);
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

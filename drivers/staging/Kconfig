@@ -24,10 +24,13 @@ menuconfig STAGING
 
 if STAGING
 
+<<<<<<< HEAD
 source "drivers/staging/tty/Kconfig"
 
 source "drivers/staging/generic_serial/Kconfig"
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "drivers/staging/et131x/Kconfig"
 
 source "drivers/staging/slicoss/Kconfig"
@@ -102,8 +105,11 @@ source "drivers/staging/sep/Kconfig"
 
 source "drivers/staging/iio/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/staging/cs5535_gpio/Kconfig"
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "drivers/staging/zram/Kconfig"
 
 source "drivers/staging/zcache/Kconfig"
@@ -122,8 +128,11 @@ source "drivers/staging/cxt1e1/Kconfig"
 
 source "drivers/staging/xgifb/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/staging/msm/Kconfig"
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "drivers/staging/lirc/Kconfig"
 
 source "drivers/staging/easycap/Kconfig"
@@ -134,8 +143,11 @@ source "drivers/staging/tidspbridge/Kconfig"
 
 source "drivers/staging/quickstart/Kconfig"
 
+<<<<<<< HEAD
 source "drivers/staging/westbridge/Kconfig"
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "drivers/staging/sbe-2t3e3/Kconfig"
 
 source "drivers/staging/ath6kl/Kconfig"

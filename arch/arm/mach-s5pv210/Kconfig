@@ -20,15 +20,21 @@ config CPU_S5PV210
 
 config S5PV210_SETUP_I2C1
 	bool
+<<<<<<< HEAD
 	default	y
 	select HAVE_S3C2410_I2C
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  Common setup code for i2c bus 1.
 
 config S5PV210_SETUP_I2C2
 	bool
+<<<<<<< HEAD
 	default	y
 	select HAVE_S3C2410_I2C
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  Common setup code for i2c bus 2.
 
@@ -63,6 +69,7 @@ config S5PV210_SETUP_FIMC
 	help
 	  Common setup code for the camera interfaces.
 
+<<<<<<< HEAD
 config S5PV210_POWER_DOMAIN
 	bool
 	depends on REGULATOR
@@ -96,6 +103,8 @@ help
 IF channel 2 uses 8-bit bus, channel 3 is disabled.
 endmenu
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 menu "S5PC110 Machines"
 
 config MACH_AQUILA
@@ -127,6 +136,10 @@ config MACH_GONI
 	select S3C_DEV_HSMMC2
 	select S3C_DEV_I2C1
 	select S3C_DEV_I2C2
+<<<<<<< HEAD
+=======
+	select S5P_DEV_MFC
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select S3C_DEV_USB_HSOTG
 	select S5P_DEV_ONENAND
 	select SAMSUNG_DEV_KEYPAD
@@ -145,7 +158,10 @@ config MACH_SMDKC110
 	select S3C_DEV_I2C1
 	select S3C_DEV_I2C2
 	select S3C_DEV_RTC
+<<<<<<< HEAD
 	select HAVE_S3C_RTC
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select S3C_DEV_WDT
 	select SAMSUNG_DEV_IDE
 	select S5PV210_SETUP_I2C1
@@ -172,6 +188,10 @@ config MACH_SMDKV210
 	select S3C_DEV_RTC
 	select S3C_DEV_WDT
 	select SAMSUNG_DEV_ADC
+<<<<<<< HEAD
+=======
+	select SAMSUNG_DEV_BACKLIGHT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select SAMSUNG_DEV_IDE
 	select SAMSUNG_DEV_KEYPAD
 	select SAMSUNG_DEV_PWM
@@ -210,6 +230,7 @@ config S5PV210_PM
 	help
 	  Power Management code common to S5PV210
 
+<<<<<<< HEAD
 config MACH_HERRING
 	bool "Herring"
 	select CPU_S5PV210
@@ -269,4 +290,6 @@ config WIFI_CONTROL_FUNC
        bool "Enable WiFi control function abstraction"
        help
          Enables Power/Reset/Carddetect function abstraction
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endif

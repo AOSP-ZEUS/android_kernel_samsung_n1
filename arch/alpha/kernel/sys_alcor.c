@@ -183,7 +183,11 @@ alcor_init_irq(void)
  */
 
 static int __init
+<<<<<<< HEAD
 alcor_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+alcor_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	static char irq_tab[7][5] __initdata = {
 		/*INT    INTA   INTB   INTC   INTD */

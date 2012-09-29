@@ -27,7 +27,10 @@
  */
 
 /*-------------------------------------------------------------------------*/
+<<<<<<< HEAD
 #include <linux/usb/otg.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define	PORT_WAKE_BITS	(PORT_WKOC_E|PORT_WKDISC_E|PORT_WKCONN_E)
 
@@ -285,7 +288,11 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 			changed = 1;
 		}
 	}
+<<<<<<< HEAD
 
+=======
+#ifdef CONFIG_ARCH_TEGRA_2x_SOC
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (changed && ehci->has_hostpc) {
 		spin_unlock_irq(&ehci->lock);
 		msleep(5);	/* 5 ms for HCD to enter low-power mode */
@@ -306,7 +313,11 @@ static int ehci_bus_suspend (struct usb_hcd *hcd)
 					"succeeded" : "failed");
 		}
 	}
+<<<<<<< HEAD
 
+=======
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Apparently some devices need a >= 1-uframe delay here */
 	if (ehci->bus_suspended)
 		udelay(150);
@@ -470,6 +481,7 @@ static int ehci_bus_resume (struct usb_hcd *hcd)
 
 /*-------------------------------------------------------------------------*/
 
+<<<<<<< HEAD
 /* Display the ports dedicated to the companion controller */
 static ssize_t show_companion(struct device *dev,
 			      struct device_attribute *attr,
@@ -493,6 +505,8 @@ static ssize_t show_companion(struct device *dev,
 	return ptr - buf;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Sets the owner of a port
  */
@@ -527,6 +541,7 @@ static void set_owner(struct ehci_hcd *ehci, int portnum, int new_owner)
 	}
 }
 
+<<<<<<< HEAD
 /*
  * Dedicate or undedicate a port to the companion controller.
  * Syntax is "[-]portnum", where a leading '-' sign means
@@ -579,6 +594,8 @@ static inline void remove_companion_file(struct ehci_hcd *ehci)
 }
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*-------------------------------------------------------------------------*/
 
 static int check_reset_complete (
@@ -801,6 +818,7 @@ static int ehci_hub_control (
 				goto error;
 			if (ehci->no_selective_suspend)
 				break;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_OTG
 			if ((hcd->self.otg_port == (wIndex + 1))
 			    && hcd->self.b_hnp_enable) {
@@ -808,6 +826,8 @@ static int ehci_hub_control (
 				break;
 			}
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (!(temp & PORT_SUSPEND))
 				break;
 			if ((temp & PORT_PE) == 0)

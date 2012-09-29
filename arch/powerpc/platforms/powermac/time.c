@@ -274,7 +274,11 @@ int __init via_calibrate_decr(void)
 		return 0;
 	}
 	of_node_put(vias);
+<<<<<<< HEAD
 	via = ioremap(rsrc.start, rsrc.end - rsrc.start + 1);
+=======
+	via = ioremap(rsrc.start, resource_size(&rsrc));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (via == NULL) {
 		printk(KERN_ERR "Failed to map VIA for timer calibration !\n");
 		return 0;

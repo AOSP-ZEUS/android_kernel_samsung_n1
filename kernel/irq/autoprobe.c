@@ -53,7 +53,11 @@ unsigned long probe_irq_on(void)
 			if (desc->irq_data.chip->irq_set_type)
 				desc->irq_data.chip->irq_set_type(&desc->irq_data,
 							 IRQ_TYPE_PROBE);
+<<<<<<< HEAD
 			irq_startup(desc, false);
+=======
+			irq_startup(desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		raw_spin_unlock_irq(&desc->lock);
 	}
@@ -70,7 +74,11 @@ unsigned long probe_irq_on(void)
 		raw_spin_lock_irq(&desc->lock);
 		if (!desc->action && irq_settings_can_probe(desc)) {
 			desc->istate |= IRQS_AUTODETECT | IRQS_WAITING;
+<<<<<<< HEAD
 			if (irq_startup(desc, false))
+=======
+			if (irq_startup(desc))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				desc->istate |= IRQS_PENDING;
 		}
 		raw_spin_unlock_irq(&desc->lock);

@@ -56,7 +56,11 @@ static int bf5xx_ad193x_hw_params(struct snd_pcm_substream *substream,
 
 	switch (params_rate(params)) {
 	case 48000:
+<<<<<<< HEAD
 		clk = 12288000;
+=======
+		clk = 24576000;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 

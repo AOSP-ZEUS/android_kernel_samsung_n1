@@ -481,7 +481,11 @@ static int set_voltage(struct regulator_dev *rdev, int min_uV, int max_uV,
 	if (i >= info->n_voltages)
 		i = info->n_voltages - 1;
 
+<<<<<<< HEAD
 	*selector = i;
+=======
+	*selector = info->voltages[i];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return write_field(hw, &info->voltage, i);
 }

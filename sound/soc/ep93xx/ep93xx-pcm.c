@@ -5,7 +5,11 @@
  * Copyright (C) 2006 Applied Data Systems
  *
  * Rewritten for the SoC audio subsystem (Based on PXA2xx code):
+<<<<<<< HEAD
  *   Copyright (c) 2008 Ryan Mallon <ryan@bluewatersys.com>
+=======
+ *   Copyright (c) 2008 Ryan Mallon
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
@@ -16,6 +20,10 @@
 #include <linux/init.h>
 #include <linux/device.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/dmaengine.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/dma-mapping.h>
 
 #include <sound/core.h>
@@ -53,6 +61,7 @@ static const struct snd_pcm_hardware ep93xx_pcm_hardware = {
 
 struct ep93xx_runtime_data
 {
+<<<<<<< HEAD
 	struct ep93xx_dma_m2p_client	cl;
 	struct ep93xx_pcm_dma_params	*params;
 	int				pointer_bytes;
@@ -90,6 +99,36 @@ static void ep93xx_pcm_buffer_finished(void *cookie,
 	} else {
 		snd_pcm_stop(substream, SNDRV_PCM_STATE_XRUN);
 	}
+=======
+	int				pointer_bytes;
+	int				periods;
+	int				period_bytes;
+	struct dma_chan			*dma_chan;
+	struct ep93xx_dma_data		dma_data;
+};
+
+static void ep93xx_pcm_dma_callback(void *data)
+{
+	struct snd_pcm_substream *substream = data;
+	struct ep93xx_runtime_data *rtd = substream->runtime->private_data;
+
+	rtd->pointer_bytes += rtd->period_bytes;
+	rtd->pointer_bytes %= rtd->period_bytes * rtd->periods;
+
+	snd_pcm_period_elapsed(substream);
+}
+
+static bool ep93xx_pcm_dma_filter(struct dma_chan *chan, void *filter_param)
+{
+	struct ep93xx_dma_data *data = filter_param;
+
+	if (data->direction == ep93xx_dma_chan_direction(chan)) {
+		chan->private = data;
+		return true;
+	}
+
+	return false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int ep93xx_pcm_open(struct snd_pcm_substream *substream)
@@ -98,15 +137,27 @@ static int ep93xx_pcm_open(struct snd_pcm_substream *substream)
 	struct snd_soc_dai *cpu_dai = soc_rtd->cpu_dai;
 	struct ep93xx_pcm_dma_params *dma_params;
 	struct ep93xx_runtime_data *rtd;    
+<<<<<<< HEAD
 	int ret;
 
 	dma_params = snd_soc_dai_get_dma_data(cpu_dai, substream);
+=======
+	dma_cap_mask_t mask;
+	int ret;
+
+	ret = snd_pcm_hw_constraint_integer(substream->runtime,
+					    SNDRV_PCM_HW_PARAM_PERIODS);
+	if (ret < 0)
+		return ret;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	snd_soc_set_runtime_hwparams(substream, &ep93xx_pcm_hardware);
 
 	rtd = kmalloc(sizeof(*rtd), GFP_KERNEL);
 	if (!rtd) 
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	memset(&rtd->period_tasklet, 0, sizeof(rtd->period_tasklet));
 	rtd->period_tasklet.func = ep93xx_pcm_period_elapsed;
 	rtd->period_tasklet.data = (unsigned long)substream;
@@ -122,6 +173,26 @@ static int ep93xx_pcm_open(struct snd_pcm_substream *substream)
 	if (ret < 0) {
 		kfree(rtd);
 		return ret;
+=======
+	dma_cap_zero(mask);
+	dma_cap_set(DMA_SLAVE, mask);
+	dma_cap_set(DMA_CYCLIC, mask);
+
+	dma_params = snd_soc_dai_get_dma_data(cpu_dai, substream);
+	rtd->dma_data.port = dma_params->dma_port;
+	rtd->dma_data.name = dma_params->name;
+
+	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+		rtd->dma_data.direction = DMA_TO_DEVICE;
+	else
+		rtd->dma_data.direction = DMA_FROM_DEVICE;
+
+	rtd->dma_chan = dma_request_channel(mask, ep93xx_pcm_dma_filter,
+					    &rtd->dma_data);
+	if (!rtd->dma_chan) {
+		kfree(rtd);
+		return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	
 	substream->runtime->private_data = rtd;
@@ -132,16 +203,54 @@ static int ep93xx_pcm_close(struct snd_pcm_substream *substream)
 {
 	struct ep93xx_runtime_data *rtd = substream->runtime->private_data;
 
+<<<<<<< HEAD
 	ep93xx_dma_m2p_client_unregister(&rtd->cl);
+=======
+	dma_release_channel(rtd->dma_chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(rtd);
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int ep93xx_pcm_dma_submit(struct snd_pcm_substream *substream)
+{
+	struct snd_pcm_runtime *runtime = substream->runtime;
+	struct ep93xx_runtime_data *rtd = runtime->private_data;
+	struct dma_chan *chan = rtd->dma_chan;
+	struct dma_async_tx_descriptor *desc;
+
+	rtd->pointer_bytes = 0;
+	desc = dmaengine_prep_dma_cyclic(chan, runtime->dma_addr,
+					       rtd->period_bytes * rtd->periods,
+					       rtd->period_bytes,
+					       rtd->dma_data.direction);
+	if (!desc)
+		return -EINVAL;
+
+	desc->callback = ep93xx_pcm_dma_callback;
+	desc->callback_param = substream;
+
+	dmaengine_submit(desc);
+	return 0;
+}
+
+static void ep93xx_pcm_dma_flush(struct snd_pcm_substream *substream)
+{
+	struct snd_pcm_runtime *runtime = substream->runtime;
+	struct ep93xx_runtime_data *rtd = runtime->private_data;
+
+	dmaengine_terminate_all(rtd->dma_chan);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int ep93xx_pcm_hw_params(struct snd_pcm_substream *substream,
 				struct snd_pcm_hw_params *params)
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct ep93xx_runtime_data *rtd = runtime->private_data;
+<<<<<<< HEAD
 	size_t totsize = params_buffer_bytes(params);
 	size_t period = params_period_bytes(params);
 	int i;
@@ -157,6 +266,13 @@ static int ep93xx_pcm_hw_params(struct snd_pcm_substream *substream,
 			rtd->buf[i].size = totsize - (i * period);
 	}
 
+=======
+
+	snd_pcm_set_runtime_buffer(substream, &substream->dma_buffer);
+
+	rtd->periods = params_periods(params);
+	rtd->period_bytes = params_period_bytes(params);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -168,24 +284,36 @@ static int ep93xx_pcm_hw_free(struct snd_pcm_substream *substream)
 
 static int ep93xx_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
 {
+<<<<<<< HEAD
 	struct ep93xx_runtime_data *rtd = substream->runtime->private_data;
 	int ret;
 	int i;
+=======
+	int ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = 0;
 	switch (cmd) {
 	case SNDRV_PCM_TRIGGER_START:
 	case SNDRV_PCM_TRIGGER_RESUME:
 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+<<<<<<< HEAD
 		rtd->pointer_bytes = 0;
 		for (i = 0; i < rtd->periods; i++)
 			ep93xx_dma_m2p_submit(&rtd->cl, rtd->buf + i);
+=======
+		ret = ep93xx_pcm_dma_submit(substream);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 
 	case SNDRV_PCM_TRIGGER_STOP:
 	case SNDRV_PCM_TRIGGER_SUSPEND:
 	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+<<<<<<< HEAD
 		ep93xx_dma_m2p_flush(&rtd->cl);
+=======
+		ep93xx_pcm_dma_flush(substream);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 
 	default:
@@ -266,9 +394,17 @@ static void ep93xx_pcm_free_dma_buffers(struct snd_pcm *pcm)
 
 static u64 ep93xx_pcm_dmamask = 0xffffffff;
 
+<<<<<<< HEAD
 static int ep93xx_pcm_new(struct snd_card *card, struct snd_soc_dai *dai,
 			  struct snd_pcm *pcm)
 {
+=======
+static int ep93xx_pcm_new(struct snd_soc_pcm_runtime *rtd)
+{
+	struct snd_card *card = rtd->card->snd_card;
+	struct snd_soc_dai *dai = rtd->cpu_dai;
+	struct snd_pcm *pcm = rtd->pcm;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret = 0;
 
 	if (!card->dev->dma_mask)
@@ -333,6 +469,10 @@ static void __exit ep93xx_soc_platform_exit(void)
 module_init(ep93xx_soc_platform_init);
 module_exit(ep93xx_soc_platform_exit);
 
+<<<<<<< HEAD
 MODULE_AUTHOR("Ryan Mallon <ryan@bluewatersys.com>");
+=======
+MODULE_AUTHOR("Ryan Mallon");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_DESCRIPTION("EP93xx ALSA PCM interface");
 MODULE_LICENSE("GPL");

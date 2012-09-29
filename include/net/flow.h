@@ -9,7 +9,11 @@
 
 #include <linux/socket.h>
 #include <linux/in6.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct flowi_common {
 	int	flowic_oif;
@@ -90,6 +94,7 @@ static inline void flowi4_init_output(struct flowi4 *fl4, int oif,
 	fl4->fl4_dport = dport;
 	fl4->fl4_sport = sport;
 }
+<<<<<<< HEAD
 
 /* Reset some input parameters after previous lookup */
 static inline void flowi4_update_output(struct flowi4 *fl4, int oif, __u8 tos,
@@ -100,6 +105,8 @@ static inline void flowi4_update_output(struct flowi4 *fl4, int oif, __u8 tos,
 	fl4->daddr = daddr;
 	fl4->saddr = saddr;
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				      
 
 struct flowi6 {
@@ -217,6 +224,10 @@ extern struct flow_cache_object *flow_cache_lookup(
 		u8 dir, flow_resolve_t resolver, void *ctx);
 
 extern void flow_cache_flush(void);
+<<<<<<< HEAD
+=======
+extern void flow_cache_flush_deferred(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern atomic_t flow_cache_genid;
 
 #endif

@@ -67,6 +67,7 @@ palmtx_pcmcia_configure_socket(struct soc_pcmcia_socket *skt,
 	return 0;
 }
 
+<<<<<<< HEAD
 static void palmtx_pcmcia_socket_init(struct soc_pcmcia_socket *skt)
 {
 }
@@ -75,6 +76,8 @@ static void palmtx_pcmcia_socket_suspend(struct soc_pcmcia_socket *skt)
 {
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct pcmcia_low_level palmtx_pcmcia_ops = {
 	.owner			= THIS_MODULE,
 
@@ -86,9 +89,12 @@ static struct pcmcia_low_level palmtx_pcmcia_ops = {
 
 	.socket_state		= palmtx_pcmcia_socket_state,
 	.configure_socket	= palmtx_pcmcia_configure_socket,
+<<<<<<< HEAD
 
 	.socket_init		= palmtx_pcmcia_socket_init,
 	.socket_suspend		= palmtx_pcmcia_socket_suspend,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct platform_device *palmtx_pcmcia_device;

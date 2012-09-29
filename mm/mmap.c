@@ -122,9 +122,23 @@ int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin)
 		return 0;
 
 	if (sysctl_overcommit_memory == OVERCOMMIT_GUESS) {
+<<<<<<< HEAD
 		unsigned long n;
 
 		free = global_page_state(NR_FILE_PAGES);
+=======
+		free = global_page_state(NR_FREE_PAGES);
+		free += global_page_state(NR_FILE_PAGES);
+
+		/*
+		 * shmem pages shouldn't be counted as free in this
+		 * case, they can't be purged, only swapped out, and
+		 * that won't affect the overall amount of available
+		 * memory in the system.
+		 */
+		free -= global_page_state(NR_SHMEM);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		free += nr_swap_pages;
 
 		/*
@@ -136,6 +150,7 @@ int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin)
 		free += global_page_state(NR_SLAB_RECLAIMABLE);
 
 		/*
+<<<<<<< HEAD
 		 * Leave the last 3% for root
 		 */
 		if (!cap_sys_admin)
@@ -157,13 +172,25 @@ int __vm_enough_memory(struct mm_struct *mm, long pages, int cap_sys_admin)
 			goto error;
 		else
 			n -= totalreserve_pages;
+=======
+		 * Leave reserved pages. The pages are not for anonymous pages.
+		 */
+		if (free <= totalreserve_pages)
+			goto error;
+		else
+			free -= totalreserve_pages;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/*
 		 * Leave the last 3% for root
 		 */
 		if (!cap_sys_admin)
+<<<<<<< HEAD
 			n -= n / 32;
 		free += n;
+=======
+			free -= free / 32;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (free > pages)
 			return 0;

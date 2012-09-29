@@ -589,6 +589,12 @@ ieee80211_tx_h_select_key(struct ieee80211_tx_data *tx)
 			break;
 		}
 
+<<<<<<< HEAD
+=======
+		if (unlikely(tx->key && tx->key->flags & KEY_FLAG_TAINTED))
+			return TX_DROP;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!skip_hw && tx->key &&
 		    tx->key->flags & KEY_FLAG_UPLOADED_TO_HARDWARE)
 			info->control.hw_key = &tx->key->conf;
@@ -1222,8 +1228,12 @@ ieee80211_tx_prepare(struct ieee80211_sub_if_data *sdata,
 		tx->sta = rcu_dereference(sdata->u.vlan.sta);
 		if (!tx->sta && sdata->dev->ieee80211_ptr->use_4addr)
 			return TX_DROP;
+<<<<<<< HEAD
 	} else if (info->flags & IEEE80211_TX_CTL_INJECTED ||
 		   tx->sdata->control_port_protocol == tx->skb->protocol) {
+=======
+	} else if (info->flags & IEEE80211_TX_CTL_INJECTED) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tx->sta = sta_info_get_bss(sdata, hdr->addr1);
 	}
 	if (!tx->sta)
@@ -1475,6 +1485,7 @@ static bool ieee80211_tx(struct ieee80211_sub_if_data *sdata,
 
 /* device xmit handlers */
 
+<<<<<<< HEAD
 static int ieee80211_skb_resize(struct ieee80211_local *local,
 				struct sk_buff *skb,
 				int head_need, bool may_encrypt)
@@ -1487,6 +1498,16 @@ static int ieee80211_skb_resize(struct ieee80211_local *local,
 	 * have no drivers for such devices currently.
 	 */
 	if (may_encrypt) {
+=======
+static int ieee80211_skb_resize(struct ieee80211_sub_if_data *sdata,
+				struct sk_buff *skb,
+				int head_need, bool may_encrypt)
+{
+	struct ieee80211_local *local = sdata->local;
+	int tail_need = 0;
+
+	if (may_encrypt && sdata->crypto_tx_tailroom_needed_cnt) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tail_need = IEEE80211_ENCRYPT_TAILROOM;
 		tail_need -= skb_tailroom(skb);
 		tail_need = max_t(int, tail_need, 0);
@@ -1579,7 +1600,11 @@ static void ieee80211_xmit(struct ieee80211_sub_if_data *sdata,
 	headroom -= skb_headroom(skb);
 	headroom = max_t(int, 0, headroom);
 
+<<<<<<< HEAD
 	if (ieee80211_skb_resize(local, skb, headroom, may_encrypt)) {
+=======
+	if (ieee80211_skb_resize(sdata, skb, headroom, may_encrypt)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dev_kfree_skb(skb);
 		rcu_read_unlock();
 		return;
@@ -1946,7 +1971,11 @@ netdev_tx_t ieee80211_subif_start_xmit(struct sk_buff *skb,
 		head_need += IEEE80211_ENCRYPT_HEADROOM;
 		head_need += local->tx_headroom;
 		head_need = max_t(int, 0, head_need);
+<<<<<<< HEAD
 		if (ieee80211_skb_resize(local, skb, head_need, true))
+=======
+		if (ieee80211_skb_resize(sdata, skb, head_need, true))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto fail;
 	}
 

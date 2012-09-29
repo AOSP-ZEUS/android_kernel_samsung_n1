@@ -476,7 +476,11 @@ static u8 __devinit pcibios_swizzle(struct pci_dev *dev, u8 *pin)
 /*
  * Map a slot/pin to an IRQ.
  */
+<<<<<<< HEAD
 static int pcibios_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int pcibios_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct pci_sys_data *sys = dev->sysdata;
 	int irq = -1;

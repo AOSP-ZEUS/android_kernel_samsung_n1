@@ -14,13 +14,23 @@ static inline int pci_xen_hvm_init(void)
 }
 #endif
 #if defined(CONFIG_XEN_DOM0)
+<<<<<<< HEAD
 void __init xen_setup_pirqs(void);
+=======
+int __init pci_xen_initial_domain(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int xen_find_device_domain_owner(struct pci_dev *dev);
 int xen_register_device_domain_owner(struct pci_dev *dev, uint16_t domain);
 int xen_unregister_device_domain_owner(struct pci_dev *dev);
 #else
+<<<<<<< HEAD
 static inline void __init xen_setup_pirqs(void)
 {
+=======
+static inline int __init pci_xen_initial_domain(void)
+{
+	return -1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 static inline int xen_find_device_domain_owner(struct pci_dev *dev)
 {

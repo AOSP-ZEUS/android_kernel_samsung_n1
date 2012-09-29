@@ -14,8 +14,11 @@ extern struct proto tcpv6_prot;
 
 struct flowi6;
 
+<<<<<<< HEAD
 extern void initialize_hashidentrnd(void);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* extension headers */
 extern int				ipv6_exthdrs_init(void);
 extern void				ipv6_exthdrs_exit(void);
@@ -41,6 +44,10 @@ extern int			datagram_recv_ctl(struct sock *sk,
 						  struct sk_buff *skb);
 
 extern int			datagram_send_ctl(struct net *net,
+<<<<<<< HEAD
+=======
+						  struct sock *sk,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 						  struct msghdr *msg,
 						  struct flowi6 *fl6,
 						  struct ipv6_txoptions *opt,

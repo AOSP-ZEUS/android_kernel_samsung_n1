@@ -181,8 +181,14 @@ struct tcf_proto_ops {
 	struct tcf_proto_ops	*next;
 	char			kind[IFNAMSIZ];
 
+<<<<<<< HEAD
 	int			(*classify)(struct sk_buff*, struct tcf_proto*,
 					struct tcf_result *);
+=======
+	int			(*classify)(struct sk_buff *,
+					    const struct tcf_proto *,
+					    struct tcf_result *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int			(*init)(struct tcf_proto*);
 	void			(*destroy)(struct tcf_proto*);
 
@@ -205,8 +211,14 @@ struct tcf_proto {
 	/* Fast access part */
 	struct tcf_proto	*next;
 	void			*root;
+<<<<<<< HEAD
 	int			(*classify)(struct sk_buff*, struct tcf_proto*,
 					struct tcf_result *);
+=======
+	int			(*classify)(struct sk_buff *,
+					    const struct tcf_proto *,
+					    struct tcf_result *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__be16			protocol;
 
 	/* All the rest */
@@ -214,11 +226,16 @@ struct tcf_proto {
 	u32			classid;
 	struct Qdisc		*q;
 	void			*data;
+<<<<<<< HEAD
 	struct tcf_proto_ops	*ops;
+=======
+	const struct tcf_proto_ops	*ops;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct qdisc_skb_cb {
 	unsigned int		pkt_len;
+<<<<<<< HEAD
 	unsigned char		data[24];
 };
 
@@ -229,6 +246,11 @@ static inline void qdisc_cb_private_validate(const struct sk_buff *skb, int sz)
 	BUILD_BUG_ON(sizeof(qcb->data) < sz);
 }
 
+=======
+	long			data[];
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int qdisc_qlen(struct Qdisc *q)
 {
 	return q->q.qlen;

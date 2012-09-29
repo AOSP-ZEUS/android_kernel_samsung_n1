@@ -149,12 +149,20 @@ static int param_get_debug_level(char *buffer, const struct kernel_param *kp)
 	return result;
 }
 
+<<<<<<< HEAD
 static struct kernel_param_ops param_ops_debug_layer = {
+=======
+static const struct kernel_param_ops param_ops_debug_layer = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.set = param_set_uint,
 	.get = param_get_debug_layer,
 };
 
+<<<<<<< HEAD
 static struct kernel_param_ops param_ops_debug_level = {
+=======
+static const struct kernel_param_ops param_ops_debug_level = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.set = param_set_uint,
 	.get = param_get_debug_level,
 };

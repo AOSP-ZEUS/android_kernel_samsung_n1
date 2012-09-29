@@ -19,7 +19,11 @@
 
 #include <linux/kernel.h>
 #include <linux/irqflags.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #if !defined(CONFIG_LAZY_SAVE_FPU)
 struct fpu_state_struct;

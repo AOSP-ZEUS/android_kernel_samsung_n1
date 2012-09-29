@@ -102,6 +102,7 @@ static int cmx255_pcmcia_configure_socket(struct soc_pcmcia_socket *skt,
 	return 0;
 }
 
+<<<<<<< HEAD
 static void cmx255_pcmcia_socket_init(struct soc_pcmcia_socket *skt)
 {
 }
@@ -111,14 +112,19 @@ static void cmx255_pcmcia_socket_suspend(struct soc_pcmcia_socket *skt)
 }
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct pcmcia_low_level cmx255_pcmcia_ops __initdata = {
 	.owner			= THIS_MODULE,
 	.hw_init		= cmx255_pcmcia_hw_init,
 	.hw_shutdown		= cmx255_pcmcia_shutdown,
 	.socket_state		= cmx255_pcmcia_socket_state,
 	.configure_socket	= cmx255_pcmcia_configure_socket,
+<<<<<<< HEAD
 	.socket_init		= cmx255_pcmcia_socket_init,
 	.socket_suspend		= cmx255_pcmcia_socket_suspend,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.nr			= 1,
 };
 

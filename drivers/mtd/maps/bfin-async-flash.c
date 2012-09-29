@@ -142,7 +142,11 @@ static int __devinit bfin_flash_probe(struct platform_device *pdev)
 	state->map.write      = bfin_flash_write;
 	state->map.copy_to    = bfin_flash_copy_to;
 	state->map.bankwidth  = pdata->width;
+<<<<<<< HEAD
 	state->map.size       = memory->end - memory->start + 1;
+=======
+	state->map.size       = resource_size(memory);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	state->map.virt       = (void __iomem *)memory->start;
 	state->map.phys       = memory->start;
 	state->map.map_priv_1 = (unsigned long)state;

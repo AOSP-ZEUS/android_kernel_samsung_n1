@@ -23,6 +23,10 @@
 #define ZOOM_SMSC911X_GPIO	158
 #define ZOOM_QUADUART_CS	3
 #define ZOOM_QUADUART_GPIO	102
+<<<<<<< HEAD
+=======
+#define ZOOM_QUADUART_RST_GPIO	152
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define QUART_CLK		1843200
 #define DEBUG_BASE		0x08000000
 #define ZOOM_ETHR_START	DEBUG_BASE
@@ -67,6 +71,17 @@ static inline void __init zoom_init_quaduart(void)
 	unsigned long cs_mem_base;
 	int quart_gpio = 0;
 
+<<<<<<< HEAD
+=======
+	if (gpio_request_one(ZOOM_QUADUART_RST_GPIO,
+				GPIOF_OUT_INIT_LOW,
+				"TL16CP754C GPIO") < 0) {
+		pr_err("Failed to request GPIO%d for TL16CP754C\n",
+			ZOOM_QUADUART_RST_GPIO);
+		return;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	quart_cs = ZOOM_QUADUART_CS;
 
 	if (gpmc_cs_request(quart_cs, SZ_1M, &cs_mem_base) < 0) {

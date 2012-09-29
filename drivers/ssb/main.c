@@ -3,7 +3,11 @@
  * Subsystem core
  *
  * Copyright 2005, Broadcom Corporation
+<<<<<<< HEAD
  * Copyright 2006, 2007, Michael Buesch <mb@bu3sch.de>
+=======
+ * Copyright 2006, 2007, Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Licensed under the GNU/GPL. See COPYING for details.
  */
@@ -557,7 +561,11 @@ error:
 }
 
 /* Needs ssb_buses_lock() */
+<<<<<<< HEAD
 static int ssb_attach_queued_buses(void)
+=======
+static int __devinit ssb_attach_queued_buses(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct ssb_bus *bus, *n;
 	int err = 0;
@@ -768,9 +776,15 @@ out:
 	return err;
 }
 
+<<<<<<< HEAD
 static int ssb_bus_register(struct ssb_bus *bus,
 			    ssb_invariants_func_t get_invariants,
 			    unsigned long baseaddr)
+=======
+static int __devinit ssb_bus_register(struct ssb_bus *bus,
+				      ssb_invariants_func_t get_invariants,
+				      unsigned long baseaddr)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int err;
 
@@ -851,8 +865,13 @@ err_disable_xtal:
 }
 
 #ifdef CONFIG_SSB_PCIHOST
+<<<<<<< HEAD
 int ssb_bus_pcibus_register(struct ssb_bus *bus,
 			    struct pci_dev *host_pci)
+=======
+int __devinit ssb_bus_pcibus_register(struct ssb_bus *bus,
+				      struct pci_dev *host_pci)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int err;
 
@@ -875,9 +894,15 @@ EXPORT_SYMBOL(ssb_bus_pcibus_register);
 #endif /* CONFIG_SSB_PCIHOST */
 
 #ifdef CONFIG_SSB_PCMCIAHOST
+<<<<<<< HEAD
 int ssb_bus_pcmciabus_register(struct ssb_bus *bus,
 			       struct pcmcia_device *pcmcia_dev,
 			       unsigned long baseaddr)
+=======
+int __devinit ssb_bus_pcmciabus_register(struct ssb_bus *bus,
+					 struct pcmcia_device *pcmcia_dev,
+					 unsigned long baseaddr)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int err;
 
@@ -897,8 +922,14 @@ EXPORT_SYMBOL(ssb_bus_pcmciabus_register);
 #endif /* CONFIG_SSB_PCMCIAHOST */
 
 #ifdef CONFIG_SSB_SDIOHOST
+<<<<<<< HEAD
 int ssb_bus_sdiobus_register(struct ssb_bus *bus, struct sdio_func *func,
 			     unsigned int quirks)
+=======
+int __devinit ssb_bus_sdiobus_register(struct ssb_bus *bus,
+				       struct sdio_func *func,
+				       unsigned int quirks)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int err;
 
@@ -918,9 +949,15 @@ int ssb_bus_sdiobus_register(struct ssb_bus *bus, struct sdio_func *func,
 EXPORT_SYMBOL(ssb_bus_sdiobus_register);
 #endif /* CONFIG_SSB_PCMCIAHOST */
 
+<<<<<<< HEAD
 int ssb_bus_ssbbus_register(struct ssb_bus *bus,
 			    unsigned long baseaddr,
 			    ssb_invariants_func_t get_invariants)
+=======
+int __devinit ssb_bus_ssbbus_register(struct ssb_bus *bus,
+				      unsigned long baseaddr,
+				      ssb_invariants_func_t get_invariants)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int err;
 
@@ -1001,8 +1038,13 @@ u32 ssb_calc_clock_rate(u32 plltype, u32 n, u32 m)
 	switch (plltype) {
 	case SSB_PLLTYPE_6: /* 100/200 or 120/240 only */
 		if (m & SSB_CHIPCO_CLK_T6_MMASK)
+<<<<<<< HEAD
 			return SSB_CHIPCO_CLK_T6_M0;
 		return SSB_CHIPCO_CLK_T6_M1;
+=======
+			return SSB_CHIPCO_CLK_T6_M1;
+		return SSB_CHIPCO_CLK_T6_M0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case SSB_PLLTYPE_1: /* 48Mhz base, 3 dividers */
 	case SSB_PLLTYPE_3: /* 25Mhz, 2 dividers */
 	case SSB_PLLTYPE_4: /* 48Mhz, 4 dividers */
@@ -1265,7 +1307,14 @@ u32 ssb_dma_translation(struct ssb_device *dev)
 	case SSB_BUSTYPE_SSB:
 		return 0;
 	case SSB_BUSTYPE_PCI:
+<<<<<<< HEAD
 		return SSB_PCI_DMA;
+=======
+		if (ssb_read32(dev, SSB_TMSHIGH) & SSB_TMSHIGH_DMA64)
+			return SSB_PCIE_DMA_H32;
+		else
+			return SSB_PCI_DMA;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default:
 		__ssb_dma_not_implemented(dev);
 	}

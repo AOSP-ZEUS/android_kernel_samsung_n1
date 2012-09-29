@@ -6,7 +6,11 @@
 
   Copyright (C) 2005 Martin Langer <martin-langer@gmx.de>
   Copyright (C) 2005 Stefano Brivio <stefano.brivio@polimi.it>
+<<<<<<< HEAD
   Copyright (C) 2005, 2006 Michael Buesch <mb@bu3sch.de>
+=======
+  Copyright (C) 2005, 2006 Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
   Copyright (C) 2005 Danny van Dyk <kugelfang@gentoo.org>
   Copyright (C) 2005 Andreas Jaggi <andreas.jaggi@waterwave.ch>
 
@@ -323,8 +327,12 @@ int b43_generate_txhdr(struct b43_wldev *dev,
 			/* we give the phase1key and iv16 here, the key is stored in
 			 * shm. With that the hardware can do phase 2 and encryption.
 			 */
+<<<<<<< HEAD
 			ieee80211_get_tkip_key(info->control.hw_key, skb_frag,
 					IEEE80211_TKIP_P1_KEY, (u8*)phase1key);
+=======
+			ieee80211_get_tkip_p1k(info->control.hw_key, skb_frag, phase1key);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* phase1key is in host endian. Copy to little-endian txhdr->iv. */
 			for (i = 0; i < 5; i++) {
 				txhdr->iv[i * 2 + 0] = phase1key[i];
@@ -547,7 +555,11 @@ static s8 b43_rssi_postprocess(struct b43_wldev *dev,
 			else
 				tmp -= 3;
 		} else {
+<<<<<<< HEAD
 			if (dev->sdev->bus->sprom.
+=======
+			if (dev->dev->bus_sprom->
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			    boardflags_lo & B43_BFL_RSSI) {
 				if (in_rssi > 63)
 					in_rssi = 63;

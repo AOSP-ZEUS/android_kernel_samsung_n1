@@ -13,6 +13,10 @@
  * Foundation, 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
  * Copyright IBM Corp. 2007
+<<<<<<< HEAD
+=======
+ * Copyright 2011 Freescale Semiconductor, Inc.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Authors: Hollis Blanchard <hollisb@us.ibm.com>
  */
@@ -24,8 +28,11 @@
 #include <asm/page.h>
 #include <asm/asm-offsets.h>
 
+<<<<<<< HEAD
 #define KVMPPC_MSR_MASK (MSR_CE|MSR_EE|MSR_PR|MSR_DE|MSR_ME|MSR_IS|MSR_DS)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define VCPU_GPR(n)     (VCPU_GPRS + (n * 4))
 
 /* The host stack layout: */
@@ -192,6 +199,15 @@ _GLOBAL(kvmppc_resume_host)
 	lwz	r3, VCPU_HOST_PID(r4)
 	mtspr	SPRN_PID, r3
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_FSL_BOOKE
+	/* we cheat and know that Linux doesn't use PID1 which is always 0 */
+	lis	r3, 0
+	mtspr	SPRN_PID1, r3
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Restore host IVPR before re-enabling interrupts. We cheat and know
 	 * that Linux IVPR is always 0xc0000000. */
 	lis	r3, 0xc000
@@ -241,6 +257,17 @@ _GLOBAL(kvmppc_resume_host)
 heavyweight_exit:
 	/* Not returning to guest. */
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SPE
+	/* save guest SPEFSCR and load host SPEFSCR */
+	mfspr	r9, SPRN_SPEFSCR
+	stw	r9, VCPU_SPEFSCR(r4)
+	lwz	r9, VCPU_HOST_SPEFSCR(r4)
+	mtspr	SPRN_SPEFSCR, r9
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* We already saved guest volatile register state; now save the
 	 * non-volatiles. */
 	stw	r15, VCPU_GPR(r15)(r4)
@@ -342,6 +369,17 @@ _GLOBAL(__kvmppc_vcpu_run)
 	lwz	r30, VCPU_GPR(r30)(r4)
 	lwz	r31, VCPU_GPR(r31)(r4)
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_SPE
+	/* save host SPEFSCR and load guest SPEFSCR */
+	mfspr	r3, SPRN_SPEFSCR
+	stw	r3, VCPU_HOST_SPEFSCR(r4)
+	lwz	r3, VCPU_SPEFSCR(r4)
+	mtspr	SPRN_SPEFSCR, r3
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 lightweight_exit:
 	stw	r2, HOST_R2(r1)
 
@@ -350,6 +388,14 @@ lightweight_exit:
 	lwz	r3, VCPU_SHADOW_PID(r4)
 	mtspr	SPRN_PID, r3
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_FSL_BOOKE
+	lwz	r3, VCPU_SHADOW_PID1(r4)
+	mtspr	SPRN_PID1, r3
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_44x
 	iccci	0, 0 /* XXX hack */
 #endif
@@ -405,13 +451,24 @@ lightweight_exit:
 
 	/* Finish loading guest volatiles and jump to guest. */
 	lwz	r3, VCPU_CTR(r4)
+<<<<<<< HEAD
 	mtctr	r3
 	lwz	r3, VCPU_CR(r4)
 	mtcr	r3
+=======
+	lwz	r5, VCPU_CR(r4)
+	lwz	r6, VCPU_PC(r4)
+	lwz	r7, VCPU_SHADOW_MSR(r4)
+	mtctr	r3
+	mtcr	r5
+	mtsrr0	r6
+	mtsrr1	r7
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	lwz	r5, VCPU_GPR(r5)(r4)
 	lwz	r6, VCPU_GPR(r6)(r4)
 	lwz	r7, VCPU_GPR(r7)(r4)
 	lwz	r8, VCPU_GPR(r8)(r4)
+<<<<<<< HEAD
 	lwz	r3, VCPU_PC(r4)
 	mtsrr0	r3
 	lwz	r3, VCPU_SHARED(r4)
@@ -419,6 +476,8 @@ lightweight_exit:
 	oris	r3, r3, KVMPPC_MSR_MASK@h
 	ori	r3, r3, KVMPPC_MSR_MASK@l
 	mtsrr1	r3
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Clear any debug events which occurred since we disabled MSR[DE].
 	 * XXX This gives us a 3-instruction window in which a breakpoint
@@ -430,3 +489,27 @@ lightweight_exit:
 	lwz	r3, VCPU_GPR(r3)(r4)
 	lwz	r4, VCPU_GPR(r4)(r4)
 	rfi
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_SPE
+_GLOBAL(kvmppc_save_guest_spe)
+	cmpi	0,r3,0
+	beqlr-
+	SAVE_32EVRS(0, r4, r3, VCPU_EVR)
+	evxor   evr6, evr6, evr6
+	evmwumiaa evr6, evr6, evr6
+	li	r4,VCPU_ACC
+	evstddx evr6, r4, r3		/* save acc */
+	blr
+
+_GLOBAL(kvmppc_load_guest_spe)
+	cmpi	0,r3,0
+	beqlr-
+	li      r4,VCPU_ACC
+	evlddx  evr6,r4,r3
+	evmra   evr6,evr6		/* load acc */
+	REST_32EVRS(0, r4, r3, VCPU_EVR)
+	blr
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

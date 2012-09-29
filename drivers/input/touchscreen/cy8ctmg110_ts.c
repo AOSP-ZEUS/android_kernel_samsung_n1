@@ -84,9 +84,15 @@ static int cy8ctmg110_write_regs(struct cy8ctmg110 *tsc, unsigned char reg,
 	memcpy(i2c_data + 1, value, len);
 
 	ret = i2c_master_send(client, i2c_data, len + 1);
+<<<<<<< HEAD
 	if (ret != 1) {
 		dev_err(&client->dev, "i2c write data cmd failed\n");
 		return ret ? ret : -EIO;
+=======
+	if (ret != len + 1) {
+		dev_err(&client->dev, "i2c write data cmd failed\n");
+		return ret < 0 ? ret : -EIO;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return 0;
@@ -193,6 +199,11 @@ static int __devinit cy8ctmg110_probe(struct i2c_client *client,
 
 	ts->client = client;
 	ts->input = input_dev;
+<<<<<<< HEAD
+=======
+	ts->reset_pin = pdata->reset_pin;
+	ts->irq_pin = pdata->irq_pin;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	snprintf(ts->phys, sizeof(ts->phys),
 		 "%s/input0", dev_name(&client->dev));
@@ -328,7 +339,11 @@ static int __devexit cy8ctmg110_remove(struct i2c_client *client)
 	return 0;
 }
 
+<<<<<<< HEAD
 static struct i2c_device_id cy8ctmg110_idtable[] = {
+=======
+static const struct i2c_device_id cy8ctmg110_idtable[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ CY8CTMG110_DRIVER_NAME, 1 },
 	{ }
 };

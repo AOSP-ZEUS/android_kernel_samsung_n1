@@ -39,6 +39,10 @@
 #include <linux/bitops.h>
 #include <linux/workqueue.h>
 #include <linux/of.h>
+<<<<<<< HEAD
+=======
+#include <linux/of_net.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h>
 
 #include <asm/processor.h>
@@ -2506,6 +2510,7 @@ static int __devinit emac_init_config(struct emac_instance *dev)
 {
 	struct device_node *np = dev->ofdev->dev.of_node;
 	const void *p;
+<<<<<<< HEAD
 	unsigned int plen;
 	const char *pm, *phy_modes[] = {
 		[PHY_MODE_NA] = "",
@@ -2518,6 +2523,8 @@ static int __devinit emac_init_config(struct emac_instance *dev)
 		[PHY_MODE_RTBI] = "rtbi",
 		[PHY_MODE_SGMII] = "sgmii",
 	};
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Read config from device-tree */
 	if (emac_read_uint_prop(np, "mal-device", &dev->mal_ph, 1))
@@ -2566,6 +2573,7 @@ static int __devinit emac_init_config(struct emac_instance *dev)
 		dev->mal_burst_size = 256;
 
 	/* PHY mode needs some decoding */
+<<<<<<< HEAD
 	dev->phy_mode = PHY_MODE_NA;
 	pm = of_get_property(np, "phy-mode", &plen);
 	if (pm != NULL) {
@@ -2583,6 +2591,11 @@ static int __devinit emac_init_config(struct emac_instance *dev)
 		if (nmode > PHY_MODE_NA && nmode <= PHY_MODE_SGMII)
 			dev->phy_mode = nmode;
 	}
+=======
+	dev->phy_mode = of_get_phy_mode(np);
+	if (dev->phy_mode < 0)
+		dev->phy_mode = PHY_MODE_NA;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Check EMAC version */
 	if (of_device_is_compatible(np, "ibm,emac4sync")) {
@@ -2770,7 +2783,11 @@ static int __devinit emac_probe(struct platform_device *ofdev)
 	}
 	// TODO : request_mem_region
 	dev->emacp = ioremap(dev->rsrc_regs.start,
+<<<<<<< HEAD
 			     dev->rsrc_regs.end - dev->rsrc_regs.start + 1);
+=======
+			     resource_size(&dev->rsrc_regs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (dev->emacp == NULL) {
 		printk(KERN_ERR "%s: Can't map device registers!\n",
 		       np->full_name);

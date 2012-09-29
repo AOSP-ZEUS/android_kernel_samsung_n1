@@ -66,11 +66,15 @@ extern void s3c24xx_init_uartdevs(char *name,
 /* timer for 2410/2440 */
 
 struct sys_timer;
+<<<<<<< HEAD
 #if	defined(CONFIG_S5P_HIGH_RES_TIMERS)
 extern struct sys_timer s5p_systimer;
 #else
 extern struct sys_timer s3c24xx_timer;
 #endif
+=======
+extern struct sys_timer s3c24xx_timer;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern struct syscore_ops s3c2410_pm_syscore_ops;
 extern struct syscore_ops s3c2412_pm_syscore_ops;

@@ -81,6 +81,10 @@ struct isp_ccp2_device {
 	struct isp_interface_mem_config mem_cfg;
 	struct isp_video video_in;
 	struct isp_csiphy *phy;
+<<<<<<< HEAD
+=======
+	struct regulator *vdds_csib;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned int error;
 	enum isp_pipeline_stream_state state;
 	wait_queue_head_t wait;

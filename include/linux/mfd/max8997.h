@@ -107,11 +107,23 @@ struct max8997_platform_data {
 	unsigned int buck5_voltage[8];
 	bool buck5_gpiodvs;
 
+<<<<<<< HEAD
+=======
+	/* ---- Charger control ---- */
+	/* eoc stands for 'end of charge' */
+	int eoc_mA; /* 50 ~ 200mA by 10mA step */
+	/* charge Full Timeout */
+	int timeout; /* 0 (no timeout), 5, 6, 7 hours */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* MUIC: Not implemented */
 	/* HAPTIC: Not implemented */
 	/* RTC: Not implemented */
 	/* Flash: Not implemented */
+<<<<<<< HEAD
 	/* Charger control: Not implemented */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif /* __LINUX_MFD_MAX8998_H */

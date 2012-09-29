@@ -449,6 +449,18 @@ void ceph_queue_cap_snap(struct ceph_inode_info *ci)
 	spin_lock(&inode->i_lock);
 	used = __ceph_caps_used(ci);
 	dirty = __ceph_caps_dirty(ci);
+<<<<<<< HEAD
+=======
+
+	/*
+	 * If there is a write in progress, treat that as a dirty Fw,
+	 * even though it hasn't completed yet; by the time we finish
+	 * up this capsnap it will be.
+	 */
+	if (used & CEPH_CAP_FILE_WR)
+		dirty |= CEPH_CAP_FILE_WR;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (__ceph_have_pending_cap_snap(ci)) {
 		/* there is no point in queuing multiple "pending" cap_snaps,
 		   as no new writes are allowed to start when pending, so any
@@ -456,6 +468,7 @@ void ceph_queue_cap_snap(struct ceph_inode_info *ci)
 		   cap_snap.  lucky us. */
 		dout("queue_cap_snap %p already pending\n", inode);
 		kfree(capsnap);
+<<<<<<< HEAD
 	} else if (ci->i_wrbuffer_ref_head || (used & CEPH_CAP_FILE_WR) ||
 		   (dirty & (CEPH_CAP_AUTH_EXCL|CEPH_CAP_XATTR_EXCL|
 			     CEPH_CAP_FILE_EXCL|CEPH_CAP_FILE_WR))) {
@@ -463,6 +476,21 @@ void ceph_queue_cap_snap(struct ceph_inode_info *ci)
 
 		dout("queue_cap_snap %p cap_snap %p queuing under %p\n", inode,
 		     capsnap, snapc);
+=======
+	} else if (dirty & (CEPH_CAP_AUTH_EXCL|CEPH_CAP_XATTR_EXCL|
+			    CEPH_CAP_FILE_EXCL|CEPH_CAP_FILE_WR)) {
+		struct ceph_snap_context *snapc = ci->i_head_snapc;
+
+		/*
+		 * if we are a sync write, we may need to go to the snaprealm
+		 * to get the current snapc.
+		 */
+		if (!snapc)
+			snapc = ci->i_snap_realm->cached_context;
+
+		dout("queue_cap_snap %p cap_snap %p queuing under %p %s\n",
+		     inode, capsnap, snapc, ceph_cap_string(dirty));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ihold(inode);
 
 		atomic_set(&capsnap->nref, 1);

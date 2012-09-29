@@ -5,6 +5,11 @@
  * Released under the terms of the GNU GPL v2.0.
  */
 
+<<<<<<< HEAD
+=======
+#include <stdarg.h>
+#include <stdlib.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <string.h>
 #include "lkc.h"
 

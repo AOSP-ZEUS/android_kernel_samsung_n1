@@ -7,7 +7,10 @@
 #include <stdlib.h>
 #include <string.h>
 
+<<<<<<< HEAD
 #define LKC_DIRECT_LINK
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "lkc.h"
 
 static char *escape(const char* text, char *bf, int len)

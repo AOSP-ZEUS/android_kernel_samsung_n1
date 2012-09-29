@@ -356,6 +356,7 @@ static void do_s2io_copy_mac_addr(struct s2io_nic *sp, int offset, u64 mac_addr)
 	sp->def_mac_addr[offset].mac_addr[0] = (u8) (mac_addr >> 40);
 }
 
+<<<<<<< HEAD
 /* Add the vlan */
 static void s2io_vlan_rx_register(struct net_device *dev,
 				  struct vlan_group *grp)
@@ -406,6 +407,8 @@ static void s2io_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Constants to be programmed into the Xena's registers, to configure
  * the XAUI.
@@ -841,7 +844,11 @@ static int init_shared_mem(struct s2io_nic *nic)
 			tmp_p_addr = ring->rx_blocks[j].block_dma_addr;
 			tmp_p_addr_next = ring->rx_blocks[next].block_dma_addr;
 
+<<<<<<< HEAD
 			pre_rxd_blk = (struct RxD_block *)tmp_v_addr;
+=======
+			pre_rxd_blk = tmp_v_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			pre_rxd_blk->reserved_2_pNext_RxD_block =
 				(unsigned long)tmp_v_addr_next;
 			pre_rxd_blk->pNext_RxD_Blk_physical =
@@ -918,7 +925,11 @@ static int init_shared_mem(struct s2io_nic *nic)
 	mac_control->stats_mem_sz = size;
 
 	tmp_v_addr = mac_control->stats_mem;
+<<<<<<< HEAD
 	mac_control->stats_info = (struct stat_block *)tmp_v_addr;
+=======
+	mac_control->stats_info = tmp_v_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	memset(tmp_v_addr, 0, size);
 	DBG_PRINT(INIT_DBG, "%s: Ring Mem PHY: 0x%llx\n",
 		dev_name(&nic->pdev->dev), (unsigned long long)tmp_p_addr);
@@ -2439,7 +2450,11 @@ static void free_tx_buffers(struct s2io_nic *nic)
 
 		spin_lock_irqsave(&fifo->tx_lock, flags);
 		for (j = 0; j < tx_cfg->fifo_len; j++) {
+<<<<<<< HEAD
 			txdp = (struct TxD *)fifo->list_info[j].list_virt_addr;
+=======
+			txdp = fifo->list_info[j].list_virt_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			skb = s2io_txdl_getskb(&mac_control->fifos[i], txdp, j);
 			if (skb) {
 				swstats->mem_freed += skb->truesize;
@@ -3075,8 +3090,12 @@ static void tx_intr_handler(struct fifo_info *fifo_data)
 
 	get_info = fifo_data->tx_curr_get_info;
 	memcpy(&put_info, &fifo_data->tx_curr_put_info, sizeof(put_info));
+<<<<<<< HEAD
 	txdlp = (struct TxD *)
 		fifo_data->list_info[get_info.offset].list_virt_addr;
+=======
+	txdlp = fifo_data->list_info[get_info.offset].list_virt_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	while ((!(txdlp->Control_1 & TXD_LIST_OWN_XENA)) &&
 	       (get_info.offset != put_info.offset) &&
 	       (txdlp->Host_Control)) {
@@ -3129,8 +3148,12 @@ static void tx_intr_handler(struct fifo_info *fifo_data)
 		get_info.offset++;
 		if (get_info.offset == get_info.fifo_len + 1)
 			get_info.offset = 0;
+<<<<<<< HEAD
 		txdlp = (struct TxD *)
 			fifo_data->list_info[get_info.offset].list_virt_addr;
+=======
+		txdlp = fifo_data->list_info[get_info.offset].list_virt_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		fifo_data->tx_curr_get_info.offset = get_info.offset;
 	}
 
@@ -4111,7 +4134,11 @@ static netdev_tx_t s2io_xmit(struct sk_buff *skb, struct net_device *dev)
 			struct tcphdr *th;
 			ip = ip_hdr(skb);
 
+<<<<<<< HEAD
 			if ((ip->frag_off & htons(IP_OFFSET|IP_MF)) == 0) {
+=======
+			if (!ip_is_fragment(ip)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				th = (struct tcphdr *)(((unsigned char *)ip) +
 						       ip->ihl*4);
 
@@ -4163,7 +4190,11 @@ static netdev_tx_t s2io_xmit(struct sk_buff *skb, struct net_device *dev)
 
 	put_off = (u16)fifo->tx_curr_put_info.offset;
 	get_off = (u16)fifo->tx_curr_get_info.offset;
+<<<<<<< HEAD
 	txdp = (struct TxD *)fifo->list_info[put_off].list_virt_addr;
+=======
+	txdp = fifo->list_info[put_off].list_virt_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	queue_len = fifo->tx_curr_put_info.fifo_len + 1;
 	/* Avoid "put" pointer going beyond "get" pointer */
@@ -7739,8 +7770,11 @@ static const struct net_device_ops s2io_netdev_ops = {
 	.ndo_set_mac_address    = s2io_set_mac_addr,
 	.ndo_change_mtu	   	= s2io_change_mtu,
 	.ndo_set_features	= s2io_set_features,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register   = s2io_vlan_rx_register,
 	.ndo_vlan_rx_kill_vid   = s2io_vlan_rx_kill_vid,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ndo_tx_timeout	   	= s2io_tx_watchdog,
 #ifdef CONFIG_NET_POLL_CONTROLLER
 	.ndo_poll_controller    = s2io_netpoll,
@@ -7972,9 +8006,13 @@ s2io_init_nic(struct pci_dev *pdev, const struct pci_device_id *pre)
 
 	/* Initializing the BAR1 address as the start of the FIFO pointer. */
 	for (j = 0; j < MAX_TX_FIFOS; j++) {
+<<<<<<< HEAD
 		mac_control->tx_FIFO_start[j] =
 			(struct TxFIFO_element __iomem *)
 			(sp->bar1 + (j * 0x00020000));
+=======
+		mac_control->tx_FIFO_start[j] = sp->bar1 + (j * 0x00020000);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/*  Driver entry points */
@@ -8621,6 +8659,7 @@ static void queue_rx_frame(struct sk_buff *skb, u16 vlan_tag)
 	struct s2io_nic *sp = netdev_priv(dev);
 
 	skb->protocol = eth_type_trans(skb, dev);
+<<<<<<< HEAD
 	if (sp->vlgrp && vlan_tag && (sp->vlan_strip_flag)) {
 		/* Queueing the vlan frame to the upper layer */
 		if (sp->config.napi)
@@ -8633,6 +8672,14 @@ static void queue_rx_frame(struct sk_buff *skb, u16 vlan_tag)
 		else
 			netif_rx(skb);
 	}
+=======
+	if (vlan_tag && sp->vlan_strip_flag)
+		__vlan_hwaccel_put_tag(skb, vlan_tag);
+	if (sp->config.napi)
+		netif_receive_skb(skb);
+	else
+		netif_rx(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void lro_append_pkt(struct s2io_nic *sp, struct lro *lro,

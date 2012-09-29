@@ -19,6 +19,10 @@
  * Copyright (C) 2008 Google Inc
  * Copyright (C) 2009 Bob Copeland (me@bobcopeland.com)
  */
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/mod_devicetable.h>
 #include <linux/mmc/sdio_func.h>
@@ -314,8 +318,13 @@ static void __devexit wl1251_sdio_remove(struct sdio_func *func)
 
 	if (wl->irq)
 		free_irq(wl->irq, wl);
+<<<<<<< HEAD
 	wl1251_free_hw(wl);
 	kfree(wl_sdio);
+=======
+	kfree(wl_sdio);
+	wl1251_free_hw(wl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	sdio_claim_host(func);
 	sdio_release_irq(func);

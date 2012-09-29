@@ -96,6 +96,7 @@ TRACE_EVENT(iwlwifi_legacy_dev_iowrite32,
 #undef TRACE_SYSTEM
 #define TRACE_SYSTEM iwlwifi_legacy_ucode
 
+<<<<<<< HEAD
 TRACE_EVENT(iwlwifi_legacy_dev_ucode_cont_event,
 	TP_PROTO(struct iwl_priv *priv, u32 time, u32 data, u32 ev),
 	TP_ARGS(priv, time, data, ev),
@@ -137,6 +138,8 @@ TRACE_EVENT(iwlwifi_legacy_dev_ucode_wrap_event,
 		  __entry->p_entry)
 );
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #undef TRACE_SYSTEM
 #define TRACE_SYSTEM iwlwifi
 
@@ -242,6 +245,7 @@ TRACE_EVENT(iwlwifi_legacy_dev_ucode_error,
 		  __entry->blink2, __entry->ilink1, __entry->ilink2)
 );
 
+<<<<<<< HEAD
 TRACE_EVENT(iwlwifi_legacy_dev_ucode_event,
 	TP_PROTO(struct iwl_priv *priv, u32 time, u32 data, u32 ev),
 	TP_ARGS(priv, time, data, ev),
@@ -261,6 +265,8 @@ TRACE_EVENT(iwlwifi_legacy_dev_ucode_event,
 	TP_printk("[%p] EVT_LOGT:%010u:0x%08x:%04u",
 		  __entry->priv, __entry->time, __entry->data, __entry->ev)
 );
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* __IWLWIFI_DEVICE_TRACE */
 
 #undef TRACE_INCLUDE_PATH

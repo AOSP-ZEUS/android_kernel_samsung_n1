@@ -48,12 +48,19 @@ static void *vb2_dma_sg_alloc(void *alloc_ctx, unsigned long size)
 	buf->sg_desc.size = size;
 	buf->sg_desc.num_pages = (size + PAGE_SIZE - 1) >> PAGE_SHIFT;
 
+<<<<<<< HEAD
 	buf->sg_desc.sglist = vmalloc(buf->sg_desc.num_pages *
 				      sizeof(*buf->sg_desc.sglist));
 	if (!buf->sg_desc.sglist)
 		goto fail_sglist_alloc;
 	memset(buf->sg_desc.sglist, 0, buf->sg_desc.num_pages *
 	       sizeof(*buf->sg_desc.sglist));
+=======
+	buf->sg_desc.sglist = vzalloc(buf->sg_desc.num_pages *
+				      sizeof(*buf->sg_desc.sglist));
+	if (!buf->sg_desc.sglist)
+		goto fail_sglist_alloc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sg_init_table(buf->sg_desc.sglist, buf->sg_desc.num_pages);
 
 	buf->pages = kzalloc(buf->sg_desc.num_pages * sizeof(struct page *),
@@ -136,13 +143,20 @@ static void *vb2_dma_sg_get_userptr(void *alloc_ctx, unsigned long vaddr,
 	last  = ((vaddr + size - 1) & PAGE_MASK) >> PAGE_SHIFT;
 	buf->sg_desc.num_pages = last - first + 1;
 
+<<<<<<< HEAD
 	buf->sg_desc.sglist = vmalloc(
+=======
+	buf->sg_desc.sglist = vzalloc(
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		buf->sg_desc.num_pages * sizeof(*buf->sg_desc.sglist));
 	if (!buf->sg_desc.sglist)
 		goto userptr_fail_sglist_alloc;
 
+<<<<<<< HEAD
 	memset(buf->sg_desc.sglist, 0,
 		buf->sg_desc.num_pages * sizeof(*buf->sg_desc.sglist));
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sg_init_table(buf->sg_desc.sglist, buf->sg_desc.num_pages);
 
 	buf->pages = kzalloc(buf->sg_desc.num_pages * sizeof(struct page *),

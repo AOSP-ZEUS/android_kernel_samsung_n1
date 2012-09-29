@@ -4,5 +4,12 @@ ToDo list (incomplete, unordered)
 	- add compile as module support
 	- move nvec devices to mfd cells?
 	- adjust to kernel style
+<<<<<<< HEAD
 
 
+=======
+	- fix clk usage
+	  should not be using clk_get_sys(), but clk_get(&pdev->dev, conn)
+	  where conn is either NULL if the device only has one clock, or
+	  the device specific name if it has multiple clocks.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

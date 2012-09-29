@@ -321,6 +321,23 @@ static int wl1271_init_beacon_broadcast(struct wl1271 *wl)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int wl12xx_init_fwlog(struct wl1271 *wl)
+{
+	int ret;
+
+	if (wl->quirks & WL12XX_QUIRK_FWLOG_NOT_IMPLEMENTED)
+		return 0;
+
+	ret = wl12xx_cmd_config_fwlog(wl);
+	if (ret < 0)
+		return ret;
+
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int wl1271_sta_hw_init(struct wl1271 *wl)
 {
 	int ret;
@@ -382,6 +399,14 @@ static int wl1271_sta_hw_init(struct wl1271 *wl)
 	if (ret < 0)
 		return ret;
 
+<<<<<<< HEAD
+=======
+	/* Configure the FW logger */
+	ret = wl12xx_init_fwlog(wl);
+	if (ret < 0)
+		return ret;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -428,7 +453,11 @@ static int wl1271_ap_hw_init(struct wl1271 *wl)
 	if (ret < 0)
 		return ret;
 
+<<<<<<< HEAD
 	ret = wl1271_acx_max_tx_retry(wl);
+=======
+	ret = wl1271_acx_ap_max_tx_retry(wl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret < 0)
 		return ret;
 
@@ -436,6 +465,14 @@ static int wl1271_ap_hw_init(struct wl1271 *wl)
 	if (ret < 0)
 		return ret;
 
+<<<<<<< HEAD
+=======
+	/* initialize Tx power */
+	ret = wl1271_acx_tx_power(wl, wl->power_level);
+	if (ret < 0)
+		return ret;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -541,6 +578,10 @@ static int wl1271_set_ba_policies(struct wl1271 *wl)
 
 	/* Reset the BA RX indicators */
 	wl->ba_rx_bitmap = 0;
+<<<<<<< HEAD
+=======
+	wl->ba_allowed = true;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* validate that FW support BA */
 	wl1271_check_ba_support(wl);

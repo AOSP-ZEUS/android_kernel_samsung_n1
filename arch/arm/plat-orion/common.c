@@ -806,7 +806,14 @@ void __init orion_xor1_init(unsigned long mapbase_low,
 /*****************************************************************************
  * EHCI
  ****************************************************************************/
+<<<<<<< HEAD
 static struct orion_ehci_data orion_ehci_data;
+=======
+static struct orion_ehci_data orion_ehci_data = {
+	.phy_version	= EHCI_PHY_NA,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static u64 ehci_dmamask = DMA_BIT_MASK(32);
 
 
@@ -827,11 +834,17 @@ static struct platform_device orion_ehci = {
 
 void __init orion_ehci_init(struct mbus_dram_target_info *mbus_dram_info,
 			    unsigned long mapbase,
+<<<<<<< HEAD
 			    unsigned long irq,
 			    enum orion_ehci_phy_ver phy_version)
 {
 	orion_ehci_data.dram = mbus_dram_info;
 	orion_ehci_data.phy_version = phy_version;
+=======
+			    unsigned long irq)
+{
+	orion_ehci_data.dram = mbus_dram_info;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	fill_resources(&orion_ehci, orion_ehci_resources, mapbase, SZ_4K - 1,
 		       irq);
 

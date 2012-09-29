@@ -156,7 +156,10 @@ enum pl08x_dma_chan_state {
  * @runtime_addr: address for RX/TX according to the runtime config
  * @runtime_direction: current direction of this channel according to
  * runtime config
+<<<<<<< HEAD
  * @lc: last completed transaction on this channel
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @pend_list: queued transactions pending on this channel
  * @at: active transaction on this channel
  * @lock: a lock for this channel data
@@ -172,10 +175,20 @@ struct pl08x_dma_chan {
 	int phychan_hold;
 	struct tasklet_struct tasklet;
 	char *name;
+<<<<<<< HEAD
 	struct pl08x_channel_data *cd;
 	dma_addr_t runtime_addr;
 	enum dma_data_direction	runtime_direction;
 	dma_cookie_t lc;
+=======
+	const struct pl08x_channel_data *cd;
+	dma_addr_t src_addr;
+	dma_addr_t dst_addr;
+	u32 src_cctl;
+	u32 dst_cctl;
+	enum dma_data_direction	runtime_direction;
+	enum dma_transfer_direction runtime_direction;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct list_head pend_list;
 	struct pl08x_txd *at;
 	spinlock_t lock;
@@ -202,7 +215,11 @@ struct pl08x_dma_chan {
  * @mem_buses: buses which memory can be accessed from: PL08X_AHB1 | PL08X_AHB2
  */
 struct pl08x_platform_data {
+<<<<<<< HEAD
 	struct pl08x_channel_data *slave_channels;
+=======
+	const struct pl08x_channel_data *slave_channels;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned int num_slave_channels;
 	struct pl08x_channel_data memcpy_channel;
 	int (*get_signal)(struct pl08x_dma_chan *);

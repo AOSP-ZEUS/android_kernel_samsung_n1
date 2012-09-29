@@ -285,7 +285,11 @@ group_add_out:
 		if (!capable(CAP_SYS_ADMIN))
 			return -EPERM;
 
+<<<<<<< HEAD
 		if (copy_from_user(&range, (struct fstrim_range *)arg,
+=======
+		if (copy_from_user(&range, (struct fstrim_range __user *)arg,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				   sizeof(range)))
 			return -EFAULT;
 
@@ -293,7 +297,11 @@ group_add_out:
 		if (ret < 0)
 			return ret;
 
+<<<<<<< HEAD
 		if (copy_to_user((struct fstrim_range *)arg, &range,
+=======
+		if (copy_to_user((struct fstrim_range __user *)arg, &range,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				 sizeof(range)))
 			return -EFAULT;
 

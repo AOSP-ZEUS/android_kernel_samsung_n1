@@ -34,6 +34,10 @@
 #include <linux/in.h>
 #include <linux/slab.h>
 #include <linux/vmalloc.h>
+<<<<<<< HEAD
+=======
+#include <linux/ratelimit.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "rds.h"
 #include "iw.h"
@@ -258,8 +262,12 @@ static int rds_iw_setup_qp(struct rds_connection *conn)
 	 */
 	rds_iwdev = ib_get_client_data(dev, &rds_iw_client);
 	if (!rds_iwdev) {
+<<<<<<< HEAD
 		if (printk_ratelimit())
 			printk(KERN_NOTICE "RDS/IW: No client_data for device %s\n",
+=======
+		printk_ratelimited(KERN_NOTICE "RDS/IW: No client_data for device %s\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					dev->name);
 		return -EOPNOTSUPP;
 	}
@@ -365,13 +373,21 @@ static u32 rds_iw_protocol_compatible(const struct rds_iw_connect_private *dp)
 		version = RDS_PROTOCOL_3_0;
 		while ((common >>= 1) != 0)
 			version++;
+<<<<<<< HEAD
 	} else if (printk_ratelimit()) {
 		printk(KERN_NOTICE "RDS: Connection from %pI4 using "
+=======
+	}
+	printk_ratelimited(KERN_NOTICE "RDS: Connection from %pI4 using "
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			"incompatible protocol version %u.%u\n",
 			&dp->dp_saddr,
 			dp->dp_protocol_major,
 			dp->dp_protocol_minor);
+<<<<<<< HEAD
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return version;
 }
 

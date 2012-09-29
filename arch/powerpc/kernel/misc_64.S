@@ -339,7 +339,11 @@ _GLOBAL(real_205_writeb)
 #endif /* CONFIG_PPC_PASEMI */
 
 
+<<<<<<< HEAD
 #ifdef CONFIG_CPU_FREQ_PMAC64
+=======
+#if defined(CONFIG_CPU_FREQ_PMAC64) || defined(CONFIG_CPU_FREQ_MAPLE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * SCOM access functions for 970 (FX only for now)
  *
@@ -408,7 +412,11 @@ _GLOBAL(scom970_write)
 	/* restore interrupts */
 	mtmsrd	r5,1
 	blr
+<<<<<<< HEAD
 #endif /* CONFIG_CPU_FREQ_PMAC64 */
+=======
+#endif /* CONFIG_CPU_FREQ_PMAC64 || CONFIG_CPU_FREQ_MAPLE */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /*

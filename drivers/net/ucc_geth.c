@@ -2030,11 +2030,14 @@ static void ucc_geth_set_multi(struct net_device *dev)
 			out_be32(&p_82xx_addr_filt->gaddr_l, 0x0);
 
 			netdev_for_each_mc_addr(ha, dev) {
+<<<<<<< HEAD
 				/* Only support group multicast for now.
 				 */
 				if (!is_multicast_ether_addr(ha->addr))
 					continue;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				/* Ask CPM to run CRC and set bit in
 				 * filter mask.
 				 */
@@ -3165,6 +3168,11 @@ static int ucc_geth_start_xmit(struct sk_buff *skb, struct net_device *dev)
 
 	ugeth->txBd[txQ] = bd;
 
+<<<<<<< HEAD
+=======
+	skb_tx_timestamp(skb);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ugeth->p_scheduler) {
 		ugeth->cpucount[txQ]++;
 		/* Indicate to QE that there are more Tx bds ready for

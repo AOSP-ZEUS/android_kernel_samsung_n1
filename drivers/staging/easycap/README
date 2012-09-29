@@ -27,6 +27,7 @@ BUILD OPTIONS AND DEPENDENCIES
 Unless EASYCAP_DEBUG is defined during compilation it will not be possible
 to select a debug level at the time of module installation.
 
+<<<<<<< HEAD
 If the parameter EASYCAP_IS_VIDEODEV_CLIENT is undefined during compilation
 the built module is entirely independent of the videodev module, and when
 the EasyCAP is physically plugged into a USB port the special files
@@ -49,6 +50,8 @@ If the build is performed out-of-tree against older kernels the parameters
 to be defined depend on the kernel version in a way which will not be
 discussed here.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 KNOWN RUNTIME ISSUES
 --------------------
@@ -82,8 +85,13 @@ Three module parameters are defined:
 
 debug      the easycap module is configured at diagnostic level n (0 to 9)
 gain       audio gain level n (0 to 31, default is 16)
+<<<<<<< HEAD
 bars       0 =>  testcard bars when incoming video signal is lost
            1 =>  testcard bars when incoming video signal is lost (default)
+=======
+bars       whether to display testcard bars when incoming video signal is lost
+           0 => no, 1 => yes (default)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 SUPPORTED TV STANDARDS AND RESOLUTIONS
@@ -128,8 +136,11 @@ hardware, but as yet it has actually been tested on only a few of these.
 I have been unable to test and calibrate the S-video input myself because I
 do not possess any equipment with S-video output.
 
+<<<<<<< HEAD
 This driver does not understand the V4L1 IOCTL commands.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 UDEV RULES
 ----------

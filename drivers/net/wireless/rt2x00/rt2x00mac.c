@@ -152,6 +152,7 @@ void rt2x00mac_tx(struct ieee80211_hw *hw, struct sk_buff *skb)
 	if (unlikely(rt2x00queue_write_tx_frame(queue, skb, false)))
 		goto exit_fail;
 
+<<<<<<< HEAD
 	/*
 	 * Pausing queue has to be serialized with rt2x00lib_txdone(). Note
 	 * we should not use spin_lock_bh variant as bottom halve was already
@@ -161,13 +162,21 @@ void rt2x00mac_tx(struct ieee80211_hw *hw, struct sk_buff *skb)
 	if (rt2x00queue_threshold(queue))
 		rt2x00queue_pause_queue(queue);
 	spin_unlock(&queue->tx_lock);
+=======
+	if (rt2x00queue_threshold(queue))
+		rt2x00queue_pause_queue(queue);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return;
 
  exit_fail:
+<<<<<<< HEAD
 	spin_lock(&queue->tx_lock);
 	rt2x00queue_pause_queue(queue);
 	spin_unlock(&queue->tx_lock);
+=======
+	rt2x00queue_pause_queue(queue);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  exit_free_skb:
 	dev_kfree_skb_any(skb);
 }
@@ -828,3 +837,20 @@ void rt2x00mac_get_ringparam(struct ieee80211_hw *hw,
 	*rx_max = rt2x00dev->rx->limit;
 }
 EXPORT_SYMBOL_GPL(rt2x00mac_get_ringparam);
+<<<<<<< HEAD
+=======
+
+bool rt2x00mac_tx_frames_pending(struct ieee80211_hw *hw)
+{
+	struct rt2x00_dev *rt2x00dev = hw->priv;
+	struct data_queue *queue;
+
+	tx_queue_for_each(rt2x00dev, queue) {
+		if (!rt2x00queue_empty(queue))
+			return true;
+	}
+
+	return false;
+}
+EXPORT_SYMBOL_GPL(rt2x00mac_tx_frames_pending);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

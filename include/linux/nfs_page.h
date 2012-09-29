@@ -55,12 +55,23 @@ struct nfs_page {
 	struct nfs_writeverf	wb_verf;	/* Commit cookie */
 };
 
+<<<<<<< HEAD
+=======
+struct nfs_pageio_descriptor;
+struct nfs_pageio_ops {
+	void	(*pg_init)(struct nfs_pageio_descriptor *, struct nfs_page *);
+	bool	(*pg_test)(struct nfs_pageio_descriptor *, struct nfs_page *, struct nfs_page *);
+	int	(*pg_doio)(struct nfs_pageio_descriptor *);
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct nfs_pageio_descriptor {
 	struct list_head	pg_list;
 	unsigned long		pg_bytes_written;
 	size_t			pg_count;
 	size_t			pg_bsize;
 	unsigned int		pg_base;
+<<<<<<< HEAD
 	char			pg_moreio;
 
 	struct inode		*pg_inode;
@@ -69,6 +80,17 @@ struct nfs_pageio_descriptor {
 	int			pg_error;
 	struct pnfs_layout_segment *pg_lseg;
 	bool			(*pg_test)(struct nfs_pageio_descriptor *, struct nfs_page *, struct nfs_page *);
+=======
+	unsigned char		pg_moreio : 1,
+				pg_recoalesce : 1;
+
+	struct inode		*pg_inode;
+	const struct nfs_pageio_ops *pg_ops;
+	int 			pg_ioflags;
+	int			pg_error;
+	const struct rpc_call_ops *pg_rpc_callops;
+	struct pnfs_layout_segment *pg_lseg;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #define NFS_WBACK_BUSY(req)	(test_bit(PG_BUSY,&(req)->wb_flags))
@@ -85,7 +107,11 @@ extern	int nfs_scan_list(struct nfs_inode *nfsi, struct list_head *dst,
 			  pgoff_t idx_start, unsigned int npages, int tag);
 extern	void nfs_pageio_init(struct nfs_pageio_descriptor *desc,
 			     struct inode *inode,
+<<<<<<< HEAD
 			     int (*doio)(struct nfs_pageio_descriptor *desc),
+=======
+			     const struct nfs_pageio_ops *pg_ops,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			     size_t bsize,
 			     int how);
 extern	int nfs_pageio_add_request(struct nfs_pageio_descriptor *,
@@ -100,7 +126,10 @@ extern	void nfs_unlock_request(struct nfs_page *req);
 extern	int nfs_set_page_tag_locked(struct nfs_page *req);
 extern  void nfs_clear_page_tag_locked(struct nfs_page *req);
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Lock the page of an asynchronous request without getting a new reference
  */

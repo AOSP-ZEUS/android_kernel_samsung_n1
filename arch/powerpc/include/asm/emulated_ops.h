@@ -18,7 +18,11 @@
 #ifndef _ASM_POWERPC_EMULATED_OPS_H
 #define _ASM_POWERPC_EMULATED_OPS_H
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/perf_event.h>
 
 
@@ -78,14 +82,22 @@ extern void ppc_warn_emulated_print(const char *type);
 #define PPC_WARN_EMULATED(type, regs)					\
 	do {								\
 		perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS,		\
+<<<<<<< HEAD
 			1, 0, regs, 0);					\
+=======
+			1, regs, 0);					\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__PPC_WARN_EMULATED(type);				\
 	} while (0)
 
 #define PPC_WARN_ALIGNMENT(type, regs)					\
 	do {								\
 		perf_sw_event(PERF_COUNT_SW_ALIGNMENT_FAULTS,		\
+<<<<<<< HEAD
 			1, 0, regs, regs->dar);				\
+=======
+			1, regs, regs->dar);				\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		__PPC_WARN_EMULATED(type);				\
 	} while (0)
 

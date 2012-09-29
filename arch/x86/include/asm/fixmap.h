@@ -78,6 +78,10 @@ enum fixed_addresses {
 	VSYSCALL_LAST_PAGE,
 	VSYSCALL_FIRST_PAGE = VSYSCALL_LAST_PAGE
 			    + ((VSYSCALL_END-VSYSCALL_START) >> PAGE_SHIFT) - 1,
+<<<<<<< HEAD
+=======
+	VVAR_PAGE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	VSYSCALL_HPET,
 #endif
 	FIX_DBGP_BASE,

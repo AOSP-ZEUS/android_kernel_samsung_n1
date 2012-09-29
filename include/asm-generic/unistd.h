@@ -143,7 +143,11 @@ __SYSCALL(__NR_pivot_root, sys_pivot_root)
 
 /* fs/nfsctl.c */
 #define __NR_nfsservctl 42
+<<<<<<< HEAD
 __SC_COMP(__NR_nfsservctl, sys_nfsservctl, compat_sys_nfsservctl)
+=======
+__SYSCALL(__NR_nfsservctl, sys_ni_syscall)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* fs/open.c */
 #define __NR3264_statfs 43
@@ -218,7 +222,11 @@ __SC_COMP(__NR_pwritev, sys_pwritev, compat_sys_pwritev)
 
 /* fs/sendfile.c */
 #define __NR3264_sendfile 71
+<<<<<<< HEAD
 __SYSCALL(__NR3264_sendfile, sys_sendfile64)
+=======
+__SC_3264(__NR3264_sendfile, sys_sendfile64, sys_sendfile)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* fs/select.c */
 #define __NR_pselect6 72

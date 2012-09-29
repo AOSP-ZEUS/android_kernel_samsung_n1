@@ -125,9 +125,12 @@ struct thread_struct {
 	.pgdir = swapper_pg_dir, \
 }
 
+<<<<<<< HEAD
 /* Do necessary setup to start up a newly executed thread.  */
 void start_thread(struct pt_regs *regs,
 		unsigned long pc, unsigned long usp);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Free all resources held by a thread. */
 extern inline void release_thread(struct task_struct *dead_task)

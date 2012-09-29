@@ -15,6 +15,7 @@
 #define __ASM_ARCH_HARDWARE_H
 
 /* PCI IO info */
+<<<<<<< HEAD
 #define PCIBIOS_MIN_IO		0x00000000
 #define PCIBIOS_MIN_MEM		0xe0000000
 
@@ -22,6 +23,11 @@
 
 #define pcibios_assign_all_busses()	0
 
+=======
+
+#include "ixp23xx.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Platform helper functions
  */

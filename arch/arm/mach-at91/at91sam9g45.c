@@ -22,6 +22,7 @@
 #include <mach/at91_shdwc.h>
 #include <mach/cpu.h>
 
+<<<<<<< HEAD
 #include "generic.h"
 #include "clock.h"
 
@@ -39,6 +40,12 @@ static struct map_desc at91sam9g45_io_desc[] __initdata = {
 	}
 };
 
+=======
+#include "soc.h"
+#include "generic.h"
+#include "clock.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* --------------------------------------------------------------------
  *  Clocks
  * -------------------------------------------------------------------- */
@@ -329,6 +336,7 @@ static void at91sam9g45_poweroff(void)
  *  AT91SAM9G45 processor initialization
  * -------------------------------------------------------------------- */
 
+<<<<<<< HEAD
 void __init at91sam9g45_map_io(void)
 {
 	/* Map peripherals */
@@ -336,17 +344,28 @@ void __init at91sam9g45_map_io(void)
 }
 
 void __init at91sam9g45_initialize(unsigned long main_clock)
+=======
+static void __init at91sam9g45_map_io(void)
+{
+	at91_init_sram(0, AT91SAM9G45_SRAM_BASE, AT91SAM9G45_SRAM_SIZE);
+}
+
+static void __init at91sam9g45_initialize(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	at91_arch_reset = at91sam9g45_reset;
 	pm_power_off = at91sam9g45_poweroff;
 	at91_extern_irq = (1 << AT91SAM9G45_ID_IRQ0);
 
+<<<<<<< HEAD
 	/* Init clock subsystem */
 	at91_clock_init(main_clock);
 
 	/* Register the processor-specific clocks */
 	at91sam9g45_register_clocks();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Register GPIO subsystem */
 	at91_gpio_init(at91sam9g45_gpio, 5);
 }
@@ -393,6 +412,7 @@ static unsigned int at91sam9g45_default_irq_priority[NR_AIC_IRQS] __initdata = {
 	0,	/* Advanced Interrupt Controller (IRQ0) */
 };
 
+<<<<<<< HEAD
 void __init at91sam9g45_init_interrupts(unsigned int priority[NR_AIC_IRQS])
 {
 	if (!priority)
@@ -404,3 +424,11 @@ void __init at91sam9g45_init_interrupts(unsigned int priority[NR_AIC_IRQS])
 	/* Enable GPIO interrupts */
 	at91_gpio_irq_setup();
 }
+=======
+struct at91_init_soc __initdata at91sam9g45_soc = {
+	.map_io = at91sam9g45_map_io,
+	.default_irq_priority = at91sam9g45_default_irq_priority,
+	.register_clocks = at91sam9g45_register_clocks,
+	.init = at91sam9g45_initialize,
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

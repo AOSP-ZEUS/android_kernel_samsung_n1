@@ -141,12 +141,19 @@ static struct tegra_pingroup_config paz00_pinmux[] = {
 };
 
 static struct tegra_gpio_table gpio_table[] = {
+<<<<<<< HEAD
 	{ .gpio = TEGRA_GPIO_SD1_CD,	.enable = true	},
 	{ .gpio = TEGRA_GPIO_SD1_WP,	.enable = true	},
 	{ .gpio = TEGRA_GPIO_SD1_POWER,	.enable = true	},
 	{ .gpio = TEGRA_GPIO_SD4_CD,	.enable = true	},
 	{ .gpio = TEGRA_GPIO_SD4_WP,	.enable = true	},
 	{ .gpio = TEGRA_GPIO_SD4_POWER,	.enable = true	},
+=======
+	{ .gpio = TEGRA_GPIO_SD1_CD,	.enable = true },
+	{ .gpio = TEGRA_GPIO_SD1_WP,	.enable = true },
+	{ .gpio = TEGRA_GPIO_SD1_POWER,	.enable = true },
+	{ .gpio = TEGRA_ULPI_RST,	.enable = true },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 void paz00_pinmux_init(void)

@@ -30,10 +30,21 @@
 
 struct mmu_gather {
 	struct mm_struct *mm;
+<<<<<<< HEAD
 	struct mmu_table_batch *batch;
 	unsigned int fullmm;
 };
 
+=======
+#ifdef CONFIG_HAVE_RCU_TABLE_FREE
+	struct mmu_table_batch *batch;
+#endif
+	unsigned int fullmm;
+	unsigned int need_flush;
+};
+
+#ifdef CONFIG_HAVE_RCU_TABLE_FREE
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct mmu_table_batch {
 	struct rcu_head		rcu;
 	unsigned int		nr;
@@ -45,6 +56,10 @@ struct mmu_table_batch {
 
 extern void tlb_table_flush(struct mmu_gather *tlb);
 extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline void tlb_gather_mmu(struct mmu_gather *tlb,
 				  struct mm_struct *mm,
@@ -52,20 +67,41 @@ static inline void tlb_gather_mmu(struct mmu_gather *tlb,
 {
 	tlb->mm = mm;
 	tlb->fullmm = full_mm_flush;
+<<<<<<< HEAD
 	tlb->batch = NULL;
+=======
+	tlb->need_flush = 0;
+#ifdef CONFIG_HAVE_RCU_TABLE_FREE
+	tlb->batch = NULL;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (tlb->fullmm)
 		__tlb_flush_mm(mm);
 }
 
 static inline void tlb_flush_mmu(struct mmu_gather *tlb)
 {
+<<<<<<< HEAD
 	tlb_table_flush(tlb);
+=======
+	if (!tlb->need_flush)
+		return;
+	tlb->need_flush = 0;
+	__tlb_flush_mm(tlb->mm);
+#ifdef CONFIG_HAVE_RCU_TABLE_FREE
+	tlb_table_flush(tlb);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline void tlb_finish_mmu(struct mmu_gather *tlb,
 				  unsigned long start, unsigned long end)
 {
+<<<<<<< HEAD
 	tlb_table_flush(tlb);
+=======
+	tlb_flush_mmu(tlb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -91,8 +127,15 @@ static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page)
 static inline void pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
 				unsigned long address)
 {
+<<<<<<< HEAD
 	if (!tlb->fullmm)
 		return page_table_free_rcu(tlb, (unsigned long *) pte);
+=======
+#ifdef CONFIG_HAVE_RCU_TABLE_FREE
+	if (!tlb->fullmm)
+		return page_table_free_rcu(tlb, (unsigned long *) pte);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	page_table_free(tlb->mm, (unsigned long *) pte);
 }
 
@@ -109,8 +152,15 @@ static inline void pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd,
 #ifdef __s390x__
 	if (tlb->mm->context.asce_limit <= (1UL << 31))
 		return;
+<<<<<<< HEAD
 	if (!tlb->fullmm)
 		return tlb_remove_table(tlb, pmd);
+=======
+#ifdef CONFIG_HAVE_RCU_TABLE_FREE
+	if (!tlb->fullmm)
+		return tlb_remove_table(tlb, pmd);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	crst_table_free(tlb->mm, (unsigned long *) pmd);
 #endif
 }
@@ -128,8 +178,15 @@ static inline void pud_free_tlb(struct mmu_gather *tlb, pud_t *pud,
 #ifdef __s390x__
 	if (tlb->mm->context.asce_limit <= (1UL << 42))
 		return;
+<<<<<<< HEAD
 	if (!tlb->fullmm)
 		return tlb_remove_table(tlb, pud);
+=======
+#ifdef CONFIG_HAVE_RCU_TABLE_FREE
+	if (!tlb->fullmm)
+		return tlb_remove_table(tlb, pud);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	crst_table_free(tlb->mm, (unsigned long *) pud);
 #endif
 }

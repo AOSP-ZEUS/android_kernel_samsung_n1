@@ -92,7 +92,11 @@ struct vm_area_struct;
  */
 #define __GFP_NOTRACK_FALSE_POSITIVE (__GFP_NOTRACK)
 
+<<<<<<< HEAD
 #define __GFP_BITS_SHIFT 23	/* Room for 23 __GFP_FOO bits */
+=======
+#define __GFP_BITS_SHIFT 24	/* Room for N __GFP_FOO bits */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define __GFP_BITS_MASK ((__force gfp_t)((1 << __GFP_BITS_SHIFT) - 1))
 
 /* This equals 0, but use constants in case they ever change */

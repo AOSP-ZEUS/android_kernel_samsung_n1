@@ -42,12 +42,15 @@ extern long subarch_ptrace(struct task_struct *child, long request,
 	unsigned long addr, unsigned long data);
 extern unsigned long getreg(struct task_struct *child, int regno);
 extern int putreg(struct task_struct *child, int regno, unsigned long value);
+<<<<<<< HEAD
 extern int get_fpregs(struct user_i387_struct __user *buf,
 		      struct task_struct *child);
 extern int set_fpregs(struct user_i387_struct __user *buf,
 		      struct task_struct *child);
 
 extern void show_regs(struct pt_regs *regs);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern int arch_copy_tls(struct task_struct *new);
 extern void clear_flushed_tls(struct task_struct *task);

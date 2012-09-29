@@ -193,7 +193,11 @@ static void atlx_tx_timeout(struct net_device *netdev)
 {
 	struct atlx_adapter *adapter = netdev_priv(netdev);
 	/* Do the reset outside of interrupt context */
+<<<<<<< HEAD
 	schedule_work(&adapter->reset_dev_task);
+=======
+	schedule_work(&adapter->tx_timeout_task);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -211,8 +215,23 @@ static void atlx_link_chg_task(struct work_struct *work)
 	spin_unlock_irqrestore(&adapter->lock, flags);
 }
 
+<<<<<<< HEAD
 static void atlx_vlan_rx_register(struct net_device *netdev,
 	struct vlan_group *grp)
+=======
+static void __atlx_vlan_mode(u32 features, u32 *ctrl)
+{
+	if (features & NETIF_F_HW_VLAN_RX) {
+		/* enable VLAN tag insert/strip */
+		*ctrl |= MAC_CTRL_RMV_VLAN;
+	} else {
+		/* disable VLAN tag insert/strip */
+		*ctrl &= ~MAC_CTRL_RMV_VLAN;
+	}
+}
+
+static void atlx_vlan_mode(struct net_device *netdev, u32 features)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct atlx_adapter *adapter = netdev_priv(netdev);
 	unsigned long flags;
@@ -220,6 +239,7 @@ static void atlx_vlan_rx_register(struct net_device *netdev,
 
 	spin_lock_irqsave(&adapter->lock, flags);
 	/* atlx_irq_disable(adapter); FIXME: confirm/remove */
+<<<<<<< HEAD
 	adapter->vlgrp = grp;
 
 	if (grp) {
@@ -234,13 +254,46 @@ static void atlx_vlan_rx_register(struct net_device *netdev,
 		iowrite32(ctrl, adapter->hw.hw_addr + REG_MAC_CTRL);
 	}
 
+=======
+	ctrl = ioread32(adapter->hw.hw_addr + REG_MAC_CTRL);
+	__atlx_vlan_mode(features, &ctrl);
+	iowrite32(ctrl, adapter->hw.hw_addr + REG_MAC_CTRL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* atlx_irq_enable(adapter); FIXME */
 	spin_unlock_irqrestore(&adapter->lock, flags);
 }
 
 static void atlx_restore_vlan(struct atlx_adapter *adapter)
 {
+<<<<<<< HEAD
 	atlx_vlan_rx_register(adapter->netdev, adapter->vlgrp);
+=======
+	atlx_vlan_mode(adapter->netdev, adapter->netdev->features);
+}
+
+static u32 atlx_fix_features(struct net_device *netdev, u32 features)
+{
+	/*
+	 * Since there is no support for separate rx/tx vlan accel
+	 * enable/disable make sure tx flag is always in same state as rx.
+	 */
+	if (features & NETIF_F_HW_VLAN_RX)
+		features |= NETIF_F_HW_VLAN_TX;
+	else
+		features &= ~NETIF_F_HW_VLAN_TX;
+
+	return features;
+}
+
+static int atlx_set_features(struct net_device *netdev, u32 features)
+{
+	u32 changed = netdev->features ^ features;
+
+	if (changed & NETIF_F_HW_VLAN_RX)
+		atlx_vlan_mode(netdev, features);
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #endif /* ATLX_C */

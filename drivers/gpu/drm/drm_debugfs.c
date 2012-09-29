@@ -90,7 +90,10 @@ int drm_debugfs_create_files(struct drm_info_list *files, int count,
 	struct drm_device *dev = minor->dev;
 	struct dentry *ent;
 	struct drm_info_node *tmp;
+<<<<<<< HEAD
 	char name[64];
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int i, ret;
 
 	for (i = 0; i < count; i++) {
@@ -108,6 +111,12 @@ int drm_debugfs_create_files(struct drm_info_list *files, int count,
 		ent = debugfs_create_file(files[i].name, S_IFREG | S_IRUGO,
 					  root, tmp, &drm_debugfs_fops);
 		if (!ent) {
+<<<<<<< HEAD
+=======
+			char name[64];
+			strncpy(name, root->d_name.name,
+						min(root->d_name.len, 64U));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			DRM_ERROR("Cannot create /sys/kernel/debug/dri/%s/%s\n",
 				  name, files[i].name);
 			kfree(tmp);

@@ -116,7 +116,11 @@ struct red_parms {
 	u32		qR;		/* Cached random number */
 
 	unsigned long	qavg;		/* Average queue length: A scaled */
+<<<<<<< HEAD
 	psched_time_t	qidlestart;	/* Start of current idle period */
+=======
+	ktime_t		qidlestart;	/* Start of current idle period */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static inline u32 red_rmask(u8 Plog)
@@ -148,17 +152,29 @@ static inline void red_set_parms(struct red_parms *p,
 
 static inline int red_is_idling(struct red_parms *p)
 {
+<<<<<<< HEAD
 	return p->qidlestart != PSCHED_PASTPERFECT;
+=======
+	return p->qidlestart.tv64 != 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline void red_start_of_idle_period(struct red_parms *p)
 {
+<<<<<<< HEAD
 	p->qidlestart = psched_get_time();
+=======
+	p->qidlestart = ktime_get();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline void red_end_of_idle_period(struct red_parms *p)
 {
+<<<<<<< HEAD
 	p->qidlestart = PSCHED_PASTPERFECT;
+=======
+	p->qidlestart.tv64 = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline void red_restart(struct red_parms *p)
@@ -170,6 +186,7 @@ static inline void red_restart(struct red_parms *p)
 
 static inline unsigned long red_calc_qavg_from_idle_time(struct red_parms *p)
 {
+<<<<<<< HEAD
 	psched_time_t now;
 	long us_idle;
 	int  shift;
@@ -177,6 +194,12 @@ static inline unsigned long red_calc_qavg_from_idle_time(struct red_parms *p)
 	now = psched_get_time();
 	us_idle = psched_tdiff_bounded(now, p->qidlestart, p->Scell_max);
 
+=======
+	s64 delta = ktime_us_delta(ktime_get(), p->qidlestart);
+	long us_idle = min_t(s64, delta, p->Scell_max);
+	int  shift;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * The problem: ideally, average length queue recalcultion should
 	 * be done over constant clock intervals. This is too expensive, so

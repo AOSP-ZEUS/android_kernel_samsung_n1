@@ -6,6 +6,7 @@
  * the Free Software Foundation; either version 2 of the License, or
  * (at your option) any later version.
  *
+<<<<<<< HEAD
  * This is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
@@ -15,6 +16,8 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA 02111-1307,
  * USA.
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 
 #include <linux/device.h>
@@ -105,7 +108,11 @@ struct vhci_hcd {
 };
 
 extern struct vhci_hcd *the_controller;
+<<<<<<< HEAD
 extern struct attribute_group dev_attr_group;
+=======
+extern const struct attribute_group dev_attr_group;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define hardware (&the_controller->pdev.dev)
 
 /* vhci_hcd.c */

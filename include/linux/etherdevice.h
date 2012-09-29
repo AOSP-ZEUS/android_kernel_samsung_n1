@@ -38,7 +38,11 @@ extern int eth_header(struct sk_buff *skb, struct net_device *dev,
 		      const void *daddr, const void *saddr, unsigned len);
 extern int eth_rebuild_header(struct sk_buff *skb);
 extern int eth_header_parse(const struct sk_buff *skb, unsigned char *haddr);
+<<<<<<< HEAD
 extern int eth_header_cache(const struct neighbour *neigh, struct hh_cache *hh);
+=======
+extern int eth_header_cache(const struct neighbour *neigh, struct hh_cache *hh, __be16 type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void eth_header_cache_update(struct hh_cache *hh,
 				    const struct net_device *dev,
 				    const unsigned char *haddr);

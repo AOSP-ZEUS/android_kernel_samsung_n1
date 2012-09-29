@@ -93,6 +93,20 @@ ENTRY(cpu_mohawk_do_idle)
 	mov	pc, lr
 
 /*
+<<<<<<< HEAD
+=======
+ *	flush_icache_all()
+ *
+ *	Unconditionally clean and invalidate the entire icache.
+ */
+ENTRY(mohawk_flush_icache_all)
+	mov	r0, #0
+	mcr	p15, 0, r0, c7, c5, 0		@ invalidate I cache
+	mov	pc, lr
+ENDPROC(mohawk_flush_icache_all)
+
+/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *	flush_user_cache_all()
  *
  *	Clean and invalidate all cache entries in a particular
@@ -288,6 +302,7 @@ ENTRY(mohawk_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(mohawk_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(mohawk_cache_fns)
 	.long	mohawk_flush_kern_cache_all
 	.long	mohawk_flush_user_cache_all
@@ -298,6 +313,10 @@ ENTRY(mohawk_cache_fns)
 	.long	mohawk_dma_map_area
 	.long	mohawk_dma_unmap_area
 	.long	mohawk_dma_flush_range
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions mohawk
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 ENTRY(cpu_mohawk_dcache_clean_area)
 1:	mcr	p15, 0, r0, c7, c10, 1		@ clean D entry
@@ -373,6 +392,7 @@ mohawk_crval:
 
 	__INITDATA
 
+<<<<<<< HEAD
 /*
  * Purpose : Function pointers used to access above functions - all calls
  *	     come through these
@@ -409,6 +429,16 @@ cpu_elf_name:
 cpu_mohawk_name:
 	.asciz	"Marvell 88SV331x"
 	.size	cpu_mohawk_name, . - cpu_mohawk_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions mohawk, dabort=v5t_early_abort, pabort=legacy_pabort
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv5te"
+	string	cpu_elf_name, "v5"
+	string	cpu_mohawk_name, "Marvell 88SV331x"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 

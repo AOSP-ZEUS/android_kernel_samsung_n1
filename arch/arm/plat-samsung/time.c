@@ -132,9 +132,13 @@ static unsigned long s3c2410_gettimeoffset (void)
 static irqreturn_t
 s3c2410_timer_interrupt(int irq, void *dev_id)
 {
+<<<<<<< HEAD
 #ifndef CONFIG_GENERIC_CLOCKEVENTS
 	timer_tick();
 #endif
+=======
+	timer_tick();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return IRQ_HANDLED;
 }
 
@@ -261,6 +265,11 @@ static void __init s3c2410_timer_resources(void)
 	clk_enable(timerclk);
 
 	if (!use_tclk1_12()) {
+<<<<<<< HEAD
+=======
+		tmpdev.id = 4;
+		tmpdev.dev.init_name = "s3c24xx-pwm.4";
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tin = clk_get(&tmpdev.dev, "pwm-tin");
 		if (IS_ERR(tin))
 			panic("failed to get pwm-tin clock for system timer");

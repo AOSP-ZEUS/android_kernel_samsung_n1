@@ -62,12 +62,15 @@
 	.subdevice = PCI_ANY_ID,\
 	.driver_data = (kernel_ulong_t)&(cfg)
 
+<<<<<<< HEAD
 #define INTEL_VENDOR_ID				0x8086
 #define SIS_VENDOR_ID				0x1039
 #define ATI_VENDOR_ID				0x1002
 #define ATI_DEVICE_ID				0x7914
 #define AMD_VENDOR_ID				0x1022
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PCI_MAX_BRIDGE_NUMBER			255
 #define PCI_MAX_DEVICES				32
 #define PCI_MAX_FUNCTION			8
@@ -75,11 +78,14 @@
 #define PCI_CONF_ADDRESS	0x0CF8	/*PCI Configuration Space Address */
 #define PCI_CONF_DATA		0x0CFC	/*PCI Configuration Space Data */
 
+<<<<<<< HEAD
 #define PCI_CLASS_BRIDGE_DEV		0x06
 #define PCI_SUBCLASS_BR_PCI_TO_PCI	0x04
 #define PCI_CAPABILITY_ID_PCI_EXPRESS	0x10
 #define PCI_CAP_ID_EXP			0x10
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define U1DONTCARE			0xFF
 #define U2DONTCARE			0xFFFF
 #define U4DONTCARE			0xFFFFFFFF
@@ -169,7 +175,10 @@ struct rtl_pci {
 	bool first_init;
 	bool being_init_adapter;
 	bool init_ready;
+<<<<<<< HEAD
 	bool irq_enabled;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*Tx */
 	struct rtl8192_tx_ring tx_ring[RTL_PCI_MAX_TX_QUEUE_COUNT];

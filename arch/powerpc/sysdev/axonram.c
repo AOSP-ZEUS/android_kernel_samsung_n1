@@ -203,7 +203,11 @@ static int axon_ram_probe(struct platform_device *device)
 		goto failed;
 	}
 
+<<<<<<< HEAD
 	bank->size = resource.end - resource.start + 1;
+=======
+	bank->size = resource_size(&resource);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (bank->size == 0) {
 		dev_err(&device->dev, "No DDR2 memory found for %s%d\n",

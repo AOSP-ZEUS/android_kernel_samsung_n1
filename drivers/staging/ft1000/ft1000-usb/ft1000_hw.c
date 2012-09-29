@@ -671,7 +671,10 @@ static int ft1000_reset_card(struct net_device *dev)
 	return TRUE;
 }
 
+<<<<<<< HEAD
 #ifdef HAVE_NET_DEVICE_OPS
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct net_device_ops ftnet_ops =
 {
 	.ndo_open = &ft1000_open,
@@ -679,7 +682,10 @@ static const struct net_device_ops ftnet_ops =
 	.ndo_start_xmit = &ft1000_start_xmit,
 	.ndo_get_stats = &ft1000_netdev_stats,
 };
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 //---------------------------------------------------------------------------
@@ -764,6 +770,7 @@ int init_ft1000_netdev(struct ft1000_device *ft1000dev)
 
 	INIT_LIST_HEAD(&pInfo->nodes.list);
 
+<<<<<<< HEAD
 #ifdef HAVE_NET_DEVICE_OPS
 	netdev->netdev_ops = &ftnet_ops;
 #else
@@ -772,6 +779,9 @@ int init_ft1000_netdev(struct ft1000_device *ft1000dev)
 	netdev->open = &ft1000_open;
 	netdev->stop = &ft1000_close;
 #endif
+=======
+	netdev->netdev_ops = &ftnet_ops;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ft1000dev->net = netdev;
 

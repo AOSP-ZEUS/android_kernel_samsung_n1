@@ -239,7 +239,11 @@ extern int rcu_read_lock_bh_held(void);
  * Check debug_lockdep_rcu_enabled() to prevent false positives during boot
  * and while lockdep is disabled.
  */
+<<<<<<< HEAD
 #ifdef CONFIG_PREEMPT
+=======
+#ifdef CONFIG_PREEMPT_COUNT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int rcu_read_lock_sched_held(void)
 {
 	int lockdep_opinion = 0;
@@ -250,12 +254,20 @@ static inline int rcu_read_lock_sched_held(void)
 		lockdep_opinion = lock_is_held(&rcu_sched_lock_map);
 	return lockdep_opinion || preempt_count() != 0 || irqs_disabled();
 }
+<<<<<<< HEAD
 #else /* #ifdef CONFIG_PREEMPT */
+=======
+#else /* #ifdef CONFIG_PREEMPT_COUNT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int rcu_read_lock_sched_held(void)
 {
 	return 1;
 }
+<<<<<<< HEAD
 #endif /* #else #ifdef CONFIG_PREEMPT */
+=======
+#endif /* #else #ifdef CONFIG_PREEMPT_COUNT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #else /* #ifdef CONFIG_DEBUG_LOCK_ALLOC */
 
@@ -276,17 +288,29 @@ static inline int rcu_read_lock_bh_held(void)
 	return 1;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PREEMPT
+=======
+#ifdef CONFIG_PREEMPT_COUNT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int rcu_read_lock_sched_held(void)
 {
 	return preempt_count() != 0 || irqs_disabled();
 }
+<<<<<<< HEAD
 #else /* #ifdef CONFIG_PREEMPT */
+=======
+#else /* #ifdef CONFIG_PREEMPT_COUNT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int rcu_read_lock_sched_held(void)
 {
 	return 1;
 }
+<<<<<<< HEAD
 #endif /* #else #ifdef CONFIG_PREEMPT */
+=======
+#endif /* #else #ifdef CONFIG_PREEMPT_COUNT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* #else #ifdef CONFIG_DEBUG_LOCK_ALLOC */
 

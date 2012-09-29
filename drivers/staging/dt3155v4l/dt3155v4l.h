@@ -179,6 +179,7 @@ struct dt3155_stats {
  * struct dt3155_priv - private data structure
  *
  * @vdev:		pointer to video_device structure
+<<<<<<< HEAD
  * @acq_fp		pointer to filp that starts acquisition
  * @streaming		streaming is negotiated
  * @pdev:		pointer to pci_dev structure
@@ -191,6 +192,15 @@ struct dt3155_stats {
  * @do_dma		wait queue of the kernel thread
  * @mux:		mutex to protect the instance
  * @lock		spinlock for videobuf queues
+=======
+ * @pdev:		pointer to pci_dev structure
+ * @q			pointer to vb2_queue structure
+ * @curr_buf:		pointer to curren buffer
+ * @mux:		mutex to protect the instance
+ * @irq_handler:	irq handler for the driver
+ * @dmaq		queue for dma buffers
+ * @lock		spinlock for dma queue
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @field_count		fields counter
  * @stats:		statistics structure
  * @users		open count
@@ -200,6 +210,7 @@ struct dt3155_stats {
  */
 struct dt3155_priv {
 	struct video_device *vdev;
+<<<<<<< HEAD
 	struct file *acq_fp;
 	int streaming;
 	struct pci_dev *pdev;
@@ -211,6 +222,14 @@ struct dt3155_priv {
 	struct list_head dmaq;
 	wait_queue_head_t do_dma;
 	struct mutex mux;
+=======
+	struct pci_dev *pdev;
+	struct vb2_queue *q;
+	struct vb2_buffer *curr_buf;
+	struct mutex mux;
+	irq_handler_t irq_handler;
+	struct list_head dmaq;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spinlock_t lock;
 	unsigned int field_count;
 	struct dt3155_stats stats;

@@ -257,6 +257,10 @@ static struct inet6_dev *ip6_mc_find_dev_rcu(struct net *net,
 
 		if (rt) {
 			dev = rt->rt6i_dev;
+<<<<<<< HEAD
+=======
+			dev_hold(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			dst_release(&rt->dst);
 		}
 	} else
@@ -2054,7 +2058,11 @@ static int ip6_mc_add_src(struct inet6_dev *idev, const struct in6_addr *pmca,
 		if (!delta)
 			pmc->mca_sfcount[sfmode]--;
 		for (j=0; j<i; j++)
+<<<<<<< HEAD
 			ip6_mc_del1_src(pmc, sfmode, &psfsrc[j]);
+=======
+			(void) ip6_mc_del1_src(pmc, sfmode, &psfsrc[i]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else if (isexclude != (pmc->mca_sfcount[MCAST_EXCLUDE] != 0)) {
 		struct ip6_sf_list *psf;
 

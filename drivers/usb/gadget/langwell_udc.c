@@ -593,8 +593,13 @@ static int queue_dtd(struct langwell_ep *ep, struct langwell_request *req)
 		/* ep0 */
 		dev_vdbg(&dev->pdev->dev, "%s-%s\n", ep->name, DIR_STRING(ep));
 
+<<<<<<< HEAD
 	dev_vdbg(&dev->pdev->dev, "ep_dqh[%d] addr: 0x%08x\n",
 			i, (u32)&(dev->ep_dqh[i]));
+=======
+	dev_vdbg(&dev->pdev->dev, "ep_dqh[%d] addr: 0x%p\n",
+			i, &(dev->ep_dqh[i]));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	bit_mask = is_in(ep) ?
 		(1 << (ep->ep_num + 16)) : (1 << (ep->ep_num));
@@ -1321,7 +1326,13 @@ static int langwell_pullup(struct usb_gadget *_gadget, int is_on)
 	return 0;
 }
 
+<<<<<<< HEAD
 
+=======
+static int langwell_start(struct usb_gadget_driver *driver,
+		int (*bind)(struct usb_gadget *));
+static int langwell_stop(struct usb_gadget_driver *driver);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* device controller usb_gadget_ops structure */
 static const struct usb_gadget_ops langwell_ops = {
 
@@ -1342,6 +1353,12 @@ static const struct usb_gadget_ops langwell_ops = {
 
 	/* D+ pullup, software-controlled connect/disconnect to USB host */
 	.pullup		= langwell_pullup,
+<<<<<<< HEAD
+=======
+
+	.start		= langwell_start,
+	.stop		= langwell_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 
@@ -1852,7 +1869,11 @@ static DEVICE_ATTR(remote_wakeup, S_IWUSR, NULL, store_remote_wakeup);
  * the driver might get unbound.
  */
 
+<<<<<<< HEAD
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int langwell_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	struct langwell_udc	*dev = the_controller;
@@ -1914,11 +1935,17 @@ err_unbind:
 	dev_dbg(&dev->pdev->dev, "<--- %s()\n", __func__);
 	return retval;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
 
 
 /* unregister gadget driver */
 int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
+=======
+
+/* unregister gadget driver */
+static int langwell_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct langwell_udc	*dev = the_controller;
 	unsigned long		flags;
@@ -1965,8 +1992,11 @@ int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
 	dev_dbg(&dev->pdev->dev, "<--- %s()\n", __func__);
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_unregister_driver);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*-------------------------------------------------------------------------*/
 
@@ -3270,7 +3300,11 @@ static int langwell_udc_probe(struct pci_dev *pdev,
 
 	/* allocate device dQH memory */
 	size = dev->ep_max * sizeof(struct langwell_dqh);
+<<<<<<< HEAD
 	dev_vdbg(&dev->pdev->dev, "orig size = %d\n", size);
+=======
+	dev_vdbg(&dev->pdev->dev, "orig size = %zd\n", size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (size < DQH_ALIGNMENT)
 		size = DQH_ALIGNMENT;
 	else if ((size % DQH_ALIGNMENT) != 0) {
@@ -3285,7 +3319,11 @@ static int langwell_udc_probe(struct pci_dev *pdev,
 		goto error;
 	}
 	dev->ep_dqh_size = size;
+<<<<<<< HEAD
 	dev_vdbg(&dev->pdev->dev, "ep_dqh_size = %d\n", dev->ep_dqh_size);
+=======
+	dev_vdbg(&dev->pdev->dev, "ep_dqh_size = %zd\n", dev->ep_dqh_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* initialize ep0 status request structure */
 	dev->status_req = kzalloc(sizeof(struct langwell_request), GFP_KERNEL);
@@ -3373,6 +3411,13 @@ static int langwell_udc_probe(struct pci_dev *pdev,
 	if (retval)
 		goto error;
 
+<<<<<<< HEAD
+=======
+	retval = usb_add_gadget_udc(&pdev->dev, &dev->gadget);
+	if (retval)
+		goto error;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	retval = device_create_file(&pdev->dev, &dev_attr_langwell_udc);
 	if (retval)
 		goto error;
@@ -3403,6 +3448,10 @@ static int langwell_udc_suspend(struct pci_dev *pdev, pm_message_t state)
 
 	dev_dbg(&dev->pdev->dev, "---> %s()\n", __func__);
 
+<<<<<<< HEAD
+=======
+	usb_del_gadget_udc(&dev->gadget);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* disable interrupt and set controller to stop state */
 	langwell_udc_stop(dev);
 
@@ -3464,7 +3513,11 @@ static int langwell_udc_resume(struct pci_dev *pdev)
 
 	/* allocate device dQH memory */
 	size = dev->ep_max * sizeof(struct langwell_dqh);
+<<<<<<< HEAD
 	dev_vdbg(&dev->pdev->dev, "orig size = %d\n", size);
+=======
+	dev_vdbg(&dev->pdev->dev, "orig size = %zd\n", size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (size < DQH_ALIGNMENT)
 		size = DQH_ALIGNMENT;
 	else if ((size % DQH_ALIGNMENT) != 0) {
@@ -3478,7 +3531,11 @@ static int langwell_udc_resume(struct pci_dev *pdev)
 		return -ENOMEM;
 	}
 	dev->ep_dqh_size = size;
+<<<<<<< HEAD
 	dev_vdbg(&dev->pdev->dev, "ep_dqh_size = %d\n", dev->ep_dqh_size);
+=======
+	dev_vdbg(&dev->pdev->dev, "ep_dqh_size = %zd\n", dev->ep_dqh_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* create dTD dma_pool resource */
 	dev->dtd_pool = dma_pool_create("langwell_dtd",

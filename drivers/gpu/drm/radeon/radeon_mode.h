@@ -468,8 +468,13 @@ radeon_atombios_get_tv_info(struct radeon_device *rdev);
 extern struct drm_connector *
 radeon_get_connector_for_encoder(struct drm_encoder *encoder);
 
+<<<<<<< HEAD
 extern bool radeon_encoder_is_dp_bridge(struct drm_encoder *encoder);
 extern bool radeon_connector_encoder_is_dp_bridge(struct drm_connector *connector);
+=======
+extern u16 radeon_encoder_get_dp_bridge_encoder_id(struct drm_encoder *encoder);
+extern u16 radeon_connector_encoder_get_dp_bridge_encoder_id(struct drm_connector *connector);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern bool radeon_connector_encoder_is_hbr2(struct drm_connector *connector);
 extern bool radeon_connector_is_dp12_capable(struct drm_connector *connector);
 

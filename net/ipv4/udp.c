@@ -105,6 +105,10 @@
 #include <net/route.h>
 #include <net/checksum.h>
 #include <net/xfrm.h>
+<<<<<<< HEAD
+=======
+#include <trace/events/udp.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "udp_impl.h"
 
 struct udp_table udp_table __read_mostly;
@@ -1366,6 +1370,10 @@ static int __udp_queue_rcv_skb(struct sock *sk, struct sk_buff *skb)
 					 is_udplite);
 		UDP_INC_STATS_BH(sock_net(sk), UDP_MIB_INERRORS, is_udplite);
 		kfree_skb(skb);
+<<<<<<< HEAD
+=======
+		trace_udp_fail_queue_rcv_skb(rc, sk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -1;
 	}
 

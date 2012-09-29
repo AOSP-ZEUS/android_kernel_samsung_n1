@@ -1,5 +1,9 @@
 /*
+<<<<<<< HEAD
  * Copyright (C) 2008 Freescale Semiconductor, Inc. All rights reserved.
+=======
+ * Copyright (C) 2008-2011 Freescale Semiconductor, Inc. All rights reserved.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Author: Yu Liu, yu.liu@freescale.com
  *
@@ -55,6 +59,10 @@ extern void kvmppc_e500_tlb_load(struct kvm_vcpu *, int);
 extern int kvmppc_e500_tlb_init(struct kvmppc_vcpu_e500 *);
 extern void kvmppc_e500_tlb_uninit(struct kvmppc_vcpu_e500 *);
 extern void kvmppc_e500_tlb_setup(struct kvmppc_vcpu_e500 *);
+<<<<<<< HEAD
+=======
+extern void kvmppc_e500_recalc_shadow_pid(struct kvmppc_vcpu_e500 *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* TLB helper functions */
 static inline unsigned int get_tlb_size(const struct tlbe *tlbe)
@@ -110,6 +118,19 @@ static inline unsigned int get_cur_pid(struct kvm_vcpu *vcpu)
 	return vcpu->arch.pid & 0xff;
 }
 
+<<<<<<< HEAD
+=======
+static inline unsigned int get_cur_as(struct kvm_vcpu *vcpu)
+{
+	return !!(vcpu->arch.shared->msr & (MSR_IS | MSR_DS));
+}
+
+static inline unsigned int get_cur_pr(struct kvm_vcpu *vcpu)
+{
+	return !!(vcpu->arch.shared->msr & MSR_PR);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline unsigned int get_cur_spid(
 		const struct kvmppc_vcpu_e500 *vcpu_e500)
 {

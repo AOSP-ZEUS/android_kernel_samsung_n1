@@ -34,7 +34,10 @@
 
 #include <mach/map.h>
 #include <mach/regs-clock.h>
+<<<<<<< HEAD
 #include <mach/regs-fb.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <plat/gpio-cfg.h>
 #include <plat/regs-serial.h>
@@ -47,6 +50,11 @@
 #include <plat/sdhci.h>
 #include <plat/clock.h>
 #include <plat/s5p-time.h>
+<<<<<<< HEAD
+=======
+#include <plat/mfc.h>
+#include <plat/regs-fb-v4.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Following are default values for UCON, ULCON and UFCON UART registers */
 #define GONI_UCON_DEFAULT	(S3C2410_UCON_TXILEVEL |	\
@@ -808,6 +816,12 @@ static struct platform_device *goni_devices[] __initdata = {
 	&goni_i2c_gpio5,
 	&mmc2_fixed_voltage,
 	&goni_device_gpiokeys,
+<<<<<<< HEAD
+=======
+	&s5p_device_mfc,
+	&s5p_device_mfc_l,
+	&s5p_device_mfc_r,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	&s3c_device_i2c0,
 	&s5p_device_fimc0,
 	&s5p_device_fimc1,
@@ -841,6 +855,14 @@ static void __init goni_map_io(void)
 	s5p_set_timer_source(S5P_PWM3, S5P_PWM4);
 }
 
+<<<<<<< HEAD
+=======
+static void __init goni_reserve(void)
+{
+	s5p_mfc_reserve_mem(0x43000000, 8 << 20, 0x51000000, 8 << 20);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init goni_machine_init(void)
 {
 	/* Radio: call before I2C 1 registeration */
@@ -893,4 +915,8 @@ MACHINE_START(GONI, "GONI")
 	.map_io		= goni_map_io,
 	.init_machine	= goni_machine_init,
 	.timer		= &s5p_timer,
+<<<<<<< HEAD
+=======
+	.reserve	= &goni_reserve,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

@@ -186,6 +186,10 @@ const char *perf_event__name(unsigned int id);
 
 int perf_event__parse_sample(const union perf_event *event, u64 type,
 			     int sample_size, bool sample_id_all,
+<<<<<<< HEAD
 			     struct perf_sample *sample);
+=======
+			     struct perf_sample *sample, bool swapped);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* __PERF_RECORD_H */

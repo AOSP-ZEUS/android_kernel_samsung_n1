@@ -31,6 +31,10 @@
 #include <linux/if_vlan.h>
 #include <linux/in.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/gfp.h>
 #include <linux/ioport.h>
 #include <linux/ip.h>
@@ -1003,9 +1007,13 @@ spider_net_pass_skb_up(struct spider_net_descr *descr,
 	}
 
 	if (data_status & SPIDER_NET_VLAN_PACKET) {
+<<<<<<< HEAD
 		/* further enhancements: HW-accel VLAN
 		 * vlan_hwaccel_receive_skb
 		 */
+=======
+		/* further enhancements: HW-accel VLAN */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* update netdevice statistics */

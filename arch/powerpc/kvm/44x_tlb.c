@@ -387,8 +387,15 @@ static void kvmppc_44x_invalidate(struct kvm_vcpu *vcpu,
 	}
 }
 
+<<<<<<< HEAD
 void kvmppc_mmu_priv_switch(struct kvm_vcpu *vcpu, int usermode)
 {
+=======
+void kvmppc_mmu_msr_notify(struct kvm_vcpu *vcpu, u32 old_msr)
+{
+	int usermode = vcpu->arch.shared->msr & MSR_PR;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	vcpu->arch.shadow_pid = !usermode;
 }
 

@@ -89,7 +89,11 @@ struct acpi_ac {
 	unsigned long long state;
 };
 
+<<<<<<< HEAD
 #define to_acpi_ac(x) container_of(x, struct acpi_ac, charger);
+=======
+#define to_acpi_ac(x) container_of(x, struct acpi_ac, charger)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_ACPI_PROCFS_POWER
 static const struct file_operations acpi_ac_fops = {

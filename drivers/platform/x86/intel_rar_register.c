@@ -637,15 +637,22 @@ end_function:
 	return error;
 }
 
+<<<<<<< HEAD
 const struct pci_device_id rar_pci_id_tbl[] = {
+=======
+static DEFINE_PCI_DEVICE_TABLE(rar_pci_id_tbl) = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{ PCI_VDEVICE(INTEL, 0x4110) },
 	{ 0 }
 };
 
 MODULE_DEVICE_TABLE(pci, rar_pci_id_tbl);
 
+<<<<<<< HEAD
 const struct pci_device_id *my_id_table = rar_pci_id_tbl;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* field for registering driver to PCI device */
 static struct pci_driver rar_pci_driver = {
 	.name = "rar_register_driver",

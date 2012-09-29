@@ -196,10 +196,15 @@ static int triflex_init_one(struct pci_dev *dev, const struct pci_device_id *id)
 		.port_ops = &triflex_port_ops
 	};
 	const struct ata_port_info *ppi[] = { &info, NULL };
+<<<<<<< HEAD
 	static int printed_version;
 
 	if (!printed_version++)
 		dev_printk(KERN_DEBUG, &dev->dev, "version " DRV_VERSION "\n");
+=======
+
+	ata_print_version_once(&dev->dev, DRV_VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return ata_pci_bmdma_init_one(dev, ppi, &triflex_sht, NULL, 0);
 }

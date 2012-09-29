@@ -51,13 +51,21 @@ int vmbus_connect(void)
 
 	/* Make sure we are not connecting or connected */
 	if (vmbus_connection.conn_state != DISCONNECTED)
+<<<<<<< HEAD
 		return -1;
+=======
+		return -EISCONN;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Initialize the vmbus connection */
 	vmbus_connection.conn_state = CONNECTING;
 	vmbus_connection.work_queue = create_workqueue("hv_vmbus_con");
 	if (!vmbus_connection.work_queue) {
+<<<<<<< HEAD
 		ret = -1;
+=======
+		ret = -ENOMEM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto cleanup;
 	}
 
@@ -74,7 +82,11 @@ int vmbus_connect(void)
 	vmbus_connection.int_page =
 	(void *)__get_free_pages(GFP_KERNEL|__GFP_ZERO, 0);
 	if (vmbus_connection.int_page == NULL) {
+<<<<<<< HEAD
 		ret = -1;
+=======
+		ret = -ENOMEM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto cleanup;
 	}
 
@@ -90,7 +102,11 @@ int vmbus_connect(void)
 	vmbus_connection.monitor_pages =
 	(void *)__get_free_pages((GFP_KERNEL|__GFP_ZERO), 1);
 	if (vmbus_connection.monitor_pages == NULL) {
+<<<<<<< HEAD
 		ret = -1;
+=======
+		ret = -ENOMEM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto cleanup;
 	}
 
@@ -157,7 +173,11 @@ int vmbus_connect(void)
 		pr_err("Unable to connect, "
 			"Version %d not supported by Hyper-V\n",
 			VMBUS_REVISION_NUMBER);
+<<<<<<< HEAD
 		ret = -1;
+=======
+		ret = -ECONNREFUSED;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto cleanup;
 	}
 
@@ -185,6 +205,7 @@ cleanup:
 	return ret;
 }
 
+<<<<<<< HEAD
 /*
  * vmbus_disconnect -
  * Sends a disconnect request on the partition service connection
@@ -223,6 +244,8 @@ cleanup:
 	kfree(msg);
 	return ret;
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * relid2channel - Get the channel object given its
@@ -262,7 +285,11 @@ static void process_chn_event(u32 relid)
 	channel = relid2channel(relid);
 
 	if (channel) {
+<<<<<<< HEAD
 		vmbus_onchannel_event(channel);
+=======
+		channel->onchannel_callback(channel->channel_callback_context);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		pr_err("channel not found for relid - %u\n", relid);
 	}

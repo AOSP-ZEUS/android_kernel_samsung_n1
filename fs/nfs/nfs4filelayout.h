@@ -47,10 +47,24 @@ enum stripetype4 {
 };
 
 /* Individual ip address */
+<<<<<<< HEAD
 struct nfs4_pnfs_ds {
 	struct list_head	ds_node;  /* nfs4_pnfs_dev_hlist dev_dslist */
 	u32			ds_ip_addr;
 	u32			ds_port;
+=======
+struct nfs4_pnfs_ds_addr {
+	struct sockaddr_storage	da_addr;
+	size_t			da_addrlen;
+	struct list_head	da_node;  /* nfs4_pnfs_dev_hlist dev_dslist */
+	char			*da_remotestr;	/* human readable addr+port */
+};
+
+struct nfs4_pnfs_ds {
+	struct list_head	ds_node;  /* nfs4_pnfs_dev_hlist dev_dslist */
+	char			*ds_remotestr;	/* comma sep list of addrs */
+	struct list_head	ds_addrs;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct nfs_client	*ds_clp;
 	atomic_t		ds_count;
 };
@@ -89,6 +103,15 @@ FILELAYOUT_LSEG(struct pnfs_layout_segment *lseg)
 			    generic_hdr);
 }
 
+<<<<<<< HEAD
+=======
+static inline struct nfs4_deviceid_node *
+FILELAYOUT_DEVID_NODE(struct pnfs_layout_segment *lseg)
+{
+	return &FILELAYOUT_LSEG(lseg)->dsaddr->id_node;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern struct nfs_fh *
 nfs4_fl_select_ds_fh(struct pnfs_layout_segment *lseg, u32 j);
 

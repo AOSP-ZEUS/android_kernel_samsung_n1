@@ -165,6 +165,7 @@ usb_copy_descriptors(struct usb_descriptor_header **src)
 	return ret;
 }
 
+<<<<<<< HEAD
 /**
  * usb_find_endpoint - find a copy of an endpoint descriptor
  * @src: original vector of descriptors
@@ -190,3 +191,5 @@ usb_find_endpoint(
 	}
 	return NULL;
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

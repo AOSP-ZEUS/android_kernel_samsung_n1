@@ -8,7 +8,14 @@
 #define _MACH_GPIO_H_
 
 #define MAX_BLACKFIN_GPIOS 16
+<<<<<<< HEAD
 #define BFIN_SPECIAL_GPIO_BANKS 3
+=======
+#ifdef CONFIG_GPIOLIB
+/* We only use the special logic with GPIOLIB devices */
+#define BFIN_SPECIAL_GPIO_BANKS 3
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define GPIO_PF0	0	/* PF */
 #define GPIO_PF1	1

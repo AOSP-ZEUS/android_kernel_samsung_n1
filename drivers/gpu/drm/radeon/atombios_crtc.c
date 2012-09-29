@@ -466,7 +466,11 @@ static void atombios_crtc_program_ss(struct drm_crtc *crtc,
 			return;
 		}
 		args.v2.ucEnable = enable;
+<<<<<<< HEAD
 		if ((ss->percentage == 0) || (ss->type & ATOM_EXTERNAL_SS_MASK))
+=======
+		if ((ss->percentage == 0) || (ss->type & ATOM_EXTERNAL_SS_MASK) || ASIC_IS_DCE41(rdev))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			args.v2.ucEnable = ATOM_DISABLE;
 	} else if (ASIC_IS_DCE3(rdev)) {
 		args.v1.usSpreadSpectrumPercentage = cpu_to_le16(ss->percentage);
@@ -558,7 +562,11 @@ static u32 atombios_adjust_pll(struct drm_crtc *crtc,
 				bpc = connector->display_info.bpc;
 			encoder_mode = atombios_get_encoder_mode(encoder);
 			if ((radeon_encoder->devices & (ATOM_DEVICE_LCD_SUPPORT | ATOM_DEVICE_DFP_SUPPORT)) ||
+<<<<<<< HEAD
 			    radeon_encoder_is_dp_bridge(encoder)) {
+=======
+			    (radeon_encoder_get_dp_bridge_encoder_id(encoder) != ENCODER_OBJECT_ID_NONE)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				if (connector) {
 					struct radeon_connector *radeon_connector = to_radeon_connector(connector);
 					struct radeon_connector_atom_dig *dig_connector =
@@ -638,6 +646,7 @@ static u32 atombios_adjust_pll(struct drm_crtc *crtc,
 				if (ss_enabled && ss->percentage)
 					args.v3.sInput.ucDispPllConfig |=
 						DISPPLL_CONFIG_SS_ENABLE;
+<<<<<<< HEAD
 				if (radeon_encoder->devices & (ATOM_DEVICE_DFP_SUPPORT) ||
 				    radeon_encoder_is_dp_bridge(encoder)) {
 					struct radeon_encoder_atom_dig *dig = radeon_encoder->enc_priv;
@@ -676,6 +685,31 @@ static u32 atombios_adjust_pll(struct drm_crtc *crtc,
 					struct radeon_encoder *ext_radeon_encoder = to_radeon_encoder(ext_encoder);
 					args.v3.sInput.ucExtTransmitterID = ext_radeon_encoder->encoder_id;
 				} else
+=======
+				if (encoder_mode == ATOM_ENCODER_MODE_DP) {
+					args.v3.sInput.ucDispPllConfig |=
+						DISPPLL_CONFIG_COHERENT_MODE;
+					/* 16200 or 27000 */
+					args.v3.sInput.usPixelClock = cpu_to_le16(dp_clock / 10);
+				} else if (radeon_encoder->devices & (ATOM_DEVICE_DFP_SUPPORT)) {
+					struct radeon_encoder_atom_dig *dig = radeon_encoder->enc_priv;
+					if (encoder_mode == ATOM_ENCODER_MODE_HDMI)
+						/* deep color support */
+						args.v3.sInput.usPixelClock =
+							cpu_to_le16((mode->clock * bpc / 8) / 10);
+					if (dig->coherent_mode)
+						args.v3.sInput.ucDispPllConfig |=
+							DISPPLL_CONFIG_COHERENT_MODE;
+					if (mode->clock > 165000)
+						args.v3.sInput.ucDispPllConfig |=
+							DISPPLL_CONFIG_DUAL_LINK;
+				}
+				if (radeon_encoder_get_dp_bridge_encoder_id(encoder) !=
+				    ENCODER_OBJECT_ID_NONE)
+					args.v3.sInput.ucExtTransmitterID =
+						radeon_encoder_get_dp_bridge_encoder_id(encoder);
+				else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					args.v3.sInput.ucExtTransmitterID = 0;
 
 				atom_execute_table(rdev->mode_info.atom_context,
@@ -764,7 +798,11 @@ static void atombios_crtc_set_dcpll(struct drm_crtc *crtc,
 }
 
 static void atombios_crtc_program_pll(struct drm_crtc *crtc,
+<<<<<<< HEAD
 				      int crtc_id,
+=======
+				      u32 crtc_id,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				      int pll_id,
 				      u32 encoder_mode,
 				      u32 encoder_id,
@@ -851,8 +889,12 @@ static void atombios_crtc_program_pll(struct drm_crtc *crtc,
 			args.v5.ucPpll = pll_id;
 			break;
 		case 6:
+<<<<<<< HEAD
 			args.v6.ulCrtcPclkFreq.ucCRTC = crtc_id;
 			args.v6.ulCrtcPclkFreq.ulPixelClock = cpu_to_le32(clock / 10);
+=======
+			args.v6.ulDispEngClkFreq = cpu_to_le32(crtc_id << 24 | clock / 10);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			args.v6.ucRefDiv = ref_div;
 			args.v6.usFbDiv = cpu_to_le16(fb_div);
 			args.v6.ulFbDivDecFrac = cpu_to_le32(frac_fb_div * 100000);
@@ -1173,7 +1215,11 @@ static int dce4_crtc_do_set_base(struct drm_crtc *crtc,
 	WREG32(EVERGREEN_GRPH_ENABLE + radeon_crtc->crtc_offset, 1);
 
 	WREG32(EVERGREEN_DESKTOP_HEIGHT + radeon_crtc->crtc_offset,
+<<<<<<< HEAD
 	       target_fb->height);
+=======
+	       crtc->mode.vdisplay);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	x &= ~3;
 	y &= ~1;
 	WREG32(EVERGREEN_VIEWPORT_START + radeon_crtc->crtc_offset,
@@ -1342,7 +1388,11 @@ static int avivo_crtc_do_set_base(struct drm_crtc *crtc,
 	WREG32(AVIVO_D1GRPH_ENABLE + radeon_crtc->crtc_offset, 1);
 
 	WREG32(AVIVO_D1MODE_DESKTOP_HEIGHT + radeon_crtc->crtc_offset,
+<<<<<<< HEAD
 	       target_fb->height);
+=======
+	       crtc->mode.vdisplay);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	x &= ~3;
 	y &= ~1;
 	WREG32(AVIVO_D1MODE_VIEWPORT_START + radeon_crtc->crtc_offset,

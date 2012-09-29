@@ -24,6 +24,10 @@ enum wm8994_type {
 
 struct regulator_dev;
 struct regulator_bulk_data;
+<<<<<<< HEAD
+=======
+struct regmap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define WM8994_NUM_GPIO_REGS 11
 #define WM8994_NUM_LDO_REGS   2
@@ -50,18 +54,25 @@ struct regulator_bulk_data;
 #define WM8994_IRQ_GPIO(x) (x + WM8994_IRQ_TEMP_WARN)
 
 struct wm8994 {
+<<<<<<< HEAD
 	struct mutex io_lock;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct mutex irq_lock;
 
 	enum wm8994_type type;
 
 	struct device *dev;
+<<<<<<< HEAD
 	int (*read_dev)(struct wm8994 *wm8994, unsigned short reg,
 			int bytes, void *dest);
 	int (*write_dev)(struct wm8994 *wm8994, unsigned short reg,
 			 int bytes, const void *src);
 
 	void *control_data;
+=======
+	struct regmap *regmap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int gpio_base;
 	int irq_base;

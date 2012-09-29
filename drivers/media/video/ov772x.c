@@ -1032,6 +1032,7 @@ static int ov772x_video_probe(struct soc_camera_device *icd,
 	u8                  pid, ver;
 	const char         *devname;
 
+<<<<<<< HEAD
 	/*
 	 * We must have a parent by now. And it cannot be a wrong one.
 	 * So this entire test is completely redundant.
@@ -1039,6 +1040,11 @@ static int ov772x_video_probe(struct soc_camera_device *icd,
 	if (!icd->dev.parent ||
 	    to_soc_camera_host(icd->dev.parent)->nr != icd->iface)
 		return -ENODEV;
+=======
+	/* We must have a parent by now. And it cannot be a wrong one. */
+	BUG_ON(!icd->parent ||
+	       to_soc_camera_host(icd->parent)->nr != icd->iface);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * check and show product ID and manufacturer ID

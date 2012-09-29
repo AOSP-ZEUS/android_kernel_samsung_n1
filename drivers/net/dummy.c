@@ -106,14 +106,24 @@ static int dummy_dev_init(struct net_device *dev)
 	return 0;
 }
 
+<<<<<<< HEAD
 static void dummy_dev_uninit(struct net_device *dev)
 {
 	free_percpu(dev->dstats);
+=======
+static void dummy_dev_free(struct net_device *dev)
+{
+	free_percpu(dev->dstats);
+	free_netdev(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static const struct net_device_ops dummy_netdev_ops = {
 	.ndo_init		= dummy_dev_init,
+<<<<<<< HEAD
 	.ndo_uninit		= dummy_dev_uninit,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ndo_start_xmit		= dummy_xmit,
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_set_multicast_list = set_multicast_list,
@@ -127,7 +137,11 @@ static void dummy_setup(struct net_device *dev)
 
 	/* Initialize the device structure. */
 	dev->netdev_ops = &dummy_netdev_ops;
+<<<<<<< HEAD
 	dev->destructor = free_netdev;
+=======
+	dev->destructor = dummy_dev_free;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Fill in device structure with ethernet-generic values. */
 	dev->tx_queue_len = 0;

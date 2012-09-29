@@ -620,6 +620,7 @@
        (including this document itself) have been moved there, and might
        be more up to date than the web version.
 
+<<<<<<< HEAD
      * Name: "Linux Source Driver"
        URL: http://lsd.linux.cz
        Keywords: Browsing source code.
@@ -631,6 +632,8 @@
        and variables) and LSD can generate patches for you on the fly
        (files, directories or kernel)".
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
      * Name: "Linux Kernel Source Reference"
        Author: Thomas Graichen.
        URL: http://marc.info/?l=linux-kernel&m=96446640102205&w=4

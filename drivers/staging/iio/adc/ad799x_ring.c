@@ -72,7 +72,11 @@ error_ret:
 static int ad799x_ring_preenable(struct iio_dev *indio_dev)
 {
 	struct iio_ring_buffer *ring = indio_dev->ring;
+<<<<<<< HEAD
 	struct ad799x_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ad799x_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Need to figure out the current mode based upon the requested
@@ -109,7 +113,11 @@ static irqreturn_t ad799x_trigger_handler(int irq, void *p)
 {
 	struct iio_poll_func *pf = p;
 	struct iio_dev *indio_dev = pf->private_data;
+<<<<<<< HEAD
 	struct ad799x_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ad799x_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_ring_buffer *ring = indio_dev->ring;
 	s64 time_ns;
 	__u8 *rxbuf;

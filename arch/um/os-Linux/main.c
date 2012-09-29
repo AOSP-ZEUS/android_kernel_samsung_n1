@@ -21,6 +21,11 @@
 #define STACKSIZE (8 * 1024 * 1024)
 #define THREAD_NAME_LEN (256)
 
+<<<<<<< HEAD
+=======
+long elf_aux_hwcap;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void set_stklim(void)
 {
 	struct rlimit lim;
@@ -143,7 +148,13 @@ int __init main(int argc, char **argv, char **envp)
 	install_fatal_handler(SIGINT);
 	install_fatal_handler(SIGTERM);
 
+<<<<<<< HEAD
 	scan_elf_aux(envp);
+=======
+#ifdef CONFIG_ARCH_REUSE_HOST_VSYSCALL_AREA
+	scan_elf_aux(envp);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	do_uml_initcalls();
 	ret = linux_main(argc, argv);

@@ -202,7 +202,11 @@ int copy_thread(unsigned long clone_flags, unsigned long sp,
 		arch_copy_thread(&current->thread.arch, &p->thread.arch);
 	}
 	else {
+<<<<<<< HEAD
 		get_safe_registers(p->thread.regs.regs.gp);
+=======
+		get_safe_registers(p->thread.regs.regs.gp, p->thread.regs.regs.fp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		p->thread.request.u.thread = current->thread.request.u.thread;
 		handler = new_thread_handler;
 	}

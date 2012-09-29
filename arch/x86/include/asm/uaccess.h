@@ -555,6 +555,12 @@ struct __large_struct { unsigned long buf[100]; };
 
 #endif /* CONFIG_X86_WP_WORKS_OK */
 
+<<<<<<< HEAD
+=======
+extern unsigned long
+copy_from_user_nmi(void *to, const void __user *from, unsigned long n);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * movsl can be slow when source and dest are not both 8-byte aligned
  */

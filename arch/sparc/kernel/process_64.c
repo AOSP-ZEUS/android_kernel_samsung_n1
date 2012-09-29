@@ -368,9 +368,12 @@ void flush_thread(void)
 
 	/* Clear FPU register state. */
 	t->fpsaved[0] = 0;
+<<<<<<< HEAD
 	
 	if (get_thread_current_ds() != ASI_AIUS)
 		set_fs(USER_DS);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* It's a bit more tricky when 64-bit tasks are involved... */

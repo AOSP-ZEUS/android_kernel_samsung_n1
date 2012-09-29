@@ -213,7 +213,11 @@ static int legacy_set_mode(struct ata_link *link, struct ata_device **unused)
 	struct ata_device *dev;
 
 	ata_for_each_dev(dev, link, ENABLED) {
+<<<<<<< HEAD
 		ata_dev_printk(dev, KERN_INFO, "configured for PIO\n");
+=======
+		ata_dev_info(dev, "configured for PIO\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dev->pio_mode = XFER_PIO_0;
 		dev->xfer_mode = XFER_PIO_0;
 		dev->xfer_shift = ATA_SHIFT_PIO;
@@ -396,7 +400,12 @@ static void ht6560b_set_piomode(struct ata_port *ap, struct ata_device *adev)
 	ata_timing_compute(adev, adev->pio_mode, &t, 20000, 1000);
 
 	active = clamp_val(t.active, 2, 15);
+<<<<<<< HEAD
 	recover = clamp_val(t.recover, 2, 16) & 0x0F;
+=======
+	recover = clamp_val(t.recover, 2, 16);
+	recover &= 0x15;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	inb(0x3E6);
 	inb(0x3E6);

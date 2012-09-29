@@ -190,7 +190,11 @@ static int rionet_start_xmit(struct sk_buff *skb, struct net_device *ndev)
 		return NETDEV_TX_BUSY;
 	}
 
+<<<<<<< HEAD
 	if (eth->h_dest[0] & 0x01) {
+=======
+	if (is_multicast_ether_addr(eth->h_dest)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		for (i = 0; i < RIO_MAX_ROUTE_ENTRIES(rnet->mport->sys_size);
 				i++)
 			if (rionet_active[i])

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 /*
  * Pull in the generic implementation for the mutex fastpath.
  *
@@ -74,3 +75,6 @@ __mutex_fastpath_trylock(atomic_t *count, int (*fail_fn)(atomic_t *))
 #endif
 
 #endif
+=======
+#include <asm-generic/mutex-dec.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -148,7 +148,12 @@ static struct pci_bus * __init enp2611_pci_scan_bus(int nr,
 	return pci_scan_bus(sys->busnr, &enp2611_pci_ops, sys);
 }
 
+<<<<<<< HEAD
 static int __init enp2611_pci_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int __init enp2611_pci_map_irq(const struct pci_dev *dev, u8 slot,
+	u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int irq;
 

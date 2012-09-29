@@ -88,5 +88,11 @@ extern ssize_t splice_direct_to_actor(struct file *, struct splice_desc *,
 extern int splice_grow_spd(struct pipe_inode_info *, struct splice_pipe_desc *);
 extern void splice_shrink_spd(struct pipe_inode_info *,
 				struct splice_pipe_desc *);
+<<<<<<< HEAD
 
+=======
+extern void spd_release_page(struct splice_pipe_desc *, unsigned int);
+
+extern const struct pipe_buf_operations page_cache_pipe_buf_ops;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif

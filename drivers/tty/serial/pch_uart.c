@@ -14,6 +14,10 @@
  *along with this program; if not, write to the Free Software
  *Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307, USA.
  */
+<<<<<<< HEAD
+=======
+#include <linux/kernel.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/serial_reg.h>
 #include <linux/slab.h>
 #include <linux/module.h>
@@ -44,6 +48,10 @@ enum {
 /* Set the max number of UART port
  * Intel EG20T PCH: 4 port
  * OKI SEMICONDUCTOR ML7213 IOH: 3 port
+<<<<<<< HEAD
+=======
+ * OKI SEMICONDUCTOR ML7223 IOH: 2 port
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 */
 #define PCH_UART_NR	4
 
@@ -137,8 +145,11 @@ enum {
 #define PCH_UART_DLL		0x00
 #define PCH_UART_DLM		0x01
 
+<<<<<<< HEAD
 #define DIV_ROUND(a, b)	(((a) + ((b)/2)) / (b))
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PCH_UART_IID_RLS	(PCH_UART_IIR_REI)
 #define PCH_UART_IID_RDR	(PCH_UART_IIR_RRI)
 #define PCH_UART_IID_RDR_TO	(PCH_UART_IIR_RRI | PCH_UART_IIR_TOI)
@@ -320,7 +331,11 @@ static int pch_uart_hal_set_line(struct eg20t_port *priv, int baud,
 	unsigned int dll, dlm, lcr;
 	int div;
 
+<<<<<<< HEAD
 	div = DIV_ROUND(priv->base_baud / 16, baud);
+=======
+	div = DIV_ROUND_CLOSEST(priv->base_baud / 16, baud);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (div < 0 || USHRT_MAX <= div) {
 		dev_err(priv->port.dev, "Invalid Baud(div=0x%x)\n", div);
 		return -EINVAL;
@@ -751,8 +766,13 @@ static int dma_handle_rx(struct eg20t_port *priv)
 
 	sg_dma_address(sg) = priv->rx_buf_dma;
 
+<<<<<<< HEAD
 	desc = priv->chan_rx->device->device_prep_slave_sg(priv->chan_rx,
 			sg, 1, DMA_FROM_DEVICE,
+=======
+	desc = dmaengine_prep_slave_sg(priv->chan_rx,
+			sg, 1, DMA_DEV_TO_MEM,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
 
 	if (!desc)
@@ -910,8 +930,18 @@ static unsigned int dma_handle_tx(struct eg20t_port *priv)
 			sg_dma_len(sg) = size;
 	}
 
+<<<<<<< HEAD
 	desc = priv->chan_tx->device->device_prep_slave_sg(priv->chan_tx,
 					priv->sg_tx_p, nent, DMA_TO_DEVICE,
+=======
+<<<<<<< HEAD
+	desc = priv->chan_tx->device->device_prep_slave_sg(priv->chan_tx,
+					priv->sg_tx_p, nent, DMA_TO_DEVICE,
+=======
+	desc = dmaengine_prep_slave_sg(priv->chan_tx,
+					priv->sg_tx_p, nent, DMA_MEM_TO_DEV,
+>>>>>>> 1605282... dmaengine/dma_slave: introduce inline wrappers
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
 	if (!desc) {
 		dev_err(priv->port.dev, "%s:device_prep_slave_sg Failed\n",
@@ -1354,11 +1384,17 @@ static int pch_uart_verify_port(struct uart_port *port,
 			__func__);
 		return -EOPNOTSUPP;
 #endif
+<<<<<<< HEAD
 		priv->use_dma_flag = 1;
 		dev_info(priv->port.dev, "PCH UART : Use DMA Mode\n");
 		if (!priv->use_dma)
 			pch_request_dma(port);
 		priv->use_dma = 1;
+=======
+		priv->use_dma = 1;
+		priv->use_dma_flag = 1;
+		dev_info(priv->port.dev, "PCH UART : Use DMA Mode\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return 0;
@@ -1437,6 +1473,11 @@ static struct eg20t_port *pch_uart_init_port(struct pci_dev *pdev,
 		goto init_port_hal_free;
 	}
 
+<<<<<<< HEAD
+=======
+	pci_enable_msi(pdev);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	iobase = pci_resource_start(pdev, 0);
 	mapbase = pci_resource_start(pdev, 1);
 	priv->mapbase = mapbase;
@@ -1493,6 +1534,11 @@ static void pch_uart_pci_remove(struct pci_dev *pdev)
 	struct eg20t_port *priv;
 
 	priv = (struct eg20t_port *)pci_get_drvdata(pdev);
+<<<<<<< HEAD
+=======
+
+	pci_disable_msi(pdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pch_uart_exit_port(priv);
 	pci_disable_device(pdev);
 	kfree(priv);
@@ -1580,6 +1626,10 @@ static int __devinit pch_uart_pci_probe(struct pci_dev *pdev,
 	return ret;
 
 probe_disable_device:
+<<<<<<< HEAD
+=======
+	pci_disable_msi(pdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pci_disable_device(pdev);
 probe_error:
 	return ret;

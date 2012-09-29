@@ -495,7 +495,11 @@ static inline int scsi_is_wlun(unsigned int lun)
 
 #define sense_class(sense)  (((sense) >> 4) & 0x7)
 #define sense_error(sense)  ((sense) & 0xf)
+<<<<<<< HEAD
 #define sense_valid(sense)  ((sense) & 0x80);
+=======
+#define sense_valid(sense)  ((sense) & 0x80)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * default timeouts

@@ -4,9 +4,20 @@ menuconfig ION
 	help
 	  Chose this option to enable the ION Memory Manager.
 
+<<<<<<< HEAD
 config ION_TEGRA
 	tristate "Ion for Tegra"
 	depends on ARCH_TEGRA && ION
+=======
+config ION_IOMMU
+       bool
+
+config ION_TEGRA
+	tristate "Ion for Tegra"
+	depends on ARCH_TEGRA && ION
+	select TEGRA_IOMMU_SMMU if !ARCH_TEGRA_2x_SOC
+	select ION_IOMMU if TEGRA_IOMMU_SMMU
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  Choose this option if you wish to use ion on an nVidia Tegra.
 

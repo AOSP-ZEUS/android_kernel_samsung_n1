@@ -27,6 +27,11 @@
 
 #include <linux/vmalloc.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+#include <linux/hardirq.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/uaccess.h>
 #include "r8192E_hw.h"
 #include "r8192E.h"
@@ -506,7 +511,11 @@ static int proc_get_stats_rx(char *page, char **start,
 static void rtl8192_proc_module_init(void)
 {
 	RT_TRACE(COMP_INIT, "Initializing proc filesystem\n");
+<<<<<<< HEAD
 	rtl8192_proc=create_proc_entry(RTL819xE_MODULE_NAME, S_IFDIR, init_net.proc_net);
+=======
+	rtl8192_proc = proc_mkdir(RTL819xE_MODULE_NAME, init_net.proc_net);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 
@@ -538,9 +547,13 @@ static void rtl8192_proc_init_one(struct r8192_priv *priv)
 	struct net_device *dev = priv->ieee80211->dev;
 	struct proc_dir_entry *e;
 
+<<<<<<< HEAD
 	priv->dir_dev = create_proc_entry(dev->name,
 					  S_IFDIR | S_IRUGO | S_IXUGO,
 					  rtl8192_proc);
+=======
+	priv->dir_dev = proc_mkdir(dev->name, rtl8192_proc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!priv->dir_dev) {
 		RT_TRACE(COMP_ERR, "Unable to initialize /proc/net/rtl8192/%s\n",
 		      dev->name);

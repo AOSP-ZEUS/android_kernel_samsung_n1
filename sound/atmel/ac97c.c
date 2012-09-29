@@ -971,7 +971,11 @@ static int __devinit atmel_ac97c_probe(struct platform_device *pdev)
 	chip->card = card;
 	chip->pclk = pclk;
 	chip->pdev = pdev;
+<<<<<<< HEAD
 	chip->regs = ioremap(regs->start, regs->end - regs->start + 1);
+=======
+	chip->regs = ioremap(regs->start, resource_size(regs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!chip->regs) {
 		dev_dbg(&pdev->dev, "could not remap register memory\n");

@@ -46,6 +46,7 @@ enum arvo_commands {
 	ARVO_COMMAND_ACTUAL_PROFILE = 0x7,
 };
 
+<<<<<<< HEAD
 enum arvo_usb_commands {
 	ARVO_USB_COMMAND_MODE_KEY = 0x303,
 	/*
@@ -59,6 +60,8 @@ enum arvo_usb_commands {
 	ARVO_USB_COMMAND_ACTUAL_PROFILE = 0x307,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct arvo_special_report {
 	uint8_t unknown1; /* always 0x01 */
 	uint8_t event;

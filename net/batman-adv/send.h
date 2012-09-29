@@ -22,6 +22,7 @@
 #ifndef _NET_BATMAN_ADV_SEND_H_
 #define _NET_BATMAN_ADV_SEND_H_
 
+<<<<<<< HEAD
 int send_skb_packet(struct sk_buff *skb,
 				struct hard_iface *hard_iface,
 				uint8_t *dst_addr);
@@ -35,5 +36,20 @@ int add_bcast_packet_to_list(struct bat_priv *bat_priv, struct sk_buff *skb);
 void send_outstanding_bat_packet(struct work_struct *work);
 void purge_outstanding_packets(struct bat_priv *bat_priv,
 			       struct hard_iface *hard_iface);
+=======
+int send_skb_packet(struct sk_buff *skb, struct hard_iface *hard_iface,
+		    const uint8_t *dst_addr);
+void schedule_own_packet(struct hard_iface *hard_iface);
+void schedule_forward_packet(struct orig_node *orig_node,
+			     const struct ethhdr *ethhdr,
+			     struct batman_packet *batman_packet,
+			     int directlink,
+			     struct hard_iface *if_outgoing);
+int add_bcast_packet_to_list(struct bat_priv *bat_priv,
+			     const struct sk_buff *skb, unsigned long delay);
+void send_outstanding_bat_packet(struct work_struct *work);
+void purge_outstanding_packets(struct bat_priv *bat_priv,
+			       const struct hard_iface *hard_iface);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _NET_BATMAN_ADV_SEND_H_ */

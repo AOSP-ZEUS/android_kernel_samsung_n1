@@ -193,6 +193,7 @@ acpi_ns_check_predefined_names(struct acpi_namespace_node *node,
 	}
 
 	/*
+<<<<<<< HEAD
 	 * 1) We have a return value, but if one wasn't expected, just exit, this is
 	 * not a problem. For example, if the "Implicit Return" feature is
 	 * enabled, methods will always return a value.
@@ -201,6 +202,22 @@ acpi_ns_check_predefined_names(struct acpi_namespace_node *node,
 	 * validation, exit.
 	 */
 	if ((!predefined->info.expected_btypes) ||
+=======
+	 * Return value validation and possible repair.
+	 *
+	 * 1) Don't perform return value validation/repair if this feature
+	 * has been disabled via a global option.
+	 *
+	 * 2) We have a return value, but if one wasn't expected, just exit,
+	 * this is not a problem. For example, if the "Implicit Return"
+	 * feature is enabled, methods will always return a value.
+	 *
+	 * 3) If the return value can be of any type, then we cannot perform
+	 * any validation, just exit.
+	 */
+	if (acpi_gbl_disable_auto_repair ||
+	    (!predefined->info.expected_btypes) ||
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    (predefined->info.expected_btypes == ACPI_RTYPE_ALL)) {
 		goto cleanup;
 	}

@@ -28,6 +28,11 @@
 #include <mach/dma-v1.h>
 #include <mach/hardware.h>
 
+<<<<<<< HEAD
+=======
+#include "dmaengine.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct imxdma_channel {
 	struct imxdma_engine		*imxdma;
 	unsigned int			channel;
@@ -39,7 +44,10 @@ struct imxdma_channel {
 	struct dma_chan			chan;
 	spinlock_t			lock;
 	struct dma_async_tx_descriptor	desc;
+<<<<<<< HEAD
 	dma_cookie_t			last_completed;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	enum dma_status			status;
 	int				dma_request;
 	struct scatterlist		*sg_list;
@@ -63,7 +71,11 @@ static void imxdma_handle(struct imxdma_channel *imxdmac)
 {
 	if (imxdmac->desc.callback)
 		imxdmac->desc.callback(imxdmac->desc.callback_param);
+<<<<<<< HEAD
 	imxdmac->last_completed = imxdmac->desc.cookie;
+=======
+	dma_cookie_complete(&imxdmac->desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void imxdma_irq_handler(int channel, void *data)
@@ -135,7 +147,12 @@ static int imxdma_control(struct dma_chan *chan, enum dma_ctrl_cmd cmd,
 		if (ret)
 			return ret;
 
+<<<<<<< HEAD
 		imx_dma_config_burstlen(imxdmac->imxdma_channel, imxdmac->watermark_level);
+=======
+		imx_dma_config_burstlen(imxdmac->imxdma_channel,
+				imxdmac->watermark_level * imxdmac->word_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		return 0;
 	default:
@@ -149,6 +166,7 @@ static enum dma_status imxdma_tx_status(struct dma_chan *chan,
 					    dma_cookie_t cookie,
 					    struct dma_tx_state *txstate)
 {
+<<<<<<< HEAD
 	struct imxdma_channel *imxdmac = to_imxdma_chan(chan);
 	dma_cookie_t last_used;
 	enum dma_status ret;
@@ -172,6 +190,9 @@ static dma_cookie_t imxdma_assign_cookie(struct imxdma_channel *imxdma)
 	imxdma->desc.cookie = cookie;
 
 	return cookie;
+=======
+	return dma_cookie_status(chan, cookie, txstate);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static dma_cookie_t imxdma_tx_submit(struct dma_async_tx_descriptor *tx)
@@ -181,7 +202,11 @@ static dma_cookie_t imxdma_tx_submit(struct dma_async_tx_descriptor *tx)
 
 	spin_lock_irq(&imxdmac->lock);
 
+<<<<<<< HEAD
 	cookie = imxdma_assign_cookie(imxdmac);
+=======
+	cookie = dma_cookie_assign(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	imx_dma_enable(imxdmac->imxdma_channel);
 
@@ -221,8 +246,13 @@ static void imxdma_free_chan_resources(struct dma_chan *chan)
 
 static struct dma_async_tx_descriptor *imxdma_prep_slave_sg(
 		struct dma_chan *chan, struct scatterlist *sgl,
+<<<<<<< HEAD
 		unsigned int sg_len, enum dma_data_direction direction,
 		unsigned long flags)
+=======
+		unsigned int sg_len, enum dma_transfer_direction direction,
+		unsigned long flags, void *context)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct imxdma_channel *imxdmac = to_imxdma_chan(chan);
 	struct scatterlist *sg;
@@ -268,7 +298,12 @@ static struct dma_async_tx_descriptor *imxdma_prep_slave_sg(
 
 static struct dma_async_tx_descriptor *imxdma_prep_dma_cyclic(
 		struct dma_chan *chan, dma_addr_t dma_addr, size_t buf_len,
+<<<<<<< HEAD
 		size_t period_len, enum dma_data_direction direction)
+=======
+		size_t period_len, enum dma_transfer_direction direction,
+		void *context)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct imxdma_channel *imxdmac = to_imxdma_chan(chan);
 	struct imxdma_engine *imxdma = imxdmac->imxdma;

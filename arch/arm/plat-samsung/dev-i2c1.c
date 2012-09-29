@@ -15,8 +15,11 @@
 #include <linux/kernel.h>
 #include <linux/string.h>
 #include <linux/platform_device.h>
+<<<<<<< HEAD
 #include <linux/clk.h>
 #include <linux/err.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <mach/irqs.h>
 #include <mach/map.h>
@@ -26,8 +29,11 @@
 #include <plat/devs.h>
 #include <plat/cpu.h>
 
+<<<<<<< HEAD
 #include <asm/io.h>
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct resource s3c_i2c_resource[] = {
 	[0] = {
 		.start = S3C_PA_IIC1,
@@ -48,6 +54,7 @@ struct platform_device s3c_device_i2c1 = {
 	.resource	  = s3c_i2c_resource,
 };
 
+<<<<<<< HEAD
 static struct s3c2410_platform_i2c default_i2c_data1 __initdata = {
 	.flags		= 0,
 	.bus_num	= 1,
@@ -56,10 +63,13 @@ static struct s3c2410_platform_i2c default_i2c_data1 __initdata = {
 	.sda_delay	= S3C2410_IICLC_SDA_DELAY5 | S3C2410_IICLC_FILTER_ON,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init s3c_i2c1_set_platdata(struct s3c2410_platform_i2c *pd)
 {
 	struct s3c2410_platform_i2c *npd;
 
+<<<<<<< HEAD
 	if (!pd)
 		pd = &default_i2c_data1;
 
@@ -100,3 +110,16 @@ void s3c_i2c1_force_stop()
 }
 EXPORT_SYMBOL(s3c_i2c1_force_stop);
 
+=======
+	if (!pd) {
+		pd = &default_i2c_data;
+		pd->bus_num = 1;
+	}
+
+	npd = s3c_set_platdata(pd, sizeof(struct s3c2410_platform_i2c),
+			       &s3c_device_i2c1);
+
+	if (!npd->cfg_gpio)
+		npd->cfg_gpio = s3c_i2c1_cfg_gpio;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

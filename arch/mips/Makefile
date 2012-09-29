@@ -191,6 +191,7 @@ endif
 #
 include $(srctree)/arch/mips/Kbuild.platforms
 
+<<<<<<< HEAD
 #
 # NETLOGIC SOC Common (common)
 #
@@ -203,6 +204,8 @@ cflags-$(CONFIG_NLM_COMMON)		+= -I$(srctree)/arch/mips/include/asm/netlogic
 core-$(CONFIG_NLM_XLR)      		+= arch/mips/netlogic/xlr/
 load-$(CONFIG_NLM_XLR_BOARD)		+= 0xffffffff84000000
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 cflags-y			+= -I$(srctree)/arch/mips/include/asm/mach-generic
 drivers-$(CONFIG_PCI)		+= arch/mips/pci/
 

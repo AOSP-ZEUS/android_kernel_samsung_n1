@@ -231,12 +231,15 @@ static irqreturn_t wm8994_irq_thread(int irq, void *data)
 		status[i] &= ~wm8994->irq_masks_cur[i];
 	}
 
+<<<<<<< HEAD
 	/* Report */
 	for (i = 0; i < ARRAY_SIZE(wm8994_irqs); i++) {
 		if (status[wm8994_irqs[i].reg - 1] & wm8994_irqs[i].mask)
 			handle_nested_irq(wm8994->irq_base + i);
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Ack any unmasked IRQs */
 	for (i = 0; i < ARRAY_SIZE(status); i++) {
 		if (status[i])
@@ -244,6 +247,15 @@ static irqreturn_t wm8994_irq_thread(int irq, void *data)
 					 status[i]);
 	}
 
+<<<<<<< HEAD
+=======
+	/* Report */
+	for (i = 0; i < ARRAY_SIZE(wm8994_irqs); i++) {
+		if (status[wm8994_irqs[i].reg - 1] & wm8994_irqs[i].mask)
+			handle_nested_irq(wm8994->irq_base + i);
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return IRQ_HANDLED;
 }
 

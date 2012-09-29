@@ -7,8 +7,11 @@
 
 /* Largest piece of memory kmalloc can allocate */
 #define RD_MAX_ALLOCATION_SIZE	65536
+<<<<<<< HEAD
 /* Maximum queuedepth for the Ramdisk HBA */
 #define RD_HBA_QUEUE_DEPTH	256
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define RD_DEVICE_QUEUE_DEPTH	32
 #define RD_MAX_DEVICE_QUEUE_DEPTH 128
 #define RD_BLOCKSIZE		512
@@ -34,8 +37,11 @@ struct rd_request {
 	u32		rd_page_count;
 	/* Scatterlist count */
 	u32		rd_size;
+<<<<<<< HEAD
 	/* Ramdisk device */
 	struct rd_dev	*rd_dev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 } ____cacheline_aligned;
 
 struct rd_dev_sg_table {

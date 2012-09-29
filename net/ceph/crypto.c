@@ -444,7 +444,11 @@ int ceph_key_instantiate(struct key *key, const void *data, size_t datalen)
 		goto err;
 
 	/* TODO ceph_crypto_key_decode should really take const input */
+<<<<<<< HEAD
 	p = (void*)data;
+=======
+	p = (void *)data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = ceph_crypto_key_decode(ckey, &p, (char*)data+datalen);
 	if (ret < 0)
 		goto err_ckey;

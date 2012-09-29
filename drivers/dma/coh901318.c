@@ -11,6 +11,10 @@
 #include <linux/module.h>
 #include <linux/kernel.h> /* printk() */
 #include <linux/fs.h> /* everything... */
+<<<<<<< HEAD
+=======
+#include <linux/scatterlist.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h> /* kmalloc() */
 #include <linux/dmaengine.h>
 #include <linux/platform_device.h>
@@ -23,6 +27,10 @@
 #include <mach/coh901318.h>
 
 #include "coh901318_lli.h"
+<<<<<<< HEAD
+=======
+#include "dmaengine.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define COHC_2_DEV(cohc) (&cohc->chan.dev->device)
 
@@ -40,6 +48,11 @@ struct coh901318_desc {
 	struct coh901318_lli *lli;
 	enum dma_data_direction dir;
 	unsigned long flags;
+<<<<<<< HEAD
+=======
+	u32 head_config;
+	u32 head_ctrl;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct coh901318_base {
@@ -56,7 +69,10 @@ struct coh901318_base {
 struct coh901318_chan {
 	spinlock_t lock;
 	int allocated;
+<<<<<<< HEAD
 	int completed;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int id;
 	int stopped;
 
@@ -315,6 +331,7 @@ static int coh901318_prep_linked_list(struct coh901318_chan *cohc,
 
 	return 0;
 }
+<<<<<<< HEAD
 static dma_cookie_t
 coh901318_assign_cookie(struct coh901318_chan *cohc,
 			struct coh901318_desc *cohd)
@@ -329,6 +346,8 @@ coh901318_assign_cookie(struct coh901318_chan *cohc,
 
 	return cookie;
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct coh901318_desc *
 coh901318_desc_get(struct coh901318_chan *cohc)
@@ -660,6 +679,12 @@ static struct coh901318_desc *coh901318_queue_start(struct coh901318_chan *cohc)
 
 		coh901318_desc_submit(cohc, cohd);
 
+<<<<<<< HEAD
+=======
+		/* Program the transaction head */
+		coh901318_set_conf(cohc, cohd->head_config);
+		coh901318_set_ctrl(cohc, cohd->head_ctrl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		coh901318_prep_linked_list(cohc, cohd->lli);
 
 		/* start dma job on this channel */
@@ -699,7 +724,11 @@ static void dma_tasklet(unsigned long data)
 	callback_param = cohd_fin->desc.callback_param;
 
 	/* sign this job as completed on the channel */
+<<<<<<< HEAD
 	cohc->completed = cohd_fin->desc.cookie;
+=======
+	dma_cookie_complete(&cohd_fin->desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* release the lli allocation and remove the descriptor */
 	coh901318_lli_free(&cohc->base->pool, &cohd_fin->lli);
@@ -923,7 +952,11 @@ static int coh901318_alloc_chan_resources(struct dma_chan *chan)
 	coh901318_config(cohc, NULL);
 
 	cohc->allocated = 1;
+<<<<<<< HEAD
 	cohc->completed = chan->cookie = 1;
+=======
+	dma_cookie_init(chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_unlock_irqrestore(&cohc->lock, flags);
 
@@ -960,16 +993,27 @@ coh901318_tx_submit(struct dma_async_tx_descriptor *tx)
 						   desc);
 	struct coh901318_chan *cohc = to_coh901318_chan(tx->chan);
 	unsigned long flags;
+<<<<<<< HEAD
 
 	spin_lock_irqsave(&cohc->lock, flags);
 
 	tx->cookie = coh901318_assign_cookie(cohc, cohd);
+=======
+	dma_cookie_t cookie;
+
+	spin_lock_irqsave(&cohc->lock, flags);
+	cookie = dma_cookie_assign(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	coh901318_desc_queue(cohc, cohd);
 
 	spin_unlock_irqrestore(&cohc->lock, flags);
 
+<<<<<<< HEAD
 	return tx->cookie;
+=======
+	return cookie;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct dma_async_tx_descriptor *
@@ -1028,8 +1072,13 @@ coh901318_prep_memcpy(struct dma_chan *chan, dma_addr_t dest, dma_addr_t src,
 
 static struct dma_async_tx_descriptor *
 coh901318_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
+<<<<<<< HEAD
 			unsigned int sg_len, enum dma_data_direction direction,
 			unsigned long flags)
+=======
+			unsigned int sg_len, enum dma_transfer_direction direction,
+			unsigned long flags, void *context)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct coh901318_chan *cohc = to_coh901318_chan(chan);
 	struct coh901318_lli *lli;
@@ -1090,8 +1139,11 @@ coh901318_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
 	} else
 		goto err_direction;
 
+<<<<<<< HEAD
 	coh901318_set_conf(cohc, config);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* The dma only supports transmitting packages up to
 	 * MAX_DMA_PACKET_SIZE. Calculate to total number of
 	 * dma elemts required to send the entire sg list
@@ -1128,16 +1180,29 @@ coh901318_prep_slave_sg(struct dma_chan *chan, struct scatterlist *sgl,
 	if (ret)
 		goto err_lli_fill;
 
+<<<<<<< HEAD
 	/*
 	 * Set the default ctrl for the channel to the one from the lli,
 	 * things may have changed due to odd buffer alignment etc.
 	 */
 	coh901318_set_ctrl(cohc, lli->control);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	COH_DBG(coh901318_list_print(cohc, lli));
 
 	/* Pick a descriptor to handle this transfer */
 	cohd = coh901318_desc_get(cohc);
+<<<<<<< HEAD
+=======
+	cohd->head_config = config;
+	/*
+	 * Set the default head ctrl for the channel to the one from the
+	 * lli, things may have changed due to odd buffer alignment
+	 * etc.
+	 */
+	cohd->head_ctrl = lli->control;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cohd->dir = direction;
 	cohd->flags = flags;
 	cohd->desc.tx_submit = coh901318_tx_submit;
@@ -1159,6 +1224,7 @@ coh901318_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
 		 struct dma_tx_state *txstate)
 {
 	struct coh901318_chan *cohc = to_coh901318_chan(chan);
+<<<<<<< HEAD
 	dma_cookie_t last_used;
 	dma_cookie_t last_complete;
 	int ret;
@@ -1170,6 +1236,14 @@ coh901318_tx_status(struct dma_chan *chan, dma_cookie_t cookie,
 
 	dma_set_tx_state(txstate, last_complete, last_used,
 			 coh901318_get_bytes_left(chan));
+=======
+	enum dma_status ret;
+
+	ret = dma_cookie_status(chan, cookie, txstate);
+	/* FIXME: should be conditional on ret != DMA_SUCCESS? */
+	dma_set_residue(txstate, coh901318_get_bytes_left(chan));
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret == DMA_IN_PROGRESS && cohc->stopped)
 		ret = DMA_PAUSED;
 

@@ -438,6 +438,7 @@ asmlinkage long compat_sys_ppoll(struct pollfd __user *ufds,
 				 struct compat_timespec __user *tsp,
 				 const compat_sigset_t __user *sigmask,
 				 compat_size_t sigsetsize);
+<<<<<<< HEAD
 #if (defined(CONFIG_NFSD) || defined(CONFIG_NFSD_MODULE)) && \
 	!defined(CONFIG_NFSD_DEPRECATED)
 union compat_nfsctl_res;
@@ -448,6 +449,8 @@ asmlinkage long compat_sys_nfsservctl(int cmd,
 #else
 asmlinkage long compat_sys_nfsservctl(int cmd, void *notused, void *notused2);
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 asmlinkage long compat_sys_signalfd4(int ufd,
 				     const compat_sigset_t __user *sigmask,
 				     compat_size_t sigsetsize, int flags);
@@ -561,9 +564,12 @@ extern ssize_t compat_rw_copy_check_uvector(int type,
 
 extern void __user *compat_alloc_user_space(unsigned long len);
 
+<<<<<<< HEAD
 #else
 
 #define is_compat_task() (0)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* CONFIG_COMPAT */
 #endif /* _LINUX_COMPAT_H */

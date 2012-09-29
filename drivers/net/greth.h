@@ -103,6 +103,10 @@ struct greth_private {
 
 	unsigned char *tx_bufs[GRETH_TXBD_NUM];
 	unsigned char *rx_bufs[GRETH_RXBD_NUM];
+<<<<<<< HEAD
+=======
+	u16 tx_bufs_length[GRETH_TXBD_NUM];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u16 tx_next;
 	u16 tx_last;

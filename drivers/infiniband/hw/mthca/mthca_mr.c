@@ -257,7 +257,10 @@ static int __mthca_write_mtt(struct mthca_dev *dev, struct mthca_mtt *mtt,
 	struct mthca_mailbox *mailbox;
 	__be64 *mtt_entry;
 	int err = 0;
+<<<<<<< HEAD
 	u8 status;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int i;
 
 	mailbox = mthca_alloc_mailbox(dev, GFP_KERNEL);
@@ -281,17 +284,24 @@ static int __mthca_write_mtt(struct mthca_dev *dev, struct mthca_mtt *mtt,
 		if (i & 1)
 			mtt_entry[i + 2] = 0;
 
+<<<<<<< HEAD
 		err = mthca_WRITE_MTT(dev, mailbox, (i + 1) & ~1, &status);
+=======
+		err = mthca_WRITE_MTT(dev, mailbox, (i + 1) & ~1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (err) {
 			mthca_warn(dev, "WRITE_MTT failed (%d)\n", err);
 			goto out;
 		}
+<<<<<<< HEAD
 		if (status) {
 			mthca_warn(dev, "WRITE_MTT returned status 0x%02x\n",
 				   status);
 			err = -EINVAL;
 			goto out;
 		}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		list_len    -= i;
 		start_index += i;
@@ -441,7 +451,10 @@ int mthca_mr_alloc(struct mthca_dev *dev, u32 pd, int buffer_size_shift,
 	u32 key;
 	int i;
 	int err;
+<<<<<<< HEAD
 	u8 status;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	WARN_ON(buffer_size_shift >= 32);
 
@@ -497,6 +510,7 @@ int mthca_mr_alloc(struct mthca_dev *dev, u32 pd, int buffer_size_shift,
 	}
 
 	err = mthca_SW2HW_MPT(dev, mailbox,
+<<<<<<< HEAD
 			      key & (dev->limits.num_mpts - 1),
 			      &status);
 	if (err) {
@@ -507,6 +521,12 @@ int mthca_mr_alloc(struct mthca_dev *dev, u32 pd, int buffer_size_shift,
 			   status);
 		err = -EINVAL;
 		goto err_out_mailbox;
+=======
+			      key & (dev->limits.num_mpts - 1));
+	if (err) {
+		mthca_warn(dev, "SW2HW_MPT failed (%d)\n", err);
+		goto err_out_mailbox;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	mthca_free_mailbox(dev, mailbox);
@@ -567,6 +587,7 @@ static void mthca_free_region(struct mthca_dev *dev, u32 lkey)
 void mthca_free_mr(struct mthca_dev *dev, struct mthca_mr *mr)
 {
 	int err;
+<<<<<<< HEAD
 	u8 status;
 
 	err = mthca_HW2SW_MPT(dev, NULL,
@@ -578,6 +599,14 @@ void mthca_free_mr(struct mthca_dev *dev, struct mthca_mr *mr)
 	else if (status)
 		mthca_warn(dev, "HW2SW_MPT returned status 0x%02x\n",
 			   status);
+=======
+
+	err = mthca_HW2SW_MPT(dev, NULL,
+			      key_to_hw_index(dev, mr->ibmr.lkey) &
+			      (dev->limits.num_mpts - 1));
+	if (err)
+		mthca_warn(dev, "HW2SW_MPT failed (%d)\n", err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mthca_free_region(dev, mr->ibmr.lkey);
 	mthca_free_mtt(dev, mr->mtt);
@@ -590,7 +619,10 @@ int mthca_fmr_alloc(struct mthca_dev *dev, u32 pd,
 	struct mthca_mailbox *mailbox;
 	u64 mtt_seg;
 	u32 key, idx;
+<<<<<<< HEAD
 	u8 status;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int list_len = mr->attr.max_pages;
 	int err = -ENOMEM;
 	int i;
@@ -672,18 +704,25 @@ int mthca_fmr_alloc(struct mthca_dev *dev, u32 pd,
 	}
 
 	err = mthca_SW2HW_MPT(dev, mailbox,
+<<<<<<< HEAD
 			      key & (dev->limits.num_mpts - 1),
 			      &status);
+=======
+			      key & (dev->limits.num_mpts - 1));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err) {
 		mthca_warn(dev, "SW2HW_MPT failed (%d)\n", err);
 		goto err_out_mailbox_free;
 	}
+<<<<<<< HEAD
 	if (status) {
 		mthca_warn(dev, "SW2HW_MPT returned status 0x%02x\n",
 			   status);
 		err = -EINVAL;
 		goto err_out_mailbox_free;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mthca_free_mailbox(dev, mailbox);
 	return 0;

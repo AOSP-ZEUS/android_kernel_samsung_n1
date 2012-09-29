@@ -251,4 +251,12 @@ struct b43_nphy_channeltab_entry_rev2 {
 void b2055_upload_inittab(struct b43_wldev *dev,
 			  bool ghz5, bool ignore_uploadflag);
 
+<<<<<<< HEAD
+=======
+/* Get the NPHY Channel Switch Table entry for a channel.
+ * Returns NULL on failure to find an entry. */
+const struct b43_nphy_channeltab_entry_rev2 *
+b43_nphy_get_chantabent_rev2(struct b43_wldev *dev, u8 channel);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* B43_RADIO_2055_H_ */

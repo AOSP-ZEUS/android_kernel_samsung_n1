@@ -14,6 +14,11 @@
  *    Moxa C101 User's Manual
  */
 
+<<<<<<< HEAD
+=======
+#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/kernel.h>
 #include <linux/capability.h>
@@ -313,44 +318,72 @@ static int __init c101_run(unsigned long irq, unsigned long winbase)
 	int result;
 
 	if (irq<3 || irq>15 || irq == 6) /* FIXME */ {
+<<<<<<< HEAD
 		printk(KERN_ERR "c101: invalid IRQ value\n");
+=======
+		pr_err("invalid IRQ value\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENODEV;
 	}
 
 	if (winbase < 0xC0000 || winbase > 0xDFFFF || (winbase & 0x3FFF) !=0) {
+<<<<<<< HEAD
 		printk(KERN_ERR "c101: invalid RAM value\n");
+=======
+		pr_err("invalid RAM value\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENODEV;
 	}
 
 	card = kzalloc(sizeof(card_t), GFP_KERNEL);
 	if (card == NULL) {
+<<<<<<< HEAD
 		printk(KERN_ERR "c101: unable to allocate memory\n");
+=======
+		pr_err("unable to allocate memory\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENOBUFS;
 	}
 
 	card->dev = alloc_hdlcdev(card);
 	if (!card->dev) {
+<<<<<<< HEAD
 		printk(KERN_ERR "c101: unable to allocate memory\n");
+=======
+		pr_err("unable to allocate memory\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		kfree(card);
 		return -ENOBUFS;
 	}
 
 	if (request_irq(irq, sca_intr, 0, devname, card)) {
+<<<<<<< HEAD
 		printk(KERN_ERR "c101: could not allocate IRQ\n");
+=======
+		pr_err("could not allocate IRQ\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		c101_destroy_card(card);
 		return -EBUSY;
 	}
 	card->irq = irq;
 
 	if (!request_mem_region(winbase, C101_MAPPED_RAM_SIZE, devname)) {
+<<<<<<< HEAD
 		printk(KERN_ERR "c101: could not request RAM window\n");
+=======
+		pr_err("could not request RAM window\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		c101_destroy_card(card);
 		return -EBUSY;
 	}
 	card->phy_winbase = winbase;
 	card->win0base = ioremap(winbase, C101_MAPPED_RAM_SIZE);
 	if (!card->win0base) {
+<<<<<<< HEAD
 		printk(KERN_ERR "c101: could not map I/O address\n");
+=======
+		pr_err("could not map I/O address\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		c101_destroy_card(card);
 		return -EFAULT;
 	}
@@ -381,7 +414,11 @@ static int __init c101_run(unsigned long irq, unsigned long winbase)
 
 	result = register_hdlc_device(dev);
 	if (result) {
+<<<<<<< HEAD
 		printk(KERN_WARNING "c101: unable to register hdlc device\n");
+=======
+		pr_warn("unable to register hdlc device\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		c101_destroy_card(card);
 		return result;
 	}
@@ -389,10 +426,15 @@ static int __init c101_run(unsigned long irq, unsigned long winbase)
 	sca_init_port(card); /* Set up C101 memory */
 	set_carrier(card);
 
+<<<<<<< HEAD
 	printk(KERN_INFO "%s: Moxa C101 on IRQ%u,"
 	       " using %u TX + %u RX packets rings\n",
 	       dev->name, card->irq,
 	       card->tx_ring_buffers, card->rx_ring_buffers);
+=======
+	netdev_info(dev, "Moxa C101 on IRQ%u, using %u TX + %u RX packets rings\n",
+		    card->irq, card->tx_ring_buffers, card->rx_ring_buffers);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	*new_card = card;
 	new_card = &card->next_card;
@@ -405,12 +447,20 @@ static int __init c101_init(void)
 {
 	if (hw == NULL) {
 #ifdef MODULE
+<<<<<<< HEAD
 		printk(KERN_INFO "c101: no card initialized\n");
+=======
+		pr_info("no card initialized\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 		return -EINVAL;	/* no parameters specified, abort */
 	}
 
+<<<<<<< HEAD
 	printk(KERN_INFO "%s\n", version);
+=======
+	pr_info("%s\n", version);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	do {
 		unsigned long irq, ram;
@@ -428,7 +478,11 @@ static int __init c101_init(void)
 			return first_card ? 0 : -EINVAL;
 	}while(*hw++ == ':');
 
+<<<<<<< HEAD
 	printk(KERN_ERR "c101: invalid hardware parameters\n");
+=======
+	pr_err("invalid hardware parameters\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return first_card ? 0 : -EINVAL;
 }
 

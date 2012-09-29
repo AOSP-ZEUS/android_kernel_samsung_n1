@@ -23,8 +23,12 @@
 #include <asm/mach/arch.h>
 #include <asm/mach/irq.h>
 
+<<<<<<< HEAD
 #include <mach/pxa3xx-regs.h>
 #include <mach/mfp-pxa320.h>
+=======
+#include <mach/pxa320.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/colibri.h>
 #include <mach/pxafb.h>
 #include <mach/ohci.h>
@@ -258,6 +262,10 @@ MACHINE_START(COLIBRI320, "Toradex Colibri PXA320")
 	.init_machine	= colibri_pxa320_init,
 	.map_io		= pxa3xx_map_io,
 	.init_irq	= pxa3xx_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa3xx_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 MACHINE_END
 

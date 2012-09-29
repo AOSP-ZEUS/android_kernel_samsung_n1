@@ -236,8 +236,13 @@ static int virtblk_ioctl(struct block_device *bdev, fmode_t mode,
 	if (!virtio_has_feature(vblk->vdev, VIRTIO_BLK_F_SCSI))
 		return -ENOTTY;
 
+<<<<<<< HEAD
 	return scsi_cmd_blk_ioctl(bdev, mode, cmd,
 				  (void __user *)data);
+=======
+	return scsi_cmd_ioctl(disk->queue, disk, mode, cmd,
+			      (void __user *)data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* We provide getgeo only to please some old bootloader/partitioning tools */

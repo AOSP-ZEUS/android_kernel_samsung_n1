@@ -76,10 +76,13 @@ void s3c_sdhci1_set_platdata(struct s3c_sdhci_platdata *pd)
 		set->host_caps |= pd->host_caps;
 	if (pd->clk_type)
 		set->clk_type = pd->clk_type;
+<<<<<<< HEAD
 	if (pd->built_in)
 		set->built_in = pd->built_in;
 	if (pd->must_maintain_clock)
 		set->must_maintain_clock = pd->must_maintain_clock;
 	if (pd->enable_intr_on_resume)
 		set->enable_intr_on_resume = pd->enable_intr_on_resume;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

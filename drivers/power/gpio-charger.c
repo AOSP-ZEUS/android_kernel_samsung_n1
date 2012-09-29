@@ -54,7 +54,11 @@ static int gpio_charger_get_property(struct power_supply *psy,
 
 	switch (psp) {
 	case POWER_SUPPLY_PROP_ONLINE:
+<<<<<<< HEAD
 		val->intval = gpio_get_value(pdata->gpio);
+=======
+		val->intval = gpio_get_value_cansleep(pdata->gpio);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		val->intval ^= pdata->gpio_active_low;
 		break;
 	default:
@@ -127,7 +131,11 @@ static int __devinit gpio_charger_probe(struct platform_device *pdev)
 		ret = request_any_context_irq(irq, gpio_charger_irq,
 				IRQF_TRIGGER_RISING | IRQF_TRIGGER_FALLING,
 				dev_name(&pdev->dev), charger);
+<<<<<<< HEAD
 		if (ret)
+=======
+		if (ret < 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			dev_warn(&pdev->dev, "Failed to request irq: %d\n", ret);
 		else
 			gpio_charger->irq = irq;

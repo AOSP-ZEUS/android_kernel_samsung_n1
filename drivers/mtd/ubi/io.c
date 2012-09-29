@@ -212,7 +212,11 @@ retry:
 	} else {
 		ubi_assert(len == read);
 
+<<<<<<< HEAD
 		if (ubi_dbg_is_bitflip()) {
+=======
+		if (ubi_dbg_is_bitflip(ubi)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			dbg_gen("bit-flip (emulated)");
 			err = UBI_IO_BITFLIPS;
 		}
@@ -281,7 +285,11 @@ int ubi_io_write(struct ubi_device *ubi, const void *buf, int pnum, int offset,
 			return err;
 	}
 
+<<<<<<< HEAD
 	if (ubi_dbg_is_write_failure()) {
+=======
+	if (ubi_dbg_is_write_failure(ubi)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dbg_err("cannot write %d bytes to PEB %d:%d "
 			"(emulated)", len, pnum, offset);
 		ubi_dbg_dump_stack();
@@ -396,7 +404,11 @@ retry:
 	if (err)
 		return err;
 
+<<<<<<< HEAD
 	if (ubi_dbg_is_erase_failure()) {
+=======
+	if (ubi_dbg_is_erase_failure(ubi)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dbg_err("cannot erase PEB %d (emulated)", pnum);
 		return -EIO;
 	}
@@ -1146,7 +1158,11 @@ static int paranoid_check_not_bad(const struct ubi_device *ubi, int pnum)
 {
 	int err;
 
+<<<<<<< HEAD
 	if (!(ubi_chk_flags & UBI_CHK_IO))
+=======
+	if (!ubi->dbg->chk_io)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	err = ubi_io_is_bad(ubi, pnum);
@@ -1173,7 +1189,11 @@ static int paranoid_check_ec_hdr(const struct ubi_device *ubi, int pnum,
 	int err;
 	uint32_t magic;
 
+<<<<<<< HEAD
 	if (!(ubi_chk_flags & UBI_CHK_IO))
+=======
+	if (!ubi->dbg->chk_io)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	magic = be32_to_cpu(ec_hdr->magic);
@@ -1211,7 +1231,11 @@ static int paranoid_check_peb_ec_hdr(const struct ubi_device *ubi, int pnum)
 	uint32_t crc, hdr_crc;
 	struct ubi_ec_hdr *ec_hdr;
 
+<<<<<<< HEAD
 	if (!(ubi_chk_flags & UBI_CHK_IO))
+=======
+	if (!ubi->dbg->chk_io)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	ec_hdr = kzalloc(ubi->ec_hdr_alsize, GFP_NOFS);
@@ -1255,7 +1279,11 @@ static int paranoid_check_vid_hdr(const struct ubi_device *ubi, int pnum,
 	int err;
 	uint32_t magic;
 
+<<<<<<< HEAD
 	if (!(ubi_chk_flags & UBI_CHK_IO))
+=======
+	if (!ubi->dbg->chk_io)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	magic = be32_to_cpu(vid_hdr->magic);
@@ -1296,7 +1324,11 @@ static int paranoid_check_peb_vid_hdr(const struct ubi_device *ubi, int pnum)
 	struct ubi_vid_hdr *vid_hdr;
 	void *p;
 
+<<<<<<< HEAD
 	if (!(ubi_chk_flags & UBI_CHK_IO))
+=======
+	if (!ubi->dbg->chk_io)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	vid_hdr = ubi_zalloc_vid_hdr(ubi, GFP_NOFS);
@@ -1348,7 +1380,11 @@ int ubi_dbg_check_write(struct ubi_device *ubi, const void *buf, int pnum,
 	void *buf1;
 	loff_t addr = (loff_t)pnum * ubi->peb_size + offset;
 
+<<<<<<< HEAD
 	if (!(ubi_chk_flags & UBI_CHK_IO))
+=======
+	if (!ubi->dbg->chk_io)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	buf1 = __vmalloc(len, GFP_NOFS, PAGE_KERNEL);
@@ -1412,7 +1448,11 @@ int ubi_dbg_check_all_ff(struct ubi_device *ubi, int pnum, int offset, int len)
 	void *buf;
 	loff_t addr = (loff_t)pnum * ubi->peb_size + offset;
 
+<<<<<<< HEAD
 	if (!(ubi_chk_flags & UBI_CHK_IO))
+=======
+	if (!ubi->dbg->chk_io)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	buf = __vmalloc(len, GFP_NOFS, PAGE_KERNEL);

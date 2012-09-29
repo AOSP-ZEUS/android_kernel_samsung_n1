@@ -55,12 +55,20 @@ static int __init pcibios_init(void)
 	ppc_md.phys_mem_access_prot = pci_phys_mem_access_prot;
 
 	if (pci_probe_only)
+<<<<<<< HEAD
 		ppc_pci_flags |= PPC_PCI_PROBE_ONLY;
+=======
+		pci_add_flags(PCI_PROBE_ONLY);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* On ppc64, we always enable PCI domains and we keep domain 0
 	 * backward compatible in /proc for video cards
 	 */
+<<<<<<< HEAD
 	ppc_pci_flags |= PPC_PCI_ENABLE_PROC_DOMAINS | PPC_PCI_COMPAT_DOMAIN_0;
+=======
+	pci_add_flags(PCI_ENABLE_PROC_DOMAINS | PCI_COMPAT_DOMAIN_0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Scan all of the recorded PCI controllers.  */
 	list_for_each_entry_safe(hose, tmp, &hose_list, list_node) {

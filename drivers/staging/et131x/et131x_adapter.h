@@ -67,7 +67,11 @@
  * Do not change these values: if changed, then change also in respective
  * TXdma and Rxdma engines
  */
+<<<<<<< HEAD
 #define NUM_DESC_PER_RING_TX         512	/* TX Do not change these values */
+=======
+#define NUM_DESC_PER_RING_TX         512    /* TX Do not change these values */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define NUM_TCB                      64
 
 /*
@@ -98,11 +102,15 @@ struct rfd {
 #define FLOW_NONE	3
 
 /* Struct to define some device statistics */
+<<<<<<< HEAD
 typedef struct _ce_stats_t {
 	/* Link Input/Output stats */
 	uint64_t ipackets;	/* # of in packets */
 	uint64_t opackets;	/* # of out packets */
 
+=======
+struct ce_stats {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* MIB II variables
 	 *
 	 * NOTE: atomic_t types are only guaranteed to store 24-bits; if we
@@ -118,7 +126,11 @@ typedef struct _ce_stats_t {
 	u32 norcvbuf;	/* # Rx packets discarded */
 	u32 noxmtbuf;	/* # Tx packets discarded */
 
+<<<<<<< HEAD
 	/* Transciever state informations. */
+=======
+	/* Transceiver state informations. */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 xcvr_addr;
 	u32 xcvr_id;
 
@@ -143,7 +155,11 @@ typedef struct _ce_stats_t {
 
 	u32 SynchrounousIterations;
 	u32 InterruptStatus;
+<<<<<<< HEAD
 } CE_STATS_t, *PCE_STATS_t;
+=======
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /* The private adapter structure */
@@ -154,7 +170,11 @@ struct et131x_adapter {
 	struct work_struct task;
 
 	/* Flags that indicate current state of the adapter */
+<<<<<<< HEAD
 	u32 Flags;
+=======
+	u32 flags;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 HwErrCount;
 
 	/* Configuration  */
@@ -186,7 +206,11 @@ struct et131x_adapter {
 	u8 MCList[NIC_MAX_MCAST_LIST][ETH_ALEN];
 
 	/* Pointer to the device's PCI register space */
+<<<<<<< HEAD
 	ADDRESS_MAP_t __iomem *regs;
+=======
+	struct address_map __iomem *regs;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Registry parameters */
 	u8 SpeedDuplex;		/* speed/duplex */
@@ -226,7 +250,11 @@ struct et131x_adapter {
 	u32 CachedMaskValue;
 
 	/* Xcvr status at last poll */
+<<<<<<< HEAD
 	MI_BMSR_t Bmsr;
+=======
+	u16 bmsr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Tx Memory Variables */
 	struct tx_ring tx_ring;
@@ -239,10 +267,16 @@ struct et131x_adapter {
 	u8 ReplicaPhyLoopbkPF;	/* Replica Enable Pass/Fail */
 
 	/* Stats */
+<<<<<<< HEAD
 	CE_STATS_t Stats;
 
 	struct net_device_stats net_stats;
 	struct net_device_stats net_stats_prev;
+=======
+	struct ce_stats stats;
+
+	struct net_device_stats net_stats;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif /* __ET131X_ADAPTER_H__ */

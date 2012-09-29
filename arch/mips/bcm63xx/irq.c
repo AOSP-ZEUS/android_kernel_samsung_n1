@@ -222,6 +222,10 @@ static struct irq_chip bcm63xx_external_irq_chip = {
 static struct irqaction cpu_ip2_cascade_action = {
 	.handler	= no_action,
 	.name		= "cascade_ip2",
+<<<<<<< HEAD
+=======
+	.flags		= IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 void __init arch_init_irq(void)

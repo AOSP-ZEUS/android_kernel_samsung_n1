@@ -74,7 +74,10 @@
 #include <mach/fb.h>
 
 #include <mach/spi.h>
+<<<<<<< HEAD
 #include <mach/spi-gpio.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <plat/usb-control.h>
 #include <mach/regs-mem.h>
 #include <mach/hardware.h>

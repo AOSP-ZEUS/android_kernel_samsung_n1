@@ -48,6 +48,11 @@
 #include <linux/io.h>
 #include <linux/ip.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+#include <linux/dma-mapping.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "ll_temac.h"
 
@@ -727,6 +732,11 @@ static int temac_start_xmit(struct sk_buff *skb, struct net_device *ndev)
 	if (lp->tx_bd_tail >= TX_BD_NUM)
 		lp->tx_bd_tail = 0;
 
+<<<<<<< HEAD
+=======
+	skb_tx_timestamp(skb);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Kick off the transfer */
 	lp->dma_out(lp, TX_TAILDESC_PTR, tail_p); /* DMA start */
 
@@ -772,7 +782,12 @@ static void ll_temac_recv(struct net_device *ndev)
 			skb->ip_summed = CHECKSUM_COMPLETE;
 		}
 
+<<<<<<< HEAD
 		netif_rx(skb);
+=======
+		if (!skb_defer_rx_timestamp(skb))
+			netif_rx(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		ndev->stats.rx_packets++;
 		ndev->stats.rx_bytes += length;

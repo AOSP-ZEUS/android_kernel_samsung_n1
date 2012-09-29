@@ -96,11 +96,19 @@
 .endm
 
 .macro RDUSP
+<<<<<<< HEAD
 	movel	sw_usp,%a2
 .endm
 
 .macro WRUSP
 	movel	%a0,sw_usp
+=======
+	movel	sw_usp,%a3
+.endm
+
+.macro WRUSP
+	movel	%a3,sw_usp
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 .endm
 
 #else /* !CONFIG_COLDFIRE_SW_A7 */
@@ -127,6 +135,7 @@
 .endm
 
 .macro RDUSP
+<<<<<<< HEAD
 	/*move	%usp,%a2*/
 	.word	0x4e6a
 .endm
@@ -134,6 +143,15 @@
 .macro WRUSP
 	/*move	%a0,%usp*/
 	.word	0x4e60
+=======
+	/*move	%usp,%a3*/
+	.word	0x4e6b
+.endm
+
+.macro WRUSP
+	/*move	%a3,%usp*/
+	.word	0x4e63
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 .endm
 
 #endif /* !CONFIG_COLDFIRE_SW_A7 */

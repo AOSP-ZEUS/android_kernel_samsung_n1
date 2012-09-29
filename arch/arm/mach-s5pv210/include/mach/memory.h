@@ -13,12 +13,16 @@
 #ifndef __ASM_ARCH_MEMORY_H
 #define __ASM_ARCH_MEMORY_H
 
+<<<<<<< HEAD
 #if defined(CONFIG_MACH_SMDKV210)
 #define PLAT_PHYS_OFFSET		UL(0x20000000)
 #else
 #define PLAT_PHYS_OFFSET		UL(0x30000000)
 #endif
 
+=======
+#define PLAT_PHYS_OFFSET		UL(0x20000000)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define CONSISTENT_DMA_SIZE	(SZ_8M + SZ_4M + SZ_2M)
 
 /*
@@ -29,6 +33,9 @@
 
 #define MAX_PHYSMEM_BITS	31
 #define SECTION_SIZE_BITS	28
+<<<<<<< HEAD
 #define NODE_MEM_SIZE_BITS   28
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* __ASM_ARCH_MEMORY_H */

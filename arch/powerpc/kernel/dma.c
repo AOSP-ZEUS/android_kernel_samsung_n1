@@ -161,9 +161,13 @@ int dma_set_mask(struct device *dev, u64 dma_mask)
 
 	if (ppc_md.dma_set_mask)
 		return ppc_md.dma_set_mask(dev, dma_mask);
+<<<<<<< HEAD
 	if (unlikely(dma_ops == NULL))
 		return -EIO;
 	if (dma_ops->set_dma_mask != NULL)
+=======
+	if ((dma_ops != NULL) && (dma_ops->set_dma_mask != NULL))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return dma_ops->set_dma_mask(dev, dma_mask);
 	if (!dev->dma_mask || !dma_supported(dev, dma_mask))
 		return -EIO;

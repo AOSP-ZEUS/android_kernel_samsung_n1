@@ -125,7 +125,11 @@ nouveau_gpuobj_mthd_call2(struct drm_device *dev, int chid,
 	int ret = -EINVAL;
 
 	spin_lock_irqsave(&dev_priv->channels.lock, flags);
+<<<<<<< HEAD
 	if (chid > 0 && chid < dev_priv->engine.fifo.channels)
+=======
+	if (chid >= 0 && chid < dev_priv->engine.fifo.channels)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		chan = dev_priv->channels.ptr[chid];
 	if (chan)
 		ret = nouveau_gpuobj_mthd_call(chan, class, mthd, data);
@@ -191,7 +195,11 @@ nouveau_gpuobj_new(struct drm_device *dev, struct nouveau_channel *chan,
 	list_add_tail(&gpuobj->list, &dev_priv->gpuobj_list);
 	spin_unlock(&dev_priv->ramin_lock);
 
+<<<<<<< HEAD
 	if (chan) {
+=======
+	if (!(flags & NVOBJ_FLAG_VM) && chan) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ramin = drm_mm_search_free(&chan->ramin_heap, size, align, 0);
 		if (ramin)
 			ramin = drm_mm_get_block(ramin, size, align);
@@ -208,7 +216,11 @@ nouveau_gpuobj_new(struct drm_device *dev, struct nouveau_channel *chan,
 		gpuobj->vinst = ramin->start + chan->ramin->vinst;
 		gpuobj->node  = ramin;
 	} else {
+<<<<<<< HEAD
 		ret = instmem->get(gpuobj, size, align);
+=======
+		ret = instmem->get(gpuobj, chan, size, align);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret) {
 			nouveau_gpuobj_ref(NULL, &gpuobj);
 			return ret;
@@ -690,16 +702,69 @@ nouveau_gpuobj_channel_init_pramin(struct nouveau_channel *chan)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int
+nvc0_gpuobj_channel_init(struct nouveau_channel *chan, struct nouveau_vm *vm)
+{
+	struct drm_device *dev = chan->dev;
+	struct nouveau_gpuobj *pgd = NULL;
+	struct nouveau_vm_pgd *vpgd;
+	int ret, i;
+
+	ret = nouveau_gpuobj_new(dev, NULL, 4096, 0x1000, 0, &chan->ramin);
+	if (ret)
+		return ret;
+
+	/* create page directory for this vm if none currently exists,
+	 * will be destroyed automagically when last reference to the
+	 * vm is removed
+	 */
+	if (list_empty(&vm->pgd_list)) {
+		ret = nouveau_gpuobj_new(dev, NULL, 65536, 0x1000, 0, &pgd);
+		if (ret)
+			return ret;
+	}
+	nouveau_vm_ref(vm, &chan->vm, pgd);
+	nouveau_gpuobj_ref(NULL, &pgd);
+
+	/* point channel at vm's page directory */
+	vpgd = list_first_entry(&vm->pgd_list, struct nouveau_vm_pgd, head);
+	nv_wo32(chan->ramin, 0x0200, lower_32_bits(vpgd->obj->vinst));
+	nv_wo32(chan->ramin, 0x0204, upper_32_bits(vpgd->obj->vinst));
+	nv_wo32(chan->ramin, 0x0208, 0xffffffff);
+	nv_wo32(chan->ramin, 0x020c, 0x000000ff);
+
+	/* map display semaphore buffers into channel's vm */
+	for (i = 0; i < 2; i++) {
+		struct nv50_display_crtc *dispc = &nv50_display(dev)->crtc[i];
+
+		ret = nouveau_bo_vma_add(dispc->sem.bo, chan->vm,
+					 &chan->dispc_vma[i]);
+		if (ret)
+			return ret;
+	}
+
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int
 nouveau_gpuobj_channel_init(struct nouveau_channel *chan,
 			    uint32_t vram_h, uint32_t tt_h)
 {
 	struct drm_device *dev = chan->dev;
 	struct drm_nouveau_private *dev_priv = dev->dev_private;
+<<<<<<< HEAD
+=======
+	struct nouveau_fpriv *fpriv = nouveau_fpriv(chan->file_priv);
+	struct nouveau_vm *vm = fpriv ? fpriv->vm : dev_priv->chan_vm;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct nouveau_gpuobj *vram = NULL, *tt = NULL;
 	int ret, i;
 
 	NV_DEBUG(dev, "ch%d vram=0x%08x tt=0x%08x\n", chan->id, vram_h, tt_h);
+<<<<<<< HEAD
 
 	if (dev_priv->card_type == NV_C0) {
 		struct nouveau_vm *vm = dev_priv->chan_vm;
@@ -719,6 +784,10 @@ nouveau_gpuobj_channel_init(struct nouveau_channel *chan,
 		nv_wo32(chan->ramin, 0x020c, 0x000000ff);
 		return 0;
 	}
+=======
+	if (dev_priv->card_type == NV_C0)
+		return nvc0_gpuobj_channel_init(chan, vm);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Allocate a chunk of memory for per-channel object storage */
 	ret = nouveau_gpuobj_channel_init_pramin(chan);
@@ -731,7 +800,11 @@ nouveau_gpuobj_channel_init(struct nouveau_channel *chan,
 	 *  - Allocate per-channel page-directory
 	 *  - Link with shared channel VM
 	 */
+<<<<<<< HEAD
 	if (dev_priv->chan_vm) {
+=======
+	if (vm) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		u32 pgd_offs = (dev_priv->chipset == 0x50) ? 0x1400 : 0x0200;
 		u64 vm_vinst = chan->ramin->vinst + pgd_offs;
 		u32 vm_pinst = chan->ramin->pinst;
@@ -744,7 +817,11 @@ nouveau_gpuobj_channel_init(struct nouveau_channel *chan,
 		if (ret)
 			return ret;
 
+<<<<<<< HEAD
 		nouveau_vm_ref(dev_priv->chan_vm, &chan->vm, chan->vm_pd);
+=======
+		nouveau_vm_ref(vm, &chan->vm, chan->vm_pd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* RAMHT */
@@ -768,7 +845,11 @@ nouveau_gpuobj_channel_init(struct nouveau_channel *chan,
 			struct nouveau_gpuobj *sem = NULL;
 			struct nv50_display_crtc *dispc =
 				&nv50_display(dev)->crtc[i];
+<<<<<<< HEAD
 			u64 offset = dispc->sem.bo->bo.mem.start << PAGE_SHIFT;
+=======
+			u64 offset = dispc->sem.bo->bo.offset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			ret = nouveau_gpuobj_dma_new(chan, 0x3d, offset, 0xfff,
 						     NV_MEM_ACCESS_RW,
@@ -841,6 +922,7 @@ void
 nouveau_gpuobj_channel_takedown(struct nouveau_channel *chan)
 {
 	struct drm_device *dev = chan->dev;
+<<<<<<< HEAD
 
 	NV_DEBUG(dev, "ch%d\n", chan->id);
 
@@ -848,6 +930,24 @@ nouveau_gpuobj_channel_takedown(struct nouveau_channel *chan)
 
 	nouveau_vm_ref(NULL, &chan->vm, chan->vm_pd);
 	nouveau_gpuobj_ref(NULL, &chan->vm_pd);
+=======
+	struct drm_nouveau_private *dev_priv = dev->dev_private;
+	int i;
+
+	NV_DEBUG(dev, "ch%d\n", chan->id);
+
+	if (dev_priv->card_type >= NV_50) {
+		struct nv50_display *disp = nv50_display(dev);
+
+		for (i = 0; i < 2; i++) {
+			struct nv50_display_crtc *dispc = &disp->crtc[i];
+			nouveau_bo_vma_del(dispc->sem.bo, &chan->dispc_vma[i]);
+		}
+
+		nouveau_vm_ref(NULL, &chan->vm, chan->vm_pd);
+		nouveau_gpuobj_ref(NULL, &chan->vm_pd);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (drm_mm_initialized(&chan->ramin_heap))
 		drm_mm_takedown(&chan->ramin_heap);
@@ -909,7 +1009,11 @@ int nouveau_ioctl_grobj_alloc(struct drm_device *dev, void *data,
 	if (init->handle == ~0)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	chan = nouveau_channel_get(dev, file_priv, init->channel);
+=======
+	chan = nouveau_channel_get(file_priv, init->channel);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (IS_ERR(chan))
 		return PTR_ERR(chan);
 
@@ -936,7 +1040,11 @@ int nouveau_ioctl_gpuobj_free(struct drm_device *dev, void *data,
 	struct nouveau_channel *chan;
 	int ret;
 
+<<<<<<< HEAD
 	chan = nouveau_channel_get(dev, file_priv, objfree->channel);
+=======
+	chan = nouveau_channel_get(file_priv, objfree->channel);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (IS_ERR(chan))
 		return PTR_ERR(chan);
 

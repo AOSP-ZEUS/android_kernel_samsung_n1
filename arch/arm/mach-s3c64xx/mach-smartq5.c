@@ -21,7 +21,10 @@
 #include <asm/mach/arch.h>
 
 #include <mach/map.h>
+<<<<<<< HEAD
 #include <mach/regs-fb.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/regs-gpio.h>
 #include <mach/s3c6410.h>
 
@@ -29,6 +32,10 @@
 #include <plat/devs.h>
 #include <plat/fb.h>
 #include <plat/gpio-cfg.h>
+<<<<<<< HEAD
+=======
+#include <plat/regs-fb-v4.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "mach-smartq.h"
 

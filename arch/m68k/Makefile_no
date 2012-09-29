@@ -13,7 +13,11 @@ platform-$(CONFIG_M68EZ328)	:= 68EZ328
 platform-$(CONFIG_M68VZ328)	:= 68VZ328
 platform-$(CONFIG_M68360)	:= 68360
 platform-$(CONFIG_M5206)	:= 5206
+<<<<<<< HEAD
 platform-$(CONFIG_M5206e)	:= 5206e
+=======
+platform-$(CONFIG_M5206e)	:= 5206
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 platform-$(CONFIG_M520x)	:= 520x
 platform-$(CONFIG_M523x)	:= 523x
 platform-$(CONFIG_M5249)	:= 5249

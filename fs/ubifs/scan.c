@@ -148,7 +148,11 @@ struct ubifs_scan_leb *ubifs_start_scan(const struct ubifs_info *c, int lnum,
 	INIT_LIST_HEAD(&sleb->nodes);
 	sleb->buf = sbuf;
 
+<<<<<<< HEAD
 	err = ubi_read(c->ubi, lnum, sbuf + offs, offs, c->leb_size - offs);
+=======
+	err = ubifs_leb_read(c, lnum, sbuf + offs, offs, c->leb_size - offs, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err && err != -EBADMSG) {
 		ubifs_err("cannot read %d bytes from LEB %d:%d,"
 			  " error %d", c->leb_size - offs, lnum, offs, err);
@@ -240,7 +244,11 @@ void ubifs_scanned_corruption(const struct ubifs_info *c, int lnum, int offs,
 	int len;
 
 	ubifs_err("corruption at LEB %d:%d", lnum, offs);
+<<<<<<< HEAD
 	if (dbg_failure_mode)
+=======
+	if (dbg_is_tst_rcvry(c))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	len = c->leb_size - offs;
 	if (len > 8192)

@@ -28,7 +28,10 @@
 #include <linux/init.h>
 #include <asm/assembler.h>
 #include <asm/hwcap.h>
+<<<<<<< HEAD
 #include <mach/hardware.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/pgtable.h>
 #include <asm/pgtable-hwdef.h>
 #include <asm/page.h>
@@ -335,6 +338,7 @@ ENTRY(xsc3_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(xsc3_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(xsc3_cache_fns)
 	.long	xsc3_flush_icache_all
 	.long	xsc3_flush_kern_cache_all
@@ -346,6 +350,10 @@ ENTRY(xsc3_cache_fns)
 	.long	xsc3_dma_map_area
 	.long	xsc3_dma_unmap_area
 	.long	xsc3_dma_flush_range
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions xsc3
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 ENTRY(cpu_xsc3_dcache_clean_area)
 1:	mcr	p15, 0, r0, c7, c10, 1		@ clean L1 D line
@@ -385,7 +393,11 @@ cpu_xsc3_mt_table:
 	.long	PTE_EXT_TEX(5) | PTE_CACHEABLE			@ L_PTE_MT_WRITETHROUGH
 	.long	PTE_CACHEABLE | PTE_BUFFERABLE			@ L_PTE_MT_WRITEBACK
 	.long	PTE_EXT_TEX(1) | PTE_BUFFERABLE			@ L_PTE_MT_DEV_SHARED
+<<<<<<< HEAD
 	.long	0x00						@ unused
+=======
+	.long	PTE_EXT_TEX(4) | PTE_BUFFERABLE			@ L_PTE_MT_INNER_WB (not present?)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.long	0x00						@ L_PTE_MT_MINICACHE (not present)
 	.long	PTE_EXT_TEX(5) | PTE_CACHEABLE | PTE_BUFFERABLE	@ L_PTE_MT_WRITEALLOC (not present?)
 	.long	0x00						@ unused
@@ -416,7 +428,11 @@ ENTRY(cpu_xsc3_set_pte_ext)
 	.align
 
 .globl	cpu_xsc3_suspend_size
+<<<<<<< HEAD
 .equ	cpu_xsc3_suspend_size, 4 * 8
+=======
+.equ	cpu_xsc3_suspend_size, 4 * 7
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_PM_SLEEP
 ENTRY(cpu_xsc3_do_suspend)
 	stmfd	sp!, {r4 - r10, lr}
@@ -428,12 +444,20 @@ ENTRY(cpu_xsc3_do_suspend)
 	mrc	p15, 0, r9, c1, c0, 1	@ auxiliary control reg
 	mrc 	p15, 0, r10, c1, c0, 0	@ control reg
 	bic	r4, r4, #2		@ clear frequency change bit
+<<<<<<< HEAD
 	stmia	r0, {r1, r4 - r10}	@ store v:p offset + cp regs
+=======
+	stmia	r0, {r4 - r10}		@ store cp regs
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ldmia	sp!, {r4 - r10, pc}
 ENDPROC(cpu_xsc3_do_suspend)
 
 ENTRY(cpu_xsc3_do_resume)
+<<<<<<< HEAD
 	ldmia	r0, {r1, r4 - r10}	@ load v:p offset + cp regs
+=======
+	ldmia	r0, {r4 - r10}		@ load cp regs
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mov	ip, #0
 	mcr	p15, 0, ip, c7, c7, 0	@ invalidate I & D caches, BTB
 	mcr	p15, 0, ip, c7, c10, 4	@ drain write (&fill) buffer
@@ -454,9 +478,12 @@ ENTRY(cpu_xsc3_do_resume)
 	ldr	r3, =0x542e		@ section flags
 	b	cpu_resume_mmu
 ENDPROC(cpu_xsc3_do_resume)
+<<<<<<< HEAD
 #else
 #define cpu_xsc3_do_suspend	0
 #define cpu_xsc3_do_resume	0
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 	__CPUINIT
@@ -503,6 +530,7 @@ xsc3_crval:
 
 	__INITDATA
 
+<<<<<<< HEAD
 /*
  * Purpose : Function pointers used to access above functions - all calls
  *	     come through these
@@ -540,15 +568,33 @@ cpu_elf_name:
 cpu_xsc3_name:
 	.asciz	"XScale-V3 based processor"
 	.size	cpu_xsc3_name, . - cpu_xsc3_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions xsc3, dabort=v5t_early_abort, pabort=legacy_pabort, suspend=1
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv5te"
+	string	cpu_elf_name, "v5"
+	string	cpu_xsc3_name, "XScale-V3 based processor"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 
 	.section ".proc.info.init", #alloc, #execinstr
 
+<<<<<<< HEAD
 	.type	__xsc3_proc_info,#object
 __xsc3_proc_info:
 	.long	0x69056000
 	.long	0xffffe000
+=======
+.macro xsc3_proc_info name:req, cpu_val:req, cpu_mask:req
+	.type	__\name\()_proc_info,#object
+__\name\()_proc_info:
+	.long	\cpu_val
+	.long	\cpu_mask
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.long	PMD_TYPE_SECT | \
 		PMD_SECT_BUFFERABLE | \
 		PMD_SECT_CACHEABLE | \
@@ -566,6 +612,7 @@ __xsc3_proc_info:
 	.long	v4wbi_tlb_fns
 	.long	xsc3_mc_user_fns
 	.long	xsc3_cache_fns
+<<<<<<< HEAD
 	.size	__xsc3_proc_info, . - __xsc3_proc_info
 
 /* Note: PXA935 changed its implementor ID from Intel to Marvell */
@@ -592,3 +639,12 @@ __xsc3_pxa935_proc_info:
 	.long	xsc3_mc_user_fns
 	.long	xsc3_cache_fns
 	.size	__xsc3_pxa935_proc_info, . - __xsc3_pxa935_proc_info
+=======
+	.size	__\name\()_proc_info, . - __\name\()_proc_info
+.endm
+
+	xsc3_proc_info xsc3, 0x69056000, 0xffffe000
+
+/* Note: PXA935 changed its implementor ID from Intel to Marvell */
+	xsc3_proc_info xsc3_pxa935, 0x56056000, 0xffffe000
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

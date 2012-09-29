@@ -68,9 +68,17 @@ page that contains parts of supervisor visible register state. The guest can
 map this shared page using the KVM hypercall KVM_HC_PPC_MAP_MAGIC_PAGE.
 
 With this hypercall issued the guest always gets the magic page mapped at the
+<<<<<<< HEAD
 desired location in effective and physical address space. For now, we always
 map the page to -4096. This way we can access it using absolute load and store
 functions. The following instruction reads the first field of the magic page:
+=======
+desired location. The first parameter indicates the effective address when the
+MMU is enabled. The second parameter indicates the address in real mode, if
+applicable to the target. For now, we always map the page to -4096. This way we
+can access it using absolute load and store functions. The following
+instruction reads the first field of the magic page:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ld	rX, -4096(0)
 

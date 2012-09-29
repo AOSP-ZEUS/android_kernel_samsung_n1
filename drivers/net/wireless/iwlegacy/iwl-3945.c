@@ -408,7 +408,10 @@ void iwl3945_hw_rx_statistics(struct iwl_priv *priv,
 #ifdef CONFIG_IWLWIFI_LEGACY_DEBUGFS
 	iwl3945_accumulative_statistics(priv, (__le32 *)&pkt->u.raw);
 #endif
+<<<<<<< HEAD
 	iwl_legacy_recover_from_statistics(priv, pkt);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	memcpy(&priv->_3945.statistics, pkt->u.raw, sizeof(priv->_3945.statistics));
 }
@@ -1872,12 +1875,20 @@ static void iwl3945_bg_reg_txpower_periodic(struct work_struct *work)
 	struct iwl_priv *priv = container_of(work, struct iwl_priv,
 					     _3945.thermal_periodic.work);
 
+<<<<<<< HEAD
 	mutex_lock(&priv->mutex);
 	if (test_bit(STATUS_EXIT_PENDING, &priv->status) || priv->txq == NULL)
 		goto out;
 
 	iwl3945_reg_txpower_periodic(priv);
 out:
+=======
+	if (test_bit(STATUS_EXIT_PENDING, &priv->status))
+		return;
+
+	mutex_lock(&priv->mutex);
+	iwl3945_reg_txpower_periodic(priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mutex_unlock(&priv->mutex);
 }
 
@@ -2645,7 +2656,10 @@ static struct iwl_lib_ops iwl3945_lib = {
 	.txq_free_tfd = iwl3945_hw_txq_free_tfd,
 	.txq_init = iwl3945_hw_tx_queue_init,
 	.load_ucode = iwl3945_load_bsm,
+<<<<<<< HEAD
 	.dump_nic_event_log = iwl3945_dump_nic_event_log,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.dump_nic_error_log = iwl3945_dump_nic_error_log,
 	.apm_ops = {
 		.init = iwl3945_apm_init,
@@ -2703,9 +2717,13 @@ static struct iwl_base_params iwl3945_base_params = {
 	.set_l0s = false,
 	.use_bsm = true,
 	.led_compensation = 64,
+<<<<<<< HEAD
 	.plcp_delta_threshold = IWL_MAX_PLCP_ERR_LONG_THRESHOLD_DEF,
 	.wd_timeout = IWL_DEF_WD_TIMEOUT,
 	.max_event_log_size = 512,
+=======
+	.wd_timeout = IWL_DEF_WD_TIMEOUT,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct iwl_cfg iwl3945_bg_cfg = {

@@ -24,7 +24,13 @@
 
 #ifndef TI_WILINK_ST_H
 #define TI_WILINK_ST_H
+<<<<<<< HEAD
 
+=======
+#include <linux/wakelock.h>
+
+#include <linux/serial_core.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * enum proto-type - The protocol on WiLink chips which share a
  *	common physical interface like UART.
@@ -156,6 +162,10 @@ struct st_data_s {
 	unsigned long ll_state;
 	void *kim_data;
 	struct tty_struct *tty;
+<<<<<<< HEAD
+=======
+	struct wake_lock st_wk_lock;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*
@@ -371,6 +381,11 @@ struct hci_command {
 #define LL_WAKE_UP_IND	0x32
 #define LL_WAKE_UP_ACK	0x33
 
+<<<<<<< HEAD
+=======
+#define HCILL_SLEEP_MODE_OPCODE 0xFD0C
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* initialize and de-init ST LL */
 long st_ll_init(struct st_data_s *);
 long st_ll_deinit(struct st_data_s *);
@@ -386,9 +401,23 @@ void st_ll_disable(struct st_data_s *);
  * various funcs used by ST core to set/get the various PM states
  * of the chip.
  */
+<<<<<<< HEAD
 unsigned long st_ll_getstate(struct st_data_s *);
 unsigned long st_ll_sleep_state(struct st_data_s *, unsigned char);
 void st_ll_wakeup(struct st_data_s *);
+=======
+
+#ifdef CONFIG_TI_ST
+unsigned long st_ll_getstate(struct st_data_s *);
+#else
+static inline unsigned long st_ll_getstate(struct st_data_s *ll){ return 0; }
+#endif
+unsigned long st_ll_sleep_state(struct st_data_s *, unsigned char);
+void st_ll_wakeup(struct st_data_s *);
+int bluesleep_start(struct uart_port *);
+void bluesleep_stop(void);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * header information used by st_core.c for FM and GPS
@@ -410,7 +439,32 @@ struct gps_event_hdr {
 	u16 plen;
 } __attribute__ ((packed));
 
+<<<<<<< HEAD
 /* platform data */
+=======
+/**
+ * struct ti_st_plat_data - platform data shared between ST driver and
+ *	platform specific board file which adds the ST device.
+ * @nshutdown_gpio: Host's GPIO line to which chip's BT_EN is connected.
+ * @dev_name: The UART/TTY name to which chip is interfaced. (eg: /dev/ttyS1)
+ * @flow_cntrl: Should always be 1, since UART's CTS/RTS is used for PM
+ *	purposes.
+ * @baud_rate: The baud rate supported by the Host UART controller, this will
+ *	be shared across with the chip via a HCI VS command from User-Space Init
+ *	Mgr application.
+ * @suspend:
+ * @resume: legacy PM routines hooked to platform specific board file, so as
+ *	to take chip-host interface specific action.
+ * @chip_enable:
+ * @chip_disable: Platform/Interface specific mux mode setting, GPIO
+ *	configuring, Host side PM disabling etc.. can be done here.
+ * @chip_asleep:
+ * @chip_awake: Chip specific deep sleep states is communicated to Host
+ *	specific board-xx.c to take actions such as cut UART clocks when chip
+ *	asleep or run host faster when chip awake etc..
+ *
+ */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct ti_st_plat_data {
 	long nshutdown_gpio;
 	unsigned char dev_name[UART_DEV_NAME_LEN]; /* uart name */

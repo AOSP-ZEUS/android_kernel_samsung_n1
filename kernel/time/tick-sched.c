@@ -484,9 +484,15 @@ static void tick_nohz_restart(struct tick_sched *ts, ktime_t now)
 				hrtimer_get_expires(&ts->sched_timer), 0))
 				break;
 		}
+<<<<<<< HEAD
 		/* Reread time and update jiffies */
 		now = ktime_get();
 		tick_do_update_jiffies64(now);
+=======
+		/* Update jiffies and reread time */
+		tick_do_update_jiffies64(now);
+		now = ktime_get();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 

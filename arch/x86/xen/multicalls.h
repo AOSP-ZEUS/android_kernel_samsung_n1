@@ -1,6 +1,11 @@
 #ifndef _XEN_MULTICALLS_H
 #define _XEN_MULTICALLS_H
 
+<<<<<<< HEAD
+=======
+#include <trace/events/xen.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "xen-ops.h"
 
 /* Multicalls */
@@ -20,8 +25,15 @@ DECLARE_PER_CPU(unsigned long, xen_mc_irq_flags);
 static inline void xen_mc_batch(void)
 {
 	unsigned long flags;
+<<<<<<< HEAD
 	/* need to disable interrupts until this entry is complete */
 	local_irq_save(flags);
+=======
+
+	/* need to disable interrupts until this entry is complete */
+	local_irq_save(flags);
+	trace_xen_mc_batch(paravirt_get_lazy_mode());
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__this_cpu_write(xen_mc_irq_flags, flags);
 }
 
@@ -37,6 +49,11 @@ void xen_mc_flush(void);
 /* Issue a multicall if we're not in a lazy mode */
 static inline void xen_mc_issue(unsigned mode)
 {
+<<<<<<< HEAD
+=======
+	trace_xen_mc_issue(mode);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if ((paravirt_get_lazy_mode() & mode) == 0)
 		xen_mc_flush();
 

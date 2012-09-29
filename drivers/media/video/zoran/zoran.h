@@ -41,10 +41,13 @@ struct zoran_sync {
 };
 
 
+<<<<<<< HEAD
 #define MAJOR_VERSION 0		/* driver major version */
 #define MINOR_VERSION 10	/* driver minor version */
 #define RELEASE_VERSION 0	/* release version */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define ZORAN_NAME    "ZORAN"	/* name of the device */
 
 #define ZR_DEVNAME(zr) ((zr)->name)

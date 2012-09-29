@@ -53,6 +53,16 @@ int sst_download_fw(void)
 	if (sst_drv_ctx->sst_state != SST_UN_INIT)
 		return -EPERM;
 
+<<<<<<< HEAD
+=======
+	/* Reload firmware is not needed for MRST */
+	if ( (sst_drv_ctx->pci_id == SST_MRST_PCI_ID) && sst_drv_ctx->fw_downloaded) {
+		pr_debug("FW already downloaded, skip for MRST platform\n");
+		sst_drv_ctx->sst_state = SST_FW_RUNNING;
+		return 0;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	snprintf(name, sizeof(name), "%s%04x%s", "fw_sst_",
 					sst_drv_ctx->pci_id, ".bin");
 
@@ -71,6 +81,12 @@ int sst_download_fw(void)
 	retval = sst_wait_timeout(sst_drv_ctx, &sst_drv_ctx->alloc_block[0]);
 	if (retval)
 		pr_err("fw download failed %d\n" , retval);
+<<<<<<< HEAD
+=======
+	else
+		sst_drv_ctx->fw_downloaded = 1;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 end_restore:
 	release_firmware(fw_sst);
 	sst_drv_ctx->alloc_block[0].sst_id = BLOCK_UNINIT;

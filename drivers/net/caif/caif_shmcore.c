@@ -134,7 +134,11 @@ int caif_shmdrv_rx_cb(u32 mbx_msg, void *priv)
 	u32 avail_emptybuff = 0;
 	unsigned long flags = 0;
 
+<<<<<<< HEAD
 	pshm_drv = (struct shmdrv_layer *)priv;
+=======
+	pshm_drv = priv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Check for received buffers. */
 	if (mbx_msg & SHM_FULL_MASK) {

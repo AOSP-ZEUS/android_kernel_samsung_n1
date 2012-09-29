@@ -101,5 +101,11 @@ MACHINE_START(GATEWAY7001, "Gateway 7001 AP")
 	.timer		= &ixp4xx_timer,
 	.boot_params	= 0x0100,
 	.init_machine	= gateway7001_init,
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_PCI)
+	.dma_zone_size	= SZ_64M,
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END
 #endif

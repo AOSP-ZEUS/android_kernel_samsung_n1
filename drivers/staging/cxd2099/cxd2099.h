@@ -1,7 +1,11 @@
 /*
  * cxd2099.h: Driver for the CXD2099AR Common Interface Controller
  *
+<<<<<<< HEAD
  * Copyright (C) 2010 DigitalDevices UG
+=======
+ * Copyright (C) 2010-2011 Digital Devices GmbH
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  *
  * This program is free software; you can redistribute it and/or
@@ -27,11 +31,29 @@
 
 #include <dvb_ca_en50221.h>
 
+<<<<<<< HEAD
 #if defined(CONFIG_DVB_CXD2099) || \
         (defined(CONFIG_DVB_CXD2099_MODULE) && defined(MODULE))
 struct dvb_ca_en50221 *cxd2099_attach(u8 adr, void *priv, struct i2c_adapter *i2c);
 #else
 static inline struct dvb_ca_en50221 *cxd2099_attach(u8 adr, void *priv, struct i2c_adapter *i2c)
+=======
+struct cxd2099_cfg {
+	u32 bitrate;
+	u8  adr;
+	u8  polarity:1;
+	u8  clock_mode:1;
+};
+
+#if defined(CONFIG_DVB_CXD2099) || \
+	(defined(CONFIG_DVB_CXD2099_MODULE) && defined(MODULE))
+struct dvb_ca_en50221 *cxd2099_attach(struct cxd2099_cfg *cfg,
+				      void *priv, struct i2c_adapter *i2c);
+#else
+
+static inline struct dvb_ca_en50221 *cxd2099_attach(struct cxd2099_cfg *cfg,
+					void *priv, struct i2c_adapter *i2c)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	printk(KERN_WARNING "%s: driver disabled by Kconfig\n", __func__);
 	return NULL;

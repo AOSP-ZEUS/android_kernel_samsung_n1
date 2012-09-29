@@ -103,6 +103,7 @@ static int balloon3_pcmcia_configure_socket(struct soc_pcmcia_socket *skt,
 	return 0;
 }
 
+<<<<<<< HEAD
 static void balloon3_pcmcia_socket_init(struct soc_pcmcia_socket *skt)
 {
 }
@@ -111,14 +112,19 @@ static void balloon3_pcmcia_socket_suspend(struct soc_pcmcia_socket *skt)
 {
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct pcmcia_low_level balloon3_pcmcia_ops = {
 	.owner			= THIS_MODULE,
 	.hw_init		= balloon3_pcmcia_hw_init,
 	.hw_shutdown		= balloon3_pcmcia_hw_shutdown,
 	.socket_state		= balloon3_pcmcia_socket_state,
 	.configure_socket	= balloon3_pcmcia_configure_socket,
+<<<<<<< HEAD
 	.socket_init		= balloon3_pcmcia_socket_init,
 	.socket_suspend		= balloon3_pcmcia_socket_suspend,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.first			= 0,
 	.nr			= 1,
 };

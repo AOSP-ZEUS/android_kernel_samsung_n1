@@ -88,6 +88,10 @@ void br_stp_enable_port(struct net_bridge_port *p)
 	br_init_port(p);
 	br_port_state_selection(p->br);
 	br_log_state(p);
+<<<<<<< HEAD
+=======
+	br_ifinfo_notify(RTM_NEWLINK, p);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* called under bridge lock */
@@ -104,6 +108,11 @@ void br_stp_disable_port(struct net_bridge_port *p)
 	p->topology_change_ack = 0;
 	p->config_pending = 0;
 
+<<<<<<< HEAD
+=======
+	br_ifinfo_notify(RTM_NEWLINK, p);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	del_timer(&p->message_age_timer);
 	del_timer(&p->forward_delay_timer);
 	del_timer(&p->hold_timer);

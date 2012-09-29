@@ -33,6 +33,10 @@ enum ion_heap_type {
 	ION_HEAP_TYPE_SYSTEM,
 	ION_HEAP_TYPE_SYSTEM_CONTIG,
 	ION_HEAP_TYPE_CARVEOUT,
+<<<<<<< HEAD
+=======
+	ION_HEAP_TYPE_IOMMU,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ION_HEAP_TYPE_CUSTOM, /* must be last so device specific heaps always
 				 are at the end of this enum */
 	ION_NUM_HEAPS,
@@ -63,6 +67,10 @@ struct ion_buffer;
  * @name:	used for debug purposes
  * @base:	base address of heap in physical memory if applicable
  * @size:	size of the heap in bytes if applicable
+<<<<<<< HEAD
+=======
+ * @priv:	heap specific data
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Provided by the board file.
  */
@@ -72,6 +80,10 @@ struct ion_platform_heap {
 	const char *name;
 	ion_phys_addr_t base;
 	size_t size;
+<<<<<<< HEAD
+=======
+	void *priv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /**

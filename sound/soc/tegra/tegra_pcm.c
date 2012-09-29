@@ -2,7 +2,11 @@
  * tegra_pcm.c - Tegra PCM driver
  *
  * Author: Stephen Warren <swarren@nvidia.com>
+<<<<<<< HEAD
  * Copyright (C) 2010 - NVIDIA, Inc.
+=======
+ * Copyright (C) 2010-2012 - NVIDIA, Inc.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Based on code copyright/by:
  *
@@ -29,6 +33,10 @@
  *
  */
 
+<<<<<<< HEAD
+=======
+#include <asm/mach-types.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/dma-mapping.h>
 #include <linux/slab.h>
@@ -48,9 +56,15 @@ static const struct snd_pcm_hardware tegra_pcm_hardware = {
 				  SNDRV_PCM_INFO_RESUME |
 				  SNDRV_PCM_INFO_INTERLEAVED,
 	.formats		= SNDRV_PCM_FMTBIT_S16_LE,
+<<<<<<< HEAD
 	.channels_min		= 2,
 	.channels_max		= 2,
 	.period_bytes_min	= 1024,
+=======
+	.channels_min		= 1,
+	.channels_max		= 2,
+	.period_bytes_min	= 128,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.period_bytes_max	= PAGE_SIZE,
 	.periods_min		= 2,
 	.periods_max		= 8,
@@ -66,7 +80,12 @@ static void tegra_pcm_queue_dma(struct tegra_runtime_data *prtd)
 	unsigned long addr;
 
 	dma_req = &prtd->dma_req[prtd->dma_req_idx];
+<<<<<<< HEAD
 	prtd->dma_req_idx = 1 - prtd->dma_req_idx;
+=======
+	if (++prtd->dma_req_idx >= prtd->dma_req_count)
+		prtd->dma_req_idx -= prtd->dma_req_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	addr = buf->addr + prtd->dma_pos;
 	prtd->dma_pos += dma_req->size;
@@ -130,13 +149,23 @@ static void setup_dma_rx_request(struct tegra_dma_req *req,
 	req->req_sel = dmap->req_sel;
 }
 
+<<<<<<< HEAD
 static int tegra_pcm_open(struct snd_pcm_substream *substream)
+=======
+int tegra_pcm_allocate(struct snd_pcm_substream *substream,
+					int dma_mode,
+					const struct snd_pcm_hardware *pcm_hardware)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct tegra_runtime_data *prtd;
 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
 	struct tegra_pcm_dma_params * dmap;
 	int ret = 0;
+<<<<<<< HEAD
+=======
+	int i = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	prtd = kzalloc(sizeof(struct tegra_runtime_data), GFP_KERNEL);
 	if (prtd == NULL)
@@ -147,6 +176,7 @@ static int tegra_pcm_open(struct snd_pcm_substream *substream)
 
 	spin_lock_init(&prtd->lock);
 
+<<<<<<< HEAD
 	if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
 		dmap = snd_soc_dai_get_dma_data(rtd->cpu_dai, substream);
 		setup_dma_tx_request(&prtd->dma_req[0], dmap);
@@ -168,6 +198,32 @@ static int tegra_pcm_open(struct snd_pcm_substream *substream)
 
 	/* Set HW params now that initialization is complete */
 	snd_soc_set_runtime_hwparams(substream, &tegra_pcm_hardware);
+=======
+	dmap = snd_soc_dai_get_dma_data(rtd->cpu_dai, substream);
+	prtd->dma_req_count = MAX_DMA_REQ_COUNT;
+
+	if (dmap) {
+		for (i = 0; i < prtd->dma_req_count; i++)
+			prtd->dma_req[i].dev = prtd;
+
+		prtd->dma_chan = tegra_dma_allocate_channel(
+					dma_mode,
+					"pcm");
+		if (prtd->dma_chan == NULL) {
+			ret = -ENOMEM;
+			goto err;
+		}
+	}
+
+	/* Set HW params now that initialization is complete */
+	snd_soc_set_runtime_hwparams(substream, pcm_hardware);
+
+	/* Ensure period size is multiple of 8 */
+	ret = snd_pcm_hw_constraint_step(runtime, 0,
+		SNDRV_PCM_HW_PARAM_PERIOD_BYTES, 0x8);
+	if (ret < 0)
+		goto err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Ensure that buffer size is a multiple of period size */
 	ret = snd_pcm_hw_constraint_integer(runtime,
@@ -187,44 +243,108 @@ err:
 	return ret;
 }
 
+<<<<<<< HEAD
 static int tegra_pcm_close(struct snd_pcm_substream *substream)
+=======
+static int tegra_pcm_open(struct snd_pcm_substream *substream)
+{
+	return tegra_pcm_allocate(substream,
+					TEGRA_DMA_MODE_CONTINUOUS_SINGLE,
+					&tegra_pcm_hardware);
+
+}
+
+int tegra_pcm_close(struct snd_pcm_substream *substream)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct tegra_runtime_data *prtd = runtime->private_data;
 
+<<<<<<< HEAD
 	tegra_dma_free_channel(prtd->dma_chan);
+=======
+	if (prtd->dma_chan)
+		tegra_dma_free_channel(prtd->dma_chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	kfree(prtd);
 
 	return 0;
 }
 
+<<<<<<< HEAD
 static int tegra_pcm_hw_params(struct snd_pcm_substream *substream,
+=======
+int tegra_pcm_hw_params(struct snd_pcm_substream *substream,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				struct snd_pcm_hw_params *params)
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct tegra_runtime_data *prtd = runtime->private_data;
+<<<<<<< HEAD
 
 	snd_pcm_set_runtime_buffer(substream, &substream->dma_buffer);
 
 	prtd->dma_req[0].size = params_period_bytes(params);
 	prtd->dma_req[1].size = prtd->dma_req[0].size;
+=======
+	struct snd_soc_pcm_runtime *rtd = substream->private_data;
+	struct tegra_pcm_dma_params * dmap;
+	int i;
+
+	snd_pcm_set_runtime_buffer(substream, &substream->dma_buffer);
+
+	/* Limit dma_req_count to period count */
+	if (prtd->dma_req_count > params_periods(params))
+		prtd->dma_req_count = params_periods(params);
+	dmap = snd_soc_dai_get_dma_data(rtd->cpu_dai, substream);
+	if (dmap) {
+		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK) {
+			for (i = 0; i < prtd->dma_req_count; i++)
+				setup_dma_tx_request(&prtd->dma_req[i], dmap);
+		} else {
+			for (i = 0; i < prtd->dma_req_count; i++)
+				setup_dma_rx_request(&prtd->dma_req[i], dmap);
+		}
+	}
+	for (i = 0; i < prtd->dma_req_count; i++)
+		prtd->dma_req[i].size = params_period_bytes(params);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
 
+<<<<<<< HEAD
 static int tegra_pcm_hw_free(struct snd_pcm_substream *substream)
+=======
+int tegra_pcm_hw_free(struct snd_pcm_substream *substream)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	snd_pcm_set_runtime_buffer(substream, NULL);
 
 	return 0;
 }
 
+<<<<<<< HEAD
 static int tegra_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
 	struct tegra_runtime_data *prtd = runtime->private_data;
 	unsigned long flags;
+=======
+int tegra_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
+{
+	struct snd_pcm_runtime *runtime = substream->runtime;
+	struct tegra_runtime_data *prtd = runtime->private_data;
+	struct snd_soc_pcm_runtime *rtd = substream->private_data;
+	struct tegra_pcm_dma_params * dmap;
+	unsigned long flags;
+	int i;
+
+	dmap = snd_soc_dai_get_dma_data(rtd->cpu_dai, substream);
+	if (!dmap)
+		return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (cmd) {
 	case SNDRV_PCM_TRIGGER_START:
@@ -238,8 +358,13 @@ static int tegra_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
 		spin_lock_irqsave(&prtd->lock, flags);
 		prtd->running = 1;
 		spin_unlock_irqrestore(&prtd->lock, flags);
+<<<<<<< HEAD
 		tegra_pcm_queue_dma(prtd);
 		tegra_pcm_queue_dma(prtd);
+=======
+		for (i = 0; i < prtd->dma_req_count; i++)
+			tegra_pcm_queue_dma(prtd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case SNDRV_PCM_TRIGGER_STOP:
 	case SNDRV_PCM_TRIGGER_SUSPEND:
@@ -247,8 +372,17 @@ static int tegra_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
 		spin_lock_irqsave(&prtd->lock, flags);
 		prtd->running = 0;
 		spin_unlock_irqrestore(&prtd->lock, flags);
+<<<<<<< HEAD
 		tegra_dma_dequeue_req(prtd->dma_chan, &prtd->dma_req[0]);
 		tegra_dma_dequeue_req(prtd->dma_chan, &prtd->dma_req[1]);
+=======
+		tegra_dma_cancel(prtd->dma_chan);
+		for (i = 0; i < prtd->dma_req_count; i++) {
+			if (prtd->dma_req[i].status ==
+				-TEGRA_DMA_REQ_ERROR_ABORTED)
+				prtd->dma_req[i].complete(&prtd->dma_req[i]);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		return -EINVAL;
@@ -257,6 +391,7 @@ static int tegra_pcm_trigger(struct snd_pcm_substream *substream, int cmd)
 	return 0;
 }
 
+<<<<<<< HEAD
 static snd_pcm_uframes_t tegra_pcm_pointer(struct snd_pcm_substream *substream)
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
@@ -267,6 +402,22 @@ static snd_pcm_uframes_t tegra_pcm_pointer(struct snd_pcm_substream *substream)
 
 
 static int tegra_pcm_mmap(struct snd_pcm_substream *substream,
+=======
+snd_pcm_uframes_t tegra_pcm_pointer(struct snd_pcm_substream *substream)
+{
+	struct snd_pcm_runtime *runtime = substream->runtime;
+	struct tegra_runtime_data *prtd = runtime->private_data;
+	int dma_transfer_count;
+
+	dma_transfer_count = tegra_dma_get_transfer_count(prtd->dma_chan,
+					&prtd->dma_req[prtd->dma_req_idx]);
+
+	return prtd->period_index * runtime->period_size +
+		bytes_to_frames(runtime, dma_transfer_count);
+}
+
+int tegra_pcm_mmap(struct snd_pcm_substream *substream,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				struct vm_area_struct *vma)
 {
 	struct snd_pcm_runtime *runtime = substream->runtime;
@@ -288,11 +439,19 @@ static struct snd_pcm_ops tegra_pcm_ops = {
 	.mmap		= tegra_pcm_mmap,
 };
 
+<<<<<<< HEAD
 static int tegra_pcm_preallocate_dma_buffer(struct snd_pcm *pcm, int stream)
 {
 	struct snd_pcm_substream *substream = pcm->streams[stream].substream;
 	struct snd_dma_buffer *buf = &substream->dma_buffer;
 	size_t size = tegra_pcm_hardware.buffer_bytes_max;
+=======
+static int tegra_pcm_preallocate_dma_buffer(struct snd_pcm *pcm,
+				int stream , size_t size)
+{
+	struct snd_pcm_substream *substream = pcm->streams[stream].substream;
+	struct snd_dma_buffer *buf = &substream->dma_buffer;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	buf->area = dma_alloc_writecombine(pcm->card->dev, size,
 						&buf->addr, GFP_KERNEL);
@@ -307,7 +466,11 @@ static int tegra_pcm_preallocate_dma_buffer(struct snd_pcm *pcm, int stream)
 	return 0;
 }
 
+<<<<<<< HEAD
 static void tegra_pcm_deallocate_dma_buffer(struct snd_pcm *pcm, int stream)
+=======
+void tegra_pcm_deallocate_dma_buffer(struct snd_pcm *pcm, int stream)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct snd_pcm_substream *substream;
 	struct snd_dma_buffer *buf;
@@ -327,9 +490,17 @@ static void tegra_pcm_deallocate_dma_buffer(struct snd_pcm *pcm, int stream)
 
 static u64 tegra_dma_mask = DMA_BIT_MASK(32);
 
+<<<<<<< HEAD
 static int tegra_pcm_new(struct snd_card *card,
 				struct snd_soc_dai *dai, struct snd_pcm *pcm)
 {
+=======
+int tegra_pcm_dma_allocate(struct snd_soc_pcm_runtime *rtd, size_t size)
+{
+	struct snd_card *card = rtd->card->snd_card;
+	struct snd_soc_dai *dai = rtd->cpu_dai;
+	struct snd_pcm *pcm = rtd->pcm;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret = 0;
 
 	if (!card->dev->dma_mask)
@@ -339,14 +510,24 @@ static int tegra_pcm_new(struct snd_card *card,
 
 	if (dai->driver->playback.channels_min) {
 		ret = tegra_pcm_preallocate_dma_buffer(pcm,
+<<<<<<< HEAD
 						SNDRV_PCM_STREAM_PLAYBACK);
+=======
+						SNDRV_PCM_STREAM_PLAYBACK,
+						size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret)
 			goto err;
 	}
 
 	if (dai->driver->capture.channels_min) {
 		ret = tegra_pcm_preallocate_dma_buffer(pcm,
+<<<<<<< HEAD
 						SNDRV_PCM_STREAM_CAPTURE);
+=======
+						SNDRV_PCM_STREAM_CAPTURE,
+						size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret)
 			goto err_free_play;
 	}
@@ -359,16 +540,41 @@ err:
 	return ret;
 }
 
+<<<<<<< HEAD
 static void tegra_pcm_free(struct snd_pcm *pcm)
+=======
+int tegra_pcm_new(struct snd_soc_pcm_runtime *rtd)
+{
+	return tegra_pcm_dma_allocate(rtd ,
+					tegra_pcm_hardware.buffer_bytes_max);
+}
+
+void tegra_pcm_free(struct snd_pcm *pcm)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	tegra_pcm_deallocate_dma_buffer(pcm, SNDRV_PCM_STREAM_CAPTURE);
 	tegra_pcm_deallocate_dma_buffer(pcm, SNDRV_PCM_STREAM_PLAYBACK);
 }
 
+<<<<<<< HEAD
+=======
+static int tegra_pcm_probe(struct snd_soc_platform *platform)
+{
+	if(machine_is_kai())
+		platform->dapm.idle_bias_off = 1;
+
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct snd_soc_platform_driver tegra_pcm_platform = {
 	.ops		= &tegra_pcm_ops,
 	.pcm_new	= tegra_pcm_new,
 	.pcm_free	= tegra_pcm_free,
+<<<<<<< HEAD
+=======
+	.probe		= tegra_pcm_probe,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __devinit tegra_pcm_platform_probe(struct platform_device *pdev)

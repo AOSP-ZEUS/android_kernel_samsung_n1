@@ -202,8 +202,12 @@ xfs_ialloc_inode_init(
 		fbuf = xfs_trans_get_buf(tp, mp->m_ddev_targp, d,
 					 mp->m_bsize * blks_per_cluster,
 					 XBF_LOCK);
+<<<<<<< HEAD
 		ASSERT(fbuf);
 		ASSERT(!XFS_BUF_GETERROR(fbuf));
+=======
+		ASSERT(!xfs_buf_geterror(fbuf));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/*
 		 * Initialize all inodes in this buffer and then log them.
@@ -683,7 +687,11 @@ xfs_dialloc(
 			return 0;
 		}
 		agi = XFS_BUF_TO_AGI(agbp);
+<<<<<<< HEAD
 		ASSERT(be32_to_cpu(agi->agi_magicnum) == XFS_AGI_MAGIC);
+=======
+		ASSERT(agi->agi_magicnum == cpu_to_be32(XFS_AGI_MAGIC));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		/*
 		 * Continue where we left off before.  In this case, we
@@ -691,7 +699,11 @@ xfs_dialloc(
 		 */
 		agbp = *IO_agbp;
 		agi = XFS_BUF_TO_AGI(agbp);
+<<<<<<< HEAD
 		ASSERT(be32_to_cpu(agi->agi_magicnum) == XFS_AGI_MAGIC);
+=======
+		ASSERT(agi->agi_magicnum == cpu_to_be32(XFS_AGI_MAGIC));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ASSERT(be32_to_cpu(agi->agi_freecount) > 0);
 	}
 	mp = tp->t_mountp;
@@ -775,7 +787,11 @@ nextag:
 		if (error)
 			goto nextag;
 		agi = XFS_BUF_TO_AGI(agbp);
+<<<<<<< HEAD
 		ASSERT(be32_to_cpu(agi->agi_magicnum) == XFS_AGI_MAGIC);
+=======
+		ASSERT(agi->agi_magicnum == cpu_to_be32(XFS_AGI_MAGIC));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	/*
 	 * Here with an allocation group that has a free inode.
@@ -944,7 +960,11 @@ nextag:
 	 * See if the most recently allocated block has any free.
 	 */
 newino:
+<<<<<<< HEAD
 	if (be32_to_cpu(agi->agi_newino) != NULLAGINO) {
+=======
+	if (agi->agi_newino != cpu_to_be32(NULLAGINO)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		error = xfs_inobt_lookup(cur, be32_to_cpu(agi->agi_newino),
 					 XFS_LOOKUP_EQ, &i);
 		if (error)
@@ -1085,7 +1105,11 @@ xfs_difree(
 		return error;
 	}
 	agi = XFS_BUF_TO_AGI(agbp);
+<<<<<<< HEAD
 	ASSERT(be32_to_cpu(agi->agi_magicnum) == XFS_AGI_MAGIC);
+=======
+	ASSERT(agi->agi_magicnum == cpu_to_be32(XFS_AGI_MAGIC));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ASSERT(agbno < be32_to_cpu(agi->agi_length));
 	/*
 	 * Initialize the cursor.
@@ -1438,7 +1462,11 @@ xfs_ialloc_log_agi(
 	xfs_agi_t		*agi;	/* allocation group header */
 
 	agi = XFS_BUF_TO_AGI(bp);
+<<<<<<< HEAD
 	ASSERT(be32_to_cpu(agi->agi_magicnum) == XFS_AGI_MAGIC);
+=======
+	ASSERT(agi->agi_magicnum == cpu_to_be32(XFS_AGI_MAGIC));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 	/*
 	 * Compute byte offsets for the first and last fields.
@@ -1486,13 +1514,21 @@ xfs_read_agi(
 	if (error)
 		return error;
 
+<<<<<<< HEAD
 	ASSERT(*bpp && !XFS_BUF_GETERROR(*bpp));
+=======
+	ASSERT(!xfs_buf_geterror(*bpp));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	agi = XFS_BUF_TO_AGI(*bpp);
 
 	/*
 	 * Validate the magic number of the agi block.
 	 */
+<<<<<<< HEAD
 	agi_ok = be32_to_cpu(agi->agi_magicnum) == XFS_AGI_MAGIC &&
+=======
+	agi_ok = agi->agi_magicnum == cpu_to_be32(XFS_AGI_MAGIC) &&
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		XFS_AGI_GOOD_VERSION(be32_to_cpu(agi->agi_versionnum)) &&
 		be32_to_cpu(agi->agi_seqno) == agno;
 	if (unlikely(XFS_TEST_ERROR(!agi_ok, mp, XFS_ERRTAG_IALLOC_READ_AGI,

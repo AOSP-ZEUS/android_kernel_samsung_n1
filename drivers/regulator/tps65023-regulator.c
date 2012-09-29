@@ -25,6 +25,10 @@
 #include <linux/i2c.h>
 #include <linux/delay.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/regmap.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Register definitions */
 #define	TPS65023_REG_VERSION		0
@@ -125,6 +129,7 @@ struct tps_pmic {
 	struct i2c_client *client;
 	struct regulator_dev *rdev[TPS65023_NUM_REGULATOR];
 	const struct tps_info *info[TPS65023_NUM_REGULATOR];
+<<<<<<< HEAD
 	struct mutex io_lock;
 };
 
@@ -159,10 +164,19 @@ static int tps_65023_set_bits(struct tps_pmic *tps, u8 reg, u8 mask)
 out:
 	mutex_unlock(&tps->io_lock);
 	return err;
+=======
+	struct regmap *regmap;
+};
+
+static int tps_65023_set_bits(struct tps_pmic *tps, u8 reg, u8 mask)
+{
+	return regmap_update_bits(tps->regmap, reg, mask, mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int tps_65023_clear_bits(struct tps_pmic *tps, u8 reg, u8 mask)
 {
+<<<<<<< HEAD
 	int err, data;
 
 	mutex_lock(&tps->io_lock);
@@ -184,10 +198,14 @@ out:
 	mutex_unlock(&tps->io_lock);
 	return err;
 
+=======
+	return regmap_update_bits(tps->regmap, reg, mask, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int tps_65023_reg_read(struct tps_pmic *tps, u8 reg)
 {
+<<<<<<< HEAD
 	int data;
 
 	mutex_lock(&tps->io_lock);
@@ -198,10 +216,22 @@ static int tps_65023_reg_read(struct tps_pmic *tps, u8 reg)
 
 	mutex_unlock(&tps->io_lock);
 	return data;
+=======
+	unsigned int val;
+	int ret;
+
+	ret = regmap_read(tps->regmap, reg, &val);
+
+	if (ret != 0)
+		return ret;
+	else
+		return val;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int tps_65023_reg_write(struct tps_pmic *tps, u8 reg, u8 val)
 {
+<<<<<<< HEAD
 	int err;
 
 	mutex_lock(&tps->io_lock);
@@ -212,6 +242,9 @@ static int tps_65023_reg_write(struct tps_pmic *tps, u8 reg, u8 val)
 
 	mutex_unlock(&tps->io_lock);
 	return err;
+=======
+	return regmap_write(tps->regmap, reg, val);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int tps65023_dcdc_is_enabled(struct regulator_dev *dev)
@@ -463,6 +496,14 @@ static struct regulator_ops tps65023_ldo_ops = {
 	.list_voltage = tps65023_ldo_list_voltage,
 };
 
+<<<<<<< HEAD
+=======
+static struct regmap_config tps65023_regmap_config = {
+	.reg_bits = 8,
+	.val_bits = 8,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __devinit tps_65023_probe(struct i2c_client *client,
 				     const struct i2c_device_id *id)
 {
@@ -488,7 +529,17 @@ static int __devinit tps_65023_probe(struct i2c_client *client,
 	if (!tps)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	mutex_init(&tps->io_lock);
+=======
+	tps->regmap = regmap_init_i2c(client, &tps65023_regmap_config);
+	if (IS_ERR(tps->regmap)) {
+		error = PTR_ERR(tps->regmap);
+		dev_err(&client->dev, "Failed to allocate register map: %d\n",
+			error);
+		goto fail_alloc;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* common for all regulators */
 	tps->client = client;
@@ -527,6 +578,11 @@ static int __devinit tps_65023_probe(struct i2c_client *client,
 	while (--i >= 0)
 		regulator_unregister(tps->rdev[i]);
 
+<<<<<<< HEAD
+=======
+	regmap_exit(tps->regmap);
+ fail_alloc:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(tps);
 	return error;
 }
@@ -545,6 +601,10 @@ static int __devexit tps_65023_remove(struct i2c_client *client)
 	for (i = 0; i < TPS65023_NUM_REGULATOR; i++)
 		regulator_unregister(tps->rdev[i]);
 
+<<<<<<< HEAD
+=======
+	regmap_exit(tps->regmap);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(tps);
 
 	return 0;

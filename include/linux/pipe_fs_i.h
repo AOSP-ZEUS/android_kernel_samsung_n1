@@ -8,7 +8,10 @@
 #define PIPE_BUF_FLAG_LRU	0x01	/* page is on the LRU */
 #define PIPE_BUF_FLAG_ATOMIC	0x02	/* was atomically mapped */
 #define PIPE_BUF_FLAG_GIFT	0x04	/* page is a gift */
+<<<<<<< HEAD
 #define PIPE_BUF_FLAG_PACKET	0x08	/* read() as a packet */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  *	struct pipe_buffer - a linux kernel pipe buffer

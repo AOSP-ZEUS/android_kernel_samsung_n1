@@ -109,6 +109,20 @@ static u32 lg_get_features(struct virtio_device *vdev)
 }
 
 /*
+<<<<<<< HEAD
+=======
+ * To notify on reset or feature finalization, we (ab)use the NOTIFY
+ * hypercall, with the descriptor address of the device.
+ */
+static void status_notify(struct virtio_device *vdev)
+{
+	unsigned long offset = (void *)to_lgdev(vdev)->desc - lguest_devices;
+
+	hcall(LHCALL_NOTIFY, (max_pfn << PAGE_SHIFT) + offset, 0, 0, 0);
+}
+
+/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * The virtio core takes the features the Host offers, and copies the ones
  * supported by the driver into the vdev->features array.  Once that's all
  * sorted out, this routine is called so we can tell the Host which features we
@@ -135,6 +149,12 @@ static void lg_finalize_features(struct virtio_device *vdev)
 		if (test_bit(i, vdev->features))
 			out_features[i / 8] |= (1 << (i % 8));
 	}
+<<<<<<< HEAD
+=======
+
+	/* Tell Host we've finished with this device's feature negotiation */
+	status_notify(vdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Once they've found a field, getting a copy of it is easy. */
@@ -168,6 +188,7 @@ static u8 lg_get_status(struct virtio_device *vdev)
 	return to_lgdev(vdev)->desc->status;
 }
 
+<<<<<<< HEAD
 /*
  * To notify on status updates, we (ab)use the NOTIFY hypercall, with the
  * descriptor address of the device.  A zero status means "reset".
@@ -185,11 +206,27 @@ static void lg_set_status(struct virtio_device *vdev, u8 status)
 {
 	BUG_ON(!status);
 	set_status(vdev, status);
+=======
+static void lg_set_status(struct virtio_device *vdev, u8 status)
+{
+	BUG_ON(!status);
+	to_lgdev(vdev)->desc->status = status;
+
+	/* Tell Host immediately if we failed. */
+	if (status & VIRTIO_CONFIG_S_FAILED)
+		status_notify(vdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void lg_reset(struct virtio_device *vdev)
 {
+<<<<<<< HEAD
 	set_status(vdev, 0);
+=======
+	/* 0 status means "reset" */
+	to_lgdev(vdev)->desc->status = 0;
+	status_notify(vdev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*

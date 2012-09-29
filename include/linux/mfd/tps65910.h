@@ -243,7 +243,12 @@
 
 
 /*Registers VDD1, VDD2 voltage values definitions */
+<<<<<<< HEAD
 #define VDD1_2_NUM_VOLTS				73
+=======
+#define VDD1_2_NUM_VOLT_FINE				73
+#define VDD1_2_NUM_VOLT_COARSE				3
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define VDD1_2_MIN_VOLT					6000
 #define VDD1_2_OFFSET					125
 
@@ -269,7 +274,11 @@
 #define LDO1_SEL_MASK					0xFC
 #define LDO3_SEL_MASK					0x7C
 #define LDO_MIN_VOLT					1000
+<<<<<<< HEAD
 #define LDO_MAX_VOLT					3300;
+=======
+#define LDO_MAX_VOLT					3300
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /*Register VDIG1  (0x80) register.RegisterDescription */
@@ -656,6 +665,11 @@
 
 
 /*Register GPIO  (0x80) register.RegisterDescription */
+<<<<<<< HEAD
+=======
+#define GPIO_SLEEP_MASK                         0x80
+#define GPIO_SLEEP_SHIFT                        7
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define GPIO_DEB_MASK                           0x10
 #define GPIO_DEB_SHIFT                          4
 #define GPIO_PUEN_MASK                          0x08
@@ -739,6 +753,48 @@
 #define TPS65910_GPIO_STS				BIT(1)
 #define TPS65910_GPIO_SET				BIT(0)
 
+<<<<<<< HEAD
+=======
+/* Max number of TPS65910/11 GPIOs */
+#define TPS65910_NUM_GPIO				6
+#define TPS65911_NUM_GPIO				9
+#define TPS6591X_MAX_NUM_GPIO				9
+
+/* Regulator Index Definitions */
+#define TPS65910_REG_VRTC				0
+#define TPS65910_REG_VIO				1
+#define TPS65910_REG_VDD1				2
+#define TPS65910_REG_VDD2				3
+#define TPS65910_REG_VDD3				4
+#define TPS65910_REG_VDIG1				5
+#define TPS65910_REG_VDIG2				6
+#define TPS65910_REG_VPLL				7
+#define TPS65910_REG_VDAC				8
+#define TPS65910_REG_VAUX1				9
+#define TPS65910_REG_VAUX2				10
+#define TPS65910_REG_VAUX33				11
+#define TPS65910_REG_VMMC				12
+
+#define TPS65911_REG_VDDCTRL				4
+#define TPS65911_REG_LDO1				5
+#define TPS65911_REG_LDO2				6
+#define TPS65911_REG_LDO3				7
+#define TPS65911_REG_LDO4				8
+#define TPS65911_REG_LDO5				9
+#define TPS65911_REG_LDO6				10
+#define TPS65911_REG_LDO7				11
+#define TPS65911_REG_LDO8				12
+
+/* Max number of TPS65910/11 regulators */
+#define TPS65910_NUM_REGS				13
+
+/* External sleep controls through EN1/EN2/EN3/SLEEP inputs */
+#define TPS65910_SLEEP_CONTROL_EXT_INPUT_EN1		0x1
+#define TPS65910_SLEEP_CONTROL_EXT_INPUT_EN2		0x2
+#define TPS65910_SLEEP_CONTROL_EXT_INPUT_EN3		0x4
+#define TPS65911_SLEEP_CONTROL_EXT_INPUT_SLEEP		0x8
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * struct tps65910_board
  * Board platform data may be used to initialize regulators.
@@ -750,7 +806,13 @@ struct tps65910_board {
 	int irq_base;
 	int vmbch_threshold;
 	int vmbch2_threshold;
+<<<<<<< HEAD
 	struct regulator_init_data *tps65910_pmic_init_data;
+=======
+	unsigned long regulator_ext_sleep_control[TPS65910_NUM_REGS];
+	bool en_gpio_sleep[TPS6591X_MAX_NUM_GPIO];
+	struct regulator_init_data *tps65910_pmic_init_data[TPS65910_NUM_REGS];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /**
@@ -760,6 +822,10 @@ struct tps65910_board {
 struct tps65910 {
 	struct device *dev;
 	struct i2c_client *i2c_client;
+<<<<<<< HEAD
+=======
+	struct regmap *regmap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct mutex io_mutex;
 	unsigned int id;
 	int (*read)(struct tps65910 *tps65910, u8 reg, int size, void *dest);
@@ -791,6 +857,10 @@ int tps65910_clear_bits(struct tps65910 *tps65910, u8 reg, u8 mask);
 void tps65910_gpio_init(struct tps65910 *tps65910, int gpio_base);
 int tps65910_irq_init(struct tps65910 *tps65910, int irq,
 		struct tps65910_platform_data *pdata);
+<<<<<<< HEAD
+=======
+int tps65910_irq_exit(struct tps65910 *tps65910);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline int tps65910_chip_id(struct tps65910 *tps65910)
 {

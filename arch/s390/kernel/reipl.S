@@ -6,14 +6,23 @@
  *    Author(s): Holger Smolinski (Holger.Smolinski@de.ibm.com)
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/linkage.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/asm-offsets.h>
 
 #
 # do_reipl_asm
 # Parameter: r2 = schid of reipl device
 #
+<<<<<<< HEAD
 		.globl	do_reipl_asm
 do_reipl_asm:	basr	%r13,0
+=======
+ENTRY(do_reipl_asm)
+		basr	%r13,0
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 .Lpg0:		lpsw	.Lnewpsw-.Lpg0(%r13)
 .Lpg1:		# do store status of all registers
 

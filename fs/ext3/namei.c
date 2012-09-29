@@ -36,6 +36,10 @@
 #include <linux/quotaops.h>
 #include <linux/buffer_head.h>
 #include <linux/bio.h>
+<<<<<<< HEAD
+=======
+#include <trace/events/ext3.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "namei.h"
 #include "xattr.h"
@@ -287,7 +291,11 @@ static struct stats dx_show_leaf(struct dx_hash_info *hinfo, struct ext3_dir_ent
 				while (len--) printk("%c", *name++);
 				ext3fs_dirhash(de->name, de->name_len, &h);
 				printk(":%x.%u ", h.hash,
+<<<<<<< HEAD
 				       ((char *) de - base));
+=======
+				       (unsigned) ((char *) de - base));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 			space += EXT3_DIR_REC_LEN(de->name_len);
 			names++;
@@ -921,7 +929,12 @@ restart:
 				bh = ext3_getblk(NULL, dir, b++, 0, &err);
 				bh_use[ra_max] = bh;
 				if (bh)
+<<<<<<< HEAD
 					ll_rw_block(READ_META, 1, &bh);
+=======
+					ll_rw_block(READ | REQ_META | REQ_PRIO,
+						    1, &bh);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 		}
 		if ((bh = bh_use[ra_ptr++]) == NULL)
@@ -1013,7 +1026,11 @@ static struct buffer_head * ext3_dx_find_entry(struct inode *dir,
 
 	*err = -ENOENT;
 errout:
+<<<<<<< HEAD
 	dxtrace(printk("%s not found\n", name));
+=======
+	dxtrace(printk("%s not found\n", entry->name));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dx_release (frames);
 	return NULL;
 }
@@ -1038,6 +1055,7 @@ static struct dentry *ext3_lookup(struct inode * dir, struct dentry *dentry, str
 			return ERR_PTR(-EIO);
 		}
 		inode = ext3_iget(dir->i_sb, ino);
+<<<<<<< HEAD
 		if (IS_ERR(inode)) {
 			if (PTR_ERR(inode) == -ESTALE) {
 				ext3_error(dir->i_sb, __func__,
@@ -1047,6 +1065,13 @@ static struct dentry *ext3_lookup(struct inode * dir, struct dentry *dentry, str
 			} else {
 				return ERR_CAST(inode);
 			}
+=======
+		if (inode == ERR_PTR(-ESTALE)) {
+			ext3_error(dir->i_sb, __func__,
+					"deleted inode referenced: %lu",
+					ino);
+			return ERR_PTR(-EIO);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 	return d_splice_alias(inode, dentry);
@@ -2144,6 +2169,10 @@ static int ext3_unlink(struct inode * dir, struct dentry *dentry)
 	struct ext3_dir_entry_2 * de;
 	handle_t *handle;
 
+<<<<<<< HEAD
+=======
+	trace_ext3_unlink_enter(dir, dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Initialize quotas before so that eventual writes go
 	 * in separate transaction */
 	dquot_initialize(dir);
@@ -2189,6 +2218,10 @@ static int ext3_unlink(struct inode * dir, struct dentry *dentry)
 end_unlink:
 	ext3_journal_stop(handle);
 	brelse (bh);
+<<<<<<< HEAD
+=======
+	trace_ext3_unlink_exit(dentry, retval);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return retval;
 }
 
@@ -2535,7 +2568,11 @@ const struct inode_operations ext3_dir_inode_operations = {
 	.listxattr	= ext3_listxattr,
 	.removexattr	= generic_removexattr,
 #endif
+<<<<<<< HEAD
 	.check_acl	= ext3_check_acl,
+=======
+	.get_acl	= ext3_get_acl,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 const struct inode_operations ext3_special_inode_operations = {
@@ -2546,5 +2583,9 @@ const struct inode_operations ext3_special_inode_operations = {
 	.listxattr	= ext3_listxattr,
 	.removexattr	= generic_removexattr,
 #endif
+<<<<<<< HEAD
 	.check_acl	= ext3_check_acl,
+=======
+	.get_acl	= ext3_get_acl,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };

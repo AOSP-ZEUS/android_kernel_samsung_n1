@@ -110,12 +110,20 @@ static int imx_ssi_dma_alloc(struct snd_pcm_substream *substream,
 		slave_config.direction = DMA_TO_DEVICE;
 		slave_config.dst_addr = dma_params->dma_addr;
 		slave_config.dst_addr_width = buswidth;
+<<<<<<< HEAD
 		slave_config.dst_maxburst = dma_params->burstsize * buswidth;
+=======
+		slave_config.dst_maxburst = dma_params->burstsize;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		slave_config.direction = DMA_FROM_DEVICE;
 		slave_config.src_addr = dma_params->dma_addr;
 		slave_config.src_addr_width = buswidth;
+<<<<<<< HEAD
 		slave_config.src_maxburst = dma_params->burstsize * buswidth;
+=======
+		slave_config.src_maxburst = dma_params->burstsize;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	ret = dmaengine_slave_config(iprtd->dma_chan, &slave_config);
@@ -155,7 +163,11 @@ static int snd_imx_pcm_hw_params(struct snd_pcm_substream *substream,
 
 	iprtd->buf = (unsigned int *)substream->dma_buffer.area;
 
+<<<<<<< HEAD
 	iprtd->desc = chan->device->device_prep_dma_cyclic(chan, dma_addr,
+=======
+	iprtd->desc = dmaengine_prep_dma_cyclic(chan, dma_addr,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			iprtd->period_bytes * iprtd->periods,
 			iprtd->period_bytes,
 			substream->stream == SNDRV_PCM_STREAM_PLAYBACK ?

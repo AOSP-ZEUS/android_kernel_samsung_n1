@@ -1128,6 +1128,12 @@ static int mv_udc_pullup(struct usb_gadget *gadget, int is_on)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int mv_udc_start(struct usb_gadget_driver *driver,
+		int (*bind)(struct usb_gadget *));
+static int mv_udc_stop(struct usb_gadget_driver *driver);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* device controller usb_gadget_ops structure */
 static const struct usb_gadget_ops mv_ops = {
 
@@ -1139,6 +1145,11 @@ static const struct usb_gadget_ops mv_ops = {
 
 	/* D+ pullup, software-controlled connect/disconnect to USB host */
 	.pullup		= mv_udc_pullup,
+<<<<<<< HEAD
+=======
+	.start		= mv_udc_start,
+	.stop		= mv_udc_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void mv_udc_testmode(struct mv_udc *udc, u16 index, bool enter)
@@ -1230,7 +1241,11 @@ static void stop_activity(struct mv_udc *udc, struct usb_gadget_driver *driver)
 	}
 }
 
+<<<<<<< HEAD
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int mv_udc_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	struct mv_udc *udc = the_controller;
@@ -1270,9 +1285,14 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
 
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
 
 int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
+=======
+
+static int mv_udc_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct mv_udc *udc = the_controller;
 	unsigned long flags;
@@ -1296,7 +1316,10 @@ int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
 
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_unregister_driver);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int
 udc_prime_status(struct mv_udc *udc, u8 direction, u16 status, bool empty)
@@ -1880,9 +1903,16 @@ static void gadget_release(struct device *_dev)
 static int mv_udc_remove(struct platform_device *dev)
 {
 	struct mv_udc *udc = the_controller;
+<<<<<<< HEAD
 
 	DECLARE_COMPLETION(done);
 
+=======
+	DECLARE_COMPLETION(done);
+
+	usb_del_gadget_udc(&udc->gadget);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	udc->done = &done;
 
 	/* free memory allocated in probe */
@@ -2074,11 +2104,20 @@ int mv_udc_probe(struct platform_device *dev)
 
 	the_controller = udc;
 
+<<<<<<< HEAD
 	goto out;
 error:
 	if (udc)
 		mv_udc_remove(udc->dev);
 out:
+=======
+	retval = usb_add_gadget_udc(&dev->dev, &udc->gadget);
+	if (!retval)
+		return retval;
+error:
+	if (udc)
+		mv_udc_remove(udc->dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return retval;
 }
 
@@ -2126,7 +2165,11 @@ static struct platform_driver udc_driver = {
 #endif
 	},
 };
+<<<<<<< HEAD
 
+=======
+MODULE_ALIAS("platform:pxa-u2o");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 MODULE_DESCRIPTION(DRIVER_DESC);
 MODULE_AUTHOR("Chao Xie <chao.xie@marvell.com>");

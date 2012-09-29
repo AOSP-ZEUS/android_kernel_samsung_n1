@@ -28,6 +28,11 @@
 #include <linux/pm_runtime.h>
 #include <linux/intel_mid_dma.h>
 
+<<<<<<< HEAD
+=======
+#include "dmaengine.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define MAX_CHAN	4 /*max ch across controllers*/
 #include "intel_mid_dma_regs.h"
 
@@ -288,7 +293,11 @@ static void midc_descriptor_complete(struct intel_mid_dma_chan *midc,
 	struct intel_mid_dma_lli	*llitem;
 	void *param_txd = NULL;
 
+<<<<<<< HEAD
 	midc->completed = txd->cookie;
+=======
+	dma_cookie_complete(txd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	callback_txd = txd->callback;
 	param_txd = txd->callback_param;
 
@@ -433,6 +442,7 @@ static dma_cookie_t intel_mid_dma_tx_submit(struct dma_async_tx_descriptor *tx)
 	dma_cookie_t		cookie;
 
 	spin_lock_bh(&midc->lock);
+<<<<<<< HEAD
 	cookie = midc->chan.cookie;
 
 	if (++cookie < 0)
@@ -441,6 +451,9 @@ static dma_cookie_t intel_mid_dma_tx_submit(struct dma_async_tx_descriptor *tx)
 	midc->chan.cookie = cookie;
 	desc->txd.cookie = cookie;
 
+=======
+	cookie = dma_cookie_assign(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (list_empty(&midc->active_list))
 		list_add_tail(&desc->desc_node, &midc->active_list);
@@ -481,6 +494,7 @@ static enum dma_status intel_mid_dma_tx_status(struct dma_chan *chan,
 						dma_cookie_t cookie,
 						struct dma_tx_state *txstate)
 {
+<<<<<<< HEAD
 	struct intel_mid_dma_chan	*midc = to_intel_mid_dma_chan(chan);
 	dma_cookie_t		last_used;
 	dma_cookie_t		last_complete;
@@ -504,6 +518,16 @@ static enum dma_status intel_mid_dma_tx_status(struct dma_chan *chan,
 		txstate->used = last_used;
 		txstate->residue = 0;
 	}
+=======
+	enum dma_status ret;
+
+	ret = dma_cookie_status(chan, cookie, txstate);
+	if (ret != DMA_SUCCESS) {
+		midc_scan_descriptors(to_middma_device(chan->device), midc);
+		ret = dma_cookie_status(chan, cookie, txstate);
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
@@ -728,13 +752,22 @@ err_desc_get:
  * @sg_len: length of sg txn
  * @direction: DMA transfer dirtn
  * @flags: DMA flags
+<<<<<<< HEAD
+=======
+ * @context: transfer context (ignored)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Prepares LLI based periphral transfer
  */
 static struct dma_async_tx_descriptor *intel_mid_dma_prep_slave_sg(
 			struct dma_chan *chan, struct scatterlist *sgl,
+<<<<<<< HEAD
 			unsigned int sg_len, enum dma_data_direction direction,
 			unsigned long flags)
+=======
+			unsigned int sg_len, enum dma_transfer_direction direction,
+			unsigned long flags, void *context)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct intel_mid_dma_chan *midc = NULL;
 	struct intel_mid_dma_slave *mids = NULL;
@@ -882,7 +915,11 @@ static int intel_mid_dma_alloc_chan_resources(struct dma_chan *chan)
 		pm_runtime_put(&mid->pdev->dev);
 		return -EIO;
 	}
+<<<<<<< HEAD
 	midc->completed = chan->cookie = 1;
+=======
+	dma_cookie_init(chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_lock_bh(&midc->lock);
 	while (midc->descs_allocated < DESCS_PER_CHANNEL) {
@@ -1113,8 +1150,13 @@ static int mid_setup_dma(struct pci_dev *pdev)
 		struct intel_mid_dma_chan *midch = &dma->ch[i];
 
 		midch->chan.device = &dma->common;
+<<<<<<< HEAD
 		midch->chan.cookie =  1;
 		midch->chan.chan_id = i;
+=======
+		midch->chan.chan_id = i;
+		dma_cookie_init(&midch->chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		midch->ch_id = dma->chan_base + i;
 		pr_debug("MDMA:Init CH %d, ID %d\n", i, midch->ch_id);
 
@@ -1351,7 +1393,10 @@ int dma_suspend(struct pci_dev *pci, pm_message_t state)
 			return -EAGAIN;
 	}
 	device->state = SUSPENDED;
+<<<<<<< HEAD
 	pci_set_drvdata(pci, device);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pci_save_state(pci);
 	pci_disable_device(pci);
 	pci_set_power_state(pci, PCI_D3hot);
@@ -1380,7 +1425,10 @@ int dma_resume(struct pci_dev *pci)
 	}
 	device->state = RUNNING;
 	iowrite32(REG_BIT0, device->dma_base + DMA_CFG);
+<<<<<<< HEAD
 	pci_set_drvdata(pci, device);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

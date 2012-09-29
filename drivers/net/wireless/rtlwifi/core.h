@@ -30,6 +30,11 @@
 #ifndef __RTL_CORE_H__
 #define __RTL_CORE_H__
 
+<<<<<<< HEAD
+=======
+#include <net/mac80211.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define RTL_SUPPORTED_FILTERS		\
 	(FIF_PROMISC_IN_BSS | \
 	FIF_ALLMULTI | FIF_CONTROL | \

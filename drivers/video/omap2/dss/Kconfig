@@ -117,6 +117,7 @@ config OMAP2_DSS_MIN_FCK_PER_PCK
 	  Max FCK is 173MHz, so this doesn't work if your PCK
 	  is very high.
 
+<<<<<<< HEAD
 config OMAP2_DSS_SLEEP_BEFORE_RESET
 	bool "Sleep 50ms before DSS reset"
 	default y
@@ -129,6 +130,8 @@ config OMAP2_DSS_SLEEP_BEFORE_RESET
 	  configurations the SYNC_LOST may never happen, so the sleep can
 	  be disabled here.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config OMAP2_DSS_SLEEP_AFTER_VENC_RESET
 	bool "Sleep 20ms after VENC reset"
 	default y

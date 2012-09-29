@@ -426,9 +426,13 @@ static const struct alps_model_info *alps_get_model(struct psmouse *psmouse, int
 
 	/*
 	 * First try "E6 report".
+<<<<<<< HEAD
 	 * ALPS should return 0,0,10 or 0,0,100 if no buttons are pressed.
 	 * The bits 0-2 of the first byte will be 1s if some buttons are
 	 * pressed.
+=======
+	 * ALPS should return 0,0,10 or 0,0,100
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 */
 	param[0] = 0;
 	if (ps2_command(ps2dev, param, PSMOUSE_CMD_SETRES) ||
@@ -443,8 +447,12 @@ static const struct alps_model_info *alps_get_model(struct psmouse *psmouse, int
 
 	dbg("E6 report: %2.2x %2.2x %2.2x", param[0], param[1], param[2]);
 
+<<<<<<< HEAD
 	if ((param[0] & 0xf8) != 0 || param[1] != 0 ||
 	    (param[2] != 10 && param[2] != 100))
+=======
+	if (param[0] != 0 || param[1] != 0 || (param[2] != 10 && param[2] != 100))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return NULL;
 
 	/*

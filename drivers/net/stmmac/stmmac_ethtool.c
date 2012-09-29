@@ -24,8 +24,15 @@
 
 #include <linux/etherdevice.h>
 #include <linux/ethtool.h>
+<<<<<<< HEAD
 #include <linux/mii.h>
 #include <linux/phy.h>
+=======
+#include <linux/interrupt.h>
+#include <linux/mii.h>
+#include <linux/phy.h>
+#include <asm/io.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "stmmac.h"
 #include "dwmac_dma.h"

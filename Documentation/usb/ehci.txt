@@ -210,3 +210,8 @@ TBD:  Interrupt and ISO transfer performance issues.  Those periodic
 transfers are fully scheduled, so the main issue is likely to be how
 to trigger "high bandwidth" modes.
 
+<<<<<<< HEAD
+=======
+TBD:  More than standard 80% periodic bandwidth allocation is possible
+through sysfs uframe_periodic_max parameter. Describe that.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -159,7 +159,11 @@ nv50_fbcon_accel_init(struct fb_info *info)
 	struct drm_device *dev = nfbdev->dev;
 	struct drm_nouveau_private *dev_priv = dev->dev_private;
 	struct nouveau_channel *chan = dev_priv->channel;
+<<<<<<< HEAD
 	struct nouveau_bo *nvbo = nfbdev->nouveau_fb.nvbo;
+=======
+	struct nouveau_framebuffer *fb = &nfbdev->nouveau_fb;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret, format;
 
 	switch (info->var.bits_per_pixel) {
@@ -247,8 +251,13 @@ nv50_fbcon_accel_init(struct fb_info *info)
 	OUT_RING(chan, info->fix.line_length);
 	OUT_RING(chan, info->var.xres_virtual);
 	OUT_RING(chan, info->var.yres_virtual);
+<<<<<<< HEAD
 	OUT_RING(chan, upper_32_bits(nvbo->vma.offset));
 	OUT_RING(chan, lower_32_bits(nvbo->vma.offset));
+=======
+	OUT_RING(chan, upper_32_bits(fb->vma.offset));
+	OUT_RING(chan, lower_32_bits(fb->vma.offset));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	BEGIN_RING(chan, NvSub2D, 0x0230, 2);
 	OUT_RING(chan, format);
 	OUT_RING(chan, 1);
@@ -256,8 +265,13 @@ nv50_fbcon_accel_init(struct fb_info *info)
 	OUT_RING(chan, info->fix.line_length);
 	OUT_RING(chan, info->var.xres_virtual);
 	OUT_RING(chan, info->var.yres_virtual);
+<<<<<<< HEAD
 	OUT_RING(chan, upper_32_bits(nvbo->vma.offset));
 	OUT_RING(chan, lower_32_bits(nvbo->vma.offset));
+=======
+	OUT_RING(chan, upper_32_bits(fb->vma.offset));
+	OUT_RING(chan, lower_32_bits(fb->vma.offset));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

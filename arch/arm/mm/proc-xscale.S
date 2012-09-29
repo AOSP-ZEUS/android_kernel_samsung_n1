@@ -390,12 +390,20 @@ ENDPROC(xscale_dma_map_area)
  *	- size	- size of region
  *	- dir	- DMA direction
  */
+<<<<<<< HEAD
 ENTRY(xscale_dma_a0_map_area)
+=======
+ENTRY(xscale_80200_A0_A1_dma_map_area)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	add	r1, r1, r0
 	teq	r2, #DMA_TO_DEVICE
 	beq	xscale_dma_clean_range
 	b	xscale_dma_flush_range
+<<<<<<< HEAD
 ENDPROC(xscale_dma_a0_map_area)
+=======
+ENDPROC(xscale_80200_A0_A1_dma_map_area)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  *	dma_unmap_area(start, size, dir)
@@ -407,6 +415,7 @@ ENTRY(xscale_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(xscale_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(xscale_cache_fns)
 	.long	xscale_flush_icache_all
 	.long	xscale_flush_kern_cache_all
@@ -418,6 +427,10 @@ ENTRY(xscale_cache_fns)
 	.long	xscale_dma_map_area
 	.long	xscale_dma_unmap_area
 	.long	xscale_dma_flush_range
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions xscale
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * On stepping A0/A1 of the 80200, invalidating D-cache by line doesn't
@@ -432,6 +445,7 @@ ENTRY(xscale_cache_fns)
  * revision January 22, 2003, available at:
  *     http://www.intel.com/design/iio/specupdt/273415.htm
  */
+<<<<<<< HEAD
 ENTRY(xscale_80200_A0_A1_cache_fns)
 	.long	xscale_flush_kern_cache_all
 	.long	xscale_flush_user_cache_all
@@ -442,6 +456,30 @@ ENTRY(xscale_80200_A0_A1_cache_fns)
 	.long	xscale_dma_a0_map_area
 	.long	xscale_dma_unmap_area
 	.long	xscale_dma_flush_range
+=======
+.macro a0_alias basename
+	.globl xscale_80200_A0_A1_\basename
+	.type xscale_80200_A0_A1_\basename , %function
+	.equ xscale_80200_A0_A1_\basename , xscale_\basename
+.endm
+
+/*
+ * Most of the cache functions are unchanged for these processor revisions.
+ * Export suitable alias symbols for the unchanged functions:
+ */
+	a0_alias flush_icache_all
+	a0_alias flush_user_cache_all
+	a0_alias flush_kern_cache_all
+	a0_alias flush_user_cache_range
+	a0_alias coherent_kern_range
+	a0_alias coherent_user_range
+	a0_alias flush_kern_dcache_area
+	a0_alias dma_flush_range
+	a0_alias dma_unmap_area
+
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions xscale_80200_A0_A1
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 ENTRY(cpu_xscale_dcache_clean_area)
 1:	mcr	p15, 0, r0, c7, c10, 1		@ clean D entry
@@ -481,7 +519,11 @@ cpu_xscale_mt_table:
 	.long	PTE_CACHEABLE					@ L_PTE_MT_WRITETHROUGH
 	.long	PTE_CACHEABLE | PTE_BUFFERABLE			@ L_PTE_MT_WRITEBACK
 	.long	PTE_EXT_TEX(1) | PTE_BUFFERABLE			@ L_PTE_MT_DEV_SHARED
+<<<<<<< HEAD
 	.long	0x00						@ unused
+=======
+	.long	PTE_EXT_TEX(1) | PTE_CACHEABLE | PTE_BUFFERABLE	@ L_PTE_MT_INNER_WB
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.long	PTE_EXT_TEX(1) | PTE_CACHEABLE			@ L_PTE_MT_MINICACHE
 	.long	PTE_EXT_TEX(1) | PTE_CACHEABLE | PTE_BUFFERABLE	@ L_PTE_MT_WRITEALLOC
 	.long	0x00						@ unused
@@ -551,9 +593,12 @@ ENTRY(cpu_xscale_do_resume)
 		     PMD_SECT_CACHEABLE | PMD_SECT_AP_WRITE
 	b	cpu_resume_mmu
 ENDPROC(cpu_xscale_do_resume)
+<<<<<<< HEAD
 #else
 #define cpu_xscale_do_suspend	0
 #define cpu_xscale_do_resume	0
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 	__CPUINIT
@@ -587,6 +632,7 @@ xscale_crval:
 
 	__INITDATA
 
+<<<<<<< HEAD
 /*
  * Purpose : Function pointers used to access above functions - all calls
  *	     come through these
@@ -689,11 +735,36 @@ cpu_pxa255_name:
 cpu_pxa270_name:
 	.asciz	"XScale-PXA270"
 	.size	cpu_pxa270_name, . - cpu_pxa270_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions xscale, dabort=v5t_early_abort, pabort=legacy_pabort, suspend=1
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv5te"
+	string	cpu_elf_name, "v5"
+
+	string	cpu_80200_A0_A1_name, "XScale-80200 A0/A1"
+	string	cpu_80200_name, "XScale-80200"
+	string	cpu_80219_name, "XScale-80219"
+	string	cpu_8032x_name, "XScale-IOP8032x Family"
+	string	cpu_8033x_name, "XScale-IOP8033x Family"
+	string	cpu_pxa250_name, "XScale-PXA250"
+	string	cpu_pxa210_name, "XScale-PXA210"
+	string	cpu_ixp42x_name, "XScale-IXP42x Family"
+	string	cpu_ixp43x_name, "XScale-IXP43x Family"
+	string	cpu_ixp46x_name, "XScale-IXP46x Family"
+	string	cpu_ixp2400_name, "XScale-IXP2400"
+	string	cpu_ixp2800_name, "XScale-IXP2800"
+	string	cpu_pxa255_name, "XScale-PXA255"
+	string	cpu_pxa270_name, "XScale-PXA270"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 
 	.section ".proc.info.init", #alloc, #execinstr
 
+<<<<<<< HEAD
 	.type	__80200_A0_A1_proc_info,#object
 __80200_A0_A1_proc_info:
 	.long	0x69052000
@@ -837,17 +908,30 @@ __pxa210_proc_info:
 	.long	0x69052120
 	.long	0xfffff3f0
 	.long   PMD_TYPE_SECT | \
+=======
+.macro xscale_proc_info name:req, cpu_val:req, cpu_mask:req, cpu_name:req, cache
+	.type	__\name\()_proc_info,#object
+__\name\()_proc_info:
+	.long	\cpu_val
+	.long	\cpu_mask
+	.long	PMD_TYPE_SECT | \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		PMD_SECT_BUFFERABLE | \
 		PMD_SECT_CACHEABLE | \
 		PMD_SECT_AP_WRITE | \
 		PMD_SECT_AP_READ
+<<<<<<< HEAD
 	.long   PMD_TYPE_SECT | \
+=======
+	.long	PMD_TYPE_SECT | \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		PMD_SECT_AP_WRITE | \
 		PMD_SECT_AP_READ
 	b	__xscale_setup
 	.long	cpu_arch_name
 	.long	cpu_elf_name
 	.long	HWCAP_SWP|HWCAP_HALF|HWCAP_THUMB|HWCAP_FAST_MULT|HWCAP_EDSP
+<<<<<<< HEAD
 	.long	cpu_pxa210_name
 	.long	xscale_processor_functions
 	.long	v4wbi_tlb_fns
@@ -1016,3 +1100,32 @@ __pxa270_proc_info:
 	.long	xscale_cache_fns
 	.size	__pxa270_proc_info, . - __pxa270_proc_info
 
+=======
+	.long	\cpu_name
+	.long	xscale_processor_functions
+	.long	v4wbi_tlb_fns
+	.long	xscale_mc_user_fns
+	.ifb \cache
+		.long	xscale_cache_fns
+	.else
+		.long	\cache
+	.endif
+	.size	__\name\()_proc_info, . - __\name\()_proc_info
+.endm
+
+	xscale_proc_info 80200_A0_A1, 0x69052000, 0xfffffffe, cpu_80200_name, \
+		cache=xscale_80200_A0_A1_cache_fns
+	xscale_proc_info 80200, 0x69052000, 0xfffffff0, cpu_80200_name
+	xscale_proc_info 80219, 0x69052e20, 0xffffffe0, cpu_80219_name
+	xscale_proc_info 8032x, 0x69052420, 0xfffff7e0, cpu_8032x_name
+	xscale_proc_info 8033x, 0x69054010, 0xfffffd30, cpu_8033x_name
+	xscale_proc_info pxa250, 0x69052100, 0xfffff7f0, cpu_pxa250_name
+	xscale_proc_info pxa210, 0x69052120, 0xfffff3f0, cpu_pxa210_name
+	xscale_proc_info ixp2400, 0x69054190, 0xfffffff0, cpu_ixp2400_name
+	xscale_proc_info ixp2800, 0x690541a0, 0xfffffff0, cpu_ixp2800_name
+	xscale_proc_info ixp42x, 0x690541c0, 0xffffffc0, cpu_ixp42x_name
+	xscale_proc_info ixp43x, 0x69054040, 0xfffffff0, cpu_ixp43x_name
+	xscale_proc_info ixp46x, 0x69054200, 0xffffff00, cpu_ixp46x_name
+	xscale_proc_info pxa255, 0x69052d00, 0xfffffff0, cpu_pxa255_name
+	xscale_proc_info pxa270, 0x69054110, 0xfffffff0, cpu_pxa270_name
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

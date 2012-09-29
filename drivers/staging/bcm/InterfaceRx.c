@@ -157,7 +157,11 @@ static void read_bulk_callback(struct urb *urb)
 		{
 			/* Moving ahead by ETH_HLEN to the data ptr as received from FW */
 			skb_pull(skb, ETH_HLEN);
+<<<<<<< HEAD
 			PHSRecieve(Adapter, pLeader->Vcid, skb, &skb->len,
+=======
+			PHSReceive(Adapter, pLeader->Vcid, skb, &skb->len,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					NULL,bHeaderSupressionEnabled);
 
 			if(!Adapter->PackInfo[QueueIndex].bEthCSSupport)
@@ -229,7 +233,11 @@ static int ReceiveRcb(PS_INTERFACE_ADAPTER psIntfAdapter, PUSB_RCB pRcb)
 /*
 Function:				InterfaceRx
 
+<<<<<<< HEAD
 Description:			This is the hardware specific Function for Recieveing
+=======
+Description:			This is the hardware specific Function for Receiving
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 						data packet/control packets from the device.
 
 Input parameters:		IN PMINI_ADAPTER Adapter   - Miniport Adapter Context

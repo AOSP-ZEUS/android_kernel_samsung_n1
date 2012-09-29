@@ -881,8 +881,12 @@ static int snd_pmac_free(struct snd_pmac *chip)
 		for (i = 0; i < 3; i++) {
 			if (chip->requested & (1 << i))
 				release_mem_region(chip->rsrc[i].start,
+<<<<<<< HEAD
 						   chip->rsrc[i].end -
 						   chip->rsrc[i].start + 1);
+=======
+						   resource_size(&chip->rsrc[i]));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -1228,8 +1232,12 @@ int __devinit snd_pmac_new(struct snd_card *card, struct snd_pmac **chip_return)
 				goto __error;
 			}
 			if (request_mem_region(chip->rsrc[i].start,
+<<<<<<< HEAD
 					       chip->rsrc[i].end -
 					       chip->rsrc[i].start + 1,
+=======
+					       resource_size(&chip->rsrc[i]),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					       rnames[i]) == NULL) {
 				printk(KERN_ERR "snd: can't request rsrc "
 				       " %d (%s: %pR)\n",
@@ -1254,8 +1262,12 @@ int __devinit snd_pmac_new(struct snd_card *card, struct snd_pmac **chip_return)
 				goto __error;
 			}
 			if (request_mem_region(chip->rsrc[i].start,
+<<<<<<< HEAD
 					       chip->rsrc[i].end -
 					       chip->rsrc[i].start + 1,
+=======
+					       resource_size(&chip->rsrc[i]),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					       rnames[i]) == NULL) {
 				printk(KERN_ERR "snd: can't request rsrc "
 				       " %d (%s: %pR)\n",

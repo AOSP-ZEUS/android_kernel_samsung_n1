@@ -967,6 +967,7 @@ static int __devinit ads7846_setup_pendown(struct spi_device *spi, struct ads784
 		ts->get_pendown_state = pdata->get_pendown_state;
 	} else if (gpio_is_valid(pdata->gpio_pendown)) {
 
+<<<<<<< HEAD
 		err = gpio_request(pdata->gpio_pendown, "ads7846_pendown");
 		if (err) {
 			dev_err(&spi->dev, "failed to request pendown GPIO%d\n",
@@ -978,6 +979,14 @@ static int __devinit ads7846_setup_pendown(struct spi_device *spi, struct ads784
 			dev_err(&spi->dev, "failed to setup pendown GPIO%d\n",
 				pdata->gpio_pendown);
 			gpio_free(pdata->gpio_pendown);
+=======
+		err = gpio_request_one(pdata->gpio_pendown, GPIOF_IN,
+				       "ads7846_pendown");
+		if (err) {
+			dev_err(&spi->dev,
+				"failed to request/setup pendown GPIO%d: %d\n",
+				pdata->gpio_pendown, err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return err;
 		}
 

@@ -892,6 +892,40 @@ static int if_sdio_reset_deep_sleep_wakeup(struct lbs_private *priv)
 
 }
 
+<<<<<<< HEAD
+=======
+static struct mmc_host *reset_host;
+
+static void if_sdio_reset_card_worker(struct work_struct *work)
+{
+	/*
+	 * The actual reset operation must be run outside of lbs_thread. This
+	 * is because mmc_remove_host() will cause the device to be instantly
+	 * destroyed, and the libertas driver then needs to end lbs_thread,
+	 * leading to a deadlock.
+	 *
+	 * We run it in a workqueue totally independent from the if_sdio_card
+	 * instance for that reason.
+	 */
+
+	pr_info("Resetting card...");
+	mmc_remove_host(reset_host);
+	mmc_add_host(reset_host);
+}
+static DECLARE_WORK(card_reset_work, if_sdio_reset_card_worker);
+
+static void if_sdio_reset_card(struct lbs_private *priv)
+{
+	struct if_sdio_card *card = priv->card;
+
+	if (work_pending(&card_reset_work))
+		return;
+
+	reset_host = card->func->card->host;
+	schedule_work(&card_reset_work);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*******************************************************************/
 /* SDIO callbacks                                                  */
 /*******************************************************************/
@@ -1065,6 +1099,10 @@ static int if_sdio_probe(struct sdio_func *func,
 	priv->enter_deep_sleep = if_sdio_enter_deep_sleep;
 	priv->exit_deep_sleep = if_sdio_exit_deep_sleep;
 	priv->reset_deep_sleep_wakeup = if_sdio_reset_deep_sleep_wakeup;
+<<<<<<< HEAD
+=======
+	priv->reset_card = if_sdio_reset_card;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	sdio_claim_host(func);
 
@@ -1301,6 +1339,11 @@ static void __exit if_sdio_exit_module(void)
 	/* Set the flag as user is removing this module. */
 	user_rmmod = 1;
 
+<<<<<<< HEAD
+=======
+	cancel_work_sync(&card_reset_work);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sdio_unregister_driver(&if_sdio_driver);
 
 	lbs_deb_leave(LBS_DEB_SDIO);

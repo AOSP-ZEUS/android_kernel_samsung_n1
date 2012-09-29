@@ -639,7 +639,11 @@ EXPORT_SYMBOL_GPL(rtc_irq_unregister);
 static int rtc_update_hrtimer(struct rtc_device *rtc, int enabled)
 {
 	/*
+<<<<<<< HEAD
 	 * We unconditionally cancel the timer here, because otherwise
+=======
+	 * We always cancel the timer here first, because otherwise
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * we could run into BUG_ON(timer->state != HRTIMER_STATE_CALLBACK);
 	 * when we manage to start the timer before the callback
 	 * returns HRTIMER_RESTART.
@@ -762,6 +766,7 @@ static int rtc_timer_enqueue(struct rtc_device *rtc, struct rtc_timer *timer)
 	return 0;
 }
 
+<<<<<<< HEAD
 static void rtc_alarm_disable(struct rtc_device *rtc)
 {
 	if (!rtc->ops || !rtc->ops->alarm_irq_enable)
@@ -770,6 +775,8 @@ static void rtc_alarm_disable(struct rtc_device *rtc)
 	rtc->ops->alarm_irq_enable(rtc->dev.parent, false);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * rtc_timer_remove - Removes a rtc_timer from the rtc_device timerqueue
  * @rtc rtc device
@@ -791,10 +798,15 @@ static void rtc_timer_remove(struct rtc_device *rtc, struct rtc_timer *timer)
 		struct rtc_wkalrm alarm;
 		int err;
 		next = timerqueue_getnext(&rtc->timerqueue);
+<<<<<<< HEAD
 		if (!next) {
 			rtc_alarm_disable(rtc);
 			return;
 		}
+=======
+		if (!next)
+			return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		alarm.time = rtc_ktime_to_tm(next->expires);
 		alarm.enabled = 1;
 		err = __rtc_set_alarm(rtc, &alarm);
@@ -856,8 +868,12 @@ again:
 		err = __rtc_set_alarm(rtc, &alarm);
 		if (err == -ETIME)
 			goto again;
+<<<<<<< HEAD
 	} else
 		rtc_alarm_disable(rtc);
+=======
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_unlock(&rtc->ops_lock);
 }

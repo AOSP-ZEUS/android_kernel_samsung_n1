@@ -506,7 +506,11 @@ int pn_sock_get_port(struct sock *sk, unsigned short sport)
 
 		phonet_get_local_port_range(&pmin, &pmax);
 		for (port = pmin; port <= pmax; port++) {
+<<<<<<< HEAD
 			port_cur += PN_HASHSIZE;
+=======
+			port_cur++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (port_cur < pmin || port_cur > pmax)
 				port_cur = pmin;
 

@@ -19,3 +19,7 @@ obj-$(CONFIG_MACH_BROWNSTONE)	+= brownstone.o
 obj-$(CONFIG_MACH_FLINT)	+= flint.o
 obj-$(CONFIG_MACH_MARVELL_JASPER) += jasper.o
 obj-$(CONFIG_MACH_TETON_BGA)	+= teton_bga.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_MACH_SHEEVAD)	+= gplugd.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

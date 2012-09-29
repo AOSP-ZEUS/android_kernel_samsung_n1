@@ -351,6 +351,10 @@
 #define		COLOR_BUFFER_SIZE(x)				((x) << 0)
 #define		POSITION_BUFFER_SIZE(x)				((x) << 8)
 #define		SMX_BUFFER_SIZE(x)				((x) << 16)
+<<<<<<< HEAD
+=======
+#define	SX_MEMORY_EXPORT_BASE				0x9010
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define	SX_MISC						0x28350
 
 #define CB_PERF_CTR0_SEL_0				0x9A20
@@ -1122,6 +1126,10 @@
 #define CAYMAN_PA_SC_AA_CONFIG				0x28BE0
 #define         CAYMAN_MSAA_NUM_SAMPLES_SHIFT           0
 #define         CAYMAN_MSAA_NUM_SAMPLES_MASK            0x7
+<<<<<<< HEAD
+=======
+#define CAYMAN_SX_SCATTER_EXPORT_BASE			0x28358
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* cayman packet3 addition */
 #define	CAYMAN_PACKET3_DEALLOC_STATE			0x14
 

@@ -62,6 +62,15 @@ struct sh_dmae_pdata {
 	const unsigned int *ts_shift;
 	int ts_shift_num;
 	u16 dmaor_init;
+<<<<<<< HEAD
+=======
+	unsigned int chcr_offset;
+	u32 chcr_ie_bit;
+
+	unsigned int dmaor_is_32bit:1;
+	unsigned int needs_tend_set:1;
+	unsigned int no_dmars:1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* DMA register */
@@ -71,6 +80,11 @@ struct sh_dmae_pdata {
 #define CHCR	0x0C
 #define DMAOR	0x40
 
+<<<<<<< HEAD
+=======
+#define TEND	0x18 /* USB-DMAC */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* DMAOR definitions */
 #define DMAOR_AE	0x00000004
 #define DMAOR_NMIF	0x00000002

@@ -292,6 +292,10 @@ Code  Seq#(hex)	Include File		Comments
 					<mailto:buk@buks.ipn.de>
 0xA0	all	linux/sdp/sdp.h		Industrial Device Project
 					<mailto:kenji@bitgate.com>
+<<<<<<< HEAD
+=======
+0xA2	00-0F	arch/tile/include/asm/hardwall.h
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 0xA3	80-8F	Port ACL		in development:
 					<mailto:tlewis@mindspring.com>
 0xA3	90-9F	linux/dtlk.h
@@ -301,6 +305,10 @@ Code  Seq#(hex)	Include File		Comments
 					<mailto:rusty@rustcorp.com.au>
 0xAE	all	linux/kvm.h		Kernel-based Virtual Machine
 					<mailto:kvm@vger.kernel.org>
+<<<<<<< HEAD
+=======
+0xAF	00-1F	linux/fsl_hypervisor.h	Freescale hypervisor
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 0xB0	all	RATIO devices		in development:
 					<mailto:vgo@ratio.de>
 0xB1	00-1F	PPPoX			<mailto:mostrows@styx.uwaterloo.ca>
@@ -317,4 +325,9 @@ Code  Seq#(hex)	Include File		Comments
 					<mailto:thomas@winischhofer.net>
 0xF4	00-1F	video/mbxfb.h		mbxfb
 					<mailto:raph@8d.com>
+<<<<<<< HEAD
+=======
+0xF6	all	LTTng			Linux Trace Toolkit Next Generation
+					<mailto:mathieu.desnoyers@efficios.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 0xFD	all	linux/dm-ioctl.h

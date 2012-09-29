@@ -27,8 +27,11 @@ SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  * reply over an existing open connection previously established by the client.
  */
 
+<<<<<<< HEAD
 #if defined(CONFIG_NFS_V4_1)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 
 #include <linux/sunrpc/xprt.h>
@@ -63,4 +66,7 @@ int bc_send(struct rpc_rqst *req)
 	return ret;
 }
 
+<<<<<<< HEAD
 #endif /* CONFIG_NFS_V4_1 */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

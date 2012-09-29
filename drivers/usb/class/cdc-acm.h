@@ -115,8 +115,15 @@ struct acm {
 	unsigned int is_int_ep:1;			/* interrupt endpoints contrary to spec used */
 	unsigned int throttled:1;			/* actually throttled */
 	unsigned int throttle_req:1;			/* throttle requested */
+<<<<<<< HEAD
 	u8 bInterval;
 	struct acm_wb *delayed_wb;			/* write queued for a device about to be woken */
+=======
+	unsigned int no_hangup_in_reset_resume:1;	/* do not call tty_hangup in acm_reset_resume */
+	u8 bInterval;
+	struct acm_wb *delayed_wb;			/* write queued for a device about to be woken */
+	struct usb_anchor	deferred;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #define CDC_DATA_INTERFACE_TYPE	0x0a
@@ -127,3 +134,8 @@ struct acm {
 #define NO_CAP_LINE			4
 #define NOT_A_MODEM			8
 #define NO_DATA_INTERFACE		16
+<<<<<<< HEAD
+=======
+#define NOT_REAL_ACM			32
+#define NO_HANGUP_IN_RESET_RESUME	64
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

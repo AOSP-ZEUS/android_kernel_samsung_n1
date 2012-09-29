@@ -344,9 +344,15 @@ _xfs_filestream_update_ag(
 	 * Either ip is a regular file and pip is a directory, or ip is a
 	 * directory and pip is NULL.
 	 */
+<<<<<<< HEAD
 	ASSERT(ip && (((ip->i_d.di_mode & S_IFREG) && pip &&
 	               (pip->i_d.di_mode & S_IFDIR)) ||
 	              ((ip->i_d.di_mode & S_IFDIR) && !pip)));
+=======
+	ASSERT(ip && ((S_ISREG(ip->i_d.di_mode) && pip &&
+	               S_ISDIR(pip->i_d.di_mode)) ||
+	              (S_ISDIR(ip->i_d.di_mode) && !pip)));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mp = ip->i_mount;
 	cache = mp->m_filestream;
@@ -537,7 +543,11 @@ xfs_filestream_lookup_ag(
 	xfs_agnumber_t	ag;
 	int		ref;
 
+<<<<<<< HEAD
 	if (!(ip->i_d.di_mode & (S_IFREG | S_IFDIR))) {
+=======
+	if (!S_ISREG(ip->i_d.di_mode) && !S_ISDIR(ip->i_d.di_mode)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ASSERT(0);
 		return NULLAGNUMBER;
 	}
@@ -579,9 +589,15 @@ xfs_filestream_associate(
 	xfs_agnumber_t	ag, rotorstep, startag;
 	int		err = 0;
 
+<<<<<<< HEAD
 	ASSERT(pip->i_d.di_mode & S_IFDIR);
 	ASSERT(ip->i_d.di_mode & S_IFREG);
 	if (!(pip->i_d.di_mode & S_IFDIR) || !(ip->i_d.di_mode & S_IFREG))
+=======
+	ASSERT(S_ISDIR(pip->i_d.di_mode));
+	ASSERT(S_ISREG(ip->i_d.di_mode));
+	if (!S_ISDIR(pip->i_d.di_mode) || !S_ISREG(ip->i_d.di_mode))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 
 	mp = pip->i_mount;

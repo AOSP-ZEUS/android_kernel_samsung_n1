@@ -130,7 +130,10 @@ static struct platform_device asmb_flash_device = {
 
 static struct bfin5xx_spi_chip mmc_spi_chip_info = {
 	.enable_dma    = 0,	 /* use no dma transfer with this chip*/
+<<<<<<< HEAD
 	.bits_per_word = 8,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif
@@ -161,7 +164,10 @@ static struct flash_platform_data bfin_spi_dataflash_data = {
 
 static struct bfin5xx_spi_chip spi_dataflash_chip_info = {
 	.enable_dma    = 0,	 /* use no dma transfer with this chip*/
+<<<<<<< HEAD
 	.bits_per_word = 8,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 #endif
 

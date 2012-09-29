@@ -273,6 +273,7 @@ static ssize_t softsynth_write(struct file *fp, const char *buf, size_t count,
 {
 	unsigned long supplied_index = 0;
 	int converted;
+<<<<<<< HEAD
 	char indbuf[5];
 	if (count >= sizeof(indbuf))
 		return -EINVAL;
@@ -282,6 +283,10 @@ static ssize_t softsynth_write(struct file *fp, const char *buf, size_t count,
 	indbuf[count] = '\0';
 
 	converted = strict_strtoul(indbuf, 0, &supplied_index);
+=======
+
+	converted = kstrtoul_from_user(buf, count, 0, &supplied_index);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (converted < 0)
 		return converted;

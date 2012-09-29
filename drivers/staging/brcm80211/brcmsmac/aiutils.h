@@ -14,6 +14,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+<<<<<<< HEAD
 #ifndef	_aiutils_h_
 #define	_aiutils_h_
 
@@ -26,6 +27,12 @@
 
 /* Include the soci specific files */
 #include <aidmp.h>
+=======
+#ifndef	_BRCM_AIUTILS_H_
+#define	_BRCM_AIUTILS_H_
+
+#include "types.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * SOC Interconnect Address Map.
@@ -158,9 +165,13 @@
 					 * maps all unused address ranges
 					 */
 
+<<<<<<< HEAD
 /* There are TWO constants on all HND chips: SI_ENUM_BASE above,
  * and chipcommon being the first core:
  */
+=======
+/* chipcommon being the first core: */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define	SI_CC_IDX		0
 
 /* SOC Interconnect types (aka chip types) */
@@ -225,7 +236,74 @@
 #define	BISZ_BSSEND_IDX		6	/*      6: bss end */
 #define BISZ_SIZE		7	/* descriptor size in 32-bit integers */
 
+<<<<<<< HEAD
 #define	SI_INFO(sih)	(si_info_t *)sih
+=======
+#define	CC_SROM_OTP		0x800	/* SROM/OTP address space */
+
+/* gpiotimerval */
+#define GPIO_ONTIME_SHIFT	16
+
+/* Fields in clkdiv */
+#define	CLKD_OTP		0x000f0000
+#define	CLKD_OTP_SHIFT		16
+
+/* When Srom support present, fields in sromcontrol */
+#define	SRC_START		0x80000000
+#define	SRC_BUSY		0x80000000
+#define	SRC_OPCODE		0x60000000
+#define	SRC_OP_READ		0x00000000
+#define	SRC_OP_WRITE		0x20000000
+#define	SRC_OP_WRDIS		0x40000000
+#define	SRC_OP_WREN		0x60000000
+#define	SRC_OTPSEL		0x00000010
+#define	SRC_LOCK		0x00000008
+#define	SRC_SIZE_MASK		0x00000006
+#define	SRC_SIZE_1K		0x00000000
+#define	SRC_SIZE_4K		0x00000002
+#define	SRC_SIZE_16K		0x00000004
+#define	SRC_SIZE_SHIFT		1
+#define	SRC_PRESENT		0x00000001
+
+/* 4330 chip-specific ChipStatus register bits */
+#define CST4330_CHIPMODE_SDIOD(cs)	(((cs) & 0x7) < 6)	/* SDIO || gSPI */
+#define CST4330_CHIPMODE_USB20D(cs)	(((cs) & 0x7) >= 6)	/* USB || USBDA */
+#define CST4330_CHIPMODE_SDIO(cs)	(((cs) & 0x4) == 0)	/* SDIO */
+#define CST4330_CHIPMODE_GSPI(cs)	(((cs) & 0x6) == 4)	/* gSPI */
+#define CST4330_CHIPMODE_USB(cs)	(((cs) & 0x7) == 6)	/* USB packet-oriented */
+#define CST4330_CHIPMODE_USBDA(cs)	(((cs) & 0x7) == 7)	/* USB Direct Access */
+#define	CST4330_OTP_PRESENT		0x00000010
+#define	CST4330_LPO_AUTODET_EN		0x00000020
+#define	CST4330_ARMREMAP_0		0x00000040
+#define	CST4330_SPROM_PRESENT		0x00000080	/* takes priority over OTP if both set */
+#define	CST4330_ILPDIV_EN		0x00000100
+#define	CST4330_LPO_SEL			0x00000200
+#define	CST4330_RES_INIT_MODE_SHIFT	10
+#define	CST4330_RES_INIT_MODE_MASK	0x00000c00
+#define CST4330_CBUCK_MODE_SHIFT	12
+#define CST4330_CBUCK_MODE_MASK		0x00003000
+#define	CST4330_CBUCK_POWER_OK		0x00004000
+#define	CST4330_BB_PLL_LOCKED		0x00008000
+
+/* Package IDs */
+#define BCM4329_289PIN_PKG_ID	0	/* 4329 289-pin package id */
+#define BCM4329_182PIN_PKG_ID	1	/* 4329N 182-pin package id */
+#define	BCM4717_PKG_ID		9	/* 4717 package id */
+#define	BCM4718_PKG_ID		10	/* 4718 package id */
+#define HDLSIM_PKG_ID		14	/* HDL simulator package id */
+#define HWSIM_PKG_ID		15	/* Hardware simulator package id */
+#define BCM43224_FAB_SMIC	0xa	/* the chip is manufactured by SMIC */
+
+/* these are router chips */
+#define	BCM4716_CHIP_ID		0x4716	/* 4716 chipcommon chipid */
+#define	BCM47162_CHIP_ID	47162	/* 47162 chipcommon chipid */
+#define	BCM4748_CHIP_ID		0x4748	/* 4716 chipcommon chipid (OTP, RBBU) */
+#define	BCM5356_CHIP_ID		0x5356	/* 5356 chipcommon chipid */
+#define	BCM5357_CHIP_ID		0x5357	/* 5357 chipcommon chipid */
+
+
+#define	SI_INFO(sih)	((struct si_info *)sih)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define	GOODCOREADDR(x, b) \
 	(((x) >= (b)) && ((x) < ((b) + SI_MAXCORES * SI_CORE_SIZE)) && \
@@ -315,6 +393,7 @@ struct si_pub {
 };
 
 /*
+<<<<<<< HEAD
  * for HIGH_ONLY driver, the si_t must be writable to allow states sync from
  * BMAC to HIGH driver for monolithic driver, it is readonly to prevent accident
  * change
@@ -322,6 +401,8 @@ struct si_pub {
 typedef const struct si_pub si_t;
 
 /*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Many of the routines below take an 'sih' handle as their first arg.
  * Allocate this by calling si_attach().  Free it by calling si_detach().
  * At any one time, the sih is logically focused on one particular si core
@@ -363,8 +444,11 @@ typedef const struct si_pub si_t;
 #define SI_PCIDOWN	2
 #define SI_PCIUP	3
 
+<<<<<<< HEAD
 #define	ISSIM_ENAB(sih)	0
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* PMU clock/power control */
 #if defined(BCMPMUCTL)
 #define PMUCTL_ENAB(sih)	(BCMPMUCTL)
@@ -404,16 +488,27 @@ typedef u32(*si_intrsoff_t) (void *intr_arg);
 typedef void (*si_intrsrestore_t) (void *intr_arg, u32 arg);
 typedef bool(*si_intrsenabled_t) (void *intr_arg);
 
+<<<<<<< HEAD
 typedef struct gpioh_item {
+=======
+struct gpioh_item {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	void *arg;
 	bool level;
 	gpio_handler_t handler;
 	u32 event;
 	struct gpioh_item *next;
+<<<<<<< HEAD
 } gpioh_item_t;
 
 /* misc si info needed by some of the routines */
 typedef struct si_info {
+=======
+};
+
+/* misc si info needed by some of the routines */
+struct si_info {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct si_pub pub;	/* back plane public state (must be first) */
 	void *pbus;		/* handle to bus (pci/sdio/..) */
 	uint dev_coreid;	/* the core provides driver functions */
@@ -424,10 +519,13 @@ typedef struct si_info {
 
 	void *pch;		/* PCI/E core handle */
 
+<<<<<<< HEAD
 	gpioh_item_t *gpioh_head;	/* GPIO event handlers list */
 
 	bool memseg;		/* flag to toggle MEM_SEG register */
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char *vars;
 	uint varsz;
 
@@ -450,6 +548,7 @@ typedef struct si_info {
 	u32 cia[SI_MAXCORES];	/* erom cia entry for each core */
 	u32 cib[SI_MAXCORES];	/* erom cia entry for each core */
 	u32 oob_router;	/* oob router registers for axi */
+<<<<<<< HEAD
 } si_info_t;
 
 /* AMBA Interconnect exported externs */
@@ -521,12 +620,84 @@ extern void ai_otp_power(si_t *sih, bool on);
 
 /* SPROM availability */
 extern bool ai_is_sprom_available(si_t *sih);
+=======
+};
+
+/* AMBA Interconnect exported externs */
+extern void ai_scan(struct si_pub *sih, void *regs);
+
+extern uint ai_flag(struct si_pub *sih);
+extern void ai_setint(struct si_pub *sih, int siflag);
+extern uint ai_coreidx(struct si_pub *sih);
+extern uint ai_corevendor(struct si_pub *sih);
+extern uint ai_corerev(struct si_pub *sih);
+extern bool ai_iscoreup(struct si_pub *sih);
+extern void *ai_setcoreidx(struct si_pub *sih, uint coreidx);
+extern u32 ai_core_cflags(struct si_pub *sih, u32 mask, u32 val);
+extern void ai_core_cflags_wo(struct si_pub *sih, u32 mask, u32 val);
+extern u32 ai_core_sflags(struct si_pub *sih, u32 mask, u32 val);
+extern uint ai_corereg(struct si_pub *sih, uint coreidx, uint regoff, uint mask,
+		       uint val);
+extern void ai_core_reset(struct si_pub *sih, u32 bits, u32 resetbits);
+extern void ai_core_disable(struct si_pub *sih, u32 bits);
+extern int ai_numaddrspaces(struct si_pub *sih);
+extern u32 ai_addrspace(struct si_pub *sih, uint asidx);
+extern u32 ai_addrspacesize(struct si_pub *sih, uint asidx);
+extern void ai_write_wrap_reg(struct si_pub *sih, u32 offset, u32 val);
+
+/* === exported functions === */
+extern struct si_pub *ai_attach(void *regs, uint bustype,
+		       void *sdh, char **vars, uint *varsz);
+
+extern void ai_detach(struct si_pub *sih);
+extern bool ai_pci_war16165(struct si_pub *sih);
+
+extern uint ai_coreid(struct si_pub *sih);
+extern uint ai_corerev(struct si_pub *sih);
+extern uint ai_corereg(struct si_pub *sih, uint coreidx, uint regoff, uint mask,
+		uint val);
+extern void ai_write_wrapperreg(struct si_pub *sih, u32 offset, u32 val);
+extern u32 ai_core_cflags(struct si_pub *sih, u32 mask, u32 val);
+extern u32 ai_core_sflags(struct si_pub *sih, u32 mask, u32 val);
+extern bool ai_iscoreup(struct si_pub *sih);
+extern uint ai_findcoreidx(struct si_pub *sih, uint coreid, uint coreunit);
+extern void *ai_setcoreidx(struct si_pub *sih, uint coreidx);
+extern void *ai_setcore(struct si_pub *sih, uint coreid, uint coreunit);
+extern void *ai_switch_core(struct si_pub *sih, uint coreid, uint *origidx,
+			    uint *intr_val);
+extern void ai_restore_core(struct si_pub *sih, uint coreid, uint intr_val);
+extern void ai_core_reset(struct si_pub *sih, u32 bits, u32 resetbits);
+extern void ai_core_disable(struct si_pub *sih, u32 bits);
+extern u32 ai_alp_clock(struct si_pub *sih);
+extern u32 ai_ilp_clock(struct si_pub *sih);
+extern void ai_pci_setup(struct si_pub *sih, uint coremask);
+extern void ai_setint(struct si_pub *sih, int siflag);
+extern bool ai_backplane64(struct si_pub *sih);
+extern void ai_register_intr_callback(struct si_pub *sih, void *intrsoff_fn,
+				      void *intrsrestore_fn,
+				      void *intrsenabled_fn, void *intr_arg);
+extern void ai_deregister_intr_callback(struct si_pub *sih);
+extern void ai_clkctl_init(struct si_pub *sih);
+extern u16 ai_clkctl_fast_pwrup_delay(struct si_pub *sih);
+extern bool ai_clkctl_cc(struct si_pub *sih, uint mode);
+extern int ai_clkctl_xtal(struct si_pub *sih, uint what, bool on);
+extern bool ai_deviceremoved(struct si_pub *sih);
+extern u32 ai_gpiocontrol(struct si_pub *sih, u32 mask, u32 val,
+			     u8 priority);
+
+/* OTP status */
+extern bool ai_is_otp_disabled(struct si_pub *sih);
+
+/* SPROM availability */
+extern bool ai_is_sprom_available(struct si_pub *sih);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Build device path. Path size must be >= SI_DEVPATH_BUFSZ.
  * The returned path is NULL terminated and has trailing '/'.
  * Return 0 on success, nonzero otherwise.
  */
+<<<<<<< HEAD
 extern int ai_devpath(si_t *sih, char *path, int size);
 /* Read variable with prepending the devpath to the name */
 extern char *ai_getdevpathvar(si_t *sih, const char *name);
@@ -544,3 +715,22 @@ extern void ai_epa_4313war(si_t *sih);
 char *ai_getnvramflvar(si_t *sih, const char *name);
 
 #endif				/* _aiutils_h_ */
+=======
+extern int ai_devpath(struct si_pub *sih, char *path, int size);
+/* Read variable with prepending the devpath to the name */
+extern char *ai_getdevpathvar(struct si_pub *sih, const char *name);
+extern int ai_getdevpathintvar(struct si_pub *sih, const char *name);
+
+extern void ai_pci_sleep(struct si_pub *sih);
+extern void ai_pci_down(struct si_pub *sih);
+extern void ai_pci_up(struct si_pub *sih);
+extern int ai_pci_fixcfg(struct si_pub *sih);
+
+extern void ai_chipcontrl_epa4331(struct si_pub *sih, bool on);
+/* Enable Ex-PA for 4313 */
+extern void ai_epa_4313war(struct si_pub *sih);
+
+char *ai_getnvramflvar(struct si_pub *sih, const char *name);
+
+#endif				/* _BRCM_AIUTILS_H_ */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

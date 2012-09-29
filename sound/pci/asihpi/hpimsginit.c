@@ -46,7 +46,11 @@ static void hpi_init_message(struct hpi_message *phm, u16 object,
 	if (gwSSX2_bypass)
 		phm->type = HPI_TYPE_SSX2BYPASS_MESSAGE;
 	else
+<<<<<<< HEAD
 		phm->type = HPI_TYPE_MESSAGE;
+=======
+		phm->type = HPI_TYPE_REQUEST;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	phm->object = object;
 	phm->function = function;
 	phm->version = 0;
@@ -89,7 +93,11 @@ static void hpi_init_messageV1(struct hpi_message_header *phm, u16 size,
 	memset(phm, 0, sizeof(*phm));
 	if ((object > 0) && (object <= HPI_OBJ_MAXINDEX)) {
 		phm->size = size;
+<<<<<<< HEAD
 		phm->type = HPI_TYPE_MESSAGE;
+=======
+		phm->type = HPI_TYPE_REQUEST;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		phm->object = object;
 		phm->function = function;
 		phm->version = 1;

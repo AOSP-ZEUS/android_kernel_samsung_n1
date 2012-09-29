@@ -532,7 +532,11 @@ static void ioc3_tcpudp_checksum(struct sk_buff *skb, uint32_t hwsum, int len)
 		return;
 
 	ih = (struct iphdr *) ((char *)eh + ETH_HLEN);
+<<<<<<< HEAD
 	if (ih->frag_off & htons(IP_MF | IP_OFFSET))
+=======
+	if (ip_is_fragment(ih))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 
 	proto = ih->protocol;
@@ -1664,12 +1668,16 @@ static void ioc3_set_multicast_list(struct net_device *dev)
 			ip->ehar_l = 0xffffffff;
 		} else {
 			netdev_for_each_mc_addr(ha, dev) {
+<<<<<<< HEAD
 				char *addr = ha->addr;
 
 				if (!(*addr & 1))
 					continue;
 
 				ehar |= (1UL << ioc3_hash(addr));
+=======
+				ehar |= (1UL << ioc3_hash(ha->addr));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 			ip->ehar_h = ehar >> 32;
 			ip->ehar_l = ehar & 0xffffffff;

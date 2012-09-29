@@ -799,6 +799,10 @@ int rt2x00usb_probe(struct usb_interface *usb_intf,
 	int retval;
 
 	usb_dev = usb_get_dev(usb_dev);
+<<<<<<< HEAD
+=======
+	usb_reset_device(usb_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	hw = ieee80211_alloc_hw(sizeof(struct rt2x00_dev), ops->hw);
 	if (!hw) {

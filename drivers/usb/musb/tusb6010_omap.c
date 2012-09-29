@@ -20,6 +20,10 @@
 #include <plat/mux.h>
 
 #include "musb_core.h"
+<<<<<<< HEAD
+=======
+#include "tusb6010.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define to_chdat(c)		((struct tusb_omap_dma_ch *)(c)->private_data)
 
@@ -89,7 +93,11 @@ static inline int tusb_omap_use_shared_dmareq(struct tusb_omap_dma_ch *chdat)
 	u32		reg = musb_readl(chdat->tbase, TUSB_DMA_EP_MAP);
 
 	if (reg != 0) {
+<<<<<<< HEAD
 		dev_dbg(musb->controller, "ep%i dmareq0 is busy for ep%i\n",
+=======
+		dev_dbg(chdat->musb->controller, "ep%i dmareq0 is busy for ep%i\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			chdat->epnum, reg & 0xf);
 		return -EAGAIN;
 	}

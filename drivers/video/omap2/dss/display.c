@@ -29,6 +29,10 @@
 
 #include <video/omapdss.h>
 #include "dss.h"
+<<<<<<< HEAD
+=======
+#include "dss_features.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static ssize_t display_enabled_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
@@ -65,6 +69,7 @@ static ssize_t display_enabled_store(struct device *dev,
 	return size;
 }
 
+<<<<<<< HEAD
 static ssize_t display_upd_mode_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -107,6 +112,8 @@ static ssize_t display_upd_mode_store(struct device *dev,
 	return size;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static ssize_t display_tear_show(struct device *dev,
 		struct device_attribute *attr, char *buf)
 {
@@ -294,8 +301,11 @@ static ssize_t display_wss_store(struct device *dev,
 
 static DEVICE_ATTR(enabled, S_IRUGO|S_IWUSR,
 		display_enabled_show, display_enabled_store);
+<<<<<<< HEAD
 static DEVICE_ATTR(update_mode, S_IRUGO|S_IWUSR,
 		display_upd_mode_show, display_upd_mode_store);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static DEVICE_ATTR(tear_elim, S_IRUGO|S_IWUSR,
 		display_tear_show, display_tear_store);
 static DEVICE_ATTR(timings, S_IRUGO|S_IWUSR,
@@ -309,7 +319,10 @@ static DEVICE_ATTR(wss, S_IRUGO|S_IWUSR,
 
 static struct device_attribute *display_sysfs_attrs[] = {
 	&dev_attr_enabled,
+<<<<<<< HEAD
 	&dev_attr_update_mode,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	&dev_attr_tear_elim,
 	&dev_attr_timings,
 	&dev_attr_rotate,
@@ -327,6 +340,7 @@ void omapdss_default_get_resolution(struct omap_dss_device *dssdev,
 EXPORT_SYMBOL(omapdss_default_get_resolution);
 
 void default_get_overlay_fifo_thresholds(enum omap_plane plane,
+<<<<<<< HEAD
 		u32 fifo_size, enum omap_burst_size *burst_size,
 		u32 *fifo_low, u32 *fifo_high)
 {
@@ -337,6 +351,15 @@ void default_get_overlay_fifo_thresholds(enum omap_plane plane,
 
 	*fifo_high = fifo_size - 1;
 	*fifo_low = fifo_size - burst_size_bytes;
+=======
+		u32 fifo_size, u32 burst_size,
+		u32 *fifo_low, u32 *fifo_high)
+{
+	unsigned buf_unit = dss_feat_get_buffer_size_unit();
+
+	*fifo_high = fifo_size - buf_unit;
+	*fifo_low = fifo_size - burst_size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int omapdss_default_get_recommended_bpp(struct omap_dss_device *dssdev)

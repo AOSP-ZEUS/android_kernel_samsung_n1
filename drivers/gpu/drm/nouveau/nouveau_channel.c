@@ -27,6 +27,7 @@
 #include "nouveau_drv.h"
 #include "nouveau_drm.h"
 #include "nouveau_dma.h"
+<<<<<<< HEAD
 
 static int
 nouveau_channel_pushbuf_ctxdma_init(struct nouveau_channel *chan)
@@ -38,12 +39,49 @@ nouveau_channel_pushbuf_ctxdma_init(struct nouveau_channel *chan)
 	int ret = 0;
 
 	if (dev_priv->card_type >= NV_50) {
+=======
+#include "nouveau_ramht.h"
+
+static int
+nouveau_channel_pushbuf_init(struct nouveau_channel *chan)
+{
+	u32 mem = nouveau_vram_pushbuf ? TTM_PL_FLAG_VRAM : TTM_PL_FLAG_TT;
+	struct drm_device *dev = chan->dev;
+	struct drm_nouveau_private *dev_priv = dev->dev_private;
+	int ret;
+
+	/* allocate buffer object */
+	ret = nouveau_bo_new(dev, 65536, 0, mem, 0, 0, &chan->pushbuf_bo);
+	if (ret)
+		goto out;
+
+	ret = nouveau_bo_pin(chan->pushbuf_bo, mem);
+	if (ret)
+		goto out;
+
+	ret = nouveau_bo_map(chan->pushbuf_bo);
+	if (ret)
+		goto out;
+
+	/* create DMA object covering the entire memtype where the push
+	 * buffer resides, userspace can submit its own push buffers from
+	 * anywhere within the same memtype.
+	 */
+	chan->pushbuf_base = chan->pushbuf_bo->bo.offset;
+	if (dev_priv->card_type >= NV_50) {
+		ret = nouveau_bo_vma_add(chan->pushbuf_bo, chan->vm,
+					 &chan->pushbuf_vma);
+		if (ret)
+			goto out;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (dev_priv->card_type < NV_C0) {
 			ret = nouveau_gpuobj_dma_new(chan,
 						     NV_CLASS_DMA_IN_MEMORY, 0,
 						     (1ULL << 40),
 						     NV_MEM_ACCESS_RO,
 						     NV_MEM_TARGET_VM,
+<<<<<<< HEAD
 						     &pushbuf);
 		}
 		chan->pushbuf_base = pb->bo.offset;
@@ -54,13 +92,30 @@ nouveau_channel_pushbuf_ctxdma_init(struct nouveau_channel *chan)
 					     NV_MEM_ACCESS_RO,
 					     NV_MEM_TARGET_GART, &pushbuf);
 		chan->pushbuf_base = pb->bo.mem.start << PAGE_SHIFT;
+=======
+						     &chan->pushbuf);
+		}
+		chan->pushbuf_base = chan->pushbuf_vma.offset;
+	} else
+	if (chan->pushbuf_bo->bo.mem.mem_type == TTM_PL_TT) {
+		ret = nouveau_gpuobj_dma_new(chan, NV_CLASS_DMA_IN_MEMORY, 0,
+					     dev_priv->gart_info.aper_size,
+					     NV_MEM_ACCESS_RO,
+					     NV_MEM_TARGET_GART,
+					     &chan->pushbuf);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else
 	if (dev_priv->card_type != NV_04) {
 		ret = nouveau_gpuobj_dma_new(chan, NV_CLASS_DMA_IN_MEMORY, 0,
 					     dev_priv->fb_available_size,
 					     NV_MEM_ACCESS_RO,
+<<<<<<< HEAD
 					     NV_MEM_TARGET_VRAM, &pushbuf);
 		chan->pushbuf_base = pb->bo.mem.start << PAGE_SHIFT;
+=======
+					     NV_MEM_TARGET_VRAM,
+					     &chan->pushbuf);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		/* NV04 cmdbuf hack, from original ddx.. not sure of it's
 		 * exact reason for existing :)  PCI access to cmdbuf in
@@ -70,6 +125,7 @@ nouveau_channel_pushbuf_ctxdma_init(struct nouveau_channel *chan)
 					     pci_resource_start(dev->pdev, 1),
 					     dev_priv->fb_available_size,
 					     NV_MEM_ACCESS_RO,
+<<<<<<< HEAD
 					     NV_MEM_TARGET_PCI, &pushbuf);
 		chan->pushbuf_base = pb->bo.mem.start << PAGE_SHIFT;
 	}
@@ -111,6 +167,24 @@ nouveau_channel_user_pushbuf_alloc(struct drm_device *dev)
 	}
 
 	return pushbuf;
+=======
+					     NV_MEM_TARGET_PCI,
+					     &chan->pushbuf);
+	}
+
+out:
+	if (ret) {
+		NV_ERROR(dev, "error initialising pushbuf: %d\n", ret);
+		nouveau_bo_vma_del(chan->pushbuf_bo, &chan->pushbuf_vma);
+		nouveau_gpuobj_ref(NULL, &chan->pushbuf);
+		if (chan->pushbuf_bo) {
+			nouveau_bo_unmap(chan->pushbuf_bo);
+			nouveau_bo_ref(NULL, &chan->pushbuf_bo);
+		}
+	}
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* allocates and initializes a fifo for user space consumption */
@@ -121,6 +195,10 @@ nouveau_channel_alloc(struct drm_device *dev, struct nouveau_channel **chan_ret,
 {
 	struct drm_nouveau_private *dev_priv = dev->dev_private;
 	struct nouveau_fifo_engine *pfifo = &dev_priv->engine.fifo;
+<<<<<<< HEAD
+=======
+	struct nouveau_fpriv *fpriv = nouveau_fpriv(file_priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct nouveau_channel *chan;
 	unsigned long flags;
 	int ret;
@@ -161,19 +239,29 @@ nouveau_channel_alloc(struct drm_device *dev, struct nouveau_channel **chan_ret,
 	INIT_LIST_HEAD(&chan->fence.pending);
 	spin_lock_init(&chan->fence.lock);
 
+<<<<<<< HEAD
 	/* Allocate DMA push buffer */
 	chan->pushbuf_bo = nouveau_channel_user_pushbuf_alloc(dev);
 	if (!chan->pushbuf_bo) {
 		ret = -ENOMEM;
 		NV_ERROR(dev, "pushbuf %d\n", ret);
+=======
+	/* setup channel's memory and vm */
+	ret = nouveau_gpuobj_channel_init(chan, vram_handle, gart_handle);
+	if (ret) {
+		NV_ERROR(dev, "gpuobj %d\n", ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		nouveau_channel_put(&chan);
 		return ret;
 	}
 
+<<<<<<< HEAD
 	nouveau_dma_pre_init(chan);
 	chan->user_put = 0x40;
 	chan->user_get = 0x44;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Allocate space for per-channel fixed notifier memory */
 	ret = nouveau_notifier_init_channel(chan);
 	if (ret) {
@@ -182,14 +270,22 @@ nouveau_channel_alloc(struct drm_device *dev, struct nouveau_channel **chan_ret,
 		return ret;
 	}
 
+<<<<<<< HEAD
 	/* Setup channel's default objects */
 	ret = nouveau_gpuobj_channel_init(chan, vram_handle, gart_handle);
 	if (ret) {
 		NV_ERROR(dev, "gpuobj %d\n", ret);
+=======
+	/* Allocate DMA push buffer */
+	ret = nouveau_channel_pushbuf_init(chan);
+	if (ret) {
+		NV_ERROR(dev, "pushbuf %d\n", ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		nouveau_channel_put(&chan);
 		return ret;
 	}
 
+<<<<<<< HEAD
 	/* Create a dma object for the push buffer */
 	ret = nouveau_channel_pushbuf_ctxdma_init(chan);
 	if (ret) {
@@ -197,6 +293,11 @@ nouveau_channel_alloc(struct drm_device *dev, struct nouveau_channel **chan_ret,
 		nouveau_channel_put(&chan);
 		return ret;
 	}
+=======
+	nouveau_dma_pre_init(chan);
+	chan->user_put = 0x40;
+	chan->user_get = 0x44;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* disable the fifo caches */
 	pfifo->reassign(dev, false);
@@ -221,6 +322,14 @@ nouveau_channel_alloc(struct drm_device *dev, struct nouveau_channel **chan_ret,
 	nouveau_debugfs_channel_init(chan);
 
 	NV_DEBUG(dev, "channel %d initialised\n", chan->id);
+<<<<<<< HEAD
+=======
+	if (fpriv) {
+		spin_lock(&fpriv->lock);
+		list_add(&chan->list, &fpriv->channels);
+		spin_unlock(&fpriv->lock);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	*chan_ret = chan;
 	return 0;
 }
@@ -237,6 +346,7 @@ nouveau_channel_get_unlocked(struct nouveau_channel *ref)
 }
 
 struct nouveau_channel *
+<<<<<<< HEAD
 nouveau_channel_get(struct drm_device *dev, struct drm_file *file_priv, int id)
 {
 	struct drm_nouveau_private *dev_priv = dev->dev_private;
@@ -260,6 +370,25 @@ nouveau_channel_get(struct drm_device *dev, struct drm_file *file_priv, int id)
 
 	mutex_lock(&chan->mutex);
 	return chan;
+=======
+nouveau_channel_get(struct drm_file *file_priv, int id)
+{
+	struct nouveau_fpriv *fpriv = nouveau_fpriv(file_priv);
+	struct nouveau_channel *chan;
+
+	spin_lock(&fpriv->lock);
+	list_for_each_entry(chan, &fpriv->channels, list) {
+		if (chan->id == id) {
+			chan = nouveau_channel_get_unlocked(chan);
+			spin_unlock(&fpriv->lock);
+			mutex_lock(&chan->mutex);
+			return chan;
+		}
+	}
+	spin_unlock(&fpriv->lock);
+
+	return ERR_PTR(-EINVAL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void
@@ -313,12 +442,22 @@ nouveau_channel_put_unlocked(struct nouveau_channel **pchan)
 	/* destroy any resources the channel owned */
 	nouveau_gpuobj_ref(NULL, &chan->pushbuf);
 	if (chan->pushbuf_bo) {
+<<<<<<< HEAD
+=======
+		nouveau_bo_vma_del(chan->pushbuf_bo, &chan->pushbuf_vma);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		nouveau_bo_unmap(chan->pushbuf_bo);
 		nouveau_bo_unpin(chan->pushbuf_bo);
 		nouveau_bo_ref(NULL, &chan->pushbuf_bo);
 	}
+<<<<<<< HEAD
 	nouveau_gpuobj_channel_takedown(chan);
 	nouveau_notifier_takedown_channel(chan);
+=======
+	nouveau_ramht_ref(NULL, &chan->ramht, chan);
+	nouveau_notifier_takedown_channel(chan);
+	nouveau_gpuobj_channel_takedown(chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	nouveau_channel_ref(NULL, pchan);
 }
@@ -384,10 +523,18 @@ nouveau_channel_cleanup(struct drm_device *dev, struct drm_file *file_priv)
 
 	NV_DEBUG(dev, "clearing FIFO enables from file_priv\n");
 	for (i = 0; i < engine->fifo.channels; i++) {
+<<<<<<< HEAD
 		chan = nouveau_channel_get(dev, file_priv, i);
 		if (IS_ERR(chan))
 			continue;
 
+=======
+		chan = nouveau_channel_get(file_priv, i);
+		if (IS_ERR(chan))
+			continue;
+
+		list_del(&chan->list);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		atomic_dec(&chan->users);
 		nouveau_channel_put(&chan);
 	}
@@ -460,10 +607,18 @@ nouveau_ioctl_fifo_free(struct drm_device *dev, void *data,
 	struct drm_nouveau_channel_free *req = data;
 	struct nouveau_channel *chan;
 
+<<<<<<< HEAD
 	chan = nouveau_channel_get(dev, file_priv, req->channel);
 	if (IS_ERR(chan))
 		return PTR_ERR(chan);
 
+=======
+	chan = nouveau_channel_get(file_priv, req->channel);
+	if (IS_ERR(chan))
+		return PTR_ERR(chan);
+
+	list_del(&chan->list);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	atomic_dec(&chan->users);
 	nouveau_channel_put(&chan);
 	return 0;

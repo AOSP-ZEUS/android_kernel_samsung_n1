@@ -475,18 +475,28 @@ static int l2tp_ip_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *m
 	if (connected)
 		rt = (struct rtable *) __sk_dst_check(sk, 0);
 
+<<<<<<< HEAD
 	if (rt == NULL) {
 		struct ip_options_rcu *inet_opt;
 
 		rcu_read_lock();
+=======
+	rcu_read_lock();
+	if (rt == NULL) {
+		const struct ip_options_rcu *inet_opt;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		inet_opt = rcu_dereference(inet->inet_opt);
 
 		/* Use correct destination address if we have options. */
 		if (inet_opt && inet_opt->opt.srr)
 			daddr = inet_opt->opt.faddr;
 
+<<<<<<< HEAD
 		rcu_read_unlock();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* If this fails, retransmit mechanism of transport layer will
 		 * keep trying until route appears or the connection times
 		 * itself out.
@@ -498,12 +508,29 @@ static int l2tp_ip_sendmsg(struct kiocb *iocb, struct sock *sk, struct msghdr *m
 					   sk->sk_bound_dev_if);
 		if (IS_ERR(rt))
 			goto no_route;
+<<<<<<< HEAD
 		sk_setup_caps(sk, &rt->dst);
 	}
 	skb_dst_set(skb, dst_clone(&rt->dst));
 
 	/* Queue the packet to IP for output */
 	rc = ip_queue_xmit(skb, &inet->cork.fl);
+=======
+		if (connected)
+			sk_setup_caps(sk, &rt->dst);
+		else
+			dst_release(&rt->dst); /* safe since we hold rcu_read_lock */
+	}
+
+	/* We dont need to clone dst here, it is guaranteed to not disappear.
+	 *  __dev_xmit_skb() might force a refcount if needed.
+	 */
+	skb_dst_set_noref(skb, &rt->dst);
+
+	/* Queue the packet to IP for output */
+	rc = ip_queue_xmit(skb, &inet->cork.fl);
+	rcu_read_unlock();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 error:
 	/* Update stats */
@@ -520,6 +547,10 @@ out:
 	return rc;
 
 no_route:
+<<<<<<< HEAD
+=======
+	rcu_read_unlock();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	IP_INC_STATS(sock_net(sk), IPSTATS_MIB_OUTNOROUTES);
 	kfree_skb(skb);
 	rc = -EHOSTUNREACH;

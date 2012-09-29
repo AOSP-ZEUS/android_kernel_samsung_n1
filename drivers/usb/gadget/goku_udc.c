@@ -996,8 +996,19 @@ static int goku_get_frame(struct usb_gadget *_gadget)
 	return -EOPNOTSUPP;
 }
 
+<<<<<<< HEAD
 static const struct usb_gadget_ops goku_ops = {
 	.get_frame	= goku_get_frame,
+=======
+static int goku_start(struct usb_gadget_driver *driver,
+		int (*bind)(struct usb_gadget *));
+static int goku_stop(struct usb_gadget_driver *driver);
+
+static const struct usb_gadget_ops goku_ops = {
+	.get_frame	= goku_get_frame,
+	.start		= goku_start,
+	.stop		= goku_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	// no remote wakeup
 	// not selfpowered
 };
@@ -1344,7 +1355,11 @@ static struct goku_udc	*the_controller;
  * disconnect is reported.  then a host may connect again, or
  * the driver might get unbound.
  */
+<<<<<<< HEAD
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int goku_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	struct goku_udc	*dev = the_controller;
@@ -1382,7 +1397,10 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
 	DBG(dev, "registered gadget driver '%s'\n", driver->driver.name);
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static void
 stop_activity(struct goku_udc *dev, struct usb_gadget_driver *driver)
@@ -1408,7 +1426,11 @@ stop_activity(struct goku_udc *dev, struct usb_gadget_driver *driver)
 		udc_enable(dev);
 }
 
+<<<<<<< HEAD
 int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
+=======
+static int goku_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct goku_udc	*dev = the_controller;
 	unsigned long	flags;
@@ -1429,8 +1451,11 @@ int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
 	DBG(dev, "unregistered driver '%s'\n", driver->driver.name);
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_unregister_driver);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*-------------------------------------------------------------------------*/
 
@@ -1730,6 +1755,11 @@ static void goku_remove(struct pci_dev *pdev)
 
 	DBG(dev, "%s\n", __func__);
 
+<<<<<<< HEAD
+=======
+	usb_del_gadget_udc(&dev->gadget);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	BUG_ON(dev->driver);
 
 #ifdef CONFIG_USB_GADGET_DEBUG_FILES
@@ -1854,6 +1884,13 @@ static int goku_probe(struct pci_dev *pdev, const struct pci_device_id *id)
 		goto err;
 	}
 	dev->registered = 1;
+<<<<<<< HEAD
+=======
+	retval = usb_add_gadget_udc(&pdev->dev, &dev->gadget);
+	if (retval)
+		goto err;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
 err:

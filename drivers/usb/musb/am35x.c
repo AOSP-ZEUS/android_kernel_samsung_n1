@@ -124,11 +124,15 @@ static void am35x_musb_disable(struct musb *musb)
 	musb_writel(reg_base, USB_END_OF_INTR_REG, 0);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_USB_MUSB_HDRC_HCD
 #define portstate(stmt)		stmt
 #else
 #define portstate(stmt)
 #endif
+=======
+#define portstate(stmt)		stmt
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static void am35x_musb_set_vbus(struct musb *musb, int is_on)
 {

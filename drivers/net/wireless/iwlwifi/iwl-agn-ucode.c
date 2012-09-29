@@ -39,6 +39,7 @@
 #include "iwl-agn-hw.h"
 #include "iwl-agn.h"
 #include "iwl-agn-calib.h"
+<<<<<<< HEAD
 
 #define IWL_AC_UNSET -1
 
@@ -71,6 +72,9 @@ static const struct queue_to_fifo_ac iwlagn_ipan_queue_to_tx_fifo[] = {
 	{ IWL_TX_FIFO_BE_IPAN, 2, },
 	{ IWLAGN_CMD_FIFO_NUM, IWL_AC_UNSET, },
 };
+=======
+#include "iwl-trans.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct iwl_wimax_coex_event_entry cu_priorities[COEX_NUM_OF_EVENTS] = {
 	{COEX_CU_UNASSOC_IDLE_RP, COEX_CU_UNASSOC_IDLE_WP,
@@ -143,7 +147,11 @@ static int iwlagn_load_section(struct iwl_priv *priv, const char *name,
 		FH_TCSR_TX_CONFIG_REG_VAL_DMA_CREDIT_DISABLE	|
 		FH_TCSR_TX_CONFIG_REG_VAL_CIRQ_HOST_ENDTFD);
 
+<<<<<<< HEAD
 	IWL_DEBUG_INFO(priv, "%s uCode section being loaded...\n", name);
+=======
+	IWL_DEBUG_FW(priv, "%s uCode section being loaded...\n", name);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = wait_event_timeout(priv->wait_command_queue,
 				 priv->ucode_write_complete, 5 * HZ);
 	if (!ret) {
@@ -178,10 +186,14 @@ static int iwlagn_set_Xtal_calib(struct iwl_priv *priv)
 	__le16 *xtal_calib =
 		(__le16 *)iwl_eeprom_query_addr(priv, EEPROM_XTAL);
 
+<<<<<<< HEAD
 	cmd.hdr.op_code = IWL_PHY_CALIBRATE_CRYSTAL_FRQ_CMD;
 	cmd.hdr.first_group = 0;
 	cmd.hdr.groups_num = 1;
 	cmd.hdr.data_valid = 1;
+=======
+	iwl_set_calib_hdr(&cmd.hdr, IWL_PHY_CALIBRATE_CRYSTAL_FRQ_CMD);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cmd.cap_pin1 = le16_to_cpu(xtal_calib[0]);
 	cmd.cap_pin2 = le16_to_cpu(xtal_calib[1]);
 	return iwl_calib_set(&priv->calib_results[IWL_CALIB_XTAL],
@@ -192,6 +204,7 @@ static int iwlagn_set_temperature_offset_calib(struct iwl_priv *priv)
 {
 	struct iwl_calib_temperature_offset_cmd cmd;
 	__le16 *offset_calib =
+<<<<<<< HEAD
 		(__le16 *)iwl_eeprom_query_addr(priv, EEPROM_5000_TEMPERATURE);
 	cmd.hdr.op_code = IWL_PHY_CALIBRATE_TEMP_OFFSET_CMD;
 	cmd.hdr.first_group = 0;
@@ -203,6 +216,18 @@ static int iwlagn_set_temperature_offset_calib(struct iwl_priv *priv)
 	cmd.reserved = 0;
 	IWL_DEBUG_CALIB(priv, "Radio sensor offset: %d\n",
 			cmd.radio_sensor_offset);
+=======
+		(__le16 *)iwl_eeprom_query_addr(priv, EEPROM_TEMPERATURE);
+
+	memset(&cmd, 0, sizeof(cmd));
+	iwl_set_calib_hdr(&cmd.hdr, IWL_PHY_CALIBRATE_TEMP_OFFSET_CMD);
+	memcpy(&cmd.radio_sensor_offset, offset_calib, sizeof(*offset_calib));
+	if (!(cmd.radio_sensor_offset))
+		cmd.radio_sensor_offset = DEFAULT_RADIO_SENSOR_OFFSET;
+
+	IWL_DEBUG_CALIB(priv, "Radio sensor offset: %d\n",
+			le16_to_cpu(cmd.radio_sensor_offset));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return iwl_calib_set(&priv->calib_results[IWL_CALIB_TEMP_OFFSET],
 			     (u8 *)&cmd, sizeof(cmd));
 }
@@ -220,9 +245,16 @@ static int iwlagn_send_calib_cfg(struct iwl_priv *priv)
 	calib_cfg_cmd.ucd_calib_cfg.once.is_enable = IWL_CALIB_INIT_CFG_ALL;
 	calib_cfg_cmd.ucd_calib_cfg.once.start = IWL_CALIB_INIT_CFG_ALL;
 	calib_cfg_cmd.ucd_calib_cfg.once.send_res = IWL_CALIB_INIT_CFG_ALL;
+<<<<<<< HEAD
 	calib_cfg_cmd.ucd_calib_cfg.flags = IWL_CALIB_INIT_CFG_ALL;
 
 	return iwl_send_cmd(priv, &cmd);
+=======
+	calib_cfg_cmd.ucd_calib_cfg.flags =
+		IWL_CALIB_CFG_FLAG_SEND_COMPLETE_NTFY_MSK;
+
+	return trans_send_cmd(&priv->trans, &cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void iwlagn_rx_calib_result(struct iwl_priv *priv,
@@ -320,7 +352,12 @@ static int iwlagn_send_wimax_coex(struct iwl_priv *priv)
 		/* coexistence is disabled */
 		memset(&coex_cmd, 0, sizeof(coex_cmd));
 	}
+<<<<<<< HEAD
 	return iwl_send_cmd_pdu(priv, COEX_PRIORITY_TABLE_CMD,
+=======
+	return trans_send_cmd_pdu(&priv->trans,
+				COEX_PRIORITY_TABLE_CMD, CMD_SYNC,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				sizeof(coex_cmd), &coex_cmd);
 }
 
@@ -352,7 +389,12 @@ void iwlagn_send_prio_tbl(struct iwl_priv *priv)
 
 	memcpy(prio_tbl_cmd.prio_tbl, iwlagn_bt_prio_tbl,
 		sizeof(iwlagn_bt_prio_tbl));
+<<<<<<< HEAD
 	if (iwl_send_cmd_pdu(priv, REPLY_BT_COEX_PRIO_TABLE,
+=======
+	if (trans_send_cmd_pdu(&priv->trans,
+				REPLY_BT_COEX_PRIO_TABLE, CMD_SYNC,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				sizeof(prio_tbl_cmd), &prio_tbl_cmd))
 		IWL_ERR(priv, "failed to send BT prio tbl command\n");
 }
@@ -364,7 +406,12 @@ int iwlagn_send_bt_env(struct iwl_priv *priv, u8 action, u8 type)
 
 	env_cmd.action = action;
 	env_cmd.type = type;
+<<<<<<< HEAD
 	ret = iwl_send_cmd_pdu(priv, REPLY_BT_COEX_PROT_ENV,
+=======
+	ret = trans_send_cmd_pdu(&priv->trans,
+			       REPLY_BT_COEX_PROT_ENV, CMD_SYNC,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			       sizeof(env_cmd), &env_cmd);
 	if (ret)
 		IWL_ERR(priv, "failed to send BT env command\n");
@@ -374,6 +421,7 @@ int iwlagn_send_bt_env(struct iwl_priv *priv, u8 action, u8 type)
 
 static int iwlagn_alive_notify(struct iwl_priv *priv)
 {
+<<<<<<< HEAD
 	const struct queue_to_fifo_ac *queue_to_fifo;
 	struct iwl_rxon_context *ctx;
 	u32 a;
@@ -477,6 +525,11 @@ static int iwlagn_alive_notify(struct iwl_priv *priv)
 	/* Enable L1-Active */
 	iwl_clear_bits_prph(priv, APMG_PCIDEV_STT_REG,
 			  APMG_PCIDEV_STT_VAL_L1_ACT_DIS);
+=======
+	int ret;
+
+	trans_tx_start(&priv->trans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = iwlagn_send_wimax_coex(priv);
 	if (ret)
@@ -503,7 +556,11 @@ static int iwlcore_verify_inst_sparse(struct iwl_priv *priv,
 	u32 val;
 	u32 i;
 
+<<<<<<< HEAD
 	IWL_DEBUG_INFO(priv, "ucode inst image size is %u\n", len);
+=======
+	IWL_DEBUG_FW(priv, "ucode inst image size is %u\n", len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	for (i = 0; i < len; i += 100, image += 100/sizeof(u32)) {
 		/* read data comes through single port, auto-incr addr */
@@ -528,7 +585,11 @@ static void iwl_print_mismatch_inst(struct iwl_priv *priv,
 	u32 offs;
 	int errors = 0;
 
+<<<<<<< HEAD
 	IWL_DEBUG_INFO(priv, "ucode inst image size is %u\n", len);
+=======
+	IWL_DEBUG_FW(priv, "ucode inst image size is %u\n", len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	iwl_write_direct32(priv, HBUS_TARG_MEM_RADDR,
 			   IWLAGN_RTC_INST_LOWER_BOUND);
@@ -554,7 +615,11 @@ static void iwl_print_mismatch_inst(struct iwl_priv *priv,
 static int iwl_verify_ucode(struct iwl_priv *priv, struct fw_img *img)
 {
 	if (!iwlcore_verify_inst_sparse(priv, &img->code)) {
+<<<<<<< HEAD
 		IWL_DEBUG_INFO(priv, "uCode is good in inst SRAM\n");
+=======
+		IWL_DEBUG_FW(priv, "uCode is good in inst SRAM\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 	}
 
@@ -578,7 +643,11 @@ static void iwlagn_alive_fn(struct iwl_priv *priv,
 
 	palive = &pkt->u.alive_frame;
 
+<<<<<<< HEAD
 	IWL_DEBUG_INFO(priv, "Alive ucode status 0x%08X revision "
+=======
+	IWL_DEBUG_FW(priv, "Alive ucode status 0x%08X revision "
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		       "0x%01X 0x%01X\n",
 		       palive->is_valid, palive->ver_type,
 		       palive->ver_subtype);
@@ -597,14 +666,24 @@ static void iwlagn_alive_fn(struct iwl_priv *priv,
 
 int iwlagn_load_ucode_wait_alive(struct iwl_priv *priv,
 				 struct fw_img *image,
+<<<<<<< HEAD
 				 int subtype, int alternate_subtype)
+=======
+				 enum iwlagn_ucode_type ucode_type)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct iwl_notification_wait alive_wait;
 	struct iwlagn_alive_data alive_data;
 	int ret;
+<<<<<<< HEAD
 	enum iwlagn_ucode_subtype old_type;
 
 	ret = iwlagn_start_device(priv);
+=======
+	enum iwlagn_ucode_type old_type;
+
+	ret = trans_start_device(&priv->trans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		return ret;
 
@@ -612,7 +691,11 @@ int iwlagn_load_ucode_wait_alive(struct iwl_priv *priv,
 				      iwlagn_alive_fn, &alive_data);
 
 	old_type = priv->ucode_type;
+<<<<<<< HEAD
 	priv->ucode_type = subtype;
+=======
+	priv->ucode_type = ucode_type;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = iwlagn_load_given_ucode(priv, image);
 	if (ret) {
@@ -621,8 +704,12 @@ int iwlagn_load_ucode_wait_alive(struct iwl_priv *priv,
 		return ret;
 	}
 
+<<<<<<< HEAD
 	/* Remove all resets to allow NIC to operate */
 	iwl_write32(priv, CSR_RESET, 0);
+=======
+	trans_kick_nic(&priv->trans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Some things may run in the background now, but we
@@ -640,6 +727,7 @@ int iwlagn_load_ucode_wait_alive(struct iwl_priv *priv,
 		return -EIO;
 	}
 
+<<<<<<< HEAD
 	if (alive_data.subtype != subtype &&
 	    alive_data.subtype != alternate_subtype) {
 		IWL_ERR(priv,
@@ -658,6 +746,24 @@ int iwlagn_load_ucode_wait_alive(struct iwl_priv *priv,
 	/* delay a bit to give rfkill time to run */
 	msleep(5);
 
+=======
+	/*
+	 * This step takes a long time (60-80ms!!) and
+	 * WoWLAN image should be loaded quickly, so
+	 * skip it for WoWLAN.
+	 */
+	if (ucode_type != IWL_UCODE_WOWLAN) {
+		ret = iwl_verify_ucode(priv, image);
+		if (ret) {
+			priv->ucode_type = old_type;
+			return ret;
+		}
+
+		/* delay a bit to give rfkill time to run */
+		msleep(5);
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = iwlagn_alive_notify(priv);
 	if (ret) {
 		IWL_WARN(priv,
@@ -680,7 +786,11 @@ int iwlagn_run_init_ucode(struct iwl_priv *priv)
 	if (!priv->ucode_init.code.len)
 		return 0;
 
+<<<<<<< HEAD
 	if (priv->ucode_type != UCODE_SUBTYPE_NONE_LOADED)
+=======
+	if (priv->ucode_type != IWL_UCODE_NONE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	iwlagn_init_notification_wait(priv, &calib_wait,
@@ -689,7 +799,11 @@ int iwlagn_run_init_ucode(struct iwl_priv *priv)
 
 	/* Will also start the device */
 	ret = iwlagn_load_ucode_wait_alive(priv, &priv->ucode_init,
+<<<<<<< HEAD
 					   UCODE_SUBTYPE_INIT, -1);
+=======
+					   IWL_UCODE_INIT);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error;
 
@@ -709,6 +823,10 @@ int iwlagn_run_init_ucode(struct iwl_priv *priv)
 	iwlagn_remove_notification(priv, &calib_wait);
  out:
 	/* Whatever happened, stop the device */
+<<<<<<< HEAD
 	iwlagn_stop_device(priv);
+=======
+	trans_stop_device(&priv->trans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }

@@ -10,6 +10,7 @@
  * NAPI and NETPOLL support
  * (C) 2004 by Eric Lemoine (eric.lemoine@gmail.com)
  *
+<<<<<<< HEAD
  * TODO:
  *  - Now that the driver was significantly simplified, I need to rework
  *    the locking. I'm sure we don't need _2_ spinlocks, and we probably
@@ -29,6 +30,8 @@
  *    Also, it would probably be possible to also remove most of the long-life
  *    locking in open/resume code path (gem_reinit_chip) by beeing more careful
  *    about when we can start taking interrupts or get xmit() called...
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
@@ -57,7 +60,10 @@
 #include <linux/workqueue.h>
 #include <linux/if_vlan.h>
 #include <linux/bitops.h>
+<<<<<<< HEAD
 #include <linux/mutex.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/mm.h>
 #include <linux/gfp.h>
 
@@ -95,12 +101,20 @@
 			 SUPPORTED_Pause | SUPPORTED_Autoneg)
 
 #define DRV_NAME	"sungem"
+<<<<<<< HEAD
 #define DRV_VERSION	"0.98"
 #define DRV_RELDATE	"8/24/03"
 #define DRV_AUTHOR	"David S. Miller (davem@redhat.com)"
 
 static char version[] __devinitdata =
         DRV_NAME ".c:v" DRV_VERSION " " DRV_RELDATE " " DRV_AUTHOR "\n";
+=======
+#define DRV_VERSION	"1.0"
+#define DRV_AUTHOR	"David S. Miller <davem@redhat.com>"
+
+static char version[] __devinitdata =
+        DRV_NAME ".c:v" DRV_VERSION " " DRV_AUTHOR "\n";
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 MODULE_AUTHOR(DRV_AUTHOR);
 MODULE_DESCRIPTION("Sun GEM Gbit ethernet driver");
@@ -218,6 +232,10 @@ static inline void gem_disable_ints(struct gem *gp)
 {
 	/* Disable all interrupts, including TXDONE */
 	writel(GREG_STAT_NAPI | GREG_STAT_TXDONE, gp->regs + GREG_IMASK);
+<<<<<<< HEAD
+=======
+	(void)readl(gp->regs + GREG_IMASK); /* write posting */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void gem_get_cell(struct gem *gp)
@@ -247,6 +265,32 @@ static void gem_put_cell(struct gem *gp)
 #endif /* CONFIG_PPC_PMAC */
 }
 
+<<<<<<< HEAD
+=======
+static inline void gem_netif_stop(struct gem *gp)
+{
+	gp->dev->trans_start = jiffies;	/* prevent tx timeout */
+	napi_disable(&gp->napi);
+	netif_tx_disable(gp->dev);
+}
+
+static inline void gem_netif_start(struct gem *gp)
+{
+	/* NOTE: unconditional netif_wake_queue is only
+	 * appropriate so long as all callers are assured to
+	 * have free tx slots.
+	 */
+	netif_wake_queue(gp->dev);
+	napi_enable(&gp->napi);
+}
+
+static void gem_schedule_reset(struct gem *gp)
+{
+	gp->reset_task_pending = 1;
+	schedule_work(&gp->reset_task);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void gem_handle_mif_event(struct gem *gp, u32 reg_val, u32 changed_bits)
 {
 	if (netif_msg_intr(gp))
@@ -604,36 +648,61 @@ static int gem_abnormal_irq(struct net_device *dev, struct gem *gp, u32 gem_stat
 				gp->dev->name);
 		dev->stats.rx_errors++;
 
+<<<<<<< HEAD
 		goto do_reset;
+=======
+		return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (gem_status & GREG_STAT_PCS) {
 		if (gem_pcs_interrupt(dev, gp, gem_status))
+<<<<<<< HEAD
 			goto do_reset;
+=======
+			return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (gem_status & GREG_STAT_TXMAC) {
 		if (gem_txmac_interrupt(dev, gp, gem_status))
+<<<<<<< HEAD
 			goto do_reset;
+=======
+			return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (gem_status & GREG_STAT_RXMAC) {
 		if (gem_rxmac_interrupt(dev, gp, gem_status))
+<<<<<<< HEAD
 			goto do_reset;
+=======
+			return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (gem_status & GREG_STAT_MAC) {
 		if (gem_mac_interrupt(dev, gp, gem_status))
+<<<<<<< HEAD
 			goto do_reset;
+=======
+			return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (gem_status & GREG_STAT_MIF) {
 		if (gem_mif_interrupt(dev, gp, gem_status))
+<<<<<<< HEAD
 			goto do_reset;
+=======
+			return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (gem_status & GREG_STAT_PCIERR) {
 		if (gem_pci_interrupt(dev, gp, gem_status))
+<<<<<<< HEAD
 			goto do_reset;
 	}
 
@@ -644,16 +713,25 @@ do_reset:
 	schedule_work(&gp->reset_task);
 
 	return 1;
+=======
+			return 1;
+	}
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static __inline__ void gem_tx(struct net_device *dev, struct gem *gp, u32 gem_status)
 {
 	int entry, limit;
 
+<<<<<<< HEAD
 	if (netif_msg_intr(gp))
 		printk(KERN_DEBUG "%s: tx interrupt, gem_status: 0x%x\n",
 			gp->dev->name, gem_status);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	entry = gp->tx_old;
 	limit = ((gem_status & GREG_STAT_TXNR) >> GREG_STAT_TXNR_SHIFT);
 	while (entry != limit) {
@@ -697,6 +775,7 @@ static __inline__ void gem_tx(struct net_device *dev, struct gem *gp, u32 gem_st
 		}
 
 		dev->stats.tx_packets++;
+<<<<<<< HEAD
 		dev_kfree_skb_irq(skb);
 	}
 	gp->tx_old = entry;
@@ -704,6 +783,29 @@ static __inline__ void gem_tx(struct net_device *dev, struct gem *gp, u32 gem_st
 	if (netif_queue_stopped(dev) &&
 	    TX_BUFFS_AVAIL(gp) > (MAX_SKB_FRAGS + 1))
 		netif_wake_queue(dev);
+=======
+		dev_kfree_skb(skb);
+	}
+	gp->tx_old = entry;
+
+	/* Need to make the tx_old update visible to gem_start_xmit()
+	 * before checking for netif_queue_stopped().  Without the
+	 * memory barrier, there is a small possibility that gem_start_xmit()
+	 * will miss it and cause the queue to be stopped forever.
+	 */
+	smp_mb();
+
+	if (unlikely(netif_queue_stopped(dev) &&
+		     TX_BUFFS_AVAIL(gp) > (MAX_SKB_FRAGS + 1))) {
+		struct netdev_queue *txq = netdev_get_tx_queue(dev, 0);
+
+		__netif_tx_lock(txq, smp_processor_id());
+		if (netif_queue_stopped(dev) &&
+		    TX_BUFFS_AVAIL(gp) > (MAX_SKB_FRAGS + 1))
+			netif_wake_queue(dev);
+		__netif_tx_unlock(txq);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static __inline__ void gem_post_rxds(struct gem *gp, int limit)
@@ -736,6 +838,24 @@ static __inline__ void gem_post_rxds(struct gem *gp, int limit)
 	}
 }
 
+<<<<<<< HEAD
+=======
+#define ALIGNED_RX_SKB_ADDR(addr) \
+        ((((unsigned long)(addr) + (64UL - 1UL)) & ~(64UL - 1UL)) - (unsigned long)(addr))
+static __inline__ struct sk_buff *gem_alloc_skb(struct net_device *dev, int size,
+						gfp_t gfp_flags)
+{
+	struct sk_buff *skb = alloc_skb(size + 64, gfp_flags);
+
+	if (likely(skb)) {
+		unsigned long offset = ALIGNED_RX_SKB_ADDR(skb->data);
+		skb_reserve(skb, offset);
+		skb->dev = dev;
+	}
+	return skb;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int gem_rx(struct gem *gp, int work_to_do)
 {
 	struct net_device *dev = gp->dev;
@@ -799,7 +919,11 @@ static int gem_rx(struct gem *gp, int work_to_do)
 		if (len > RX_COPY_THRESHOLD) {
 			struct sk_buff *new_skb;
 
+<<<<<<< HEAD
 			new_skb = gem_alloc_skb(RX_BUF_ALLOC_SIZE(gp), GFP_ATOMIC);
+=======
+			new_skb = gem_alloc_skb(dev, RX_BUF_ALLOC_SIZE(gp), GFP_ATOMIC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (new_skb == NULL) {
 				drops++;
 				goto drop_it;
@@ -808,7 +932,10 @@ static int gem_rx(struct gem *gp, int work_to_do)
 				       RX_BUF_ALLOC_SIZE(gp),
 				       PCI_DMA_FROMDEVICE);
 			gp->rx_skbs[entry] = new_skb;
+<<<<<<< HEAD
 			new_skb->dev = gp->dev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			skb_put(new_skb, (gp->rx_buf_sz + RX_OFFSET));
 			rxd->buffer = cpu_to_le64(pci_map_page(gp->pdev,
 							       virt_to_page(new_skb->data),
@@ -820,7 +947,11 @@ static int gem_rx(struct gem *gp, int work_to_do)
 			/* Trim the original skb for the netif. */
 			skb_trim(skb, len);
 		} else {
+<<<<<<< HEAD
 			struct sk_buff *copy_skb = dev_alloc_skb(len + 2);
+=======
+			struct sk_buff *copy_skb = netdev_alloc_skb(dev, len + 2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			if (copy_skb == NULL) {
 				drops++;
@@ -842,7 +973,11 @@ static int gem_rx(struct gem *gp, int work_to_do)
 		skb->ip_summed = CHECKSUM_COMPLETE;
 		skb->protocol = eth_type_trans(skb, gp->dev);
 
+<<<<<<< HEAD
 		netif_receive_skb(skb);
+=======
+		napi_gro_receive(&gp->napi, skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		dev->stats.rx_packets++;
 		dev->stats.rx_bytes += len;
@@ -865,6 +1000,7 @@ static int gem_poll(struct napi_struct *napi, int budget)
 {
 	struct gem *gp = container_of(napi, struct gem, napi);
 	struct net_device *dev = gp->dev;
+<<<<<<< HEAD
 	unsigned long flags;
 	int work_done;
 
@@ -887,6 +1023,34 @@ static int gem_poll(struct napi_struct *napi, int budget)
 		spin_unlock(&gp->tx_lock);
 
 		spin_unlock_irqrestore(&gp->lock, flags);
+=======
+	int work_done;
+
+	work_done = 0;
+	do {
+		/* Handle anomalies */
+		if (unlikely(gp->status & GREG_STAT_ABNORMAL)) {
+			struct netdev_queue *txq = netdev_get_tx_queue(dev, 0);
+			int reset;
+
+			/* We run the abnormal interrupt handling code with
+			 * the Tx lock. It only resets the Rx portion of the
+			 * chip, but we need to guard it against DMA being
+			 * restarted by the link poll timer
+			 */
+			__netif_tx_lock(txq, smp_processor_id());
+			reset = gem_abnormal_irq(dev, gp, gp->status);
+			__netif_tx_unlock(txq);
+			if (reset) {
+				gem_schedule_reset(gp);
+				napi_complete(napi);
+				return work_done;
+			}
+		}
+
+		/* Run TX completion thread */
+		gem_tx(dev, gp, gp->status);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* Run RX thread. We don't use any locking here,
 		 * code willing to do bad things - like cleaning the
@@ -898,6 +1062,7 @@ static int gem_poll(struct napi_struct *napi, int budget)
 		if (work_done >= budget)
 			return work_done;
 
+<<<<<<< HEAD
 		spin_lock_irqsave(&gp->lock, flags);
 
 		gp->status = readl(gp->regs + GREG_STAT);
@@ -908,6 +1073,14 @@ static int gem_poll(struct napi_struct *napi, int budget)
 
 	spin_unlock_irqrestore(&gp->lock, flags);
 
+=======
+		gp->status = readl(gp->regs + GREG_STAT);
+	} while (gp->status & GREG_STAT_NAPI);
+
+	napi_complete(napi);
+	gem_enable_ints(gp);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return work_done;
 }
 
@@ -915,6 +1088,7 @@ static irqreturn_t gem_interrupt(int irq, void *dev_id)
 {
 	struct net_device *dev = dev_id;
 	struct gem *gp = netdev_priv(dev);
+<<<<<<< HEAD
 	unsigned long flags;
 
 	/* Swallow interrupts when shutting the chip down, though
@@ -925,22 +1099,38 @@ static irqreturn_t gem_interrupt(int irq, void *dev_id)
 		return IRQ_HANDLED;
 
 	spin_lock_irqsave(&gp->lock, flags);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (napi_schedule_prep(&gp->napi)) {
 		u32 gem_status = readl(gp->regs + GREG_STAT);
 
+<<<<<<< HEAD
 		if (gem_status == 0) {
 			napi_enable(&gp->napi);
 			spin_unlock_irqrestore(&gp->lock, flags);
 			return IRQ_NONE;
 		}
+=======
+		if (unlikely(gem_status == 0)) {
+			napi_enable(&gp->napi);
+			return IRQ_NONE;
+		}
+		if (netif_msg_intr(gp))
+			printk(KERN_DEBUG "%s: gem_interrupt() gem_status: 0x%x\n",
+			       gp->dev->name, gem_status);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		gp->status = gem_status;
 		gem_disable_ints(gp);
 		__napi_schedule(&gp->napi);
 	}
 
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&gp->lock, flags);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* If polling was disabled at the time we received that
 	 * interrupt, we may return IRQ_HANDLED here while we
 	 * should return IRQ_NONE. No big deal...
@@ -951,10 +1141,18 @@ static irqreturn_t gem_interrupt(int irq, void *dev_id)
 #ifdef CONFIG_NET_POLL_CONTROLLER
 static void gem_poll_controller(struct net_device *dev)
 {
+<<<<<<< HEAD
 	/* gem_interrupt is safe to reentrance so no need
 	 * to disable_irq here.
 	 */
 	gem_interrupt(dev->irq, dev);
+=======
+	struct gem *gp = netdev_priv(dev);
+
+	disable_irq(gp->pdev->irq);
+	gem_interrupt(gp->pdev->irq, dev);
+	enable_irq(gp->pdev->irq);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 #endif
 
@@ -963,10 +1161,14 @@ static void gem_tx_timeout(struct net_device *dev)
 	struct gem *gp = netdev_priv(dev);
 
 	netdev_err(dev, "transmit timed out, resetting\n");
+<<<<<<< HEAD
 	if (!gp->running) {
 		netdev_err(dev, "hrm.. hw not running !\n");
 		return;
 	}
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	netdev_err(dev, "TX_STATE[%08x:%08x:%08x]\n",
 		   readl(gp->regs + TXDMA_CFG),
 		   readl(gp->regs + MAC_TXSTAT),
@@ -976,6 +1178,7 @@ static void gem_tx_timeout(struct net_device *dev)
 		   readl(gp->regs + MAC_RXSTAT),
 		   readl(gp->regs + MAC_RXCFG));
 
+<<<<<<< HEAD
 	spin_lock_irq(&gp->lock);
 	spin_lock(&gp->tx_lock);
 
@@ -984,6 +1187,9 @@ static void gem_tx_timeout(struct net_device *dev)
 
 	spin_unlock(&gp->tx_lock);
 	spin_unlock_irq(&gp->lock);
+=======
+	gem_schedule_reset(gp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static __inline__ int gem_intme(int entry)
@@ -1001,7 +1207,10 @@ static netdev_tx_t gem_start_xmit(struct sk_buff *skb,
 	struct gem *gp = netdev_priv(dev);
 	int entry;
 	u64 ctrl;
+<<<<<<< HEAD
 	unsigned long flags;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ctrl = 0;
 	if (skb->ip_summed == CHECKSUM_PARTIAL) {
@@ -1013,6 +1222,7 @@ static netdev_tx_t gem_start_xmit(struct sk_buff *skb,
 			(csum_stuff_off << 21));
 	}
 
+<<<<<<< HEAD
 	if (!spin_trylock_irqsave(&gp->tx_lock, flags)) {
 		/* Tell upper layer to requeue */
 		return NETDEV_TX_LOCKED;
@@ -1028,6 +1238,14 @@ static netdev_tx_t gem_start_xmit(struct sk_buff *skb,
 		netif_stop_queue(dev);
 		spin_unlock_irqrestore(&gp->tx_lock, flags);
 		netdev_err(dev, "BUG! Tx Ring full when queue awake!\n");
+=======
+	if (unlikely(TX_BUFFS_AVAIL(gp) <= (skb_shinfo(skb)->nr_frags + 1))) {
+		/* This is a hard error, log it. */
+		if (!netif_queue_stopped(dev)) {
+			netif_stop_queue(dev);
+			netdev_err(dev, "BUG! Tx Ring full when queue awake!\n");
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return NETDEV_TX_BUSY;
 	}
 
@@ -1104,17 +1322,35 @@ static netdev_tx_t gem_start_xmit(struct sk_buff *skb,
 	}
 
 	gp->tx_new = entry;
+<<<<<<< HEAD
 	if (TX_BUFFS_AVAIL(gp) <= (MAX_SKB_FRAGS + 1))
 		netif_stop_queue(dev);
 
+=======
+	if (unlikely(TX_BUFFS_AVAIL(gp) <= (MAX_SKB_FRAGS + 1))) {
+		netif_stop_queue(dev);
+
+		/* netif_stop_queue() must be done before checking
+		 * checking tx index in TX_BUFFS_AVAIL() below, because
+		 * in gem_tx(), we update tx_old before checking for
+		 * netif_queue_stopped().
+		 */
+		smp_mb();
+		if (TX_BUFFS_AVAIL(gp) > (MAX_SKB_FRAGS + 1))
+			netif_wake_queue(dev);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (netif_msg_tx_queued(gp))
 		printk(KERN_DEBUG "%s: tx queued, slot %d, skblen %d\n",
 		       dev->name, entry, skb->len);
 	mb();
 	writel(gp->tx_new, gp->regs + TXDMA_KICK);
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&gp->tx_lock, flags);
 
 	dev->trans_start = jiffies; /* NETIF_F_LLTX driver :( */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return NETDEV_TX_OK;
 }
@@ -1184,7 +1420,10 @@ static void gem_pcs_reinit_adv(struct gem *gp)
 
 #define STOP_TRIES 32
 
+<<<<<<< HEAD
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void gem_reset(struct gem *gp)
 {
 	int limit;
@@ -1213,7 +1452,10 @@ static void gem_reset(struct gem *gp)
 		gem_pcs_reinit_adv(gp);
 }
 
+<<<<<<< HEAD
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void gem_start_dma(struct gem *gp)
 {
 	u32 val;
@@ -1236,8 +1478,12 @@ static void gem_start_dma(struct gem *gp)
 	writel(RX_RING_SIZE - 4, gp->regs + RXDMA_KICK);
 }
 
+<<<<<<< HEAD
 /* Must be invoked under gp->lock and gp->tx_lock. DMA won't be
  * actually stopped before about 4ms tho ...
+=======
+/* DMA won't be actually stopped before about 4ms tho ...
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 static void gem_stop_dma(struct gem *gp)
 {
@@ -1259,7 +1505,10 @@ static void gem_stop_dma(struct gem *gp)
 }
 
 
+<<<<<<< HEAD
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 // XXX dbl check what that function should do when called on PCS PHY
 static void gem_begin_auto_negotiation(struct gem *gp, struct ethtool_cmd *ep)
 {
@@ -1319,7 +1568,11 @@ start_aneg:
 	/* If we are asleep, we don't try to actually setup the PHY, we
 	 * just store the settings
 	 */
+<<<<<<< HEAD
 	if (gp->asleep) {
+=======
+	if (!netif_device_present(gp->dev)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		gp->phy_mii.autoneg = gp->want_autoneg = autoneg;
 		gp->phy_mii.speed = speed;
 		gp->phy_mii.duplex = duplex;
@@ -1345,6 +1598,7 @@ non_mii:
 
 /* A link-up condition has occurred, initialize and enable the
  * rest of the chip.
+<<<<<<< HEAD
  *
  * Must be invoked under gp->lock and gp->tx_lock.
  */
@@ -1352,6 +1606,14 @@ static int gem_set_link_modes(struct gem *gp)
 {
 	u32 val;
 	int full_duplex, speed, pause;
+=======
+ */
+static int gem_set_link_modes(struct gem *gp)
+{
+	struct netdev_queue *txq = netdev_get_tx_queue(gp->dev, 0);
+	int full_duplex, speed, pause;
+	u32 val;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	full_duplex = 0;
 	speed = SPEED_10;
@@ -1375,8 +1637,16 @@ static int gem_set_link_modes(struct gem *gp)
 	netif_info(gp, link, gp->dev, "Link is up at %d Mbps, %s-duplex\n",
 		   speed, (full_duplex ? "full" : "half"));
 
+<<<<<<< HEAD
 	if (!gp->running)
 		return 0;
+=======
+
+	/* We take the tx queue lock to avoid collisions between
+	 * this code, the tx path and the NAPI-driven error path
+	 */
+	__netif_tx_lock(txq, smp_processor_id());
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	val = (MAC_TXCFG_EIPG0 | MAC_TXCFG_NGU);
 	if (full_duplex) {
@@ -1425,6 +1695,7 @@ static int gem_set_link_modes(struct gem *gp)
 			pause = 1;
 	}
 
+<<<<<<< HEAD
 	if (netif_msg_link(gp)) {
 		if (pause) {
 			netdev_info(gp->dev,
@@ -1437,6 +1708,8 @@ static int gem_set_link_modes(struct gem *gp)
 		}
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!full_duplex)
 		writel(512, gp->regs + MAC_STIME);
 	else
@@ -1450,10 +1723,30 @@ static int gem_set_link_modes(struct gem *gp)
 
 	gem_start_dma(gp);
 
+<<<<<<< HEAD
 	return 0;
 }
 
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+	__netif_tx_unlock(txq);
+
+	if (netif_msg_link(gp)) {
+		if (pause) {
+			netdev_info(gp->dev,
+				    "Pause is enabled (rxfifo: %d off: %d on: %d)\n",
+				    gp->rx_fifo_sz,
+				    gp->rx_pause_off,
+				    gp->rx_pause_on);
+		} else {
+			netdev_info(gp->dev, "Pause is disabled\n");
+		}
+	}
+
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int gem_mdio_link_not_up(struct gem *gp)
 {
 	switch (gp->lstate) {
@@ -1501,6 +1794,7 @@ static int gem_mdio_link_not_up(struct gem *gp)
 static void gem_link_timer(unsigned long data)
 {
 	struct gem *gp = (struct gem *) data;
+<<<<<<< HEAD
 	int restart_aneg = 0;
 
 	if (gp->asleep)
@@ -1515,6 +1809,14 @@ static void gem_link_timer(unsigned long data)
 	 */
 	if (gp->reset_task_pending)
 		goto restart;
+=======
+	struct net_device *dev = gp->dev;
+	int restart_aneg = 0;
+
+	/* There's no point doing anything if we're going to be reset */
+	if (gp->reset_task_pending)
+		return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (gp->phy_type == phy_serialink ||
 	    gp->phy_type == phy_serdes) {
@@ -1528,7 +1830,11 @@ static void gem_link_timer(unsigned long data)
 				goto restart;
 
 			gp->lstate = link_up;
+<<<<<<< HEAD
 			netif_carrier_on(gp->dev);
+=======
+			netif_carrier_on(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			(void)gem_set_link_modes(gp);
 		}
 		goto restart;
@@ -1544,12 +1850,20 @@ static void gem_link_timer(unsigned long data)
 			gp->last_forced_speed = gp->phy_mii.speed;
 			gp->timer_ticks = 5;
 			if (netif_msg_link(gp))
+<<<<<<< HEAD
 				netdev_info(gp->dev,
+=======
+				netdev_info(dev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					    "Got link after fallback, retrying autoneg once...\n");
 			gp->phy_mii.def->ops->setup_aneg(&gp->phy_mii, gp->phy_mii.advertising);
 		} else if (gp->lstate != link_up) {
 			gp->lstate = link_up;
+<<<<<<< HEAD
 			netif_carrier_on(gp->dev);
+=======
+			netif_carrier_on(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (gem_set_link_modes(gp))
 				restart_aneg = 1;
 		}
@@ -1559,11 +1873,19 @@ static void gem_link_timer(unsigned long data)
 		 */
 		if (gp->lstate == link_up) {
 			gp->lstate = link_down;
+<<<<<<< HEAD
 			netif_info(gp, link, gp->dev, "Link down\n");
 			netif_carrier_off(gp->dev);
 			gp->reset_task_pending = 1;
 			schedule_work(&gp->reset_task);
 			restart_aneg = 1;
+=======
+			netif_info(gp, link, dev, "Link down\n");
+			netif_carrier_off(dev);
+			gem_schedule_reset(gp);
+			/* The reset task will restart the timer */
+			return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else if (++gp->timer_ticks > 10) {
 			if (found_mii_phy(gp))
 				restart_aneg = gem_mdio_link_not_up(gp);
@@ -1573,6 +1895,7 @@ static void gem_link_timer(unsigned long data)
 	}
 	if (restart_aneg) {
 		gem_begin_auto_negotiation(gp, NULL);
+<<<<<<< HEAD
 		goto out_unlock;
 	}
 restart:
@@ -1584,6 +1907,14 @@ out_unlock:
 }
 
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+		return;
+	}
+restart:
+	mod_timer(&gp->link_timer, jiffies + ((12 * HZ) / 10));
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void gem_clean_rings(struct gem *gp)
 {
 	struct gem_init_block *gb = gp->init_block;
@@ -1634,7 +1965,10 @@ static void gem_clean_rings(struct gem *gp)
 	}
 }
 
+<<<<<<< HEAD
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void gem_init_rings(struct gem *gp)
 {
 	struct gem_init_block *gb = gp->init_block;
@@ -1653,7 +1987,11 @@ static void gem_init_rings(struct gem *gp)
 		struct sk_buff *skb;
 		struct gem_rxd *rxd = &gb->rxd[i];
 
+<<<<<<< HEAD
 		skb = gem_alloc_skb(RX_BUF_ALLOC_SIZE(gp), GFP_ATOMIC);
+=======
+		skb = gem_alloc_skb(dev, RX_BUF_ALLOC_SIZE(gp), GFP_KERNEL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!skb) {
 			rxd->buffer = 0;
 			rxd->status_word = 0;
@@ -1661,7 +1999,10 @@ static void gem_init_rings(struct gem *gp)
 		}
 
 		gp->rx_skbs[i] = skb;
+<<<<<<< HEAD
 		skb->dev = dev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		skb_put(skb, (gp->rx_buf_sz + RX_OFFSET));
 		dma_addr = pci_map_page(gp->pdev,
 					virt_to_page(skb->data),
@@ -1737,7 +2078,11 @@ static void gem_init_phy(struct gem *gp)
 
 	if (gp->phy_type == phy_mii_mdio0 ||
 	    gp->phy_type == phy_mii_mdio1) {
+<<<<<<< HEAD
 	    	// XXX check for errors
+=======
+		/* Reset and detect MII PHY */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		mii_phy_probe(&gp->phy_mii, gp->mii_phy_addr);
 
 		/* Init PHY */
@@ -1753,6 +2098,7 @@ static void gem_init_phy(struct gem *gp)
 	gp->lstate = link_down;
 	netif_carrier_off(gp->dev);
 
+<<<<<<< HEAD
 	/* Can I advertise gigabit here ? I'd need BCM PHY docs... */
 	spin_lock_irq(&gp->lock);
 	gem_begin_auto_negotiation(gp, NULL);
@@ -1760,6 +2106,17 @@ static void gem_init_phy(struct gem *gp)
 }
 
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+	/* Print things out */
+	if (gp->phy_type == phy_mii_mdio0 ||
+	    gp->phy_type == phy_mii_mdio1)
+		netdev_info(gp->dev, "Found %s PHY\n",
+			    gp->phy_mii.def ? gp->phy_mii.def->name : "no");
+
+	gem_begin_auto_negotiation(gp, NULL);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void gem_init_dma(struct gem *gp)
 {
 	u64 desc_dma = (u64) gp->gblock_dvma;
@@ -1797,7 +2154,10 @@ static void gem_init_dma(struct gem *gp)
 		       gp->regs + RXDMA_BLANK);
 }
 
+<<<<<<< HEAD
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static u32 gem_setup_multicast(struct gem *gp)
 {
 	u32 rxcfg = 0;
@@ -1818,12 +2178,16 @@ static u32 gem_setup_multicast(struct gem *gp)
 
 		memset(hash_table, 0, sizeof(hash_table));
 		netdev_for_each_mc_addr(ha, gp->dev) {
+<<<<<<< HEAD
 			char *addrs = ha->addr;
 
 			if (!(*addrs & 1))
 				continue;
 
  			crc = ether_crc_le(6, addrs);
+=======
+			crc = ether_crc_le(6, ha->addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			crc >>= 24;
 			hash_table[crc >> 4] |= 1 << (15 - (crc & 0xf));
 		}
@@ -1835,7 +2199,10 @@ static u32 gem_setup_multicast(struct gem *gp)
 	return rxcfg;
 }
 
+<<<<<<< HEAD
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void gem_init_mac(struct gem *gp)
 {
 	unsigned char *e = &gp->dev->dev_addr[0];
@@ -1918,7 +2285,10 @@ static void gem_init_mac(struct gem *gp)
 		writel(0, gp->regs + WOL_WAKECSR);
 }
 
+<<<<<<< HEAD
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void gem_init_pause_thresholds(struct gem *gp)
 {
        	u32 cfg;
@@ -2079,7 +2449,10 @@ static int gem_check_invariants(struct gem *gp)
 	return 0;
 }
 
+<<<<<<< HEAD
 /* Must be invoked under gp->lock and gp->tx_lock. */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void gem_reinit_chip(struct gem *gp)
 {
 	/* Reset the chip */
@@ -2100,11 +2473,17 @@ static void gem_reinit_chip(struct gem *gp)
 }
 
 
+<<<<<<< HEAD
 /* Must be invoked with no lock held. */
 static void gem_stop_phy(struct gem *gp, int wol)
 {
 	u32 mifcfg;
 	unsigned long flags;
+=======
+static void gem_stop_phy(struct gem *gp, int wol)
+{
+	u32 mifcfg;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Let the chip settle down a bit, it seems that helps
 	 * for sleep mode on some models
@@ -2150,6 +2529,7 @@ static void gem_stop_phy(struct gem *gp, int wol)
 	writel(0, gp->regs + RXDMA_CFG);
 
 	if (!wol) {
+<<<<<<< HEAD
 		spin_lock_irqsave(&gp->lock, flags);
 		spin_lock(&gp->tx_lock);
 		gem_reset(gp);
@@ -2159,6 +2539,11 @@ static void gem_stop_phy(struct gem *gp, int wol)
 		spin_unlock_irqrestore(&gp->lock, flags);
 
 		/* No need to take the lock here */
+=======
+		gem_reset(gp);
+		writel(MAC_TXRST_CMD, gp->regs + MAC_TXRST);
+		writel(MAC_RXRST_CMD, gp->regs + MAC_RXRST);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (found_mii_phy(gp) && gp->phy_mii.def->ops->suspend)
 			gp->phy_mii.def->ops->suspend(&gp->phy_mii);
@@ -2175,6 +2560,7 @@ static void gem_stop_phy(struct gem *gp, int wol)
 	}
 }
 
+<<<<<<< HEAD
 
 static int gem_do_start(struct net_device *dev)
 {
@@ -2183,10 +2569,17 @@ static int gem_do_start(struct net_device *dev)
 
 	spin_lock_irqsave(&gp->lock, flags);
 	spin_lock(&gp->tx_lock);
+=======
+static int gem_do_start(struct net_device *dev)
+{
+	struct gem *gp = netdev_priv(dev);
+	int rc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Enable the cell */
 	gem_get_cell(gp);
 
+<<<<<<< HEAD
 	/* Init & setup chip hardware */
 	gem_reinit_chip(gp);
 
@@ -2223,6 +2616,49 @@ static int gem_do_start(struct net_device *dev)
 
 		return -EAGAIN;
 	}
+=======
+	/* Make sure PCI access and bus master are enabled */
+	rc = pci_enable_device(gp->pdev);
+	if (rc) {
+		netdev_err(dev, "Failed to enable chip on PCI bus !\n");
+
+		/* Put cell and forget it for now, it will be considered as
+		 * still asleep, a new sleep cycle may bring it back
+		 */
+		gem_put_cell(gp);
+		return -ENXIO;
+	}
+	pci_set_master(gp->pdev);
+
+	/* Init & setup chip hardware */
+	gem_reinit_chip(gp);
+
+	/* An interrupt might come in handy */
+	rc = request_irq(gp->pdev->irq, gem_interrupt,
+			 IRQF_SHARED, dev->name, (void *)dev);
+	if (rc) {
+		netdev_err(dev, "failed to request irq !\n");
+
+		gem_reset(gp);
+		gem_clean_rings(gp);
+		gem_put_cell(gp);
+		return rc;
+	}
+
+	/* Mark us as attached again if we come from resume(), this has
+	 * no effect if we weren't detatched and needs to be done now.
+	 */
+	netif_device_attach(dev);
+
+	/* Restart NAPI & queues */
+	gem_netif_start(gp);
+
+	/* Detect & init PHY, start autoneg etc... this will
+	 * eventually result in starting DMA operations when
+	 * the link is up
+	 */
+	gem_init_phy(gp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -2230,6 +2666,7 @@ static int gem_do_start(struct net_device *dev)
 static void gem_do_stop(struct net_device *dev, int wol)
 {
 	struct gem *gp = netdev_priv(dev);
+<<<<<<< HEAD
 	unsigned long flags;
 
 	spin_lock_irqsave(&gp->lock, flags);
@@ -2246,6 +2683,32 @@ static void gem_do_stop(struct net_device *dev, int wol)
 	/* We can drop the lock now */
 	spin_unlock(&gp->tx_lock);
 	spin_unlock_irqrestore(&gp->lock, flags);
+=======
+
+	/* Stop NAPI and stop tx queue */
+	gem_netif_stop(gp);
+
+	/* Make sure ints are disabled. We don't care about
+	 * synchronizing as NAPI is disabled, thus a stray
+	 * interrupt will do nothing bad (our irq handler
+	 * just schedules NAPI)
+	 */
+	gem_disable_ints(gp);
+
+	/* Stop the link timer */
+	del_timer_sync(&gp->link_timer);
+
+	/* We cannot cancel the reset task while holding the
+	 * rtnl lock, we'd get an A->B / B->A deadlock stituation
+	 * if we did. This is not an issue however as the reset
+	 * task is synchronized vs. us (rtnl_lock) and will do
+	 * nothing if the device is down or suspended. We do
+	 * still clear reset_task_pending to avoid a spurrious
+	 * reset later on in case we do resume before it gets
+	 * scheduled.
+	 */
+	gp->reset_task_pending = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* If we are going to sleep with WOL */
 	gem_stop_dma(gp);
@@ -2260,18 +2723,31 @@ static void gem_do_stop(struct net_device *dev, int wol)
 	/* No irq needed anymore */
 	free_irq(gp->pdev->irq, (void *) dev);
 
+<<<<<<< HEAD
 	/* Cell not needed neither if no WOL */
 	if (!wol) {
 		spin_lock_irqsave(&gp->lock, flags);
 		gem_put_cell(gp);
 		spin_unlock_irqrestore(&gp->lock, flags);
 	}
+=======
+	/* Shut the PHY down eventually and setup WOL */
+	gem_stop_phy(gp, wol);
+
+	/* Make sure bus master is disabled */
+	pci_disable_device(gp->pdev);
+
+	/* Cell not needed neither if no WOL */
+	if (!wol)
+		gem_put_cell(gp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void gem_reset_task(struct work_struct *work)
 {
 	struct gem *gp = container_of(work, struct gem, reset_task);
 
+<<<<<<< HEAD
 	mutex_lock(&gp->pm_mutex);
 
 	if (gp->opened)
@@ -2317,10 +2793,64 @@ static int gem_open(struct net_device *dev)
 	mutex_unlock(&gp->pm_mutex);
 
 	return rc;
+=======
+	/* Lock out the network stack (essentially shield ourselves
+	 * against a racing open, close, control call, or suspend
+	 */
+	rtnl_lock();
+
+	/* Skip the reset task if suspended or closed, or if it's
+	 * been cancelled by gem_do_stop (see comment there)
+	 */
+	if (!netif_device_present(gp->dev) ||
+	    !netif_running(gp->dev) ||
+	    !gp->reset_task_pending) {
+		rtnl_unlock();
+		return;
+	}
+
+	/* Stop the link timer */
+	del_timer_sync(&gp->link_timer);
+
+	/* Stop NAPI and tx */
+	gem_netif_stop(gp);
+
+	/* Reset the chip & rings */
+	gem_reinit_chip(gp);
+	if (gp->lstate == link_up)
+		gem_set_link_modes(gp);
+
+	/* Restart NAPI and Tx */
+	gem_netif_start(gp);
+
+	/* We are back ! */
+	gp->reset_task_pending = 0;
+
+	/* If the link is not up, restart autoneg, else restart the
+	 * polling timer
+	 */
+	if (gp->lstate != link_up)
+		gem_begin_auto_negotiation(gp, NULL);
+	else
+		mod_timer(&gp->link_timer, jiffies + ((12 * HZ) / 10));
+
+	rtnl_unlock();
+}
+
+static int gem_open(struct net_device *dev)
+{
+	/* We allow open while suspended, we just do nothing,
+	 * the chip will be initialized in resume()
+	 */
+	if (netif_device_present(dev))
+		return gem_do_start(dev);
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int gem_close(struct net_device *dev)
 {
+<<<<<<< HEAD
 	struct gem *gp = netdev_priv(dev);
 
 	mutex_lock(&gp->pm_mutex);
@@ -2333,6 +2863,11 @@ static int gem_close(struct net_device *dev)
 
 	mutex_unlock(&gp->pm_mutex);
 
+=======
+	if (netif_device_present(dev))
+		gem_do_stop(dev, 0);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -2341,6 +2876,7 @@ static int gem_suspend(struct pci_dev *pdev, pm_message_t state)
 {
 	struct net_device *dev = pci_get_drvdata(pdev);
 	struct gem *gp = netdev_priv(dev);
+<<<<<<< HEAD
 	unsigned long flags;
 
 	mutex_lock(&gp->pm_mutex);
@@ -2394,6 +2930,37 @@ static int gem_suspend(struct pci_dev *pdev, pm_message_t state)
 	 * nothing else can happen now
 	 */
 	gem_put_cell(gp);
+=======
+
+	/* Lock the network stack first to avoid racing with open/close,
+	 * reset task and setting calls
+	 */
+	rtnl_lock();
+
+	/* Not running, mark ourselves non-present, no need for
+	 * a lock here
+	 */
+	if (!netif_running(dev)) {
+		netif_device_detach(dev);
+		rtnl_unlock();
+		return 0;
+	}
+	netdev_info(dev, "suspending, WakeOnLan %s\n",
+		    (gp->wake_on_lan && netif_running(dev)) ?
+		    "enabled" : "disabled");
+
+	/* Tell the network stack we're gone. gem_do_stop() below will
+	 * synchronize with TX, stop NAPI etc...
+	 */
+	netif_device_detach(dev);
+
+	/* Switch off chip, remember WOL setting */
+	gp->asleep_wol = gp->wake_on_lan;
+	gem_do_stop(dev, gp->asleep_wol);
+
+	/* Unlock the network stack */
+	rtnl_unlock();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -2402,6 +2969,7 @@ static int gem_resume(struct pci_dev *pdev)
 {
 	struct net_device *dev = pci_get_drvdata(pdev);
 	struct gem *gp = netdev_priv(dev);
+<<<<<<< HEAD
 	unsigned long flags;
 
 	netdev_info(dev, "resuming\n");
@@ -2449,6 +3017,25 @@ static int gem_resume(struct pci_dev *pdev)
 
 	spin_lock_irqsave(&gp->lock, flags);
 	spin_lock(&gp->tx_lock);
+=======
+
+	/* See locking comment in gem_suspend */
+	rtnl_lock();
+
+	/* Not running, mark ourselves present, no need for
+	 * a lock here
+	 */
+	if (!netif_running(dev)) {
+		netif_device_attach(dev);
+		rtnl_unlock();
+		return 0;
+	}
+
+	/* Restart chip. If that fails there isn't much we can do, we
+	 * leave things stopped.
+	 */
+	gem_do_start(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* If we had WOL enabled, the cell clock was never turned off during
 	 * sleep, so we end up beeing unbalanced. Fix that here
@@ -2456,6 +3043,7 @@ static int gem_resume(struct pci_dev *pdev)
 	if (gp->asleep_wol)
 		gem_put_cell(gp);
 
+<<<<<<< HEAD
 	/* This function doesn't need to hold the cell, it will be held if the
 	 * driver is open by gem_do_start().
 	 */
@@ -2465,6 +3053,10 @@ static int gem_resume(struct pci_dev *pdev)
 	spin_unlock_irqrestore(&gp->lock, flags);
 
 	mutex_unlock(&gp->pm_mutex);
+=======
+	/* Unlock the network stack */
+	rtnl_unlock();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -2474,6 +3066,7 @@ static struct net_device_stats *gem_get_stats(struct net_device *dev)
 {
 	struct gem *gp = netdev_priv(dev);
 
+<<<<<<< HEAD
 	spin_lock_irq(&gp->lock);
 	spin_lock(&gp->tx_lock);
 
@@ -2501,6 +3094,37 @@ static struct net_device_stats *gem_get_stats(struct net_device *dev)
 	spin_unlock(&gp->tx_lock);
 	spin_unlock_irq(&gp->lock);
 
+=======
+	/* I have seen this being called while the PM was in progress,
+	 * so we shield against this. Let's also not poke at registers
+	 * while the reset task is going on.
+	 *
+	 * TODO: Move stats collection elsewhere (link timer ?) and
+	 * make this a nop to avoid all those synchro issues
+	 */
+	if (!netif_device_present(dev) || !netif_running(dev))
+		goto bail;
+
+	/* Better safe than sorry... */
+	if (WARN_ON(!gp->cell_enabled))
+		goto bail;
+
+	dev->stats.rx_crc_errors += readl(gp->regs + MAC_FCSERR);
+	writel(0, gp->regs + MAC_FCSERR);
+
+	dev->stats.rx_frame_errors += readl(gp->regs + MAC_AERR);
+	writel(0, gp->regs + MAC_AERR);
+
+	dev->stats.rx_length_errors += readl(gp->regs + MAC_LERR);
+	writel(0, gp->regs + MAC_LERR);
+
+	dev->stats.tx_aborted_errors += readl(gp->regs + MAC_ECOLL);
+	dev->stats.collisions +=
+		(readl(gp->regs + MAC_ECOLL) + readl(gp->regs + MAC_LCOLL));
+	writel(0, gp->regs + MAC_ECOLL);
+	writel(0, gp->regs + MAC_LCOLL);
+ bail:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return &dev->stats;
 }
 
@@ -2513,6 +3137,7 @@ static int gem_set_mac_address(struct net_device *dev, void *addr)
 	if (!is_valid_ether_addr(macaddr->sa_data))
 		return -EADDRNOTAVAIL;
 
+<<<<<<< HEAD
 	if (!netif_running(dev) || !netif_device_present(dev)) {
 		/* We'll just catch it later when the
 		 * device is up'd or resumed.
@@ -2529,6 +3154,21 @@ static int gem_set_mac_address(struct net_device *dev, void *addr)
 		writel((e[0] << 8) | e[1], gp->regs + MAC_ADDR2);
 	}
 	mutex_unlock(&gp->pm_mutex);
+=======
+	memcpy(dev->dev_addr, macaddr->sa_data, dev->addr_len);
+
+	/* We'll just catch it later when the device is up'd or resumed */
+	if (!netif_running(dev) || !netif_device_present(dev))
+		return 0;
+
+	/* Better safe than sorry... */
+	if (WARN_ON(!gp->cell_enabled))
+		return 0;
+
+	writel((e[4] << 8) | e[5], gp->regs + MAC_ADDR0);
+	writel((e[2] << 8) | e[3], gp->regs + MAC_ADDR1);
+	writel((e[0] << 8) | e[1], gp->regs + MAC_ADDR2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -2539,6 +3179,7 @@ static void gem_set_multicast(struct net_device *dev)
 	u32 rxcfg, rxcfg_new;
 	int limit = 10000;
 
+<<<<<<< HEAD
 
 	spin_lock_irq(&gp->lock);
 	spin_lock(&gp->tx_lock);
@@ -2547,6 +3188,14 @@ static void gem_set_multicast(struct net_device *dev)
 		goto bail;
 
 	netif_stop_queue(dev);
+=======
+	if (!netif_running(dev) || !netif_device_present(dev))
+		return;
+
+	/* Better safe than sorry... */
+	if (gp->reset_task_pending || WARN_ON(!gp->cell_enabled))
+		return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	rxcfg = readl(gp->regs + MAC_RXCFG);
 	rxcfg_new = gem_setup_multicast(gp);
@@ -2566,12 +3215,15 @@ static void gem_set_multicast(struct net_device *dev)
 	rxcfg |= rxcfg_new;
 
 	writel(rxcfg, gp->regs + MAC_RXCFG);
+<<<<<<< HEAD
 
 	netif_wake_queue(dev);
 
  bail:
 	spin_unlock(&gp->tx_lock);
 	spin_unlock_irq(&gp->lock);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Jumbo-grams don't seem to work :-( */
@@ -2589,6 +3241,7 @@ static int gem_change_mtu(struct net_device *dev, int new_mtu)
 	if (new_mtu < GEM_MIN_MTU || new_mtu > GEM_MAX_MTU)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	if (!netif_running(dev) || !netif_device_present(dev)) {
 		/* We'll just catch it later when the
 		 * device is up'd or resumed.
@@ -2609,6 +3262,23 @@ static int gem_change_mtu(struct net_device *dev, int new_mtu)
 	spin_unlock(&gp->tx_lock);
 	spin_unlock_irq(&gp->lock);
 	mutex_unlock(&gp->pm_mutex);
+=======
+	dev->mtu = new_mtu;
+
+	/* We'll just catch it later when the device is up'd or resumed */
+	if (!netif_running(dev) || !netif_device_present(dev))
+		return 0;
+
+	/* Better safe than sorry... */
+	if (WARN_ON(!gp->cell_enabled))
+		return 0;
+
+	gem_netif_stop(gp);
+	gem_reinit_chip(gp);
+	if (gp->lstate == link_up)
+		gem_set_link_modes(gp);
+	gem_netif_start(gp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -2640,7 +3310,10 @@ static int gem_get_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 		cmd->phy_address = 0; /* XXX fixed PHYAD */
 
 		/* Return current PHY settings */
+<<<<<<< HEAD
 		spin_lock_irq(&gp->lock);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cmd->autoneg = gp->want_autoneg;
 		ethtool_cmd_speed_set(cmd, gp->phy_mii.speed);
 		cmd->duplex = gp->phy_mii.duplex;
@@ -2652,7 +3325,10 @@ static int gem_get_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 		 */
 		if (cmd->advertising == 0)
 			cmd->advertising = cmd->supported;
+<<<<<<< HEAD
 		spin_unlock_irq(&gp->lock);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else { // XXX PCS ?
 		cmd->supported =
 			(SUPPORTED_10baseT_Half | SUPPORTED_10baseT_Full |
@@ -2706,11 +3382,18 @@ static int gem_set_settings(struct net_device *dev, struct ethtool_cmd *cmd)
 		return -EINVAL;
 
 	/* Apply settings and restart link process. */
+<<<<<<< HEAD
 	spin_lock_irq(&gp->lock);
 	gem_get_cell(gp);
 	gem_begin_auto_negotiation(gp, cmd);
 	gem_put_cell(gp);
 	spin_unlock_irq(&gp->lock);
+=======
+	if (netif_device_present(gp->dev)) {
+		del_timer_sync(&gp->link_timer);
+		gem_begin_auto_negotiation(gp, cmd);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -2722,12 +3405,20 @@ static int gem_nway_reset(struct net_device *dev)
 	if (!gp->want_autoneg)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	/* Restart link process. */
 	spin_lock_irq(&gp->lock);
 	gem_get_cell(gp);
 	gem_begin_auto_negotiation(gp, NULL);
 	gem_put_cell(gp);
 	spin_unlock_irq(&gp->lock);
+=======
+	/* Restart link process  */
+	if (netif_device_present(gp->dev)) {
+		del_timer_sync(&gp->link_timer);
+		gem_begin_auto_negotiation(gp, NULL);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -2791,6 +3482,7 @@ static int gem_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 	struct gem *gp = netdev_priv(dev);
 	struct mii_ioctl_data *data = if_mii(ifr);
 	int rc = -EOPNOTSUPP;
+<<<<<<< HEAD
 	unsigned long flags;
 
 	/* Hold the PM mutex while doing ioctl's or we may collide
@@ -2801,6 +3493,13 @@ static int gem_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 	spin_lock_irqsave(&gp->lock, flags);
 	gem_get_cell(gp);
 	spin_unlock_irqrestore(&gp->lock, flags);
+=======
+
+	/* For SIOCGMIIREG and SIOCSMIIREG the core checks for us that
+	 * netif_device_present() is true and holds rtnl_lock for us
+	 * so we have nothing to worry about
+	 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (cmd) {
 	case SIOCGMIIPHY:		/* Get address of MII PHY in use. */
@@ -2808,6 +3507,7 @@ static int gem_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 		/* Fallthrough... */
 
 	case SIOCGMIIREG:		/* Read MII PHY register. */
+<<<<<<< HEAD
 		if (!gp->running)
 			rc = -EAGAIN;
 		else {
@@ -2834,6 +3534,19 @@ static int gem_ioctl(struct net_device *dev, struct ifreq *ifr, int cmd)
 
 	mutex_unlock(&gp->pm_mutex);
 
+=======
+		data->val_out = __phy_read(gp, data->phy_id & 0x1f,
+					   data->reg_num & 0x1f);
+		rc = 0;
+		break;
+
+	case SIOCSMIIREG:		/* Write MII PHY register. */
+		__phy_write(gp, data->phy_id & 0x1f, data->reg_num & 0x1f,
+			    data->val_in);
+		rc = 0;
+		break;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return rc;
 }
 
@@ -2921,6 +3634,7 @@ static void gem_remove_one(struct pci_dev *pdev)
 
 		unregister_netdev(dev);
 
+<<<<<<< HEAD
 		/* Stop the link timer */
 		del_timer_sync(&gp->link_timer);
 
@@ -2938,6 +3652,11 @@ static void gem_remove_one(struct pci_dev *pdev)
 		/* Make sure bus master is disabled */
 		pci_disable_device(gp->pdev);
 
+=======
+		/* Ensure reset task is truely gone */
+		cancel_work_sync(&gp->reset_task);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Free resources */
 		pci_free_consistent(pdev,
 				    sizeof(struct gem_init_block),
@@ -3043,10 +3762,13 @@ static int __devinit gem_init_one(struct pci_dev *pdev,
 
 	gp->msg_enable = DEFAULT_MSG;
 
+<<<<<<< HEAD
 	spin_lock_init(&gp->lock);
 	spin_lock_init(&gp->tx_lock);
 	mutex_init(&gp->pm_mutex);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	init_timer(&gp->link_timer);
 	gp->link_timer.function = gem_link_timer;
 	gp->link_timer.data = (unsigned long) gp;
@@ -3122,6 +3844,7 @@ static int __devinit gem_init_one(struct pci_dev *pdev,
 	/* Set that now, in case PM kicks in now */
 	pci_set_drvdata(pdev, dev);
 
+<<<<<<< HEAD
 	/* Detect & init PHY, start autoneg, we release the cell now
 	 * too, it will be managed by whoever needs it
 	 */
@@ -3130,6 +3853,13 @@ static int __devinit gem_init_one(struct pci_dev *pdev,
 	spin_lock_irq(&gp->lock);
 	gem_put_cell(gp);
 	spin_unlock_irq(&gp->lock);
+=======
+	/* We can do scatter/gather and HW checksum */
+	dev->hw_features = NETIF_F_SG | NETIF_F_HW_CSUM;
+	dev->features |= dev->hw_features | NETIF_F_RXCSUM;
+	if (pci_using_dac)
+		dev->features |= NETIF_F_HIGHDMA;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Register with kernel */
 	if (register_netdev(dev)) {
@@ -3138,6 +3868,7 @@ static int __devinit gem_init_one(struct pci_dev *pdev,
 		goto err_out_free_consistent;
 	}
 
+<<<<<<< HEAD
 	netdev_info(dev, "Sun GEM (PCI) 10/100/1000BaseT Ethernet %pM\n",
 		    dev->dev_addr);
 
@@ -3152,6 +3883,17 @@ static int __devinit gem_init_one(struct pci_dev *pdev,
 	if (pci_using_dac)
 		dev->features |= NETIF_F_HIGHDMA;
 
+=======
+	/* Undo the get_cell with appropriate locking (we could use
+	 * ndo_init/uninit but that would be even more clumsy imho)
+	 */
+	rtnl_lock();
+	gem_put_cell(gp);
+	rtnl_unlock();
+
+	netdev_info(dev, "Sun GEM (PCI) 10/100/1000BaseT Ethernet %pM\n",
+		    dev->dev_addr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
 err_out_free_consistent:

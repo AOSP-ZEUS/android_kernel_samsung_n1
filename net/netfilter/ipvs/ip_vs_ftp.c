@@ -44,8 +44,13 @@
 #include <net/ip_vs.h>
 
 
+<<<<<<< HEAD
 #define SERVER_STRING "227 Entering Passive Mode ("
 #define CLIENT_STRING "PORT "
+=======
+#define SERVER_STRING "227 "
+#define CLIENT_STRING "PORT"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /*
@@ -79,6 +84,7 @@ ip_vs_ftp_done_conn(struct ip_vs_app *app, struct ip_vs_conn *cp)
 
 /*
  * Get <addr,port> from the string "xxx.xxx.xxx.xxx,ppp,ppp", started
+<<<<<<< HEAD
  * with the "pattern" and terminated with the "term" character.
  * <addr,port> is in network order.
  */
@@ -87,6 +93,19 @@ static int ip_vs_ftp_get_addrport(char *data, char *data_limit,
 				  __be32 *addr, __be16 *port,
 				  char **start, char **end)
 {
+=======
+ * with the "pattern", ignoring before "skip" and terminated with
+ * the "term" character.
+ * <addr,port> is in network order.
+ */
+static int ip_vs_ftp_get_addrport(char *data, char *data_limit,
+				  const char *pattern, size_t plen,
+				  char skip, char term,
+				  __be32 *addr, __be16 *port,
+				  char **start, char **end)
+{
+	char *s, c;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned char p[6];
 	int i = 0;
 
@@ -101,19 +120,53 @@ static int ip_vs_ftp_get_addrport(char *data, char *data_limit,
 	if (strnicmp(data, pattern, plen) != 0) {
 		return 0;
 	}
+<<<<<<< HEAD
 	*start = data + plen;
 
 	for (data = *start; *data != term; data++) {
 		if (data == data_limit)
 			return -1;
+=======
+	s = data + plen;
+	if (skip) {
+		int found = 0;
+
+		for (;; s++) {
+			if (s == data_limit)
+				return -1;
+			if (!found) {
+				if (*s == skip)
+					found = 1;
+			} else if (*s != skip) {
+				break;
+			}
+		}
+	}
+
+	for (data = s; ; data++) {
+		if (data == data_limit)
+			return -1;
+		if (*data == term)
+			break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	*end = data;
 
 	memset(p, 0, sizeof(p));
+<<<<<<< HEAD
 	for (data = *start; data != *end; data++) {
 		if (*data >= '0' && *data <= '9') {
 			p[i] = p[i]*10 + *data - '0';
 		} else if (*data == ',' && i < 5) {
+=======
+	for (data = s; ; data++) {
+		c = *data;
+		if (c == term)
+			break;
+		if (c >= '0' && c <= '9') {
+			p[i] = p[i]*10 + c - '0';
+		} else if (c == ',' && i < 5) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			i++;
 		} else {
 			/* unexpected character */
@@ -124,8 +177,14 @@ static int ip_vs_ftp_get_addrport(char *data, char *data_limit,
 	if (i != 5)
 		return -1;
 
+<<<<<<< HEAD
 	*addr = get_unaligned((__be32 *)p);
 	*port = get_unaligned((__be16 *)(p + 4));
+=======
+	*start = s;
+	*addr = get_unaligned((__be32 *) p);
+	*port = get_unaligned((__be16 *) (p + 4));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 1;
 }
 
@@ -185,7 +244,12 @@ static int ip_vs_ftp_out(struct ip_vs_app *app, struct ip_vs_conn *cp,
 
 		if (ip_vs_ftp_get_addrport(data, data_limit,
 					   SERVER_STRING,
+<<<<<<< HEAD
 					   sizeof(SERVER_STRING)-1, ')',
+=======
+					   sizeof(SERVER_STRING)-1,
+					   '(', ')',
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					   &from.ip, &port,
 					   &start, &end) != 1)
 			return 1;
@@ -345,7 +409,11 @@ static int ip_vs_ftp_in(struct ip_vs_app *app, struct ip_vs_conn *cp,
 	 */
 	if (ip_vs_ftp_get_addrport(data_start, data_limit,
 				   CLIENT_STRING, sizeof(CLIENT_STRING)-1,
+<<<<<<< HEAD
 				   '\r', &to.ip, &port,
+=======
+				   ' ', '\r', &to.ip, &port,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				   &start, &end) != 1)
 		return 1;
 

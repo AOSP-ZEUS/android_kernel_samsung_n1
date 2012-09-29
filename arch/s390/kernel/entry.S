@@ -9,8 +9,13 @@
  *		 Heiko Carstens <heiko.carstens@de.ibm.com>
  */
 
+<<<<<<< HEAD
 #include <linux/linkage.h>
 #include <linux/init.h>
+=======
+#include <linux/init.h>
+#include <linux/linkage.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/cache.h>
 #include <asm/errno.h>
 #include <asm/ptrace.h>
@@ -197,8 +202,12 @@ STACK_SIZE  = 1 << STACK_SHIFT
  * Returns:
  *  gpr2 = prev
  */
+<<<<<<< HEAD
 	.globl	__switch_to
 __switch_to:
+=======
+ENTRY(__switch_to)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	basr	%r1,0
 0:	l	%r4,__THREAD_info(%r2)		# get thread_info of prev
 	l	%r5,__THREAD_info(%r3)		# get thread_info of next
@@ -224,8 +233,12 @@ __critical_start:
  * are executed with interrupts enabled.
  */
 
+<<<<<<< HEAD
 	.globl	system_call
 system_call:
+=======
+ENTRY(system_call)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stpt	__LC_SYNC_ENTER_TIMER
 sysc_saveall:
 	SAVE_ALL_SVC __LC_SVC_OLD_PSW,__LC_SAVE_AREA
@@ -388,8 +401,12 @@ sysc_tracenogo:
 #
 # a new process exits the kernel with ret_from_fork
 #
+<<<<<<< HEAD
 	.globl	ret_from_fork
 ret_from_fork:
+=======
+ENTRY(ret_from_fork)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	l	%r13,__LC_SVC_NEW_PSW+4
 	l	%r12,__LC_THREAD_INFO	# load pointer to thread_info struct
 	tm	SP_PSW+1(%r15),0x01	# forking a kernel thread ?
@@ -405,8 +422,12 @@ ret_from_fork:
 # kernel_execve function needs to deal with pt_regs that is not
 # at the usual place
 #
+<<<<<<< HEAD
 	.globl	kernel_execve
 kernel_execve:
+=======
+ENTRY(kernel_execve)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stm	%r12,%r15,48(%r15)
 	lr	%r14,%r15
 	l	%r13,__LC_SVC_NEW_PSW+4
@@ -438,8 +459,12 @@ kernel_execve:
  * Program check handler routine
  */
 
+<<<<<<< HEAD
 	.globl	pgm_check_handler
 pgm_check_handler:
+=======
+ENTRY(pgm_check_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * First we need to check for a special case:
  * Single stepping an instruction that disables the PER event mask will
@@ -565,8 +590,12 @@ kernel_per:
  * IO interrupt handler routine
  */
 
+<<<<<<< HEAD
 	.globl io_int_handler
 io_int_handler:
+=======
+ENTRY(io_int_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stck	__LC_INT_CLOCK
 	stpt	__LC_ASYNC_ENTER_TIMER
 	SAVE_ALL_ASYNC __LC_IO_OLD_PSW,__LC_SAVE_AREA+16
@@ -703,8 +732,12 @@ io_notify_resume:
  * External interrupt handler routine
  */
 
+<<<<<<< HEAD
 	.globl	ext_int_handler
 ext_int_handler:
+=======
+ENTRY(ext_int_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stck	__LC_INT_CLOCK
 	stpt	__LC_ASYNC_ENTER_TIMER
 	SAVE_ALL_ASYNC __LC_EXT_OLD_PSW,__LC_SAVE_AREA+16
@@ -731,8 +764,12 @@ __critical_end:
  * Machine check handler routines
  */
 
+<<<<<<< HEAD
 	.globl mcck_int_handler
 mcck_int_handler:
+=======
+ENTRY(mcck_int_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	stck	__LC_MCCK_CLOCK
 	spt	__LC_CPU_TIMER_SAVE_AREA	# revalidate cpu timer
 	lm	%r0,%r15,__LC_GPREGS_SAVE_AREA	# revalidate gprs
@@ -818,8 +855,12 @@ mcck_return:
  */
 #ifdef CONFIG_SMP
 	__CPUINIT
+<<<<<<< HEAD
 	.globl restart_int_handler
 restart_int_handler:
+=======
+ENTRY(restart_int_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	basr	%r1,0
 restart_base:
 	spt	restart_vtime-restart_base(%r1)
@@ -848,8 +889,12 @@ restart_vtime:
 /*
  * If we do not run with SMP enabled, let the new CPU crash ...
  */
+<<<<<<< HEAD
 	.globl restart_int_handler
 restart_int_handler:
+=======
+ENTRY(restart_int_handler)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	basr	%r1,0
 restart_base:
 	lpsw	restart_crash-restart_base(%r1)
@@ -859,6 +904,37 @@ restart_crash:
 restart_go:
 #endif
 
+<<<<<<< HEAD
+=======
+#
+# PSW restart interrupt handler
+#
+ENTRY(psw_restart_int_handler)
+	st	%r15,__LC_SAVE_AREA_64(%r0)	# save r15
+	basr	%r15,0
+0:	l	%r15,.Lrestart_stack-0b(%r15)	# load restart stack
+	l	%r15,0(%r15)
+	ahi	%r15,-SP_SIZE			# make room for pt_regs
+	stm	%r0,%r14,SP_R0(%r15)		# store gprs %r0-%r14 to stack
+	mvc	SP_R15(4,%r15),__LC_SAVE_AREA_64(%r0)# store saved %r15 to stack
+	mvc	SP_PSW(8,%r15),__LC_RST_OLD_PSW(%r0) # store restart old psw
+	xc	__SF_BACKCHAIN(4,%r15),__SF_BACKCHAIN(%r15) # set backchain to 0
+	basr	%r14,0
+1:	l	%r14,.Ldo_restart-1b(%r14)
+	basr	%r14,%r14
+
+	basr	%r14,0				# load disabled wait PSW if
+2:	lpsw	restart_psw_crash-2b(%r14)	# do_restart returns
+	.align 4
+.Ldo_restart:
+	.long	do_restart
+.Lrestart_stack:
+	.long	restart_stack
+	.align 8
+restart_psw_crash:
+	.long	0x000a0000,0x00000000 + restart_psw_crash
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.section .kprobes.text, "ax"
 
 #ifdef CONFIG_CHECK_STACK

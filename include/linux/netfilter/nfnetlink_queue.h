@@ -8,6 +8,10 @@ enum nfqnl_msg_types {
 	NFQNL_MSG_PACKET,		/* packet from kernel to userspace */
 	NFQNL_MSG_VERDICT,		/* verdict from userspace to kernel */
 	NFQNL_MSG_CONFIG,		/* connect to a particular queue */
+<<<<<<< HEAD
+=======
+	NFQNL_MSG_VERDICT_BATCH,	/* batchv from userspace to kernel */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	NFQNL_MSG_MAX
 };

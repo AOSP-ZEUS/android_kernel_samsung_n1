@@ -245,7 +245,11 @@ static int ghash_async_setkey(struct crypto_ahash *tfm, const u8 *key,
 	crypto_ahash_set_flags(tfm, crypto_ahash_get_flags(child)
 			       & CRYPTO_TFM_RES_MASK);
 
+<<<<<<< HEAD
 	return 0;
+=======
+	return err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int ghash_async_init_tfm(struct crypto_tfm *tfm)

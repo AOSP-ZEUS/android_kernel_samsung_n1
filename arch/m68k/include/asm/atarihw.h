@@ -399,8 +399,13 @@ struct CODEC
 #define CODEC_OVERFLOW_LEFT     2
   u_char unused2, unused3, unused4, unused5;
   u_char gpio_directions;
+<<<<<<< HEAD
 #define GPIO_IN                 0
 #define GPIO_OUT                1
+=======
+#define CODEC_GPIO_IN           0
+#define CODEC_GPIO_OUT          1
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
   u_char unused6;
   u_char gpio_data;
 };

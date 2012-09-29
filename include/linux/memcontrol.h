@@ -76,8 +76,11 @@ extern void mem_cgroup_uncharge_end(void);
 
 extern void mem_cgroup_uncharge_page(struct page *page);
 extern void mem_cgroup_uncharge_cache_page(struct page *page);
+<<<<<<< HEAD
 extern int mem_cgroup_shmem_charge_fallback(struct page *page,
 			struct mm_struct *mm, gfp_t gfp_mask);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern void mem_cgroup_out_of_memory(struct mem_cgroup *mem, gfp_t gfp_mask);
 int task_in_mem_cgroup(struct task_struct *task, const struct mem_cgroup *mem);
@@ -111,8 +114,12 @@ int mem_cgroup_inactive_anon_is_low(struct mem_cgroup *memcg);
 int mem_cgroup_inactive_file_is_low(struct mem_cgroup *memcg);
 int mem_cgroup_select_victim_node(struct mem_cgroup *memcg);
 unsigned long mem_cgroup_zone_nr_lru_pages(struct mem_cgroup *memcg,
+<<<<<<< HEAD
 						struct zone *zone,
 						enum lru_list lru);
+=======
+					int nid, int zid, unsigned int lrumask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct zone_reclaim_stat *mem_cgroup_get_reclaim_stat(struct mem_cgroup *memcg,
 						      struct zone *zone);
 struct zone_reclaim_stat*
@@ -209,12 +216,15 @@ static inline void mem_cgroup_uncharge_cache_page(struct page *page)
 {
 }
 
+<<<<<<< HEAD
 static inline int mem_cgroup_shmem_charge_fallback(struct page *page,
 			struct mm_struct *mm, gfp_t gfp_mask)
 {
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline void mem_cgroup_add_lru_list(struct page *page, int lru)
 {
 }
@@ -315,8 +325,13 @@ mem_cgroup_inactive_file_is_low(struct mem_cgroup *memcg)
 }
 
 static inline unsigned long
+<<<<<<< HEAD
 mem_cgroup_zone_nr_lru_pages(struct mem_cgroup *memcg, struct zone *zone,
 			     enum lru_list lru)
+=======
+mem_cgroup_zone_nr_lru_pages(struct mem_cgroup *memcg, int nid, int zid,
+				unsigned int lru_mask)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return 0;
 }

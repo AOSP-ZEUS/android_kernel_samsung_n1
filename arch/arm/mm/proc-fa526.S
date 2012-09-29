@@ -180,6 +180,7 @@ fa526_cr1_set:
 
 	__INITDATA
 
+<<<<<<< HEAD
 /*
  * Purpose : Function pointers used to access above functions - all calls
  *	     come through these
@@ -216,6 +217,16 @@ cpu_elf_name:
 cpu_fa526_name:
 	.asciz	"FA526"
 	.size	cpu_fa526_name, . - cpu_fa526_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions fa526, dabort=v4_early_abort, pabort=legacy_pabort
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv4"
+	string	cpu_elf_name, "v4"
+	string	cpu_fa526_name, "FA526"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 

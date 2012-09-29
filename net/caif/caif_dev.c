@@ -11,7 +11,10 @@
 
 #define pr_fmt(fmt) KBUILD_MODNAME ":%s(): " fmt, __func__
 
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/kernel.h>
 #include <linux/if_arp.h>
 #include <linux/net.h>
@@ -91,10 +94,21 @@ static struct caif_device_entry *caif_device_alloc(struct net_device *dev)
 
 	caifdevs = caif_device_list(dev_net(dev));
 
+<<<<<<< HEAD
 	caifd = kzalloc(sizeof(*caifd), GFP_ATOMIC);
 	if (!caifd)
 		return NULL;
 	caifd->pcpu_refcnt = alloc_percpu(int);
+=======
+	caifd = kzalloc(sizeof(*caifd), GFP_KERNEL);
+	if (!caifd)
+		return NULL;
+	caifd->pcpu_refcnt = alloc_percpu(int);
+	if (!caifd->pcpu_refcnt) {
+		kfree(caifd);
+		return NULL;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	caifd->netdev = dev;
 	dev_hold(dev);
 	return caifd;

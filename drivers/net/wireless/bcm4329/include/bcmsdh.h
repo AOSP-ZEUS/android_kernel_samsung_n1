@@ -179,7 +179,11 @@ typedef struct {
 	/* attach to device */
 	void *(*attach)(uint16 vend_id, uint16 dev_id, uint16 bus, uint16 slot,
 	                uint16 func, uint bustype, void * regsva, osl_t * osh,
+<<<<<<< HEAD
 	                void * param);
+=======
+	                void * param, void *dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* detach from device */
 	void (*detach)(void *ch);
 } bcmsdh_driver_t;

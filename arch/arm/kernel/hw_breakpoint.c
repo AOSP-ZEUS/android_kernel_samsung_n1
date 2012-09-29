@@ -796,7 +796,11 @@ unlock:
 
 /*
  * Called from either the Data Abort Handler [watchpoint] or the
+<<<<<<< HEAD
  * Prefetch Abort Handler [breakpoint] with preemption disabled.
+=======
+ * Prefetch Abort Handler [breakpoint] with interrupts disabled.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
 				 struct pt_regs *regs)
@@ -804,8 +808,15 @@ static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
 	int ret = 0;
 	u32 dscr;
 
+<<<<<<< HEAD
 	/* We must be called with preemption disabled. */
 	WARN_ON(preemptible());
+=======
+	preempt_disable();
+
+	if (interrupts_enabled(regs))
+		local_irq_enable();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* We only handle watchpoints and hardware breakpoints. */
 	ARM_DBG_READ(c1, 0, dscr);
@@ -824,10 +835,13 @@ static int hw_breakpoint_pending(unsigned long addr, unsigned int fsr,
 		ret = 1; /* Unhandled fault. */
 	}
 
+<<<<<<< HEAD
 	/*
 	 * Re-enable preemption after it was disabled in the
 	 * low-level exception handling code.
 	 */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	preempt_enable();
 
 	return ret;

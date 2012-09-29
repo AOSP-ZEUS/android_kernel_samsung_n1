@@ -35,7 +35,10 @@
 #include <asm/mach/irq.h>
 
 #include <mach/hardware.h>
+<<<<<<< HEAD
 #include <mach/regs-fb.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/map.h>
 
 #include <asm/irq.h>
@@ -44,6 +47,10 @@
 #include <plat/regs-serial.h>
 #include <plat/iic.h>
 #include <plat/fb.h>
+<<<<<<< HEAD
+=======
+#include <plat/regs-fb-v4.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <mach/s3c6410.h>
 #include <plat/clock.h>

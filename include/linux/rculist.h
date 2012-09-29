@@ -183,7 +183,11 @@ static inline void list_splice_init_rcu(struct list_head *list,
 	struct list_head *last = list->prev;
 	struct list_head *at = head->next;
 
+<<<<<<< HEAD
 	if (list_empty(head))
+=======
+	if (list_empty(list))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 
 	/* "first" and "last" tracking list, so initialize it. */

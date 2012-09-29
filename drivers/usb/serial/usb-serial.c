@@ -1059,12 +1059,15 @@ int usb_serial_probe(struct usb_interface *interface,
 		serial->attached = 1;
 	}
 
+<<<<<<< HEAD
 	/* Avoid race with tty_open and serial_install by setting the
 	 * disconnected flag and not clearing it until all ports have been
 	 * registered.
 	 */
 	serial->disconnected = 1;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (get_free_serial(serial, num_ports, &minor) == NULL) {
 		dev_err(&interface->dev, "No more free serial devices\n");
 		goto probe_error;
@@ -1089,8 +1092,11 @@ int usb_serial_probe(struct usb_interface *interface,
 		}
 	}
 
+<<<<<<< HEAD
 	serial->disconnected = 0;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	usb_serial_console_init(debug, minor);
 
 exit:

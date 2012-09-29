@@ -34,6 +34,10 @@ static int pci_conf1_mq_read(unsigned int seg, unsigned int bus,
 	unsigned long flags;
 	void *adr __iomem = XQUAD_PORT_ADDR(0xcfc, BUS2QUAD(bus));
 
+<<<<<<< HEAD
+=======
+	WARN_ON(seg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!value || (bus >= MAX_MP_BUSSES) || (devfn > 255) || (reg > 255))
 		return -EINVAL;
 
@@ -73,6 +77,10 @@ static int pci_conf1_mq_write(unsigned int seg, unsigned int bus,
 	unsigned long flags;
 	void *adr __iomem = XQUAD_PORT_ADDR(0xcfc, BUS2QUAD(bus));
 
+<<<<<<< HEAD
+=======
+	WARN_ON(seg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if ((bus >= MAX_MP_BUSSES) || (devfn > 255) || (reg > 255)) 
 		return -EINVAL;
 

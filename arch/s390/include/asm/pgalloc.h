@@ -20,9 +20,18 @@
 unsigned long *crst_table_alloc(struct mm_struct *);
 void crst_table_free(struct mm_struct *, unsigned long *);
 
+<<<<<<< HEAD
 unsigned long *page_table_alloc(struct mm_struct *);
 void page_table_free(struct mm_struct *, unsigned long *);
 void page_table_free_rcu(struct mmu_gather *, unsigned long *);
+=======
+unsigned long *page_table_alloc(struct mm_struct *, unsigned long);
+void page_table_free(struct mm_struct *, unsigned long *);
+#ifdef CONFIG_HAVE_RCU_TABLE_FREE
+void page_table_free_rcu(struct mmu_gather *, unsigned long *);
+void __tlb_remove_table(void *_table);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline void clear_table(unsigned long *s, unsigned long val, size_t n)
 {
@@ -112,6 +121,10 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
 {
 	spin_lock_init(&mm->context.list_lock);
 	INIT_LIST_HEAD(&mm->context.pgtable_list);
+<<<<<<< HEAD
+=======
+	INIT_LIST_HEAD(&mm->context.gmap_list);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return (pgd_t *) crst_table_alloc(mm);
 }
 #define pgd_free(mm, pgd) crst_table_free(mm, (unsigned long *) pgd)
@@ -130,8 +143,13 @@ static inline void pmd_populate(struct mm_struct *mm,
 /*
  * page table entry allocation/free routines.
  */
+<<<<<<< HEAD
 #define pte_alloc_one_kernel(mm, vmaddr) ((pte_t *) page_table_alloc(mm))
 #define pte_alloc_one(mm, vmaddr) ((pte_t *) page_table_alloc(mm))
+=======
+#define pte_alloc_one_kernel(mm, vmaddr) ((pte_t *) page_table_alloc(mm, vmaddr))
+#define pte_alloc_one(mm, vmaddr) ((pte_t *) page_table_alloc(mm, vmaddr))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define pte_free_kernel(mm, pte) page_table_free(mm, (unsigned long *) pte)
 #define pte_free(mm, pte) page_table_free(mm, (unsigned long *) pte)

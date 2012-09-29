@@ -55,7 +55,10 @@ struct isofs_sb_info {
 	gid_t s_gid;
 	uid_t s_uid;
 	struct nls_table *s_nls_iocharset; /* Native language support table */
+<<<<<<< HEAD
 	struct mutex s_mutex; /* replaces BKL, please remove if possible */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #define ISOFS_INVALID_MODE ((mode_t) -1)

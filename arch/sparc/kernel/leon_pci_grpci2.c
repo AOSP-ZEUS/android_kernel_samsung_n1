@@ -215,7 +215,11 @@ struct grpci2_priv {
 DEFINE_SPINLOCK(grpci2_dev_lock);
 struct grpci2_priv *grpci2priv;
 
+<<<<<<< HEAD
 int grpci2_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+int grpci2_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct grpci2_priv *priv = dev->bus->sysdata;
 	int irq_group;

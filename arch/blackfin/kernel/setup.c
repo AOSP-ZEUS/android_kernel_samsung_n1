@@ -54,8 +54,12 @@ EXPORT_SYMBOL(mtd_size);
 #endif
 
 char __initdata command_line[COMMAND_LINE_SIZE];
+<<<<<<< HEAD
 void __initdata *init_retx, *init_saved_retx, *init_saved_seqstat,
 	*init_saved_icplb_fault_addr, *init_saved_dcplb_fault_addr;
+=======
+struct blackfin_initial_pda __initdata initial_pda;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* boot memmap, for parsing "memmap=" */
 #define BFIN_MEMMAP_MAX		128 /* number of entries in bfin_memmap */
@@ -957,6 +961,7 @@ void __init setup_arch(char **cmdline_p)
 		printk(KERN_EMERG "Recovering from DOUBLE FAULT event\n");
 #ifdef CONFIG_DEBUG_DOUBLEFAULT
 		/* We assume the crashing kernel, and the current symbol table match */
+<<<<<<< HEAD
 		printk(KERN_EMERG " While handling exception (EXCAUSE = 0x%x) at %pF\n",
 			(int)init_saved_seqstat & SEQSTAT_EXCAUSE, init_saved_retx);
 		printk(KERN_NOTICE "   DCPLB_FAULT_ADDR: %pF\n", init_saved_dcplb_fault_addr);
@@ -964,6 +969,18 @@ void __init setup_arch(char **cmdline_p)
 #endif
 		printk(KERN_NOTICE " The instruction at %pF caused a double exception\n",
 			init_retx);
+=======
+		printk(KERN_EMERG " While handling exception (EXCAUSE = %#x) at %pF\n",
+			initial_pda.seqstat_doublefault & SEQSTAT_EXCAUSE,
+			initial_pda.retx_doublefault);
+		printk(KERN_NOTICE "   DCPLB_FAULT_ADDR: %pF\n",
+			initial_pda.dcplb_doublefault_addr);
+		printk(KERN_NOTICE "   ICPLB_FAULT_ADDR: %pF\n",
+			initial_pda.icplb_doublefault_addr);
+#endif
+		printk(KERN_NOTICE " The instruction at %pF caused a double exception\n",
+			initial_pda.retx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else if (_bfin_swrst & RESET_WDOG)
 		printk(KERN_INFO "Recovering from Watchdog event\n");
 	else if (_bfin_swrst & RESET_SOFTWARE)

@@ -56,6 +56,10 @@ config MACH_SMDKC100
 	select S3C_DEV_RTC
 	select S3C_DEV_WDT
 	select SAMSUNG_DEV_ADC
+<<<<<<< HEAD
+=======
+	select SAMSUNG_DEV_BACKLIGHT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select SAMSUNG_DEV_IDE
 	select SAMSUNG_DEV_KEYPAD
 	select SAMSUNG_DEV_PWM

@@ -5,7 +5,11 @@
 #include <linux/device.h>
 #include <linux/string.h>
 #include <linux/pm_runtime.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/jiffies.h>
 #include "power.h"
 
@@ -116,12 +120,21 @@ static ssize_t control_store(struct device * dev, struct device_attribute *attr,
 	cp = memchr(buf, '\n', n);
 	if (cp)
 		len = cp - buf;
+<<<<<<< HEAD
+=======
+	device_lock(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (len == sizeof ctrl_auto - 1 && strncmp(buf, ctrl_auto, len) == 0)
 		pm_runtime_allow(dev);
 	else if (len == sizeof ctrl_on - 1 && strncmp(buf, ctrl_on, len) == 0)
 		pm_runtime_forbid(dev);
 	else
+<<<<<<< HEAD
 		return -EINVAL;
+=======
+		n = -EINVAL;
+	device_unlock(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return n;
 }
 
@@ -205,7 +218,13 @@ static ssize_t autosuspend_delay_ms_store(struct device *dev,
 	if (strict_strtol(buf, 10, &delay) != 0 || delay != (int) delay)
 		return -EINVAL;
 
+<<<<<<< HEAD
 	pm_runtime_set_autosuspend_delay(dev, delay);
+=======
+	device_lock(dev);
+	pm_runtime_set_autosuspend_delay(dev, delay);
+	device_unlock(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return n;
 }
 

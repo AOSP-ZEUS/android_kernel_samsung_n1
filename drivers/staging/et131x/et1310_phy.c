@@ -99,7 +99,11 @@ static void et131x_xcvr_init(struct et131x_adapter *etdev);
 /**
  * PhyMiRead - Read from the PHY through the MII Interface on the MAC
  * @etdev: pointer to our private adapter structure
+<<<<<<< HEAD
  * @xcvrAddr: the address of the transciever
+=======
+ * @xcvrAddr: the address of the transceiver
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @xcvrReg: the register to read
  * @value: pointer to a 16-bit value in which the value will be stored
  *
@@ -108,7 +112,11 @@ static void et131x_xcvr_init(struct et131x_adapter *etdev);
 int PhyMiRead(struct et131x_adapter *etdev, u8 xcvrAddr,
 	      u8 xcvrReg, u16 *value)
 {
+<<<<<<< HEAD
 	struct _MAC_t __iomem *mac = &etdev->regs->mac;
+=======
+	struct mac_regs __iomem *mac = &etdev->regs->mac;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int status = 0;
 	u32 delay;
 	u32 miiAddr;
@@ -176,9 +184,15 @@ int PhyMiRead(struct et131x_adapter *etdev, u8 xcvrAddr,
  */
 int MiWrite(struct et131x_adapter *etdev, u8 xcvrReg, u16 value)
 {
+<<<<<<< HEAD
 	struct _MAC_t __iomem *mac = &etdev->regs->mac;
 	int status = 0;
 	u8 xcvrAddr = etdev->Stats.xcvr_addr;
+=======
+	struct mac_regs __iomem *mac = &etdev->regs->mac;
+	int status = 0;
+	u8 xcvrAddr = etdev->stats.xcvr_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 delay;
 	u32 miiAddr;
 	u32 miiCmd;
@@ -259,8 +273,13 @@ int et131x_xcvr_find(struct et131x_adapter *etdev)
 		xcvr_id = (u32) ((idr1 << 16) | idr2);
 
 		if (idr1 != 0 && idr1 != 0xffff) {
+<<<<<<< HEAD
 			etdev->Stats.xcvr_id = xcvr_id;
 			etdev->Stats.xcvr_addr = xcvr_addr;
+=======
+			etdev->stats.xcvr_id = xcvr_id;
+			etdev->stats.xcvr_addr = xcvr_addr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return 0;
 		}
 	}
@@ -582,7 +601,11 @@ static void et131x_xcvr_init(struct et131x_adapter *etdev)
 	u16 lcr2;
 
 	/* Zero out the adapter structure variable representing BMSR */
+<<<<<<< HEAD
 	etdev->Bmsr.value = 0;
+=======
+	etdev->bmsr = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	MiRead(etdev, (u8) offsetof(struct mi_regs, isr), &isr);
 	MiRead(etdev, (u8) offsetof(struct mi_regs, imr), &imr);
@@ -590,7 +613,11 @@ static void et131x_xcvr_init(struct et131x_adapter *etdev)
 	/* Set the link status interrupt only.  Bad behavior when link status
 	 * and auto neg are set, we run into a nested interrupt problem
 	 */
+<<<<<<< HEAD
         imr |= 0x0105;
+=======
+	imr |= 0x0105;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	MiWrite(etdev, (u8) offsetof(struct mi_regs, imr), imr);
 
@@ -729,7 +756,11 @@ static void et131x_xcvr_init(struct et131x_adapter *etdev)
 }
 
 void et131x_Mii_check(struct et131x_adapter *etdev,
+<<<<<<< HEAD
 		      MI_BMSR_t bmsr, MI_BMSR_t bmsr_ints)
+=======
+		      u16 bmsr, u16 bmsr_ints)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u8 link_status;
 	u32 autoneg_status;
@@ -740,8 +771,13 @@ void et131x_Mii_check(struct et131x_adapter *etdev,
 	u32 polarity;
 	unsigned long flags;
 
+<<<<<<< HEAD
 	if (bmsr_ints.bits.link_status) {
 		if (bmsr.bits.link_status) {
+=======
+	if (bmsr_ints & MI_BMSR_LINK_STATUS) {
+		if (bmsr & MI_BMSR_LINK_STATUS) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			etdev->boot_coma = 20;
 
 			/* Update our state variables and indicate the
@@ -750,7 +786,10 @@ void et131x_Mii_check(struct et131x_adapter *etdev,
 			spin_lock_irqsave(&etdev->Lock, flags);
 
 			etdev->MediaState = NETIF_STATUS_MEDIA_CONNECT;
+<<<<<<< HEAD
 			etdev->Flags &= ~fMP_ADAPTER_LINK_DETECTION;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			spin_unlock_irqrestore(&etdev->Lock, flags);
 
@@ -780,8 +819,12 @@ void et131x_Mii_check(struct et131x_adapter *etdev,
 			 * Timer expires, we can report disconnected (handled
 			 * in the LinkDetectionDPC).
 			 */
+<<<<<<< HEAD
 			if (!(etdev->Flags & fMP_ADAPTER_LINK_DETECTION) ||
 			 (etdev->MediaState == NETIF_STATUS_MEDIA_DISCONNECT)) {
+=======
+			if ((etdev->MediaState == NETIF_STATUS_MEDIA_DISCONNECT)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				spin_lock_irqsave(&etdev->Lock, flags);
 				etdev->MediaState =
 				    NETIF_STATUS_MEDIA_DISCONNECT;
@@ -822,9 +865,16 @@ void et131x_Mii_check(struct et131x_adapter *etdev,
 		}
 	}
 
+<<<<<<< HEAD
 	if (bmsr_ints.bits.auto_neg_complete ||
 	    (etdev->AiForceDpx == 3 && bmsr_ints.bits.link_status)) {
 		if (bmsr.bits.auto_neg_complete || etdev->AiForceDpx == 3) {
+=======
+	if ((bmsr_ints & MI_BMSR_AUTO_NEG_COMPLETE) ||
+	    (etdev->AiForceDpx == 3 && (bmsr_ints & MI_BMSR_LINK_STATUS))) {
+		if ((bmsr & MI_BMSR_AUTO_NEG_COMPLETE) ||
+		    etdev->AiForceDpx == 3) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ET1310_PhyLinkStatus(etdev,
 					     &link_status, &autoneg_status,
 					     &speed, &duplex, &mdi_mdix,

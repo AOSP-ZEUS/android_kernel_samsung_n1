@@ -34,6 +34,12 @@ static LIST_HEAD(clock_list);
 static DEFINE_SPINLOCK(clock_lock);
 static DEFINE_MUTEX(clock_list_sem);
 
+<<<<<<< HEAD
+=======
+/* clock disable operations are not passed on to hardware during boot */
+static int allow_disable;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void clk_rate_table_build(struct clk *clk,
 			  struct cpufreq_frequency_table *freq_table,
 			  int nr_freqs,
@@ -228,7 +234,11 @@ static void __clk_disable(struct clk *clk)
 		return;
 
 	if (!(--clk->usecount)) {
+<<<<<<< HEAD
 		if (likely(clk->ops && clk->ops->disable))
+=======
+		if (likely(allow_disable && clk->ops && clk->ops->disable))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			clk->ops->disable(clk);
 		if (likely(clk->parent))
 			__clk_disable(clk->parent);
@@ -393,7 +403,11 @@ int clk_register(struct clk *clk)
 {
 	int ret;
 
+<<<<<<< HEAD
 	if (clk == NULL || IS_ERR(clk))
+=======
+	if (IS_ERR_OR_NULL(clk))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 
 	/*
@@ -670,7 +684,11 @@ static struct dentry *clk_debugfs_root;
 static int clk_debugfs_register_one(struct clk *c)
 {
 	int err;
+<<<<<<< HEAD
 	struct dentry *d, *child, *child_tmp;
+=======
+	struct dentry *d;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct clk *pa = c->parent;
 	char s[255];
 	char *p = s;
@@ -699,10 +717,14 @@ static int clk_debugfs_register_one(struct clk *c)
 	return 0;
 
 err_out:
+<<<<<<< HEAD
 	d = c->dentry;
 	list_for_each_entry_safe(child, child_tmp, &d->d_subdirs, d_u.d_child)
 		debugfs_remove(child);
 	debugfs_remove(c->dentry);
+=======
+	debugfs_remove_recursive(c->dentry);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return err;
 }
 
@@ -747,3 +769,28 @@ err_out:
 	return err;
 }
 late_initcall(clk_debugfs_init);
+<<<<<<< HEAD
+=======
+
+static int __init clk_late_init(void)
+{
+	unsigned long flags;
+	struct clk *clk;
+
+	/* disable all clocks with zero use count */
+	mutex_lock(&clock_list_sem);
+	spin_lock_irqsave(&clock_lock, flags);
+
+	list_for_each_entry(clk, &clock_list, node)
+		if (!clk->usecount && clk->ops && clk->ops->disable)
+			clk->ops->disable(clk);
+
+	/* from now on allow clock disable operations */
+	allow_disable = 1;
+
+	spin_unlock_irqrestore(&clock_lock, flags);
+	mutex_unlock(&clock_list_sem);
+	return 0;
+}
+late_initcall(clk_late_init);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

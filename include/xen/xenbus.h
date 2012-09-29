@@ -223,7 +223,13 @@ int xenbus_free_evtchn(struct xenbus_device *dev, int port);
 
 enum xenbus_state xenbus_read_driver_state(const char *path);
 
+<<<<<<< HEAD
 void xenbus_dev_error(struct xenbus_device *dev, int err, const char *fmt, ...);
+=======
+__attribute__((format(printf, 3, 4)))
+void xenbus_dev_error(struct xenbus_device *dev, int err, const char *fmt, ...);
+__attribute__((format(printf, 3, 4)))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void xenbus_dev_fatal(struct xenbus_device *dev, int err, const char *fmt, ...);
 
 const char *xenbus_strstate(enum xenbus_state state);

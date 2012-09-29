@@ -26,6 +26,10 @@ targets += vdso.so vdso.so.dbg vdso.lds $(vobjs-y)
 export CPPFLAGS_vdso.lds += -P -C
 
 VDSO_LDFLAGS_vdso.lds = -m64 -Wl,-soname=linux-vdso.so.1 \
+<<<<<<< HEAD
+=======
+			-Wl,--no-undefined \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		      	-Wl,-z,max-page-size=4096 -Wl,-z,common-page-size=4096
 
 $(obj)/vdso.o: $(src)/vdso.S $(obj)/vdso.so

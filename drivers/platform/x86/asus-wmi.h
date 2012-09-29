@@ -29,12 +29,21 @@
 
 #include <linux/platform_device.h>
 
+<<<<<<< HEAD
+=======
+#define ASUS_WMI_KEY_IGNORE (-1)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct module;
 struct key_entry;
 struct asus_wmi;
 
 struct asus_wmi_driver {
 	bool			hotplug_wireless;
+<<<<<<< HEAD
+=======
+	int			wapf;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	const char		*name;
 	struct module		*owner;
@@ -44,6 +53,13 @@ struct asus_wmi_driver {
 	const struct key_entry	*keymap;
 	const char		*input_name;
 	const char		*input_phys;
+<<<<<<< HEAD
+=======
+	/* Returns new code, value, and autorelease values in arguments.
+	 * Return ASUS_WMI_KEY_IGNORE in code if event should be ignored. */
+	void (*key_filter) (struct asus_wmi_driver *driver, int *code,
+			    unsigned int *value, bool *autorelease);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int (*probe) (struct platform_device *device);
 	void (*quirks) (struct asus_wmi_driver *driver);

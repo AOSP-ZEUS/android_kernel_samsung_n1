@@ -23,6 +23,10 @@ extern char cmd_line[COMMAND_LINE_SIZE];
 void early_printk(const char *fmt, ...);
 
 int setup_early_printk(char *opt);
+<<<<<<< HEAD
+=======
+void remap_early_printk(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void disable_early_printk(void);
 
 #if defined(CONFIG_EARLY_PRINTK)

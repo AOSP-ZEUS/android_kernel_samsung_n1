@@ -107,7 +107,10 @@ struct media {
  * @link_req: ptr to (optional) structure making periodic link setup requests
  * @links: list of non-congested links associated with bearer
  * @cong_links: list of congested links associated with bearer
+<<<<<<< HEAD
  * @continue_count: # of times bearer has resumed after congestion or blocking
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @active: non-zero if bearer structure is represents a bearer
  * @net_plane: network plane ('A' through 'H') currently associated with bearer
  * @nodes: indicates which nodes in cluster can be reached through bearer
@@ -129,7 +132,10 @@ struct tipc_bearer {
 	struct link_req *link_req;
 	struct list_head links;
 	struct list_head cong_links;
+<<<<<<< HEAD
 	u32 continue_count;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int active;
 	char net_plane;
 	struct tipc_node_map nodes;

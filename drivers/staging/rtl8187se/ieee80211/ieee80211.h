@@ -25,13 +25,20 @@
 #define IEEE80211_H
 #include <linux/if_ether.h> /* ETH_ALEN */
 #include <linux/kernel.h>   /* ARRAY_SIZE */
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/jiffies.h>
 #include <linux/timer.h>
 #include <linux/sched.h>
 #include <linux/semaphore.h>
 #include <linux/wireless.h>
 #include <linux/ieee80211.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define KEY_TYPE_NA		0x0
 #define KEY_TYPE_WEP40 		0x1

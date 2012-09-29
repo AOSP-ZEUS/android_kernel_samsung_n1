@@ -78,6 +78,21 @@ struct minstrel_priv {
 	unsigned int update_interval;
 	unsigned int lookaround_rate;
 	unsigned int lookaround_rate_mrr;
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_MAC80211_DEBUGFS
+	/*
+	 * enable fixed rate processing per RC
+	 *   - write static index to debugfs:ieee80211/phyX/rc/fixed_rate_idx
+	 *   - write -1 to enable RC processing again
+	 *   - setting will be applied on next update
+	 */
+	u32 fixed_rate_idx;
+	struct dentry *dbg_fixed_rate;
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct minstrel_debugfs_info {

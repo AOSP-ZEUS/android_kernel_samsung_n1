@@ -56,6 +56,12 @@
 #define TI816X_UART2_BASE	0x48022000
 #define TI816X_UART3_BASE	0x48024000
 
+<<<<<<< HEAD
+=======
+/* AM3505/3517 UART4 */
+#define AM35XX_UART4_BASE	0x4809E000	/* Only on AM3505/3517 */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* External port on Zoom2/3 */
 #define ZOOM_UART_BASE		0x10000000
 #define ZOOM_UART_VIRT		0xfa400000

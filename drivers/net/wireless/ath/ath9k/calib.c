@@ -19,6 +19,10 @@
 
 /* Common calibration code */
 
+<<<<<<< HEAD
+=======
+#define ATH9K_NF_TOO_HIGH	-60
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int16_t ath9k_hw_get_nf_hist_mid(int16_t *nfCalBuffer)
 {
@@ -334,10 +338,17 @@ static void ath9k_hw_nf_sanitize(struct ath_hw *ah, s16 *nf)
 			"NF calibrated [%s] [chain %d] is %d\n",
 			(i >= 3 ? "ext" : "ctl"), i % 3, nf[i]);
 
+<<<<<<< HEAD
 		if (nf[i] > limit->max) {
 			ath_dbg(common, ATH_DBG_CALIBRATE,
 				"NF[%d] (%d) > MAX (%d), correcting to MAX\n",
 				i, nf[i], limit->max);
+=======
+		if (nf[i] > ATH9K_NF_TOO_HIGH) {
+			ath_dbg(common, ATH_DBG_CALIBRATE,
+				"NF[%d] (%d) > MAX (%d), correcting to MAX\n",
+				i, nf[i], ATH9K_NF_TOO_HIGH);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			nf[i] = limit->max;
 		} else if (nf[i] < limit->min) {
 			ath_dbg(common, ATH_DBG_CALIBRATE,

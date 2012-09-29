@@ -22,18 +22,26 @@
 
 		.text
 /*
+<<<<<<< HEAD
  * sa1100_cpu_suspend()
+=======
+ * sa1100_finish_suspend()
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Causes sa11x0 to enter sleep state
  *
  */
 
+<<<<<<< HEAD
 ENTRY(sa1100_cpu_suspend)
 	stmfd	sp!, {r4 - r12, lr}		@ save registers on stack
 	mov	r1, r0
 	ldr	r3, =sa1100_cpu_resume		@ return function
 	bl	cpu_suspend
 
+=======
+ENTRY(sa1100_finish_suspend)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	@ disable clock switching
 	mcr	p15, 0, r1, c15, c2, 2
 
@@ -139,6 +147,7 @@ sa1110_sdram_controller_fix:
 	str	r13, [r12]
 
 20:	b	20b			@ loop waiting for sleep
+<<<<<<< HEAD
 
 /*
  * cpu_sa1100_resume()
@@ -149,3 +158,5 @@ sa1110_sdram_controller_fix:
 sa1100_cpu_resume:
 	mcr	p15, 0, r1, c15, c1, 2		@ enable clock switching
 	ldmfd	sp!, {r4 - r12, pc}		@ return to caller
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

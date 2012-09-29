@@ -23,7 +23,10 @@
 
 #include <linux/module.h>
 #include <linux/platform_device.h>
+<<<<<<< HEAD
 #include <linux/crc7.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/spi/spi.h>
 
 #include "wl12xx.h"
@@ -128,12 +131,22 @@ EXPORT_SYMBOL_GPL(wl1271_set_partition);
 
 void wl1271_io_reset(struct wl1271 *wl)
 {
+<<<<<<< HEAD
 	wl->if_ops->reset(wl);
+=======
+	if (wl->if_ops->reset)
+		wl->if_ops->reset(wl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void wl1271_io_init(struct wl1271 *wl)
 {
+<<<<<<< HEAD
 	wl->if_ops->init(wl);
+=======
+	if (wl->if_ops->init)
+		wl->if_ops->init(wl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void wl1271_top_reg_write(struct wl1271 *wl, int addr, u16 val)

@@ -641,6 +641,17 @@ config I2C_TEGRA
 	  If you say yes to this option, support will be included for the
 	  I2C controller embedded in NVIDIA Tegra SOCs
 
+<<<<<<< HEAD
+=======
+config I2C_SLAVE_TEGRA
+	tristate "NVIDIA Tegra internal I2C slave controller"
+	depends on ARCH_TEGRA && I2C_SLAVE
+	default n
+	help
+	  If you say yes to this option, support will be included for the
+	  I2C slave controller embedded in NVIDIA Tegra SOCs
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config I2C_VERSATILE
 	tristate "ARM Versatile/Realview I2C bus support"
 	depends on ARCH_VERSATILE || ARCH_REALVIEW || ARCH_VEXPRESS

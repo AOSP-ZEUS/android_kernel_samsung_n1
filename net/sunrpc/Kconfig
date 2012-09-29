@@ -4,6 +4,13 @@ config SUNRPC
 config SUNRPC_GSS
 	tristate
 
+<<<<<<< HEAD
+=======
+config SUNRPC_BACKCHANNEL
+	bool
+	depends on SUNRPC
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SUNRPC_XPRT_RDMA
 	tristate
 	depends on SUNRPC && INFINIBAND && INFINIBAND_ADDR_TRANS && EXPERIMENTAL

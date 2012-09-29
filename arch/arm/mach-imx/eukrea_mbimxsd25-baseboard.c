@@ -173,7 +173,11 @@ static struct platform_device eukrea_mbimxsd_lcd_powerdev = {
 	.dev.platform_data	= &eukrea_mbimxsd_lcd_power_data,
 };
 
+<<<<<<< HEAD
 static struct gpio_led eukrea_mbimxsd_leds[] = {
+=======
+static const struct gpio_led eukrea_mbimxsd_leds[] __initconst = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		.name			= "led1",
 		.default_trigger	= "heartbeat",
@@ -182,11 +186,17 @@ static struct gpio_led eukrea_mbimxsd_leds[] = {
 	},
 };
 
+<<<<<<< HEAD
 static struct gpio_led_platform_data eukrea_mbimxsd_led_info = {
+=======
+static const struct gpio_led_platform_data
+		eukrea_mbimxsd_led_info __initconst = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.leds		= eukrea_mbimxsd_leds,
 	.num_leds	= ARRAY_SIZE(eukrea_mbimxsd_leds),
 };
 
+<<<<<<< HEAD
 static struct platform_device eukrea_mbimxsd_leds_gpio = {
 	.name	= "leds-gpio",
 	.id	= -1,
@@ -195,6 +205,8 @@ static struct platform_device eukrea_mbimxsd_leds_gpio = {
 	},
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct gpio_keys_button eukrea_mbimxsd_gpio_buttons[] = {
 	{
 		.gpio		= GPIO_SWITCH1,
@@ -212,7 +224,10 @@ static const struct gpio_keys_platform_data
 };
 
 static struct platform_device *platform_devices[] __initdata = {
+<<<<<<< HEAD
 	&eukrea_mbimxsd_leds_gpio,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	&eukrea_mbimxsd_lcd_powerdev,
 };
 
@@ -233,7 +248,12 @@ struct imx_ssi_platform_data eukrea_mbimxsd_ssi_pdata __initconst = {
 
 static struct esdhc_platform_data sd1_pdata = {
 	.cd_gpio = GPIO_SD1CD,
+<<<<<<< HEAD
 	.wp_gpio = -EINVAL,
+=======
+	.cd_type = ESDHC_CD_GPIO,
+	.wp_type = ESDHC_WP_NONE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*
@@ -287,5 +307,9 @@ void __init eukrea_mbimxsd25_baseboard_init(void)
 				ARRAY_SIZE(eukrea_mbimxsd_i2c_devices));
 
 	platform_add_devices(platform_devices, ARRAY_SIZE(platform_devices));
+<<<<<<< HEAD
+=======
+	gpio_led_register_device(-1, &eukrea_mbimxsd_led_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	imx_add_gpio_keys(&eukrea_mbimxsd_button_data);
 }

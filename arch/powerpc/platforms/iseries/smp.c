@@ -29,7 +29,11 @@
 #include <linux/cpu.h>
 
 #include <asm/ptrace.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/irq.h>
 #include <asm/page.h>
 #include <asm/pgtable.h>
@@ -75,7 +79,11 @@ static void __devinit smp_iSeries_setup_cpu(int nr)
 }
 
 static struct smp_ops_t iSeries_smp_ops = {
+<<<<<<< HEAD
 	.message_pass = smp_muxed_ipi_message_pass,
+=======
+	.message_pass = NULL,	/* Use smp_muxed_ipi_message_pass */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.cause_ipi    = smp_iSeries_cause_ipi,
 	.probe        = smp_iSeries_probe,
 	.kick_cpu     = smp_iSeries_kick_cpu,

@@ -120,7 +120,20 @@ static inline void iwl_wake_any_queue(struct iwl_priv *priv,
 	}
 }
 
+<<<<<<< HEAD
 #define ieee80211_stop_queue DO_NOT_USE_ieee80211_stop_queue
+=======
+#ifdef ieee80211_stop_queue
+#undef ieee80211_stop_queue
+#endif
+
+#define ieee80211_stop_queue DO_NOT_USE_ieee80211_stop_queue
+
+#ifdef ieee80211_wake_queue
+#undef ieee80211_wake_queue
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define ieee80211_wake_queue DO_NOT_USE_ieee80211_wake_queue
 
 static inline void iwl_disable_interrupts(struct iwl_priv *priv)

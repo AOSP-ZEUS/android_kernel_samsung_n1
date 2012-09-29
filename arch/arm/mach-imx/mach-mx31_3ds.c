@@ -13,6 +13,10 @@
  */
 
 #include <linux/delay.h>
+<<<<<<< HEAD
+=======
+#include <linux/dma-mapping.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/types.h>
 #include <linux/init.h>
 #include <linux/clk.h>
@@ -53,11 +57,16 @@ static int mx31_3ds_pins[] = {
 	MX31_PIN_RXD1__RXD1,
 	IOMUX_MODE(MX31_PIN_GPIO1_1, IOMUX_CONFIG_GPIO),
 	/*SPI0*/
+<<<<<<< HEAD
 	MX31_PIN_CSPI1_SCLK__SCLK,
 	MX31_PIN_CSPI1_MOSI__MOSI,
 	MX31_PIN_CSPI1_MISO__MISO,
 	MX31_PIN_CSPI1_SPI_RDY__SPI_RDY,
 	MX31_PIN_CSPI1_SS2__SS2, /* CS for LCD */
+=======
+	IOMUX_MODE(MX31_PIN_DSR_DCE1, IOMUX_CONFIG_ALT1),
+	IOMUX_MODE(MX31_PIN_RI_DCE1, IOMUX_CONFIG_ALT1),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* SPI 1 */
 	MX31_PIN_CSPI2_SCLK__SCLK,
 	MX31_PIN_CSPI2_MOSI__MOSI,
@@ -689,6 +698,14 @@ static void __init mx31_3ds_init(void)
 {
 	int ret;
 
+<<<<<<< HEAD
+=======
+	imx31_soc_init();
+
+	/* Configure SPI1 IOMUX */
+	mxc_iomux_set_gpr(MUX_PGP_CSPI_BB, true);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mxc_iomux_setup_multiple_pins(mx31_3ds_pins, ARRAY_SIZE(mx31_3ds_pins),
 				      "mx31_3ds");
 

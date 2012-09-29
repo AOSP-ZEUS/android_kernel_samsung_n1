@@ -39,7 +39,11 @@ static int adis16220_spi_write_reg_8(struct device *dev,
 {
 	int ret;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adis16220_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16220_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&st->buf_lock);
 	st->tx[0] = ADIS16220_WRITE_REG(reg_address);
@@ -65,7 +69,11 @@ static int adis16220_spi_write_reg_16(struct device *dev,
 	int ret;
 	struct spi_message msg;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adis16220_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16220_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct spi_transfer xfers[] = {
 		{
 			.tx_buf = st->tx,
@@ -110,7 +118,11 @@ static int adis16220_spi_read_reg_16(struct device *dev,
 {
 	struct spi_message msg;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adis16220_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16220_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 	struct spi_transfer xfers[] = {
 		{
@@ -316,10 +328,17 @@ err_ret:
 	return ret;
 }
 
+<<<<<<< HEAD
 static int adis16220_initial_setup(struct adis16220_state *st)
 {
 	int ret;
 	struct device *dev = &st->indio_dev->dev;
+=======
+static int adis16220_initial_setup(struct iio_dev *indio_dev)
+{
+	int ret;
+	struct device *dev = &indio_dev->dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Do self test */
 	ret = adis16220_self_test(dev);
@@ -341,19 +360,30 @@ static int adis16220_initial_setup(struct adis16220_state *st)
 		}
 	}
 
+<<<<<<< HEAD
 	printk(KERN_INFO DRIVER_NAME ": at CS%d (irq %d)\n",
 			st->us->chip_select, st->us->irq);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err_ret:
 	return ret;
 }
 
+<<<<<<< HEAD
 static ssize_t adis16220_capture_buffer_read(struct adis16220_state *st,
+=======
+static ssize_t adis16220_capture_buffer_read(struct iio_dev *indio_dev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					char *buf,
 					loff_t off,
 					size_t count,
 					int addr)
 {
+<<<<<<< HEAD
+=======
+	struct adis16220_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct spi_message msg;
 	struct spi_transfer xfers[] = {
 		{
@@ -383,7 +413,11 @@ static ssize_t adis16220_capture_buffer_read(struct adis16220_state *st,
 		count = ADIS16220_CAPTURE_SIZE - off;
 
 	/* write the begin position of capture buffer */
+<<<<<<< HEAD
 	ret = adis16220_spi_write_reg_16(&st->indio_dev->dev,
+=======
+	ret = adis16220_spi_write_reg_16(&indio_dev->dev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					ADIS16220_CAPT_PNTR,
 					off > 1);
 	if (ret)
@@ -422,9 +456,14 @@ static ssize_t adis16220_accel_bin_read(struct file *filp, struct kobject *kobj,
 {
 	struct device *dev = container_of(kobj, struct device, kobj);
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adis16220_state *st = iio_dev_get_devdata(indio_dev);
 
 	return adis16220_capture_buffer_read(st, buf,
+=======
+
+	return adis16220_capture_buffer_read(indio_dev, buf,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					off, count,
 					ADIS16220_CAPT_BUFA);
 }
@@ -445,9 +484,14 @@ static ssize_t adis16220_adc1_bin_read(struct file *filp, struct kobject *kobj,
 {
 	struct device *dev = container_of(kobj, struct device, kobj);
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adis16220_state *st = iio_dev_get_devdata(indio_dev);
 
 	return adis16220_capture_buffer_read(st, buf,
+=======
+
+	return adis16220_capture_buffer_read(indio_dev, buf,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					off, count,
 					ADIS16220_CAPT_BUF1);
 }
@@ -468,9 +512,14 @@ static ssize_t adis16220_adc2_bin_read(struct file *filp, struct kobject *kobj,
 {
 	struct device *dev = container_of(kobj, struct device, kobj);
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adis16220_state *st = iio_dev_get_devdata(indio_dev);
 
 	return adis16220_capture_buffer_read(st, buf,
+=======
+
+	return adis16220_capture_buffer_read(indio_dev, buf,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					off, count,
 					ADIS16220_CAPT_BUF2);
 }
@@ -551,6 +600,7 @@ static const struct iio_info adis16220_info = {
 static int __devinit adis16220_probe(struct spi_device *spi)
 {
 	int ret, regdone = 0;
+<<<<<<< HEAD
 	struct adis16220_state *st = kzalloc(sizeof *st, GFP_KERNEL);
 	if (!st) {
 		ret =  -ENOMEM;
@@ -586,10 +636,36 @@ static int __devinit adis16220_probe(struct spi_device *spi)
 	st->indio_dev->modes = INDIO_DIRECT_MODE;
 
 	ret = iio_device_register(st->indio_dev);
+=======
+	struct adis16220_state *st;
+	struct iio_dev *indio_dev;
+
+	/* setup the industrialio driver allocated elements */
+	indio_dev = iio_allocate_device(sizeof(*st));
+	if (indio_dev == NULL) {
+		ret = -ENOMEM;
+		goto error_ret;
+	}
+
+	st = iio_priv(indio_dev);
+	/* this is only used for removal purposes */
+	spi_set_drvdata(spi, indio_dev);
+
+	st->us = spi;
+	mutex_init(&st->buf_lock);
+
+	indio_dev->name = spi->dev.driver->name;
+	indio_dev->dev.parent = &spi->dev;
+	indio_dev->info = &adis16220_info;
+	indio_dev->modes = INDIO_DIRECT_MODE;
+
+	ret = iio_device_register(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_free_dev;
 	regdone = 1;
 
+<<<<<<< HEAD
 	ret = sysfs_create_bin_file(&st->indio_dev->dev.kobj, &accel_bin);
 	if (ret)
 		goto error_free_dev;
@@ -599,16 +675,32 @@ static int __devinit adis16220_probe(struct spi_device *spi)
 		goto error_rm_accel_bin;
 
 	ret = sysfs_create_bin_file(&st->indio_dev->dev.kobj, &adc2_bin);
+=======
+	ret = sysfs_create_bin_file(&indio_dev->dev.kobj, &accel_bin);
+	if (ret)
+		goto error_free_dev;
+
+	ret = sysfs_create_bin_file(&indio_dev->dev.kobj, &adc1_bin);
+	if (ret)
+		goto error_rm_accel_bin;
+
+	ret = sysfs_create_bin_file(&indio_dev->dev.kobj, &adc2_bin);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_rm_adc1_bin;
 
 	/* Get the device into a sane initial state */
+<<<<<<< HEAD
 	ret = adis16220_initial_setup(st);
+=======
+	ret = adis16220_initial_setup(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_rm_adc2_bin;
 	return 0;
 
 error_rm_adc2_bin:
+<<<<<<< HEAD
 	sysfs_remove_bin_file(&st->indio_dev->dev.kobj, &adc2_bin);
 error_rm_adc1_bin:
 	sysfs_remove_bin_file(&st->indio_dev->dev.kobj, &adc1_bin);
@@ -625,12 +717,25 @@ error_free_rx:
 	kfree(st->rx);
 error_free_st:
 	kfree(st);
+=======
+	sysfs_remove_bin_file(&indio_dev->dev.kobj, &adc2_bin);
+error_rm_adc1_bin:
+	sysfs_remove_bin_file(&indio_dev->dev.kobj, &adc1_bin);
+error_rm_accel_bin:
+	sysfs_remove_bin_file(&indio_dev->dev.kobj, &accel_bin);
+error_free_dev:
+	if (regdone)
+		iio_device_unregister(indio_dev);
+	else
+		iio_free_device(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_ret:
 	return ret;
 }
 
 static int adis16220_remove(struct spi_device *spi)
 {
+<<<<<<< HEAD
 	struct adis16220_state *st = spi_get_drvdata(spi);
 	struct iio_dev *indio_dev = st->indio_dev;
 
@@ -643,6 +748,16 @@ static int adis16220_remove(struct spi_device *spi)
 	kfree(st->tx);
 	kfree(st->rx);
 	kfree(st);
+=======
+	struct iio_dev *indio_dev = spi_get_drvdata(spi);
+
+	flush_scheduled_work();
+
+	sysfs_remove_bin_file(&indio_dev->dev.kobj, &adc2_bin);
+	sysfs_remove_bin_file(&indio_dev->dev.kobj, &adc1_bin);
+	sysfs_remove_bin_file(&indio_dev->dev.kobj, &accel_bin);
+	iio_device_unregister(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

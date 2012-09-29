@@ -8,8 +8,11 @@
 #include <mach/ep93xx-regs.h>
 #include <mach/platform.h>
 
+<<<<<<< HEAD
 #define pcibios_assign_all_busses()	0
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * The EP93xx has two external crystal oscillators.  To generate the
  * required high-frequency clocks, the processor uses two phase-locked-

@@ -1211,7 +1211,10 @@ struct nes_vnic {
 	/* void *mem; */
 	struct nes_device *nesdev;
 	struct net_device *netdev;
+<<<<<<< HEAD
 	struct vlan_group *vlan_grp;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	atomic_t          rx_skbs_needed;
 	atomic_t          rx_skb_timer_running;
 	int               budget;
@@ -1357,7 +1360,10 @@ struct nes_terminate_hdr {
 #define NES_LINK_RECHECK_DELAY	msecs_to_jiffies(50)
 #define NES_LINK_RECHECK_MAX	60
 
+<<<<<<< HEAD
 #define nes_vlan_rx vlan_hwaccel_receive_skb
 #define nes_netif_rx netif_receive_skb
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif		/* __NES_HW_H */

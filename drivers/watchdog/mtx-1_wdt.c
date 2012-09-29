@@ -225,11 +225,19 @@ static int __devinit mtx1_wdt_probe(struct platform_device *pdev)
 
 	ret = misc_register(&mtx1_wdt_misc);
 	if (ret < 0) {
+<<<<<<< HEAD
 		printk(KERN_ERR " mtx-1_wdt : failed to register\n");
 		return ret;
 	}
 	mtx1_wdt_start();
 	printk(KERN_INFO "MTX-1 Watchdog driver\n");
+=======
+		dev_err(&pdev->dev, "failed to register\n");
+		return ret;
+	}
+	mtx1_wdt_start();
+	dev_info(&pdev->dev, "MTX-1 Watchdog driver\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

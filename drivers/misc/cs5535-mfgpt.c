@@ -262,7 +262,11 @@ static void __init reset_all_timers(void)
  * In other cases (such as with VSAless OpenFirmware), the system firmware
  * leaves timers available for us to use.
  */
+<<<<<<< HEAD
 static int __devinit scan_timers(struct cs5535_mfgpt_chip *mfgpt)
+=======
+static int __init scan_timers(struct cs5535_mfgpt_chip *mfgpt)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct cs5535_mfgpt_timer timer = { .chip = mfgpt };
 	unsigned long flags;

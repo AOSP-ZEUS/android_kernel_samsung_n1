@@ -45,7 +45,11 @@ struct journal_head {
 	 * has been cowed
 	 * [jbd_lock_bh_state()]
 	 */
+<<<<<<< HEAD
 	unsigned b_cow_tid;
+=======
+	tid_t b_cow_tid;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Copy of the buffer data frozen for writing to the log.

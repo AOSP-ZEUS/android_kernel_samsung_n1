@@ -576,7 +576,11 @@ int pasemi_dma_init(void)
 		res.start = 0xfd800000;
 		res.end = res.start + 0x1000;
 	}
+<<<<<<< HEAD
 	dma_status = __ioremap(res.start, res.end-res.start, 0);
+=======
+	dma_status = __ioremap(res.start, resource_size(&res), 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pci_dev_put(iob_pdev);
 
 	for (i = 0; i < MAX_TXCH; i++)

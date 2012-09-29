@@ -29,7 +29,10 @@
 
 #include <mach/map.h>
 #include <mach/regs-clock.h>
+<<<<<<< HEAD
 #include <mach/regs-fb.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <plat/gpio-cfg.h>
 #include <plat/regs-serial.h>
@@ -40,6 +43,10 @@
 #include <plat/fimc-core.h>
 #include <plat/sdhci.h>
 #include <plat/s5p-time.h>
+<<<<<<< HEAD
+=======
+#include <plat/regs-fb-v4.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Following are default values for UCON, ULCON and UFCON UART registers */
 #define AQUILA_UCON_DEFAULT	(S3C2410_UCON_TXILEVEL |	\

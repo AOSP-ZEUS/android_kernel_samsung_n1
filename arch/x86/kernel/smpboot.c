@@ -285,6 +285,7 @@ notrace static void __cpuinit start_secondary(void *unused)
 	per_cpu(cpu_state, smp_processor_id()) = CPU_ONLINE;
 	x86_platform.nmi_init();
 
+<<<<<<< HEAD
 	/*
 	 * Wait until the cpu which brought this one up marked it
 	 * online before enabling interrupts. If we don't do that then
@@ -298,6 +299,8 @@ notrace static void __cpuinit start_secondary(void *unused)
 	while (!cpumask_test_cpu(smp_processor_id(), cpu_active_mask))
 		cpu_relax();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* enable local interrupts */
 	local_irq_enable();
 
@@ -438,7 +441,11 @@ static void impress_friends(void)
 void __inquire_remote_apic(int apicid)
 {
 	unsigned i, regs[] = { APIC_ID >> 4, APIC_LVR >> 4, APIC_SPIV >> 4 };
+<<<<<<< HEAD
 	char *names[] = { "ID", "VERSION", "SPIV" };
+=======
+	const char * const names[] = { "ID", "VERSION", "SPIV" };
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int timeout;
 	u32 status;
 

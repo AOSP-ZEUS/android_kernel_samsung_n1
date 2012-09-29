@@ -43,7 +43,13 @@
 
 #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
 
+<<<<<<< HEAD
 #include <linux/if_vlan.h>
+=======
+#include <linux/bitops.h>
+#include <linux/if_vlan.h>
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/pci.h>
 #include <linux/slab.h>
 #include <linux/tcp.h>
@@ -295,16 +301,25 @@ vxge_rx_complete(struct vxge_ring *ring, struct sk_buff *skb, u16 vlan,
 	skb_record_rx_queue(skb, ring->driver_id);
 	skb->protocol = eth_type_trans(skb, ring->ndev);
 
+<<<<<<< HEAD
+=======
+	u64_stats_update_begin(&ring->stats.syncp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ring->stats.rx_frms++;
 	ring->stats.rx_bytes += pkt_length;
 
 	if (skb->pkt_type == PACKET_MULTICAST)
 		ring->stats.rx_mcast++;
+<<<<<<< HEAD
+=======
+	u64_stats_update_end(&ring->stats.syncp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	vxge_debug_rx(VXGE_TRACE,
 		"%s: %s:%d  skb protocol = %d",
 		ring->ndev->name, __func__, __LINE__, skb->protocol);
 
+<<<<<<< HEAD
 	if (ring->vlgrp && ext_info->vlan &&
 		(ring->vlan_tag_strip ==
 			VXGE_HW_VPATH_RPA_STRIP_VLAN_TAG_ENABLE))
@@ -312,6 +327,12 @@ vxge_rx_complete(struct vxge_ring *ring, struct sk_buff *skb, u16 vlan,
 				ext_info->vlan, skb);
 	else
 		napi_gro_receive(ring->napi_p, skb);
+=======
+	if (ext_info->vlan &&
+	    ring->vlan_tag_strip == VXGE_HW_VPATH_RPA_STRIP_VLAN_TAG_ENABLE)
+		__vlan_hwaccel_put_tag(skb, ext_info->vlan);
+	napi_gro_receive(ring->napi_p, skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	vxge_debug_entryexit(VXGE_TRACE,
 		"%s: %s:%d Exiting...", ring->ndev->name, __func__, __LINE__);
@@ -591,8 +612,15 @@ vxge_xmit_compl(struct __vxge_hw_fifo *fifo_hw, void *dtr,
 		vxge_hw_fifo_txdl_free(fifo_hw, dtr);
 
 		/* Updating the statistics block */
+<<<<<<< HEAD
 		fifo->stats.tx_frms++;
 		fifo->stats.tx_bytes += skb->len;
+=======
+		u64_stats_update_begin(&fifo->stats.syncp);
+		fifo->stats.tx_frms++;
+		fifo->stats.tx_bytes += skb->len;
+		u64_stats_update_end(&fifo->stats.syncp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		*done_skb++ = skb;
 
@@ -628,7 +656,11 @@ static u32 vxge_get_vpath_no(struct vxgedev *vdev, struct sk_buff *skb)
 
 		ip = ip_hdr(skb);
 
+<<<<<<< HEAD
 		if ((ip->frag_off & htons(IP_OFFSET|IP_MF)) == 0) {
+=======
+		if (!ip_is_fragment(ip)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			th = (struct tcphdr *)(((unsigned char *)ip) +
 					ip->ihl*4);
 
@@ -679,8 +711,12 @@ static int vxge_mac_list_add(struct vxge_vpath *vpath, struct macInfo *mac)
 	new_mac_entry->state = mac->state;
 	vpath->mac_addr_cnt++;
 
+<<<<<<< HEAD
 	/* Is this a multicast address */
 	if (0x01 & mac->macaddr[0])
+=======
+	if (is_multicast_ether_addr(mac->macaddr))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		vpath->mcast_addr_cnt++;
 
 	return TRUE;
@@ -694,7 +730,11 @@ vxge_add_mac_addr(struct vxgedev *vdev, struct macInfo *mac)
 	struct vxge_vpath *vpath;
 	enum vxge_hw_vpath_mac_addr_add_mode duplicate_mode;
 
+<<<<<<< HEAD
 	if (0x01 & mac->macaddr[0]) /* multicast address */
+=======
+	if (is_multicast_ether_addr(mac->macaddr))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		duplicate_mode = VXGE_HW_VPATH_MAC_ADDR_ADD_DUPLICATE;
 	else
 		duplicate_mode = VXGE_HW_VPATH_MAC_ADDR_REPLACE_DUPLICATE;
@@ -1073,8 +1113,12 @@ static int vxge_mac_list_del(struct vxge_vpath *vpath, struct macInfo *mac)
 			kfree((struct vxge_mac_addrs *)entry);
 			vpath->mac_addr_cnt--;
 
+<<<<<<< HEAD
 			/* Is this a multicast address */
 			if (0x01 & mac->macaddr[0])
+=======
+			if (is_multicast_ether_addr(mac->macaddr))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				vpath->mcast_addr_cnt--;
 			return TRUE;
 		}
@@ -1196,8 +1240,12 @@ static void vxge_set_multicast(struct net_device *dev)
 				mac_address = (u8 *)&mac_entry->macaddr;
 				memcpy(mac_info.macaddr, mac_address, ETH_ALEN);
 
+<<<<<<< HEAD
 				/* Is this a multicast address */
 				if (0x01 & mac_info.macaddr[0]) {
+=======
+				if (is_multicast_ether_addr(mac_info.macaddr)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					for (vpath_idx = 0; vpath_idx <
 						vdev->no_of_vpath;
 						vpath_idx++) {
@@ -1239,8 +1287,12 @@ _set_all_mcast:
 				mac_address = (u8 *)&mac_entry->macaddr;
 				memcpy(mac_info.macaddr, mac_address, ETH_ALEN);
 
+<<<<<<< HEAD
 				/* Is this a multicast address */
 				if (0x01 & mac_info.macaddr[0])
+=======
+				if (is_multicast_ether_addr(mac_info.macaddr))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					break;
 			}
 
@@ -1488,6 +1540,7 @@ vxge_restore_vpath_vid_table(struct vxge_vpath *vpath)
 	struct vxgedev *vdev = vpath->vdev;
 	u16 vid;
 
+<<<<<<< HEAD
 	if (vdev->vlgrp && vpath->is_open) {
 
 		for (vid = 0; vid < VLAN_N_VID; vid++) {
@@ -1497,6 +1550,13 @@ vxge_restore_vpath_vid_table(struct vxge_vpath *vpath)
 			status = vxge_hw_vpath_vid_add(vpath->handle, vid);
 		}
 	}
+=======
+	if (!vpath->is_open)
+		return status;
+
+	for_each_set_bit(vid, vdev->active_vlans, VLAN_N_VID)
+		status = vxge_hw_vpath_vid_add(vpath->handle, vid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return status;
 }
@@ -2629,11 +2689,24 @@ static void vxge_poll_vp_lockup(unsigned long data)
 	struct vxge_vpath *vpath;
 	struct vxge_ring *ring;
 	int i;
+<<<<<<< HEAD
 
 	for (i = 0; i < vdev->no_of_vpath; i++) {
 		ring = &vdev->vpaths[i].ring;
 		/* Did this vpath received any packets */
 		if (ring->stats.prev_rx_frms == ring->stats.rx_frms) {
+=======
+	unsigned long rx_frms;
+
+	for (i = 0; i < vdev->no_of_vpath; i++) {
+		ring = &vdev->vpaths[i].ring;
+
+		/* Truncated to machine word size number of frames */
+		rx_frms = ACCESS_ONCE(ring->stats.rx_frms);
+
+		/* Did this vpath received any packets */
+		if (ring->stats.prev_rx_frms == rx_frms) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			status = vxge_hw_vpath_check_leak(ring->handle);
 
 			/* Did it received any packets last time */
@@ -2653,7 +2726,11 @@ static void vxge_poll_vp_lockup(unsigned long data)
 				}
 			}
 		}
+<<<<<<< HEAD
 		ring->stats.prev_rx_frms = ring->stats.rx_frms;
+=======
+		ring->stats.prev_rx_frms = rx_frms;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ring->last_status = status;
 	}
 
@@ -3124,6 +3201,7 @@ vxge_get_stats64(struct net_device *dev, struct rtnl_link_stats64 *net_stats)
 
 	/* net_stats already zeroed by caller */
 	for (k = 0; k < vdev->no_of_vpath; k++) {
+<<<<<<< HEAD
 		net_stats->rx_packets += vdev->vpaths[k].ring.stats.rx_frms;
 		net_stats->rx_bytes += vdev->vpaths[k].ring.stats.rx_bytes;
 		net_stats->rx_errors += vdev->vpaths[k].ring.stats.rx_errors;
@@ -3132,6 +3210,38 @@ vxge_get_stats64(struct net_device *dev, struct rtnl_link_stats64 *net_stats)
 		net_stats->tx_packets += vdev->vpaths[k].fifo.stats.tx_frms;
 		net_stats->tx_bytes += vdev->vpaths[k].fifo.stats.tx_bytes;
 		net_stats->tx_errors += vdev->vpaths[k].fifo.stats.tx_errors;
+=======
+		struct vxge_ring_stats *rxstats = &vdev->vpaths[k].ring.stats;
+		struct vxge_fifo_stats *txstats = &vdev->vpaths[k].fifo.stats;
+		unsigned int start;
+		u64 packets, bytes, multicast;
+
+		do {
+			start = u64_stats_fetch_begin(&rxstats->syncp);
+
+			packets   = rxstats->rx_frms;
+			multicast = rxstats->rx_mcast;
+			bytes     = rxstats->rx_bytes;
+		} while (u64_stats_fetch_retry(&rxstats->syncp, start));
+
+		net_stats->rx_packets += packets;
+		net_stats->rx_bytes += bytes;
+		net_stats->multicast += multicast;
+
+		net_stats->rx_errors += rxstats->rx_errors;
+		net_stats->rx_dropped += rxstats->rx_dropped;
+
+		do {
+			start = u64_stats_fetch_begin(&txstats->syncp);
+
+			packets = txstats->tx_frms;
+			bytes   = txstats->tx_bytes;
+		} while (u64_stats_fetch_retry(&txstats->syncp, start));
+
+		net_stats->tx_packets += packets;
+		net_stats->tx_bytes += bytes;
+		net_stats->tx_errors += txstats->tx_errors;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return net_stats;
@@ -3275,6 +3385,7 @@ static void vxge_tx_watchdog(struct net_device *dev)
 }
 
 /**
+<<<<<<< HEAD
  * vxge_vlan_rx_register
  * @dev: net device pointer.
  * @grp: vlan group
@@ -3329,6 +3440,8 @@ vxge_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 }
 
 /**
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * vxge_vlan_rx_add_vid
  * @dev: net device pointer.
  * @vid: vid
@@ -3338,12 +3451,19 @@ vxge_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 static void
 vxge_vlan_rx_add_vid(struct net_device *dev, unsigned short vid)
 {
+<<<<<<< HEAD
 	struct vxgedev *vdev;
 	struct vxge_vpath *vpath;
 	int vp_id;
 
 	vdev = netdev_priv(dev);
 
+=======
+	struct vxgedev *vdev = netdev_priv(dev);
+	struct vxge_vpath *vpath;
+	int vp_id;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Add these vlan to the vid table */
 	for (vp_id = 0; vp_id < vdev->no_of_vpath; vp_id++) {
 		vpath = &vdev->vpaths[vp_id];
@@ -3351,6 +3471,10 @@ vxge_vlan_rx_add_vid(struct net_device *dev, unsigned short vid)
 			continue;
 		vxge_hw_vpath_vid_add(vpath->handle, vid);
 	}
+<<<<<<< HEAD
+=======
+	set_bit(vid, vdev->active_vlans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -3363,16 +3487,23 @@ vxge_vlan_rx_add_vid(struct net_device *dev, unsigned short vid)
 static void
 vxge_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 {
+<<<<<<< HEAD
 	struct vxgedev *vdev;
+=======
+	struct vxgedev *vdev = netdev_priv(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct vxge_vpath *vpath;
 	int vp_id;
 
 	vxge_debug_entryexit(VXGE_TRACE, "%s:%d", __func__, __LINE__);
 
+<<<<<<< HEAD
 	vdev = netdev_priv(dev);
 
 	vlan_group_set_device(vdev->vlgrp, vid, NULL);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Delete this vlan from the vid table */
 	for (vp_id = 0; vp_id < vdev->no_of_vpath; vp_id++) {
 		vpath = &vdev->vpaths[vp_id];
@@ -3382,6 +3513,10 @@ vxge_vlan_rx_kill_vid(struct net_device *dev, unsigned short vid)
 	}
 	vxge_debug_entryexit(VXGE_TRACE,
 		"%s:%d  Exiting...", __func__, __LINE__);
+<<<<<<< HEAD
+=======
+	clear_bit(vid, vdev->active_vlans);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static const struct net_device_ops vxge_netdev_ops = {
@@ -3396,7 +3531,10 @@ static const struct net_device_ops vxge_netdev_ops = {
 	.ndo_change_mtu         = vxge_change_mtu,
 	.ndo_fix_features	= vxge_fix_features,
 	.ndo_set_features	= vxge_set_features,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register   = vxge_vlan_rx_register,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ndo_vlan_rx_kill_vid   = vxge_vlan_rx_kill_vid,
 	.ndo_vlan_rx_add_vid	= vxge_vlan_rx_add_vid,
 	.ndo_tx_timeout         = vxge_tx_watchdog,

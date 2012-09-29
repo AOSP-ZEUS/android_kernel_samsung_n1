@@ -115,14 +115,33 @@
 #ifndef __ASSEMBLY__
 #include <asm/cputable.h>
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_PPC_FSL_BOOK3E
+#include <asm/percpu.h>
+DECLARE_PER_CPU(int, next_tlbcam_idx);
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int mmu_has_feature(unsigned long feature)
 {
 	return (cur_cpu_spec->mmu_features & feature);
 }
 
+<<<<<<< HEAD
 extern unsigned int __start___mmu_ftr_fixup, __stop___mmu_ftr_fixup;
 
 /* MMU initialization (64-bit only fo now) */
+=======
+static inline void mmu_clear_feature(unsigned long feature)
+{
+	cur_cpu_spec->mmu_features &= ~feature;
+}
+
+extern unsigned int __start___mmu_ftr_fixup, __stop___mmu_ftr_fixup;
+
+/* MMU initialization */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void early_init_mmu(void);
 extern void early_init_mmu_secondary(void);
 

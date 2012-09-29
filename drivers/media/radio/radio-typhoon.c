@@ -31,15 +31,27 @@
 #include <linux/module.h>	/* Modules                        */
 #include <linux/init.h>		/* Initdata                       */
 #include <linux/ioport.h>	/* request_region		  */
+<<<<<<< HEAD
 #include <linux/version.h>      /* for KERNEL_VERSION MACRO     */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/videodev2.h>	/* kernel radio structs           */
 #include <linux/io.h>		/* outb, outb_p                   */
 #include <media/v4l2-device.h>
 #include <media/v4l2-ioctl.h>
 
+<<<<<<< HEAD
 MODULE_AUTHOR("Dr. Henrik Seidel");
 MODULE_DESCRIPTION("A driver for the Typhoon radio card (a.k.a. EcoRadio).");
 MODULE_LICENSE("GPL");
+=======
+#define DRIVER_VERSION "0.1.2"
+
+MODULE_AUTHOR("Dr. Henrik Seidel");
+MODULE_DESCRIPTION("A driver for the Typhoon radio card (a.k.a. EcoRadio).");
+MODULE_LICENSE("GPL");
+MODULE_VERSION(DRIVER_VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifndef CONFIG_RADIO_TYPHOON_PORT
 #define CONFIG_RADIO_TYPHOON_PORT -1
@@ -61,9 +73,13 @@ static unsigned long mutefreq = CONFIG_RADIO_TYPHOON_MUTEFREQ;
 module_param(mutefreq, ulong, 0);
 MODULE_PARM_DESC(mutefreq, "Frequency used when muting the card (in kHz)");
 
+<<<<<<< HEAD
 #define RADIO_VERSION KERNEL_VERSION(0, 1, 1)
 
 #define BANNER "Typhoon Radio Card driver v0.1.1\n"
+=======
+#define BANNER "Typhoon Radio Card driver v" DRIVER_VERSION "\n"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct typhoon {
 	struct v4l2_device v4l2_dev;
@@ -171,7 +187,10 @@ static int vidioc_querycap(struct file *file, void  *priv,
 	strlcpy(v->driver, "radio-typhoon", sizeof(v->driver));
 	strlcpy(v->card, "Typhoon Radio", sizeof(v->card));
 	strlcpy(v->bus_info, "ISA", sizeof(v->bus_info));
+<<<<<<< HEAD
 	v->version = RADIO_VERSION;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	v->capabilities = V4L2_CAP_TUNER | V4L2_CAP_RADIO;
 	return 0;
 }

@@ -112,9 +112,14 @@ kdb_bt(int argc, const char **argv)
 	unsigned long addr;
 	long offset;
 
+<<<<<<< HEAD
 	kdbgetintenv("BTARGS", &argcount);	/* Arguments to print */
 	kdbgetintenv("BTAPROMPT", &btaprompt);	/* Prompt after each
 						 * proc in bta */
+=======
+	/* Prompt after each proc in bta */
+	kdbgetintenv("BTAPROMPT", &btaprompt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (strcmp(argv[0], "bta") == 0) {
 		struct task_struct *g, *p;

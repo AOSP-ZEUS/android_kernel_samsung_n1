@@ -1,6 +1,10 @@
 #
 # Makefile for the kernel serial device drivers.
 #
+<<<<<<< HEAD
+=======
+GCOV_PROFILE_tegra_hsuart.o := y
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 obj-$(CONFIG_SERIAL_CORE) += serial_core.o
 obj-$(CONFIG_SERIAL_21285) += 21285.o
@@ -38,6 +42,7 @@ obj-$(CONFIG_SERIAL_BCM63XX) += bcm63xx_uart.o
 obj-$(CONFIG_SERIAL_BFIN) += bfin_5xx.o
 obj-$(CONFIG_SERIAL_BFIN_SPORT) += bfin_sport_uart.o
 obj-$(CONFIG_SERIAL_SAMSUNG) += samsung.o
+<<<<<<< HEAD
 obj-$(CONFIG_SERIAL_S3C2400) += s3c2400.o
 obj-$(CONFIG_SERIAL_S3C2410) += s3c2410.o
 obj-$(CONFIG_SERIAL_S3C2412) += s3c2412.o
@@ -45,6 +50,14 @@ obj-$(CONFIG_SERIAL_S3C2440) += s3c2440.o
 obj-$(CONFIG_SERIAL_S3C24A0) += s3c24a0.o
 obj-$(CONFIG_SERIAL_S3C6400) += s3c6400.o
 obj-$(CONFIG_SERIAL_S5PV210) += s5pv210.o
+=======
+obj-$(CONFIG_SERIAL_S3C2410) += s3c2410.o
+obj-$(CONFIG_SERIAL_S3C2412) += s3c2412.o
+obj-$(CONFIG_SERIAL_S3C2440) += s3c2440.o
+obj-$(CONFIG_SERIAL_S3C6400) += s3c6400.o
+obj-$(CONFIG_SERIAL_S5PV210) += s5pv210.o
+obj-$(CONFIG_SERIAL_TEGRA) += tegra_hsuart.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SERIAL_MAX3100) += max3100.o
 obj-$(CONFIG_SERIAL_MAX3107) += max3107.o
 obj-$(CONFIG_SERIAL_MAX3107_AAVA) += max3107-aava.o

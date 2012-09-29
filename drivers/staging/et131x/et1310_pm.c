@@ -121,7 +121,11 @@ void EnablePhyComa(struct et131x_adapter *etdev)
 
 	/* Stop sending packets. */
 	spin_lock_irqsave(&etdev->send_hw_lock, flags);
+<<<<<<< HEAD
 	etdev->Flags |= fMP_ADAPTER_LOWER_POWER;
+=======
+	etdev->flags |= fMP_ADAPTER_LOWER_POWER;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock_irqrestore(&etdev->send_hw_lock, flags);
 
 	/* Wait for outstanding Receive packets */
@@ -172,7 +176,11 @@ void DisablePhyComa(struct et131x_adapter *etdev)
 	et131x_adapter_setup(etdev);
 
 	/* Allow Tx to restart */
+<<<<<<< HEAD
 	etdev->Flags &= ~fMP_ADAPTER_LOWER_POWER;
+=======
+	etdev->flags &= ~fMP_ADAPTER_LOWER_POWER;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Need to re-enable Rx. */
 	et131x_rx_dma_enable(etdev);

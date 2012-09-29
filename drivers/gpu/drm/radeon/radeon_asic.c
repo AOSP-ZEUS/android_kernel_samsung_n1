@@ -625,7 +625,11 @@ static struct radeon_asic r600_asic = {
 	.fence_ring_emit = &r600_fence_ring_emit,
 	.cs_parse = &r600_cs_parse,
 	.copy_blit = &r600_copy_blit,
+<<<<<<< HEAD
 	.copy_dma = &r600_copy_blit,
+=======
+	.copy_dma = NULL,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.copy = &r600_copy_blit,
 	.get_engine_clock = &radeon_atom_get_engine_clock,
 	.set_engine_clock = &radeon_atom_set_engine_clock,
@@ -672,7 +676,11 @@ static struct radeon_asic rs780_asic = {
 	.fence_ring_emit = &r600_fence_ring_emit,
 	.cs_parse = &r600_cs_parse,
 	.copy_blit = &r600_copy_blit,
+<<<<<<< HEAD
 	.copy_dma = &r600_copy_blit,
+=======
+	.copy_dma = NULL,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.copy = &r600_copy_blit,
 	.get_engine_clock = &radeon_atom_get_engine_clock,
 	.set_engine_clock = &radeon_atom_set_engine_clock,
@@ -719,7 +727,11 @@ static struct radeon_asic rv770_asic = {
 	.fence_ring_emit = &r600_fence_ring_emit,
 	.cs_parse = &r600_cs_parse,
 	.copy_blit = &r600_copy_blit,
+<<<<<<< HEAD
 	.copy_dma = &r600_copy_blit,
+=======
+	.copy_dma = NULL,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.copy = &r600_copy_blit,
 	.get_engine_clock = &radeon_atom_get_engine_clock,
 	.set_engine_clock = &radeon_atom_set_engine_clock,
@@ -766,7 +778,11 @@ static struct radeon_asic evergreen_asic = {
 	.fence_ring_emit = &r600_fence_ring_emit,
 	.cs_parse = &evergreen_cs_parse,
 	.copy_blit = &evergreen_copy_blit,
+<<<<<<< HEAD
 	.copy_dma = &evergreen_copy_blit,
+=======
+	.copy_dma = NULL,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.copy = &evergreen_copy_blit,
 	.get_engine_clock = &radeon_atom_get_engine_clock,
 	.set_engine_clock = &radeon_atom_set_engine_clock,
@@ -813,7 +829,11 @@ static struct radeon_asic sumo_asic = {
 	.fence_ring_emit = &r600_fence_ring_emit,
 	.cs_parse = &evergreen_cs_parse,
 	.copy_blit = &evergreen_copy_blit,
+<<<<<<< HEAD
 	.copy_dma = &evergreen_copy_blit,
+=======
+	.copy_dma = NULL,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.copy = &evergreen_copy_blit,
 	.get_engine_clock = &radeon_atom_get_engine_clock,
 	.set_engine_clock = &radeon_atom_set_engine_clock,
@@ -860,7 +880,11 @@ static struct radeon_asic btc_asic = {
 	.fence_ring_emit = &r600_fence_ring_emit,
 	.cs_parse = &evergreen_cs_parse,
 	.copy_blit = &evergreen_copy_blit,
+<<<<<<< HEAD
 	.copy_dma = &evergreen_copy_blit,
+=======
+	.copy_dma = NULL,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.copy = &evergreen_copy_blit,
 	.get_engine_clock = &radeon_atom_get_engine_clock,
 	.set_engine_clock = &radeon_atom_set_engine_clock,
@@ -907,7 +931,11 @@ static struct radeon_asic cayman_asic = {
 	.fence_ring_emit = &r600_fence_ring_emit,
 	.cs_parse = &evergreen_cs_parse,
 	.copy_blit = &evergreen_copy_blit,
+<<<<<<< HEAD
 	.copy_dma = &evergreen_copy_blit,
+=======
+	.copy_dma = NULL,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.copy = &evergreen_copy_blit,
 	.get_engine_clock = &radeon_atom_get_engine_clock,
 	.set_engine_clock = &radeon_atom_set_engine_clock,

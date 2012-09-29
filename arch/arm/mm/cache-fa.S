@@ -242,6 +242,7 @@ ENDPROC(fa_dma_unmap_area)
 
 	__INITDATA
 
+<<<<<<< HEAD
 	.type	fa_cache_fns, #object
 ENTRY(fa_cache_fns)
 	.long	fa_flush_icache_all
@@ -255,3 +256,7 @@ ENTRY(fa_cache_fns)
 	.long	fa_dma_unmap_area
 	.long	fa_dma_flush_range
 	.size	fa_cache_fns, . - fa_cache_fns
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions fa
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

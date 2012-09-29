@@ -39,6 +39,10 @@
 #include <linux/pci.h>
 #include <linux/bitops.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/ratelimit.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/system.h>
 #include <asm/io.h>
@@ -1490,8 +1494,12 @@ static int mxser_ioctl_special(unsigned int cmd, void __user *argp)
 
 	switch (cmd) {
 	case MOXA_GET_MAJOR:
+<<<<<<< HEAD
 		if (printk_ratelimit())
 			printk(KERN_WARNING "mxser: '%s' uses deprecated ioctl "
+=======
+		printk_ratelimited(KERN_WARNING "mxser: '%s' uses deprecated ioctl "
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					"%x (GET_MAJOR), fix your userspace\n",
 					current->comm, cmd);
 		return put_user(ttymajor, (int __user *)argp);

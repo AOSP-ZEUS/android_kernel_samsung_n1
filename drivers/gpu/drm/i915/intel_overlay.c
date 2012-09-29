@@ -773,6 +773,7 @@ static int intel_overlay_do_put_image(struct intel_overlay *overlay,
 	if (ret != 0)
 		return ret;
 
+<<<<<<< HEAD
 	ret = i915_gem_object_pin(new_bo, PAGE_SIZE, true);
 	if (ret != 0)
 		return ret;
@@ -781,6 +782,12 @@ static int intel_overlay_do_put_image(struct intel_overlay *overlay,
 	if (ret != 0)
 		goto out_unpin;
 
+=======
+	ret = i915_gem_object_pin_to_display_plane(new_bo, 0, NULL);
+	if (ret != 0)
+		return ret;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = i915_gem_object_put_fence(new_bo);
 	if (ret)
 		goto out_unpin;

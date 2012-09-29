@@ -290,6 +290,7 @@ static int e1000_set_pauseparam(struct net_device *netdev,
 	return retval;
 }
 
+<<<<<<< HEAD
 static u32 e1000_get_rx_csum(struct net_device *netdev)
 {
 	struct e1000_adapter *adapter = netdev_priv(netdev);
@@ -353,6 +354,8 @@ static int e1000_set_tso(struct net_device *netdev, u32 data)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static u32 e1000_get_msglevel(struct net_device *netdev)
 {
 	struct e1000_adapter *adapter = netdev_priv(netdev);
@@ -901,6 +904,10 @@ static int e1000_intr_test(struct e1000_adapter *adapter, u64 *data)
 
 	/* Disable all the interrupts */
 	ew32(IMC, 0xFFFFFFFF);
+<<<<<<< HEAD
+=======
+	E1000_WRITE_FLUSH();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	msleep(10);
 
 	/* Test each interrupt */
@@ -919,6 +926,10 @@ static int e1000_intr_test(struct e1000_adapter *adapter, u64 *data)
 			adapter->test_icr = 0;
 			ew32(IMC, mask);
 			ew32(ICS, mask);
+<<<<<<< HEAD
+=======
+			E1000_WRITE_FLUSH();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			msleep(10);
 
 			if (adapter->test_icr & mask) {
@@ -936,6 +947,10 @@ static int e1000_intr_test(struct e1000_adapter *adapter, u64 *data)
 		adapter->test_icr = 0;
 		ew32(IMS, mask);
 		ew32(ICS, mask);
+<<<<<<< HEAD
+=======
+		E1000_WRITE_FLUSH();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		msleep(10);
 
 		if (!(adapter->test_icr & mask)) {
@@ -953,6 +968,10 @@ static int e1000_intr_test(struct e1000_adapter *adapter, u64 *data)
 			adapter->test_icr = 0;
 			ew32(IMC, ~mask & 0x00007FFF);
 			ew32(ICS, ~mask & 0x00007FFF);
+<<<<<<< HEAD
+=======
+			E1000_WRITE_FLUSH();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			msleep(10);
 
 			if (adapter->test_icr) {
@@ -964,6 +983,10 @@ static int e1000_intr_test(struct e1000_adapter *adapter, u64 *data)
 
 	/* Disable all the interrupts */
 	ew32(IMC, 0xFFFFFFFF);
+<<<<<<< HEAD
+=======
+	E1000_WRITE_FLUSH();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	msleep(10);
 
 	/* Unhook test interrupt handler */
@@ -1457,6 +1480,10 @@ static int e1000_run_loopback_test(struct e1000_adapter *adapter)
 			if (unlikely(++k == txdr->count)) k = 0;
 		}
 		ew32(TDT, k);
+<<<<<<< HEAD
+=======
+		E1000_WRITE_FLUSH();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		msleep(200);
 		time = jiffies; /* set the start time for the receive */
 		good_cnt = 0;
@@ -1905,12 +1932,15 @@ static const struct ethtool_ops e1000_ethtool_ops = {
 	.set_ringparam          = e1000_set_ringparam,
 	.get_pauseparam         = e1000_get_pauseparam,
 	.set_pauseparam         = e1000_set_pauseparam,
+<<<<<<< HEAD
 	.get_rx_csum            = e1000_get_rx_csum,
 	.set_rx_csum            = e1000_set_rx_csum,
 	.get_tx_csum            = e1000_get_tx_csum,
 	.set_tx_csum            = e1000_set_tx_csum,
 	.set_sg                 = ethtool_op_set_sg,
 	.set_tso                = e1000_set_tso,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.self_test              = e1000_diag_test,
 	.get_strings            = e1000_get_strings,
 	.set_phys_id            = e1000_set_phys_id,

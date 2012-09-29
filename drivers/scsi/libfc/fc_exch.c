@@ -494,6 +494,12 @@ static int fc_seq_send(struct fc_lport *lport, struct fc_seq *sp,
 	 */
 	error = lport->tt.frame_send(lport, fp);
 
+<<<<<<< HEAD
+=======
+	if (fh->fh_type == FC_TYPE_BLS)
+		return error;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Update the exchange and sequence flags,
 	 * assuming all frames for the sequence have been sent.
@@ -575,6 +581,7 @@ static void fc_seq_set_resp(struct fc_seq *sp,
 }
 
 /**
+<<<<<<< HEAD
  * fc_seq_exch_abort() - Abort an exchange and sequence
  * @req_sp:	The sequence to be aborted
  * @timer_msec: The period of time to wait before aborting
@@ -597,20 +604,48 @@ static int fc_seq_exch_abort(const struct fc_seq *req_sp,
 		spin_unlock_bh(&ep->ex_lock);
 		return -ENXIO;
 	}
+=======
+ * fc_exch_abort_locked() - Abort an exchange
+ * @ep:	The exchange to be aborted
+ * @timer_msec: The period of time to wait before aborting
+ *
+ * Locking notes:  Called with exch lock held
+ *
+ * Return value: 0 on success else error code
+ */
+static int fc_exch_abort_locked(struct fc_exch *ep,
+				unsigned int timer_msec)
+{
+	struct fc_seq *sp;
+	struct fc_frame *fp;
+	int error;
+
+	if (ep->esb_stat & (ESB_ST_COMPLETE | ESB_ST_ABNORMAL) ||
+	    ep->state & (FC_EX_DONE | FC_EX_RST_CLEANUP))
+		return -ENXIO;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Send the abort on a new sequence if possible.
 	 */
 	sp = fc_seq_start_next_locked(&ep->seq);
+<<<<<<< HEAD
 	if (!sp) {
 		spin_unlock_bh(&ep->ex_lock);
 		return -ENOMEM;
 	}
+=======
+	if (!sp)
+		return -ENOMEM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ep->esb_stat |= ESB_ST_SEQ_INIT | ESB_ST_ABNORMAL;
 	if (timer_msec)
 		fc_exch_timer_set_locked(ep, timer_msec);
+<<<<<<< HEAD
 	spin_unlock_bh(&ep->ex_lock);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * If not logged into the fabric, don't send ABTS but leave
@@ -633,6 +668,31 @@ static int fc_seq_exch_abort(const struct fc_seq *req_sp,
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * fc_seq_exch_abort() - Abort an exchange and sequence
+ * @req_sp:	The sequence to be aborted
+ * @timer_msec: The period of time to wait before aborting
+ *
+ * Generally called because of a timeout or an abort from the upper layer.
+ *
+ * Return value: 0 on success else error code
+ */
+static int fc_seq_exch_abort(const struct fc_seq *req_sp,
+			     unsigned int timer_msec)
+{
+	struct fc_exch *ep;
+	int error;
+
+	ep = fc_seq_exch(req_sp);
+	spin_lock_bh(&ep->ex_lock);
+	error = fc_exch_abort_locked(ep, timer_msec);
+	spin_unlock_bh(&ep->ex_lock);
+	return error;
+}
+
+/**
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * fc_exch_timeout() - Handle exchange timer expiration
  * @work: The work_struct identifying the exchange that timed out
  */
@@ -802,10 +862,15 @@ static struct fc_exch *fc_exch_find(struct fc_exch_mgr *mp, u16 xid)
 		pool = per_cpu_ptr(mp->pool, xid & fc_cpu_mask);
 		spin_lock_bh(&pool->lock);
 		ep = fc_exch_ptr_get(pool, (xid - mp->min_xid) >> fc_cpu_order);
+<<<<<<< HEAD
 		if (ep) {
 			fc_exch_hold(ep);
 			WARN_ON(ep->xid != xid);
 		}
+=======
+		if (ep && ep->xid == xid)
+			fc_exch_hold(ep);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_unlock_bh(&pool->lock);
 	}
 	return ep;
@@ -965,8 +1030,35 @@ static enum fc_pf_rjt_reason fc_seq_lookup_recip(struct fc_lport *lport,
 		sp = &ep->seq;
 		if (sp->id != fh->fh_seq_id) {
 			atomic_inc(&mp->stats.seq_not_found);
+<<<<<<< HEAD
 			reject = FC_RJT_SEQ_ID;	/* sequence/exch should exist */
 			goto rel;
+=======
+			if (f_ctl & FC_FC_END_SEQ) {
+				/*
+				 * Update sequence_id based on incoming last
+				 * frame of sequence exchange. This is needed
+				 * for FCoE target where DDP has been used
+				 * on target where, stack is indicated only
+				 * about last frame's (payload _header) header.
+				 * Whereas "seq_id" which is part of
+				 * frame_header is allocated by initiator
+				 * which is totally different from "seq_id"
+				 * allocated when XFER_RDY was sent by target.
+				 * To avoid false -ve which results into not
+				 * sending RSP, hence write request on other
+				 * end never finishes.
+				 */
+				spin_lock_bh(&ep->ex_lock);
+				sp->ssb_stat |= SSB_ST_RESP;
+				sp->id = fh->fh_seq_id;
+				spin_unlock_bh(&ep->ex_lock);
+			} else {
+				/* sequence/exch should exist */
+				reject = FC_RJT_SEQ_ID;
+				goto rel;
+			}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 	WARN_ON(ep != fc_seq_exch(sp));
@@ -1695,6 +1787,10 @@ static void fc_exch_reset(struct fc_exch *ep)
 	int rc = 1;
 
 	spin_lock_bh(&ep->ex_lock);
+<<<<<<< HEAD
+=======
+	fc_exch_abort_locked(ep, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ep->state |= FC_EX_RST_CLEANUP;
 	if (cancel_delayed_work(&ep->timeout_work))
 		atomic_dec(&ep->ex_refcnt);	/* drop hold for timer */
@@ -1942,6 +2038,10 @@ static struct fc_seq *fc_exch_seq_send(struct fc_lport *lport,
 	struct fc_exch *ep;
 	struct fc_seq *sp = NULL;
 	struct fc_frame_header *fh;
+<<<<<<< HEAD
+=======
+	struct fc_fcp_pkt *fsp = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int rc = 1;
 
 	ep = fc_exch_alloc(lport, fp);
@@ -1964,8 +2064,15 @@ static struct fc_seq *fc_exch_seq_send(struct fc_lport *lport,
 	fc_exch_setup_hdr(ep, fp, ep->f_ctl);
 	sp->cnt++;
 
+<<<<<<< HEAD
 	if (ep->xid <= lport->lro_xid && fh->fh_r_ctl == FC_RCTL_DD_UNSOL_CMD)
 		fc_fcp_ddp_setup(fr_fsp(fp), ep->xid);
+=======
+	if (ep->xid <= lport->lro_xid && fh->fh_r_ctl == FC_RCTL_DD_UNSOL_CMD) {
+		fsp = fr_fsp(fp);
+		fc_fcp_ddp_setup(fr_fsp(fp), ep->xid);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (unlikely(lport->tt.frame_send(lport, fp)))
 		goto err;
@@ -1979,7 +2086,12 @@ static struct fc_seq *fc_exch_seq_send(struct fc_lport *lport,
 	spin_unlock_bh(&ep->ex_lock);
 	return sp;
 err:
+<<<<<<< HEAD
 	fc_fcp_ddp_done(fr_fsp(fp));
+=======
+	if (fsp)
+		fc_fcp_ddp_done(fsp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	rc = fc_exch_done_locked(ep);
 	spin_unlock_bh(&ep->ex_lock);
 	if (!rc)
@@ -2443,8 +2555,16 @@ int fc_setup_exch_mgr(void)
 
 	fc_exch_workqueue = create_singlethread_workqueue("fc_exch_workqueue");
 	if (!fc_exch_workqueue)
+<<<<<<< HEAD
 		return -ENOMEM;
 	return 0;
+=======
+		goto err;
+	return 0;
+err:
+	kmem_cache_destroy(fc_em_cachep);
+	return -ENOMEM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**

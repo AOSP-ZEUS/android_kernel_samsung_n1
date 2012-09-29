@@ -221,7 +221,11 @@ static int __devinit mace_probe(struct platform_device *pdev)
 	SET_NETDEV_DEV(dev, &pdev->dev);
 
 	dev->base_addr = (u32)MACE_BASE;
+<<<<<<< HEAD
 	mp->mace = (volatile struct mace *) MACE_BASE;
+=======
+	mp->mace = MACE_BASE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	dev->irq = IRQ_MAC_MACE;
 	mp->dma_intr = IRQ_MAC_MACE_DMA;

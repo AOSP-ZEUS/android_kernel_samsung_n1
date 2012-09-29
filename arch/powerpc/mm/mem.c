@@ -250,7 +250,11 @@ static int __init mark_nonram_nosave(void)
  */
 void __init paging_init(void)
 {
+<<<<<<< HEAD
 	unsigned long total_ram = memblock_phys_mem_size();
+=======
+	unsigned long long total_ram = memblock_phys_mem_size();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	phys_addr_t top_of_ram = memblock_end_of_DRAM();
 	unsigned long max_zone_pfns[MAX_NR_ZONES];
 
@@ -270,7 +274,11 @@ void __init paging_init(void)
 	kmap_prot = PAGE_KERNEL;
 #endif /* CONFIG_HIGHMEM */
 
+<<<<<<< HEAD
 	printk(KERN_DEBUG "Top of RAM: 0x%llx, Total RAM: 0x%lx\n",
+=======
+	printk(KERN_DEBUG "Top of RAM: 0x%llx, Total RAM: 0x%llx\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	       (unsigned long long)top_of_ram, total_ram);
 	printk(KERN_DEBUG "Memory hole size: %ldMB\n",
 	       (long int)((top_of_ram - total_ram) >> 20));
@@ -338,8 +346,14 @@ void __init mem_init(void)
 
 		highmem_mapnr = lowmem_end_addr >> PAGE_SHIFT;
 		for (pfn = highmem_mapnr; pfn < max_mapnr; ++pfn) {
+<<<<<<< HEAD
 			struct page *page = pfn_to_page(pfn);
 			if (memblock_is_reserved(pfn << PAGE_SHIFT))
+=======
+			phys_addr_t paddr = (phys_addr_t)pfn << PAGE_SHIFT;
+			struct page *page = pfn_to_page(pfn);
+			if (memblock_is_reserved(paddr))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				continue;
 			ClearPageReserved(page);
 			init_page_count(page);
@@ -353,6 +367,18 @@ void __init mem_init(void)
 	}
 #endif /* CONFIG_HIGHMEM */
 
+<<<<<<< HEAD
+=======
+#if defined(CONFIG_PPC_FSL_BOOK3E) && !defined(CONFIG_SMP)
+	/*
+	 * If smp is enabled, next_tlbcam_idx is initialized in the cpu up
+	 * functions.... do it here for the non-smp case.
+	 */
+	per_cpu(next_tlbcam_idx, smp_processor_id()) =
+		(mfspr(SPRN_TLB1CFG) & TLBnCFG_N_ENTRY) - 1;
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	printk(KERN_INFO "Memory: %luk/%luk available (%luk kernel code, "
 	       "%luk reserved, %luk data, %luk bss, %luk init)\n",
 		nr_free_pages() << (PAGE_SHIFT-10),
@@ -383,6 +409,28 @@ void __init mem_init(void)
 	mem_init_done = 1;
 }
 
+<<<<<<< HEAD
+=======
+void free_initmem(void)
+{
+	unsigned long addr;
+
+	ppc_md.progress = ppc_printk_progress;
+
+	addr = (unsigned long)__init_begin;
+	for (; addr < (unsigned long)__init_end; addr += PAGE_SIZE) {
+		memset((void *)addr, POISON_FREE_INITMEM, PAGE_SIZE);
+		ClearPageReserved(virt_to_page(addr));
+		init_page_count(virt_to_page(addr));
+		free_page(addr);
+		totalram_pages++;
+	}
+	pr_info("Freeing unused kernel memory: %luk freed\n",
+		((unsigned long)__init_end -
+		(unsigned long)__init_begin) >> 10);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_BLK_DEV_INITRD
 void __init free_initrd_mem(unsigned long start, unsigned long end)
 {

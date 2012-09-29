@@ -146,7 +146,10 @@ struct lm8323_chip {
 	/* device lock */
 	struct mutex		lock;
 	struct i2c_client	*client;
+<<<<<<< HEAD
 	struct work_struct	work;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct input_dev	*idev;
 	bool			kp_enabled;
 	bool			pm_suspend;
@@ -162,7 +165,10 @@ struct lm8323_chip {
 
 #define client_to_lm8323(c)	container_of(c, struct lm8323_chip, client)
 #define dev_to_lm8323(d)	container_of(d, struct lm8323_chip, client->dev)
+<<<<<<< HEAD
 #define work_to_lm8323(w)	container_of(w, struct lm8323_chip, work)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define cdev_to_pwm(c)		container_of(c, struct lm8323_pwm, cdev)
 #define work_to_pwm(w)		container_of(w, struct lm8323_pwm, work)
 
@@ -375,9 +381,15 @@ static void pwm_done(struct lm8323_pwm *pwm)
  * Bottom half: handle the interrupt by posting key events, or dealing with
  * errors appropriately.
  */
+<<<<<<< HEAD
 static void lm8323_work(struct work_struct *work)
 {
 	struct lm8323_chip *lm = work_to_lm8323(work);
+=======
+static irqreturn_t lm8323_irq(int irq, void *_lm)
+{
+	struct lm8323_chip *lm = _lm;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 ints;
 	int i;
 
@@ -409,6 +421,7 @@ static void lm8323_work(struct work_struct *work)
 	}
 
 	mutex_unlock(&lm->lock);
+<<<<<<< HEAD
 }
 
 /*
@@ -419,6 +432,8 @@ static irqreturn_t lm8323_irq(int irq, void *data)
 	struct lm8323_chip *lm = data;
 
 	schedule_work(&lm->work);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return IRQ_HANDLED;
 }
@@ -675,7 +690,10 @@ static int __devinit lm8323_probe(struct i2c_client *client,
 	lm->client = client;
 	lm->idev = idev;
 	mutex_init(&lm->lock);
+<<<<<<< HEAD
 	INIT_WORK(&lm->work, lm8323_work);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	lm->size_x = pdata->size_x;
 	lm->size_y = pdata->size_y;
@@ -746,9 +764,14 @@ static int __devinit lm8323_probe(struct i2c_client *client,
 		goto fail3;
 	}
 
+<<<<<<< HEAD
 	err = request_irq(client->irq, lm8323_irq,
 			  IRQF_TRIGGER_FALLING | IRQF_DISABLED,
 			  "lm8323", lm);
+=======
+	err = request_threaded_irq(client->irq, NULL, lm8323_irq,
+			  IRQF_TRIGGER_LOW|IRQF_ONESHOT, "lm8323", lm);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err) {
 		dev_err(&client->dev, "could not get IRQ %d\n", client->irq);
 		goto fail4;
@@ -768,8 +791,16 @@ fail3:
 	device_remove_file(&client->dev, &dev_attr_disable_kp);
 fail2:
 	while (--pwm >= 0)
+<<<<<<< HEAD
 		if (lm->pwm[pwm].enabled)
 			led_classdev_unregister(&lm->pwm[pwm].cdev);
+=======
+		if (lm->pwm[pwm].enabled) {
+			device_remove_file(lm->pwm[pwm].cdev.dev,
+					   &dev_attr_time);
+			led_classdev_unregister(&lm->pwm[pwm].cdev);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 fail1:
 	input_free_device(idev);
 	kfree(lm);
@@ -783,15 +814,25 @@ static int __devexit lm8323_remove(struct i2c_client *client)
 
 	disable_irq_wake(client->irq);
 	free_irq(client->irq, lm);
+<<<<<<< HEAD
 	cancel_work_sync(&lm->work);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	input_unregister_device(lm->idev);
 
 	device_remove_file(&lm->client->dev, &dev_attr_disable_kp);
 
 	for (i = 0; i < 3; i++)
+<<<<<<< HEAD
 		if (lm->pwm[i].enabled)
 			led_classdev_unregister(&lm->pwm[i].cdev);
+=======
+		if (lm->pwm[i].enabled) {
+			device_remove_file(lm->pwm[i].cdev.dev, &dev_attr_time);
+			led_classdev_unregister(&lm->pwm[i].cdev);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	kfree(lm);
 

@@ -162,9 +162,13 @@ config H8300_TPU_CH
 	int "TPU channel"
 	depends on H8300_TPU
 
+<<<<<<< HEAD
 config PREEMPT
 	bool "Preemptible Kernel"
 	default n
+=======
+source "kernel/Kconfig.preempt"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 source "mm/Kconfig"
 

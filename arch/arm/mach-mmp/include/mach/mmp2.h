@@ -1,7 +1,11 @@
 #ifndef __ASM_MACH_MMP2_H
 #define __ASM_MACH_MMP2_H
 
+<<<<<<< HEAD
 #include <plat/sdhci.h>
+=======
+#include <linux/platform_data/pxa_sdhci.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct sys_timer;
 

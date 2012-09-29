@@ -261,11 +261,21 @@ static netdev_tx_t mscan_start_xmit(struct sk_buff *skb, struct net_device *dev)
 		void __iomem *data = &regs->tx.dsr1_0;
 		u16 *payload = (u16 *)frame->data;
 
+<<<<<<< HEAD
 		/* It is safe to write into dsr[dlc+1] */
 		for (i = 0; i < (frame->can_dlc + 1) / 2; i++) {
 			out_be16(data, *payload++);
 			data += 2 + _MSCAN_RESERVED_DSR_SIZE;
 		}
+=======
+		for (i = 0; i < frame->can_dlc / 2; i++) {
+			out_be16(data, *payload++);
+			data += 2 + _MSCAN_RESERVED_DSR_SIZE;
+		}
+		/* write remaining byte if necessary */
+		if (frame->can_dlc & 1)
+			out_8(data, frame->data[frame->can_dlc - 1]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	out_8(&regs->tx.dlr, frame->can_dlc);
@@ -330,10 +340,20 @@ static void mscan_get_rx_frame(struct net_device *dev, struct can_frame *frame)
 		void __iomem *data = &regs->rx.dsr1_0;
 		u16 *payload = (u16 *)frame->data;
 
+<<<<<<< HEAD
 		for (i = 0; i < (frame->can_dlc + 1) / 2; i++) {
 			*payload++ = in_be16(data);
 			data += 2 + _MSCAN_RESERVED_DSR_SIZE;
 		}
+=======
+		for (i = 0; i < frame->can_dlc / 2; i++) {
+			*payload++ = in_be16(data);
+			data += 2 + _MSCAN_RESERVED_DSR_SIZE;
+		}
+		/* read remaining byte if necessary */
+		if (frame->can_dlc & 1)
+			frame->data[frame->can_dlc - 1] = in_8(data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	out_8(&regs->canrflg, MSCAN_RXF);

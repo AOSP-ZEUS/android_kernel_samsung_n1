@@ -89,7 +89,10 @@
 
 /* Interrupt Mask register */
 #define PERF_IRQMASK_REG		0xc
+<<<<<<< HEAD
 #define PERF_IRQSTAT_REG		0x10
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Interrupt Status register */
 #define PERF_IRQSTAT_REG		0x10

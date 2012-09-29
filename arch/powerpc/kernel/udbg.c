@@ -31,6 +31,12 @@ void __init udbg_early_init(void)
 #if defined(CONFIG_PPC_EARLY_DEBUG_LPAR)
 	/* For LPAR machines that have an HVC console on vterm 0 */
 	udbg_init_debug_lpar();
+<<<<<<< HEAD
+=======
+#elif defined(CONFIG_PPC_EARLY_DEBUG_LPAR_HVSI)
+	/* For LPAR machines that have an HVSI console on vterm 0 */
+	udbg_init_debug_lpar_hvsi();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #elif defined(CONFIG_PPC_EARLY_DEBUG_G5)
 	/* For use on Apple G5 machines */
 	udbg_init_pmac_realmode();
@@ -68,6 +74,11 @@ void __init udbg_early_init(void)
 
 #ifdef CONFIG_PPC_EARLY_DEBUG
 	console_loglevel = 10;
+<<<<<<< HEAD
+=======
+
+	register_early_udbg_console();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 }
 

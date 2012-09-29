@@ -6,7 +6,11 @@
  * needed to reduce the lookup overhead since most of these queries happen on
  * a per-packet basis.
  *
+<<<<<<< HEAD
  * Author: Paul Moore <paul.moore@hp.com>
+=======
+ * Author: Paul Moore <paul@paul-moore.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * This code is heavily based on the "netif" concept originally developed by
  * James Morris <jmorris@redhat.com>
@@ -69,6 +73,7 @@ static DEFINE_SPINLOCK(sel_netnode_lock);
 static struct sel_netnode_bkt sel_netnode_hash[SEL_NETNODE_HASH_SIZE];
 
 /**
+<<<<<<< HEAD
  * sel_netnode_free - Frees a node entry
  * @p: the entry's RCU field
  *
@@ -85,6 +90,8 @@ static void sel_netnode_free(struct rcu_head *p)
 }
 
 /**
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * sel_netnode_hashfn_ipv4 - IPv4 hashing function for the node table
  * @addr: IPv4 address
  *
@@ -193,7 +200,11 @@ static void sel_netnode_insert(struct sel_netnode *node)
 			rcu_dereference(sel_netnode_hash[idx].list.prev),
 			struct sel_netnode, list);
 		list_del_rcu(&tail->list);
+<<<<<<< HEAD
 		call_rcu(&tail->rcu, sel_netnode_free);
+=======
+		kfree_rcu(tail, rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else
 		sel_netnode_hash[idx].size++;
 }
@@ -306,7 +317,11 @@ static void sel_netnode_flush(void)
 		list_for_each_entry_safe(node, node_tmp,
 					 &sel_netnode_hash[idx].list, list) {
 				list_del_rcu(&node->list);
+<<<<<<< HEAD
 				call_rcu(&node->rcu, sel_netnode_free);
+=======
+				kfree_rcu(node, rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		sel_netnode_hash[idx].size = 0;
 	}

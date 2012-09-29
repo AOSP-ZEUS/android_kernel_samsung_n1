@@ -37,7 +37,11 @@ static int ad7887_read_raw(struct iio_dev *dev_info,
 			   long m)
 {
 	int ret;
+<<<<<<< HEAD
 	struct ad7887_state *st = dev_info->dev_data;
+=======
+	struct ad7887_state *st = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned int scale_uv;
 
 	switch (m) {
@@ -118,7 +122,10 @@ static int __devinit ad7887_probe(struct spi_device *spi)
 	/* Estabilish that the iio_dev is a child of the spi device */
 	indio_dev->dev.parent = &spi->dev;
 	indio_dev->name = spi_get_device_id(spi)->name;
+<<<<<<< HEAD
 	indio_dev->dev_data = (void *)(st);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	indio_dev->info = &ad7887_info;
 	indio_dev->modes = INDIO_DIRECT_MODE;
 

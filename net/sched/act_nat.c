@@ -102,7 +102,11 @@ static int tcf_nat_cleanup(struct tc_action *a, int bind)
 	return tcf_hash_release(&p->common, bind, &nat_hash_info);
 }
 
+<<<<<<< HEAD
 static int tcf_nat(struct sk_buff *skb, struct tc_action *a,
+=======
+static int tcf_nat(struct sk_buff *skb, const struct tc_action *a,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		   struct tcf_result *res)
 {
 	struct tcf_nat *p = a->priv;

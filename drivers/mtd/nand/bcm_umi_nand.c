@@ -380,7 +380,11 @@ static int __devinit bcm_umi_nand_probe(struct platform_device *pdev)
 		return -ENXIO;
 
 	/* map physical address */
+<<<<<<< HEAD
 	bcm_umi_io_base = ioremap(r->start, r->end - r->start + 1);
+=======
+	bcm_umi_io_base = ioremap(r->start, resource_size(r));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!bcm_umi_io_base) {
 		printk(KERN_ERR "ioremap to access BCM UMI NAND chip failed\n");

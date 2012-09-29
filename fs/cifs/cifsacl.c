@@ -991,6 +991,7 @@ struct cifs_ntsd *get_cifs_acl(struct cifs_sb_info *cifs_sb,
 	return pntsd;
 }
 
+<<<<<<< HEAD
 static int set_cifs_acl_by_fid(struct cifs_sb_info *cifs_sb, __u16 fid,
 		struct cifs_ntsd *pnntsd, u32 acllen)
 {
@@ -1009,6 +1010,8 @@ static int set_cifs_acl_by_fid(struct cifs_sb_info *cifs_sb, __u16 fid,
 	return rc;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int set_cifs_acl_by_path(struct cifs_sb_info *cifs_sb, const char *path,
 		struct cifs_ntsd *pnntsd, u32 acllen)
 {
@@ -1047,6 +1050,7 @@ int set_cifs_acl(struct cifs_ntsd *pnntsd, __u32 acllen,
 				struct inode *inode, const char *path)
 {
 	struct cifs_sb_info *cifs_sb = CIFS_SB(inode->i_sb);
+<<<<<<< HEAD
 	struct cifsFileInfo *open_file;
 	int rc;
 
@@ -1059,6 +1063,12 @@ int set_cifs_acl(struct cifs_ntsd *pnntsd, __u32 acllen,
 	rc = set_cifs_acl_by_fid(cifs_sb, open_file->netfid, pnntsd, acllen);
 	cifsFileInfo_put(open_file);
 	return rc;
+=======
+
+	cFYI(DBG2, "set ACL for %s from mode 0x%x", path, inode->i_mode);
+
+	return set_cifs_acl_by_path(cifs_sb, path, pnntsd, acllen);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Translate the CIFS ACL (simlar to NTFS ACL) for a file into mode bits */

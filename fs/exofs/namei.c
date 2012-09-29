@@ -55,12 +55,16 @@ static struct dentry *exofs_lookup(struct inode *dir, struct dentry *dentry,
 		return ERR_PTR(-ENAMETOOLONG);
 
 	ino = exofs_inode_by_name(dir, dentry);
+<<<<<<< HEAD
 	inode = NULL;
 	if (ino) {
 		inode = exofs_iget(dir->i_sb, ino);
 		if (IS_ERR(inode))
 			return ERR_CAST(inode);
 	}
+=======
+	inode = ino ? exofs_iget(dir->i_sb, ino) : NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return d_splice_alias(inode, dentry);
 }
 

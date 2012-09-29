@@ -609,6 +609,7 @@ void fusb300_rdcxf(struct fusb300 *fusb300,
 	}
 }
 
+<<<<<<< HEAD
 #if 0
 static void fusb300_dbg_fifo(struct fusb300_ep *ep,
 				u8 entry, u16 length)
@@ -710,6 +711,8 @@ static void fusb300_cmp_dbg_fifo(struct fusb300_ep *ep,
 }
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void fusb300_rdfifo(struct fusb300_ep *ep,
 			  struct fusb300_request *req,
 			  u32 length)
@@ -767,6 +770,7 @@ static void fusb300_rdfifo(struct fusb300_ep *ep,
 	} while (!reg);
 }
 
+<<<<<<< HEAD
 /* write data to fifo */
 static void fusb300_wrfifo(struct fusb300_ep *ep,
 			   struct fusb300_request *req)
@@ -817,6 +821,8 @@ static void fusb300_wrfifo(struct fusb300_ep *ep,
 	} while (!reg);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static u8 fusb300_get_epnstall(struct fusb300 *fusb300, u8 ep)
 {
 	u8 value;
@@ -980,11 +986,14 @@ static void set_address(struct fusb300 *fusb300, struct usb_ctrlrequest *ctrl)
 		} \
 	} while (0)
 
+<<<<<<< HEAD
 static void fusb300_ep0_complete(struct usb_ep *ep,
 				struct usb_request *req)
 {
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int setup_packet(struct fusb300 *fusb300, struct usb_ctrlrequest *ctrl)
 {
 	u8 *p = (u8 *)ctrl;
@@ -1029,6 +1038,7 @@ static int setup_packet(struct fusb300 *fusb300, struct usb_ctrlrequest *ctrl)
 	return ret;
 }
 
+<<<<<<< HEAD
 static void fusb300_set_ep_bycnt(struct fusb300_ep *ep, u32 bycnt)
 {
 	struct fusb300 *fusb300 = ep->fusb300;
@@ -1040,6 +1050,8 @@ static void fusb300_set_ep_bycnt(struct fusb300_ep *ep, u32 bycnt)
 	iowrite32(reg, fusb300->reg + FUSB300_OFFSET_EPFFR(ep->epnum));
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void done(struct fusb300_ep *ep, struct fusb300_request *req,
 		 int status)
 {
@@ -1063,8 +1075,13 @@ static void done(struct fusb300_ep *ep, struct fusb300_request *req,
 		fusb300_set_cxdone(ep->fusb300);
 }
 
+<<<<<<< HEAD
 void fusb300_fill_idma_prdtbl(struct fusb300_ep *ep,
 			struct fusb300_request *req)
+=======
+static void fusb300_fill_idma_prdtbl(struct fusb300_ep *ep, dma_addr_t d,
+		u32 len)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u32 value;
 	u32 reg;
@@ -1076,10 +1093,16 @@ void fusb300_fill_idma_prdtbl(struct fusb300_ep *ep,
 		reg &= FUSB300_EPPRD0_H;
 	} while (reg);
 
+<<<<<<< HEAD
 	iowrite32((u32) req->req.buf, ep->fusb300->reg +
 		FUSB300_OFFSET_EPPRD_W1(ep->epnum));
 
 	value = FUSB300_EPPRD0_BTC(req->req.length) | FUSB300_EPPRD0_H |
+=======
+	iowrite32(d, ep->fusb300->reg + FUSB300_OFFSET_EPPRD_W1(ep->epnum));
+
+	value = FUSB300_EPPRD0_BTC(len) | FUSB300_EPPRD0_H |
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		FUSB300_EPPRD0_F | FUSB300_EPPRD0_L | FUSB300_EPPRD0_I;
 	iowrite32(value, ep->fusb300->reg + FUSB300_OFFSET_EPPRD_W0(ep->epnum));
 
@@ -1116,13 +1139,21 @@ static void  fusb300_set_idma(struct fusb300_ep *ep,
 			struct fusb300_request *req)
 {
 	dma_addr_t d;
+<<<<<<< HEAD
 	u8 *tmp = NULL;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	d = dma_map_single(NULL, req->req.buf, req->req.length, DMA_TO_DEVICE);
 
 	if (dma_mapping_error(NULL, d)) {
+<<<<<<< HEAD
 		kfree(req->req.buf);
 		printk(KERN_DEBUG "dma_mapping_error\n");
+=======
+		printk(KERN_DEBUG "dma_mapping_error\n");
+		return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	dma_sync_single_for_device(NULL, d, req->req.length, DMA_TO_DEVICE);
@@ -1130,6 +1161,7 @@ static void  fusb300_set_idma(struct fusb300_ep *ep,
 	fusb300_enable_bit(ep->fusb300, FUSB300_OFFSET_IGER0,
 		FUSB300_IGER0_EEPn_PRD_INT(ep->epnum));
 
+<<<<<<< HEAD
 	tmp = req->req.buf;
 	req->req.buf = (u8 *)d;
 
@@ -1141,6 +1173,13 @@ static void  fusb300_set_idma(struct fusb300_ep *ep,
 
 	if (d)
 		dma_unmap_single(NULL, d, req->req.length, DMA_TO_DEVICE);
+=======
+	fusb300_fill_idma_prdtbl(ep, d, req->req.length);
+	/* check idma is done */
+	fusb300_wait_idma_finished(ep);
+
+	dma_unmap_single(NULL, d, req->req.length, DMA_TO_DEVICE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void in_ep_fifo_handler(struct fusb300_ep *ep)
@@ -1148,6 +1187,7 @@ static void in_ep_fifo_handler(struct fusb300_ep *ep)
 	struct fusb300_request *req = list_entry(ep->queue.next,
 					struct fusb300_request, queue);
 
+<<<<<<< HEAD
 	if (req->req.length) {
 #if 0
 		fusb300_set_ep_bycnt(ep, req->req.length);
@@ -1156,6 +1196,10 @@ static void in_ep_fifo_handler(struct fusb300_ep *ep)
 		fusb300_set_idma(ep, req);
 #endif
 	}
+=======
+	if (req->req.length)
+		fusb300_set_idma(ep, req);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	done(ep, req, 0);
 }
 
@@ -1500,7 +1544,11 @@ static void init_controller(struct fusb300 *fusb300)
 /*------------------------------------------------------------------------*/
 static struct fusb300 *the_controller;
 
+<<<<<<< HEAD
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int fusb300_udc_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	struct fusb300 *fusb300 = the_controller;
@@ -1544,9 +1592,14 @@ error:
 
 	return retval;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
 
 int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
+=======
+
+static int fusb300_udc_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct fusb300 *fusb300 = the_controller;
 
@@ -1562,7 +1615,10 @@ int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
 
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_unregister_driver);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*--------------------------------------------------------------------------*/
 
 static int fusb300_udc_pullup(struct usb_gadget *_gadget, int is_active)
@@ -1572,12 +1628,21 @@ static int fusb300_udc_pullup(struct usb_gadget *_gadget, int is_active)
 
 static struct usb_gadget_ops fusb300_gadget_ops = {
 	.pullup		= fusb300_udc_pullup,
+<<<<<<< HEAD
+=======
+	.start		= fusb300_udc_start,
+	.stop		= fusb300_udc_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __exit fusb300_remove(struct platform_device *pdev)
 {
 	struct fusb300 *fusb300 = dev_get_drvdata(&pdev->dev);
 
+<<<<<<< HEAD
+=======
+	usb_del_gadget_udc(&fusb300->gadget);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	iounmap(fusb300->reg);
 	free_irq(platform_get_irq(pdev, 0), fusb300);
 
@@ -1702,9 +1767,21 @@ static int __init fusb300_probe(struct platform_device *pdev)
 		goto clean_up3;
 
 	init_controller(fusb300);
+<<<<<<< HEAD
 	dev_info(&pdev->dev, "version %s\n", DRIVER_VERSION);
 
 	return 0;
+=======
+	ret = usb_add_gadget_udc(&pdev->dev, &fusb300->gadget);
+	if (ret)
+		goto err_add_udc;
+
+	dev_info(&pdev->dev, "version %s\n", DRIVER_VERSION);
+
+	return 0;
+err_add_udc:
+	fusb300_free_request(&fusb300->ep[0]->ep, fusb300->ep0_req);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 clean_up3:
 	free_irq(ires->start, fusb300);

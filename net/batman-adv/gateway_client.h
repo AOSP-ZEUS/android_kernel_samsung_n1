@@ -31,6 +31,11 @@ void gw_node_update(struct bat_priv *bat_priv,
 void gw_node_delete(struct bat_priv *bat_priv, struct orig_node *orig_node);
 void gw_node_purge(struct bat_priv *bat_priv);
 int gw_client_seq_print_text(struct seq_file *seq, void *offset);
+<<<<<<< HEAD
 int gw_is_target(struct bat_priv *bat_priv, struct sk_buff *skb);
+=======
+int gw_is_target(struct bat_priv *bat_priv, struct sk_buff *skb,
+		 struct orig_node *old_gw);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _NET_BATMAN_ADV_GATEWAY_CLIENT_H_ */

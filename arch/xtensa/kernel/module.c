@@ -24,6 +24,7 @@
 
 #undef DEBUG_RELOCATE
 
+<<<<<<< HEAD
 void *module_alloc(unsigned long size)
 {
 	if (size == 0)
@@ -44,6 +45,8 @@ int module_frob_arch_sections(Elf32_Ehdr *hdr,
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int
 decode_calln_opcode (unsigned char *location)
 {
@@ -66,6 +69,7 @@ decode_l32r_opcode (unsigned char *location)
 #endif
 }
 
+<<<<<<< HEAD
 int apply_relocate(Elf32_Shdr *sechdrs,
     		   const char *strtab,
 		   unsigned int symindex,
@@ -78,6 +82,8 @@ int apply_relocate(Elf32_Shdr *sechdrs,
 
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int apply_relocate_add(Elf32_Shdr *sechdrs,
 		       const char *strtab,
 		       unsigned int symindex,
@@ -222,6 +228,7 @@ int apply_relocate_add(Elf32_Shdr *sechdrs,
 	}
 	return 0;
 }
+<<<<<<< HEAD
 
 int module_finalize(const Elf_Ehdr *hdr,
     		    const Elf_Shdr *sechdrs,
@@ -233,3 +240,5 @@ int module_finalize(const Elf_Ehdr *hdr,
 void module_arch_cleanup(struct module *mod)
 {
 }
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -2357,12 +2357,19 @@ int mwifiex_scan_networks(struct mwifiex_private *priv,
  *      - Setting command ID, and proper size
  *      - Ensuring correct endian-ness
  */
+<<<<<<< HEAD
 int mwifiex_cmd_802_11_scan(struct host_cmd_ds_command *cmd, void *data_buf)
 {
 	struct host_cmd_ds_802_11_scan *scan_cmd = &cmd->params.scan;
 	struct mwifiex_scan_cmd_config *scan_cfg;
 
 	scan_cfg = (struct mwifiex_scan_cmd_config *) data_buf;
+=======
+int mwifiex_cmd_802_11_scan(struct host_cmd_ds_command *cmd,
+			    struct mwifiex_scan_cmd_config *scan_cfg)
+{
+	struct host_cmd_ds_802_11_scan *scan_cmd = &cmd->params.scan;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Set fixed field variables in scan command */
 	scan_cmd->bss_mode = scan_cfg->bss_mode;

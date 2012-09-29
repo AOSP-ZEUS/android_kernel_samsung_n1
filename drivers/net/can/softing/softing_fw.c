@@ -20,6 +20,10 @@
 #include <linux/firmware.h>
 #include <linux/sched.h>
 #include <asm/div64.h>
+<<<<<<< HEAD
+=======
+#include <asm/io.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "softing.h"
 

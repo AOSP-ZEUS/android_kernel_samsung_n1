@@ -69,7 +69,11 @@ enum {
 
 int	nfsd_reply_cache_init(void);
 void	nfsd_reply_cache_shutdown(void);
+<<<<<<< HEAD
 int	nfsd_cache_lookup(struct svc_rqst *, int);
+=======
+int	nfsd_cache_lookup(struct svc_rqst *);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void	nfsd_cache_update(struct svc_rqst *, int, __be32 *);
 
 #ifdef CONFIG_NFSD_V4

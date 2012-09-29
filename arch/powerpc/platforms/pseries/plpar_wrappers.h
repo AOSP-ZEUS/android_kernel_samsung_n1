@@ -53,9 +53,15 @@ static inline long vpa_call(unsigned long flags, unsigned long cpu,
 	return plpar_hcall_norets(H_REGISTER_VPA, flags, cpu, vpa);
 }
 
+<<<<<<< HEAD
 static inline long unregister_vpa(unsigned long cpu, unsigned long vpa)
 {
 	return vpa_call(0x5, cpu, vpa);
+=======
+static inline long unregister_vpa(unsigned long cpu)
+{
+	return vpa_call(0x5, cpu, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline long register_vpa(unsigned long cpu, unsigned long vpa)
@@ -63,9 +69,15 @@ static inline long register_vpa(unsigned long cpu, unsigned long vpa)
 	return vpa_call(0x1, cpu, vpa);
 }
 
+<<<<<<< HEAD
 static inline long unregister_slb_shadow(unsigned long cpu, unsigned long vpa)
 {
 	return vpa_call(0x7, cpu, vpa);
+=======
+static inline long unregister_slb_shadow(unsigned long cpu)
+{
+	return vpa_call(0x7, cpu, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static inline long register_slb_shadow(unsigned long cpu, unsigned long vpa)

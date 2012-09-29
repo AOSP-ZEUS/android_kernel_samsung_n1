@@ -23,6 +23,7 @@
 #define FT_TPG_NAMELEN 32	/* max length of TPG name */
 #define FT_LUN_NAMELEN 32	/* max length of LUN name */
 
+<<<<<<< HEAD
 /*
  * Debug options.
  */
@@ -47,6 +48,8 @@ extern unsigned int ft_debug_logging;	/* debug options */
 #define	FT_IO_DBG(fmt, args...)		FT_DEBUG(FT_DEBUG_IO, fmt, ##args)
 #define	FT_DATA_DBG(fmt, args...)	FT_DEBUG(FT_DEBUG_DATA, fmt, ##args)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct ft_transport_id {
 	__u8	format;
 	__u8	__resvd1[7];
@@ -122,8 +125,12 @@ struct ft_tpg {
 	struct list_head list;		/* linkage in ft_lport_acl tpg_list */
 	struct list_head lun_list;	/* head of LUNs */
 	struct se_portal_group se_tpg;
+<<<<<<< HEAD
 	struct task_struct *thread;	/* processing thread */
 	struct se_queue_obj qobj;	/* queue for processing thread */
+=======
+	struct workqueue_struct *workqueue;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct ft_lport_acl {
@@ -134,16 +141,22 @@ struct ft_lport_acl {
 	struct se_wwn fc_lport_wwn;
 };
 
+<<<<<<< HEAD
 enum ft_cmd_state {
 	FC_CMD_ST_NEW = 0,
 	FC_CMD_ST_REJ
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Commands
  */
 struct ft_cmd {
+<<<<<<< HEAD
 	enum ft_cmd_state state;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 lun;                        /* LUN from request */
 	struct ft_sess *sess;		/* session held for cmd */
 	struct fc_seq *seq;		/* sequence in exchange mgr */
@@ -151,7 +164,11 @@ struct ft_cmd {
 	struct fc_frame *req_frame;
 	unsigned char *cdb;		/* pointer to CDB inside frame */
 	u32 write_data_len;		/* data received on writes */
+<<<<<<< HEAD
 	struct se_queue_req se_req;
+=======
+	struct work_struct work;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Local sense buffer */
 	unsigned char ft_sense_buffer[TRANSPORT_SENSE_BUFFER];
 	u32 was_ddp_setup:1;		/* Set only if ddp is setup */
@@ -195,14 +212,20 @@ int ft_write_pending(struct se_cmd *);
 int ft_write_pending_status(struct se_cmd *);
 u32 ft_get_task_tag(struct se_cmd *);
 int ft_get_cmd_state(struct se_cmd *);
+<<<<<<< HEAD
 void ft_new_cmd_failure(struct se_cmd *);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int ft_queue_tm_resp(struct se_cmd *);
 int ft_is_state_remove(struct se_cmd *);
 
 /*
  * other internal functions.
  */
+<<<<<<< HEAD
 int ft_thread(void *);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void ft_recv_req(struct ft_sess *, struct fc_frame *);
 struct ft_tpg *ft_lport_find_tpg(struct fc_lport *);
 struct ft_node_acl *ft_acl_get(struct ft_tpg *, struct fc_rport_priv *);
@@ -212,4 +235,12 @@ void ft_dump_cmd(struct ft_cmd *, const char *caller);
 
 ssize_t ft_format_wwn(char *, size_t, u64);
 
+<<<<<<< HEAD
+=======
+/*
+ * Underlying HW specific helper function
+ */
+void ft_invl_hw_context(struct ft_cmd *);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* __TCM_FC_H__ */

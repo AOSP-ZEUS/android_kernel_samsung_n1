@@ -161,6 +161,13 @@ ext2_xattr_get(struct inode *inode, int name_index, const char *name,
 
 	if (name == NULL)
 		return -EINVAL;
+<<<<<<< HEAD
+=======
+	name_len = strlen(name);
+	if (name_len > 255)
+		return -ERANGE;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	down_read(&EXT2_I(inode)->xattr_sem);
 	error = -ENODATA;
 	if (!EXT2_I(inode)->i_file_acl)
@@ -181,12 +188,17 @@ bad_block:	ext2_error(inode->i_sb, "ext2_xattr_get",
 		error = -EIO;
 		goto cleanup;
 	}
+<<<<<<< HEAD
 	/* find named attribute */
 	name_len = strlen(name);
 
 	error = -ERANGE;
 	if (name_len > 255)
 		goto cleanup;
+=======
+
+	/* find named attribute */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	entry = FIRST_ENTRY(bh);
 	while (!IS_LAST_ENTRY(entry)) {
 		struct ext2_xattr_entry *next =

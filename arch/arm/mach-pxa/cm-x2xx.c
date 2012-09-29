@@ -21,7 +21,12 @@
 #include <asm/mach-types.h>
 #include <asm/mach/map.h>
 
+<<<<<<< HEAD
 #include <mach/pxa2xx-regs.h>
+=======
+#include <mach/pxa25x.h>
+#include <mach/pxa27x.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/audio.h>
 #include <mach/pxafb.h>
 #include <mach/smemc.h>
@@ -516,6 +521,16 @@ MACHINE_START(ARMCORE, "Compulab CM-X2XX")
 	.map_io		= cmx2xx_map_io,
 	.nr_irqs	= CMX2XX_NR_IRQS,
 	.init_irq	= cmx2xx_init_irq,
+<<<<<<< HEAD
 	.timer		= &pxa_timer,
 	.init_machine	= cmx2xx_init,
+=======
+	/* NOTE: pxa25x_handle_irq() works on PXA27x w/o camera support */
+	.handle_irq	= pxa25x_handle_irq,
+	.timer		= &pxa_timer,
+	.init_machine	= cmx2xx_init,
+#ifdef CONFIG_PCI
+	.dma_zone_size	= SZ_64M,
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

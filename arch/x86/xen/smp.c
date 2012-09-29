@@ -172,7 +172,10 @@ static void __init xen_fill_possible_map(void)
 static void __init xen_filter_cpu_maps(void)
 {
 	int i, rc;
+<<<<<<< HEAD
 	unsigned int subtract = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!xen_initial_domain())
 		return;
@@ -187,6 +190,7 @@ static void __init xen_filter_cpu_maps(void)
 		} else {
 			set_cpu_possible(i, false);
 			set_cpu_present(i, false);
+<<<<<<< HEAD
 			subtract++;
 		}
 	}
@@ -203,6 +207,10 @@ static void __init xen_filter_cpu_maps(void)
 		nr_cpu_ids = nr_cpu_ids - subtract;
 #endif
 
+=======
+		}
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void __init xen_smp_prepare_boot_cpu(void)
@@ -547,7 +555,10 @@ static void __init xen_hvm_smp_prepare_cpus(unsigned int max_cpus)
 	WARN_ON(xen_smp_intr_init(0));
 
 	xen_init_lock_cpu(0);
+<<<<<<< HEAD
 	xen_init_spinlocks();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int __cpuinit xen_hvm_cpu_up(unsigned int cpu)

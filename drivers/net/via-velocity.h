@@ -1437,7 +1437,11 @@ struct velocity_info {
 	struct pci_dev *pdev;
 	struct net_device *dev;
 
+<<<<<<< HEAD
 	struct vlan_group    *vlgrp;
+=======
+	unsigned long active_vlans[BITS_TO_LONGS(VLAN_N_VID)];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 ip_addr[4];
 	enum chip_type chip_id;
 

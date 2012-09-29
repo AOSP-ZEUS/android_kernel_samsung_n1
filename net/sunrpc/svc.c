@@ -167,7 +167,10 @@ svc_pool_map_alloc_arrays(struct svc_pool_map *m, unsigned int maxpools)
 
 fail_free:
 	kfree(m->to_pool);
+<<<<<<< HEAD
 	m->to_pool = NULL;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 fail:
 	return -ENOMEM;
 }
@@ -288,9 +291,13 @@ svc_pool_map_put(void)
 	if (!--m->count) {
 		m->mode = SVC_POOL_DEFAULT;
 		kfree(m->to_pool);
+<<<<<<< HEAD
 		m->to_pool = NULL;
 		kfree(m->pool_to);
 		m->pool_to = NULL;
+=======
+		kfree(m->pool_to);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		m->npools = 0;
 	}
 
@@ -475,6 +482,7 @@ svc_destroy(struct svc_serv *serv)
 		printk("svc_destroy: no threads for serv=%p!\n", serv);
 
 	del_timer_sync(&serv->sv_temptimer);
+<<<<<<< HEAD
 	/*
 	 * The set of xprts (contained in the sv_tempsocks and
 	 * sv_permsocks lists) is now constant, since it is modified
@@ -485,10 +493,22 @@ svc_destroy(struct svc_serv *serv)
 	 * safe to traverse those lists and shut everything down:
 	 */
 	svc_close_all(serv);
+=======
+
+	svc_close_all(&serv->sv_tempsocks);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (serv->sv_shutdown)
 		serv->sv_shutdown(serv);
 
+<<<<<<< HEAD
+=======
+	svc_close_all(&serv->sv_permsocks);
+
+	BUG_ON(!list_empty(&serv->sv_permsocks));
+	BUG_ON(!list_empty(&serv->sv_tempsocks));
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cache_clean_deferred(serv);
 
 	if (svc_serv_is_pooled(serv))
@@ -1258,7 +1278,11 @@ svc_process(struct svc_rqst *rqstp)
 	}
 }
 
+<<<<<<< HEAD
 #if defined(CONFIG_NFS_V4_1)
+=======
+#if defined(CONFIG_SUNRPC_BACKCHANNEL)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Process a backchannel RPC request that arrived over an existing
  * outbound connection
@@ -1306,8 +1330,13 @@ bc_svc_process(struct svc_serv *serv, struct rpc_rqst *req,
 		return 0;
 	}
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(bc_svc_process);
 #endif /* CONFIG_NFS_V4_1 */
+=======
+EXPORT_SYMBOL_GPL(bc_svc_process);
+#endif /* CONFIG_SUNRPC_BACKCHANNEL */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Return (transport-specific) limit on the rpc payload.

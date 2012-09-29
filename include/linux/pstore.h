@@ -38,9 +38,18 @@ struct pstore_info {
 	int		(*open)(struct pstore_info *psi);
 	int		(*close)(struct pstore_info *psi);
 	ssize_t		(*read)(u64 *id, enum pstore_type_id *type,
+<<<<<<< HEAD
 			struct timespec *time);
 	u64		(*write)(enum pstore_type_id type, size_t size);
 	int		(*erase)(u64 id);
+=======
+			struct timespec *time, struct pstore_info *psi);
+	u64		(*write)(enum pstore_type_id type, unsigned int part,
+			size_t size, struct pstore_info *psi);
+	int		(*erase)(enum pstore_type_id type, u64 id,
+			struct pstore_info *psi);
+	void		*data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #ifdef CONFIG_PSTORE

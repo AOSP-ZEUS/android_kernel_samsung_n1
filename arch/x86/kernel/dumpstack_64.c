@@ -105,6 +105,7 @@ in_irq_stack(unsigned long *stack, unsigned long *irq_stack,
 }
 
 /*
+<<<<<<< HEAD
  * We are returning from the irq stack and go to the previous one.
  * If the previous stack is also in the irq stack, then bp in the first
  * frame of the irq stack points to the previous, interrupted one.
@@ -133,6 +134,8 @@ fixup_bp_irq_link(unsigned long bp, unsigned long *stack,
 }
 
 /*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * x86-64 can have up to three kernel stacks:
  * process stack
  * interrupt stack
@@ -155,9 +158,18 @@ void dump_trace(struct task_struct *task, struct pt_regs *regs,
 		task = current;
 
 	if (!stack) {
+<<<<<<< HEAD
 		stack = &dummy;
 		if (task && task != current)
 			stack = (unsigned long *)task->thread.sp;
+=======
+		if (regs)
+			stack = (unsigned long *)regs->sp;
+		else if (task && task != current)
+			stack = (unsigned long *)task->thread.sp;
+		else
+			stack = &dummy;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (!bp)
@@ -205,8 +217,11 @@ void dump_trace(struct task_struct *task, struct pt_regs *regs,
 				 * pointer (index -1 to end) in the IRQ stack:
 				 */
 				stack = (unsigned long *) (irq_stack_end[-1]);
+<<<<<<< HEAD
 				bp = fixup_bp_irq_link(bp, stack, irq_stack,
 						       irq_stack_end);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				irq_stack_end = NULL;
 				ops->stack(data, "EOI");
 				continue;

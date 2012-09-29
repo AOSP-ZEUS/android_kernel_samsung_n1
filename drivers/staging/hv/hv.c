@@ -277,11 +277,19 @@ u16 hv_post_message(union hv_connection_id connection_id,
 	unsigned long addr;
 
 	if (payload_size > HV_MESSAGE_PAYLOAD_BYTE_COUNT)
+<<<<<<< HEAD
 		return -1;
 
 	addr = (unsigned long)kmalloc(sizeof(struct aligned_input), GFP_ATOMIC);
 	if (!addr)
 		return -1;
+=======
+		return -EMSGSIZE;
+
+	addr = (unsigned long)kmalloc(sizeof(struct aligned_input), GFP_ATOMIC);
+	if (!addr)
+		return -ENOMEM;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	aligned_msg = (struct hv_input_post_message *)
 			(ALIGN(addr, HV_HYPERCALL_PARAM_ALIGN));

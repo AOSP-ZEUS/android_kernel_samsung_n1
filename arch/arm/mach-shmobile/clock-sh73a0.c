@@ -306,10 +306,13 @@ static struct clk mstp_clks[MSTP_NR] = {
 	[MSTP403] = MSTP(&r_clk, SMSTPCR4, 3, 0), /* KEYSC */
 };
 
+<<<<<<< HEAD
 #define CLKDEV_CON_ID(_id, _clk) { .con_id = _id, .clk = _clk }
 #define CLKDEV_DEV_ID(_id, _clk) { .dev_id = _id, .clk = _clk }
 #define CLKDEV_ICK_ID(_cid, _did, _clk) { .con_id = _cid, .dev_id = _did, .clk = _clk }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct clk_lookup lookups[] = {
 	/* main clocks */
 	CLKDEV_CON_ID("r_clk", &r_clk),
@@ -369,7 +372,11 @@ void __init sh73a0_clock_init(void)
 	__raw_writel(0x108, SD2CKCR);
 
 	/* detect main clock parent */
+<<<<<<< HEAD
 	switch ((__raw_readl(CKSCR) >> 24) & 0x03) {
+=======
+	switch ((__raw_readl(CKSCR) >> 28) & 0x03) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case 0:
 		main_clk.parent = &sh73a0_extal1_clk;
 		break;

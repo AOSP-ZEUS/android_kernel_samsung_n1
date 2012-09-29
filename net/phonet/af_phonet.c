@@ -68,7 +68,11 @@ static int pn_socket_create(struct net *net, struct socket *sock, int protocol,
 	struct phonet_protocol *pnp;
 	int err;
 
+<<<<<<< HEAD
 	if (!capable(CAP_SYS_ADMIN) && !capable(CAP_NET_ADMIN))
+=======
+	if (!capable(CAP_SYS_ADMIN))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EPERM;
 
 	if (protocol == 0) {

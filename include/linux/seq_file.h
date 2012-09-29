@@ -23,6 +23,10 @@ struct seq_file {
 	u64 version;
 	struct mutex lock;
 	const struct seq_operations *op;
+<<<<<<< HEAD
+=======
+	int poll_event;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	void *private;
 };
 

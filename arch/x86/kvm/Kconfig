@@ -22,6 +22,11 @@ config KVM
 	depends on HAVE_KVM
 	# for device assignment:
 	depends on PCI
+<<<<<<< HEAD
+=======
+	# for TASKSTATS/TASK_DELAY_ACCT:
+	depends on NET
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select PREEMPT_NOTIFIERS
 	select MMU_NOTIFIER
 	select ANON_INODES
@@ -31,6 +36,11 @@ config KVM
 	select KVM_ASYNC_PF
 	select USER_RETURN_NOTIFIER
 	select KVM_MMIO
+<<<<<<< HEAD
+=======
+	select TASKSTATS
+	select TASK_DELAY_ACCT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	---help---
 	  Support hosting fully virtualized guest machines using hardware
 	  virtualization extensions.  You will need a fairly recent
@@ -76,6 +86,9 @@ config KVM_MMU_AUDIT
 # the virtualization menu.
 source drivers/vhost/Kconfig
 source drivers/lguest/Kconfig
+<<<<<<< HEAD
 source drivers/virtio/Kconfig
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 endif # VIRTUALIZATION

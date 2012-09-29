@@ -88,7 +88,11 @@ static int expkey_parse(struct cache_detail *cd, char *mesg, int mlen)
 	struct svc_expkey key;
 	struct svc_expkey *ek = NULL;
 
+<<<<<<< HEAD
 	if (mlen < 1 || mesg[mlen-1] != '\n')
+=======
+	if (mesg[mlen-1] != '\n')
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 	mesg[mlen-1] = 0;
 
@@ -797,6 +801,7 @@ exp_find_key(svc_client *clp, int fsid_type, u32 *fsidv, struct cache_req *reqp)
 	return ek;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 static int exp_set_key(svc_client *clp, int fsid_type, u32 *fsidv,
 		       struct svc_export *exp)
@@ -849,6 +854,8 @@ exp_get_fsid_key(svc_client *clp, int fsid)
 	return exp_find_key(clp, FSID_NUM, fsidv, NULL);
 }
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static svc_export *exp_get_by_name(svc_client *clp, const struct path *path,
 				     struct cache_req *reqp)
@@ -890,6 +897,7 @@ static struct svc_export *exp_parent(svc_client *clp, struct path *path)
 	return exp;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 /*
  * Hashtable locking. Write locks are placed only by user processes
@@ -1159,6 +1167,9 @@ out_unlock:
 	return err;
 }
 #endif /* CONFIG_NFSD_DEPRECATED */
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Obtain the root fh on behalf of a client.
@@ -1367,7 +1378,10 @@ static void *e_start(struct seq_file *m, loff_t *pos)
 	unsigned hash, export;
 	struct cache_head *ch;
 	
+<<<<<<< HEAD
 	exp_readlock();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	read_lock(&svc_export_cache.hash_lock);
 	if (!n--)
 		return SEQ_START_TOKEN;
@@ -1418,7 +1432,10 @@ static void e_stop(struct seq_file *m, void *p)
 	__releases(svc_export_cache.hash_lock)
 {
 	read_unlock(&svc_export_cache.hash_lock);
+<<<<<<< HEAD
 	exp_readunlock();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct flags {
@@ -1550,6 +1567,7 @@ const struct seq_operations nfs_exports_op = {
 	.show	= e_show,
 };
 
+<<<<<<< HEAD
 #ifdef CONFIG_NFSD_DEPRECATED
 /*
  * Add or modify a client.
@@ -1641,6 +1659,8 @@ exp_verify_string(char *cp, int max)
 	return 0;
 }
 #endif /* CONFIG_NFSD_DEPRECATED */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Initialize the exports module.
@@ -1667,10 +1687,15 @@ nfsd_export_init(void)
 void
 nfsd_export_flush(void)
 {
+<<<<<<< HEAD
 	exp_writelock();
 	cache_purge(&svc_expkey_cache);
 	cache_purge(&svc_export_cache);
 	exp_writeunlock();
+=======
+	cache_purge(&svc_expkey_cache);
+	cache_purge(&svc_export_cache);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -1682,12 +1707,18 @@ nfsd_export_shutdown(void)
 
 	dprintk("nfsd: shutting down export module.\n");
 
+<<<<<<< HEAD
 	exp_writelock();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cache_unregister(&svc_expkey_cache);
 	cache_unregister(&svc_export_cache);
 	svcauth_unix_purge();
 
+<<<<<<< HEAD
 	exp_writeunlock();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dprintk("nfsd: export shutdown complete.\n");
 }

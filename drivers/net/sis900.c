@@ -482,7 +482,11 @@ static int __devinit sis900_probe(struct pci_dev *pci_dev,
 		ret = -ENOMEM;
 		goto err_out_cleardev;
 	}
+<<<<<<< HEAD
 	sis_priv->tx_ring = (BufferDesc *)ring_space;
+=======
+	sis_priv->tx_ring = ring_space;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sis_priv->tx_ring_dma = ring_dma;
 
 	ring_space = pci_alloc_consistent(pci_dev, RX_TOTAL_SIZE, &ring_dma);
@@ -490,7 +494,11 @@ static int __devinit sis900_probe(struct pci_dev *pci_dev,
 		ret = -ENOMEM;
 		goto err_unmap_tx;
 	}
+<<<<<<< HEAD
 	sis_priv->rx_ring = (BufferDesc *)ring_space;
+=======
+	sis_priv->rx_ring = ring_space;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sis_priv->rx_ring_dma = ring_dma;
 
 	/* The SiS900-specific entries in the device structure. */

@@ -722,8 +722,13 @@ unsigned int ivtv_v4l2_dec_poll(struct file *filp, poll_table *wait)
 
 	/* If there are subscribed events, then only use the new event
 	   API instead of the old video.h based API. */
+<<<<<<< HEAD
 	if (!list_empty(&id->fh.events->subscribed)) {
 		poll_wait(filp, &id->fh.events->wait, wait);
+=======
+	if (!list_empty(&id->fh.subscribed)) {
+		poll_wait(filp, &id->fh.wait, wait);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Turn off the old-style vsync events */
 		clear_bit(IVTV_F_I_EV_VSYNC_ENABLED, &itv->i_flags);
 		if (v4l2_event_pending(&id->fh))
@@ -750,6 +755,10 @@ unsigned int ivtv_v4l2_enc_poll(struct file *filp, poll_table * wait)
 	struct ivtv *itv = id->itv;
 	struct ivtv_stream *s = &itv->streams[id->type];
 	int eof = test_bit(IVTV_F_S_STREAMOFF, &s->s_flags);
+<<<<<<< HEAD
+=======
+	unsigned res = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Start a capture if there is none */
 	if (!eof && !test_bit(IVTV_F_S_STREAMING, &s->s_flags)) {
@@ -769,12 +778,25 @@ unsigned int ivtv_v4l2_enc_poll(struct file *filp, poll_table * wait)
 	/* add stream's waitq to the poll list */
 	IVTV_DEBUG_HI_FILE("Encoder poll\n");
 	poll_wait(filp, &s->waitq, wait);
+<<<<<<< HEAD
 
 	if (s->q_full.length || s->q_io.length)
 		return POLLIN | POLLRDNORM;
 	if (eof)
 		return POLLHUP;
 	return 0;
+=======
+	if (v4l2_event_pending(&id->fh))
+		res |= POLLPRI;
+	else
+		poll_wait(filp, &id->fh.wait, wait);
+
+	if (s->q_full.length || s->q_io.length)
+		return res | POLLIN | POLLRDNORM;
+	if (eof)
+		return res | POLLHUP;
+	return res;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void ivtv_stop_capture(struct ivtv_open_id *id, int gop_end)
@@ -961,10 +983,13 @@ static int ivtv_serialized_open(struct ivtv_stream *s, struct file *filp)
 		return -ENOMEM;
 	}
 	v4l2_fh_init(&item->fh, s->vdev);
+<<<<<<< HEAD
 	if (s->type == IVTV_DEC_STREAM_TYPE_YUV ||
 	    s->type == IVTV_DEC_STREAM_TYPE_MPG) {
 		res = v4l2_event_alloc(&item->fh, 60);
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (res < 0) {
 		v4l2_fh_exit(&item->fh);
 		kfree(item);

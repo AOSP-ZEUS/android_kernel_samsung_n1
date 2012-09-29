@@ -94,13 +94,22 @@ static void publ_to_item(struct distr_item *i, struct publication *p)
 
 static struct sk_buff *named_prepare_buf(u32 type, u32 size, u32 dest)
 {
+<<<<<<< HEAD
 	struct sk_buff *buf = tipc_buf_acquire(LONG_H_SIZE + size);
+=======
+	struct sk_buff *buf = tipc_buf_acquire(INT_H_SIZE + size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct tipc_msg *msg;
 
 	if (buf != NULL) {
 		msg = buf_msg(buf);
+<<<<<<< HEAD
 		tipc_msg_init(msg, NAME_DISTRIBUTOR, type, LONG_H_SIZE, dest);
 		msg_set_size(msg, LONG_H_SIZE + size);
+=======
+		tipc_msg_init(msg, NAME_DISTRIBUTOR, type, INT_H_SIZE, dest);
+		msg_set_size(msg, INT_H_SIZE + size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return buf;
 }

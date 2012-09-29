@@ -125,6 +125,7 @@ static int dev_whitelist_add(struct dev_cgroup *dev_cgroup,
 	return 0;
 }
 
+<<<<<<< HEAD
 static void whitelist_item_free(struct rcu_head *rcu)
 {
 	struct dev_whitelist_item *item;
@@ -133,6 +134,8 @@ static void whitelist_item_free(struct rcu_head *rcu)
 	kfree(item);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * called under devcgroup_mutex
  */
@@ -155,7 +158,11 @@ remove:
 		walk->access &= ~wh->access;
 		if (!walk->access) {
 			list_del_rcu(&walk->list);
+<<<<<<< HEAD
 			call_rcu(&walk->rcu, whitelist_item_free);
+=======
+			kfree_rcu(walk, rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 }

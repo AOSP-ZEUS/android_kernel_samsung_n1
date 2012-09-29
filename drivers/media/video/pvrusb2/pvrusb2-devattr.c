@@ -319,6 +319,7 @@ static struct tda829x_config tda829x_no_probe = {
 	.probe_tuner = TDA829X_DONT_PROBE,
 };
 
+<<<<<<< HEAD
 static struct tda18271_std_map hauppauge_tda18271_dvbt_std_map = {
         .dvbt_6   = { .if_freq = 3300, .agc_mode = 3, .std = 4,
                       .if_lvl = 1, .rfagc_top = 0x37, },
@@ -330,6 +331,9 @@ static struct tda18271_std_map hauppauge_tda18271_dvbt_std_map = {
 
 static struct tda18271_config hauppauge_tda18271_dvb_config = {
 	.std_map = &hauppauge_tda18271_dvbt_std_map,
+=======
+static struct tda18271_config hauppauge_tda18271_dvb_config = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.gate    = TDA18271_GATE_ANALOG,
 	.output_opt = TDA18271_OUTPUT_LT_OFF,
 };

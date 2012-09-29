@@ -79,6 +79,13 @@
 #include <asm/smp.h>
 #endif
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+#include <linux/kernel_sec_common.h>
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int kernel_init(void *);
 
 extern void init_IRQ(void);
@@ -209,8 +216,24 @@ early_param("quiet", quiet_kernel);
 
 static int __init loglevel(char *str)
 {
+<<<<<<< HEAD
 	get_option(&str, &console_loglevel);
 	return 0;
+=======
+	int newlevel;
+
+	/*
+	 * Only update loglevel value when a correct setting was passed,
+	 * to prevent blind crashes (when loglevel being set to 0) that
+	 * are quite hard to debug
+	 */
+	if (get_option(&str, &newlevel)) {
+		console_loglevel = newlevel;
+		return 0;
+	}
+
+	return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 early_param("loglevel", loglevel);
@@ -369,9 +392,15 @@ static noinline void __init_refok rest_init(void)
 	init_idle_bootup_task(current);
 	preempt_enable_no_resched();
 	schedule();
+<<<<<<< HEAD
 	preempt_disable();
 
 	/* Call into cpu_idle with preempt disabled */
+=======
+
+	/* Call into cpu_idle with preempt disabled */
+	preempt_disable();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cpu_idle();
 }
 
@@ -625,6 +654,13 @@ asmlinkage void __init start_kernel(void)
 
 	ftrace_init();
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_KERNEL_DEBUG_SEC
+	kernel_sec_init();
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Do the rest non-__init'ed, we're now alive */
 	rest_init();
 }
@@ -715,10 +751,18 @@ static void __init do_basic_setup(void)
 {
 	cpuset_init_smp();
 	usermodehelper_init();
+<<<<<<< HEAD
 	init_tmpfs();
 	driver_init();
 	init_irq_proc();
 	do_ctors();
+=======
+	shmem_init();
+	driver_init();
+	init_irq_proc();
+	do_ctors();
+	usermodehelper_enable();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	do_initcalls();
 }
 

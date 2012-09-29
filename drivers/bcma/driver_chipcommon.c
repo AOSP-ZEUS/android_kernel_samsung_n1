@@ -3,7 +3,11 @@
  * ChipCommon core driver
  *
  * Copyright 2005, Broadcom Corporation
+<<<<<<< HEAD
  * Copyright 2006, 2007, Michael Buesch <mb@bu3sch.de>
+=======
+ * Copyright 2006, 2007, Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Licensed under the GNU/GPL. See COPYING for details.
  */
@@ -23,6 +27,12 @@ static inline u32 bcma_cc_write32_masked(struct bcma_drv_cc *cc, u16 offset,
 
 void bcma_core_chipcommon_init(struct bcma_drv_cc *cc)
 {
+<<<<<<< HEAD
+=======
+	u32 leddc_on = 10;
+	u32 leddc_off = 90;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (cc->core->id.rev >= 11)
 		cc->status = bcma_cc_read32(cc, BCMA_CC_CHIPSTAT);
 	cc->capabilities = bcma_cc_read32(cc, BCMA_CC_CAP);
@@ -38,6 +48,20 @@ void bcma_core_chipcommon_init(struct bcma_drv_cc *cc)
 		bcma_pmu_init(cc);
 	if (cc->capabilities & BCMA_CC_CAP_PCTL)
 		pr_err("Power control not implemented!\n");
+<<<<<<< HEAD
+=======
+
+	if (cc->core->id.rev >= 16) {
+		if (cc->core->bus->sprom.leddc_on_time &&
+		    cc->core->bus->sprom.leddc_off_time) {
+			leddc_on = cc->core->bus->sprom.leddc_on_time;
+			leddc_off = cc->core->bus->sprom.leddc_off_time;
+		}
+		bcma_cc_write32(cc, BCMA_CC_GPIOTIMER,
+			((leddc_on << BCMA_CC_GPIOTIMER_ONTIME_SHIFT) |
+			 (leddc_off << BCMA_CC_GPIOTIMER_OFFTIME_SHIFT)));
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* Set chip watchdog reset timer to fire in 'ticks' backplane cycles */

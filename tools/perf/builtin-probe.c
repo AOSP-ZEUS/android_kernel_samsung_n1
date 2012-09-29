@@ -134,10 +134,25 @@ static int opt_show_lines(const struct option *opt __used,
 {
 	int ret = 0;
 
+<<<<<<< HEAD
 	if (str)
 		ret = parse_line_range_desc(str, &params.line_range);
 	INIT_LIST_HEAD(&params.line_range.line_list);
 	params.show_lines = true;
+=======
+	if (!str)
+		return 0;
+
+	if (params.show_lines) {
+		pr_warning("Warning: more than one --line options are"
+			   " detected. Only the first one is valid.\n");
+		return 0;
+	}
+
+	params.show_lines = true;
+	ret = parse_line_range_desc(str, &params.line_range);
+	INIT_LIST_HEAD(&params.line_range.line_list);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return ret;
 }
@@ -242,7 +257,12 @@ static const struct option options[] = {
 	OPT_STRING('s', "source", &symbol_conf.source_prefix,
 		   "directory", "path to kernel source"),
 	OPT_STRING('m', "module", &params.target_module,
+<<<<<<< HEAD
 		   "modname", "target module name"),
+=======
+		   "modname|path",
+		   "target module name (for online) or path (for offline)"),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 	OPT__DRY_RUN(&probe_event_dry_run),
 	OPT_INTEGER('\0', "max-probes", &params.max_probe_points,

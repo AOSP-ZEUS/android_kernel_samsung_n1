@@ -75,11 +75,14 @@ static void __init gsia18s_init_early(void)
 	at91_register_uart(AT91SAM9260_ID_US4, 5, 0);
 }
 
+<<<<<<< HEAD
 static void __init init_irq(void)
 {
 	at91sam9260_init_interrupts(NULL);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Two USB Host ports
  */
@@ -577,8 +580,14 @@ static void __init gsia18s_board_init(void)
 
 MACHINE_START(GSIA18S, "GS_IA18_S")
 	.timer		= &at91sam926x_timer,
+<<<<<<< HEAD
 	.map_io		= at91sam9260_map_io,
 	.init_early	= gsia18s_init_early,
 	.init_irq	= init_irq,
+=======
+	.map_io		= at91_map_io,
+	.init_early	= gsia18s_init_early,
+	.init_irq	= at91_init_irq_default,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init_machine	= gsia18s_board_init,
 MACHINE_END

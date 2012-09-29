@@ -10,7 +10,11 @@
 #include <linux/bitops.h>
 #include <linux/lockdep.h>
 #include <linux/threads.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct workqueue_struct;
 
@@ -255,7 +259,11 @@ enum {
 	WQ_HIGHPRI		= 1 << 4, /* high priority */
 	WQ_CPU_INTENSIVE	= 1 << 5, /* cpu instensive workqueue */
 
+<<<<<<< HEAD
 	WQ_DYING		= 1 << 6, /* internal: workqueue is dying */
+=======
+	WQ_DRAINING		= 1 << 6, /* internal: workqueue is draining */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	WQ_RESCUER		= 1 << 7, /* internal: workqueue has rescuer */
 
 	WQ_MAX_ACTIVE		= 512,	  /* I like 512, better ideas? */
@@ -289,16 +297,22 @@ enum {
  *
  * system_freezable_wq is equivalent to system_wq except that it's
  * freezable.
+<<<<<<< HEAD
  *
  * system_nrt_freezable_wq is equivalent to system_nrt_wq except that
  * it's freezable.
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 extern struct workqueue_struct *system_wq;
 extern struct workqueue_struct *system_long_wq;
 extern struct workqueue_struct *system_nrt_wq;
 extern struct workqueue_struct *system_unbound_wq;
 extern struct workqueue_struct *system_freezable_wq;
+<<<<<<< HEAD
 extern struct workqueue_struct *system_nrt_freezable_wq;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern struct workqueue_struct *
 __alloc_workqueue_key(const char *name, unsigned int flags, int max_active,
@@ -359,6 +373,10 @@ extern int queue_delayed_work_on(int cpu, struct workqueue_struct *wq,
 			struct delayed_work *work, unsigned long delay);
 
 extern void flush_workqueue(struct workqueue_struct *wq);
+<<<<<<< HEAD
+=======
+extern void drain_workqueue(struct workqueue_struct *wq);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void flush_scheduled_work(void);
 
 extern int schedule_work(struct work_struct *work);
@@ -416,6 +434,7 @@ static inline bool __cancel_delayed_work(struct delayed_work *work)
 	return ret;
 }
 
+<<<<<<< HEAD
 /* Obsolete. use cancel_delayed_work_sync() */
 static inline __deprecated
 void cancel_rearming_delayed_workqueue(struct workqueue_struct *wq,
@@ -431,6 +450,8 @@ void cancel_rearming_delayed_work(struct delayed_work *work)
 	cancel_delayed_work_sync(work);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef CONFIG_SMP
 static inline long work_on_cpu(unsigned int cpu, long (*fn)(void *), void *arg)
 {

@@ -568,12 +568,19 @@ void ip_forward_options(struct sk_buff *skb)
 		     ) {
 			if (srrptr + 3 > srrspace)
 				break;
+<<<<<<< HEAD
 			if (memcmp(&opt->nexthop, &optptr[srrptr-1], 4) == 0)
+=======
+			if (memcmp(&ip_hdr(skb)->daddr, &optptr[srrptr-1], 4) == 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				break;
 		}
 		if (srrptr + 3 <= srrspace) {
 			opt->is_changed = 1;
+<<<<<<< HEAD
 			ip_hdr(skb)->daddr = opt->nexthop;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ip_rt_get_source(&optptr[srrptr-1], skb, rt);
 			optptr[2] = srrptr+4;
 		} else if (net_ratelimit())
@@ -641,7 +648,11 @@ int ip_options_rcv_srr(struct sk_buff *skb)
 	}
 	if (srrptr <= srrspace) {
 		opt->srr_is_hit = 1;
+<<<<<<< HEAD
 		opt->nexthop = nexthop;
+=======
+		iph->daddr = nexthop;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		opt->is_changed = 1;
 	}
 	return 0;

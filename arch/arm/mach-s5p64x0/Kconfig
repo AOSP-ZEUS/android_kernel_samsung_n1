@@ -36,6 +36,10 @@ config MACH_SMDK6440
 	select S3C_DEV_WDT
 	select S3C64XX_DEV_SPI
 	select SAMSUNG_DEV_ADC
+<<<<<<< HEAD
+=======
+	select SAMSUNG_DEV_BACKLIGHT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select SAMSUNG_DEV_PWM
 	select SAMSUNG_DEV_TS
 	select S5P64X0_SETUP_I2C1
@@ -50,6 +54,10 @@ config MACH_SMDK6450
 	select S3C_DEV_WDT
 	select S3C64XX_DEV_SPI
 	select SAMSUNG_DEV_ADC
+<<<<<<< HEAD
+=======
+	select SAMSUNG_DEV_BACKLIGHT
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select SAMSUNG_DEV_PWM
 	select SAMSUNG_DEV_TS
 	select S5P64X0_SETUP_I2C1

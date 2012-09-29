@@ -33,7 +33,10 @@
 #include <linux/i2c.h>
 #include <linux/platform_device.h>
 #include <linux/io.h>
+<<<<<<< HEAD
 #include <linux/version.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h>
 #include <media/v4l2-device.h>
 #include <media/v4l2-ioctl.h>
@@ -44,6 +47,10 @@
 
 MODULE_DESCRIPTION("TI DaVinci VPIF Capture driver");
 MODULE_LICENSE("GPL");
+<<<<<<< HEAD
+=======
+MODULE_VERSION(VPIF_CAPTURE_VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define vpif_err(fmt, arg...)	v4l2_err(&vpif_obj.v4l2_dev, fmt, ## arg)
 #define vpif_dbg(level, debug, fmt, arg...)	\
@@ -1677,7 +1684,10 @@ static int vpif_querycap(struct file *file, void  *priv,
 {
 	struct vpif_capture_config *config = vpif_dev->platform_data;
 
+<<<<<<< HEAD
 	cap->version = VPIF_CAPTURE_VERSION_CODE;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cap->capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_STREAMING;
 	strlcpy(cap->driver, "vpif capture", sizeof(cap->driver));
 	strlcpy(cap->bus_info, "DM646x Platform", sizeof(cap->bus_info));
@@ -2211,10 +2221,15 @@ static __init int vpif_probe(struct platform_device *pdev)
 		vfd->v4l2_dev = &vpif_obj.v4l2_dev;
 		vfd->release = video_device_release;
 		snprintf(vfd->name, sizeof(vfd->name),
+<<<<<<< HEAD
 			 "DM646x_VPIFCapture_DRIVER_V%d.%d.%d",
 			 (VPIF_CAPTURE_VERSION_CODE >> 16) & 0xff,
 			 (VPIF_CAPTURE_VERSION_CODE >> 8) & 0xff,
 			 (VPIF_CAPTURE_VERSION_CODE) & 0xff);
+=======
+			 "DM646x_VPIFCapture_DRIVER_V%s",
+			 VPIF_CAPTURE_VERSION);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Set video_dev to the video device */
 		ch->video_dev = vfd;
 	}

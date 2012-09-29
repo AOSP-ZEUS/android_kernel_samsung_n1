@@ -169,12 +169,23 @@ static int perf_event__synthesize_mmap_events(union perf_event *event,
 			continue;
 		pbf += n + 3;
 		if (*pbf == 'x') { /* vm_exec */
+<<<<<<< HEAD
+=======
+			char anonstr[] = "//anon\n";
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			char *execname = strchr(bf, '/');
 
 			/* Catch VDSO */
 			if (execname == NULL)
 				execname = strstr(bf, "[vdso]");
 
+<<<<<<< HEAD
+=======
+			/* Catch anonymous mmaps */
+			if ((execname == NULL) && !strstr(bf, "["))
+				execname = anonstr;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (execname == NULL)
 				continue;
 

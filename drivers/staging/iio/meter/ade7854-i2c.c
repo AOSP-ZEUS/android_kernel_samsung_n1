@@ -20,7 +20,11 @@ static int ade7854_i2c_write_reg_8(struct device *dev,
 {
 	int ret;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ade7854_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ade7854_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&st->buf_lock);
 	st->tx[0] = (reg_address >> 8) & 0xFF;
@@ -39,7 +43,11 @@ static int ade7854_i2c_write_reg_16(struct device *dev,
 {
 	int ret;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ade7854_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ade7854_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&st->buf_lock);
 	st->tx[0] = (reg_address >> 8) & 0xFF;
@@ -59,7 +67,11 @@ static int ade7854_i2c_write_reg_24(struct device *dev,
 {
 	int ret;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ade7854_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ade7854_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&st->buf_lock);
 	st->tx[0] = (reg_address >> 8) & 0xFF;
@@ -80,7 +92,11 @@ static int ade7854_i2c_write_reg_32(struct device *dev,
 {
 	int ret;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ade7854_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ade7854_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&st->buf_lock);
 	st->tx[0] = (reg_address >> 8) & 0xFF;
@@ -101,7 +117,11 @@ static int ade7854_i2c_read_reg_8(struct device *dev,
 		u8 *val)
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ade7854_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ade7854_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 
 	mutex_lock(&st->buf_lock);
@@ -127,7 +147,11 @@ static int ade7854_i2c_read_reg_16(struct device *dev,
 		u16 *val)
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ade7854_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ade7854_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 
 	mutex_lock(&st->buf_lock);
@@ -153,7 +177,11 @@ static int ade7854_i2c_read_reg_24(struct device *dev,
 		u32 *val)
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ade7854_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ade7854_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 
 	mutex_lock(&st->buf_lock);
@@ -179,7 +207,11 @@ static int ade7854_i2c_read_reg_32(struct device *dev,
 		u32 *val)
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ade7854_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ade7854_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 
 	mutex_lock(&st->buf_lock);
@@ -204,6 +236,7 @@ static int __devinit ade7854_i2c_probe(struct i2c_client *client,
 		const struct i2c_device_id *id)
 {
 	int ret;
+<<<<<<< HEAD
 	struct ade7854_state *st = kzalloc(sizeof *st, GFP_KERNEL);
 	if (!st) {
 		ret =  -ENOMEM;
@@ -211,6 +244,16 @@ static int __devinit ade7854_i2c_probe(struct i2c_client *client,
 	}
 
 	i2c_set_clientdata(client, st);
+=======
+	struct ade7854_state *st;
+	struct iio_dev *indio_dev;
+
+	indio_dev = iio_allocate_device(sizeof(*st));
+	if (indio_dev == NULL)
+		return -ENOMEM;
+	st = iio_priv(indio_dev);
+	i2c_set_clientdata(client, indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	st->read_reg_8 = ade7854_i2c_read_reg_8;
 	st->read_reg_16 = ade7854_i2c_read_reg_16;
 	st->read_reg_24 = ade7854_i2c_read_reg_24;
@@ -222,11 +265,17 @@ static int __devinit ade7854_i2c_probe(struct i2c_client *client,
 	st->i2c = client;
 	st->irq = client->irq;
 
+<<<<<<< HEAD
 	ret = ade7854_probe(st, &client->dev);
 	if (ret) {
 		kfree(st);
 		return ret;
 	}
+=======
+	ret = ade7854_probe(indio_dev, &client->dev);
+	if (ret)
+		iio_free_device(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return ret;
 }

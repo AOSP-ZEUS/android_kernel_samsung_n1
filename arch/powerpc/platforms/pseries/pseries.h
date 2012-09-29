@@ -47,7 +47,12 @@ extern void pSeries_final_fixup(void);
 /* Poweron flag used for enabling auto ups restart */
 extern unsigned long rtas_poweron_auto;
 
+<<<<<<< HEAD
 extern void find_udbg_vterm(void);
+=======
+/* Provided by HVC VIO */
+extern void hvc_vio_init_early(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Dynamic logical Partitioning/Mobility */
 extern void dlpar_free_cc_nodes(struct device_node *);

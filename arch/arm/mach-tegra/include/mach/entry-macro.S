@@ -20,7 +20,11 @@
 #include <asm/hardware/entry-macro-gic.S>
 
 	/* Uses the GIC interrupt controller built into the cpu */
+<<<<<<< HEAD
 #define ICTRL_BASE (IO_CPU_VIRT + 0x100)
+=======
+#define ICTRL_BASE (IO_CPU_VIRT + 0x40100)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.macro	disable_fiq
 	.endm
@@ -33,6 +37,7 @@
 	.macro  arch_ret_to_user, tmp1, tmp2
 	.endm
 #else
+<<<<<<< HEAD
 	/* legacy interrupt controller for AP16 */
 	.macro	disable_fiq
 	.endm
@@ -53,4 +58,7 @@
 	ldr \irqnr, [\base, #0x20]	@ EVT_IRQ_STS
 	cmp \irqnr, #0x80
 	.endm
+=======
+#error "Unsupported configuration"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif

@@ -228,7 +228,14 @@ static void change(char *dev, char *what, unsigned char *addr,
 		       "buffer\n");
 
 	pid = change_tramp(argv, output, output_len);
+<<<<<<< HEAD
 	if (pid < 0) return;
+=======
+	if (pid < 0) {
+		kfree(output);
+		return;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (output != NULL) {
 		printk("%s", output);

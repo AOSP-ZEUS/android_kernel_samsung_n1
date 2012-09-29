@@ -33,6 +33,7 @@
 	.text
 
 	/*
+<<<<<<< HEAD
 	 * s3c_cpu_save
 	 *
 	 * entry:
@@ -55,6 +56,8 @@ resume_with_mmu:
 	.ltorg
 
 	/*
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * sleep magic, to allow the bootloader to check for an valid
 	 * image to resume to. Must be the first word before the
 	 * s3c_cpu_resume entry.

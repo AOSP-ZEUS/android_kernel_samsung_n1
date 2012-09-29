@@ -66,6 +66,10 @@ struct irq_desc {
 #ifdef CONFIG_PROC_FS
 	struct proc_dir_entry	*dir;
 #endif
+<<<<<<< HEAD
+=======
+	struct module		*owner;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	const char		*name;
 } ____cacheline_internodealigned_in_smp;
 

@@ -905,10 +905,13 @@ void handle_moddevtable(struct module *mod, struct elf_info *info,
 	if (!sym->st_shndx || get_secindex(info, sym) >= info->num_sections)
 		return;
 
+<<<<<<< HEAD
 	/* We're looking for an object */
 	if (ELF_ST_TYPE(sym->st_info) != STT_OBJECT)
 		return;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Handle all-NULL symbols allocated into .bss */
 	if (info->sechdrs[get_secindex(info, sym)].sh_type & SHT_NOBITS) {
 		zeros = calloc(1, sym->st_size);

@@ -173,7 +173,11 @@ static int proc_taint(struct ctl_table *table, int write,
 #endif
 
 #ifdef CONFIG_PRINTK
+<<<<<<< HEAD
 static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
+=======
+static int proc_dmesg_restrict(struct ctl_table *table, int write,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				void __user *buffer, size_t *lenp, loff_t *ppos);
 #endif
 
@@ -710,7 +714,11 @@ static struct ctl_table kern_table[] = {
 		.data		= &dmesg_restrict,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec_minmax_sysadmin,
+=======
+		.proc_handler	= proc_dointvec_minmax,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.extra1		= &zero,
 		.extra2		= &one,
 	},
@@ -719,7 +727,11 @@ static struct ctl_table kern_table[] = {
 		.data		= &kptr_restrict,
 		.maxlen		= sizeof(int),
 		.mode		= 0644,
+<<<<<<< HEAD
 		.proc_handler	= proc_dointvec_minmax_sysadmin,
+=======
+		.proc_handler	= proc_dmesg_restrict,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.extra1		= &zero,
 		.extra2		= &two,
 	},
@@ -1598,16 +1610,23 @@ void sysctl_head_get(struct ctl_table_header *head)
 	spin_unlock(&sysctl_lock);
 }
 
+<<<<<<< HEAD
 static void free_head(struct rcu_head *rcu)
 {
 	kfree(container_of(rcu, struct ctl_table_header, rcu));
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void sysctl_head_put(struct ctl_table_header *head)
 {
 	spin_lock(&sysctl_lock);
 	if (!--head->count)
+<<<<<<< HEAD
 		call_rcu(&head->rcu, free_head);
+=======
+		kfree_rcu(head, rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock(&sysctl_lock);
 }
 
@@ -1979,10 +1998,17 @@ void unregister_sysctl_table(struct ctl_table_header * header)
 	start_unregistering(header);
 	if (!--header->parent->count) {
 		WARN_ON(1);
+<<<<<<< HEAD
 		call_rcu(&header->parent->rcu, free_head);
 	}
 	if (!--header->count)
 		call_rcu(&header->rcu, free_head);
+=======
+		kfree_rcu(header->parent, rcu);
+	}
+	if (!--header->count)
+		kfree_rcu(header, rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock(&sysctl_lock);
 }
 
@@ -2424,7 +2450,11 @@ static int proc_taint(struct ctl_table *table, int write,
 }
 
 #ifdef CONFIG_PRINTK
+<<<<<<< HEAD
 static int proc_dointvec_minmax_sysadmin(struct ctl_table *table, int write,
+=======
+static int proc_dmesg_restrict(struct ctl_table *table, int write,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				void __user *buffer, size_t *lenp, loff_t *ppos)
 {
 	if (write && !capable(CAP_SYS_ADMIN))

@@ -154,7 +154,11 @@ static struct i2c_board_info jasper_twsi1_info[] = {
 };
 
 static struct sdhci_pxa_platdata mmp2_sdh_platdata_mmc0 = {
+<<<<<<< HEAD
 	.max_speed	= 25000000,
+=======
+	.clk_delay_cycles = 0x1f,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void __init jasper_init(void)

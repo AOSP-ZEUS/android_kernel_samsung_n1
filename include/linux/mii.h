@@ -128,6 +128,11 @@
 /* 1000BASE-T Control register */
 #define ADVERTISE_1000FULL      0x0200  /* Advertise 1000BASE-T full duplex */
 #define ADVERTISE_1000HALF      0x0100  /* Advertise 1000BASE-T half duplex */
+<<<<<<< HEAD
+=======
+#define CTL1000_AS_MASTER	0x0800
+#define CTL1000_ENABLE_MASTER	0x1000
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* 1000BASE-T Status register */
 #define LPA_1000LOCALRXOK       0x2000  /* Link partner local receiver status */

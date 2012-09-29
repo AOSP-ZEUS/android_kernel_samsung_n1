@@ -1,7 +1,11 @@
 /*******************************************************************************
 
   Intel(R) Gigabit Ethernet Linux driver
+<<<<<<< HEAD
   Copyright(c) 2007-2009 Intel Corporation.
+=======
+  Copyright(c) 2007-2011 Intel Corporation.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
   This program is free software; you can redistribute it and/or modify it
   under the terms and conditions of the GNU General Public License,
@@ -29,6 +33,10 @@
 #include <linux/delay.h>
 #include <linux/pci.h>
 #include <linux/netdevice.h>
+<<<<<<< HEAD
+=======
+#include <linux/etherdevice.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "e1000_mac.h"
 
@@ -217,7 +225,11 @@ s32 igb_check_alt_mac_addr(struct e1000_hw *hw)
 	}
 
 	/* if multicast bit is set, the alternate address will not be used */
+<<<<<<< HEAD
 	if (alt_mac_addr[0] & 0x01) {
+=======
+	if (is_multicast_ether_addr(alt_mac_addr)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		hw_dbg("Ignoring Alternate Mac Address with MC bit set\n");
 		goto out;
 	}

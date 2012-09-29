@@ -60,9 +60,14 @@ ENTRY(v4wbi_flush_kern_tlb_range)
 
 	__INITDATA
 
+<<<<<<< HEAD
 	.type	v4wbi_tlb_fns, #object
 ENTRY(v4wbi_tlb_fns)
 	.long	v4wbi_flush_user_tlb_range
 	.long	v4wbi_flush_kern_tlb_range
 	.long	v4wbi_tlb_flags
 	.size	v4wbi_tlb_fns, . - v4wbi_tlb_fns
+=======
+	/* define struct cpu_tlb_fns (see <asm/tlbflush.h> and proc-macros.S) */
+	define_tlb_functions v4wbi, v4wbi_tlb_flags
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

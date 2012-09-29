@@ -257,9 +257,18 @@ static void
 __flush_batch(journal_t *journal, int *batch_count)
 {
 	int i;
+<<<<<<< HEAD
 
 	for (i = 0; i < *batch_count; i++)
 		write_dirty_buffer(journal->j_chkpt_bhs[i], WRITE);
+=======
+	struct blk_plug plug;
+
+	blk_start_plug(&plug);
+	for (i = 0; i < *batch_count; i++)
+		write_dirty_buffer(journal->j_chkpt_bhs[i], WRITE_SYNC);
+	blk_finish_plug(&plug);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	for (i = 0; i < *batch_count; i++) {
 		struct buffer_head *bh = journal->j_chkpt_bhs[i];

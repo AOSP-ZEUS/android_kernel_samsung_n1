@@ -27,8 +27,11 @@ struct cpu_stop_work {
 	struct cpu_stop_done	*done;
 };
 
+<<<<<<< HEAD
 extern struct mutex stop_cpus_mutex;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int stop_one_cpu(unsigned int cpu, cpu_stop_fn_t fn, void *arg);
 void stop_one_cpu_nowait(unsigned int cpu, cpu_stop_fn_t fn, void *arg,
 			 struct cpu_stop_work *work_buf);
@@ -96,7 +99,11 @@ static inline int try_stop_cpus(const struct cpumask *cpumask,
  * stop_machine "Bogolock": stop the entire machine, disable
  * interrupts.  This is a very heavy lock, which is equivalent to
  * grabbing every spinlock (and more).  So the "read" side to such a
+<<<<<<< HEAD
  * lock is anything which disables preeempt.
+=======
+ * lock is anything which disables preemption.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 #if defined(CONFIG_STOP_MACHINE) && defined(CONFIG_SMP)
 
@@ -126,15 +133,29 @@ int stop_machine(int (*fn)(void *), void *data, const struct cpumask *cpus);
  */
 int __stop_machine(int (*fn)(void *), void *data, const struct cpumask *cpus);
 
+<<<<<<< HEAD
+=======
+int stop_machine_from_inactive_cpu(int (*fn)(void *), void *data,
+				   const struct cpumask *cpus);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #else	 /* CONFIG_STOP_MACHINE && CONFIG_SMP */
 
 static inline int __stop_machine(int (*fn)(void *), void *data,
 				 const struct cpumask *cpus)
 {
+<<<<<<< HEAD
 	int ret;
 	local_irq_disable();
 	ret = fn(data);
 	local_irq_enable();
+=======
+	unsigned long flags;
+	int ret;
+	local_irq_save(flags);
+	ret = fn(data);
+	local_irq_restore(flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
@@ -144,5 +165,14 @@ static inline int stop_machine(int (*fn)(void *), void *data,
 	return __stop_machine(fn, data, cpus);
 }
 
+<<<<<<< HEAD
+=======
+static inline int stop_machine_from_inactive_cpu(int (*fn)(void *), void *data,
+						 const struct cpumask *cpus)
+{
+	return __stop_machine(fn, data, cpus);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif	/* CONFIG_STOP_MACHINE && CONFIG_SMP */
 #endif	/* _LINUX_STOP_MACHINE */

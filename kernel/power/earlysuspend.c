@@ -33,8 +33,15 @@ module_param_named(debug_mask, debug_mask, int, S_IRUGO | S_IWUSR | S_IWGRP);
 
 static DEFINE_MUTEX(early_suspend_lock);
 static LIST_HEAD(early_suspend_handlers);
+<<<<<<< HEAD
 static void early_suspend(struct work_struct *work);
 static void late_resume(struct work_struct *work);
+=======
+static void sync_system(struct work_struct *work);
+static void early_suspend(struct work_struct *work);
+static void late_resume(struct work_struct *work);
+static DECLARE_WORK(sync_system_work, sync_system);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static DECLARE_WORK(early_suspend_work, early_suspend);
 static DECLARE_WORK(late_resume_work, late_resume);
 static DEFINE_SPINLOCK(state_lock);
@@ -45,6 +52,18 @@ enum {
 };
 static int state;
 
+<<<<<<< HEAD
+=======
+static void sync_system(struct work_struct *work)
+{
+	pr_info("%s +\n", __func__);
+	wake_lock(&sync_wake_lock);
+	sys_sync();
+	wake_unlock(&sync_wake_lock);
+	pr_info("%s -\n", __func__);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void register_early_suspend(struct early_suspend *handler)
 {
 	struct list_head *pos;
@@ -106,7 +125,13 @@ static void early_suspend(struct work_struct *work)
 	if (debug_mask & DEBUG_SUSPEND)
 		pr_info("early_suspend: sync\n");
 
+<<<<<<< HEAD
 	sys_sync();
+=======
+	/* sys_sync(); */
+	queue_work(sync_work_queue, &sync_system_work);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 abort:
 	spin_lock_irqsave(&state_lock, irqflags);
 	if (state == SUSPEND_REQUESTED_AND_SUSPENDED)

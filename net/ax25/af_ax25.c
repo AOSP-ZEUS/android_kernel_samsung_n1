@@ -2006,17 +2006,29 @@ static void __exit ax25_exit(void)
 	proc_net_remove(&init_net, "ax25_route");
 	proc_net_remove(&init_net, "ax25");
 	proc_net_remove(&init_net, "ax25_calls");
+<<<<<<< HEAD
 
 	unregister_netdevice_notifier(&ax25_dev_notifier);
 	ax25_unregister_sysctl();
+=======
+	ax25_rt_free();
+	ax25_uid_free();
+	ax25_dev_free();
+
+	ax25_unregister_sysctl();
+	unregister_netdevice_notifier(&ax25_dev_notifier);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	dev_remove_pack(&ax25_packet_type);
 
 	sock_unregister(PF_AX25);
 	proto_unregister(&ax25_proto);
+<<<<<<< HEAD
 
 	ax25_rt_free();
 	ax25_uid_free();
 	ax25_dev_free();
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 module_exit(ax25_exit);

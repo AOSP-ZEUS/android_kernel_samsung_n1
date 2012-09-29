@@ -14,7 +14,10 @@
 #include <linux/serial_sci.h>
 #include <linux/sh_dma.h>
 #include <linux/sh_timer.h>
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <cpu/dma-register.h>
 
 static struct plat_sci_port scif0_platform_data = {
@@ -24,6 +27,10 @@ static struct plat_sci_port scif0_platform_data = {
 	.scbrr_algo_id	= SCBRR_ALGO_1,
 	.type		= PORT_SCIF,
 	.irqs		= { 40, 40, 40, 40 },
+<<<<<<< HEAD
+=======
+	.regtype	= SCIx_SH4_SCIF_FIFODATA_REGTYPE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct platform_device scif0_device = {
@@ -41,6 +48,10 @@ static struct plat_sci_port scif1_platform_data = {
 	.scbrr_algo_id	= SCBRR_ALGO_1,
 	.type		= PORT_SCIF,
 	.irqs		= { 76, 76, 76, 76 },
+<<<<<<< HEAD
+=======
+	.regtype	= SCIx_SH4_SCIF_FIFODATA_REGTYPE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct platform_device scif1_device = {

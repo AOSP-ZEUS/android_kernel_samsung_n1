@@ -447,6 +447,13 @@ int cfg80211_set_freq(struct cfg80211_registered_device *rdev,
 
 u16 cfg80211_calculate_bitrate(struct rate_info *rate);
 
+<<<<<<< HEAD
+=======
+int ieee80211_get_ratemask(struct ieee80211_supported_band *sband,
+			   const u8 *rates, unsigned int n_rates,
+			   u32 *mask);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int cfg80211_validate_beacon_int(struct cfg80211_registered_device *rdev,
 				 u32 beacon_int);
 

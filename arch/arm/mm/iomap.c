@@ -9,6 +9,12 @@
 #include <linux/ioport.h>
 #include <linux/io.h>
 
+<<<<<<< HEAD
+=======
+unsigned long vga_base;
+EXPORT_SYMBOL(vga_base);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef __io
 void __iomem *ioport_map(unsigned long port, unsigned int nr)
 {
@@ -23,6 +29,18 @@ EXPORT_SYMBOL(ioport_unmap);
 #endif
 
 #ifdef CONFIG_PCI
+<<<<<<< HEAD
+=======
+unsigned long pcibios_min_io = 0x1000;
+EXPORT_SYMBOL(pcibios_min_io);
+
+unsigned long pcibios_min_mem = 0x01000000;
+EXPORT_SYMBOL(pcibios_min_mem);
+
+unsigned int pci_flags = PCI_REASSIGN_ALL_RSRC;
+EXPORT_SYMBOL(pci_flags);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __iomem *pci_iomap(struct pci_dev *dev, int bar, unsigned long maxlen)
 {
 	resource_size_t start = pci_resource_start(dev, bar);

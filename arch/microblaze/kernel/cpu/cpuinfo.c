@@ -88,4 +88,11 @@ void __init setup_cpuinfo(void)
 		printk(KERN_WARNING "%s: Unsupported PVR setting\n", __func__);
 		set_cpuinfo_static(&cpuinfo, cpu);
 	}
+<<<<<<< HEAD
+=======
+
+	if (cpuinfo.mmu_privins)
+		printk(KERN_WARNING "%s: Stream instructions enabled"
+			" - USERSPACE CAN LOCK THIS KERNEL!\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

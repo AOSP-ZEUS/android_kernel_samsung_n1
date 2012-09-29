@@ -144,6 +144,11 @@ struct usb_int_retry_fail {
 
 struct read_regs_int {
 	struct completion completion;
+<<<<<<< HEAD
+=======
+	struct usb_req_read_regs *req;
+	unsigned int req_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Stores the USB int structure and contains the USB address of the
 	 * first requested register before request.
 	 */
@@ -169,7 +174,12 @@ struct zd_usb_interrupt {
 	void *buffer;
 	dma_addr_t buffer_dma;
 	int interval;
+<<<<<<< HEAD
 	u8 read_regs_enabled:1;
+=======
+	atomic_t read_regs_enabled;
+	u8 read_regs_int_overridden:1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static inline struct usb_int_regs *get_read_regs(struct zd_usb_interrupt *intr)

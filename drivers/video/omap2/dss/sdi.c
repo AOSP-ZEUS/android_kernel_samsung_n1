@@ -20,13 +20,19 @@
 #define DSS_SUBSYS_NAME "SDI"
 
 #include <linux/kernel.h>
+<<<<<<< HEAD
 #include <linux/clk.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/delay.h>
 #include <linux/err.h>
 #include <linux/regulator/consumer.h>
 
 #include <video/omapdss.h>
+<<<<<<< HEAD
 #include <plat/cpu.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "dss.h"
 
 static struct {
@@ -60,14 +66,30 @@ int omapdss_sdi_display_enable(struct omap_dss_device *dssdev)
 	r = omap_dss_start_device(dssdev);
 	if (r) {
 		DSSERR("failed to start device\n");
+<<<<<<< HEAD
 		goto err0;
+=======
+		goto err_start_dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	r = regulator_enable(sdi.vdds_sdi_reg);
 	if (r)
+<<<<<<< HEAD
 		goto err1;
 
 	dss_clk_enable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+		goto err_reg_enable;
+
+	r = dss_runtime_get();
+	if (r)
+		goto err_get_dss;
+
+	r = dispc_runtime_get();
+	if (r)
+		goto err_get_dispc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	sdi_basic_init(dssdev);
 
@@ -80,7 +102,11 @@ int omapdss_sdi_display_enable(struct omap_dss_device *dssdev)
 	r = dss_calc_clock_div(1, t->pixel_clock * 1000,
 			&dss_cinfo, &dispc_cinfo);
 	if (r)
+<<<<<<< HEAD
 		goto err2;
+=======
+		goto err_calc_clock_div;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	fck = dss_cinfo.fck;
 	lck_div = dispc_cinfo.lck_div;
@@ -101,27 +127,55 @@ int omapdss_sdi_display_enable(struct omap_dss_device *dssdev)
 
 	r = dss_set_clock_div(&dss_cinfo);
 	if (r)
+<<<<<<< HEAD
 		goto err2;
 
 	r = dispc_set_clock_div(dssdev->manager->id, &dispc_cinfo);
 	if (r)
 		goto err2;
+=======
+		goto err_set_dss_clock_div;
+
+	r = dispc_set_clock_div(dssdev->manager->id, &dispc_cinfo);
+	if (r)
+		goto err_set_dispc_clock_div;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	dss_sdi_init(dssdev->phy.sdi.datapairs);
 	r = dss_sdi_enable();
 	if (r)
+<<<<<<< HEAD
 		goto err1;
+=======
+		goto err_sdi_enable;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mdelay(2);
 
 	dssdev->manager->enable(dssdev->manager);
 
 	return 0;
+<<<<<<< HEAD
 err2:
 	dss_clk_disable(DSS_CLK_ICK | DSS_CLK_FCK);
 	regulator_disable(sdi.vdds_sdi_reg);
 err1:
 	omap_dss_stop_device(dssdev);
 err0:
+=======
+
+err_sdi_enable:
+err_set_dispc_clock_div:
+err_set_dss_clock_div:
+err_calc_clock_div:
+	dispc_runtime_put();
+err_get_dispc:
+	dss_runtime_put();
+err_get_dss:
+	regulator_disable(sdi.vdds_sdi_reg);
+err_reg_enable:
+	omap_dss_stop_device(dssdev);
+err_start_dev:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return r;
 }
 EXPORT_SYMBOL(omapdss_sdi_display_enable);
@@ -132,7 +186,12 @@ void omapdss_sdi_display_disable(struct omap_dss_device *dssdev)
 
 	dss_sdi_disable();
 
+<<<<<<< HEAD
 	dss_clk_disable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+	dispc_runtime_put();
+	dss_runtime_put();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	regulator_disable(sdi.vdds_sdi_reg);
 

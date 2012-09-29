@@ -319,6 +319,7 @@ config TOUCHSCREEN_MK712
 	  To compile this driver as a module, choose M here: the
 	  module will be called mk712.
 
+<<<<<<< HEAD
 config TOUCHSCREEN_MXT224
 	tristate "Atmel MaxTouch 224"
 	depends on I2C
@@ -331,6 +332,8 @@ config TOUCHSCREEN_MXT224
 	  To compile this driver as a module, choose M here: the
 	  module will be called mxt224.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config TOUCHSCREEN_HP600
 	tristate "HP Jornada 6xx touchscreen"
 	depends on SH_HP6XX && SH_ADC
@@ -386,6 +389,22 @@ config TOUCHSCREEN_MIGOR
 	  To compile this driver as a module, choose M here: the
 	  module will be called migor_ts.
 
+<<<<<<< HEAD
+=======
+config TOUCHSCREEN_PANJIT_I2C
+	tristate "PANJIT I2C touchscreen driver"
+	depends on I2C
+	default n
+	help
+	  Say Y here to enable PANJIT I2C capacitive touchscreen support,
+	  covering devices such as the MGG1010AI06 and EGG1010AI06
+
+	  If unsure, say N
+
+	  To compile this driver as a module, choose M here: the module will
+	  be called panjit_i2c.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config TOUCHSCREEN_TNETV107X
 	tristate "TI TNETV107X touchscreen support"
 	depends on ARCH_DAVINCI_TNETV107X
@@ -744,4 +763,42 @@ config TOUCHSCREEN_TPS6507X
 	  To compile this driver as a module, choose M here: the
 	  module will be called tps6507x_ts.
 
+<<<<<<< HEAD
+=======
+config TOUCHSCREEN_RM31080A
+	tristate "RAYDIUM_31080A based touchscreens"
+	depends on SPI_MASTER
+	help
+	  Say Y here if you have a touchscreen interface using the
+	  RAYDIUM_T31080A controller, and your board-specific initialization
+	  code includes that in its table of SPI devices.
+
+	  If unsure, say N (but it's safe to say "Y").
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called RAYDIUM_31080A.
+
+config TOUCHSCREEN_SYN_RMI4_SPI
+	tristate "RMI4 SPI Support"
+	depends on SPI_MASTER
+	help
+	  Say Y here if you want to support RMI4 devices connect
+	  to an SPI bus.
+
+	  If unsure, say Y.
+
+	  To compile this driver as a module, choose M here: the
+	  module will be called rmi-spi.
+
+config TOUCHSCREEN_ATMEL_MXT224E
+    bool "Atmel MXT224E Touchscreen Interface"
+    depends on I2C
+    default n
+    help
+        Say Y here if you want support for atmel_224E touchscreen controllers.
+
+        To compile this driver as a module, choose M here: the
+        module will be called atmel_mxt224E.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endif

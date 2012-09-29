@@ -14,6 +14,10 @@
 #include <linux/bug.h>
 #include <linux/compiler.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/kernel.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/mm.h>
 #include <linux/module.h>
 #include <linux/sched.h>
@@ -364,21 +368,40 @@ static int regs_to_trapnr(struct pt_regs *regs)
 	return (regs->cp0_cause >> 2) & 0x1f;
 }
 
+<<<<<<< HEAD
 static DEFINE_SPINLOCK(die_lock);
+=======
+static DEFINE_RAW_SPINLOCK(die_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void __noreturn die(const char *str, struct pt_regs *regs)
 {
 	static int die_counter;
 	int sig = SIGSEGV;
 #ifdef CONFIG_MIPS_MT_SMTC
+<<<<<<< HEAD
 	unsigned long dvpret = dvpe();
 #endif /* CONFIG_MIPS_MT_SMTC */
 
+=======
+	unsigned long dvpret;
+#endif /* CONFIG_MIPS_MT_SMTC */
+
+	oops_enter();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (notify_die(DIE_OOPS, str, regs, 0, regs_to_trapnr(regs), SIGSEGV) == NOTIFY_STOP)
 		sig = 0;
 
 	console_verbose();
+<<<<<<< HEAD
 	spin_lock_irq(&die_lock);
+=======
+	raw_spin_lock_irq(&die_lock);
+#ifdef CONFIG_MIPS_MT_SMTC
+	dvpret = dvpe();
+#endif /* CONFIG_MIPS_MT_SMTC */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bust_spinlocks(1);
 #ifdef CONFIG_MIPS_MT_SMTC
 	mips_mt_regdump(dvpret);
@@ -387,7 +410,13 @@ void __noreturn die(const char *str, struct pt_regs *regs)
 	printk("%s[#%d]:\n", str, ++die_counter);
 	show_registers(regs);
 	add_taint(TAINT_DIE);
+<<<<<<< HEAD
 	spin_unlock_irq(&die_lock);
+=======
+	raw_spin_unlock_irq(&die_lock);
+
+	oops_exit();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (in_interrupt())
 		panic("Fatal exception in interrupt");
@@ -578,12 +607,20 @@ static int simulate_llsc(struct pt_regs *regs, unsigned int opcode)
 {
 	if ((opcode & OPCODE) == LL) {
 		perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS,
+<<<<<<< HEAD
 				1, 0, regs, 0);
+=======
+				1, regs, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return simulate_ll(regs, opcode);
 	}
 	if ((opcode & OPCODE) == SC) {
 		perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS,
+<<<<<<< HEAD
 				1, 0, regs, 0);
+=======
+				1, regs, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return simulate_sc(regs, opcode);
 	}
 
@@ -602,7 +639,11 @@ static int simulate_rdhwr(struct pt_regs *regs, unsigned int opcode)
 		int rd = (opcode & RD) >> 11;
 		int rt = (opcode & RT) >> 16;
 		perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS,
+<<<<<<< HEAD
 				1, 0, regs, 0);
+=======
+				1, regs, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		switch (rd) {
 		case 0:		/* CPU number */
 			regs->regs[rt] = smp_processor_id();
@@ -640,7 +681,11 @@ static int simulate_sync(struct pt_regs *regs, unsigned int opcode)
 {
 	if ((opcode & OPCODE) == SPEC0 && (opcode & FUNC) == SYNC) {
 		perf_sw_event(PERF_COUNT_SW_EMULATION_FAULTS,
+<<<<<<< HEAD
 				1, 0, regs, 0);
+=======
+				1, regs, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 	}
 

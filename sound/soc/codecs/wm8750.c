@@ -778,11 +778,25 @@ static int __devexit wm8750_spi_remove(struct spi_device *spi)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static const struct spi_device_id wm8750_spi_ids[] = {
+	{ "wm8750", 0 },
+	{ "wm8987", 0 },
+	{ },
+};
+MODULE_DEVICE_TABLE(spi, wm8750_spi_ids);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct spi_driver wm8750_spi_driver = {
 	.driver = {
 		.name	= "wm8750-codec",
 		.owner	= THIS_MODULE,
 	},
+<<<<<<< HEAD
+=======
+	.id_table	= wm8750_spi_ids,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.probe		= wm8750_spi_probe,
 	.remove		= __devexit_p(wm8750_spi_remove),
 };

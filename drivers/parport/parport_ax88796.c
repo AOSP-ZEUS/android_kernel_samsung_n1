@@ -293,7 +293,11 @@ static int parport_ax88796_probe(struct platform_device *pdev)
 		goto exit_mem;
 	}
 
+<<<<<<< HEAD
 	size = (res->end - res->start) + 1;
+=======
+	size = resource_size(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spacing = size / 3;
 
 	dd->io = request_mem_region(res->start, size, pdev->name);

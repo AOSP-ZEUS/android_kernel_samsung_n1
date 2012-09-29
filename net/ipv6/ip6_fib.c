@@ -1586,7 +1586,12 @@ int __init fib6_init(void)
 	if (ret)
 		goto out_kmem_cache_create;
 
+<<<<<<< HEAD
 	ret = __rtnl_register(PF_INET6, RTM_GETROUTE, NULL, inet6_dump_fib);
+=======
+	ret = __rtnl_register(PF_INET6, RTM_GETROUTE, NULL, inet6_dump_fib,
+			      NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto out_unregister_subsys;
 out:

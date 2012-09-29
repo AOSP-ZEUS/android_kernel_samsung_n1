@@ -340,6 +340,12 @@ static ssize_t iio_trigger_write_current(struct device *dev,
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
 	struct iio_trigger *oldtrig = dev_info->trig;
+<<<<<<< HEAD
+=======
+	struct iio_trigger *trig;
+	int ret;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mutex_lock(&dev_info->mlock);
 	if (dev_info->currentmode == INDIO_RING_TRIGGERED) {
 		mutex_unlock(&dev_info->mlock);
@@ -347,7 +353,26 @@ static ssize_t iio_trigger_write_current(struct device *dev,
 	}
 	mutex_unlock(&dev_info->mlock);
 
+<<<<<<< HEAD
 	dev_info->trig = iio_trigger_find_by_name(buf, len);
+=======
+	trig = iio_trigger_find_by_name(buf, len);
+
+	if (trig && dev_info->info->validate_trigger) {
+		ret = dev_info->info->validate_trigger(dev_info, trig);
+		if (ret)
+			return ret;
+	}
+
+	if (trig && trig->validate_device) {
+		ret = trig->validate_device(trig, dev_info);
+		if (ret)
+			return ret;
+	}
+
+	dev_info->trig = trig;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (oldtrig && dev_info->trig != oldtrig)
 		iio_put_trigger(oldtrig);
 	if (dev_info->trig)

@@ -525,10 +525,16 @@ static int setup_fbmem(struct msmfb_info *msmfb, struct platform_device *pdev)
 		return -ENOMEM;
 	}
 	fb->fix.smem_start = resource->start;
+<<<<<<< HEAD
 	fb->fix.smem_len = resource->end - resource->start;
 	fbram = ioremap(resource->start,
 			resource->end - resource->start);
 	if (fbram == 0) {
+=======
+	fb->fix.smem_len = resource_size(resource);
+	fbram = ioremap(resource->start, resource_size(resource));
+	if (fbram == NULL) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		printk(KERN_ERR "msmfb: cannot allocate fbram!\n");
 		return -ENOMEM;
 	}

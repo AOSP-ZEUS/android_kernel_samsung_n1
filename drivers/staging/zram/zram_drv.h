@@ -61,7 +61,14 @@ static const unsigned max_zpage_size = PAGE_SIZE / 4 * 3;
 #define SECTOR_SIZE		(1 << SECTOR_SHIFT)
 #define SECTORS_PER_PAGE_SHIFT	(PAGE_SHIFT - SECTOR_SHIFT)
 #define SECTORS_PER_PAGE	(1 << SECTORS_PER_PAGE_SHIFT)
+<<<<<<< HEAD
 #define ZRAM_LOGICAL_BLOCK_SIZE	4096
+=======
+#define ZRAM_LOGICAL_BLOCK_SHIFT 12
+#define ZRAM_LOGICAL_BLOCK_SIZE	(1 << ZRAM_LOGICAL_BLOCK_SHIFT)
+#define ZRAM_SECTOR_PER_LOGICAL_BLOCK	\
+	(1 << (ZRAM_LOGICAL_BLOCK_SHIFT - SECTOR_SHIFT))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Flags for zram pages (table[page_no].flags) */
 enum zram_pageflags {
@@ -104,8 +111,13 @@ struct zram {
 	void *compress_buffer;
 	struct table *table;
 	spinlock_t stat64_lock;	/* protect 64-bit stats */
+<<<<<<< HEAD
 	struct mutex lock;	/* protect compression buffers against
 				 * concurrent writes */
+=======
+	struct rw_semaphore lock; /* protect compression buffers and table
+				   * against concurrent read and writes */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct request_queue *queue;
 	struct gendisk *disk;
 	int init_done;

@@ -22,7 +22,10 @@ extern e_vector vectors[];
 asmlinkage void auto_inthandler(void);
 asmlinkage void user_inthandler(void);
 asmlinkage void bad_inthandler(void);
+<<<<<<< HEAD
 extern void init_vectors(void);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif
 

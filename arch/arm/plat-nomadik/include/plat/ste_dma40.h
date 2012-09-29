@@ -10,6 +10,10 @@
 #define STE_DMA40_H
 
 #include <linux/dmaengine.h>
+<<<<<<< HEAD
+=======
+#include <linux/scatterlist.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/workqueue.h>
 #include <linux/interrupt.h>
 
@@ -194,8 +198,12 @@ dma_async_tx_descriptor *stedma40_slave_mem(struct dma_chan *chan,
 	sg.dma_address = addr;
 	sg.length = size;
 
+<<<<<<< HEAD
 	return chan->device->device_prep_slave_sg(chan, &sg, 1,
 						  direction, flags);
+=======
+	return dmaengine_prep_slave_sg(chan, &sg, 1, direction, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #else

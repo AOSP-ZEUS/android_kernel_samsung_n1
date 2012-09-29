@@ -697,7 +697,11 @@ static int __devinit of_platform_mb862xx_probe(struct platform_device *ofdev)
 		goto fbrel;
 	}
 
+<<<<<<< HEAD
 	res_size = 1 + res.end - res.start;
+=======
+	res_size = resource_size(&res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	par->res = request_mem_region(res.start, res_size, DRV_NAME);
 	if (par->res == NULL) {
 		dev_err(dev, "Cannot claim framebuffer/mmio\n");
@@ -787,7 +791,11 @@ static int __devexit of_platform_mb862xx_remove(struct platform_device *ofdev)
 {
 	struct fb_info *fbi = dev_get_drvdata(&ofdev->dev);
 	struct mb862xxfb_par *par = fbi->par;
+<<<<<<< HEAD
 	resource_size_t res_size = 1 + par->res->end - par->res->start;
+=======
+	resource_size_t res_size = resource_size(par->res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long reg;
 
 	dev_dbg(fbi->dev, "%s release\n", fbi->fix.id);

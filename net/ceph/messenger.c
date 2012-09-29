@@ -486,6 +486,7 @@ static void prepare_write_message(struct ceph_connection *con)
 	m = list_first_entry(&con->out_queue,
 		       struct ceph_msg, list_head);
 	con->out_msg = m;
+<<<<<<< HEAD
 	if (test_bit(LOSSYTX, &con->state)) {
 		list_del_init(&m->list_head);
 	} else {
@@ -493,6 +494,12 @@ static void prepare_write_message(struct ceph_connection *con)
 		ceph_msg_get(m);
 		list_move_tail(&m->list_head, &con->out_sent);
 	}
+=======
+
+	/* put message on sent list */
+	ceph_msg_get(m);
+	list_move_tail(&m->list_head, &con->out_sent);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * only assign outgoing seq # if we haven't sent this message
@@ -1399,6 +1406,10 @@ static void process_ack(struct ceph_connection *con)
 			break;
 		dout("got ack for seq %llu type %d at %p\n", seq,
 		     le16_to_cpu(m->hdr.type), m);
+<<<<<<< HEAD
+=======
+		m->ack_stamp = jiffies;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ceph_msg_remove(m);
 	}
 	prepare_read_tag(con);
@@ -2309,6 +2320,10 @@ struct ceph_msg *ceph_msg_new(int type, int front_len, gfp_t flags)
 	m->front_max = front_len;
 	m->front_is_vmalloc = false;
 	m->more_to_follow = false;
+<<<<<<< HEAD
+=======
+	m->ack_stamp = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	m->pool = NULL;
 
 	/* middle */

@@ -408,6 +408,11 @@ int snd_usb_parse_audio_endpoints(struct snd_usb_audio *chip, int iface_no)
 			/* doesn't set the sample rate attribute, but supports it */
 			fp->attributes |= UAC_EP_CS_ATTR_SAMPLE_RATE;
 			break;
+<<<<<<< HEAD
+=======
+		case USB_ID(0x0763, 0x2001):  /* M-Audio Quattro USB */
+		case USB_ID(0x0763, 0x2012):  /* M-Audio Fast Track Pro USB */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		case USB_ID(0x047f, 0x0ca1): /* plantronics headset */
 		case USB_ID(0x077d, 0x07af): /* Griffin iMic (note that there is
 						an older model 77d:223) */

@@ -58,6 +58,10 @@ static struct pll_data pll0_data = {
 static struct clk ref_clk = {
 	.name		= "ref_clk",
 	.rate		= DA850_REF_FREQ,
+<<<<<<< HEAD
+=======
+	.set_rate	= davinci_simple_set_rate,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct clk pll0_clk = {
@@ -373,6 +377,17 @@ static struct clk spi1_clk = {
 	.flags		= DA850_CLK_ASYNC3,
 };
 
+<<<<<<< HEAD
+=======
+static struct clk sata_clk = {
+	.name		= "sata",
+	.parent		= &pll0_sysclk2,
+	.lpsc		= DA850_LPSC1_SATA,
+	.gpsc		= 1,
+	.flags		= PSC_FORCE,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct clk_lookup da850_clks[] = {
 	CLK(NULL,		"ref",		&ref_clk),
 	CLK(NULL,		"pll0",		&pll0_clk),
@@ -419,6 +434,10 @@ static struct clk_lookup da850_clks[] = {
 	CLK(NULL,		"usb20",	&usb20_clk),
 	CLK("spi_davinci.0",	NULL,		&spi0_clk),
 	CLK("spi_davinci.1",	NULL,		&spi1_clk),
+<<<<<<< HEAD
+=======
+	CLK("ahci",		NULL,		&sata_clk),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	CLK(NULL,		NULL,		NULL),
 };
 

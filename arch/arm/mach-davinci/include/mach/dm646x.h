@@ -15,7 +15,10 @@
 #include <mach/asp.h>
 #include <linux/i2c.h>
 #include <linux/videodev2.h>
+<<<<<<< HEAD
 #include <linux/clk.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/davinci_emac.h>
 
 #define DM646X_EMAC_BASE		(0x01C80000)
@@ -31,7 +34,10 @@
 void __init dm646x_init(void);
 void __init dm646x_init_mcasp0(struct snd_platform_data *pdata);
 void __init dm646x_init_mcasp1(struct snd_platform_data *pdata);
+<<<<<<< HEAD
 void __init dm646x_board_setup_refclk(struct clk *clk);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int __init dm646x_init_edma(struct edma_rsv_info *rsv);
 
 void dm646x_video_init(void);

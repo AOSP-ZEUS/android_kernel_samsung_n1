@@ -17,6 +17,7 @@
 #ifndef _wl_cfg80211_h_
 #define _wl_cfg80211_h_
 
+<<<<<<< HEAD
 #include <linux/wireless.h>
 #include <linux/wireless.h>
 #include <net/cfg80211.h>
@@ -27,6 +28,13 @@ struct wl_iface;
 struct wl_priv;
 struct wl_security;
 struct wl_ibss;
+=======
+struct brcmf_cfg80211_conf;
+struct brcmf_cfg80211_iface;
+struct brcmf_cfg80211_priv;
+struct brcmf_cfg80211_security;
+struct brcmf_cfg80211_ibss;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define WL_DBG_NONE		0
 #define WL_DBG_CONN		(1 << 5)
@@ -39,7 +47,11 @@ struct wl_ibss;
 
 #define	WL_ERR(fmt, args...)					\
 do {								\
+<<<<<<< HEAD
 	if (wl_dbg_level & WL_DBG_ERR) {			\
+=======
+	if (brcmf_dbg_level & WL_DBG_ERR) {			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (net_ratelimit()) {				\
 			printk(KERN_ERR "ERROR @%s : " fmt,	\
 				__func__, ##args);		\
@@ -50,7 +62,11 @@ do {								\
 #if (defined BCMDBG)
 #define	WL_INFO(fmt, args...)					\
 do {								\
+<<<<<<< HEAD
 	if (wl_dbg_level & WL_DBG_INFO) {			\
+=======
+	if (brcmf_dbg_level & WL_DBG_INFO) {			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (net_ratelimit()) {				\
 			printk(KERN_ERR "INFO @%s : " fmt,	\
 				__func__, ##args);		\
@@ -60,7 +76,11 @@ do {								\
 
 #define	WL_TRACE(fmt, args...)					\
 do {								\
+<<<<<<< HEAD
 	if (wl_dbg_level & WL_DBG_TRACE) {			\
+=======
+	if (brcmf_dbg_level & WL_DBG_TRACE) {			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (net_ratelimit()) {				\
 			printk(KERN_ERR "TRACE @%s : " fmt,	\
 				__func__, ##args);		\
@@ -70,7 +90,11 @@ do {								\
 
 #define	WL_SCAN(fmt, args...)					\
 do {								\
+<<<<<<< HEAD
 	if (wl_dbg_level & WL_DBG_SCAN) {			\
+=======
+	if (brcmf_dbg_level & WL_DBG_SCAN) {			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (net_ratelimit()) {				\
 			printk(KERN_ERR "SCAN @%s : " fmt,	\
 				__func__, ##args);		\
@@ -80,7 +104,11 @@ do {								\
 
 #define	WL_CONN(fmt, args...)					\
 do {								\
+<<<<<<< HEAD
 	if (wl_dbg_level & WL_DBG_CONN) {			\
+=======
+	if (brcmf_dbg_level & WL_DBG_CONN) {			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (net_ratelimit()) {				\
 			printk(KERN_ERR "CONN @%s : " fmt,	\
 				__func__, ##args);		\
@@ -95,15 +123,23 @@ do {								\
 #define	WL_CONN(fmt, args...)
 #endif /* (defined BCMDBG) */
 
+<<<<<<< HEAD
 
 #define WL_SCAN_RETRY_MAX	3	/* used for ibss scan */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define WL_NUM_SCAN_MAX		1
 #define WL_NUM_PMKIDS_MAX	MAXPMKID	/* will be used
 						 * for 2.6.33 kernel
 						 * or later
 						 */
+<<<<<<< HEAD
 #define WL_SCAN_BUF_MAX 		(1024 * 8)
 #define WL_TLV_INFO_MAX 		1024
+=======
+#define WL_SCAN_BUF_MAX			(1024 * 8)
+#define WL_TLV_INFO_MAX			1024
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define WL_BSS_INFO_MAX			2048
 #define WL_ASSOC_INFO_MAX	512	/*
 				 * needs to grab assoc info from dongle to
@@ -113,6 +149,7 @@ do {								\
 #define WL_IOCTL_LEN_MAX	1024
 #define WL_EXTRA_BUF_MAX	2048
 #define WL_ISCAN_BUF_MAX	2048	/*
+<<<<<<< HEAD
 				 * the buf lengh can be WLC_IOCTL_MAXLEN (8K)
 				 * to reduce iteration
 				 */
@@ -122,6 +159,16 @@ do {								\
 				 * as kernel memory allows
 				 */
 #define WL_FILE_NAME_MAX		256
+=======
+				 * the buf length can be BRCMF_C_IOCTL_MAXLEN
+				 * to reduce iteration
+				 */
+#define WL_ISCAN_TIMER_INTERVAL_MS	3000
+#define WL_SCAN_ERSULTS_LAST	(BRCMF_SCAN_RESULTS_NO_MEM+1)
+#define WL_AP_MAX	256	/* virtually unlimitted as long
+				 * as kernel memory allows
+				 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define WL_ROAM_TRIGGER_LEVEL		-75
 #define WL_ROAM_DELTA			20
@@ -166,6 +213,7 @@ enum wl_iscan_state {
 	WL_ISCAN_STATE_SCANING
 };
 
+<<<<<<< HEAD
 /* fw downloading status */
 enum wl_fw_status {
 	WL_FW_LOADING_DONE,
@@ -182,6 +230,10 @@ struct beacon_proberesp {
 
 /* dongle configuration */
 struct wl_conf {
+=======
+/* dongle configuration */
+struct brcmf_cfg80211_conf {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 mode;		/* adhoc , infrastructure or ap */
 	u32 frag_threshold;
 	u32 rts_threshold;
@@ -192,6 +244,7 @@ struct wl_conf {
 };
 
 /* cfg80211 main event loop */
+<<<<<<< HEAD
 struct wl_event_loop {
 	s32(*handler[WLC_E_LAST]) (struct wl_priv *wl,
 				     struct net_device *ndev,
@@ -223,20 +276,56 @@ struct wl_scan_req {
 
 /* basic structure of information element */
 struct wl_ie {
+=======
+struct brcmf_cfg80211_event_loop {
+	s32(*handler[BRCMF_E_LAST]) (struct brcmf_cfg80211_priv *cfg_priv,
+				     struct net_device *ndev,
+				     const struct brcmf_event_msg *e,
+				     void *data);
+};
+
+/* representing interface of cfg80211 plane */
+struct brcmf_cfg80211_iface {
+	struct brcmf_cfg80211_priv *cfg_priv;
+};
+
+struct brcmf_cfg80211_dev {
+	void *driver_data;	/* to store cfg80211 object information */
+};
+
+/* basic structure of scan request */
+struct brcmf_cfg80211_scan_req {
+	struct brcmf_ssid ssid;
+};
+
+/* basic structure of information element */
+struct brcmf_cfg80211_ie {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16 offset;
 	u8 buf[WL_TLV_INFO_MAX];
 };
 
 /* event queue for cfg80211 main event */
+<<<<<<< HEAD
 struct wl_event_q {
 	struct list_head eq_list;
 	u32 etype;
 	wl_event_msg_t emsg;
+=======
+struct brcmf_cfg80211_event_q {
+	struct list_head eq_list;
+	u32 etype;
+	struct brcmf_event_msg emsg;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	s8 edata[1];
 };
 
 /* security information with currently associated ap */
+<<<<<<< HEAD
 struct wl_security {
+=======
+struct brcmf_cfg80211_security {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 wpa_versions;
 	u32 auth_type;
 	u32 cipher_pairwise;
@@ -245,7 +334,11 @@ struct wl_security {
 };
 
 /* ibss information for currently joined ibss network */
+<<<<<<< HEAD
 struct wl_ibss {
+=======
+struct brcmf_cfg80211_ibss {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 beacon_interval;	/* in millisecond */
 	u8 atim;		/* in millisecond */
 	s8 join_only;
@@ -254,6 +347,7 @@ struct wl_ibss {
 };
 
 /* dongle profile */
+<<<<<<< HEAD
 struct wl_profile {
 	u32 mode;
 	struct wlc_ssid ssid;
@@ -262,16 +356,36 @@ struct wl_profile {
 	u8 dtim_period;
 	struct wl_security sec;
 	struct wl_ibss ibss;
+=======
+struct brcmf_cfg80211_profile {
+	u32 mode;
+	struct brcmf_ssid ssid;
+	u8 bssid[ETH_ALEN];
+	u16 beacon_interval;
+	u8 dtim_period;
+	struct brcmf_cfg80211_security sec;
+	struct brcmf_cfg80211_ibss ibss;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	s32 band;
 };
 
 /* dongle iscan event loop */
+<<<<<<< HEAD
 struct wl_iscan_eloop {
 	s32(*handler[WL_SCAN_ERSULTS_LAST]) (struct wl_priv *wl);
 };
 
 /* dongle iscan controller */
 struct wl_iscan_ctrl {
+=======
+struct brcmf_cfg80211_iscan_eloop {
+	s32 (*handler[WL_SCAN_ERSULTS_LAST])
+		(struct brcmf_cfg80211_priv *cfg_priv);
+};
+
+/* dongle iscan controller */
+struct brcmf_cfg80211_iscan_ctrl {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct net_device *dev;
 	struct timer_list timer;
 	u32 timer_ms;
@@ -279,20 +393,31 @@ struct wl_iscan_ctrl {
 	s32 state;
 	struct task_struct *tsk;
 	struct semaphore sync;
+<<<<<<< HEAD
 	struct wl_iscan_eloop el;
 	void *data;
 	s8 ioctl_buf[WLC_IOCTL_SMLEN];
+=======
+	struct brcmf_cfg80211_iscan_eloop el;
+	void *data;
+	s8 ioctl_buf[BRCMF_C_IOCTL_SMLEN];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	s8 scan_buf[WL_ISCAN_BUF_MAX];
 };
 
 /* association inform */
+<<<<<<< HEAD
 struct wl_connect_info {
+=======
+struct brcmf_cfg80211_connect_info {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 *req_ie;
 	s32 req_ie_len;
 	u8 *resp_ie;
 	s32 resp_ie_len;
 };
 
+<<<<<<< HEAD
 /* firmware /nvram downloading controller */
 struct wl_fw_ctrl {
 	const struct firmware *fw_entry;
@@ -304,17 +429,26 @@ struct wl_fw_ctrl {
 
 /* assoc ie length */
 struct wl_assoc_ielen {
+=======
+/* assoc ie length */
+struct brcmf_cfg80211_assoc_ielen {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 req_len;
 	u32 resp_len;
 };
 
 /* wpa2 pmk list */
+<<<<<<< HEAD
 struct wl_pmk_list {
+=======
+struct brcmf_cfg80211_pmk_list {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pmkid_list_t pmkids;
 	pmkid_t foo[MAXPMKID - 1];
 };
 
 /* dongle private data of cfg80211 interface */
+<<<<<<< HEAD
 struct wl_priv {
 	struct wireless_dev *wdev;	/* representing wl cfg80211 device */
 	struct wl_conf *conf;	/* dongle configuration */
@@ -342,6 +476,32 @@ struct wl_priv {
 	struct wl_fw_ctrl *fw;	/* control firwmare / nvram paramter
 				 downloading */
 	struct wl_pmk_list *pmk_list;	/* wpa2 pmk list */
+=======
+struct brcmf_cfg80211_priv {
+	struct wireless_dev *wdev;	/* representing wl cfg80211 device */
+	struct brcmf_cfg80211_conf *conf;	/* dongle configuration */
+	struct cfg80211_scan_request *scan_request;	/* scan request
+							 object */
+	struct brcmf_cfg80211_event_loop el;	/* main event loop */
+	struct list_head eq_list;	/* used for event queue */
+	spinlock_t eq_lock;	/* for event queue synchronization */
+	struct mutex usr_sync;	/* maily for dongle up/down synchronization */
+	struct brcmf_scan_results *bss_list;	/* bss_list holding scanned
+						 ap information */
+	struct brcmf_scan_results *scan_results;
+	struct brcmf_cfg80211_scan_req *scan_req_int;	/* scan request object
+						 for internal purpose */
+	struct wl_cfg80211_bss_info *bss_info;	/* bss information for
+						 cfg80211 layer */
+	struct brcmf_cfg80211_ie ie;	/* information element object for
+					 internal purpose */
+	struct semaphore event_sync;	/* for synchronization of main event
+					 thread */
+	struct brcmf_cfg80211_profile *profile;	/* holding dongle profile */
+	struct brcmf_cfg80211_iscan_ctrl *iscan;	/* iscan controller */
+	struct brcmf_cfg80211_connect_info conn_info; /* association info */
+	struct brcmf_cfg80211_pmk_list *pmk_list;	/* wpa2 pmk list */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct task_struct *event_tsk;	/* task of main event handler thread */
 	unsigned long status;		/* current dongle status */
 	void *pub;
@@ -362,6 +522,7 @@ struct wl_priv {
 	u8 ci[0] __attribute__ ((__aligned__(NETDEV_ALIGN)));
 };
 
+<<<<<<< HEAD
 #define wl_to_dev(w) (wiphy_dev(wl->wdev->wiphy))
 #define wl_to_wiphy(w) (w->wdev->wiphy)
 #define wiphy_to_wl(w) ((struct wl_priv *)(wiphy_priv(w)))
@@ -382,6 +543,23 @@ static inline struct wl_bss_info *next_bss(struct wl_scan_results *list,
 {
 	return bss = bss ?
 		(struct wl_bss_info *)((unsigned long)bss +
+=======
+#define cfg_to_wiphy(w) (w->wdev->wiphy)
+#define wiphy_to_cfg(w) ((struct brcmf_cfg80211_priv *)(wiphy_priv(w)))
+#define cfg_to_wdev(w) (w->wdev)
+#define wdev_to_cfg(w) ((struct brcmf_cfg80211_priv *)(wdev_priv(w)))
+#define cfg_to_ndev(w) (w->wdev->netdev)
+#define ndev_to_cfg(n) (wdev_to_cfg(n->ieee80211_ptr))
+#define iscan_to_cfg(i) ((struct brcmf_cfg80211_priv *)(i->data))
+#define cfg_to_iscan(w) (w->iscan)
+#define cfg_to_conn(w) (&w->conn_info)
+
+static inline struct brcmf_bss_info *next_bss(struct brcmf_scan_results *list,
+					   struct brcmf_bss_info *bss)
+{
+	return bss = bss ?
+		(struct brcmf_bss_info *)((unsigned long)bss +
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				       le32_to_cpu(bss->length)) :
 		list->bss_info;
 }
@@ -389,6 +567,7 @@ static inline struct wl_bss_info *next_bss(struct wl_scan_results *list,
 #define for_each_bss(list, bss, __i)	\
 	for (__i = 0; __i < list->count && __i < WL_AP_MAX; __i++, bss = next_bss(list, bss))
 
+<<<<<<< HEAD
 extern s32 wl_cfg80211_attach(struct net_device *ndev, void *data);
 extern void wl_cfg80211_detach(void);
 /* event handler from dongle */
@@ -410,5 +589,16 @@ extern s8 *wl_cfg80211_get_fwname(void);	/* get firmware name for
 extern s8 *wl_cfg80211_get_nvramname(void);	/* get nvram name for
 						 the dongle */
 extern void wl_os_wd_timer(struct net_device *ndev, uint wdtick);
+=======
+extern s32 brcmf_cfg80211_attach(struct net_device *ndev, void *data);
+extern void brcmf_cfg80211_detach(void);
+/* event handler from dongle */
+extern void brcmf_cfg80211_event(struct net_device *ndev,
+				 const struct brcmf_event_msg *e, void *data);
+extern void brcmf_cfg80211_sdio_func(void *func); /* set sdio function info */
+extern struct sdio_func *brcmf_cfg80211_get_sdio_func(void);
+extern s32 brcmf_cfg80211_up(void);	/* dongle up */
+extern s32 brcmf_cfg80211_down(void);	/* dongle down */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif				/* _wl_cfg80211_h_ */

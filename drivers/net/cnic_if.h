@@ -12,8 +12,13 @@
 #ifndef CNIC_IF_H
 #define CNIC_IF_H
 
+<<<<<<< HEAD
 #define CNIC_MODULE_VERSION	"2.2.14"
 #define CNIC_MODULE_RELDATE	"Mar 30, 2011"
+=======
+#define CNIC_MODULE_VERSION	"2.5.7"
+#define CNIC_MODULE_RELDATE	"July 20, 2011"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define CNIC_ULP_RDMA		0
 #define CNIC_ULP_ISCSI		1
@@ -99,6 +104,11 @@ struct kcqe {
 
 struct cnic_ctl_completion {
 	u32	cid;
+<<<<<<< HEAD
+=======
+	u8	opcode;
+	u8	error;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct cnic_ctl_info {
@@ -169,7 +179,11 @@ struct cnic_eth_dev {
 	struct pci_dev	*pdev;
 	void __iomem	*io_base;
 	void __iomem	*io_base2;
+<<<<<<< HEAD
 	void		*iro_arr;
+=======
+	const void	*iro_arr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u32		ctx_tbl_offset;
 	u32		ctx_tbl_len;
@@ -179,6 +193,14 @@ struct cnic_eth_dev {
 	u32		max_fcoe_conn;
 	u32		max_rdma_conn;
 	u32		fcoe_init_cid;
+<<<<<<< HEAD
+=======
+	u32		fcoe_wwn_port_name_hi;
+	u32		fcoe_wwn_port_name_lo;
+	u32		fcoe_wwn_node_name_hi;
+	u32		fcoe_wwn_node_name_lo;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16		iscsi_l2_client_id;
 	u16		iscsi_l2_cid;
 	u8		iscsi_mac[ETH_ALEN];
@@ -311,7 +333,11 @@ struct cnic_ulp_ops {
 	void (*cnic_stop)(void *ulp_ctx);
 	void (*indicate_kcqes)(void *ulp_ctx, struct kcqe *cqes[],
 				u32 num_cqes);
+<<<<<<< HEAD
 	void (*indicate_netevent)(void *ulp_ctx, unsigned long event);
+=======
+	void (*indicate_netevent)(void *ulp_ctx, unsigned long event, u16 vid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	void (*cm_connect_complete)(struct cnic_sock *);
 	void (*cm_close_complete)(struct cnic_sock *);
 	void (*cm_abort_complete)(struct cnic_sock *);

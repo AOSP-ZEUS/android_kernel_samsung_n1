@@ -28,6 +28,10 @@
 #include <asm/mach-types.h>
 #include <asm/mach/arch.h>
 #include <asm/mach/map.h>
+<<<<<<< HEAD
+=======
+#include <asm/irq.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <mach/pxa25x.h>
 #include <mach/h5000.h>
@@ -205,6 +209,10 @@ MACHINE_START(H5400, "HP iPAQ H5000")
 	.boot_params = 0xa0000100,
 	.map_io = pxa25x_map_io,
 	.init_irq = pxa25x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq = pxa25x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer = &pxa_timer,
 	.init_machine = h5000_init,
 MACHINE_END

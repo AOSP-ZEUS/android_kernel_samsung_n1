@@ -2,7 +2,11 @@
  *
  *	Added conditional policy language extensions
  *
+<<<<<<< HEAD
  *  Updated: Hewlett-Packard <paul.moore@hp.com>
+=======
+ *  Updated: Hewlett-Packard <paul@paul-moore.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  *	Added support for the policy capability bitmap
  *
@@ -1984,6 +1988,10 @@ __initcall(init_sel_fs);
 void exit_sel_fs(void)
 {
 	kobject_put(selinuxfs_kobj);
+<<<<<<< HEAD
+=======
+	kern_unmount(selinuxfs_mount);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unregister_filesystem(&sel_fs_type);
 }
 #endif

@@ -403,6 +403,17 @@ void default_idle(void)
 EXPORT_SYMBOL(default_idle);
 #endif
 
+<<<<<<< HEAD
+=======
+bool set_pm_idle_to_default(void)
+{
+	bool ret = !!pm_idle;
+
+	pm_idle = default_idle;
+
+	return ret;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void stop_this_cpu(void *dummy)
 {
 	local_irq_disable();
@@ -438,6 +449,7 @@ void cpu_idle_wait(void)
 }
 EXPORT_SYMBOL_GPL(cpu_idle_wait);
 
+<<<<<<< HEAD
 /*
  * This uses new MONITOR/MWAIT instructions on P4 processors with PNI,
  * which can obviate IPI to trigger checking of need_resched.
@@ -461,6 +473,8 @@ void mwait_idle_with_hints(unsigned long ax, unsigned long cx)
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Default MONITOR/MWAIT with no hints, used for default C1 state */
 static void mwait_idle(void)
 {

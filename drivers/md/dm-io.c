@@ -296,8 +296,11 @@ static void do_region(int rw, unsigned region, struct dm_io_region *where,
 	unsigned offset;
 	unsigned num_bvecs;
 	sector_t remaining = where->count;
+<<<<<<< HEAD
 	struct request_queue *q = bdev_get_queue(where->bdev);
 	sector_t discard_sectors;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * where->count may be zero if rw holds a flush and we need to
@@ -307,12 +310,18 @@ static void do_region(int rw, unsigned region, struct dm_io_region *where,
 		/*
 		 * Allocate a suitably sized-bio.
 		 */
+<<<<<<< HEAD
 		if (rw & REQ_DISCARD)
 			num_bvecs = 1;
 		else
 			num_bvecs = min_t(int, bio_get_nr_vecs(where->bdev),
 					  dm_sector_div_up(remaining, (PAGE_SIZE >> SECTOR_SHIFT)));
 
+=======
+		num_bvecs = dm_sector_div_up(remaining,
+					     (PAGE_SIZE >> SECTOR_SHIFT));
+		num_bvecs = min_t(int, bio_get_nr_vecs(where->bdev), num_bvecs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		bio = bio_alloc_bioset(GFP_NOIO, num_bvecs, io->client->bios);
 		bio->bi_sector = where->sector + (where->count - remaining);
 		bio->bi_bdev = where->bdev;
@@ -320,6 +329,7 @@ static void do_region(int rw, unsigned region, struct dm_io_region *where,
 		bio->bi_destructor = dm_bio_destructor;
 		store_io_and_region_in_bio(bio, io, region);
 
+<<<<<<< HEAD
 		if (rw & REQ_DISCARD) {
 			discard_sectors = min_t(sector_t, q->limits.max_discard_sectors, remaining);
 			bio->bi_size = discard_sectors << SECTOR_SHIFT;
@@ -328,6 +338,12 @@ static void do_region(int rw, unsigned region, struct dm_io_region *where,
 			/*
 			 * Try and add as many pages as possible.
 			 */
+=======
+		/*
+		 * Try and add as many pages as possible.
+		 */
+		while (remaining) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			dp->get_page(dp, &page, &len, &offset);
 			len = min(len, to_bytes(remaining));
 			if (!bio_add_page(bio, page, len, offset))

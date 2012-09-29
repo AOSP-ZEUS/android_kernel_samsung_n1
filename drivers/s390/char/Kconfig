@@ -116,9 +116,12 @@ config S390_TAPE
 	  called tape390 and include all selected interfaces and
 	  hardware drivers.
 
+<<<<<<< HEAD
 comment "S/390 tape interface support"
 	depends on S390_TAPE
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 comment "S/390 tape hardware support"
 	depends on S390_TAPE
 

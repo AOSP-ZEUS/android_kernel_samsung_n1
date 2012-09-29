@@ -43,6 +43,7 @@ void *module_alloc(unsigned long size)
 				GFP_KERNEL, PAGE_KERNEL_EXEC, -1,
 				__builtin_return_address(0));
 }
+<<<<<<< HEAD
 #else /* CONFIG_MMU */
 void *module_alloc(unsigned long size)
 {
@@ -62,6 +63,9 @@ int module_frob_arch_sections(Elf_Ehdr *hdr,
 {
 	return 0;
 }
+=======
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 int
 apply_relocate(Elf32_Shdr *sechdrs, const char *strtab, unsigned int symindex,
@@ -107,6 +111,10 @@ apply_relocate(Elf32_Shdr *sechdrs, const char *strtab, unsigned int symindex,
 			break;
 
 		case R_ARM_ABS32:
+<<<<<<< HEAD
+=======
+		case R_ARM_TARGET1:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			*(u32 *)loc += sym->st_value;
 			break;
 
@@ -265,6 +273,7 @@ apply_relocate(Elf32_Shdr *sechdrs, const char *strtab, unsigned int symindex,
 	return 0;
 }
 
+<<<<<<< HEAD
 int
 apply_relocate_add(Elf32_Shdr *sechdrs, const char *strtab,
 		   unsigned int symindex, unsigned int relsec, struct module *module)
@@ -274,6 +283,8 @@ apply_relocate_add(Elf32_Shdr *sechdrs, const char *strtab,
 	return -ENOEXEC;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct mod_unwind_map {
 	const Elf_Shdr *unw_sec;
 	const Elf_Shdr *txt_sec;
@@ -350,7 +361,15 @@ int module_finalize(const Elf32_Ehdr *hdr, const Elf_Shdr *sechdrs,
 #endif
 	s = find_mod_section(hdr, sechdrs, ".alt.smp.init");
 	if (s && !is_smp())
+<<<<<<< HEAD
 		fixup_smp((void *)s->sh_addr, s->sh_size);
+=======
+#ifdef CONFIG_SMP_ON_UP
+		fixup_smp((void *)s->sh_addr, s->sh_size);
+#else
+		return -EINVAL;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

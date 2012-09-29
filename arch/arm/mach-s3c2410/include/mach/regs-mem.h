@@ -145,6 +145,7 @@
 #define S3C2410_BANKCON_Tacs_SHIFT	(13)
 
 #define S3C2410_BANKCON_SRAM		(0x0 << 15)
+<<<<<<< HEAD
 #define S3C2400_BANKCON_EDODRAM		(0x2 << 15)
 #define S3C2410_BANKCON_SDRAM		(0x3 << 15)
 
@@ -168,6 +169,10 @@
 #define S3C2400_BANKCON_EDO_SCANb10    (0x02 << 0)
 #define S3C2400_BANKCON_EDO_SCANb11    (0x03 << 0)
 
+=======
+#define S3C2410_BANKCON_SDRAM		(0x3 << 15)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* next bits only for SDRAM in 6,7 */
 #define S3C2410_BANKCON_Trcd2		(0x00 << 2)
 #define S3C2410_BANKCON_Trcd3		(0x01 << 2)
@@ -194,12 +199,15 @@
 #define S3C2410_REFRESH_TRP_3clk	(1<<20)
 #define S3C2410_REFRESH_TRP_4clk	(2<<20)
 
+<<<<<<< HEAD
 #define S3C2400_REFRESH_DRAM_TRP_MASK   (3<<20)
 #define S3C2400_REFRESH_DRAM_TRP_1_5clk (0<<20)
 #define S3C2400_REFRESH_DRAM_TRP_2_5clk (1<<20)
 #define S3C2400_REFRESH_DRAM_TRP_3_5clk (2<<20)
 #define S3C2400_REFRESH_DRAM_TRP_4_5clk (3<<20)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define S3C2410_REFRESH_TSRC_MASK	(3<<18)
 #define S3C2410_REFRESH_TSRC_4clk	(0<<18)
 #define S3C2410_REFRESH_TSRC_5clk	(1<<18)
@@ -222,7 +230,10 @@
 #define S3C2410_BANKSIZE_4M		(0x5 << 0)
 #define S3C2410_BANKSIZE_2M		(0x4 << 0)
 #define S3C2410_BANKSIZE_MASK		(0x7 << 0)
+<<<<<<< HEAD
 #define S3C2400_BANKSIZE_MASK           (0x4 << 0)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define S3C2410_BANKSIZE_SCLK_EN	(1<<4)
 #define S3C2410_BANKSIZE_SCKE_EN	(1<<5)
 #define S3C2410_BANKSIZE_BURST		(1<<7)

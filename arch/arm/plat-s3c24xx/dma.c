@@ -1249,7 +1249,11 @@ static void s3c2410_dma_resume(void)
 	struct s3c2410_dma_chan *cp = s3c2410_chans + dma_channels - 1;
 	int channel;
 
+<<<<<<< HEAD
 	for (channel = dma_channels - 1; channel >= 0; cp--, channel--)
+=======
+	for (channel = dma_channels - 1; channel >= 0; cp++, channel--)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		s3c2410_dma_resume_chan(cp);
 }
 

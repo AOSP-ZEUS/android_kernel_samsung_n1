@@ -74,16 +74,114 @@ static void dso__set_sorted_by_name(struct dso *dso, enum map_type type)
 
 bool symbol_type__is_a(char symbol_type, enum map_type map_type)
 {
+<<<<<<< HEAD
+=======
+	symbol_type = toupper(symbol_type);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (map_type) {
 	case MAP__FUNCTION:
 		return symbol_type == 'T' || symbol_type == 'W';
 	case MAP__VARIABLE:
+<<<<<<< HEAD
 		return symbol_type == 'D' || symbol_type == 'd';
+=======
+		return symbol_type == 'D';
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default:
 		return false;
 	}
 }
 
+<<<<<<< HEAD
+=======
+static int prefix_underscores_count(const char *str)
+{
+	const char *tail = str;
+
+	while (*tail == '_')
+		tail++;
+
+	return tail - str;
+}
+
+#define SYMBOL_A 0
+#define SYMBOL_B 1
+
+static int choose_best_symbol(struct symbol *syma, struct symbol *symb)
+{
+	s64 a;
+	s64 b;
+
+	/* Prefer a symbol with non zero length */
+	a = syma->end - syma->start;
+	b = symb->end - symb->start;
+	if ((b == 0) && (a > 0))
+		return SYMBOL_A;
+	else if ((a == 0) && (b > 0))
+		return SYMBOL_B;
+
+	/* Prefer a non weak symbol over a weak one */
+	a = syma->binding == STB_WEAK;
+	b = symb->binding == STB_WEAK;
+	if (b && !a)
+		return SYMBOL_A;
+	if (a && !b)
+		return SYMBOL_B;
+
+	/* Prefer a global symbol over a non global one */
+	a = syma->binding == STB_GLOBAL;
+	b = symb->binding == STB_GLOBAL;
+	if (a && !b)
+		return SYMBOL_A;
+	if (b && !a)
+		return SYMBOL_B;
+
+	/* Prefer a symbol with less underscores */
+	a = prefix_underscores_count(syma->name);
+	b = prefix_underscores_count(symb->name);
+	if (b > a)
+		return SYMBOL_A;
+	else if (a > b)
+		return SYMBOL_B;
+
+	/* If all else fails, choose the symbol with the longest name */
+	if (strlen(syma->name) >= strlen(symb->name))
+		return SYMBOL_A;
+	else
+		return SYMBOL_B;
+}
+
+static void symbols__fixup_duplicate(struct rb_root *symbols)
+{
+	struct rb_node *nd;
+	struct symbol *curr, *next;
+
+	nd = rb_first(symbols);
+
+	while (nd) {
+		curr = rb_entry(nd, struct symbol, rb_node);
+again:
+		nd = rb_next(&curr->rb_node);
+		next = rb_entry(nd, struct symbol, rb_node);
+
+		if (!nd)
+			break;
+
+		if (curr->start != next->start)
+			continue;
+
+		if (choose_best_symbol(curr, next) == SYMBOL_A) {
+			rb_erase(&next->rb_node, symbols);
+			goto again;
+		} else {
+			nd = rb_next(&curr->rb_node);
+			rb_erase(&curr->rb_node, symbols);
+		}
+	}
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void symbols__fixup_end(struct rb_root *symbols)
 {
 	struct rb_node *nd, *prevnd = rb_first(symbols);
@@ -438,18 +536,24 @@ int kallsyms__parse(const char *filename, void *arg,
 	char *line = NULL;
 	size_t n;
 	int err = -1;
+<<<<<<< HEAD
 	u64 prev_start = 0;
 	char prev_symbol_type = 0;
 	char *prev_symbol_name;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	FILE *file = fopen(filename, "r");
 
 	if (file == NULL)
 		goto out_failure;
 
+<<<<<<< HEAD
 	prev_symbol_name = malloc(KSYM_NAME_LEN);
 	if (prev_symbol_name == NULL)
 		goto out_close;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	err = 0;
 
 	while (!feof(file)) {
@@ -470,7 +574,11 @@ int kallsyms__parse(const char *filename, void *arg,
 		if (len + 2 >= line_len)
 			continue;
 
+<<<<<<< HEAD
 		symbol_type = toupper(line[len]);
+=======
+		symbol_type = line[len];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		len += 2;
 		symbol_name = line + len;
 		len = line_len - len;
@@ -480,6 +588,7 @@ int kallsyms__parse(const char *filename, void *arg,
 			break;
 		}
 
+<<<<<<< HEAD
 		if (prev_symbol_type) {
 			u64 end = start;
 			if (end != prev_start)
@@ -498,6 +607,20 @@ int kallsyms__parse(const char *filename, void *arg,
 	free(prev_symbol_name);
 	free(line);
 out_close:
+=======
+		/*
+		 * module symbols are not sorted so we add all
+		 * symbols with zero length and rely on
+		 * symbols__fixup_end() to fix it up.
+		 */
+		err = process_symbol(arg, symbol_name,
+				     symbol_type, start, start);
+		if (err)
+			break;
+	}
+
+	free(line);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	fclose(file);
 	return err;
 
@@ -703,6 +826,12 @@ int dso__load_kallsyms(struct dso *dso, const char *filename,
 	if (dso__load_all_kallsyms(dso, filename, map) < 0)
 		return -1;
 
+<<<<<<< HEAD
+=======
+	symbols__fixup_duplicate(&dso->symbols[map->type]);
+	symbols__fixup_end(&dso->symbols[map->type]);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (dso->kernel == DSO_TYPE_GUEST_KERNEL)
 		dso->symtab_type = SYMTAB__GUEST_KALLSYMS;
 	else
@@ -1092,8 +1221,12 @@ static int dso__load_sym(struct dso *dso, struct map *map, const char *name,
 	if (dso->has_build_id) {
 		u8 build_id[BUILD_ID_SIZE];
 
+<<<<<<< HEAD
 		if (elf_read_build_id(elf, build_id,
 				      BUILD_ID_SIZE) != BUILD_ID_SIZE)
+=======
+		if (elf_read_build_id(elf, build_id, BUILD_ID_SIZE) < 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto out_elf_end;
 
 		if (!dso__build_id_equal(dso, build_id))
@@ -1278,6 +1411,10 @@ new_symbol:
 	 * For misannotated, zeroed, ASM function sizes.
 	 */
 	if (nr > 0) {
+<<<<<<< HEAD
+=======
+		symbols__fixup_duplicate(&dso->symbols[map->type]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		symbols__fixup_end(&dso->symbols[map->type]);
 		if (kmap) {
 			/*
@@ -1364,8 +1501,13 @@ static int elf_read_build_id(Elf *elf, void *bf, size_t size)
 	ptr = data->d_buf;
 	while (ptr < (data->d_buf + data->d_size)) {
 		GElf_Nhdr *nhdr = ptr;
+<<<<<<< HEAD
 		int namesz = NOTE_ALIGN(nhdr->n_namesz),
 		    descsz = NOTE_ALIGN(nhdr->n_descsz);
+=======
+		size_t namesz = NOTE_ALIGN(nhdr->n_namesz),
+		       descsz = NOTE_ALIGN(nhdr->n_descsz);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		const char *name;
 
 		ptr += sizeof(*nhdr);
@@ -1374,8 +1516,15 @@ static int elf_read_build_id(Elf *elf, void *bf, size_t size)
 		if (nhdr->n_type == NT_GNU_BUILD_ID &&
 		    nhdr->n_namesz == sizeof("GNU")) {
 			if (memcmp(name, "GNU", sizeof("GNU")) == 0) {
+<<<<<<< HEAD
 				memcpy(bf, ptr, BUILD_ID_SIZE);
 				err = BUILD_ID_SIZE;
+=======
+				size_t sz = min(size, descsz);
+				memcpy(bf, ptr, sz);
+				memset(bf + sz, 0, size - sz);
+				err = descsz;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				break;
 			}
 		}
@@ -1427,7 +1576,11 @@ int sysfs__read_build_id(const char *filename, void *build_id, size_t size)
 	while (1) {
 		char bf[BUFSIZ];
 		GElf_Nhdr nhdr;
+<<<<<<< HEAD
 		int namesz, descsz;
+=======
+		size_t namesz, descsz;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (read(fd, &nhdr, sizeof(nhdr)) != sizeof(nhdr))
 			break;
@@ -1436,6 +1589,7 @@ int sysfs__read_build_id(const char *filename, void *build_id, size_t size)
 		descsz = NOTE_ALIGN(nhdr.n_descsz);
 		if (nhdr.n_type == NT_GNU_BUILD_ID &&
 		    nhdr.n_namesz == sizeof("GNU")) {
+<<<<<<< HEAD
 			if (read(fd, bf, namesz) != namesz)
 				break;
 			if (memcmp(bf, "GNU", sizeof("GNU")) == 0) {
@@ -1445,6 +1599,18 @@ int sysfs__read_build_id(const char *filename, void *build_id, size_t size)
 					break;
 				}
 			} else if (read(fd, bf, descsz) != descsz)
+=======
+			if (read(fd, bf, namesz) != (ssize_t)namesz)
+				break;
+			if (memcmp(bf, "GNU", sizeof("GNU")) == 0) {
+				size_t sz = min(descsz, size);
+				if (read(fd, build_id, sz) == (ssize_t)sz) {
+					memset(build_id + sz, 0, size - sz);
+					err = 0;
+					break;
+				}
+			} else if (read(fd, bf, descsz) != (ssize_t)descsz)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				break;
 		} else {
 			int n = namesz + descsz;
@@ -1506,6 +1672,20 @@ int dso__load(struct dso *dso, struct map *map, symbol_filter_t filter)
 	dso->adjust_symbols = 0;
 
 	if (strncmp(dso->name, "/tmp/perf-", 10) == 0) {
+<<<<<<< HEAD
+=======
+		struct stat st;
+
+		if (lstat(dso->name, &st) < 0)
+			return -1;
+
+		if (st.st_uid && (st.st_uid != geteuid())) {
+			pr_warning("File %s not owned by current user or root, "
+				"ignoring it.\n", dso->name);
+			return -1;
+		}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = dso__load_perf_map(dso, map, filter);
 		dso->symtab_type = ret > 0 ? SYMTAB__JAVA_JIT :
 					      SYMTAB__NOT_FOUND;
@@ -2172,6 +2352,7 @@ size_t machines__fprintf_dsos_buildid(struct rb_root *machines,
 	return ret;
 }
 
+<<<<<<< HEAD
 struct dso *dso__new_kernel(const char *name)
 {
 	struct dso *dso = dso__new(name ?: "[kernel.kallsyms]");
@@ -2193,6 +2374,24 @@ static struct dso *dso__new_guest_kernel(struct machine *machine,
 	if (dso != NULL) {
 		dso__set_short_name(dso, "[guest.kernel]");
 		dso->kernel = DSO_TYPE_GUEST_KERNEL;
+=======
+static struct dso*
+dso__kernel_findnew(struct machine *machine, const char *name,
+		    const char *short_name, int dso_type)
+{
+	/*
+	 * The kernel dso could be created by build_id processing.
+	 */
+	struct dso *dso = __dsos__findnew(&machine->kernel_dsos, name);
+
+	/*
+	 * We need to run this in all cases, since during the build_id
+	 * processing we had no idea this was the kernel dso.
+	 */
+	if (dso != NULL) {
+		dso__set_short_name(dso, short_name);
+		dso->kernel = dso_type;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return dso;
@@ -2210,13 +2409,18 @@ void dso__read_running_kernel_build_id(struct dso *dso, struct machine *machine)
 		dso->has_build_id = true;
 }
 
+<<<<<<< HEAD
 static struct dso *machine__create_kernel(struct machine *machine)
+=======
+static struct dso *machine__get_kernel(struct machine *machine)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	const char *vmlinux_name = NULL;
 	struct dso *kernel;
 
 	if (machine__is_host(machine)) {
 		vmlinux_name = symbol_conf.vmlinux_name;
+<<<<<<< HEAD
 		kernel = dso__new_kernel(vmlinux_name);
 	} else {
 		if (machine__is_default_guest(machine))
@@ -2228,6 +2432,31 @@ static struct dso *machine__create_kernel(struct machine *machine)
 		dso__read_running_kernel_build_id(kernel, machine);
 		dsos__add(&machine->kernel_dsos, kernel);
 	}
+=======
+		if (!vmlinux_name)
+			vmlinux_name = "[kernel.kallsyms]";
+
+		kernel = dso__kernel_findnew(machine, vmlinux_name,
+					     "[kernel]",
+					     DSO_TYPE_KERNEL);
+	} else {
+		char bf[PATH_MAX];
+
+		if (machine__is_default_guest(machine))
+			vmlinux_name = symbol_conf.default_guest_vmlinux_name;
+		if (!vmlinux_name)
+			vmlinux_name = machine__mmap_name(machine, bf,
+							  sizeof(bf));
+
+		kernel = dso__kernel_findnew(machine, vmlinux_name,
+					     "[guest.kernel]",
+					     DSO_TYPE_GUEST_KERNEL);
+	}
+
+	if (kernel != NULL && (!kernel->has_build_id))
+		dso__read_running_kernel_build_id(kernel, machine);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return kernel;
 }
 
@@ -2331,7 +2560,11 @@ void machine__destroy_kernel_maps(struct machine *machine)
 
 int machine__create_kernel_maps(struct machine *machine)
 {
+<<<<<<< HEAD
 	struct dso *kernel = machine__create_kernel(machine);
+=======
+	struct dso *kernel = machine__get_kernel(machine);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (kernel == NULL ||
 	    __machine__create_kernel_maps(machine, kernel) < 0)

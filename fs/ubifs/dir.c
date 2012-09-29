@@ -102,7 +102,11 @@ struct inode *ubifs_new_inode(struct ubifs_info *c, const struct inode *dir,
 	 * UBIFS has to fully control "clean <-> dirty" transitions of inodes
 	 * to make budgeting work.
 	 */
+<<<<<<< HEAD
 	inode->i_flags |= (S_NOCMTIME);
+=======
+	inode->i_flags |= S_NOCMTIME;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	inode_init_owner(inode, dir, mode);
 	inode->i_mtime = inode->i_atime = inode->i_ctime =
@@ -172,9 +176,17 @@ struct inode *ubifs_new_inode(struct ubifs_info *c, const struct inode *dir,
 
 #ifdef CONFIG_UBIFS_FS_DEBUG
 
+<<<<<<< HEAD
 static int dbg_check_name(struct ubifs_dent_node *dent, struct qstr *nm)
 {
 	if (!(ubifs_chk_flags & UBIFS_CHK_GEN))
+=======
+static int dbg_check_name(const struct ubifs_info *c,
+			  const struct ubifs_dent_node *dent,
+			  const struct qstr *nm)
+{
+	if (!dbg_is_chk_gen(c))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 	if (le16_to_cpu(dent->nlen) != nm->len)
 		return -EINVAL;
@@ -185,7 +197,11 @@ static int dbg_check_name(struct ubifs_dent_node *dent, struct qstr *nm)
 
 #else
 
+<<<<<<< HEAD
 #define dbg_check_name(dent, nm) 0
+=======
+#define dbg_check_name(c, dent, nm) 0
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif
 
@@ -219,7 +235,11 @@ static struct dentry *ubifs_lookup(struct inode *dir, struct dentry *dentry,
 		goto out;
 	}
 
+<<<<<<< HEAD
 	if (dbg_check_name(dent, &dentry->d_name)) {
+=======
+	if (dbg_check_name(c, dent, &dentry->d_name)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		err = -EINVAL;
 		goto out;
 	}
@@ -522,7 +542,11 @@ static int ubifs_link(struct dentry *old_dentry, struct inode *dir,
 	ubifs_assert(mutex_is_locked(&dir->i_mutex));
 	ubifs_assert(mutex_is_locked(&inode->i_mutex));
 
+<<<<<<< HEAD
 	err = dbg_check_synced_i_size(inode);
+=======
+	err = dbg_check_synced_i_size(c, inode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err)
 		return err;
 
@@ -577,7 +601,11 @@ static int ubifs_unlink(struct inode *dir, struct dentry *dentry)
 		inode->i_nlink, dir->i_ino);
 	ubifs_assert(mutex_is_locked(&dir->i_mutex));
 	ubifs_assert(mutex_is_locked(&inode->i_mutex));
+<<<<<<< HEAD
 	err = dbg_check_synced_i_size(inode);
+=======
+	err = dbg_check_synced_i_size(c, inode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err)
 		return err;
 

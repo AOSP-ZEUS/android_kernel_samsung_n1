@@ -359,7 +359,11 @@ void HPI_6000(struct hpi_message *phm, struct hpi_response *phr)
 			HPI_ERROR_PROCESSING_MESSAGE);
 
 	switch (phm->type) {
+<<<<<<< HEAD
 	case HPI_TYPE_MESSAGE:
+=======
+	case HPI_TYPE_REQUEST:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		switch (phm->object) {
 		case HPI_OBJ_SUBSYSTEM:
 			subsys_message(phm, phr);
@@ -538,7 +542,11 @@ static short create_adapter_obj(struct hpi_adapter_obj *pao,
 
 		HPI_DEBUG_LOG(VERBOSE, "send ADAPTER_GET_INFO\n");
 		memset(&hm, 0, sizeof(hm));
+<<<<<<< HEAD
 		hm.type = HPI_TYPE_MESSAGE;
+=======
+		hm.type = HPI_TYPE_REQUEST;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		hm.size = sizeof(struct hpi_message);
 		hm.object = HPI_OBJ_ADAPTER;
 		hm.function = HPI_ADAPTER_GET_INFO;
@@ -946,11 +954,16 @@ static short hpi6000_adapter_boot_load_dsp(struct hpi_adapter_obj *pao,
 		}
 
 		/* write the DSP code down into the DSPs memory */
+<<<<<<< HEAD
 		/*HpiDspCode_Open(nBootLoadFamily,&DspCode,pdwOsErrorCode); */
 		dsp_code.ps_dev = pao->pci.pci_dev;
 
 		error = hpi_dsp_code_open(boot_load_family, &dsp_code,
 			pos_error_code);
+=======
+		error = hpi_dsp_code_open(boot_load_family, pao->pci.pci_dev,
+			&dsp_code, pos_error_code);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		if (error)
 			return error;

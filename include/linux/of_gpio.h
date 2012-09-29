@@ -46,8 +46,14 @@ static inline struct of_mm_gpio_chip *to_of_mm_gpio_chip(struct gpio_chip *gc)
 	return container_of(gc, struct of_mm_gpio_chip, gc);
 }
 
+<<<<<<< HEAD
 extern int of_get_gpio_flags(struct device_node *np, int index,
 			     enum of_gpio_flags *flags);
+=======
+extern int of_get_named_gpio_flags(struct device_node *np,
+		const char *list_name, int index, enum of_gpio_flags *flags);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern unsigned int of_gpio_count(struct device_node *np);
 
 extern int of_mm_gpiochip_add(struct device_node *np,
@@ -56,12 +62,22 @@ extern int of_mm_gpiochip_add(struct device_node *np,
 extern void of_gpiochip_add(struct gpio_chip *gc);
 extern void of_gpiochip_remove(struct gpio_chip *gc);
 extern struct gpio_chip *of_node_to_gpiochip(struct device_node *np);
+<<<<<<< HEAD
+=======
+extern int of_gpio_simple_xlate(struct gpio_chip *gc, struct device_node *np,
+				const void *gpio_spec, u32 *flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #else /* CONFIG_OF_GPIO */
 
 /* Drivers may not strictly depend on the GPIO support, so let them link. */
+<<<<<<< HEAD
 static inline int of_get_gpio_flags(struct device_node *np, int index,
 				    enum of_gpio_flags *flags)
+=======
+static inline int of_get_named_gpio_flags(struct device_node *np,
+		const char *list_name, int index, enum of_gpio_flags *flags)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return -ENOSYS;
 }
@@ -71,13 +87,58 @@ static inline unsigned int of_gpio_count(struct device_node *np)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static inline int of_gpio_simple_xlate(struct gpio_chip *gc,
+				       struct device_node *np,
+				       const void *gpio_spec, u32 *flags)
+{
+	return -ENOSYS;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline void of_gpiochip_add(struct gpio_chip *gc) { }
 static inline void of_gpiochip_remove(struct gpio_chip *gc) { }
 
 #endif /* CONFIG_OF_GPIO */
 
 /**
+<<<<<<< HEAD
  * of_get_gpio - Get a GPIO number to use with GPIO API
+=======
+ * of_get_gpio_flags() - Get a GPIO number and flags to use with GPIO API
+ * @np:		device node to get GPIO from
+ * @index:	index of the GPIO
+ * @flags:	a flags pointer to fill in
+ *
+ * Returns GPIO number to use with Linux generic GPIO API, or one of the errno
+ * value on the error condition. If @flags is not NULL the function also fills
+ * in flags for the GPIO.
+ */
+static inline int of_get_gpio_flags(struct device_node *np, int index,
+		      enum of_gpio_flags *flags)
+{
+	return of_get_named_gpio_flags(np, "gpios", index, flags);
+}
+
+/**
+ * of_get_named_gpio() - Get a GPIO number to use with GPIO API
+ * @np:		device node to get GPIO from
+ * @propname:	Name of property containing gpio specifier(s)
+ * @index:	index of the GPIO
+ *
+ * Returns GPIO number to use with Linux generic GPIO API, or one of the errno
+ * value on the error condition.
+ */
+static inline int of_get_named_gpio(struct device_node *np,
+                                   const char *propname, int index)
+{
+	return of_get_named_gpio_flags(np, propname, index, NULL);
+}
+
+/**
+ * of_get_gpio() - Get a GPIO number to use with GPIO API
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @np:		device node to get GPIO from
  * @index:	index of the GPIO
  *

@@ -401,6 +401,10 @@ extern unsigned long arch_align_stack(unsigned long sp);
 extern void free_init_pages(char *what, unsigned long begin, unsigned long end);
 
 void default_idle(void);
+<<<<<<< HEAD
+=======
+bool set_pm_idle_to_default(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void stop_this_cpu(void *dummy);
 

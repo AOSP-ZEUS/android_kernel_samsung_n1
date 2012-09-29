@@ -34,7 +34,10 @@
  * @irq_type: irq type
  * @x flip: x flip flag
  * @y flip: y flip flag
+<<<<<<< HEAD
  * @regulator_en: regulator enable flag
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * This structure gives platform data for rmi4.
  */
@@ -43,7 +46,10 @@ struct synaptics_rmi4_platform_data {
 	int irq_type;
 	bool x_flip;
 	bool y_flip;
+<<<<<<< HEAD
 	bool regulator_en;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif

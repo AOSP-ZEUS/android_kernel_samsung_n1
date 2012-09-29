@@ -67,7 +67,11 @@ struct p9_trans_module {
 
 void v9fs_register_trans(struct p9_trans_module *m);
 void v9fs_unregister_trans(struct p9_trans_module *m);
+<<<<<<< HEAD
 struct p9_trans_module *v9fs_get_trans_by_name(const substring_t *name);
+=======
+struct p9_trans_module *v9fs_get_trans_by_name(char *s);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct p9_trans_module *v9fs_get_default_trans(void);
 void v9fs_put_trans(struct p9_trans_module *m);
 #endif /* NET_9P_TRANSPORT_H */

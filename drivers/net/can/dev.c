@@ -208,7 +208,11 @@ static int can_fixup_bittiming(struct net_device *dev, struct can_bittiming *bt)
 	return 0;
 }
 
+<<<<<<< HEAD
 int can_get_bittiming(struct net_device *dev, struct can_bittiming *bt)
+=======
+static int can_get_bittiming(struct net_device *dev, struct can_bittiming *bt)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct can_priv *priv = netdev_priv(dev);
 	int err;

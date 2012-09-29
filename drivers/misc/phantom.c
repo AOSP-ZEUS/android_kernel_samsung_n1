@@ -26,7 +26,11 @@
 #include <linux/sched.h>
 #include <linux/mutex.h>
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/io.h>
 
 #define PHANTOM_VERSION		"n0.9.8"

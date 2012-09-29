@@ -112,8 +112,11 @@ static void sn_ack_irq(struct irq_data *data)
 	irq_move_irq(data);
 }
 
+<<<<<<< HEAD
 static void sn_irq_info_free(struct rcu_head *head);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct sn_irq_info *sn_retarget_vector(struct sn_irq_info *sn_irq_info,
 				       nasid_t nasid, int slice)
 {
@@ -177,7 +180,11 @@ struct sn_irq_info *sn_retarget_vector(struct sn_irq_info *sn_irq_info,
 	spin_lock(&sn_irq_info_lock);
 	list_replace_rcu(&sn_irq_info->list, &new_irq_info->list);
 	spin_unlock(&sn_irq_info_lock);
+<<<<<<< HEAD
 	call_rcu(&sn_irq_info->rcu, sn_irq_info_free);
+=======
+	kfree_rcu(sn_irq_info, rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 finish_up:
@@ -338,6 +345,7 @@ static void unregister_intr_pda(struct sn_irq_info *sn_irq_info)
 	rcu_read_unlock();
 }
 
+<<<<<<< HEAD
 static void sn_irq_info_free(struct rcu_head *head)
 {
 	struct sn_irq_info *sn_irq_info;
@@ -346,6 +354,8 @@ static void sn_irq_info_free(struct rcu_head *head)
 	kfree(sn_irq_info);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void sn_irq_fixup(struct pci_dev *pci_dev, struct sn_irq_info *sn_irq_info)
 {
 	nasid_t nasid = sn_irq_info->irq_nasid;
@@ -399,7 +409,11 @@ void sn_irq_unfixup(struct pci_dev *pci_dev)
 	spin_unlock(&sn_irq_info_lock);
 	if (list_empty(sn_irq_lh[sn_irq_info->irq_irq]))
 		free_irq_vector(sn_irq_info->irq_irq);
+<<<<<<< HEAD
 	call_rcu(&sn_irq_info->rcu, sn_irq_info_free);
+=======
+	kfree_rcu(sn_irq_info, rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pci_dev_put(pci_dev);
 
 }

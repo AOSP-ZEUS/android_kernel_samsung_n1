@@ -26,7 +26,11 @@
 #include <linux/types.h>
 #include <linux/list.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/if.h>
 #include <linux/skbuff.h>
 #include <linux/ieee80211.h>

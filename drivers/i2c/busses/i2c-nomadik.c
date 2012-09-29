@@ -146,6 +146,10 @@ struct i2c_nmk_client {
  * @stop: stop condition
  * @xfer_complete: acknowledge completion for a I2C message
  * @result: controller propogated result
+<<<<<<< HEAD
+=======
+ * @regulator: pointer to i2c regulator
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @busy: Busy doing transfer
  */
 struct nmk_i2c_dev {
@@ -417,12 +421,20 @@ static int read_i2c(struct nmk_i2c_dev *dev)
 	writel(readl(dev->virtbase + I2C_IMSCR) | irq_mask,
 			dev->virtbase + I2C_IMSCR);
 
+<<<<<<< HEAD
 	timeout = wait_for_completion_interruptible_timeout(
+=======
+	timeout = wait_for_completion_timeout(
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		&dev->xfer_complete, dev->adap.timeout);
 
 	if (timeout < 0) {
 		dev_err(&dev->pdev->dev,
+<<<<<<< HEAD
 			"wait_for_completion_interruptible_timeout"
+=======
+			"wait_for_completion_timeout"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			"returned %d waiting for event\n", timeout);
 		status = timeout;
 	}
@@ -504,12 +516,20 @@ static int write_i2c(struct nmk_i2c_dev *dev)
 	writel(readl(dev->virtbase + I2C_IMSCR) | irq_mask,
 			dev->virtbase + I2C_IMSCR);
 
+<<<<<<< HEAD
 	timeout = wait_for_completion_interruptible_timeout(
+=======
+	timeout = wait_for_completion_timeout(
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		&dev->xfer_complete, dev->adap.timeout);
 
 	if (timeout < 0) {
 		dev_err(&dev->pdev->dev,
+<<<<<<< HEAD
 			"wait_for_completion_interruptible_timeout"
+=======
+			"wait_for_completion_timeout "
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			"returned %d waiting for event\n", timeout);
 		status = timeout;
 	}

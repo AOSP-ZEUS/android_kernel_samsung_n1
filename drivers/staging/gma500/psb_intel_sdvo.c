@@ -107,14 +107,20 @@ static bool psb_intel_sdvo_read_byte(
 
 	ret = i2c_transfer(&sdvo_priv->i2c_bus->adapter, msgs, 2);
 	if (ret == 2) {
+<<<<<<< HEAD
 		/* DRM_DEBUG("got back from addr %02X = %02x\n",
 		 * out_buf[0], buf[0]);
 		 */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		*ch = buf[0];
 		return true;
 	}
 
+<<<<<<< HEAD
 	DRM_DEBUG("i2c transfer returned %d\n", ret);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return false;
 }
 
@@ -205,24 +211,42 @@ static void psb_intel_sdvo_write_cmd(struct psb_intel_output *psb_intel_output,
 	int i;
 
 	if (0) {
+<<<<<<< HEAD
 		DRM_DEBUG("%s: W: %02X ", SDVO_NAME(sdvo_priv), cmd);
 		for (i = 0; i < args_len; i++)
 			printk(KERN_INFO"%02X ", ((u8 *) args)[i]);
 		for (; i < 8; i++)
 			printk("   ");
+=======
+		printk(KERN_DEBUG "%s: W: %02X ", SDVO_NAME(sdvo_priv), cmd);
+		for (i = 0; i < args_len; i++)
+			printk(KERN_CONT "%02X ", ((u8 *) args)[i]);
+		for (; i < 8; i++)
+			printk(KERN_CONT "   ");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		for (i = 0;
 		     i <
 		     sizeof(sdvo_cmd_names) / sizeof(sdvo_cmd_names[0]);
 		     i++) {
 			if (cmd == sdvo_cmd_names[i].cmd) {
+<<<<<<< HEAD
 				printk("(%s)", sdvo_cmd_names[i].name);
+=======
+				printk(KERN_CONT
+					"(%s)", sdvo_cmd_names[i].name);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				break;
 			}
 		}
 		if (i ==
 		    sizeof(sdvo_cmd_names) / sizeof(sdvo_cmd_names[0]))
+<<<<<<< HEAD
 			printk("(%02X)", cmd);
 		printk("\n");
+=======
+			printk(KERN_CONT "(%02X)", cmd);
+		printk(KERN_CONT "\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	for (i = 0; i < args_len; i++) {
@@ -267,6 +291,7 @@ static u8 psb_intel_sdvo_read_response(
 					 &status);
 
 		if (0) {
+<<<<<<< HEAD
 			DRM_DEBUG("%s: R: ", SDVO_NAME(sdvo_priv));
 			for (i = 0; i < response_len; i++)
 				printk(KERN_INFO"%02X ", ((u8 *) response)[i]);
@@ -278,6 +303,19 @@ static u8 psb_intel_sdvo_read_response(
 			else
 				printk(KERN_INFO"(??? %d)", status);
 			printk("\n");
+=======
+			pr_debug("%s: R: ", SDVO_NAME(sdvo_priv));
+			for (i = 0; i < response_len; i++)
+				printk(KERN_CONT "%02X ", ((u8 *) response)[i]);
+			for (; i < 8; i++)
+				printk("   ");
+			if (status <= SDVO_CMD_STATUS_SCALING_NOT_SUPP)
+				printk(KERN_CONT "(%s)",
+					 cmd_status_names[status]);
+			else
+				printk(KERN_CONT "(??? %d)", status);
+			printk(KERN_CONT "\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 		if (status != SDVO_CMD_STATUS_PENDING)
@@ -997,7 +1035,10 @@ int psb_intel_sdvo_supports_hotplug(struct drm_connector *connector)
 	u8 response[2];
 	u8 status;
 	struct psb_intel_output *psb_intel_output;
+<<<<<<< HEAD
 	DRM_DEBUG("\n");
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!connector)
 		return 0;
@@ -1198,7 +1239,11 @@ void psb_intel_sdvo_init(struct drm_device *dev, int output_device)
 	/* Read the regs to test if we can talk to the device */
 	for (i = 0; i < 0x40; i++) {
 		if (!psb_intel_sdvo_read_byte(psb_intel_output, i, &ch[i])) {
+<<<<<<< HEAD
 			DRM_DEBUG("No SDVO device found on SDVO%c\n",
+=======
+			dev_dbg(dev->dev, "No SDVO device found on SDVO%c\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				  output_device == SDVOB ? 'B' : 'C');
 			goto err_i2c;
 		}
@@ -1242,8 +1287,12 @@ void psb_intel_sdvo_init(struct drm_device *dev, int output_device)
 		unsigned char bytes[2];
 
 		memcpy(bytes, &sdvo_priv->caps.output_flags, 2);
+<<<<<<< HEAD
 		DRM_DEBUG
 		    ("%s: No active RGB or TMDS outputs (0x%02x%02x)\n",
+=======
+		dev_dbg(dev->dev, "%s: No active RGB or TMDS outputs (0x%02x%02x)\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		     SDVO_NAME(sdvo_priv), bytes[0], bytes[1]);
 		goto err_i2c;
 	}
@@ -1267,7 +1316,11 @@ void psb_intel_sdvo_init(struct drm_device *dev, int output_device)
 					       pixel_clock_max);
 
 
+<<<<<<< HEAD
 	DRM_DEBUG("%s device VID/DID: %02X:%02X.%02X, "
+=======
+	dev_dbg(dev->dev, "%s device VID/DID: %02X:%02X.%02X, "
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		  "clock range %dMHz - %dMHz, "
 		  "input 1: %c, input 2: %c, "
 		  "output 1: %c, output 2: %c\n",

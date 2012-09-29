@@ -13,6 +13,10 @@
 #include <linux/irq.h>
 #include <linux/platform_device.h>
 #include <linux/spi/spi.h>
+<<<<<<< HEAD
+=======
+#include <linux/gpio.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/mach-types.h>
 #include <asm/mach/arch.h>
@@ -26,7 +30,11 @@
 #include "devices-imx51.h"
 #include "devices.h"
 
+<<<<<<< HEAD
 #define EXPIO_PARENT_INT	(MXC_INTERNAL_IRQS + GPIO_PORTA + 6)
+=======
+#define EXPIO_PARENT_INT	gpio_to_irq(IMX_GPIO_NR(1, 6))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define MX51_3DS_ECSPI2_CS	(GPIO_PORTC + 28)
 
 static iomux_v3_cfg_t mx51_3ds_pads[] = {
@@ -135,6 +143,11 @@ static struct spi_board_info mx51_3ds_spi_nor_device[] = {
  */
 static void __init mx51_3ds_init(void)
 {
+<<<<<<< HEAD
+=======
+	imx51_soc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mxc_iomux_v3_setup_multiple_pads(mx51_3ds_pads,
 					ARRAY_SIZE(mx51_3ds_pads));
 

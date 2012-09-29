@@ -106,6 +106,7 @@ static int be_mcc_compl_process(struct be_adapter *adapter,
 			netdev_stats_update(adapter);
 			adapter->stats_cmd_sent = false;
 		}
+<<<<<<< HEAD
 	} else if ((compl_status != MCC_STATUS_NOT_SUPPORTED) &&
 		   (compl->tag0 != OPCODE_COMMON_NTWK_MAC_QUERY)) {
 		extd_status = (compl->status >> CQE_STATUS_EXTD_SHIFT) &
@@ -114,6 +115,26 @@ static int be_mcc_compl_process(struct be_adapter *adapter,
 		"Error in cmd completion - opcode %d, compl %d, extd %d\n",
 			compl->tag0, compl_status, extd_status);
 	}
+=======
+	} else {
+		if (compl_status == MCC_STATUS_NOT_SUPPORTED ||
+			compl_status == MCC_STATUS_ILLEGAL_REQUEST)
+			goto done;
+
+		if (compl_status == MCC_STATUS_UNAUTHORIZED_REQUEST) {
+			dev_warn(&adapter->pdev->dev, "This domain(VM) is not "
+				"permitted to execute this cmd (opcode %d)\n",
+				compl->tag0);
+		} else {
+			extd_status = (compl->status >> CQE_STATUS_EXTD_SHIFT) &
+					CQE_STATUS_EXTD_MASK;
+			dev_err(&adapter->pdev->dev, "Cmd (opcode %d) failed:"
+				"status %d, extd-status %d\n",
+				compl->tag0, compl_status, extd_status);
+		}
+	}
+done:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return compl_status;
 }
 
@@ -799,12 +820,20 @@ static u32 be_encoded_q_len(int q_len)
 	return len_encoded;
 }
 
+<<<<<<< HEAD
 int be_cmd_mccq_create(struct be_adapter *adapter,
+=======
+int be_cmd_mccq_ext_create(struct be_adapter *adapter,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			struct be_queue_info *mccq,
 			struct be_queue_info *cq)
 {
 	struct be_mcc_wrb *wrb;
+<<<<<<< HEAD
 	struct be_cmd_req_mcc_create *req;
+=======
+	struct be_cmd_req_mcc_ext_create *req;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct be_dma_mem *q_mem = &mccq->dma_mem;
 	void *ctxt;
 	int status;
@@ -859,6 +888,70 @@ int be_cmd_mccq_create(struct be_adapter *adapter,
 	return status;
 }
 
+<<<<<<< HEAD
+=======
+int be_cmd_mccq_org_create(struct be_adapter *adapter,
+			struct be_queue_info *mccq,
+			struct be_queue_info *cq)
+{
+	struct be_mcc_wrb *wrb;
+	struct be_cmd_req_mcc_create *req;
+	struct be_dma_mem *q_mem = &mccq->dma_mem;
+	void *ctxt;
+	int status;
+
+	if (mutex_lock_interruptible(&adapter->mbox_lock))
+		return -1;
+
+	wrb = wrb_from_mbox(adapter);
+	req = embedded_payload(wrb);
+	ctxt = &req->context;
+
+	be_wrb_hdr_prepare(wrb, sizeof(*req), true, 0,
+			OPCODE_COMMON_MCC_CREATE);
+
+	be_cmd_hdr_prepare(&req->hdr, CMD_SUBSYSTEM_COMMON,
+			OPCODE_COMMON_MCC_CREATE, sizeof(*req));
+
+	req->num_pages = cpu_to_le16(PAGES_4K_SPANNED(q_mem->va, q_mem->size));
+
+	AMAP_SET_BITS(struct amap_mcc_context_be, valid, ctxt, 1);
+	AMAP_SET_BITS(struct amap_mcc_context_be, ring_size, ctxt,
+			be_encoded_q_len(mccq->len));
+	AMAP_SET_BITS(struct amap_mcc_context_be, cq_id, ctxt, cq->id);
+
+	be_dws_cpu_to_le(ctxt, sizeof(req->context));
+
+	be_cmd_page_addrs_prepare(req->pages, ARRAY_SIZE(req->pages), q_mem);
+
+	status = be_mbox_notify_wait(adapter);
+	if (!status) {
+		struct be_cmd_resp_mcc_create *resp = embedded_payload(wrb);
+		mccq->id = le16_to_cpu(resp->id);
+		mccq->created = true;
+	}
+
+	mutex_unlock(&adapter->mbox_lock);
+	return status;
+}
+
+int be_cmd_mccq_create(struct be_adapter *adapter,
+			struct be_queue_info *mccq,
+			struct be_queue_info *cq)
+{
+	int status;
+
+	status = be_cmd_mccq_ext_create(adapter, mccq, cq);
+	if (status && !lancer_chip(adapter)) {
+		dev_warn(&adapter->pdev->dev, "Upgrade to F/W ver 2.102.235.0 "
+			"or newer to avoid conflicting priorities between NIC "
+			"and FCoE traffic");
+		status = be_cmd_mccq_org_create(adapter, mccq, cq);
+	}
+	return status;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int be_cmd_txq_create(struct be_adapter *adapter,
 			struct be_queue_info *txq,
 			struct be_queue_info *cq)
@@ -913,7 +1006,11 @@ int be_cmd_txq_create(struct be_adapter *adapter,
 	return status;
 }
 
+<<<<<<< HEAD
 /* Uses mbox */
+=======
+/* Uses MCC */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int be_cmd_rxq_create(struct be_adapter *adapter,
 		struct be_queue_info *rxq, u16 cq_id, u16 frag_size,
 		u16 max_frame_size, u32 if_id, u32 rss, u8 *rss_id)
@@ -923,10 +1020,20 @@ int be_cmd_rxq_create(struct be_adapter *adapter,
 	struct be_dma_mem *q_mem = &rxq->dma_mem;
 	int status;
 
+<<<<<<< HEAD
 	if (mutex_lock_interruptible(&adapter->mbox_lock))
 		return -1;
 
 	wrb = wrb_from_mbox(adapter);
+=======
+	spin_lock_bh(&adapter->mcc_lock);
+
+	wrb = wrb_from_mccq(adapter);
+	if (!wrb) {
+		status = -EBUSY;
+		goto err;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	req = embedded_payload(wrb);
 
 	be_wrb_hdr_prepare(wrb, sizeof(*req), true, 0,
@@ -943,7 +1050,11 @@ int be_cmd_rxq_create(struct be_adapter *adapter,
 	req->max_frame_size = cpu_to_le16(max_frame_size);
 	req->rss_queue = cpu_to_le32(rss);
 
+<<<<<<< HEAD
 	status = be_mbox_notify_wait(adapter);
+=======
+	status = be_mcc_notify_wait(adapter);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!status) {
 		struct be_cmd_resp_eth_rx_create *resp = embedded_payload(wrb);
 		rxq->id = le16_to_cpu(resp->id);
@@ -951,8 +1062,13 @@ int be_cmd_rxq_create(struct be_adapter *adapter,
 		*rss_id = resp->rss_id;
 	}
 
+<<<<<<< HEAD
 	mutex_unlock(&adapter->mbox_lock);
 
+=======
+err:
+	spin_unlock_bh(&adapter->mcc_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return status;
 }
 
@@ -1007,9 +1123,46 @@ int be_cmd_q_destroy(struct be_adapter *adapter, struct be_queue_info *q,
 	req->id = cpu_to_le16(q->id);
 
 	status = be_mbox_notify_wait(adapter);
+<<<<<<< HEAD
 
 	mutex_unlock(&adapter->mbox_lock);
 
+=======
+	if (!status)
+		q->created = false;
+
+	mutex_unlock(&adapter->mbox_lock);
+	return status;
+}
+
+/* Uses MCC */
+int be_cmd_rxq_destroy(struct be_adapter *adapter, struct be_queue_info *q)
+{
+	struct be_mcc_wrb *wrb;
+	struct be_cmd_req_q_destroy *req;
+	int status;
+
+	spin_lock_bh(&adapter->mcc_lock);
+
+	wrb = wrb_from_mccq(adapter);
+	if (!wrb) {
+		status = -EBUSY;
+		goto err;
+	}
+	req = embedded_payload(wrb);
+
+	be_wrb_hdr_prepare(wrb, sizeof(*req), true, 0, OPCODE_ETH_RX_DESTROY);
+	be_cmd_hdr_prepare(&req->hdr, CMD_SUBSYSTEM_ETH, OPCODE_ETH_RX_DESTROY,
+		sizeof(*req));
+	req->id = cpu_to_le16(q->id);
+
+	status = be_mcc_notify_wait(adapter);
+	if (!status)
+		q->created = false;
+
+err:
+	spin_unlock_bh(&adapter->mcc_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return status;
 }
 
@@ -2273,8 +2426,12 @@ int be_cmd_get_cntl_attributes(struct be_adapter *adapter)
 
 	status = be_mbox_notify_wait(adapter);
 	if (!status) {
+<<<<<<< HEAD
 		attribs = (struct mgmt_controller_attrib *)( attribs_cmd.va +
 					sizeof(struct be_cmd_resp_hdr));
+=======
+		attribs = attribs_cmd.va + sizeof(struct be_cmd_resp_hdr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		adapter->hba_port_num = attribs->hba_attribs.phy_port;
 	}
 
@@ -2286,7 +2443,11 @@ err:
 }
 
 /* Uses mbox */
+<<<<<<< HEAD
 int be_cmd_check_native_mode(struct be_adapter *adapter)
+=======
+int be_cmd_req_native_mode(struct be_adapter *adapter)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct be_mcc_wrb *wrb;
 	struct be_cmd_req_set_func_cap *req;

@@ -54,7 +54,10 @@
 
 struct ad774x_chip_info {
 	struct i2c_client *client;
+<<<<<<< HEAD
 	struct iio_dev *indio_dev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bool inter;
 	u16 cap_offs;                   /* Capacitive offset */
 	u16 cap_gain;                   /* Capacitive gain calibration */
@@ -169,7 +172,11 @@ static ssize_t ad774x_show_conversion_mode(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return sprintf(buf, "%s\n", chip->conversion_mode);
 }
@@ -180,7 +187,11 @@ static ssize_t ad774x_store_conversion_mode(struct device *dev,
 		size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 cfg;
 	int i;
 
@@ -210,7 +221,11 @@ static ssize_t ad774x_show_dac_value(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
 	u8 data;
 
@@ -225,7 +240,11 @@ static ssize_t ad774x_store_dac_value(struct device *dev,
 		size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
 	unsigned long data;
 	int ret;
@@ -256,7 +275,11 @@ static ssize_t ad774x_show_cap_setup(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return sprintf(buf, "0x%02x\n", chip->cap_setup);
 }
@@ -267,7 +290,11 @@ static ssize_t ad774x_store_cap_setup(struct device *dev,
 		size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long data;
 	int ret;
 
@@ -291,7 +318,11 @@ static ssize_t ad774x_show_vt_setup(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return sprintf(buf, "0x%02x\n", chip->vt_setup);
 }
@@ -302,7 +333,11 @@ static ssize_t ad774x_store_vt_setup(struct device *dev,
 		size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long data;
 	int ret;
 
@@ -326,7 +361,11 @@ static ssize_t ad774x_show_exec_setup(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return sprintf(buf, "0x%02x\n", chip->exec_setup);
 }
@@ -337,7 +376,11 @@ static ssize_t ad774x_store_exec_setup(struct device *dev,
 		size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long data;
 	int ret;
 
@@ -361,7 +404,11 @@ static ssize_t ad774x_show_volt_gain(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return sprintf(buf, "%d\n", chip->volt_gain);
 }
@@ -372,7 +419,11 @@ static ssize_t ad774x_store_volt_gain(struct device *dev,
 		size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long data;
 	int ret;
 
@@ -397,7 +448,11 @@ static ssize_t ad774x_show_cap_data(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long data;
 	char tmp[3];
 
@@ -414,7 +469,11 @@ static ssize_t ad774x_show_vt_data(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long data;
 	char tmp[3];
 
@@ -431,7 +490,11 @@ static ssize_t ad774x_show_cap_offs(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return sprintf(buf, "%d\n", chip->cap_offs);
 }
@@ -442,7 +505,11 @@ static ssize_t ad774x_store_cap_offs(struct device *dev,
 		size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long data;
 	int ret;
 
@@ -467,7 +534,11 @@ static ssize_t ad774x_show_cap_gain(struct device *dev,
 		char *buf)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return sprintf(buf, "%d\n", chip->cap_gain);
 }
@@ -478,7 +549,11 @@ static ssize_t ad774x_store_cap_gain(struct device *dev,
 		size_t len)
 {
 	struct iio_dev *dev_info = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = dev_info->dev_data;
+=======
+	struct ad774x_chip_info *chip = iio_priv(dev_info);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long data;
 	int ret;
 
@@ -534,7 +609,11 @@ static const struct attribute_group ad774x_attribute_group = {
 static irqreturn_t ad774x_event_handler(int irq, void *private)
 {
 	struct iio_dev *indio_dev = private;
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = iio_dev_get_devdata(indio_dev);
+=======
+	struct ad774x_chip_info *chip = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 int_status;
 
 	ad774x_i2c_read(chip, AD774X_STATUS, &int_status, 1);
@@ -579,6 +658,7 @@ static int __devinit ad774x_probe(struct i2c_client *client,
 		const struct i2c_device_id *id)
 {
 	int ret = 0, regdone = 0;
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = kzalloc(sizeof(*chip), GFP_KERNEL);
 	if (chip == NULL) {
 		ret = -ENOMEM;
@@ -604,6 +684,29 @@ static int __devinit ad774x_probe(struct i2c_client *client,
 	chip->indio_dev->modes = INDIO_DIRECT_MODE;
 
 	ret = iio_device_register(chip->indio_dev);
+=======
+	struct ad774x_chip_info *chip;
+	struct iio_dev *indio_dev;
+
+	indio_dev = iio_allocate_device(sizeof(*chip));
+	if (indio_dev == NULL) {
+		ret = -ENOMEM;
+		goto error_ret;
+	}
+	chip = iio_priv(indio_dev);
+	/* this is only used for device removal purposes */
+	i2c_set_clientdata(client, indio_dev);
+
+	chip->client = client;
+
+	/* Establish that the iio_dev is a child of the i2c device */
+	indio_dev->name = id->name;
+	indio_dev->dev.parent = &client->dev;
+	indio_dev->info = &ad774x_info;
+	indio_dev->modes = INDIO_DIRECT_MODE;
+
+	ret = iio_device_register(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_free_dev;
 	regdone = 1;
@@ -614,7 +717,11 @@ static int __devinit ad774x_probe(struct i2c_client *client,
 					   &ad774x_event_handler,
 					   IRQF_TRIGGER_FALLING,
 					   "ad774x",
+<<<<<<< HEAD
 					   chip->indio_dev);
+=======
+					   indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret)
 			goto error_free_dev;
 	}
@@ -625,24 +732,37 @@ static int __devinit ad774x_probe(struct i2c_client *client,
 
 error_free_dev:
 	if (regdone)
+<<<<<<< HEAD
 		free_irq(client->irq, chip->indio_dev);
 	else
 		iio_free_device(chip->indio_dev);
 error_free_chip:
 	kfree(chip);
+=======
+		free_irq(client->irq, indio_dev);
+	else
+		iio_free_device(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_ret:
 	return ret;
 }
 
 static int __devexit ad774x_remove(struct i2c_client *client)
 {
+<<<<<<< HEAD
 	struct ad774x_chip_info *chip = i2c_get_clientdata(client);
 	struct iio_dev *indio_dev = chip->indio_dev;
+=======
+	struct iio_dev *indio_dev = i2c_get_clientdata(client);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (client->irq)
 		free_irq(client->irq, indio_dev);
 	iio_device_unregister(indio_dev);
+<<<<<<< HEAD
 	kfree(chip);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

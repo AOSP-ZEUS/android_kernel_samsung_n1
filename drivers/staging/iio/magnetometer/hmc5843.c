@@ -131,7 +131,10 @@ static const unsigned short normal_i2c[] = { HMC5843_I2C_ADDRESS,
 
 /* Each client has this additional data */
 struct hmc5843_data {
+<<<<<<< HEAD
 	struct iio_dev	*indio_dev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct mutex lock;
 	u8		rate;
 	u8		meas_conf;
@@ -159,7 +162,11 @@ static ssize_t hmc5843_read_measurement(struct device *dev,
 	struct i2c_client *client = to_i2c_client(indio_dev->dev.parent);
 	s16 coordinate_val;
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
+<<<<<<< HEAD
 	struct hmc5843_data *data = indio_dev->dev_data;
+=======
+	struct hmc5843_data *data = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	s32 result;
 
 	mutex_lock(&data->lock);
@@ -202,7 +209,11 @@ static ssize_t hmc5843_show_operating_mode(struct device *dev,
 					char *buf)
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct hmc5843_data *data = indio_dev->dev_data;
+=======
+	struct hmc5843_data *data = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return sprintf(buf, "%d\n", data->operating_mode);
 }
 
@@ -213,7 +224,11 @@ static ssize_t hmc5843_set_operating_mode(struct device *dev,
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
 	struct i2c_client *client = to_i2c_client(indio_dev->dev.parent);
+<<<<<<< HEAD
 	struct hmc5843_data *data = indio_dev->dev_data;
+=======
+	struct hmc5843_data *data = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
 	unsigned long operating_mode = 0;
 	s32 status;
@@ -278,7 +293,11 @@ static ssize_t hmc5843_show_measurement_configuration(struct device *dev,
 						char *buf)
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct hmc5843_data *data = indio_dev->dev_data;
+=======
+	struct hmc5843_data *data = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return sprintf(buf, "%d\n", data->meas_conf);
 }
 
@@ -350,7 +369,11 @@ static ssize_t set_sampling_frequency(struct device *dev,
 
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
 	struct i2c_client *client = to_i2c_client(indio_dev->dev.parent);
+<<<<<<< HEAD
 	struct hmc5843_data *data = indio_dev->dev_data;
+=======
+	struct hmc5843_data *data = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long rate = 0;
 
 	if (strncmp(buf, "0.5" , 3) == 0)
@@ -422,7 +445,11 @@ static ssize_t show_range(struct device *dev,
 {
 	u8 range;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct hmc5843_data *data = indio_dev->dev_data;
+=======
+	struct hmc5843_data *data = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	range = data->range;
 	return sprintf(buf, "%d\n", regval_to_input_field_mg[range]);
@@ -436,7 +463,11 @@ static ssize_t set_range(struct device *dev,
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
 	struct i2c_client *client = to_i2c_client(indio_dev->dev.parent);
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
+<<<<<<< HEAD
 	struct hmc5843_data *data = indio_dev->dev_data;
+=======
+	struct hmc5843_data *data = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long range = 0;
 	int error;
 	mutex_lock(&data->lock);
@@ -473,7 +504,11 @@ static ssize_t show_scale(struct device *dev,
 			char *buf)
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct hmc5843_data *data = indio_dev->dev_data;
+=======
+	struct hmc5843_data *data = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return strlen(strcpy(buf, regval_to_scale[data->range]));
 }
 static IIO_DEVICE_ATTR(magn_scale,
@@ -520,9 +555,13 @@ static int hmc5843_detect(struct i2c_client *client,
 /* Called when we have found a new HMC5843. */
 static void hmc5843_init_client(struct i2c_client *client)
 {
+<<<<<<< HEAD
 	struct iio_dev *indio_dev = i2c_get_clientdata(client);
 	struct hmc5843_data *data = iio_priv(indio_dev);
 
+=======
+	struct hmc5843_data *data = i2c_get_clientdata(client);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	hmc5843_set_meas_conf(client, data->meas_conf);
 	hmc5843_set_rate(client, data->rate);
 	hmc5843_configure(client, data->operating_mode);
@@ -540,6 +579,7 @@ static int hmc5843_probe(struct i2c_client *client,
 			 const struct i2c_device_id *id)
 {
 	struct hmc5843_data *data;
+<<<<<<< HEAD
 	int err = 0;
 
 	data = kzalloc(sizeof(struct hmc5843_data), GFP_KERNEL);
@@ -548,17 +588,33 @@ static int hmc5843_probe(struct i2c_client *client,
 		goto exit;
 	}
 
+=======
+	struct iio_dev *indio_dev;
+	int err = 0;
+
+	indio_dev = iio_allocate_device(sizeof(*data));
+	if (indio_dev == NULL) {
+		err = -ENOMEM;
+		goto exit;
+	}
+	data = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* default settings at probe */
 
 	data->meas_conf = CONF_NORMAL;
 	data->range = RANGE_1_0;
 	data->operating_mode = MODE_CONVERSION_CONTINUOUS;
 
+<<<<<<< HEAD
 	i2c_set_clientdata(client, data);
+=======
+	i2c_set_clientdata(client, indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Initialize the HMC5843 chip */
 	hmc5843_init_client(client);
 
+<<<<<<< HEAD
 	data->indio_dev = iio_allocate_device(0);
 	if (!data->indio_dev) {
 		err = -ENOMEM;
@@ -569,24 +625,42 @@ static int hmc5843_probe(struct i2c_client *client,
 	data->indio_dev->dev_data = (void *)(data);
 	data->indio_dev->modes = INDIO_DIRECT_MODE;
 	err = iio_device_register(data->indio_dev);
+=======
+	indio_dev->info = &hmc5843_info;
+	indio_dev->dev.parent = &client->dev;
+	indio_dev->modes = INDIO_DIRECT_MODE;
+	err = iio_device_register(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err)
 		goto exit_free2;
 	return 0;
 exit_free2:
+<<<<<<< HEAD
 	iio_free_device(data->indio_dev);
 exit_free1:
 	kfree(data);
+=======
+	iio_free_device(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 exit:
 	return err;
 }
 
 static int hmc5843_remove(struct i2c_client *client)
 {
+<<<<<<< HEAD
 	struct hmc5843_data *data = i2c_get_clientdata(client);
 	 /*  sleep mode to save power */
 	hmc5843_configure(client, MODE_SLEEP);
 	iio_device_unregister(data->indio_dev);
 	kfree(i2c_get_clientdata(client));
+=======
+	struct iio_dev *indio_dev = i2c_get_clientdata(client);
+	 /*  sleep mode to save power */
+	hmc5843_configure(client, MODE_SLEEP);
+	iio_device_unregister(indio_dev);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

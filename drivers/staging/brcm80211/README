@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 Broadcom brcmsmac (mac80211-based softmac PCIe) and brcmfmac (SDIO) drivers.
 
 Completely open source host drivers, no binary object files.
@@ -62,3 +63,6 @@ Roland Vossen		rvossen@broadcom.com
 Arend van Spriel	arend@broadcom.com
 
 For more info, refer to: http://linuxwireless.org/en/users/Drivers/brcm80211
+=======
+refer to: http://linuxwireless.org/en/users/Drivers/brcm80211
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

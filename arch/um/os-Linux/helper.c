@@ -28,14 +28,22 @@ static int helper_child(void *arg)
 {
 	struct helper_data *data = arg;
 	char **argv = data->argv;
+<<<<<<< HEAD
 	int err;
+=======
+	int err, ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (data->pre_exec != NULL)
 		(*data->pre_exec)(data->pre_data);
 	err = execvp_noalloc(data->buf, argv[0], argv);
 
 	/* If the exec succeeds, we don't get here */
+<<<<<<< HEAD
 	write(data->fd, &err, sizeof(err));
+=======
+	CATCH_EINTR(ret = write(data->fd, &err, sizeof(err)));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

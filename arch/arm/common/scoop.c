@@ -193,7 +193,11 @@ static int __devinit scoop_probe(struct platform_device *pdev)
 	spin_lock_init(&devptr->scoop_lock);
 
 	inf = pdev->dev.platform_data;
+<<<<<<< HEAD
 	devptr->base = ioremap(mem->start, mem->end - mem->start + 1);
+=======
+	devptr->base = ioremap(mem->start, resource_size(mem));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!devptr->base) {
 		ret = -ENOMEM;

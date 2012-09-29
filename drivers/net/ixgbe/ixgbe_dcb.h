@@ -123,11 +123,14 @@ struct tc_configuration {
 	u8 tc; /* Traffic class (TC) */
 };
 
+<<<<<<< HEAD
 enum dcb_rx_pba_cfg {
 	pba_equal,     /* PBA[0-7] each use 64KB FIFO */
 	pba_80_48      /* PBA[0-3] each use 80KB, PBA[4-7] each use 48KB */
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct dcb_num_tcs {
 	u8 pg_tcs;
 	u8 pfc_tcs;
@@ -140,8 +143,11 @@ struct ixgbe_dcb_config {
 	u8     bw_percentage[2][MAX_BW_GROUP]; /* One each for Tx/Rx */
 	bool   pfc_mode_enable;
 
+<<<<<<< HEAD
 	enum dcb_rx_pba_cfg rx_pba_cfg;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32  dcb_cfg_version; /* Not used...OS-specific? */
 	u32  link_speed; /* For bandwidth allocation validation purpose */
 };

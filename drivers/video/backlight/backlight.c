@@ -19,7 +19,11 @@
 #include <asm/backlight.h>
 #endif
 
+<<<<<<< HEAD
 static const char const *backlight_types[] = {
+=======
+static const char *const backlight_types[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	[BACKLIGHT_RAW] = "raw",
 	[BACKLIGHT_PLATFORM] = "platform",
 	[BACKLIGHT_FIRMWARE] = "firmware",

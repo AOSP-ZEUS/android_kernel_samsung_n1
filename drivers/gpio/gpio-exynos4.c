@@ -1,10 +1,18 @@
+<<<<<<< HEAD
 /* linux/arch/arm/mach-exynos4/gpiolib.c
+=======
+/*
+ * EXYNOS4 - GPIOlib support
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Copyright (c) 2010-2011 Samsung Electronics Co., Ltd.
  *		http://www.samsung.com
  *
+<<<<<<< HEAD
  * EXYNOS4 - GPIOlib support
  *
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.

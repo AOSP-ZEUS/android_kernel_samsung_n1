@@ -1164,7 +1164,11 @@
           }
           chip->port = pci_resource_start(pci, 0);
           if (request_irq(pci->irq, snd_mychip_interrupt,
+<<<<<<< HEAD
                           IRQF_SHARED, "My Chip", chip)) {
+=======
+                          IRQF_SHARED, KBUILD_MODNAME, chip)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
                   printk(KERN_ERR "cannot grab irq %d\n", pci->irq);
                   snd_mychip_free(chip);
                   return -EBUSY;
@@ -1197,7 +1201,11 @@
 
   /* pci_driver definition */
   static struct pci_driver driver = {
+<<<<<<< HEAD
           .name = "My Own Chip",
+=======
+          .name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
           .id_table = snd_mychip_ids,
           .probe = snd_mychip_probe,
           .remove = __devexit_p(snd_mychip_remove),
@@ -1340,7 +1348,11 @@
           <programlisting>
 <![CDATA[
   if (request_irq(pci->irq, snd_mychip_interrupt,
+<<<<<<< HEAD
                   IRQF_SHARED, "My Chip", chip)) {
+=======
+                  IRQF_SHARED, KBUILD_MODNAME, chip)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
           printk(KERN_ERR "cannot grab irq %d\n", pci->irq);
           snd_mychip_free(chip);
           return -EBUSY;
@@ -1616,7 +1628,11 @@
           <programlisting>
 <![CDATA[
   static struct pci_driver driver = {
+<<<<<<< HEAD
           .name = "My Own Chip",
+=======
+          .name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
           .id_table = snd_mychip_ids,
           .probe = snd_mychip_probe,
           .remove = __devexit_p(snd_mychip_remove),
@@ -5816,7 +5832,11 @@ struct _snd_pcm_runtime {
         <programlisting>
 <![CDATA[
   static struct pci_driver driver = {
+<<<<<<< HEAD
           .name = "My Chip",
+=======
+          .name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
           .id_table = snd_my_ids,
           .probe = snd_my_probe,
           .remove = __devexit_p(snd_my_remove),

@@ -20,6 +20,10 @@
 
 #ifndef __ASSEMBLY__
 #include <linux/compiler.h>
+<<<<<<< HEAD
+=======
+#include <linux/cache.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/ptrace.h>
 #include <asm/types.h>
 
@@ -156,6 +160,13 @@ struct thread_struct {
 #endif
 	struct pt_regs	*regs;		/* Pointer to saved register state */
 	mm_segment_t	fs;		/* for get_fs() validation */
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_BOOKE
+	/* BookE base exception scratch space; align on cacheline */
+	unsigned long	normsave[8] ____cacheline_aligned;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_PPC32
 	void		*pgdir;		/* root of page-table tree */
 #endif

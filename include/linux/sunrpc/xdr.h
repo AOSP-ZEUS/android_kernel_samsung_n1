@@ -191,6 +191,11 @@ extern int xdr_decode_array2(struct xdr_buf *buf, unsigned int base,
 			     struct xdr_array2_desc *desc);
 extern int xdr_encode_array2(struct xdr_buf *buf, unsigned int base,
 			     struct xdr_array2_desc *desc);
+<<<<<<< HEAD
+=======
+extern void _copy_from_pages(char *p, struct page **pages, size_t pgbase,
+			     size_t len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Provide some simple tools for XDR buffer overflow-checking etc.

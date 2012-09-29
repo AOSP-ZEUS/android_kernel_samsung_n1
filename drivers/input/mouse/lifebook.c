@@ -33,7 +33,11 @@ static const char *desired_serio_phys;
 static int lifebook_limit_serio3(const struct dmi_system_id *d)
 {
 	desired_serio_phys = "isa0060/serio3";
+<<<<<<< HEAD
 	return 0;
+=======
+	return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static bool lifebook_use_6byte_proto;
@@ -41,7 +45,11 @@ static bool lifebook_use_6byte_proto;
 static int lifebook_set_6byte_proto(const struct dmi_system_id *d)
 {
 	lifebook_use_6byte_proto = true;
+<<<<<<< HEAD
 	return 0;
+=======
+	return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static const struct dmi_system_id __initconst lifebook_dmi_table[] = {

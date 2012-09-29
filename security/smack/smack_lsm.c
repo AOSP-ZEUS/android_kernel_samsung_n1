@@ -9,7 +9,11 @@
  *
  *  Copyright (C) 2007 Casey Schaufler <casey@schaufler-ca.com>
  *  Copyright (C) 2009 Hewlett-Packard Development Company, L.P.
+<<<<<<< HEAD
  *                Paul Moore <paul.moore@hp.com>
+=======
+ *                Paul Moore <paul@paul-moore.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *  Copyright (C) 2010 Nokia Corporation
  *
  *	This program is free software; you can redistribute it and/or modify
@@ -689,9 +693,16 @@ static int smack_inode_rename(struct inode *old_inode,
  *
  * Returns 0 if access is permitted, -EACCES otherwise
  */
+<<<<<<< HEAD
 static int smack_inode_permission(struct inode *inode, int mask, unsigned flags)
 {
 	struct smk_audit_info ad;
+=======
+static int smack_inode_permission(struct inode *inode, int mask)
+{
+	struct smk_audit_info ad;
+	int no_block = mask & MAY_NOT_BLOCK;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mask &= (MAY_READ|MAY_WRITE|MAY_EXEC|MAY_APPEND);
 	/*
@@ -701,7 +712,11 @@ static int smack_inode_permission(struct inode *inode, int mask, unsigned flags)
 		return 0;
 
 	/* May be droppable after audit */
+<<<<<<< HEAD
 	if (flags & IPERM_FLAG_RCU)
+=======
+	if (no_block)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ECHILD;
 	smk_ad_init(&ad, __func__, LSM_AUDIT_DATA_INODE);
 	smk_ad_setfield_u_fs_inode(&ad, inode);

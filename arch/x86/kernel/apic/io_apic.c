@@ -1202,7 +1202,10 @@ void __setup_vector_irq(int cpu)
 }
 
 static struct irq_chip ioapic_chip;
+<<<<<<< HEAD
 static struct irq_chip ir_ioapic_chip;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_X86_32
 static inline int IO_APIC_irq_trigger(int irq)
@@ -1246,7 +1249,11 @@ static void ioapic_register_intr(unsigned int irq, struct irq_cfg *cfg,
 
 	if (irq_remapped(cfg)) {
 		irq_set_status_flags(irq, IRQ_MOVE_PCNTXT);
+<<<<<<< HEAD
 		chip = &ir_ioapic_chip;
+=======
+		irq_remap_modify_chip_defaults(chip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		fasteoi = trigger != 0;
 	}
 
@@ -1295,6 +1302,19 @@ static int setup_ioapic_entry(int apic_id, int irq,
 		 * irq handler will do the explicit EOI to the io-apic.
 		 */
 		ir_entry->vector = pin;
+<<<<<<< HEAD
+=======
+
+		apic_printk(APIC_VERBOSE, KERN_DEBUG "IOAPIC[%d]: "
+			"Set IRTE entry (P:%d FPD:%d Dst_Mode:%d "
+			"Redir_hint:%d Trig_Mode:%d Dlvry_Mode:%X "
+			"Avail:%X Vector:%02X Dest:%08X "
+			"SID:%04X SQ:%X SVT:%X)\n",
+			apic_id, irte.present, irte.fpd, irte.dst_mode,
+			irte.redir_hint, irte.trigger_mode, irte.dlvry_mode,
+			irte.avail, irte.vector, irte.dest_id,
+			irte.sid, irte.sq, irte.svt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		entry->delivery_mode = apic->irq_delivery_mode;
 		entry->dest_mode = apic->irq_dest_mode;
@@ -1337,9 +1357,15 @@ static void setup_ioapic_irq(int apic_id, int pin, unsigned int irq,
 
 	apic_printk(APIC_VERBOSE,KERN_DEBUG
 		    "IOAPIC[%d]: Set routing entry (%d-%d -> 0x%x -> "
+<<<<<<< HEAD
 		    "IRQ %d Mode:%i Active:%i)\n",
 		    apic_id, mpc_ioapic_id(apic_id), pin, cfg->vector,
 		    irq, trigger, polarity);
+=======
+		    "IRQ %d Mode:%i Active:%i Dest:%d)\n",
+		    apic_id, mpc_ioapic_id(apic_id), pin, cfg->vector,
+		    irq, trigger, polarity, dest);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 	if (setup_ioapic_entry(mpc_ioapic_id(apic_id), irq, &entry,
@@ -1522,10 +1548,19 @@ __apicdebuginit(void) print_IO_APIC(void)
 	printk(KERN_DEBUG ".......    : LTS          : %X\n", reg_00.bits.LTS);
 
 	printk(KERN_DEBUG ".... register #01: %08X\n", *(int *)&reg_01);
+<<<<<<< HEAD
 	printk(KERN_DEBUG ".......     : max redirection entries: %04X\n", reg_01.bits.entries);
 
 	printk(KERN_DEBUG ".......     : PRQ implemented: %X\n", reg_01.bits.PRQ);
 	printk(KERN_DEBUG ".......     : IO APIC version: %04X\n", reg_01.bits.version);
+=======
+	printk(KERN_DEBUG ".......     : max redirection entries: %02X\n",
+		reg_01.bits.entries);
+
+	printk(KERN_DEBUG ".......     : PRQ implemented: %X\n", reg_01.bits.PRQ);
+	printk(KERN_DEBUG ".......     : IO APIC version: %02X\n",
+		reg_01.bits.version);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Some Intel chipsets with IO APIC VERSION of 0x1? don't have reg_02,
@@ -1550,6 +1585,7 @@ __apicdebuginit(void) print_IO_APIC(void)
 
 	printk(KERN_DEBUG ".... IRQ redirection table:\n");
 
+<<<<<<< HEAD
 	printk(KERN_DEBUG " NR Dst Mask Trig IRR Pol"
 			  " Stat Dmod Deli Vect:\n");
 
@@ -1575,6 +1611,62 @@ __apicdebuginit(void) print_IO_APIC(void)
 		);
 	}
 	}
+=======
+	if (intr_remapping_enabled) {
+		printk(KERN_DEBUG " NR Indx Fmt Mask Trig IRR"
+			" Pol Stat Indx2 Zero Vect:\n");
+	} else {
+		printk(KERN_DEBUG " NR Dst Mask Trig IRR Pol"
+			" Stat Dmod Deli Vect:\n");
+	}
+
+	for (i = 0; i <= reg_01.bits.entries; i++) {
+		if (intr_remapping_enabled) {
+			struct IO_APIC_route_entry entry;
+			struct IR_IO_APIC_route_entry *ir_entry;
+
+			entry = ioapic_read_entry(apic, i);
+			ir_entry = (struct IR_IO_APIC_route_entry *) &entry;
+			printk(KERN_DEBUG " %02x %04X ",
+				i,
+				ir_entry->index
+			);
+			printk("%1d   %1d    %1d    %1d   %1d   "
+				"%1d    %1d     %X    %02X\n",
+				ir_entry->format,
+				ir_entry->mask,
+				ir_entry->trigger,
+				ir_entry->irr,
+				ir_entry->polarity,
+				ir_entry->delivery_status,
+				ir_entry->index2,
+				ir_entry->zero,
+				ir_entry->vector
+			);
+		} else {
+			struct IO_APIC_route_entry entry;
+
+			entry = ioapic_read_entry(apic, i);
+			printk(KERN_DEBUG " %02x %02X  ",
+				i,
+				entry.dest
+			);
+			printk("%1d    %1d    %1d   %1d   %1d    "
+				"%1d    %1d    %02X\n",
+				entry.mask,
+				entry.trigger,
+				entry.irr,
+				entry.polarity,
+				entry.delivery_status,
+				entry.dest_mode,
+				entry.delivery_mode,
+				entry.vector
+			);
+		}
+	}
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	printk(KERN_DEBUG "IRQ to pin mappings:\n");
 	for_each_active_irq(irq) {
 		struct irq_pin_list *entry;
@@ -1792,7 +1884,11 @@ __apicdebuginit(int) print_ICs(void)
 	return 0;
 }
 
+<<<<<<< HEAD
 fs_initcall(print_ICs);
+=======
+late_initcall(print_ICs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /* Where if anywhere is the i8259 connect in external int mode */
@@ -2214,7 +2310,11 @@ ioapic_set_affinity(struct irq_data *data, const struct cpumask *mask,
 	return ret;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_INTR_REMAP
+=======
+#ifdef CONFIG_IRQ_REMAP
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Migrate the IO-APIC irq in the presence of intr-remapping.
@@ -2226,6 +2326,12 @@ ioapic_set_affinity(struct irq_data *data, const struct cpumask *mask,
  * updated vector information), by using a virtual vector (io-apic pin number).
  * Real vector that is used for interrupting cpu will be coming from
  * the interrupt-remapping table entry.
+<<<<<<< HEAD
+=======
+ *
+ * As the migration is a simple atomic update of IRTE, the same mechanism
+ * is used to migrate MSI irq's in the presence of interrupt-remapping.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 static int
 ir_ioapic_set_affinity(struct irq_data *data, const struct cpumask *mask,
@@ -2250,10 +2356,23 @@ ir_ioapic_set_affinity(struct irq_data *data, const struct cpumask *mask,
 	irte.dest_id = IRTE_DEST(dest);
 
 	/*
+<<<<<<< HEAD
 	 * Modified the IRTE and flushes the Interrupt entry cache.
 	 */
 	modify_irte(irq, &irte);
 
+=======
+	 * Atomically updates the IRTE with the new destination, vector
+	 * and flushes the interrupt entry cache.
+	 */
+	modify_irte(irq, &irte);
+
+	/*
+	 * After this point, all the interrupts will start arriving
+	 * at the new destination. So, time to cleanup the previous
+	 * vector allocation.
+	 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (cfg->move_in_progress)
 		send_cleanup_vector(cfg);
 
@@ -2511,7 +2630,11 @@ static void ack_apic_level(struct irq_data *data)
 	}
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_INTR_REMAP
+=======
+#ifdef CONFIG_IRQ_REMAP
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void ir_ack_apic_edge(struct irq_data *data)
 {
 	ack_APIC_irq();
@@ -2522,7 +2645,27 @@ static void ir_ack_apic_level(struct irq_data *data)
 	ack_APIC_irq();
 	eoi_ioapic_irq(data->irq, data->chip_data);
 }
+<<<<<<< HEAD
 #endif /* CONFIG_INTR_REMAP */
+=======
+
+static void ir_print_prefix(struct irq_data *data, struct seq_file *p)
+{
+	seq_printf(p, " IR-%s", data->chip->name);
+}
+
+static void irq_remap_modify_chip_defaults(struct irq_chip *chip)
+{
+	chip->irq_print_chip = ir_print_prefix;
+	chip->irq_ack = ir_ack_apic_edge;
+	chip->irq_eoi = ir_ack_apic_level;
+
+#ifdef CONFIG_SMP
+	chip->irq_set_affinity = ir_ioapic_set_affinity;
+#endif
+}
+#endif /* CONFIG_IRQ_REMAP */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct irq_chip ioapic_chip __read_mostly = {
 	.name			= "IO-APIC",
@@ -2537,6 +2680,7 @@ static struct irq_chip ioapic_chip __read_mostly = {
 	.irq_retrigger		= ioapic_retrigger_irq,
 };
 
+<<<<<<< HEAD
 static struct irq_chip ir_ioapic_chip __read_mostly = {
 	.name			= "IR-IO-APIC",
 	.irq_startup		= startup_ioapic_irq,
@@ -2552,6 +2696,8 @@ static struct irq_chip ir_ioapic_chip __read_mostly = {
 	.irq_retrigger		= ioapic_retrigger_irq,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline void init_IO_APIC_traps(void)
 {
 	struct irq_cfg *cfg;
@@ -3103,6 +3249,7 @@ msi_set_affinity(struct irq_data *data, const struct cpumask *mask, bool force)
 
 	return 0;
 }
+<<<<<<< HEAD
 #ifdef CONFIG_INTR_REMAP
 /*
  * Migrate the MSI irq to another cpumask. This migration is
@@ -3142,6 +3289,8 @@ ir_msi_set_affinity(struct irq_data *data, const struct cpumask *mask,
 }
 
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* CONFIG_SMP */
 
 /*
@@ -3159,6 +3308,7 @@ static struct irq_chip msi_chip = {
 	.irq_retrigger		= ioapic_retrigger_irq,
 };
 
+<<<<<<< HEAD
 static struct irq_chip msi_ir_chip = {
 	.name			= "IR-PCI-MSI",
 	.irq_unmask		= unmask_msi_irq,
@@ -3172,6 +3322,8 @@ static struct irq_chip msi_ir_chip = {
 	.irq_retrigger		= ioapic_retrigger_irq,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Map the PCI dev to the corresponding remapping hardware unit
  * and allocate 'nvec' consecutive interrupt-remapping table entries
@@ -3214,7 +3366,11 @@ static int setup_msi_irq(struct pci_dev *dev, struct msi_desc *msidesc, int irq)
 
 	if (irq_remapped(irq_get_chip_data(irq))) {
 		irq_set_status_flags(irq, IRQ_MOVE_PCNTXT);
+<<<<<<< HEAD
 		chip = &msi_ir_chip;
+=======
+		irq_remap_modify_chip_defaults(chip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	irq_set_chip_and_handler_name(irq, chip, handle_edge_irq, "edge");
@@ -3287,7 +3443,11 @@ void native_teardown_msi_irq(unsigned int irq)
 	destroy_irq(irq);
 }
 
+<<<<<<< HEAD
 #if defined (CONFIG_DMAR) || defined (CONFIG_INTR_REMAP)
+=======
+#ifdef CONFIG_DMAR_TABLE
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_SMP
 static int
 dmar_msi_set_affinity(struct irq_data *data, const struct cpumask *mask,
@@ -3368,6 +3528,7 @@ static int hpet_msi_set_affinity(struct irq_data *data,
 
 #endif /* CONFIG_SMP */
 
+<<<<<<< HEAD
 static struct irq_chip ir_hpet_msi_type = {
 	.name			= "IR-HPET_MSI",
 	.irq_unmask		= hpet_msi_unmask,
@@ -3381,6 +3542,8 @@ static struct irq_chip ir_hpet_msi_type = {
 	.irq_retrigger		= ioapic_retrigger_irq,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct irq_chip hpet_msi_type = {
 	.name = "HPET_MSI",
 	.irq_unmask = hpet_msi_unmask,
@@ -3417,7 +3580,11 @@ int arch_setup_hpet_msi(unsigned int irq, unsigned int id)
 	hpet_msi_write(irq_get_handler_data(irq), &msg);
 	irq_set_status_flags(irq, IRQ_MOVE_PCNTXT);
 	if (irq_remapped(irq_get_chip_data(irq)))
+<<<<<<< HEAD
 		chip = &ir_hpet_msi_type;
+=======
+		irq_remap_modify_chip_defaults(chip);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	irq_set_chip_and_handler_name(irq, chip, handle_edge_irq, "edge");
 	return 0;

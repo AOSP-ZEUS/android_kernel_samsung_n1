@@ -117,6 +117,13 @@ static struct map *kernel_get_module_map(const char *module)
 	struct rb_node *nd;
 	struct map_groups *grp = &machine.kmaps;
 
+<<<<<<< HEAD
+=======
+	/* A file path -- this is an offline module */
+	if (module && strchr(module, '/'))
+		return machine__new_module(&machine, 0, module);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!module)
 		module = "kernel";
 
@@ -170,6 +177,7 @@ const char *kernel_get_module_path(const char *module)
 }
 
 #ifdef DWARF_SUPPORT
+<<<<<<< HEAD
 static int open_vmlinux(const char *module)
 {
 	const char *path = kernel_get_module_path(module);
@@ -180,6 +188,26 @@ static int open_vmlinux(const char *module)
 	}
 	pr_debug("Try to open %s\n", path);
 	return open(path, O_RDONLY);
+=======
+/* Open new debuginfo of given module */
+static struct debuginfo *open_debuginfo(const char *module)
+{
+	const char *path;
+
+	/* A file path -- this is an offline module */
+	if (module && strchr(module, '/'))
+		path = module;
+	else {
+		path = kernel_get_module_path(module);
+
+		if (!path) {
+			pr_err("Failed to find path of %s module.\n",
+			       module ?: "kernel");
+			return NULL;
+		}
+	}
+	return debuginfo__new(path);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -193,13 +221,31 @@ static int kprobe_convert_to_perf_probe(struct probe_trace_point *tp,
 	struct map *map;
 	u64 addr;
 	int ret = -ENOENT;
+<<<<<<< HEAD
+=======
+	struct debuginfo *dinfo;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	sym = __find_kernel_function_by_name(tp->symbol, &map);
 	if (sym) {
 		addr = map->unmap_ip(map, sym->start + tp->offset);
 		pr_debug("try to find %s+%ld@%" PRIx64 "\n", tp->symbol,
 			 tp->offset, addr);
+<<<<<<< HEAD
 		ret = find_perf_probe_point((unsigned long)addr, pp);
+=======
+
+		dinfo = debuginfo__new_online_kernel(addr);
+		if (dinfo) {
+			ret = debuginfo__find_probe_point(dinfo,
+						 (unsigned long)addr, pp);
+			debuginfo__delete(dinfo);
+		} else {
+			pr_debug("Failed to open debuginfo at 0x%" PRIx64 "\n",
+				 addr);
+			ret = -ENOENT;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (ret <= 0) {
 		pr_debug("Failed to find corresponding probes from "
@@ -214,6 +260,7 @@ static int kprobe_convert_to_perf_probe(struct probe_trace_point *tp,
 	return 0;
 }
 
+<<<<<<< HEAD
 /* Try to find perf_probe_event with debuginfo */
 static int try_to_find_probe_trace_events(struct perf_probe_event *pev,
 					   struct probe_trace_event **tevs,
@@ -238,6 +285,72 @@ static int try_to_find_probe_trace_events(struct perf_probe_event *pev,
 	if (ntevs > 0) {	/* Succeeded to find trace events */
 		pr_debug("find %d probe_trace_events.\n", ntevs);
 		return ntevs;
+=======
+static int add_module_to_probe_trace_events(struct probe_trace_event *tevs,
+					    int ntevs, const char *module)
+{
+	int i, ret = 0;
+	char *tmp;
+
+	if (!module)
+		return 0;
+
+	tmp = strrchr(module, '/');
+	if (tmp) {
+		/* This is a module path -- get the module name */
+		module = strdup(tmp + 1);
+		if (!module)
+			return -ENOMEM;
+		tmp = strchr(module, '.');
+		if (tmp)
+			*tmp = '\0';
+		tmp = (char *)module;	/* For free() */
+	}
+
+	for (i = 0; i < ntevs; i++) {
+		tevs[i].point.module = strdup(module);
+		if (!tevs[i].point.module) {
+			ret = -ENOMEM;
+			break;
+		}
+	}
+
+	if (tmp)
+		free(tmp);
+
+	return ret;
+}
+
+/* Try to find perf_probe_event with debuginfo */
+static int try_to_find_probe_trace_events(struct perf_probe_event *pev,
+					  struct probe_trace_event **tevs,
+					  int max_tevs, const char *module)
+{
+	bool need_dwarf = perf_probe_event_need_dwarf(pev);
+	struct debuginfo *dinfo = open_debuginfo(module);
+	int ntevs, ret = 0;
+
+	if (!dinfo) {
+		if (need_dwarf) {
+			pr_warning("Failed to open debuginfo file.\n");
+			return -ENOENT;
+		}
+		pr_debug("Could not open debuginfo. Try to use symbols.\n");
+		return 0;
+	}
+
+	/* Searching trace events corresponding to a probe event */
+	ntevs = debuginfo__find_trace_events(dinfo, pev, tevs, max_tevs);
+
+	debuginfo__delete(dinfo);
+
+	if (ntevs > 0) {	/* Succeeded to find trace events */
+		pr_debug("find %d probe_trace_events.\n", ntevs);
+		if (module)
+			ret = add_module_to_probe_trace_events(*tevs, ntevs,
+							       module);
+		return ret < 0 ? ret : ntevs;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (ntevs == 0)	{	/* No error but failed to find probe point. */
@@ -371,8 +484,14 @@ int show_line_range(struct line_range *lr, const char *module)
 {
 	int l = 1;
 	struct line_node *ln;
+<<<<<<< HEAD
 	FILE *fp;
 	int fd, ret;
+=======
+	struct debuginfo *dinfo;
+	FILE *fp;
+	int ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char *tmp;
 
 	/* Search a line range */
@@ -380,6 +499,7 @@ int show_line_range(struct line_range *lr, const char *module)
 	if (ret < 0)
 		return ret;
 
+<<<<<<< HEAD
 	fd = open_vmlinux(module);
 	if (fd < 0) {
 		pr_warning("Failed to open debuginfo file.\n");
@@ -387,6 +507,16 @@ int show_line_range(struct line_range *lr, const char *module)
 	}
 
 	ret = find_line_range(fd, lr);
+=======
+	dinfo = open_debuginfo(module);
+	if (!dinfo) {
+		pr_warning("Failed to open debuginfo file.\n");
+		return -ENOENT;
+	}
+
+	ret = debuginfo__find_line_range(dinfo, lr);
+	debuginfo__delete(dinfo);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret == 0) {
 		pr_warning("Specified source line is not found.\n");
 		return -ENOENT;
@@ -448,7 +578,12 @@ end:
 	return ret;
 }
 
+<<<<<<< HEAD
 static int show_available_vars_at(int fd, struct perf_probe_event *pev,
+=======
+static int show_available_vars_at(struct debuginfo *dinfo,
+				  struct perf_probe_event *pev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				  int max_vls, struct strfilter *_filter,
 				  bool externs)
 {
@@ -463,7 +598,12 @@ static int show_available_vars_at(int fd, struct perf_probe_event *pev,
 		return -EINVAL;
 	pr_debug("Searching variables at %s\n", buf);
 
+<<<<<<< HEAD
 	ret = find_available_vars_at(fd, pev, &vls, max_vls, externs);
+=======
+	ret = debuginfo__find_available_vars_at(dinfo, pev, &vls,
+						max_vls, externs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret <= 0) {
 		pr_err("Failed to find variables at %s (%d)\n", buf, ret);
 		goto end;
@@ -504,12 +644,18 @@ int show_available_vars(struct perf_probe_event *pevs, int npevs,
 			int max_vls, const char *module,
 			struct strfilter *_filter, bool externs)
 {
+<<<<<<< HEAD
 	int i, fd, ret = 0;
+=======
+	int i, ret = 0;
+	struct debuginfo *dinfo;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = init_vmlinux();
 	if (ret < 0)
 		return ret;
 
+<<<<<<< HEAD
 	setup_pager();
 
 	for (i = 0; i < npevs && ret >= 0; i++) {
@@ -522,6 +668,21 @@ int show_available_vars(struct perf_probe_event *pevs, int npevs,
 		ret = show_available_vars_at(fd, &pevs[i], max_vls, _filter,
 					     externs);
 	}
+=======
+	dinfo = open_debuginfo(module);
+	if (!dinfo) {
+		pr_warning("Failed to open debuginfo file.\n");
+		return -ENOENT;
+	}
+
+	setup_pager();
+
+	for (i = 0; i < npevs && ret >= 0; i++)
+		ret = show_available_vars_at(dinfo, &pevs[i], max_vls, _filter,
+					     externs);
+
+	debuginfo__delete(dinfo);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
@@ -990,7 +1151,11 @@ bool perf_probe_event_need_dwarf(struct perf_probe_event *pev)
 
 /* Parse probe_events event into struct probe_point */
 static int parse_probe_trace_command(const char *cmd,
+<<<<<<< HEAD
 					struct probe_trace_event *tev)
+=======
+				     struct probe_trace_event *tev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct probe_trace_point *tp = &tev->point;
 	char pr;
@@ -1023,8 +1188,19 @@ static int parse_probe_trace_command(const char *cmd,
 
 	tp->retprobe = (pr == 'r');
 
+<<<<<<< HEAD
 	/* Scan function name and offset */
 	ret = sscanf(argv[1], "%a[^+]+%lu", (float *)(void *)&tp->symbol,
+=======
+	/* Scan module name(if there), function name and offset */
+	p = strchr(argv[1], ':');
+	if (p) {
+		tp->module = strndup(argv[1], p - argv[1]);
+		p++;
+	} else
+		p = argv[1];
+	ret = sscanf(p, "%a[^+]+%lu", (float *)(void *)&tp->symbol,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		     &tp->offset);
 	if (ret == 1)
 		tp->offset = 0;
@@ -1269,9 +1445,16 @@ char *synthesize_probe_trace_command(struct probe_trace_event *tev)
 	if (buf == NULL)
 		return NULL;
 
+<<<<<<< HEAD
 	len = e_snprintf(buf, MAX_CMDLEN, "%c:%s/%s %s+%lu",
 			 tp->retprobe ? 'r' : 'p',
 			 tev->group, tev->event,
+=======
+	len = e_snprintf(buf, MAX_CMDLEN, "%c:%s/%s %s%s%s+%lu",
+			 tp->retprobe ? 'r' : 'p',
+			 tev->group, tev->event,
+			 tp->module ?: "", tp->module ? ":" : "",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			 tp->symbol, tp->offset);
 	if (len <= 0)
 		goto error;
@@ -1378,6 +1561,11 @@ static void clear_probe_trace_event(struct probe_trace_event *tev)
 		free(tev->group);
 	if (tev->point.symbol)
 		free(tev->point.symbol);
+<<<<<<< HEAD
+=======
+	if (tev->point.module)
+		free(tev->point.module);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (i = 0; i < tev->nargs; i++) {
 		if (tev->args[i].name)
 			free(tev->args[i].name);
@@ -1729,7 +1917,11 @@ static int convert_to_probe_trace_events(struct perf_probe_event *pev,
 	/* Convert perf_probe_event with debuginfo */
 	ret = try_to_find_probe_trace_events(pev, tevs, max_tevs, module);
 	if (ret != 0)
+<<<<<<< HEAD
 		return ret;
+=======
+		return ret;	/* Found in debuginfo or got an error */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Allocate trace event buffer */
 	tev = *tevs = zalloc(sizeof(struct probe_trace_event));
@@ -1742,6 +1934,18 @@ static int convert_to_probe_trace_events(struct perf_probe_event *pev,
 		ret = -ENOMEM;
 		goto error;
 	}
+<<<<<<< HEAD
+=======
+
+	if (module) {
+		tev->point.module = strdup(module);
+		if (tev->point.module == NULL) {
+			ret = -ENOMEM;
+			goto error;
+		}
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tev->point.offset = pev->point.offset;
 	tev->point.retprobe = pev->point.retprobe;
 	tev->nargs = pev->nargs;

@@ -188,7 +188,12 @@ extern char elf_platform[];
 #define SET_PERSONALITY(ex)					\
 do {								\
 	if (personality(current->personality) != PER_LINUX32)	\
+<<<<<<< HEAD
 		set_personality(PER_LINUX);			\
+=======
+		set_personality(PER_LINUX |			\
+			(current->personality & ~PER_MASK));	\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if ((ex).e_ident[EI_CLASS] == ELFCLASS32)		\
 		set_thread_flag(TIF_31BIT);			\
 	else							\

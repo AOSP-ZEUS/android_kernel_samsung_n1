@@ -442,9 +442,15 @@ int crcimage(struct imgchunk *fchunk, unsigned int nfchunks,
 void free_chunks(struct imgchunk *fchunk, unsigned int *nfchunks)
 {
 	int i;
+<<<<<<< HEAD
 	for (i = 0; i < *nfchunks; i++) {
 		kfree(fchunk[i].data);
 	}
+=======
+	for (i = 0; i < *nfchunks; i++)
+		kfree(fchunk[i].data);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	*nfchunks = 0;
 	memset(fchunk, 0, sizeof(*fchunk));
 

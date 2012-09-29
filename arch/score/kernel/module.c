@@ -27,6 +27,7 @@
 #include <linux/module.h>
 #include <linux/vmalloc.h>
 
+<<<<<<< HEAD
 void *module_alloc(unsigned long size)
 {
 	return size ? vmalloc(size) : NULL;
@@ -44,6 +45,8 @@ int module_frob_arch_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int apply_relocate(Elf_Shdr *sechdrs, const char *strtab,
 		unsigned int symindex, unsigned int relindex,
 		struct module *me)
@@ -146,6 +149,12 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
 		unsigned int symindex, unsigned int relsec,
 		struct module *me)
 {
+<<<<<<< HEAD
+=======
+	/* Non-standard return value... most other arch's return -ENOEXEC
+	 * for an unsupported relocation variant
+	 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -154,6 +163,7 @@ const struct exception_table_entry *search_module_dbetables(unsigned long addr)
 {
 	return NULL;
 }
+<<<<<<< HEAD
 
 /* Put in dbe list if necessary. */
 int module_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
@@ -163,3 +173,5 @@ int module_finalize(const Elf_Ehdr *hdr, const Elf_Shdr *sechdrs,
 }
 
 void module_arch_cleanup(struct module *mod) {}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -821,11 +821,18 @@ static void __init omap_mux_set_cmdline_signals(void)
 	if (!omap_mux_options)
 		return;
 
+<<<<<<< HEAD
 	options = kmalloc(strlen(omap_mux_options) + 1, GFP_KERNEL);
 	if (!options)
 		return;
 
 	strcpy(options, omap_mux_options);
+=======
+	options = kstrdup(omap_mux_options, GFP_KERNEL);
+	if (!options)
+		return;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	next_opt = options;
 
 	while ((token = strsep(&next_opt, ",")) != NULL) {
@@ -855,24 +862,37 @@ static int __init omap_mux_copy_names(struct omap_mux *src,
 
 	for (i = 0; i < OMAP_MUX_NR_MODES; i++) {
 		if (src->muxnames[i]) {
+<<<<<<< HEAD
 			dst->muxnames[i] =
 				kmalloc(strlen(src->muxnames[i]) + 1,
 					GFP_KERNEL);
 			if (!dst->muxnames[i])
 				goto free;
 			strcpy(dst->muxnames[i], src->muxnames[i]);
+=======
+			dst->muxnames[i] = kstrdup(src->muxnames[i],
+						   GFP_KERNEL);
+			if (!dst->muxnames[i])
+				goto free;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
 #ifdef CONFIG_DEBUG_FS
 	for (i = 0; i < OMAP_MUX_NR_SIDES; i++) {
 		if (src->balls[i]) {
+<<<<<<< HEAD
 			dst->balls[i] =
 				kmalloc(strlen(src->balls[i]) + 1,
 					GFP_KERNEL);
 			if (!dst->balls[i])
 				goto free;
 			strcpy(dst->balls[i], src->balls[i]);
+=======
+			dst->balls[i] = kstrdup(src->balls[i], GFP_KERNEL);
+			if (!dst->balls[i])
+				goto free;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 #endif

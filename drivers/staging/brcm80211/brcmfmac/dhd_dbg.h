@@ -14,6 +14,7 @@
  * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
  */
 
+<<<<<<< HEAD
 #ifndef _dhd_dbg_
 #define _dhd_dbg_
 
@@ -101,3 +102,59 @@ extern int dhd_msg_level;
 #include <dhdioctl.h>
 
 #endif				/* _dhd_dbg_ */
+=======
+#ifndef _BRCMF_DBG_H_
+#define _BRCMF_DBG_H_
+
+#if defined(BCMDBG)
+
+#define BRCMF_ERROR(args) \
+	do {if ((brcmf_msg_level & BRCMF_ERROR_VAL) && (net_ratelimit())) \
+		printk args; } while (0)
+#define BRCMF_TRACE(args)	do {if (brcmf_msg_level & BRCMF_TRACE_VAL) \
+					printk args; } while (0)
+#define BRCMF_INFO(args)	do {if (brcmf_msg_level & BRCMF_INFO_VAL) \
+					printk args; } while (0)
+#define BRCMF_DATA(args)	do {if (brcmf_msg_level & BRCMF_DATA_VAL) \
+					printk args; } while (0)
+#define BRCMF_CTL(args)		do {if (brcmf_msg_level & BRCMF_CTL_VAL) \
+					printk args; } while (0)
+#define BRCMF_TIMER(args)	do {if (brcmf_msg_level & BRCMF_TIMER_VAL) \
+					printk args; } while (0)
+#define BRCMF_INTR(args)	do {if (brcmf_msg_level & BRCMF_INTR_VAL) \
+					printk args; } while (0)
+#define BRCMF_GLOM(args)	do {if (brcmf_msg_level & BRCMF_GLOM_VAL) \
+					printk args; } while (0)
+#define BRCMF_EVENT(args)	do {if (brcmf_msg_level & BRCMF_EVENT_VAL) \
+					printk args; } while (0)
+
+#define BRCMF_DATA_ON()		(brcmf_msg_level & BRCMF_DATA_VAL)
+#define BRCMF_CTL_ON()		(brcmf_msg_level & BRCMF_CTL_VAL)
+#define BRCMF_HDRS_ON()		(brcmf_msg_level & BRCMF_HDRS_VAL)
+#define BRCMF_BYTES_ON()	(brcmf_msg_level & BRCMF_BYTES_VAL)
+#define BRCMF_GLOM_ON()		(brcmf_msg_level & BRCMF_GLOM_VAL)
+
+#else	/* (defined BCMDBG) || (defined BCMDBG) */
+
+#define BRCMF_ERROR(args)  do {if (net_ratelimit()) printk args; } while (0)
+#define BRCMF_TRACE(args)
+#define BRCMF_INFO(args)
+#define BRCMF_DATA(args)
+#define BRCMF_CTL(args)
+#define BRCMF_TIMER(args)
+#define BRCMF_INTR(args)
+#define BRCMF_GLOM(args)
+#define BRCMF_EVENT(args)
+
+#define BRCMF_DATA_ON()		0
+#define BRCMF_CTL_ON()		0
+#define BRCMF_HDRS_ON()		0
+#define BRCMF_BYTES_ON()		0
+#define BRCMF_GLOM_ON()		0
+
+#endif				/* defined(BCMDBG) */
+
+extern int brcmf_msg_level;
+
+#endif				/* _BRCMF_DBG_H_ */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

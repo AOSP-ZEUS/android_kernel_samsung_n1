@@ -1829,10 +1829,17 @@ static int drbd_nl_syncer_conf(struct drbd_conf *mdev, struct drbd_nl_cfg_req *n
 
 	/* silently ignore cpu mask on UP kernel */
 	if (nr_cpu_ids > 1 && sc.cpu_mask[0] != 0) {
+<<<<<<< HEAD
 		err = __bitmap_parse(sc.cpu_mask, 32, 0,
 				cpumask_bits(new_cpu_mask), nr_cpu_ids);
 		if (err) {
 			dev_warn(DEV, "__bitmap_parse() failed with %d\n", err);
+=======
+		err = bitmap_parse(sc.cpu_mask, 32,
+				cpumask_bits(new_cpu_mask), nr_cpu_ids);
+		if (err) {
+			dev_warn(DEV, "bitmap_parse() failed with %d\n", err);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			retcode = ERR_CPU_MASK_PARSE;
 			goto fail;
 		}

@@ -49,16 +49,23 @@ nouveau_bo_del_ttm(struct ttm_buffer_object *bo)
 		DRM_ERROR("bo %p still attached to GEM object\n", bo);
 
 	nv10_mem_put_tile_region(dev, nvbo->tile, NULL);
+<<<<<<< HEAD
 	if (nvbo->vma.node) {
 		nouveau_vm_unmap(&nvbo->vma);
 		nouveau_vm_put(&nvbo->vma);
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(nvbo);
 }
 
 static void
 nouveau_bo_fixup_align(struct nouveau_bo *nvbo, u32 flags,
+<<<<<<< HEAD
 		       int *align, int *size, int *page_shift)
+=======
+		       int *align, int *size)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct drm_nouveau_private *dev_priv = nouveau_bdev(nvbo->bo.bdev);
 
@@ -82,6 +89,7 @@ nouveau_bo_fixup_align(struct nouveau_bo *nvbo, u32 flags,
 			}
 		}
 	} else {
+<<<<<<< HEAD
 		if (likely(dev_priv->chan_vm)) {
 			if (!(flags & TTM_PL_FLAG_TT) &&  *size > 256 * 1024)
 				*page_shift = dev_priv->chan_vm->lpg_shift;
@@ -93,12 +101,17 @@ nouveau_bo_fixup_align(struct nouveau_bo *nvbo, u32 flags,
 
 		*size = roundup(*size, (1 << *page_shift));
 		*align = max((1 << *page_shift), *align);
+=======
+		*size = roundup(*size, (1 << nvbo->page_shift));
+		*align = max((1 <<  nvbo->page_shift), *align);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	*size = roundup(*size, PAGE_SIZE);
 }
 
 int
+<<<<<<< HEAD
 nouveau_bo_new(struct drm_device *dev, struct nouveau_channel *chan,
 	       int size, int align, uint32_t flags, uint32_t tile_mode,
 	       uint32_t tile_flags, struct nouveau_bo **pnvbo)
@@ -106,16 +119,30 @@ nouveau_bo_new(struct drm_device *dev, struct nouveau_channel *chan,
 	struct drm_nouveau_private *dev_priv = dev->dev_private;
 	struct nouveau_bo *nvbo;
 	int ret = 0, page_shift = 0;
+=======
+nouveau_bo_new(struct drm_device *dev, int size, int align,
+	       uint32_t flags, uint32_t tile_mode, uint32_t tile_flags,
+	       struct nouveau_bo **pnvbo)
+{
+	struct drm_nouveau_private *dev_priv = dev->dev_private;
+	struct nouveau_bo *nvbo;
+	int ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	nvbo = kzalloc(sizeof(struct nouveau_bo), GFP_KERNEL);
 	if (!nvbo)
 		return -ENOMEM;
 	INIT_LIST_HEAD(&nvbo->head);
 	INIT_LIST_HEAD(&nvbo->entry);
+<<<<<<< HEAD
+=======
+	INIT_LIST_HEAD(&nvbo->vma_list);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	nvbo->tile_mode = tile_mode;
 	nvbo->tile_flags = tile_flags;
 	nvbo->bo.bdev = &dev_priv->ttm.bdev;
 
+<<<<<<< HEAD
 	nouveau_bo_fixup_align(nvbo, flags, &align, &size, &page_shift);
 	align >>= PAGE_SHIFT;
 
@@ -135,14 +162,34 @@ nouveau_bo_new(struct drm_device *dev, struct nouveau_channel *chan,
 	ret = ttm_bo_init(&dev_priv->ttm.bdev, &nvbo->bo, size,
 			  ttm_bo_type_device, &nvbo->placement, align, 0,
 			  false, NULL, size, nouveau_bo_del_ttm);
+=======
+	nvbo->page_shift = 12;
+	if (dev_priv->bar1_vm) {
+		if (!(flags & TTM_PL_FLAG_TT) && size > 256 * 1024)
+			nvbo->page_shift = dev_priv->bar1_vm->lpg_shift;
+	}
+
+	nouveau_bo_fixup_align(nvbo, flags, &align, &size);
+	nvbo->bo.mem.num_pages = size >> PAGE_SHIFT;
+	nouveau_bo_placement_set(nvbo, flags, 0);
+
+	ret = ttm_bo_init(&dev_priv->ttm.bdev, &nvbo->bo, size,
+			  ttm_bo_type_device, &nvbo->placement,
+			  align >> PAGE_SHIFT, 0, false, NULL, size,
+			  nouveau_bo_del_ttm);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret) {
 		/* ttm will call nouveau_bo_del_ttm if it fails.. */
 		return ret;
 	}
+<<<<<<< HEAD
 	nvbo->channel = NULL;
 
 	if (nvbo->vma.node)
 		nvbo->bo.offset = nvbo->vma.offset;
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	*pnvbo = nvbo;
 	return 0;
 }
@@ -312,8 +359,11 @@ nouveau_bo_validate(struct nouveau_bo *nvbo, bool interruptible,
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
 	if (nvbo->vma.node)
 		nvbo->bo.offset = nvbo->vma.offset;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -440,7 +490,10 @@ nouveau_bo_init_mem_type(struct ttm_bo_device *bdev, uint32_t type,
 				     TTM_MEMTYPE_FLAG_CMA;
 			man->available_caching = TTM_PL_MASK_CACHING;
 			man->default_caching = TTM_PL_FLAG_CACHED;
+<<<<<<< HEAD
 			man->gpu_offset = dev_priv->gart_info.aper_base;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		default:
 			NV_ERROR(dev, "Unknown GART type: %d\n",
@@ -501,6 +554,7 @@ static int
 nvc0_bo_move_m2mf(struct nouveau_channel *chan, struct ttm_buffer_object *bo,
 		  struct ttm_mem_reg *old_mem, struct ttm_mem_reg *new_mem)
 {
+<<<<<<< HEAD
 	struct nouveau_mem *old_node = old_mem->mm_node;
 	struct nouveau_mem *new_node = new_mem->mm_node;
 	struct nouveau_bo *nvbo = nouveau_bo(bo);
@@ -514,6 +568,14 @@ nvc0_bo_move_m2mf(struct nouveau_channel *chan, struct ttm_buffer_object *bo,
 	else
 		dst_offset = nvbo->vma.offset;
 
+=======
+	struct nouveau_mem *node = old_mem->mm_node;
+	u64 src_offset = node->vma[0].offset;
+	u64 dst_offset = node->vma[1].offset;
+	u32 page_count = new_mem->num_pages;
+	int ret;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	page_count = new_mem->num_pages;
 	while (page_count) {
 		int line_count = (page_count > 2047) ? 2047 : page_count;
@@ -547,6 +609,7 @@ static int
 nv50_bo_move_m2mf(struct nouveau_channel *chan, struct ttm_buffer_object *bo,
 		  struct ttm_mem_reg *old_mem, struct ttm_mem_reg *new_mem)
 {
+<<<<<<< HEAD
 	struct nouveau_mem *old_node = old_mem->mm_node;
 	struct nouveau_mem *new_node = new_mem->mm_node;
 	struct nouveau_bo *nvbo = nouveau_bo(bo);
@@ -560,6 +623,15 @@ nv50_bo_move_m2mf(struct nouveau_channel *chan, struct ttm_buffer_object *bo,
 	else
 		dst_offset = nvbo->vma.offset;
 
+=======
+	struct nouveau_mem *node = old_mem->mm_node;
+	struct nouveau_bo *nvbo = nouveau_bo(bo);
+	u64 length = (new_mem->num_pages << PAGE_SHIFT);
+	u64 src_offset = node->vma[0].offset;
+	u64 dst_offset = node->vma[1].offset;
+	int ret;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	while (length) {
 		u32 amount, stride, height;
 
@@ -695,6 +767,30 @@ nv04_bo_move_m2mf(struct nouveau_channel *chan, struct ttm_buffer_object *bo,
 }
 
 static int
+<<<<<<< HEAD
+=======
+nouveau_vma_getmap(struct nouveau_channel *chan, struct nouveau_bo *nvbo,
+		   struct ttm_mem_reg *mem, struct nouveau_vma *vma)
+{
+	struct nouveau_mem *node = mem->mm_node;
+	int ret;
+
+	ret = nouveau_vm_get(chan->vm, mem->num_pages << PAGE_SHIFT,
+			     node->page_shift, NV_MEM_ACCESS_RO, vma);
+	if (ret)
+		return ret;
+
+	if (mem->mem_type == TTM_PL_VRAM)
+		nouveau_vm_map(vma, node);
+	else
+		nouveau_vm_map_sg(vma, 0, mem->num_pages << PAGE_SHIFT,
+				  node, node->pages);
+
+	return 0;
+}
+
+static int
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 nouveau_bo_move_m2mf(struct ttm_buffer_object *bo, int evict, bool intr,
 		     bool no_wait_reserve, bool no_wait_gpu,
 		     struct ttm_mem_reg *new_mem)
@@ -711,6 +807,7 @@ nouveau_bo_move_m2mf(struct ttm_buffer_object *bo, int evict, bool intr,
 		mutex_lock_nested(&chan->mutex, NOUVEAU_KCHANNEL_MUTEX);
 	}
 
+<<<<<<< HEAD
 	/* create temporary vma for old memory, this will get cleaned
 	 * up after ttm destroys the ttm_mem_reg
 	 */
@@ -736,6 +833,22 @@ nouveau_bo_move_m2mf(struct ttm_buffer_object *bo, int evict, bool intr,
 					  old_mem->num_pages << PAGE_SHIFT,
 					  node, node->pages);
 		}
+=======
+	/* create temporary vmas for the transfer and attach them to the
+	 * old nouveau_mem node, these will get cleaned up after ttm has
+	 * destroyed the ttm_mem_reg
+	 */
+	if (dev_priv->card_type >= NV_50) {
+		struct nouveau_mem *node = old_mem->mm_node;
+
+		ret = nouveau_vma_getmap(chan, nvbo, old_mem, &node->vma[0]);
+		if (ret)
+			goto out;
+
+		ret = nouveau_vma_getmap(chan, nvbo, new_mem, &node->vma[1]);
+		if (ret)
+			goto out;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (dev_priv->card_type < NV_50)
@@ -762,7 +875,10 @@ nouveau_bo_move_flipd(struct ttm_buffer_object *bo, bool evict, bool intr,
 		      bool no_wait_reserve, bool no_wait_gpu,
 		      struct ttm_mem_reg *new_mem)
 {
+<<<<<<< HEAD
 	struct drm_nouveau_private *dev_priv = nouveau_bdev(bo->bdev);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 placement_memtype = TTM_PL_FLAG_TT | TTM_PL_MASK_CACHING;
 	struct ttm_placement placement;
 	struct ttm_mem_reg tmp_mem;
@@ -782,6 +898,7 @@ nouveau_bo_move_flipd(struct ttm_buffer_object *bo, bool evict, bool intr,
 	if (ret)
 		goto out;
 
+<<<<<<< HEAD
 	if (dev_priv->card_type >= NV_50) {
 		struct nouveau_bo *nvbo = nouveau_bo(bo);
 		struct nouveau_mem *node = tmp_mem.mm_node;
@@ -799,6 +916,9 @@ nouveau_bo_move_flipd(struct ttm_buffer_object *bo, bool evict, bool intr,
 		nouveau_vm_unmap(&nvbo->vma);
 	}
 
+=======
+	ret = nouveau_bo_move_m2mf(bo, true, intr, no_wait_reserve, no_wait_gpu, &tmp_mem);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto out;
 
@@ -844,6 +964,7 @@ out:
 static void
 nouveau_bo_move_ntfy(struct ttm_buffer_object *bo, struct ttm_mem_reg *new_mem)
 {
+<<<<<<< HEAD
 	struct drm_nouveau_private *dev_priv = nouveau_bdev(bo->bdev);
 	struct nouveau_mem *node = new_mem->mm_node;
 	struct nouveau_bo *nvbo = nouveau_bo(bo);
@@ -868,6 +989,24 @@ nouveau_bo_move_ntfy(struct ttm_buffer_object *bo, struct ttm_mem_reg *new_mem)
 	default:
 		nouveau_vm_unmap(&nvbo->vma);
 		break;
+=======
+	struct nouveau_mem *node = new_mem->mm_node;
+	struct nouveau_bo *nvbo = nouveau_bo(bo);
+	struct nouveau_vma *vma;
+
+	list_for_each_entry(vma, &nvbo->vma_list, head) {
+		if (new_mem->mem_type == TTM_PL_VRAM) {
+			nouveau_vm_map(vma, new_mem->mm_node);
+		} else
+		if (new_mem->mem_type == TTM_PL_TT &&
+		    nvbo->page_shift == vma->vm->spg_shift) {
+			nouveau_vm_map_sg(vma, 0, new_mem->
+					  num_pages << PAGE_SHIFT,
+					  node, node->pages);
+		} else {
+			nouveau_vm_unmap(vma);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -1113,3 +1252,57 @@ struct ttm_bo_driver nouveau_bo_driver = {
 	.io_mem_free = &nouveau_ttm_io_mem_free,
 };
 
+<<<<<<< HEAD
+=======
+struct nouveau_vma *
+nouveau_bo_vma_find(struct nouveau_bo *nvbo, struct nouveau_vm *vm)
+{
+	struct nouveau_vma *vma;
+	list_for_each_entry(vma, &nvbo->vma_list, head) {
+		if (vma->vm == vm)
+			return vma;
+	}
+
+	return NULL;
+}
+
+int
+nouveau_bo_vma_add(struct nouveau_bo *nvbo, struct nouveau_vm *vm,
+		   struct nouveau_vma *vma)
+{
+	const u32 size = nvbo->bo.mem.num_pages << PAGE_SHIFT;
+	struct nouveau_mem *node = nvbo->bo.mem.mm_node;
+	int ret;
+
+	ret = nouveau_vm_get(vm, size, nvbo->page_shift,
+			     NV_MEM_ACCESS_RW, vma);
+	if (ret)
+		return ret;
+
+	if (nvbo->bo.mem.mem_type == TTM_PL_VRAM)
+		nouveau_vm_map(vma, nvbo->bo.mem.mm_node);
+	else
+	if (nvbo->bo.mem.mem_type == TTM_PL_TT)
+		nouveau_vm_map_sg(vma, 0, size, node, node->pages);
+
+	list_add_tail(&vma->head, &nvbo->vma_list);
+	vma->refcount = 1;
+	return 0;
+}
+
+void
+nouveau_bo_vma_del(struct nouveau_bo *nvbo, struct nouveau_vma *vma)
+{
+	if (vma->node) {
+		if (nvbo->bo.mem.mem_type != TTM_PL_SYSTEM) {
+			spin_lock(&nvbo->bo.bdev->fence_lock);
+			ttm_bo_wait(&nvbo->bo, false, false, false);
+			spin_unlock(&nvbo->bo.bdev->fence_lock);
+			nouveau_vm_unmap(vma);
+		}
+
+		nouveau_vm_put(vma);
+		list_del(&vma->head);
+	}
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

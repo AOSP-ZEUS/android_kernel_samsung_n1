@@ -347,6 +347,7 @@ ENDPROC(v6_dma_unmap_area)
 
 	__INITDATA
 
+<<<<<<< HEAD
 	.type	v6_cache_fns, #object
 ENTRY(v6_cache_fns)
 	.long	v6_flush_icache_all
@@ -360,3 +361,7 @@ ENTRY(v6_cache_fns)
 	.long	v6_dma_unmap_area
 	.long	v6_dma_flush_range
 	.size	v6_cache_fns, . - v6_cache_fns
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions v6
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

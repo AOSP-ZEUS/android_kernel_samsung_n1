@@ -23,6 +23,7 @@ void __init board_setup(void)
 	unsigned long freq0, clksrc, div, pfc;
 	unsigned short whoami;
 
+<<<<<<< HEAD
 	/* Set Config[OD] (disable overlapping bus transaction):
 	 * This gets rid of a _lot_ of spurious interrupts (especially
 	 * wrt. IDE); but incurs ~10% performance hit in some
@@ -30,6 +31,8 @@ void __init board_setup(void)
 	 */
 	set_c0_config(1 << 19);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bcsr_init(DB1200_BCSR_PHYS_ADDR,
 		  DB1200_BCSR_PHYS_ADDR + DB1200_BCSR_HEXLED_OFS);
 

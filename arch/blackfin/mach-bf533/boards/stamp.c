@@ -80,6 +80,12 @@ static struct resource net2272_bfin_resources[] = {
 		.end = 0x20300000 + 0x100,
 		.flags = IORESOURCE_MEM,
 	}, {
+<<<<<<< HEAD
+=======
+		.start = 1,
+		.flags = IORESOURCE_BUS,
+	}, {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.start = IRQ_PF10,
 		.end = IRQ_PF10,
 		.flags = IORESOURCE_IRQ | IORESOURCE_IRQ_HIGHLEVEL,
@@ -172,6 +178,7 @@ static struct flash_platform_data bfin_spi_flash_data = {
 /* SPI flash chip (m25p64) */
 static struct bfin5xx_spi_chip spi_flash_chip_info = {
 	.enable_dma = 0,         /* use dma transfer with this chip*/
+<<<<<<< HEAD
 	.bits_per_word = 8,
 };
 #endif
@@ -195,6 +202,8 @@ static struct bfin5xx_spi_chip ad1836_spi_chip_info = {
 static struct bfin5xx_spi_chip spidev_chip_info = {
 	.enable_dma = 0,
 	.bits_per_word = 8,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 #endif
 
@@ -221,7 +230,10 @@ static struct mmc_spi_platform_data bfin_mmc_spi_pdata = {
 
 static struct bfin5xx_spi_chip  mmc_spi_chip_info = {
 	.enable_dma = 0,
+<<<<<<< HEAD
 	.bits_per_word = 8,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.pio_interrupt = 0,
 };
 #endif
@@ -240,6 +252,7 @@ static struct spi_board_info bfin_spi_board_info[] __initdata = {
 	},
 #endif
 
+<<<<<<< HEAD
 #if defined(CONFIG_BFIN_SPI_ADC) || defined(CONFIG_BFIN_SPI_ADC_MODULE)
 	{
 		.modalias = "bfin_spi_adc", /* Name of spi_driver for this device */
@@ -251,6 +264,8 @@ static struct spi_board_info bfin_spi_board_info[] __initdata = {
 	},
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_SND_BF5XX_SOC_AD183X) || defined(CONFIG_SND_BF5XX_SOC_AD183X_MODULE)
 	{
 		.modalias = "ad183x",
@@ -258,7 +273,10 @@ static struct spi_board_info bfin_spi_board_info[] __initdata = {
 		.bus_num = 0,
 		.chip_select = 4,
 		.platform_data = "ad1836", /* only includes chip name for the moment */
+<<<<<<< HEAD
 		.controller_data = &ad1836_spi_chip_info,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.mode = SPI_MODE_3,
 	},
 #endif
@@ -269,7 +287,10 @@ static struct spi_board_info bfin_spi_board_info[] __initdata = {
 		.max_speed_hz = 3125000,     /* max spi clock (SCK) speed in HZ */
 		.bus_num = 0,
 		.chip_select = 1,
+<<<<<<< HEAD
 		.controller_data = &spidev_chip_info,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 #endif
 #if defined(CONFIG_MMC_SPI) || defined(CONFIG_MMC_SPI_MODULE)
@@ -659,6 +680,44 @@ static struct platform_device *stamp_devices[] __initdata = {
 #endif
 };
 
+<<<<<<< HEAD
+=======
+static int __init net2272_init(void)
+{
+#if defined(CONFIG_USB_NET2272) || defined(CONFIG_USB_NET2272_MODULE)
+	int ret;
+
+	/* Set PF0 to 0, PF1 to 1 make /AMS3 work properly */
+	ret = gpio_request(GPIO_PF0, "net2272");
+	if (ret)
+		return ret;
+
+	ret = gpio_request(GPIO_PF1, "net2272");
+	if (ret) {
+		gpio_free(GPIO_PF0);
+		return ret;
+	}
+
+	ret = gpio_request(GPIO_PF11, "net2272");
+	if (ret) {
+		gpio_free(GPIO_PF0);
+		gpio_free(GPIO_PF1);
+		return ret;
+	}
+
+	gpio_direction_output(GPIO_PF0, 0);
+	gpio_direction_output(GPIO_PF1, 1);
+
+	/* Reset the USB chip */
+	gpio_direction_output(GPIO_PF11, 0);
+	mdelay(2);
+	gpio_set_value(GPIO_PF11, 1);
+#endif
+
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __init stamp_init(void)
 {
 	int ret;
@@ -685,6 +744,12 @@ static int __init stamp_init(void)
 	}
 #endif
 
+<<<<<<< HEAD
+=======
+	if (net2272_init())
+		pr_warning("unable to configure net2272; it probably won't work\n");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spi_register_board_info(bfin_spi_board_info, ARRAY_SIZE(bfin_spi_board_info));
 	return 0;
 }

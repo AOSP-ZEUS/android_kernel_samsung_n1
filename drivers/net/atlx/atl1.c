@@ -44,7 +44,11 @@
  * SMP torture testing
  */
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/byteorder.h>
 
 #include <linux/compiler.h>
@@ -1285,8 +1289,12 @@ static void atl1_setup_mac_ctrl(struct atl1_adapter *adapter)
 	value |= (((u32) adapter->hw.preamble_len
 		   & MAC_CTRL_PRMLEN_MASK) << MAC_CTRL_PRMLEN_SHIFT);
 	/* vlan */
+<<<<<<< HEAD
 	if (adapter->vlgrp)
 		value |= MAC_CTRL_RMV_VLAN;
+=======
+	__atlx_vlan_mode(netdev->features, &value);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* rx checksum
 	   if (adapter->rx_csum)
 	   value |= MAC_CTRL_RX_CHKSUM_EN;
@@ -2023,6 +2031,7 @@ rrd_ok:
 		atl1_rx_checksum(adapter, rrd, skb);
 		skb->protocol = eth_type_trans(skb, adapter->netdev);
 
+<<<<<<< HEAD
 		if (adapter->vlgrp && (rrd->pkt_flg & PACKET_FLAG_VLAN_INS)) {
 			u16 vlan_tag = (rrd->vlan_tag >> 4) |
 					((rrd->vlan_tag & 7) << 13) |
@@ -2030,6 +2039,16 @@ rrd_ok:
 			vlan_hwaccel_rx(skb, adapter->vlgrp, vlan_tag);
 		} else
 			netif_rx(skb);
+=======
+		if (rrd->pkt_flg & PACKET_FLAG_VLAN_INS) {
+			u16 vlan_tag = (rrd->vlan_tag >> 4) |
+					((rrd->vlan_tag & 7) << 13) |
+					((rrd->vlan_tag & 8) << 9);
+
+			__vlan_hwaccel_put_tag(skb, vlan_tag);
+		}
+		netif_rx(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* let protocol layer free skb */
 		buffer_info->skb = NULL;
@@ -2476,7 +2495,11 @@ static irqreturn_t atl1_intr(int irq, void *data)
 					"pcie phy link down %x\n", status);
 			if (netif_running(adapter->netdev)) {	/* reset MAC */
 				iowrite32(0, adapter->hw.hw_addr + REG_IMR);
+<<<<<<< HEAD
 				schedule_work(&adapter->reset_dev_task);
+=======
+				schedule_work(&adapter->pcie_dma_to_rst_task);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				return IRQ_HANDLED;
 			}
 		}
@@ -2488,7 +2511,11 @@ static irqreturn_t atl1_intr(int irq, void *data)
 					"pcie DMA r/w error (status = 0x%x)\n",
 					status);
 			iowrite32(0, adapter->hw.hw_addr + REG_IMR);
+<<<<<<< HEAD
 			schedule_work(&adapter->reset_dev_task);
+=======
+			schedule_work(&adapter->pcie_dma_to_rst_task);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return IRQ_HANDLED;
 		}
 
@@ -2633,10 +2660,17 @@ static void atl1_down(struct atl1_adapter *adapter)
 	atl1_clean_rx_ring(adapter);
 }
 
+<<<<<<< HEAD
 static void atl1_reset_dev_task(struct work_struct *work)
 {
 	struct atl1_adapter *adapter =
 		container_of(work, struct atl1_adapter, reset_dev_task);
+=======
+static void atl1_tx_timeout_task(struct work_struct *work)
+{
+	struct atl1_adapter *adapter =
+		container_of(work, struct atl1_adapter, tx_timeout_task);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct net_device *netdev = adapter->netdev;
 
 	netif_device_detach(netdev);
@@ -2783,8 +2817,12 @@ static int atl1_suspend(struct device *dev)
 			ctrl |= MAC_CTRL_DUPLX;
 		ctrl |= (((u32)adapter->hw.preamble_len &
 			MAC_CTRL_PRMLEN_MASK) << MAC_CTRL_PRMLEN_SHIFT);
+<<<<<<< HEAD
 		if (adapter->vlgrp)
 			ctrl |= MAC_CTRL_RMV_VLAN;
+=======
+		__atlx_vlan_mode(netdev->features, &ctrl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (wufc & ATLX_WUFC_MAG)
 			ctrl |= MAC_CTRL_BC_EN;
 		iowrite32(ctrl, hw->hw_addr + REG_MAC_CTRL);
@@ -2874,9 +2912,16 @@ static const struct net_device_ops atl1_netdev_ops = {
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_set_mac_address	= atl1_set_mac,
 	.ndo_change_mtu		= atl1_change_mtu,
+<<<<<<< HEAD
 	.ndo_do_ioctl		= atlx_ioctl,
 	.ndo_tx_timeout		= atlx_tx_timeout,
 	.ndo_vlan_rx_register	= atlx_vlan_rx_register,
+=======
+	.ndo_fix_features	= atlx_fix_features,
+	.ndo_set_features	= atlx_set_features,
+	.ndo_do_ioctl		= atlx_ioctl,
+	.ndo_tx_timeout		= atlx_tx_timeout,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_NET_POLL_CONTROLLER
 	.ndo_poll_controller	= atl1_poll_controller,
 #endif
@@ -2984,7 +3029,12 @@ static int __devinit atl1_probe(struct pci_dev *pdev,
 	netdev->features |= NETIF_F_SG;
 	netdev->features |= (NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX);
 
+<<<<<<< HEAD
 	netdev->hw_features = NETIF_F_HW_CSUM | NETIF_F_SG | NETIF_F_TSO;
+=======
+	netdev->hw_features = NETIF_F_HW_CSUM | NETIF_F_SG | NETIF_F_TSO |
+			      NETIF_F_HW_VLAN_RX;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* is this valid? see atl1_setup_mac_ctrl() */
 	netdev->features |= NETIF_F_RXCSUM;
@@ -3034,10 +3084,19 @@ static int __devinit atl1_probe(struct pci_dev *pdev,
 		    (unsigned long)adapter);
 	adapter->phy_timer_pending = false;
 
+<<<<<<< HEAD
 	INIT_WORK(&adapter->reset_dev_task, atl1_reset_dev_task);
 
 	INIT_WORK(&adapter->link_chg_task, atlx_link_chg_task);
 
+=======
+	INIT_WORK(&adapter->tx_timeout_task, atl1_tx_timeout_task);
+
+	INIT_WORK(&adapter->link_chg_task, atlx_link_chg_task);
+
+	INIT_WORK(&adapter->pcie_dma_to_rst_task, atl1_tx_timeout_task);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	err = register_netdev(netdev);
 	if (err)
 		goto err_common;

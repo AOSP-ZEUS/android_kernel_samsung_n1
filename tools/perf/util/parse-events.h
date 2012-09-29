@@ -8,6 +8,10 @@
 
 struct list_head;
 struct perf_evsel;
+<<<<<<< HEAD
+=======
+struct perf_evlist;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct option;
 
@@ -24,7 +28,14 @@ const char *event_type(int type);
 const char *event_name(struct perf_evsel *event);
 extern const char *__event_name(int type, u64 config);
 
+<<<<<<< HEAD
 extern int parse_events(const struct option *opt, const char *str, int unset);
+=======
+extern int parse_events_option(const struct option *opt, const char *str,
+			       int unset);
+extern int parse_events(struct perf_evlist *evlist, const char *str,
+			int unset);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern int parse_filter(const struct option *opt, const char *str, int unset);
 
 #define EVENTS_HELP_MAX (128*1024)

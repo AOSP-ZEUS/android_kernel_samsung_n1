@@ -38,6 +38,17 @@
 u8 cpu_mask;
 
 /*
+<<<<<<< HEAD
+=======
+ * clkdm_control: if true, then when a clock is enabled in the
+ * hardware, its clockdomain will first be enabled; and when a clock
+ * is disabled in the hardware, its clockdomain will be disabled
+ * afterwards.
+ */
+static bool clkdm_control = true;
+
+/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * OMAP2+ specific clock functions
  */
 
@@ -100,6 +111,22 @@ void omap2_init_clk_clkdm(struct clk *clk)
 }
 
 /**
+<<<<<<< HEAD
+=======
+ * omap2_clk_disable_clkdm_control - disable clkdm control on clk enable/disable
+ *
+ * Prevent the OMAP clock code from calling into the clockdomain code
+ * when a hardware clock in that clockdomain is enabled or disabled.
+ * Intended to be called at init time from omap*_clk_init().  No
+ * return value.
+ */
+void __init omap2_clk_disable_clkdm_control(void)
+{
+	clkdm_control = false;
+}
+
+/**
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * omap2_clk_dflt_find_companion - find companion clock to @clk
  * @clk: struct clk * to find the companion clock of
  * @other_reg: void __iomem ** to return the companion clock CM_*CLKEN va in
@@ -268,7 +295,11 @@ void omap2_clk_disable(struct clk *clk)
 		clk->ops->disable(clk);
 	}
 
+<<<<<<< HEAD
 	if (clk->clkdm)
+=======
+	if (clkdm_control && clk->clkdm)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		clkdm_clk_disable(clk->clkdm, clk);
 
 	if (clk->parent)
@@ -308,7 +339,11 @@ int omap2_clk_enable(struct clk *clk)
 		}
 	}
 
+<<<<<<< HEAD
 	if (clk->clkdm) {
+=======
+	if (clkdm_control && clk->clkdm) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = clkdm_clk_enable(clk->clkdm, clk);
 		if (ret) {
 			WARN(1, "clock: %s: could not enable clockdomain %s: "
@@ -330,7 +365,11 @@ int omap2_clk_enable(struct clk *clk)
 	return 0;
 
 oce_err3:
+<<<<<<< HEAD
 	if (clk->clkdm)
+=======
+	if (clkdm_control && clk->clkdm)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		clkdm_clk_disable(clk->clkdm, clk);
 oce_err2:
 	if (clk->parent)
@@ -453,6 +492,10 @@ int __init omap2_clk_switch_mpurate_at_boot(const char *mpurate_ck_name)
 	if (IS_ERR_VALUE(r)) {
 		WARN(1, "clock: %s: unable to set MPU rate to %d: %d\n",
 		     mpurate_ck->name, mpurate, r);
+<<<<<<< HEAD
+=======
+		clk_put(mpurate_ck);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -EINVAL;
 	}
 

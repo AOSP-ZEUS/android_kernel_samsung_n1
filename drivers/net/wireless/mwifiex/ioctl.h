@@ -249,6 +249,10 @@ struct mwifiex_ds_hs_cfg {
 };
 
 #define DEEP_SLEEP_ON  1
+<<<<<<< HEAD
+=======
+#define DEEP_SLEEP_OFF 0
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define DEEP_SLEEP_IDLE_TIME	100
 #define PS_MODE_AUTO		1
 

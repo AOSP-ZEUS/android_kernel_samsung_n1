@@ -634,7 +634,11 @@ static int s5h1420_set_frontend(struct dvb_frontend* fe,
 	struct s5h1420_state* state = fe->demodulator_priv;
 	int frequency_delta;
 	struct dvb_frontend_tune_settings fesettings;
+<<<<<<< HEAD
 	uint8_t clock_settting;
+=======
+	uint8_t clock_setting;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	dprintk("enter %s\n", __func__);
 
@@ -684,6 +688,7 @@ static int s5h1420_set_frontend(struct dvb_frontend* fe,
 	switch (state->fclk) {
 	default:
 	case 88000000:
+<<<<<<< HEAD
 		clock_settting = 80;
 		break;
 	case 86000000:
@@ -697,6 +702,21 @@ static int s5h1420_set_frontend(struct dvb_frontend* fe,
 		break;
 	case 44000000:
 		clock_settting = 36;
+=======
+		clock_setting = 80;
+		break;
+	case 86000000:
+		clock_setting = 78;
+		break;
+	case 80000000:
+		clock_setting = 72;
+		break;
+	case 59000000:
+		clock_setting = 51;
+		break;
+	case 44000000:
+		clock_setting = 36;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 	dprintk("pll01: %d, ToneFreq: %d\n", state->fclk/1000000 - 8, (state->fclk + (TONE_FREQ * 32) - 1) / (TONE_FREQ * 32));

@@ -9,6 +9,11 @@
 #ifndef __MACH_MXS_DMA_H__
 #define __MACH_MXS_DMA_H__
 
+<<<<<<< HEAD
+=======
+#include <linux/dmaengine.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct mxs_dma_data {
 	int chan_irq;
 };

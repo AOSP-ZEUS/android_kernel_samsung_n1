@@ -105,7 +105,11 @@ struct pci_sys_data;
 
 extern void it8152_irq_demux(unsigned int irq, struct irq_desc *desc);
 extern void it8152_init_irq(void);
+<<<<<<< HEAD
 extern int it8152_pci_map_irq(struct pci_dev *dev, u8 slot, u8 pin);
+=======
+extern int it8152_pci_map_irq(const struct pci_dev *dev, u8 slot, u8 pin);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern int it8152_pci_setup(int nr, struct pci_sys_data *sys);
 extern struct pci_bus *it8152_pci_scan_bus(int nr, struct pci_sys_data *sys);
 

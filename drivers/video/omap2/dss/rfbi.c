@@ -33,6 +33,11 @@
 #include <linux/hrtimer.h>
 #include <linux/seq_file.h>
 #include <linux/semaphore.h>
+<<<<<<< HEAD
+=======
+#include <linux/platform_device.h>
+#include <linux/pm_runtime.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <video/omapdss.h>
 #include "dss.h"
@@ -120,12 +125,34 @@ static inline u32 rfbi_read_reg(const struct rfbi_reg idx)
 	return __raw_readl(rfbi.base + idx.idx);
 }
 
+<<<<<<< HEAD
 static void rfbi_enable_clocks(bool enable)
 {
 	if (enable)
 		dss_clk_enable(DSS_CLK_ICK | DSS_CLK_FCK);
 	else
 		dss_clk_disable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+static int rfbi_runtime_get(void)
+{
+	int r;
+
+	DSSDBG("rfbi_runtime_get\n");
+
+	r = pm_runtime_get_sync(&rfbi.pdev->dev);
+	WARN_ON(r < 0);
+	return r < 0 ? r : 0;
+}
+
+static void rfbi_runtime_put(void)
+{
+	int r;
+
+	DSSDBG("rfbi_runtime_put\n");
+
+	r = pm_runtime_put(&rfbi.pdev->dev);
+	WARN_ON(r < 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void rfbi_bus_lock(void)
@@ -805,7 +832,12 @@ void rfbi_dump_regs(struct seq_file *s)
 {
 #define DUMPREG(r) seq_printf(s, "%-35s %08x\n", #r, rfbi_read_reg(r))
 
+<<<<<<< HEAD
 	dss_clk_enable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+	if (rfbi_runtime_get())
+		return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	DUMPREG(RFBI_REVISION);
 	DUMPREG(RFBI_SYSCONFIG);
@@ -836,7 +868,11 @@ void rfbi_dump_regs(struct seq_file *s)
 	DUMPREG(RFBI_VSYNC_WIDTH);
 	DUMPREG(RFBI_HSYNC_WIDTH);
 
+<<<<<<< HEAD
 	dss_clk_disable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+	rfbi_runtime_put();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #undef DUMPREG
 }
 
@@ -844,7 +880,13 @@ int omapdss_rfbi_display_enable(struct omap_dss_device *dssdev)
 {
 	int r;
 
+<<<<<<< HEAD
 	rfbi_enable_clocks(1);
+=======
+	r = rfbi_runtime_get();
+	if (r)
+		return r;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	r = omap_dss_start_device(dssdev);
 	if (r) {
@@ -879,6 +921,10 @@ int omapdss_rfbi_display_enable(struct omap_dss_device *dssdev)
 err1:
 	omap_dss_stop_device(dssdev);
 err0:
+<<<<<<< HEAD
+=======
+	rfbi_runtime_put();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return r;
 }
 EXPORT_SYMBOL(omapdss_rfbi_display_enable);
@@ -889,7 +935,11 @@ void omapdss_rfbi_display_disable(struct omap_dss_device *dssdev)
 			DISPC_IRQ_FRAMEDONE);
 	omap_dss_stop_device(dssdev);
 
+<<<<<<< HEAD
 	rfbi_enable_clocks(0);
+=======
+	rfbi_runtime_put();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL(omapdss_rfbi_display_disable);
 
@@ -904,8 +954,14 @@ int rfbi_init_display(struct omap_dss_device *dssdev)
 static int omap_rfbihw_probe(struct platform_device *pdev)
 {
 	u32 rev;
+<<<<<<< HEAD
 	u32 l;
 	struct resource *rfbi_mem;
+=======
+	struct resource *rfbi_mem;
+	struct clk *clk;
+	int r;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	rfbi.pdev = pdev;
 
@@ -914,11 +970,17 @@ static int omap_rfbihw_probe(struct platform_device *pdev)
 	rfbi_mem = platform_get_resource(rfbi.pdev, IORESOURCE_MEM, 0);
 	if (!rfbi_mem) {
 		DSSERR("can't get IORESOURCE_MEM RFBI\n");
+<<<<<<< HEAD
 		return -EINVAL;
+=======
+		r = -EINVAL;
+		goto err_ioremap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	rfbi.base = ioremap(rfbi_mem->start, resource_size(rfbi_mem));
 	if (!rfbi.base) {
 		DSSERR("can't ioremap RFBI\n");
+<<<<<<< HEAD
 		return -ENOMEM;
 	}
 
@@ -932,28 +994,113 @@ static int omap_rfbihw_probe(struct platform_device *pdev)
 	l = rfbi_read_reg(RFBI_SYSCONFIG);
 	l |= (1 << 0) | (2 << 3);
 	rfbi_write_reg(RFBI_SYSCONFIG, l);
+=======
+		r = -ENOMEM;
+		goto err_ioremap;
+	}
+
+	pm_runtime_enable(&pdev->dev);
+
+	r = rfbi_runtime_get();
+	if (r)
+		goto err_get_rfbi;
+
+	msleep(10);
+
+	if (cpu_is_omap24xx() || cpu_is_omap34xx() || cpu_is_omap3630())
+		clk = dss_get_ick();
+	else
+		clk = clk_get(&pdev->dev, "ick");
+	if (IS_ERR(clk)) {
+		DSSERR("can't get ick\n");
+		r = PTR_ERR(clk);
+		goto err_get_ick;
+	}
+
+	rfbi.l4_khz = clk_get_rate(clk) / 1000;
+
+	clk_put(clk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	rev = rfbi_read_reg(RFBI_REVISION);
 	dev_dbg(&pdev->dev, "OMAP RFBI rev %d.%d\n",
 	       FLD_GET(rev, 7, 4), FLD_GET(rev, 3, 0));
 
+<<<<<<< HEAD
 	rfbi_enable_clocks(0);
 
 	return 0;
+=======
+	rfbi_runtime_put();
+
+	return 0;
+
+err_get_ick:
+	rfbi_runtime_put();
+err_get_rfbi:
+	pm_runtime_disable(&pdev->dev);
+	iounmap(rfbi.base);
+err_ioremap:
+	return r;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int omap_rfbihw_remove(struct platform_device *pdev)
 {
+<<<<<<< HEAD
+=======
+	pm_runtime_disable(&pdev->dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	iounmap(rfbi.base);
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int rfbi_runtime_suspend(struct device *dev)
+{
+	dispc_runtime_put();
+	dss_runtime_put();
+
+	return 0;
+}
+
+static int rfbi_runtime_resume(struct device *dev)
+{
+	int r;
+
+	r = dss_runtime_get();
+	if (r < 0)
+		goto err_get_dss;
+
+	r = dispc_runtime_get();
+	if (r < 0)
+		goto err_get_dispc;
+
+	return 0;
+
+err_get_dispc:
+	dss_runtime_put();
+err_get_dss:
+	return r;
+}
+
+static const struct dev_pm_ops rfbi_pm_ops = {
+	.runtime_suspend = rfbi_runtime_suspend,
+	.runtime_resume = rfbi_runtime_resume,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct platform_driver omap_rfbihw_driver = {
 	.probe          = omap_rfbihw_probe,
 	.remove         = omap_rfbihw_remove,
 	.driver         = {
 		.name   = "omapdss_rfbi",
 		.owner  = THIS_MODULE,
+<<<<<<< HEAD
+=======
+		.pm	= &rfbi_pm_ops,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 };
 

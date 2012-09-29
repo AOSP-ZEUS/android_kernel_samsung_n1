@@ -30,7 +30,11 @@
 #include <asm/percpu.h>
 
 extern int boot_cpuid;
+<<<<<<< HEAD
 extern int boot_cpu_count;
+=======
+extern int spinning_secondaries;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern void cpu_die(void);
 
@@ -119,7 +123,10 @@ extern const char *smp_ipi_name[];
 /* for irq controllers with only a single ipi */
 extern void smp_muxed_ipi_set_data(int cpu, unsigned long data);
 extern void smp_muxed_ipi_message_pass(int cpu, int msg);
+<<<<<<< HEAD
 extern void smp_muxed_ipi_resend(void);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern irqreturn_t smp_ipi_demux(void);
 
 void smp_init_iSeries(void);

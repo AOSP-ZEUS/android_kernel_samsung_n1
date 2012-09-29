@@ -29,16 +29,25 @@
 
 u64 uevent_seqnum;
 char uevent_helper[UEVENT_HELPER_PATH_LEN] = CONFIG_UEVENT_HELPER_PATH;
+<<<<<<< HEAD
+=======
+static DEFINE_SPINLOCK(sequence_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_NET
 struct uevent_sock {
 	struct list_head list;
 	struct sock *sk;
 };
 static LIST_HEAD(uevent_sock_list);
+<<<<<<< HEAD
 #endif
 
 /* This lock protects uevent_seqnum and uevent_sock_list */
 static DEFINE_MUTEX(uevent_sock_mutex);
+=======
+static DEFINE_MUTEX(uevent_sock_mutex);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* the strings here must match the enum in include/linux/kobject.h */
 static const char *kobject_actions[] = {
@@ -137,6 +146,10 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 	struct kobject *top_kobj;
 	struct kset *kset;
 	const struct kset_uevent_ops *uevent_ops;
+<<<<<<< HEAD
+=======
+	u64 seq;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int i = 0;
 	int retval = 0;
 #ifdef CONFIG_NET
@@ -243,6 +256,7 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 	else if (action == KOBJ_REMOVE)
 		kobj->state_remove_uevent_sent = 1;
 
+<<<<<<< HEAD
 	mutex_lock(&uevent_sock_mutex);
 	/* we will send an event, so request a new sequence number */
 	retval = add_uevent_var(env, "SEQNUM=%llu", (unsigned long long)++uevent_seqnum);
@@ -253,6 +267,19 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 
 #if defined(CONFIG_NET)
 	/* send netlink message */
+=======
+	/* we will send an event, so request a new sequence number */
+	spin_lock(&sequence_lock);
+	seq = ++uevent_seqnum;
+	spin_unlock(&sequence_lock);
+	retval = add_uevent_var(env, "SEQNUM=%llu", (unsigned long long)seq);
+	if (retval)
+		goto exit;
+
+#if defined(CONFIG_NET)
+	/* send netlink message */
+	mutex_lock(&uevent_sock_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	list_for_each_entry(ue_sk, &uevent_sock_list, list) {
 		struct sock *uevent_sock = ue_sk->sk;
 		struct sk_buff *skb;
@@ -286,8 +313,13 @@ int kobject_uevent_env(struct kobject *kobj, enum kobject_action action,
 		} else
 			retval = -ENOMEM;
 	}
+<<<<<<< HEAD
 #endif
 	mutex_unlock(&uevent_sock_mutex);
+=======
+	mutex_unlock(&uevent_sock_mutex);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* call uevent_helper, usually only enabled during early boot */
 	if (uevent_helper[0] && !kobj_usermode_filter(kobj)) {

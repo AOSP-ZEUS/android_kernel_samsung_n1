@@ -132,12 +132,24 @@ static cycle_t exynos4_frc_read(struct clocksource *cs)
 	return ((cycle_t)hi << 32) | lo;
 }
 
+<<<<<<< HEAD
+=======
+static void exynos4_frc_resume(struct clocksource *cs)
+{
+	exynos4_mct_frc_start(0, 0);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct clocksource mct_frc = {
 	.name		= "mct-frc",
 	.rating		= 400,
 	.read		= exynos4_frc_read,
 	.mask		= CLOCKSOURCE_MASK(64),
 	.flags		= CLOCK_SOURCE_IS_CONTINUOUS,
+<<<<<<< HEAD
+=======
+	.resume		= exynos4_frc_resume,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void __init exynos4_clocksource_init(void)
@@ -383,15 +395,28 @@ static void exynos4_mct_tick_init(struct clock_event_device *evt)
 		setup_irq(IRQ_MCT_L0, &mct_tick0_event_irq);
 	} else {
 		mct_tick1_event_irq.dev_id = &mct_tick[cpu];
+<<<<<<< HEAD
 		irq_set_affinity(IRQ_MCT1, cpumask_of(1));
 		setup_irq(IRQ_MCT_L1, &mct_tick1_event_irq);
+=======
+		setup_irq(IRQ_MCT_L1, &mct_tick1_event_irq);
+		irq_set_affinity(IRQ_MCT_L1, cpumask_of(1));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
 /* Setup the local clock events for a CPU */
+<<<<<<< HEAD
 void __cpuinit local_timer_setup(struct clock_event_device *evt)
 {
 	exynos4_mct_tick_init(evt);
+=======
+int __cpuinit local_timer_setup(struct clock_event_device *evt)
+{
+	exynos4_mct_tick_init(evt);
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int local_timer_ack(void)

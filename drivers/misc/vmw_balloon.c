@@ -45,7 +45,11 @@
 
 MODULE_AUTHOR("VMware, Inc.");
 MODULE_DESCRIPTION("VMware Memory Control (Balloon) Driver");
+<<<<<<< HEAD
 MODULE_VERSION("1.2.1.2-k");
+=======
+MODULE_VERSION("1.2.1.3-k");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_ALIAS("dmi:*:svnVMware*:*");
 MODULE_ALIAS("vmware_vmmemctl");
 MODULE_LICENSE("GPL");
@@ -215,7 +219,10 @@ struct vmballoon {
 };
 
 static struct vmballoon balloon;
+<<<<<<< HEAD
 static struct workqueue_struct *vmballoon_wq;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Send "start" command to the host, communicating supported version
@@ -674,7 +681,16 @@ static void vmballoon_work(struct work_struct *work)
 			vmballoon_deflate(b);
 	}
 
+<<<<<<< HEAD
 	queue_delayed_work(vmballoon_wq, dwork, round_jiffies_relative(HZ));
+=======
+	/*
+	 * We are using a freezable workqueue so that balloon operations are
+	 * stopped while the system transitions to/from sleep/hibernation.
+	 */
+	queue_delayed_work(system_freezable_wq,
+			   dwork, round_jiffies_relative(HZ));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -785,12 +801,15 @@ static int __init vmballoon_init(void)
 	if (x86_hyper != &x86_hyper_vmware)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	vmballoon_wq = create_freezable_workqueue("vmmemctl");
 	if (!vmballoon_wq) {
 		pr_err("failed to create workqueue\n");
 		return -ENOMEM;
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	INIT_LIST_HEAD(&balloon.pages);
 	INIT_LIST_HEAD(&balloon.refused_pages);
 
@@ -805,18 +824,27 @@ static int __init vmballoon_init(void)
 	 */
 	if (!vmballoon_send_start(&balloon)) {
 		pr_err("failed to send start command to the host\n");
+<<<<<<< HEAD
 		error = -EIO;
 		goto fail;
+=======
+		return -EIO;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (!vmballoon_send_guest_id(&balloon)) {
 		pr_err("failed to send guest ID to the host\n");
+<<<<<<< HEAD
 		error = -EIO;
 		goto fail;
+=======
+		return -EIO;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	error = vmballoon_debugfs_init(&balloon);
 	if (error)
+<<<<<<< HEAD
 		goto fail;
 
 	queue_delayed_work(vmballoon_wq, &balloon.dwork, 0);
@@ -826,13 +854,23 @@ static int __init vmballoon_init(void)
 fail:
 	destroy_workqueue(vmballoon_wq);
 	return error;
+=======
+		return error;
+
+	queue_delayed_work(system_freezable_wq, &balloon.dwork, 0);
+
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 module_init(vmballoon_init);
 
 static void __exit vmballoon_exit(void)
 {
 	cancel_delayed_work_sync(&balloon.dwork);
+<<<<<<< HEAD
 	destroy_workqueue(vmballoon_wq);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	vmballoon_debugfs_exit(&balloon);
 

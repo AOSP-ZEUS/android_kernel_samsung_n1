@@ -97,7 +97,11 @@
 #include <net/xfrm.h>
 
 #include <asm/byteorder.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "l2tp_core.h"
 
@@ -908,7 +912,11 @@ static int pppol2tp_getname(struct socket *sock, struct sockaddr *uaddr,
 		goto end_put_sess;
 	}
 
+<<<<<<< HEAD
 	inet = inet_sk(tunnel->sock);
+=======
+	inet = inet_sk(sk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (tunnel->version == 2) {
 		struct sockaddr_pppol2tp sp;
 		len = sizeof(sp);

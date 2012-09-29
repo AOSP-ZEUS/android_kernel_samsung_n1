@@ -32,6 +32,7 @@
 #include "ixgbe_dcb_82598.h"
 
 /**
+<<<<<<< HEAD
  * ixgbe_dcb_config_packet_buffers_82598 - Configure packet buffers
  * @hw: pointer to hardware structure
  * @dcb_config: pointer to ixgbe_dcb_config structure
@@ -71,6 +72,8 @@ static s32 ixgbe_dcb_config_packet_buffers_82598(struct ixgbe_hw *hw, u8 rx_pba)
 }
 
 /**
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * ixgbe_dcb_config_rx_arbiter_82598 - Config Rx data arbiter
  * @hw: pointer to hardware structure
  * @dcb_config: pointer to ixgbe_dcb_config structure
@@ -321,11 +324,17 @@ static s32 ixgbe_dcb_config_tc_stats_82598(struct ixgbe_hw *hw)
  *
  * Configure dcb settings and enable dcb mode.
  */
+<<<<<<< HEAD
 s32 ixgbe_dcb_hw_config_82598(struct ixgbe_hw *hw,
 			      u8 rx_pba, u8 pfc_en, u16 *refill,
 			      u16 *max, u8 *bwg_id, u8 *prio_type)
 {
 	ixgbe_dcb_config_packet_buffers_82598(hw, rx_pba);
+=======
+s32 ixgbe_dcb_hw_config_82598(struct ixgbe_hw *hw, u8 pfc_en, u16 *refill,
+			      u16 *max, u8 *bwg_id, u8 *prio_type)
+{
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ixgbe_dcb_config_rx_arbiter_82598(hw, refill, max, prio_type);
 	ixgbe_dcb_config_tx_desc_arbiter_82598(hw, refill, max,
 					       bwg_id, prio_type);

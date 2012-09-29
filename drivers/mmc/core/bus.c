@@ -25,6 +25,13 @@
 
 #define to_mmc_driver(d)	container_of(d, struct mmc_driver, drv)
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_MMC_TEST
+static struct mmc_driver *mmc_test_drv;
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static ssize_t mmc_type_show(struct device *dev,
 	struct device_attribute *attr, char *buf)
 {
@@ -107,6 +114,16 @@ static int mmc_bus_probe(struct device *dev)
 	struct mmc_driver *drv = to_mmc_driver(dev->driver);
 	struct mmc_card *card = mmc_dev_to_card(dev);
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_MMC_TEST
+	/*
+	 * Hack: Explicitly invoking mmc_test probe to co-exist with mmcblk driver.
+	 */
+	mmc_test_drv->probe(card);
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return drv->probe(card);
 }
 
@@ -196,6 +213,13 @@ void mmc_unregister_bus(void)
 int mmc_register_driver(struct mmc_driver *drv)
 {
 	drv->drv.bus = &mmc_bus_type;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_MMC_TEST
+	if (!strcmp(drv->drv.name, "mmc_test"))
+		mmc_test_drv = drv;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return driver_register(&drv->drv);
 }
 

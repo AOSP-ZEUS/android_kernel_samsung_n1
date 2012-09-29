@@ -38,6 +38,11 @@ struct m66592_platdata {
 	/* (external controller only) one = 3.3V, zero = 1.5V */
 	unsigned	vif:1;
 
+<<<<<<< HEAD
+=======
+	/* (external controller only) set one = WR0_N shorted to WR1_N */
+	unsigned	wr0_shorted_to_wr1:1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif /* __LINUX_USB_M66592_H */

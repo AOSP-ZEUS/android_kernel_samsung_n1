@@ -82,6 +82,7 @@ assign:
 
 static int ops_init(const struct pernet_operations *ops, struct net *net)
 {
+<<<<<<< HEAD
 	int err = -ENOMEM;
 	void *data = NULL;
 
@@ -105,6 +106,23 @@ cleanup:
 
 out:
 	return err;
+=======
+	int err;
+	if (ops->id && ops->size) {
+		void *data = kzalloc(ops->size, GFP_KERNEL);
+		if (!data)
+			return -ENOMEM;
+
+		err = net_assign_generic(net, *ops->id, data);
+		if (err) {
+			kfree(data);
+			return err;
+		}
+	}
+	if (ops->init)
+		return ops->init(net);
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void ops_free(const struct pernet_operations *ops, struct net *net)
@@ -149,6 +167,10 @@ static __net_init int setup_net(struct net *net)
 
 	atomic_set(&net->count, 1);
 	atomic_set(&net->passive, 1);
+<<<<<<< HEAD
+=======
+	net->dev_base_seq = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef NETNS_REFCNT_DEBUG
 	atomic_set(&net->use_count, 0);
@@ -454,7 +476,16 @@ static void __unregister_pernet_operations(struct pernet_operations *ops)
 static int __register_pernet_operations(struct list_head *list,
 					struct pernet_operations *ops)
 {
+<<<<<<< HEAD
 	return ops_init(ops, &init_net);
+=======
+	int err = 0;
+	err = ops_init(ops, &init_net);
+	if (err)
+		ops_free(ops, &init_net);
+	return err;
+	
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void __unregister_pernet_operations(struct pernet_operations *ops)

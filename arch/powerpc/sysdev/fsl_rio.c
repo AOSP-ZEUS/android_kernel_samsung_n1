@@ -1525,7 +1525,11 @@ int fsl_rio_setup(struct platform_device *dev)
 	port->priv = priv;
 	port->phys_efptr = 0x100;
 
+<<<<<<< HEAD
 	priv->regs_win = ioremap(regs.start, regs.end - regs.start + 1);
+=======
+	priv->regs_win = ioremap(regs.start, resource_size(&regs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	rio_regs_win = priv->regs_win;
 
 	/* Probe the master port phy type */

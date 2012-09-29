@@ -28,8 +28,13 @@
 #include <linux/mm.h>
 #include <linux/module.h>
 #include <linux/random.h>
+<<<<<<< HEAD
 #include <linux/compat.h>
 #include <asm/pgalloc.h>
+=======
+#include <asm/pgalloc.h>
+#include <asm/compat.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static unsigned long stack_maxrandom_size(void)
 {

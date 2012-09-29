@@ -62,3 +62,9 @@ static inline void s3c_pm_arch_update_uart(void __iomem *regs,
 					   struct pm_uart_save *save)
 {
 }
+<<<<<<< HEAD
+=======
+
+static inline void s3c_pm_restored_gpios(void) { }
+static inline void s3c_pm_saved_gpios(void) { }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -88,6 +88,10 @@
  */
 
 #include <linux/timer.h>
+<<<<<<< HEAD
+=======
+#include <linux/delay.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h>
 #include <asm/unaligned.h>
 
@@ -1025,10 +1029,27 @@ static void fc_lport_enter_reset(struct fc_lport *lport)
 			fc_vport_set_state(lport->vport, FC_VPORT_LINKDOWN);
 	}
 	fc_lport_state_enter(lport, LPORT_ST_RESET);
+<<<<<<< HEAD
 	fc_vports_linkchange(lport);
 	fc_lport_reset_locked(lport);
 	if (lport->link_up)
 		fc_lport_enter_flogi(lport);
+=======
+	fc_host_post_event(lport->host, fc_get_event_number(),
+			   FCH_EVT_LIPRESET, 0);
+	fc_vports_linkchange(lport);
+	fc_lport_reset_locked(lport);
+	if (lport->link_up) {
+		/*
+		 * Wait upto resource allocation time out before
+		 * doing re-login since incomplete FIP exchanged
+		 * from last session may collide with exchanges
+		 * in new session.
+		 */
+		msleep(lport->r_a_tov);
+		fc_lport_enter_flogi(lport);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -1350,7 +1371,10 @@ static void fc_lport_timeout(struct work_struct *work)
 		WARN_ON(1);
 		break;
 	case LPORT_ST_READY:
+<<<<<<< HEAD
 		WARN_ON(1);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case LPORT_ST_RESET:
 		break;

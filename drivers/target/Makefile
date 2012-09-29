@@ -24,5 +24,10 @@ obj-$(CONFIG_TCM_PSCSI)		+= target_core_pscsi.o
 
 # Fabric modules
 obj-$(CONFIG_LOOPBACK_TARGET)	+= loopback/
+<<<<<<< HEAD
 
 obj-$(CONFIG_TCM_FC)		+= tcm_fc/
+=======
+obj-$(CONFIG_TCM_FC)		+= tcm_fc/
+obj-$(CONFIG_ISCSI_TARGET)	+= iscsi/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

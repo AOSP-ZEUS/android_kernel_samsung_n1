@@ -104,9 +104,16 @@ static void __init saarb_init(void)
 
 MACHINE_START(SAARB, "PXA955 Handheld Platform (aka SAARB)")
 	.boot_params    = 0xa0000100,
+<<<<<<< HEAD
 	.map_io         = pxa_map_io,
 	.nr_irqs	= SAARB_NR_IRQS,
 	.init_irq       = pxa95x_init_irq,
+=======
+	.map_io         = pxa3xx_map_io,
+	.nr_irqs	= SAARB_NR_IRQS,
+	.init_irq       = pxa95x_init_irq,
+	.handle_irq	= pxa3xx_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer          = &pxa_timer,
 	.init_machine   = saarb_init,
 MACHINE_END

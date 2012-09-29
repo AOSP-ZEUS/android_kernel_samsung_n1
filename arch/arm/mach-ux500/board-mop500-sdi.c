@@ -32,6 +32,7 @@
 #define MCI_DATA31DIREN		(1 << 5)
 #define MCI_FBCLKEN		(1 << 7)
 
+<<<<<<< HEAD
 static u32 mop500_sdi0_vdd_handler(struct device *dev, unsigned int vdd,
 				   unsigned char power_mode)
 {
@@ -39,6 +40,34 @@ static u32 mop500_sdi0_vdd_handler(struct device *dev, unsigned int vdd,
 		gpio_set_value_cansleep(GPIO_SDMMC_EN, 1);
 	else if (power_mode == MMC_POWER_OFF)
 		gpio_set_value_cansleep(GPIO_SDMMC_EN, 0);
+=======
+/* GPIO pins used by the sdi0 level shifter */
+static int sdi0_en = -1;
+static int sdi0_vsel = -1;
+
+static u32 mop500_sdi0_vdd_handler(struct device *dev, unsigned int vdd,
+				   unsigned char power_mode)
+{
+	switch (power_mode) {
+	case MMC_POWER_UP:
+	case MMC_POWER_ON:
+		/*
+		 * Level shifter voltage should depend on vdd to when deciding
+		 * on either 1.8V or 2.9V. Once the decision has been made the
+		 * level shifter must be disabled and re-enabled with a changed
+		 * select signal in order to switch the voltage. Since there is
+		 * no framework support yet for indicating 1.8V in vdd, use the
+		 * default 2.9V.
+		 */
+		gpio_direction_output(sdi0_vsel, 0);
+		gpio_direction_output(sdi0_en, 1);
+		break;
+	case MMC_POWER_OFF:
+		gpio_direction_output(sdi0_vsel, 0);
+		gpio_direction_output(sdi0_en, 0);
+		break;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return MCI_FBCLKEN | MCI_CMDDIREN | MCI_DATA0DIREN |
 	       MCI_DATA2DIREN | MCI_DATA31DIREN;
@@ -67,8 +96,15 @@ static struct stedma40_chan_cfg mop500_sdi0_dma_cfg_tx = {
 static struct mmci_platform_data mop500_sdi0_data = {
 	.vdd_handler	= mop500_sdi0_vdd_handler,
 	.ocr_mask	= MMC_VDD_29_30,
+<<<<<<< HEAD
 	.f_max		= 100000000,
 	.capabilities	= MMC_CAP_4_BIT_DATA,
+=======
+	.f_max		= 50000000,
+	.capabilities	= MMC_CAP_4_BIT_DATA |
+				MMC_CAP_SD_HIGHSPEED |
+				MMC_CAP_MMC_HIGHSPEED,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.gpio_wp	= -1,
 #ifdef CONFIG_STE_DMA40
 	.dma_filter	= stedma40_filter,
@@ -77,10 +113,13 @@ static struct mmci_platform_data mop500_sdi0_data = {
 #endif
 };
 
+<<<<<<< HEAD
 /* GPIO pins used by the sdi0 level shifter */
 static int sdi0_en = -1;
 static int sdi0_vsel = -1;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void sdi0_configure(void)
 {
 	int ret;
@@ -140,7 +179,11 @@ static struct stedma40_chan_cfg mop500_sdi2_dma_cfg_tx = {
 
 static struct mmci_platform_data mop500_sdi2_data = {
 	.ocr_mask	= MMC_VDD_165_195,
+<<<<<<< HEAD
 	.f_max		= 100000000,
+=======
+	.f_max		= 50000000,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.capabilities	= MMC_CAP_4_BIT_DATA | MMC_CAP_8_BIT_DATA,
 	.gpio_cd	= -1,
 	.gpio_wp	= -1,
@@ -177,7 +220,11 @@ static struct stedma40_chan_cfg mop500_sdi4_dma_cfg_tx = {
 
 static struct mmci_platform_data mop500_sdi4_data = {
 	.ocr_mask	= MMC_VDD_29_30,
+<<<<<<< HEAD
 	.f_max		= 100000000,
+=======
+	.f_max		= 50000000,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.capabilities	= MMC_CAP_4_BIT_DATA | MMC_CAP_8_BIT_DATA |
 			  MMC_CAP_MMC_HIGHSPEED,
 	.gpio_cd	= -1,
@@ -199,17 +246,40 @@ void __init mop500_sdi_init(void)
 	/* PoP:ed eMMC on top of DB8500 v1.0 has problems with high speed */
 	if (!cpu_is_u8500v10())
 		mop500_sdi2_data.capabilities |= MMC_CAP_MMC_HIGHSPEED;
+<<<<<<< HEAD
 	db8500_add_sdi2(&mop500_sdi2_data, periphid);
+=======
+	/* sdi2 on snowball is in ATL_B mode for FSMC (LAN) */
+	if (!machine_is_snowball())
+		db8500_add_sdi2(&mop500_sdi2_data, periphid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* On-board eMMC */
 	db8500_add_sdi4(&mop500_sdi4_data, periphid);
 
+<<<<<<< HEAD
 	if (machine_is_hrefv60()) {
 		mop500_sdi0_data.gpio_cd = HREFV60_SDMMC_CD_GPIO;
 		sdi0_en = HREFV60_SDMMC_EN_GPIO;
 		sdi0_vsel = HREFV60_SDMMC_1V8_3V_GPIO;
 		sdi0_configure();
 	}
+=======
+	if (machine_is_hrefv60() || machine_is_snowball()) {
+		if (machine_is_hrefv60()) {
+			mop500_sdi0_data.gpio_cd = HREFV60_SDMMC_CD_GPIO;
+			sdi0_en = HREFV60_SDMMC_EN_GPIO;
+			sdi0_vsel = HREFV60_SDMMC_1V8_3V_GPIO;
+		} else if (machine_is_snowball()) {
+			mop500_sdi0_data.gpio_cd = SNOWBALL_SDMMC_CD_GPIO;
+			mop500_sdi0_data.cd_invert = true;
+			sdi0_en = SNOWBALL_SDMMC_EN_GPIO;
+			sdi0_vsel = SNOWBALL_SDMMC_1V8_3V_GPIO;
+		}
+		sdi0_configure();
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * On boards with the TC35892 GPIO expander, sdi0 will finally
 	 * be added when the TC35892 initializes and calls

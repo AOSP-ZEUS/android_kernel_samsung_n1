@@ -114,6 +114,11 @@
 #define MXC_CCM_CCGR4		(MX51_CCM_BASE + 0x78)
 #define MXC_CCM_CCGR5		(MX51_CCM_BASE + 0x7C)
 #define MXC_CCM_CCGR6		(MX51_CCM_BASE + 0x80)
+<<<<<<< HEAD
+=======
+#define MXC_CCM_CCGR7		(MX51_CCM_BASE + 0x84)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define MXC_CCM_CMEOR		(MX51_CCM_BASE + 0x84)
 
 /* Define the bits in register CCR */

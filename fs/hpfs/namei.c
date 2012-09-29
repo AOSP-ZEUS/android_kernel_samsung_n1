@@ -398,7 +398,11 @@ again:
 			hpfs_unlock(dir->i_sb);
 			return -ENOSPC;
 		}
+<<<<<<< HEAD
 		if (generic_permission(inode, MAY_WRITE, 0, NULL) ||
+=======
+		if (generic_permission(inode, MAY_WRITE) ||
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		    !S_ISREG(inode->i_mode) ||
 		    get_write_access(inode)) {
 			d_rehash(dentry);

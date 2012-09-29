@@ -1514,7 +1514,11 @@ static int es1938_resume(struct pci_dev *pci)
 	}
 
 	if (request_irq(pci->irq, snd_es1938_interrupt,
+<<<<<<< HEAD
 			IRQF_SHARED, "ES1938", chip)) {
+=======
+			IRQF_SHARED, KBUILD_MODNAME, chip)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		printk(KERN_ERR "es1938: unable to grab IRQ %d, "
 		       "disabling device\n", pci->irq);
 		snd_card_disconnect(card);
@@ -1636,7 +1640,11 @@ static int __devinit snd_es1938_create(struct snd_card *card,
 	chip->mpu_port = pci_resource_start(pci, 3);
 	chip->game_port = pci_resource_start(pci, 4);
 	if (request_irq(pci->irq, snd_es1938_interrupt, IRQF_SHARED,
+<<<<<<< HEAD
 			"ES1938", chip)) {
+=======
+			KBUILD_MODNAME, chip)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		snd_printk(KERN_ERR "unable to grab IRQ %d\n", pci->irq);
 		snd_es1938_free(chip);
 		return -EBUSY;
@@ -1882,7 +1890,11 @@ static void __devexit snd_es1938_remove(struct pci_dev *pci)
 }
 
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name = "ESS ES1938 (Solo-1)",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_es1938_ids,
 	.probe = snd_es1938_probe,
 	.remove = __devexit_p(snd_es1938_remove),

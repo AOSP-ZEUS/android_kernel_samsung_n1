@@ -118,7 +118,11 @@ int wl1271_ps_elp_wakeup(struct wl1271 *wl)
 			&compl, msecs_to_jiffies(WL1271_WAKEUP_TIMEOUT));
 		if (ret == 0) {
 			wl1271_error("ELP wakeup timeout!");
+<<<<<<< HEAD
 			ieee80211_queue_work(wl->hw, &wl->recovery_work);
+=======
+			wl12xx_queue_recovery_work(wl);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ret = -ETIMEDOUT;
 			goto err;
 		} else if (ret < 0) {
@@ -169,9 +173,17 @@ int wl1271_ps_set_mode(struct wl1271 *wl, enum wl1271_cmd_ps_mode mode,
 		wl1271_debug(DEBUG_PSM, "leaving psm");
 
 		/* disable beacon early termination */
+<<<<<<< HEAD
 		ret = wl1271_acx_bet_enable(wl, false);
 		if (ret < 0)
 			return ret;
+=======
+		if (wl->band == IEEE80211_BAND_2GHZ) {
+			ret = wl1271_acx_bet_enable(wl, false);
+			if (ret < 0)
+				return ret;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* disable beacon filtering */
 		ret = wl1271_acx_beacon_filter_opt(wl, false);
@@ -191,6 +203,7 @@ int wl1271_ps_set_mode(struct wl1271 *wl, enum wl1271_cmd_ps_mode mode,
 
 static void wl1271_ps_filter_frames(struct wl1271 *wl, u8 hlid)
 {
+<<<<<<< HEAD
 	int i, filtered = 0;
 	struct sk_buff *skb;
 	struct ieee80211_tx_info *info;
@@ -198,17 +211,38 @@ static void wl1271_ps_filter_frames(struct wl1271 *wl, u8 hlid)
 
 	/* filter all frames currently the low level queus for this hlid */
 	for (i = 0; i < NUM_TX_QUEUES; i++) {
+=======
+	int i;
+	struct sk_buff *skb;
+	struct ieee80211_tx_info *info;
+	unsigned long flags;
+	int filtered[NUM_TX_QUEUES];
+
+	/* filter all frames currently the low level queus for this hlid */
+	for (i = 0; i < NUM_TX_QUEUES; i++) {
+		filtered[i] = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		while ((skb = skb_dequeue(&wl->links[hlid].tx_queue[i]))) {
 			info = IEEE80211_SKB_CB(skb);
 			info->flags |= IEEE80211_TX_STAT_TX_FILTERED;
 			info->status.rates[0].idx = -1;
+<<<<<<< HEAD
 			ieee80211_tx_status(wl->hw, skb);
 			filtered++;
+=======
+			ieee80211_tx_status_ni(wl->hw, skb);
+			filtered[i]++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
 	spin_lock_irqsave(&wl->wl_lock, flags);
+<<<<<<< HEAD
 	wl->tx_queue_count -= filtered;
+=======
+	for (i = 0; i < NUM_TX_QUEUES; i++)
+		wl->tx_queue_count[i] -= filtered[i];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock_irqrestore(&wl->wl_lock, flags);
 
 	wl1271_handle_tx_low_watermark(wl);

@@ -50,6 +50,10 @@ config MACH_REALVIEW_PB1176
 	bool "Support RealView(R) Platform Baseboard for ARM1176JZF-S"
 	select CPU_V6
 	select ARM_GIC
+<<<<<<< HEAD
+=======
+	select HAVE_TCM
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  Include support for the ARM(R) RealView(R) Platform Baseboard for
 	  ARM1176JZF-S.

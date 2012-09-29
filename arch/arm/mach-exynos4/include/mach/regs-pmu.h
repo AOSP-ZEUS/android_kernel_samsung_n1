@@ -29,6 +29,11 @@
 #define S5P_USE_STANDBY_WFE1			(1 << 25)
 #define S5P_USE_MASK				((0x3 << 16) | (0x3 << 24))
 
+<<<<<<< HEAD
+=======
+#define S5P_SWRESET				S5P_PMUREG(0x0400)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define S5P_WAKEUP_STAT				S5P_PMUREG(0x0600)
 #define S5P_EINT_WAKEUP_MASK			S5P_PMUREG(0x0604)
 #define S5P_WAKEUP_MASK				S5P_PMUREG(0x0608)
@@ -158,6 +163,10 @@
 #define S5P_PMU_GPS_CONF			S5P_PMUREG(0x3CE0)
 
 #define S5P_PMU_SATA_PHY_CONTROL_EN		0x1
+<<<<<<< HEAD
+=======
+#define S5P_CORE_LOCAL_PWR_EN			0x3
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define S5P_INT_LOCAL_PWR_EN			0x7
 
 #define S5P_CHECK_SLEEP				0x00000BAD

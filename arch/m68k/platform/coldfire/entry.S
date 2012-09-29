@@ -182,6 +182,7 @@ ENTRY(inthandler)
 
 /*
  * Beware - when entering resume, prev (the current task) is
+<<<<<<< HEAD
  * in a0, next (the new task) is in a1,so don't change these
  * registers until their contents are no longer needed.
  * This is always called in supervisor mode, so don't bother to save
@@ -200,3 +201,25 @@ ENTRY(resume)
 	movel	%a1@(TASK_THREAD+THREAD_USP),%a0 /* restore thread user stack */
 	WRUSP
 	rts
+=======
+ * in a0, next (the new task) is in a1, so don't change these
+ * registers until their contents are no longer needed.
+ */
+ENTRY(resume)
+	movew	%sr,%d1				 /* save current status */
+	movew	%d1,%a0@(TASK_THREAD+THREAD_SR)
+	movel	%a0,%d1				 /* get prev thread in d1 */
+	SAVE_SWITCH_STACK
+	movel	%sp,%a0@(TASK_THREAD+THREAD_KSP) /* save kernel stack pointer */
+	RDUSP					 /* movel %usp,%a3 */
+	movel	%a3,%a0@(TASK_THREAD+THREAD_USP) /* save thread user stack */
+
+	movel	%a1@(TASK_THREAD+THREAD_USP),%a3 /* restore thread user stack */
+	WRUSP					 /* movel %a3,%usp */
+	movel	%a1@(TASK_THREAD+THREAD_KSP),%sp /* restore new kernel stack */
+	movew	%a1@(TASK_THREAD+THREAD_SR),%d7	 /* restore new status */
+	movew	%d7,%sr
+	RESTORE_SWITCH_STACK
+	rts
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

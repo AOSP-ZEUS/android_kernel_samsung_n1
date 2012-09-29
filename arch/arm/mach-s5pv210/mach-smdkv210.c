@@ -29,7 +29,10 @@
 
 #include <mach/map.h>
 #include <mach/regs-clock.h>
+<<<<<<< HEAD
 #include <mach/regs-fb.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <plat/regs-serial.h>
 #include <plat/regs-srom.h>
@@ -45,6 +48,11 @@
 #include <plat/pm.h>
 #include <plat/fb.h>
 #include <plat/s5p-time.h>
+<<<<<<< HEAD
+=======
+#include <plat/backlight.h>
+#include <plat/regs-fb-v4.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Following are default values for UCON, ULCON and UFCON UART registers */
 #define SMDKV210_UCON_DEFAULT	(S3C2410_UCON_TXILEVEL |	\
@@ -210,6 +218,7 @@ static struct s3c_fb_platdata smdkv210_lcd0_pdata __initdata = {
 	.setup_gpio	= s5pv210_fb_gpio_setup_24bpp,
 };
 
+<<<<<<< HEAD
 static int smdkv210_backlight_init(struct device *dev)
 {
 	int ret;
@@ -249,6 +258,8 @@ static struct platform_device smdkv210_backlight_device = {
 	},
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct platform_device *smdkv210_devices[] __initdata = {
 	&s3c_device_adc,
 	&s3c_device_cfcon,
@@ -267,11 +278,18 @@ static struct platform_device *smdkv210_devices[] __initdata = {
 	&s5pv210_device_iis0,
 	&s5pv210_device_spdif,
 	&samsung_asoc_dma,
+<<<<<<< HEAD
 	&samsung_device_keypad,
 	&smdkv210_dm9000,
 	&smdkv210_lcd_lte480wv,
 	&s3c_device_timer[3],
 	&smdkv210_backlight_device,
+=======
+	&samsung_asoc_idma,
+	&samsung_device_keypad,
+	&smdkv210_dm9000,
+	&smdkv210_lcd_lte480wv,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void __init smdkv210_dm9000_init(void)
@@ -310,6 +328,19 @@ static struct s3c2410_ts_mach_info s3c_ts_platform __initdata = {
 	.oversampling_shift	= 2,
 };
 
+<<<<<<< HEAD
+=======
+/* LCD Backlight data */
+static struct samsung_bl_gpio_info smdkv210_bl_gpio_info = {
+	.no = S5PV210_GPD0(3),
+	.func = S3C_GPIO_SFN(2),
+};
+
+static struct platform_pwm_backlight_data smdkv210_bl_data = {
+	.pwm_id = 3,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init smdkv210_map_io(void)
 {
 	s5p_init_io(NULL, 0, S5P_VA_CHIPID);
@@ -341,6 +372,11 @@ static void __init smdkv210_machine_init(void)
 
 	s3c_fb_set_platdata(&smdkv210_lcd0_pdata);
 
+<<<<<<< HEAD
+=======
+	samsung_bl_set(&smdkv210_bl_gpio_info, &smdkv210_bl_data);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	platform_add_devices(smdkv210_devices, ARRAY_SIZE(smdkv210_devices));
 }
 

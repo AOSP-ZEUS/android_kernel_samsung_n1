@@ -268,6 +268,10 @@ static struct pwm_tdiv_clk clk_timer_tdiv[] = {
 	[0]	= {
 		.clk	= {
 			.name	= "pwm-tdiv",
+<<<<<<< HEAD
+=======
+			.devname	= "s3c24xx-pwm.0",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			.ops	= &clk_tdiv_ops,
 			.parent	= &clk_timer_scaler[0],
 		},
@@ -275,6 +279,10 @@ static struct pwm_tdiv_clk clk_timer_tdiv[] = {
 	[1]	= {
 		.clk	= {
 			.name	= "pwm-tdiv",
+<<<<<<< HEAD
+=======
+			.devname	= "s3c24xx-pwm.1",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			.ops	= &clk_tdiv_ops,
 			.parent	= &clk_timer_scaler[0],
 		}
@@ -282,6 +290,10 @@ static struct pwm_tdiv_clk clk_timer_tdiv[] = {
 	[2]	= {
 		.clk	= {
 			.name	= "pwm-tdiv",
+<<<<<<< HEAD
+=======
+			.devname	= "s3c24xx-pwm.2",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			.ops	= &clk_tdiv_ops,
 			.parent	= &clk_timer_scaler[1],
 		},
@@ -289,6 +301,10 @@ static struct pwm_tdiv_clk clk_timer_tdiv[] = {
 	[3]	= {
 		.clk	= {
 			.name	= "pwm-tdiv",
+<<<<<<< HEAD
+=======
+			.devname	= "s3c24xx-pwm.3",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			.ops	= &clk_tdiv_ops,
 			.parent	= &clk_timer_scaler[1],
 		},
@@ -296,6 +312,10 @@ static struct pwm_tdiv_clk clk_timer_tdiv[] = {
 	[4]	= {
 		.clk	= {
 			.name	= "pwm-tdiv",
+<<<<<<< HEAD
+=======
+			.devname	= "s3c24xx-pwm.4",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			.ops	= &clk_tdiv_ops,
 			.parent	= &clk_timer_scaler[1],
 		},
@@ -361,26 +381,46 @@ static struct clk_ops clk_tin_ops = {
 static struct clk clk_tin[] = {
 	[0]	= {
 		.name	= "pwm-tin",
+<<<<<<< HEAD
+=======
+		.devname	= "s3c24xx-pwm.0",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.id	= 0,
 		.ops	= &clk_tin_ops,
 	},
 	[1]	= {
 		.name	= "pwm-tin",
+<<<<<<< HEAD
+=======
+		.devname	= "s3c24xx-pwm.1",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.id	= 1,
 		.ops	= &clk_tin_ops,
 	},
 	[2]	= {
 		.name	= "pwm-tin",
+<<<<<<< HEAD
+=======
+		.devname	= "s3c24xx-pwm.2",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.id	= 2,
 		.ops	= &clk_tin_ops,
 	},
 	[3]	= {
 		.name	= "pwm-tin",
+<<<<<<< HEAD
+=======
+		.devname	= "s3c24xx-pwm.3",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.id	= 3,
 		.ops	= &clk_tin_ops,
 	},
 	[4]	= {
 		.name	= "pwm-tin",
+<<<<<<< HEAD
+=======
+		.devname	= "s3c24xx-pwm.4",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.id	= 4,
 		.ops	= &clk_tin_ops,
 	},

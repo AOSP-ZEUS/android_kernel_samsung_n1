@@ -8,4 +8,11 @@
 *.dvi
 *.log
 *.out
+<<<<<<< HEAD
 media/
+=======
+*.png
+*.gif
+media-indices.tmpl
+media-entities.tmpl
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -1382,7 +1382,11 @@ static int find_mii(struct net_device *dev)
 /* WCSR bits [0:4] [9:10] */
 #define WCSR_RESET_SAVE 0x61f
 /* RFCR bits [20] [22] [27:31] */
+<<<<<<< HEAD
 #define RFCR_RESET_SAVE 0xf8500000;
+=======
+#define RFCR_RESET_SAVE 0xf8500000
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static void natsemi_reset(struct net_device *dev)
 {
@@ -2920,7 +2924,11 @@ static int netdev_set_ecmd(struct net_device *dev, struct ethtool_cmd *ecmd)
 
 	/*
 	 * If we're ignoring the PHY then autoneg and the internal
+<<<<<<< HEAD
 	 * transciever are really not going to work so don't let the
+=======
+	 * transceiver are really not going to work so don't let the
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * user select them.
 	 */
 	if (np->ignore_phy && (ecmd->autoneg == AUTONEG_ENABLE ||

@@ -43,10 +43,22 @@ struct vme_slave {
 #endif
 };
 
+<<<<<<< HEAD
+=======
+struct vme_irq_id {
+	__u8 level;
+	__u8 statid;
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define VME_GET_SLAVE _IOR(VME_IOC_MAGIC, 1, struct vme_slave)
 #define VME_SET_SLAVE _IOW(VME_IOC_MAGIC, 2, struct vme_slave)
 #define VME_GET_MASTER _IOR(VME_IOC_MAGIC, 3, struct vme_master)
 #define VME_SET_MASTER _IOW(VME_IOC_MAGIC, 4, struct vme_master)
+<<<<<<< HEAD
+=======
+#define VME_IRQ_GEN _IOW(VME_IOC_MAGIC, 5, struct vme_irq_id)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _VME_USER_H_ */
 

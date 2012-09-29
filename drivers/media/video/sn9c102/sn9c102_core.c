@@ -33,6 +33,10 @@
 #include <linux/stat.h>
 #include <linux/mm.h>
 #include <linux/vmalloc.h>
+<<<<<<< HEAD
+=======
+#include <linux/version.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/page-flags.h>
 #include <asm/byteorder.h>
 #include <asm/page.h>
@@ -47,8 +51,12 @@
 #define SN9C102_MODULE_AUTHOR   "(C) 2004-2007 Luca Risolia"
 #define SN9C102_AUTHOR_EMAIL    "<luca.risolia@studio.unibo.it>"
 #define SN9C102_MODULE_LICENSE  "GPL"
+<<<<<<< HEAD
 #define SN9C102_MODULE_VERSION  "1:1.47pre49"
 #define SN9C102_MODULE_VERSION_CODE  KERNEL_VERSION(1, 1, 47)
+=======
+#define SN9C102_MODULE_VERSION  "1:1.48"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*****************************************************************************/
 
@@ -2158,7 +2166,11 @@ sn9c102_vidioc_querycap(struct sn9c102_device* cam, void __user * arg)
 {
 	struct v4l2_capability cap = {
 		.driver = "sn9c102",
+<<<<<<< HEAD
 		.version = SN9C102_MODULE_VERSION_CODE,
+=======
+		.version = LINUX_VERSION_CODE,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.capabilities = V4L2_CAP_VIDEO_CAPTURE | V4L2_CAP_READWRITE |
 				V4L2_CAP_STREAMING,
 	};
@@ -3187,6 +3199,7 @@ static long sn9c102_ioctl_v4l2(struct file *filp,
 	case VIDIOC_S_AUDIO:
 		return sn9c102_vidioc_s_audio(cam, arg);
 
+<<<<<<< HEAD
 	case VIDIOC_G_STD:
 	case VIDIOC_S_STD:
 	case VIDIOC_QUERYSTD:
@@ -3197,6 +3210,10 @@ static long sn9c102_ioctl_v4l2(struct file *filp,
 
 	default:
 		return -EINVAL;
+=======
+	default:
+		return -ENOTTY;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	}
 }

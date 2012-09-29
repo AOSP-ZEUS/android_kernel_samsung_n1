@@ -223,21 +223,35 @@ bfa_cee_isr(void *cbarg, struct bfi_mbmsg *m)
 }
 
 /**
+<<<<<<< HEAD
  * bfa_cee_hbfail()
  *
  * @brief CEE module heart-beat failure handler.
  *
  * @param[in] Pointer to the CEE module data structure.
+=======
+ * bfa_cee_notify()
+ *
+ * @brief CEE module heart-beat failure handler.
+ * @brief CEE module IOC event handler.
+ *
+ * @param[in] IOC event type
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * @return void
  */
 
 static void
+<<<<<<< HEAD
 bfa_cee_hbfail(void *arg)
+=======
+bfa_cee_notify(void *arg, enum bfa_ioc_event event)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct bfa_cee *cee;
 	cee = (struct bfa_cee *) arg;
 
+<<<<<<< HEAD
 	if (cee->get_attr_pending == true) {
 		cee->get_attr_status = BFA_STATUS_FAILED;
 		cee->get_attr_pending  = false;
@@ -261,6 +275,42 @@ bfa_cee_hbfail(void *arg)
 			cee->cbfn.reset_stats_cbfn(cee->cbfn.reset_stats_cbarg,
 			    BFA_STATUS_FAILED);
 		}
+=======
+	switch (event) {
+	case BFA_IOC_E_DISABLED:
+	case BFA_IOC_E_FAILED:
+		if (cee->get_attr_pending == true) {
+			cee->get_attr_status = BFA_STATUS_FAILED;
+			cee->get_attr_pending  = false;
+			if (cee->cbfn.get_attr_cbfn) {
+				cee->cbfn.get_attr_cbfn(
+					cee->cbfn.get_attr_cbarg,
+					BFA_STATUS_FAILED);
+			}
+		}
+		if (cee->get_stats_pending == true) {
+			cee->get_stats_status = BFA_STATUS_FAILED;
+			cee->get_stats_pending  = false;
+			if (cee->cbfn.get_stats_cbfn) {
+				cee->cbfn.get_stats_cbfn(
+					cee->cbfn.get_stats_cbarg,
+					BFA_STATUS_FAILED);
+			}
+		}
+		if (cee->reset_stats_pending == true) {
+			cee->reset_stats_status = BFA_STATUS_FAILED;
+			cee->reset_stats_pending  = false;
+			if (cee->cbfn.reset_stats_cbfn) {
+				cee->cbfn.reset_stats_cbfn(
+					cee->cbfn.reset_stats_cbarg,
+					BFA_STATUS_FAILED);
+			}
+		}
+		break;
+
+	default:
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -286,6 +336,12 @@ bfa_nw_cee_attach(struct bfa_cee *cee, struct bfa_ioc *ioc,
 	cee->ioc = ioc;
 
 	bfa_nw_ioc_mbox_regisr(cee->ioc, BFI_MC_CEE, bfa_cee_isr, cee);
+<<<<<<< HEAD
 	bfa_ioc_hbfail_init(&cee->hbfail, bfa_cee_hbfail, cee);
 	bfa_nw_ioc_hbfail_register(cee->ioc, &cee->hbfail);
+=======
+	bfa_q_qe_init(&cee->ioc_notify);
+	bfa_ioc_notify_init(&cee->ioc_notify, bfa_cee_notify, cee);
+	bfa_nw_ioc_notify_register(cee->ioc, &cee->ioc_notify);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

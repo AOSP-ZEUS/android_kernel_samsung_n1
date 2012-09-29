@@ -4,6 +4,7 @@
 #include <linux/device.h>
 #include <linux/err.h>
 #include <linux/dma-attrs.h>
+<<<<<<< HEAD
 #include <linux/scatterlist.h>
 
 /* These definitions mirror those in pci.h, so they can be used
@@ -15,6 +16,11 @@ enum dma_data_direction {
 	DMA_NONE = 3,
 };
 
+=======
+#include <linux/dma-direction.h>
+#include <linux/scatterlist.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct dma_map_ops {
 	void* (*alloc_coherent)(struct device *dev, size_t size,
 				dma_addr_t *dma_handle, gfp_t gfp);
@@ -54,6 +60,7 @@ struct dma_map_ops {
 
 #define DMA_BIT_MASK(n)	(((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
 
+<<<<<<< HEAD
 typedef u64 DMA_nnBIT_MASK __deprecated;
 
 /*
@@ -75,6 +82,8 @@ typedef u64 DMA_nnBIT_MASK __deprecated;
 #define DMA_28BIT_MASK	(DMA_nnBIT_MASK)DMA_BIT_MASK(28)
 #define DMA_24BIT_MASK	(DMA_nnBIT_MASK)DMA_BIT_MASK(24)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define DMA_MASK_NONE	0x0ULL
 
 static inline int valid_dma_direction(int dma_direction)

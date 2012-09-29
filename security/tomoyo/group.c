@@ -1,21 +1,51 @@
 /*
  * security/tomoyo/group.c
  *
+<<<<<<< HEAD
  * Copyright (C) 2005-2010  NTT DATA CORPORATION
+=======
+ * Copyright (C) 2005-2011  NTT DATA CORPORATION
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 
 #include <linux/slab.h>
 #include "common.h"
 
+<<<<<<< HEAD
 static bool tomoyo_same_path_group(const struct tomoyo_acl_head *a,
 				const struct tomoyo_acl_head *b)
+=======
+/**
+ * tomoyo_same_path_group - Check for duplicated "struct tomoyo_path_group" entry.
+ *
+ * @a: Pointer to "struct tomoyo_acl_head".
+ * @b: Pointer to "struct tomoyo_acl_head".
+ *
+ * Returns true if @a == @b, false otherwise.
+ */
+static bool tomoyo_same_path_group(const struct tomoyo_acl_head *a,
+				   const struct tomoyo_acl_head *b)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return container_of(a, struct tomoyo_path_group, head)->member_name ==
 		container_of(b, struct tomoyo_path_group, head)->member_name;
 }
 
+<<<<<<< HEAD
 static bool tomoyo_same_number_group(const struct tomoyo_acl_head *a,
 				  const struct tomoyo_acl_head *b)
+=======
+/**
+ * tomoyo_same_number_group - Check for duplicated "struct tomoyo_number_group" entry.
+ *
+ * @a: Pointer to "struct tomoyo_acl_head".
+ * @b: Pointer to "struct tomoyo_acl_head".
+ *
+ * Returns true if @a == @b, false otherwise.
+ */
+static bool tomoyo_same_number_group(const struct tomoyo_acl_head *a,
+				     const struct tomoyo_acl_head *b)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return !memcmp(&container_of(a, struct tomoyo_number_group, head)
 		       ->number,
@@ -28,6 +58,7 @@ static bool tomoyo_same_number_group(const struct tomoyo_acl_head *a,
 /**
  * tomoyo_write_group - Write "struct tomoyo_path_group"/"struct tomoyo_number_group" list.
  *
+<<<<<<< HEAD
  * @data:      String to parse.
  * @is_delete: True if it is a delete request.
  * @type:      Type of this group.
@@ -49,10 +80,28 @@ int tomoyo_write_group(char *data, const bool is_delete, const u8 type)
 	if (type == TOMOYO_PATH_GROUP) {
 		struct tomoyo_path_group e = { };
 		e.member_name = tomoyo_get_name(w[1]);
+=======
+ * @param: Pointer to "struct tomoyo_acl_param".
+ * @type:  Type of this group.
+ *
+ * Returns 0 on success, negative value otherwise.
+ */
+int tomoyo_write_group(struct tomoyo_acl_param *param, const u8 type)
+{
+	struct tomoyo_group *group = tomoyo_get_group(param, type);
+	int error = -EINVAL;
+	if (!group)
+		return -ENOMEM;
+	param->list = &group->member_list;
+	if (type == TOMOYO_PATH_GROUP) {
+		struct tomoyo_path_group e = { };
+		e.member_name = tomoyo_get_name(tomoyo_read_token(param));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!e.member_name) {
 			error = -ENOMEM;
 			goto out;
 		}
+<<<<<<< HEAD
 		error = tomoyo_update_policy(&e.head, sizeof(e), is_delete,
 					     member, tomoyo_same_path_group);
 		tomoyo_put_name(e.member_name);
@@ -70,6 +119,24 @@ int tomoyo_write_group(char *data, const bool is_delete, const u8 type)
 		 */
 	}
  out:
+=======
+		error = tomoyo_update_policy(&e.head, sizeof(e), param,
+					  tomoyo_same_path_group);
+		tomoyo_put_name(e.member_name);
+	} else if (type == TOMOYO_NUMBER_GROUP) {
+		struct tomoyo_number_group e = { };
+		if (param->data[0] == '@' ||
+		    !tomoyo_parse_number_union(param, &e.number))
+			goto out;
+		error = tomoyo_update_policy(&e.head, sizeof(e), param,
+					  tomoyo_same_number_group);
+		/*
+		 * tomoyo_put_number_union() is not needed because
+		 * param->data[0] != '@'.
+		 */
+	}
+out:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tomoyo_put_group(group);
 	return error;
 }
@@ -77,8 +144,13 @@ int tomoyo_write_group(char *data, const bool is_delete, const u8 type)
 /**
  * tomoyo_path_matches_group - Check whether the given pathname matches members of the given pathname group.
  *
+<<<<<<< HEAD
  * @pathname:        The name of pathname.
  * @group:           Pointer to "struct tomoyo_path_group".
+=======
+ * @pathname: The name of pathname.
+ * @group:    Pointer to "struct tomoyo_path_group".
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Returns matched member's pathname if @pathname matches pathnames in @group,
  * NULL otherwise.

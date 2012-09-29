@@ -494,7 +494,11 @@ static struct usb_descriptor_header *fsg_hs_function[] = {
 };
 
 /* Maxpacket and other transfer characteristics vary by speed. */
+<<<<<<< HEAD
 static struct usb_endpoint_descriptor *
+=======
+static __maybe_unused struct usb_endpoint_descriptor *
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 fsg_ep_desc(struct usb_gadget *g, struct usb_endpoint_descriptor *fs,
 		struct usb_endpoint_descriptor *hs)
 {

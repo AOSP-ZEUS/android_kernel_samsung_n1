@@ -285,14 +285,22 @@ static int afs_check_permit(struct afs_vnode *vnode, struct key *key,
  * - AFS ACLs are attached to directories only, and a file is controlled by its
  *   parent directory's ACL
  */
+<<<<<<< HEAD
 int afs_permission(struct inode *inode, int mask, unsigned int flags)
+=======
+int afs_permission(struct inode *inode, int mask)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct afs_vnode *vnode = AFS_FS_I(inode);
 	afs_access_t uninitialized_var(access);
 	struct key *key;
 	int ret;
 
+<<<<<<< HEAD
 	if (flags & IPERM_FLAG_RCU)
+=======
+	if (mask & MAY_NOT_BLOCK)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ECHILD;
 
 	_enter("{{%x:%u},%lx},%x,",
@@ -350,7 +358,11 @@ int afs_permission(struct inode *inode, int mask, unsigned int flags)
 	}
 
 	key_put(key);
+<<<<<<< HEAD
 	ret = generic_permission(inode, mask, flags, NULL);
+=======
+	ret = generic_permission(inode, mask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	_leave(" = %d", ret);
 	return ret;
 

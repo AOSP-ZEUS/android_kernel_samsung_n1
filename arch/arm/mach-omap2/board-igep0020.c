@@ -222,8 +222,14 @@ static inline void __init igep2_init_smsc911x(void)
 static inline void __init igep2_init_smsc911x(void) { }
 #endif
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply igep_vmmc1_supply =
 	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.0");
+=======
+static struct regulator_consumer_supply igep_vmmc1_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.0"),
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* VMMC1 for OMAP VDD_MMC1 (i/o) and MMC1 card */
 static struct regulator_init_data igep_vmmc1 = {
@@ -236,12 +242,22 @@ static struct regulator_init_data igep_vmmc1 = {
 					| REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies  = 1,
 	.consumer_supplies      = &igep_vmmc1_supply,
 };
 
 static struct regulator_consumer_supply igep_vio_supply =
 	REGULATOR_SUPPLY("vmmc_aux", "omap_hsmmc.1");
+=======
+	.num_consumer_supplies  = ARRAY_SIZE(igep_vmmc1_supply),
+	.consumer_supplies      = igep_vmmc1_supply,
+};
+
+static struct regulator_consumer_supply igep_vio_supply[] = {
+	REGULATOR_SUPPLY("vmmc_aux", "omap_hsmmc.1"),
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct regulator_init_data igep_vio = {
 	.constraints = {
@@ -254,20 +270,35 @@ static struct regulator_init_data igep_vio = {
 					| REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies  = 1,
 	.consumer_supplies      = &igep_vio_supply,
 };
 
 static struct regulator_consumer_supply igep_vmmc2_supply =
 	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.1");
+=======
+	.num_consumer_supplies  = ARRAY_SIZE(igep_vio_supply),
+	.consumer_supplies      = igep_vio_supply,
+};
+
+static struct regulator_consumer_supply igep_vmmc2_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.1"),
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct regulator_init_data igep_vmmc2 = {
 	.constraints		= {
 		.valid_modes_mask	= REGULATOR_MODE_NORMAL,
 		.always_on		= 1,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies	= 1,
 	.consumer_supplies	= &igep_vmmc2_supply,
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(igep_vmmc2_supply),
+	.consumer_supplies	= igep_vmmc2_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct fixed_voltage_config igep_vwlan = {
@@ -440,10 +471,13 @@ static struct twl4030_gpio_platform_data igep_twl4030_gpio_pdata = {
 	.setup		= igep_twl_gpio_setup,
 };
 
+<<<<<<< HEAD
 static struct twl4030_usb_data igep_usb_data = {
 	.usb_mode	= T2_USB_MODE_ULPI,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int igep2_enable_dvi(struct omap_dss_device *dssdev)
 {
 	gpio_direction_output(IGEP2_GPIO_DVI_PUP, 1);
@@ -480,6 +514,7 @@ static struct omap_dss_board_info igep2_dss_data = {
 	.default_device	= &igep2_dvi_device,
 };
 
+<<<<<<< HEAD
 static struct regulator_consumer_supply igep2_vpll2_supplies[] = {
 	REGULATOR_SUPPLY("vdds_dsi", "omapdss"),
 	REGULATOR_SUPPLY("vdds_dsi", "omapdss_dsi1"),
@@ -500,6 +535,8 @@ static struct regulator_init_data igep2_vpll2 = {
 	.consumer_supplies	= igep2_vpll2_supplies,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init igep2_display_init(void)
 {
 	int err = gpio_request_one(IGEP2_GPIO_DVI_PUP, GPIOF_OUT_INIT_HIGH,
@@ -519,6 +556,7 @@ static void __init igep_init_early(void)
 				  m65kxxxxam_sdrc_params);
 }
 
+<<<<<<< HEAD
 static struct twl4030_codec_audio_data igep2_audio_data;
 
 static struct twl4030_codec_data igep2_codec_data = {
@@ -526,6 +564,8 @@ static struct twl4030_codec_data igep2_codec_data = {
 	.audio = &igep2_audio_data,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int igep2_keymap[] = {
 	KEY(0, 0, KEY_LEFT),
 	KEY(0, 1, KEY_RIGHT),
@@ -558,11 +598,15 @@ static struct twl4030_keypad_data igep2_keypad_pdata = {
 };
 
 static struct twl4030_platform_data igep_twldata = {
+<<<<<<< HEAD
 	.irq_base	= TWL4030_IRQ_BASE,
 	.irq_end	= TWL4030_IRQ_END,
 
 	/* platform_data for children goes here */
 	.usb		= &igep_usb_data,
+=======
+	/* platform_data for children goes here */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.gpio		= &igep_twl4030_gpio_pdata,
 	.vmmc1          = &igep_vmmc1,
 	.vio		= &igep_vio,
@@ -578,6 +622,11 @@ static void __init igep_i2c_init(void)
 {
 	int ret;
 
+<<<<<<< HEAD
+=======
+	omap3_pmic_get_config(&igep_twldata, TWL_COMMON_PDATA_USB, 0);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (machine_is_igep0020()) {
 		/*
 		 * Bus 3 is attached to the DVI port where devices like the
@@ -588,9 +637,18 @@ static void __init igep_i2c_init(void)
 		if (ret)
 			pr_warning("IGEP2: Could not register I2C3 bus (%d)\n", ret);
 
+<<<<<<< HEAD
 		igep_twldata.codec	= &igep2_codec_data;
 		igep_twldata.keypad	= &igep2_keypad_pdata;
 		igep_twldata.vpll2	= &igep2_vpll2;
+=======
+		igep_twldata.keypad	= &igep2_keypad_pdata;
+		/* Get common pmic data */
+		omap3_pmic_get_config(&igep_twldata, TWL_COMMON_PDATA_AUDIO,
+				      TWL_COMMON_REGULATOR_VPLL2);
+		igep_twldata.vpll2->constraints.apply_uV = true;
+		igep_twldata.vpll2->constraints.name = "VDVI";
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	omap3_pmic_init("twl4030", &igep_twldata);
@@ -703,9 +761,15 @@ MACHINE_START(IGEP0020, "IGEP v2 board")
 	.reserve	= omap_reserve,
 	.map_io		= omap3_map_io,
 	.init_early	= igep_init_early,
+<<<<<<< HEAD
 	.init_irq	= omap_init_irq,
 	.init_machine	= igep_init,
 	.timer		= &omap_timer,
+=======
+	.init_irq	= omap3_init_irq,
+	.init_machine	= igep_init,
+	.timer		= &omap3_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END
 
 MACHINE_START(IGEP0030, "IGEP OMAP3 module")
@@ -713,7 +777,13 @@ MACHINE_START(IGEP0030, "IGEP OMAP3 module")
 	.reserve	= omap_reserve,
 	.map_io		= omap3_map_io,
 	.init_early	= igep_init_early,
+<<<<<<< HEAD
 	.init_irq	= omap_init_irq,
 	.init_machine	= igep_init,
 	.timer		= &omap_timer,
+=======
+	.init_irq	= omap3_init_irq,
+	.init_machine	= igep_init,
+	.timer		= &omap3_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

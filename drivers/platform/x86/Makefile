@@ -44,3 +44,7 @@ obj-$(CONFIG_SAMSUNG_LAPTOP)	+= samsung-laptop.o
 obj-$(CONFIG_MXM_WMI)		+= mxm-wmi.o
 obj-$(CONFIG_INTEL_MID_POWER_BUTTON)	+= intel_mid_powerbtn.o
 obj-$(CONFIG_INTEL_OAKTRAIL)	+= intel_oaktrail.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_SAMSUNG_Q10)	+= samsung-q10.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

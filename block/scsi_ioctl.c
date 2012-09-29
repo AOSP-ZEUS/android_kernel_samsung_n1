@@ -24,7 +24,10 @@
 #include <linux/capability.h>
 #include <linux/completion.h>
 #include <linux/cdrom.h>
+<<<<<<< HEAD
 #include <linux/ratelimit.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h>
 #include <linux/times.h>
 #include <asm/uaccess.h>
@@ -692,6 +695,7 @@ int scsi_cmd_ioctl(struct request_queue *q, struct gendisk *bd_disk, fmode_t mod
 }
 EXPORT_SYMBOL(scsi_cmd_ioctl);
 
+<<<<<<< HEAD
 int scsi_verify_blk_ioctl(struct block_device *bd, unsigned int cmd)
 {
 	if (bd && bd == bd->bd_contains)
@@ -743,6 +747,8 @@ int scsi_cmd_blk_ioctl(struct block_device *bd, fmode_t mode,
 }
 EXPORT_SYMBOL(scsi_cmd_blk_ioctl);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __init blk_scsi_ioctl_init(void)
 {
 	blk_set_cmd_filter_defaults(&blk_default_cmd_filter);

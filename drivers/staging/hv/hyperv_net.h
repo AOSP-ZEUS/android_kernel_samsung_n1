@@ -99,9 +99,15 @@ int netvsc_recv_callback(struct hv_device *device_obj,
 int netvsc_initialize(struct hv_driver *drv);
 int rndis_filter_open(struct hv_device *dev);
 int rndis_filter_close(struct hv_device *dev);
+<<<<<<< HEAD
 int rndis_filte_device_add(struct hv_device *dev,
 			void *additional_info);
 int rndis_filter_device_remove(struct hv_device *dev);
+=======
+int rndis_filter_device_add(struct hv_device *dev,
+			void *additional_info);
+void rndis_filter_device_remove(struct hv_device *dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int rndis_filter_receive(struct hv_device *dev,
 			struct hv_netvsc_packet *pkt);
 
@@ -355,10 +361,13 @@ struct nvsp_message {
 /* #define NVSC_MIN_PROTOCOL_VERSION		1 */
 /* #define NVSC_MAX_PROTOCOL_VERSION		1 */
 
+<<<<<<< HEAD
 #define NETVSC_SEND_BUFFER_SIZE			(64*1024)	/* 64K */
 #define NETVSC_SEND_BUFFER_ID			0xface
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define NETVSC_RECEIVE_BUFFER_SIZE		(1024*1024)	/* 1MB */
 
 #define NETVSC_RECEIVE_BUFFER_ID		0xcafe
@@ -383,12 +392,15 @@ struct netvsc_device {
 	struct list_head recv_pkt_list;
 	spinlock_t recv_pkt_list_lock;
 
+<<<<<<< HEAD
 	/* Send buffer allocated by us but manages by NetVSP */
 	void *send_buf;
 	u32 send_buf_size;
 	u32 send_buf_gpadl_handle;
 	u32 send_section_size;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Receive buffer allocated by us but manages by NetVSP */
 	void *recv_buf;
 	u32 recv_buf_size;

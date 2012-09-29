@@ -25,6 +25,7 @@
 int my_skb_head_push(struct sk_buff *skb, unsigned int len);
 int softif_neigh_seq_print_text(struct seq_file *seq, void *offset);
 void softif_neigh_purge(struct bat_priv *bat_priv);
+<<<<<<< HEAD
 int interface_tx(struct sk_buff *skb, struct net_device *soft_iface);
 void interface_rx(struct net_device *soft_iface,
 		  struct sk_buff *skb, struct hard_iface *recv_if,
@@ -32,5 +33,13 @@ void interface_rx(struct net_device *soft_iface,
 struct net_device *softif_create(char *name);
 void softif_destroy(struct net_device *soft_iface);
 int softif_is_valid(struct net_device *net_dev);
+=======
+void interface_rx(struct net_device *soft_iface,
+		  struct sk_buff *skb, struct hard_iface *recv_if,
+		  int hdr_size);
+struct net_device *softif_create(const char *name);
+void softif_destroy(struct net_device *soft_iface);
+int softif_is_valid(const struct net_device *net_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* _NET_BATMAN_ADV_SOFT_INTERFACE_H_ */

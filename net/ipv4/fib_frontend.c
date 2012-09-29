@@ -1124,9 +1124,15 @@ static struct pernet_operations fib_net_ops = {
 
 void __init ip_fib_init(void)
 {
+<<<<<<< HEAD
 	rtnl_register(PF_INET, RTM_NEWROUTE, inet_rtm_newroute, NULL);
 	rtnl_register(PF_INET, RTM_DELROUTE, inet_rtm_delroute, NULL);
 	rtnl_register(PF_INET, RTM_GETROUTE, NULL, inet_dump_fib);
+=======
+	rtnl_register(PF_INET, RTM_NEWROUTE, inet_rtm_newroute, NULL, NULL);
+	rtnl_register(PF_INET, RTM_DELROUTE, inet_rtm_delroute, NULL, NULL);
+	rtnl_register(PF_INET, RTM_GETROUTE, NULL, inet_dump_fib, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	register_pernet_subsys(&fib_net_ops);
 	register_netdevice_notifier(&fib_netdev_notifier);

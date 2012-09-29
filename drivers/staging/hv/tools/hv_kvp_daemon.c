@@ -35,7 +35,10 @@
 #include <arpa/inet.h>
 #include <linux/connector.h>
 #include <linux/netlink.h>
+<<<<<<< HEAD
 #include <sys/socket.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <ifaddrs.h>
 #include <netdb.h>
 #include <syslog.h>

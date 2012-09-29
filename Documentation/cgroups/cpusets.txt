@@ -180,7 +180,11 @@ files describing that cpuset:
  - cpuset.sched_load_balance flag: if set, load balance within CPUs on that cpuset
  - cpuset.sched_relax_domain_level: the searching range when migrating tasks
 
+<<<<<<< HEAD
 In addition, the root cpuset only has the following file:
+=======
+In addition, only the root cpuset has the following file:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  - cpuset.memory_pressure_enabled flag: compute memory_pressure?
 
 New cpusets are created using the mkdir system call or shell

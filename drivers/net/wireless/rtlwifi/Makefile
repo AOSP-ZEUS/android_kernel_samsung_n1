@@ -23,5 +23,9 @@ obj-$(CONFIG_RTL8192C_COMMON)	+= rtl8192c/
 obj-$(CONFIG_RTL8192CE)		+= rtl8192ce/
 obj-$(CONFIG_RTL8192CU)		+= rtl8192cu/
 obj-$(CONFIG_RTL8192SE)		+= rtl8192se/
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_RTL8192DE)		+= rtl8192de/
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 ccflags-y += -D__CHECK_ENDIAN__

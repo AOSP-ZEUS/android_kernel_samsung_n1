@@ -4,8 +4,11 @@
 #define FD_VERSION		"4.0"
 
 #define FD_MAX_DEV_NAME		256
+<<<<<<< HEAD
 /* Maximum queuedepth for the FILEIO HBA */
 #define FD_HBA_QUEUE_DEPTH	256
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define FD_DEVICE_QUEUE_DEPTH	32
 #define FD_MAX_DEVICE_QUEUE_DEPTH 128
 #define FD_BLOCKSIZE		512
@@ -18,8 +21,11 @@ struct fd_request {
 	struct se_task	fd_task;
 	/* SCSI CDB from iSCSI Command PDU */
 	unsigned char	fd_scsi_cdb[TCM_MAX_COMMAND_SIZE];
+<<<<<<< HEAD
 	/* FILEIO device */
 	struct fd_dev	*fd_dev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 } ____cacheline_aligned;
 
 #define FBDF_HAS_PATH		0x01

@@ -2532,11 +2532,16 @@ static void t3_synchronize_rx(struct adapter *adap, const struct port_info *p)
 	}
 }
 
+<<<<<<< HEAD
 static void vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
+=======
+static void cxgb_vlan_mode(struct net_device *dev, u32 features)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct port_info *pi = netdev_priv(dev);
 	struct adapter *adapter = pi->adapter;
 
+<<<<<<< HEAD
 	pi->vlan_grp = grp;
 	if (adapter->params.rev > 0)
 		t3_set_vlan_accel(adapter, 1 << pi->port_id, grp != NULL);
@@ -2545,12 +2550,51 @@ static void vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 		unsigned int i, have_vlans = 0;
 		for_each_port(adapter, i)
 		    have_vlans |= adap2pinfo(adapter, i)->vlan_grp != NULL;
+=======
+	if (adapter->params.rev > 0) {
+		t3_set_vlan_accel(adapter, 1 << pi->port_id,
+				  features & NETIF_F_HW_VLAN_RX);
+	} else {
+		/* single control for all ports */
+		unsigned int i, have_vlans = features & NETIF_F_HW_VLAN_RX;
+
+		for_each_port(adapter, i)
+			have_vlans |=
+				adapter->port[i]->features & NETIF_F_HW_VLAN_RX;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		t3_set_vlan_accel(adapter, 1, have_vlans);
 	}
 	t3_synchronize_rx(adapter, pi);
 }
 
+<<<<<<< HEAD
+=======
+static u32 cxgb_fix_features(struct net_device *dev, u32 features)
+{
+	/*
+	 * Since there is no support for separate rx/tx vlan accel
+	 * enable/disable make sure tx flag is always in same state as rx.
+	 */
+	if (features & NETIF_F_HW_VLAN_RX)
+		features |= NETIF_F_HW_VLAN_TX;
+	else
+		features &= ~NETIF_F_HW_VLAN_TX;
+
+	return features;
+}
+
+static int cxgb_set_features(struct net_device *dev, u32 features)
+{
+	u32 changed = dev->features ^ features;
+
+	if (changed & NETIF_F_HW_VLAN_RX)
+		cxgb_vlan_mode(dev, features);
+
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_NET_POLL_CONTROLLER
 static void cxgb_netpoll(struct net_device *dev)
 {
@@ -3131,7 +3175,12 @@ static const struct net_device_ops cxgb_netdev_ops = {
 	.ndo_do_ioctl		= cxgb_ioctl,
 	.ndo_change_mtu		= cxgb_change_mtu,
 	.ndo_set_mac_address	= cxgb_set_mac_addr,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register	= vlan_rx_register,
+=======
+	.ndo_fix_features	= cxgb_fix_features,
+	.ndo_set_features	= cxgb_set_features,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_NET_POLL_CONTROLLER
 	.ndo_poll_controller	= cxgb_netpoll,
 #endif
@@ -3263,9 +3312,14 @@ static int __devinit init_one(struct pci_dev *pdev,
 		netdev->mem_start = mmio_start;
 		netdev->mem_end = mmio_start + mmio_len - 1;
 		netdev->hw_features = NETIF_F_SG | NETIF_F_IP_CSUM |
+<<<<<<< HEAD
 			NETIF_F_TSO | NETIF_F_RXCSUM;
 		netdev->features |= netdev->hw_features |
 			NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX;
+=======
+			NETIF_F_TSO | NETIF_F_RXCSUM | NETIF_F_HW_VLAN_RX;
+		netdev->features |= netdev->hw_features | NETIF_F_HW_VLAN_TX;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (pci_using_dac)
 			netdev->features |= NETIF_F_HIGHDMA;
 
@@ -3329,6 +3383,12 @@ static int __devinit init_one(struct pci_dev *pdev,
 	err = sysfs_create_group(&adapter->port[0]->dev.kobj,
 				 &cxgb3_attr_group);
 
+<<<<<<< HEAD
+=======
+	for_each_port(adapter, i)
+		cxgb_vlan_mode(adapter->port[i], adapter->port[i]->features);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	print_port_info(adapter, ai);
 	return 0;
 

@@ -97,7 +97,10 @@ extern struct task_struct *__kernel_current_task;
  */
 #define start_thread(_regs, _pc, _usp)			\
 do {							\
+<<<<<<< HEAD
 	set_fs(USER_DS); /* reads from user space */	\
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	__frame = __kernel_frame0_ptr;			\
 	__frame->pc	= (_pc);			\
 	__frame->psr	&= ~PSR_S;			\

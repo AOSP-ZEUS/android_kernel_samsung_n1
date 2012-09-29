@@ -69,10 +69,17 @@
 #ifndef SCSI_OSD_MAJOR
 #  define SCSI_OSD_MAJOR 260
 #endif
+<<<<<<< HEAD
 #define SCSI_OSD_MAX_MINOR MINORMASK
 
 static const char osd_name[] = "osd";
 static const char *osd_version_string = "open-osd 0.2.1";
+=======
+#define SCSI_OSD_MAX_MINOR 64
+
+static const char osd_name[] = "osd";
+static const char *osd_version_string = "open-osd 0.2.0";
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 MODULE_AUTHOR("Boaz Harrosh <bharrosh@panasas.com>");
 MODULE_DESCRIPTION("open-osd Upper-Layer-Driver osd.ko");

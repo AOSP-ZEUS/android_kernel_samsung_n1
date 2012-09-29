@@ -817,8 +817,13 @@ static int rawv6_sendmsg(struct kiocb *iocb, struct sock *sk,
 		memset(opt, 0, sizeof(struct ipv6_txoptions));
 		opt->tot_len = sizeof(struct ipv6_txoptions);
 
+<<<<<<< HEAD
 		err = datagram_send_ctl(sock_net(sk), msg, &fl6, opt, &hlimit,
 					&tclass, &dontfrag);
+=======
+		err = datagram_send_ctl(sock_net(sk), sk, msg, &fl6, opt,
+					&hlimit, &tclass, &dontfrag);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (err < 0) {
 			fl6_sock_release(flowlabel);
 			return err;
@@ -959,6 +964,7 @@ static int do_rawv6_setsockopt(struct sock *sk, int level, int optname,
 		return -EFAULT;
 
 	switch (optname) {
+<<<<<<< HEAD
 		case IPV6_CHECKSUM:
 			if (inet_sk(sk)->inet_num == IPPROTO_ICMPV6 &&
 			    level == IPPROTO_IPV6) {
@@ -989,12 +995,44 @@ static int do_rawv6_setsockopt(struct sock *sk, int level, int optname,
 
 		default:
 			return -ENOPROTOOPT;
+=======
+	case IPV6_CHECKSUM:
+		if (inet_sk(sk)->inet_num == IPPROTO_ICMPV6 &&
+		    level == IPPROTO_IPV6) {
+			/*
+			 * RFC3542 tells that IPV6_CHECKSUM socket
+			 * option in the IPPROTO_IPV6 level is not
+			 * allowed on ICMPv6 sockets.
+			 * If you want to set it, use IPPROTO_RAW
+			 * level IPV6_CHECKSUM socket option
+			 * (Linux extension).
+			 */
+			return -EINVAL;
+		}
+
+		/* You may get strange result with a positive odd offset;
+		   RFC2292bis agrees with me. */
+		if (val > 0 && (val&1))
+			return -EINVAL;
+		if (val < 0) {
+			rp->checksum = 0;
+		} else {
+			rp->checksum = 1;
+			rp->offset = val;
+		}
+
+		return 0;
+
+	default:
+		return -ENOPROTOOPT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
 static int rawv6_setsockopt(struct sock *sk, int level, int optname,
 			  char __user *optval, unsigned int optlen)
 {
+<<<<<<< HEAD
 	switch(level) {
 		case SOL_RAW:
 			break;
@@ -1010,6 +1048,21 @@ static int rawv6_setsockopt(struct sock *sk, int level, int optname,
 		default:
 			return ipv6_setsockopt(sk, level, optname, optval,
 					       optlen);
+=======
+	switch (level) {
+	case SOL_RAW:
+		break;
+
+	case SOL_ICMPV6:
+		if (inet_sk(sk)->inet_num != IPPROTO_ICMPV6)
+			return -EOPNOTSUPP;
+		return rawv6_seticmpfilter(sk, level, optname, optval, optlen);
+	case SOL_IPV6:
+		if (optname == IPV6_CHECKSUM)
+			break;
+	default:
+		return ipv6_setsockopt(sk, level, optname, optval, optlen);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return do_rawv6_setsockopt(sk, level, optname, optval, optlen);
@@ -1075,6 +1128,7 @@ static int do_rawv6_getsockopt(struct sock *sk, int level, int optname,
 static int rawv6_getsockopt(struct sock *sk, int level, int optname,
 			  char __user *optval, int __user *optlen)
 {
+<<<<<<< HEAD
 	switch(level) {
 		case SOL_RAW:
 			break;
@@ -1090,6 +1144,21 @@ static int rawv6_getsockopt(struct sock *sk, int level, int optname,
 		default:
 			return ipv6_getsockopt(sk, level, optname, optval,
 					       optlen);
+=======
+	switch (level) {
+	case SOL_RAW:
+		break;
+
+	case SOL_ICMPV6:
+		if (inet_sk(sk)->inet_num != IPPROTO_ICMPV6)
+			return -EOPNOTSUPP;
+		return rawv6_geticmpfilter(sk, level, optname, optval, optlen);
+	case SOL_IPV6:
+		if (optname == IPV6_CHECKSUM)
+			break;
+	default:
+		return ipv6_getsockopt(sk, level, optname, optval, optlen);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return do_rawv6_getsockopt(sk, level, optname, optval, optlen);
@@ -1119,6 +1188,7 @@ static int compat_rawv6_getsockopt(struct sock *sk, int level, int optname,
 
 static int rawv6_ioctl(struct sock *sk, int cmd, unsigned long arg)
 {
+<<<<<<< HEAD
 	switch(cmd) {
 		case SIOCOUTQ:
 		{
@@ -1144,6 +1214,31 @@ static int rawv6_ioctl(struct sock *sk, int cmd, unsigned long arg)
 			return ip6mr_ioctl(sk, cmd, (void __user *)arg);
 #else
 			return -ENOIOCTLCMD;
+=======
+	switch (cmd) {
+	case SIOCOUTQ: {
+		int amount = sk_wmem_alloc_get(sk);
+
+		return put_user(amount, (int __user *)arg);
+	}
+	case SIOCINQ: {
+		struct sk_buff *skb;
+		int amount = 0;
+
+		spin_lock_bh(&sk->sk_receive_queue.lock);
+		skb = skb_peek(&sk->sk_receive_queue);
+		if (skb != NULL)
+			amount = skb->tail - skb->transport_header;
+		spin_unlock_bh(&sk->sk_receive_queue.lock);
+		return put_user(amount, (int __user *)arg);
+	}
+
+	default:
+#ifdef CONFIG_IPV6_MROUTE
+		return ip6mr_ioctl(sk, cmd, (void __user *)arg);
+#else
+		return -ENOIOCTLCMD;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 	}
 }

@@ -28,6 +28,11 @@ struct pwm_bl_data {
 	unsigned int		lth_brightness;
 	int			(*notify)(struct device *,
 					  int brightness);
+<<<<<<< HEAD
+=======
+	void			(*notify_after)(struct device *,
+					int brightness);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int			(*check_fb)(struct device *, struct fb_info *);
 };
 
@@ -55,6 +60,13 @@ static int pwm_backlight_update_status(struct backlight_device *bl)
 		pwm_config(pb->pwm, brightness, pb->period);
 		pwm_enable(pb->pwm);
 	}
+<<<<<<< HEAD
+=======
+
+	if (pb->notify_after)
+		pb->notify_after(pb->dev, brightness);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -105,6 +117,10 @@ static int pwm_backlight_probe(struct platform_device *pdev)
 
 	pb->period = data->pwm_period_ns;
 	pb->notify = data->notify;
+<<<<<<< HEAD
+=======
+	pb->notify_after = data->notify_after;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pb->check_fb = data->check_fb;
 	pb->lth_brightness = data->lth_brightness *
 		(data->pwm_period_ns / data->max_brightness);
@@ -172,6 +188,11 @@ static int pwm_backlight_suspend(struct platform_device *pdev,
 		pb->notify(pb->dev, 0);
 	pwm_config(pb->pwm, 0, pb->period);
 	pwm_disable(pb->pwm);
+<<<<<<< HEAD
+=======
+	if (pb->notify_after)
+		pb->notify_after(pb->dev, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

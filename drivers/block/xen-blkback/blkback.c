@@ -458,7 +458,12 @@ static void end_block_io_op(struct bio *bio, int error)
  * (which has the sectors we want, number of them, grant references, etc),
  * and transmute  it to the block API to hand it over to the proper block disk.
  */
+<<<<<<< HEAD
 static int do_block_io_op(struct xen_blkif *blkif)
+=======
+static int
+__do_block_io_op(struct xen_blkif *blkif)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	union blkif_back_rings *blk_rings = &blkif->blk_rings;
 	struct blkif_request req;
@@ -515,6 +520,26 @@ static int do_block_io_op(struct xen_blkif *blkif)
 	return more_to_do;
 }
 
+<<<<<<< HEAD
+=======
+static int
+do_block_io_op(struct xen_blkif *blkif)
+{
+	union blkif_back_rings *blk_rings = &blkif->blk_rings;
+	int more_to_do;
+
+	do {
+		more_to_do = __do_block_io_op(blkif);
+		if (more_to_do)
+			break;
+
+		RING_FINAL_CHECK_FOR_REQUESTS(&blk_rings->common, more_to_do);
+	} while (more_to_do);
+
+	return more_to_do;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Transmutation of the 'struct blkif_request' to a proper 'struct bio'
  * and call the 'submit_bio' to pass it to the underlying storage.
@@ -700,7 +725,10 @@ static void make_response(struct xen_blkif *blkif, u64 id,
 	struct blkif_response  resp;
 	unsigned long     flags;
 	union blkif_back_rings *blk_rings = &blkif->blk_rings;
+<<<<<<< HEAD
 	int more_to_do = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int notify;
 
 	resp.id        = id;
@@ -727,6 +755,7 @@ static void make_response(struct xen_blkif *blkif, u64 id,
 	}
 	blk_rings->common.rsp_prod_pvt++;
 	RING_PUSH_RESPONSES_AND_CHECK_NOTIFY(&blk_rings->common, notify);
+<<<<<<< HEAD
 	if (blk_rings->common.rsp_prod_pvt == blk_rings->common.req_cons) {
 		/*
 		 * Tail check for pending requests. Allows frontend to avoid
@@ -743,6 +772,9 @@ static void make_response(struct xen_blkif *blkif, u64 id,
 
 	if (more_to_do)
 		blkif_notify_work(blkif);
+=======
+	spin_unlock_irqrestore(&blkif->blk_ring_lock, flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (notify)
 		notify_remote_via_irq(blkif->irq);
 }
@@ -824,3 +856,7 @@ static int __init xen_blkif_init(void)
 module_init(xen_blkif_init);
 
 MODULE_LICENSE("Dual BSD/GPL");
+<<<<<<< HEAD
+=======
+MODULE_ALIAS("xen-backend:vbd");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

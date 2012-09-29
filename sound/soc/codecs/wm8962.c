@@ -78,6 +78,11 @@ struct wm8962_priv {
 #ifdef CONFIG_GPIOLIB
 	struct gpio_chip gpio_chip;
 #endif
+<<<<<<< HEAD
+=======
+
+	int irq;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* We can't use the same notifier block for more than one supply and
@@ -1988,6 +1993,10 @@ static const unsigned int classd_tlv[] = {
 	0, 6, TLV_DB_SCALE_ITEM(0, 150, 0),
 	7, 7, TLV_DB_SCALE_ITEM(1200, 0, 0),
 };
+<<<<<<< HEAD
+=======
+static const DECLARE_TLV_DB_SCALE(eq_tlv, -1200, 100, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* The VU bits for the headphones are in a different register to the mute
  * bits and only take effect on the PGA if it is actually powered.
@@ -2127,6 +2136,21 @@ SOC_SINGLE_TLV("HPMIXR MIXINR Volume", WM8962_HEADPHONE_MIXER_4,
 
 SOC_SINGLE_TLV("Speaker Boost Volume", WM8962_CLASS_D_CONTROL_2, 0, 7, 0,
 	       classd_tlv),
+<<<<<<< HEAD
+=======
+
+SOC_SINGLE("EQ Switch", WM8962_EQ1, WM8962_EQ_ENA_SHIFT, 1, 0),
+SOC_DOUBLE_R_TLV("EQ1 Volume", WM8962_EQ2, WM8962_EQ22,
+		 WM8962_EQL_B1_GAIN_SHIFT, 31, 0, eq_tlv),
+SOC_DOUBLE_R_TLV("EQ2 Volume", WM8962_EQ2, WM8962_EQ22,
+		 WM8962_EQL_B2_GAIN_SHIFT, 31, 0, eq_tlv),
+SOC_DOUBLE_R_TLV("EQ3 Volume", WM8962_EQ2, WM8962_EQ22,
+		 WM8962_EQL_B3_GAIN_SHIFT, 31, 0, eq_tlv),
+SOC_DOUBLE_R_TLV("EQ4 Volume", WM8962_EQ3, WM8962_EQ23,
+		 WM8962_EQL_B4_GAIN_SHIFT, 31, 0, eq_tlv),
+SOC_DOUBLE_R_TLV("EQ5 Volume", WM8962_EQ3, WM8962_EQ23,
+		 WM8962_EQL_B5_GAIN_SHIFT, 31, 0, eq_tlv),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const struct snd_kcontrol_new wm8962_spk_mono_controls[] = {
@@ -2192,6 +2216,11 @@ static int sysclk_event(struct snd_soc_dapm_widget *w,
 			struct snd_kcontrol *kcontrol, int event)
 {
 	struct snd_soc_codec *codec = w->codec;
+<<<<<<< HEAD
+=======
+	struct wm8962_priv *wm8962 = snd_soc_codec_get_drvdata(codec);
+	unsigned long timeout;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int src;
 	int fll;
 
@@ -2211,9 +2240,26 @@ static int sysclk_event(struct snd_soc_dapm_widget *w,
 
 	switch (event) {
 	case SND_SOC_DAPM_PRE_PMU:
+<<<<<<< HEAD
 		if (fll)
 			snd_soc_update_bits(codec, WM8962_FLL_CONTROL_1,
 					    WM8962_FLL_ENA, WM8962_FLL_ENA);
+=======
+		if (fll) {
+			try_wait_for_completion(&wm8962->fll_lock);
+
+			snd_soc_update_bits(codec, WM8962_FLL_CONTROL_1,
+					    WM8962_FLL_ENA, WM8962_FLL_ENA);
+
+			timeout = msecs_to_jiffies(5);
+			timeout = wait_for_completion_timeout(&wm8962->fll_lock,
+							      timeout);
+
+			if (wm8962->irq && timeout == 0)
+				dev_err(codec->dev,
+					"Timed out starting FLL\n");
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 
 	case SND_SOC_DAPM_POST_PMD:
@@ -2373,7 +2419,11 @@ static int out_pga_event(struct snd_soc_dapm_widget *w,
 	}
 }
 
+<<<<<<< HEAD
 static const char *st_text[] = { "None", "Left", "Right" };
+=======
+static const char *st_text[] = { "None", "Right", "Left" };
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static const struct soc_enum str_enum =
 	SOC_ENUM_SINGLE(WM8962_DAC_DSP_MIXING_1, 2, 3, st_text);
@@ -2770,11 +2820,19 @@ static const int bclk_divs[] = {
 	1, -1, 2, 3, 4, -1, 6, 8, -1, 12, 16, 24, -1, 32, 32, 32
 };
 
+<<<<<<< HEAD
+=======
+static const int sysclk_rates[] = {
+	64, 128, 192, 256, 384, 512, 768, 1024, 1408, 1536,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void wm8962_configure_bclk(struct snd_soc_codec *codec)
 {
 	struct wm8962_priv *wm8962 = snd_soc_codec_get_drvdata(codec);
 	int dspclk, i;
 	int clocking2 = 0;
+<<<<<<< HEAD
 	int aif2 = 0;
 
 	if (!wm8962->bclk) {
@@ -2782,6 +2840,37 @@ static void wm8962_configure_bclk(struct snd_soc_codec *codec)
 		return;
 	}
 
+=======
+	int clocking4 = 0;
+	int aif2 = 0;
+
+	if (!wm8962->sysclk_rate) {
+		dev_dbg(codec->dev, "No SYSCLK configured\n");
+		return;
+	}
+
+	if (!wm8962->bclk || !wm8962->lrclk) {
+		dev_dbg(codec->dev, "No audio clocks configured\n");
+		return;
+	}
+
+	for (i = 0; i < ARRAY_SIZE(sysclk_rates); i++) {
+		if (sysclk_rates[i] == wm8962->sysclk_rate / wm8962->lrclk) {
+			clocking4 |= i << WM8962_SYSCLK_RATE_SHIFT;
+			break;
+		}
+	}
+
+	if (i == ARRAY_SIZE(sysclk_rates)) {
+		dev_err(codec->dev, "Unsupported sysclk ratio %d\n",
+			wm8962->sysclk_rate / wm8962->lrclk);
+		return;
+	}
+
+	snd_soc_update_bits(codec, WM8962_CLOCKING_4,
+			    WM8962_SYSCLK_RATE_MASK, clocking4);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dspclk = snd_soc_read(codec, WM8962_CLOCKING1);
 	if (dspclk < 0) {
 		dev_err(codec->dev, "Failed to read DSPCLK: %d\n", dspclk);
@@ -2851,6 +2940,11 @@ static int wm8962_set_bias_level(struct snd_soc_codec *codec,
 		/* VMID 2*50k */
 		snd_soc_update_bits(codec, WM8962_PWR_MGMT_1,
 				    WM8962_VMID_SEL_MASK, 0x80);
+<<<<<<< HEAD
+=======
+
+		wm8962_configure_bclk(codec);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 
 	case SND_SOC_BIAS_STANDBY:
@@ -2879,12 +2973,15 @@ static int wm8962_set_bias_level(struct snd_soc_codec *codec,
 					    WM8962_BIAS_ENA | 0x180);
 
 			msleep(5);
+<<<<<<< HEAD
 
 			snd_soc_update_bits(codec, WM8962_CLOCKING2,
 					    WM8962_CLKREG_OVD,
 					    WM8962_CLKREG_OVD);
 
 			wm8962_configure_bclk(codec);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 		/* VMID 2*250k */
@@ -2925,10 +3022,13 @@ static const struct {
 	{ 96000, 6 },
 };
 
+<<<<<<< HEAD
 static const int sysclk_rates[] = {
 	64, 128, 192, 256, 384, 512, 768, 1024, 1408, 1536,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int wm8962_hw_params(struct snd_pcm_substream *substream,
 			    struct snd_pcm_hw_params *params,
 			    struct snd_soc_dai *dai)
@@ -2936,22 +3036,33 @@ static int wm8962_hw_params(struct snd_pcm_substream *substream,
 	struct snd_soc_pcm_runtime *rtd = substream->private_data;
 	struct snd_soc_codec *codec = rtd->codec;
 	struct wm8962_priv *wm8962 = snd_soc_codec_get_drvdata(codec);
+<<<<<<< HEAD
 	int rate = params_rate(params);
 	int i;
 	int aif0 = 0;
 	int adctl3 = 0;
 	int clocking4 = 0;
+=======
+	int i;
+	int aif0 = 0;
+	int adctl3 = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	wm8962->bclk = snd_soc_params_to_bclk(params);
 	wm8962->lrclk = params_rate(params);
 
 	for (i = 0; i < ARRAY_SIZE(sr_vals); i++) {
+<<<<<<< HEAD
 		if (sr_vals[i].rate == rate) {
+=======
+		if (sr_vals[i].rate == wm8962->lrclk) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			adctl3 |= sr_vals[i].reg;
 			break;
 		}
 	}
 	if (i == ARRAY_SIZE(sr_vals)) {
+<<<<<<< HEAD
 		dev_err(codec->dev, "Unsupported rate %dHz\n", rate);
 		return -EINVAL;
 	}
@@ -2971,10 +3082,20 @@ static int wm8962_hw_params(struct snd_pcm_substream *substream,
 		return -EINVAL;
 	}
 
+=======
+		dev_err(codec->dev, "Unsupported rate %dHz\n", wm8962->lrclk);
+		return -EINVAL;
+	}
+
+	if (wm8962->lrclk % 8000 == 0)
+		adctl3 |= WM8962_SAMPLE_RATE_INT_MODE;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (params_format(params)) {
 	case SNDRV_PCM_FORMAT_S16_LE:
 		break;
 	case SNDRV_PCM_FORMAT_S20_3LE:
+<<<<<<< HEAD
 		aif0 |= 0x4;
 		break;
 	case SNDRV_PCM_FORMAT_S24_LE:
@@ -2982,6 +3103,15 @@ static int wm8962_hw_params(struct snd_pcm_substream *substream,
 		break;
 	case SNDRV_PCM_FORMAT_S32_LE:
 		aif0 |= 0xc;
+=======
+		aif0 |= 0x40;
+		break;
+	case SNDRV_PCM_FORMAT_S24_LE:
+		aif0 |= 0x80;
+		break;
+	case SNDRV_PCM_FORMAT_S32_LE:
+		aif0 |= 0xc0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		return -EINVAL;
@@ -2992,8 +3122,11 @@ static int wm8962_hw_params(struct snd_pcm_substream *substream,
 	snd_soc_update_bits(codec, WM8962_ADDITIONAL_CONTROL_3,
 			    WM8962_SAMPLE_RATE_INT_MODE |
 			    WM8962_SAMPLE_RATE_MASK, adctl3);
+<<<<<<< HEAD
 	snd_soc_update_bits(codec, WM8962_CLOCKING_4,
 			    WM8962_SYSCLK_RATE_MASK, clocking4);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	wm8962_configure_bclk(codec);
 
@@ -3262,22 +3395,53 @@ static int wm8962_set_fll(struct snd_soc_codec *codec, int fll_id, int source,
 	snd_soc_write(codec, WM8962_FLL_CONTROL_7, fll_div.lambda);
 	snd_soc_write(codec, WM8962_FLL_CONTROL_8, fll_div.n);
 
+<<<<<<< HEAD
+=======
+	try_wait_for_completion(&wm8962->fll_lock);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	snd_soc_update_bits(codec, WM8962_FLL_CONTROL_1,
 			    WM8962_FLL_FRAC | WM8962_FLL_REFCLK_SRC_MASK |
 			    WM8962_FLL_ENA, fll1);
 
 	dev_dbg(codec->dev, "FLL configured for %dHz->%dHz\n", Fref, Fout);
 
+<<<<<<< HEAD
 	/* This should be a massive overestimate */
 	timeout = msecs_to_jiffies(1);
 
 	wait_for_completion_timeout(&wm8962->fll_lock, timeout);
+=======
+	ret = 0;
+
+	if (fll1 & WM8962_FLL_ENA) {
+		/* This should be a massive overestimate but go even
+		 * higher if we'll error out
+		 */
+		if (wm8962->irq)
+			timeout = msecs_to_jiffies(5);
+		else
+			timeout = msecs_to_jiffies(1);
+
+		timeout = wait_for_completion_timeout(&wm8962->fll_lock,
+						      timeout);
+
+		if (timeout == 0 && wm8962->irq) {
+			dev_err(codec->dev, "FLL lock timed out");
+			ret = -ETIMEDOUT;
+		}
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	wm8962->fll_fref = Fref;
 	wm8962->fll_fout = Fout;
 	wm8962->fll_src = source;
 
+<<<<<<< HEAD
 	return 0;
+=======
+	return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int wm8962_mute(struct snd_soc_dai *dai, int mute)
@@ -3368,6 +3532,12 @@ static irqreturn_t wm8962_irq(int irq, void *data)
 	active = snd_soc_read(codec, WM8962_INTERRUPT_STATUS_2);
 	active &= ~mask;
 
+<<<<<<< HEAD
+=======
+	/* Acknowledge the interrupts */
+	snd_soc_write(codec, WM8962_INTERRUPT_STATUS_2, active);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (active & WM8962_FLL_LOCK_EINT) {
 		dev_dbg(codec->dev, "FLL locked\n");
 		complete(&wm8962->fll_lock);
@@ -3392,9 +3562,12 @@ static irqreturn_t wm8962_irq(int irq, void *data)
 				      msecs_to_jiffies(250));
 	}
 
+<<<<<<< HEAD
 	/* Acknowledge the interrupts */
 	snd_soc_write(codec, WM8962_INTERRUPT_STATUS_2, active);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return IRQ_HANDLED;
 }
 
@@ -3438,6 +3611,7 @@ int wm8962_mic_detect(struct snd_soc_codec *codec, struct snd_soc_jack *jack)
 }
 EXPORT_SYMBOL_GPL(wm8962_mic_detect);
 
+<<<<<<< HEAD
 #ifdef CONFIG_PM
 static int wm8962_resume(struct snd_soc_codec *codec)
 {
@@ -3463,6 +3637,8 @@ static int wm8962_resume(struct snd_soc_codec *codec)
 #define wm8962_resume NULL
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_INPUT) || defined(CONFIG_INPUT_MODULE)
 static int beep_rates[] = {
 	500, 1000, 2000, 4000,
@@ -3738,8 +3914,11 @@ static int wm8962_probe(struct snd_soc_codec *codec)
 	int ret;
 	struct wm8962_priv *wm8962 = snd_soc_codec_get_drvdata(codec);
 	struct wm8962_pdata *pdata = dev_get_platdata(codec->dev);
+<<<<<<< HEAD
 	struct i2c_client *i2c = container_of(codec->dev, struct i2c_client,
 					      dev);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16 *reg_cache = codec->reg_cache;
 	int i, trigger, irq_pol;
 	bool dmicclk, dmicdat;
@@ -3829,6 +4008,13 @@ static int wm8962_probe(struct snd_soc_codec *codec)
 	 */
 	snd_soc_update_bits(codec, WM8962_CLOCKING2, WM8962_SYSCLK_ENA, 0);
 
+<<<<<<< HEAD
+=======
+	/* Ensure we have soft control over all registers */
+	snd_soc_update_bits(codec, WM8962_CLOCKING2,
+			    WM8962_CLKREG_OVD, WM8962_CLKREG_OVD);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Ensure that the oscillator and PLLs are disabled */
 	snd_soc_update_bits(codec, WM8962_PLL2,
 			    WM8962_OSC_ENA | WM8962_PLL2_ENA | WM8962_PLL3_ENA,
@@ -3883,6 +4069,12 @@ static int wm8962_probe(struct snd_soc_codec *codec)
 	snd_soc_update_bits(codec, WM8962_HPOUTR_VOLUME,
 			    WM8962_HPOUT_VU, WM8962_HPOUT_VU);
 
+<<<<<<< HEAD
+=======
+	/* Stereo control for EQ */
+	snd_soc_update_bits(codec, WM8962_EQ1, WM8962_EQ_SHARED_COEFF, 0);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wm8962_add_widgets(codec);
 
 	/* Save boards having to disable DMIC when not in use */
@@ -3911,7 +4103,11 @@ static int wm8962_probe(struct snd_soc_codec *codec)
 	wm8962_init_beep(codec);
 	wm8962_init_gpio(codec);
 
+<<<<<<< HEAD
 	if (i2c->irq) {
+=======
+	if (wm8962->irq) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (pdata && pdata->irq_active_low) {
 			trigger = IRQF_TRIGGER_LOW;
 			irq_pol = WM8962_IRQ_POL;
@@ -3923,12 +4119,21 @@ static int wm8962_probe(struct snd_soc_codec *codec)
 		snd_soc_update_bits(codec, WM8962_INTERRUPT_CONTROL,
 				    WM8962_IRQ_POL, irq_pol);
 
+<<<<<<< HEAD
 		ret = request_threaded_irq(i2c->irq, NULL, wm8962_irq,
+=======
+		ret = request_threaded_irq(wm8962->irq, NULL, wm8962_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					   trigger | IRQF_ONESHOT,
 					   "wm8962", codec);
 		if (ret != 0) {
 			dev_err(codec->dev, "Failed to request IRQ %d: %d\n",
+<<<<<<< HEAD
 				i2c->irq, ret);
+=======
+				wm8962->irq, ret);
+			wm8962->irq = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* Non-fatal */
 		} else {
 			/* Enable some IRQs by default */
@@ -3953,12 +4158,19 @@ err:
 static int wm8962_remove(struct snd_soc_codec *codec)
 {
 	struct wm8962_priv *wm8962 = snd_soc_codec_get_drvdata(codec);
+<<<<<<< HEAD
 	struct i2c_client *i2c = container_of(codec->dev, struct i2c_client,
 					      dev);
 	int i;
 
 	if (i2c->irq)
 		free_irq(i2c->irq, codec);
+=======
+	int i;
+
+	if (wm8962->irq)
+		free_irq(wm8962->irq, codec);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	cancel_delayed_work_sync(&wm8962->mic_work);
 
@@ -3975,7 +4187,10 @@ static int wm8962_remove(struct snd_soc_codec *codec)
 static struct snd_soc_codec_driver soc_codec_dev_wm8962 = {
 	.probe =	wm8962_probe,
 	.remove =	wm8962_remove,
+<<<<<<< HEAD
 	.resume =	wm8962_resume,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.set_bias_level = wm8962_set_bias_level,
 	.reg_cache_size = WM8962_MAX_REGISTER + 1,
 	.reg_word_size = sizeof(u16),
@@ -3998,6 +4213,11 @@ static __devinit int wm8962_i2c_probe(struct i2c_client *i2c,
 
 	i2c_set_clientdata(i2c, wm8962);
 
+<<<<<<< HEAD
+=======
+	wm8962->irq = i2c->irq;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = snd_soc_register_codec(&i2c->dev,
 				     &soc_codec_dev_wm8962, &wm8962_dai, 1);
 	if (ret < 0)

@@ -97,7 +97,10 @@
 #include <linux/init.h>
 #include <linux/net.h>
 #include <linux/rcupdate.h>
+<<<<<<< HEAD
 #include <linux/jhash.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h>
 #ifdef CONFIG_SYSCTL
 #include <linux/sysctl.h>
@@ -139,8 +142,11 @@ static const struct neigh_ops arp_generic_ops = {
 	.error_report =		arp_error_report,
 	.output =		neigh_resolve_output,
 	.connected_output =	neigh_connected_output,
+<<<<<<< HEAD
 	.hh_output =		dev_queue_xmit,
 	.queue_xmit =		dev_queue_xmit,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const struct neigh_ops arp_hh_ops = {
@@ -149,16 +155,24 @@ static const struct neigh_ops arp_hh_ops = {
 	.error_report =		arp_error_report,
 	.output =		neigh_resolve_output,
 	.connected_output =	neigh_resolve_output,
+<<<<<<< HEAD
 	.hh_output =		dev_queue_xmit,
 	.queue_xmit =		dev_queue_xmit,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const struct neigh_ops arp_direct_ops = {
 	.family =		AF_INET,
+<<<<<<< HEAD
 	.output =		dev_queue_xmit,
 	.connected_output =	dev_queue_xmit,
 	.hh_output =		dev_queue_xmit,
 	.queue_xmit =		dev_queue_xmit,
+=======
+	.output =		neigh_direct_output,
+	.connected_output =	neigh_direct_output,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const struct neigh_ops arp_broken_ops = {
@@ -167,8 +181,11 @@ static const struct neigh_ops arp_broken_ops = {
 	.error_report =		arp_error_report,
 	.output =		neigh_compat_output,
 	.connected_output =	neigh_compat_output,
+<<<<<<< HEAD
 	.hh_output =		dev_queue_xmit,
 	.queue_xmit =		dev_queue_xmit,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct neigh_table arp_tbl = {
@@ -232,7 +249,11 @@ static u32 arp_hash(const void *pkey,
 		    const struct net_device *dev,
 		    __u32 hash_rnd)
 {
+<<<<<<< HEAD
 	return jhash_2words(*(u32 *)pkey, dev->ifindex, hash_rnd);
+=======
+	return arp_hashfn(*(u32 *)pkey, dev, hash_rnd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int arp_constructor(struct neighbour *neigh)
@@ -259,7 +280,11 @@ static int arp_constructor(struct neighbour *neigh)
 	if (!dev->header_ops) {
 		neigh->nud_state = NUD_NOARP;
 		neigh->ops = &arp_direct_ops;
+<<<<<<< HEAD
 		neigh->output = neigh->ops->queue_xmit;
+=======
+		neigh->output = neigh_direct_output;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		/* Good devices (checked by reading texts, but only Ethernet is
 		   tested)
@@ -518,6 +543,7 @@ EXPORT_SYMBOL(arp_find);
 
 /* END OF OBSOLETE FUNCTIONS */
 
+<<<<<<< HEAD
 struct neighbour *__arp_bind_neighbour(struct dst_entry *dst, __be32 nexthop)
 {
 	struct net_device *dev = dst->dev;
@@ -548,6 +574,8 @@ int arp_bind_neighbour(struct dst_entry *dst)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Check if we can use proxy ARP for this path
  */
@@ -906,8 +934,12 @@ static int arp_process(struct sk_buff *skb)
 			if (addr_type == RTN_UNICAST  &&
 			    (arp_fwd_proxy(in_dev, dev, rt) ||
 			     arp_fwd_pvlan(in_dev, dev, rt, sip, tip) ||
+<<<<<<< HEAD
 			     (rt->dst.dev != dev &&
 			      pneigh_lookup(&arp_tbl, net, &tip, dev, 0)))) {
+=======
+			     pneigh_lookup(&arp_tbl, net, &tip, dev, 0))) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				n = neigh_event_ns(&arp_tbl, sha, &sip, dev);
 				if (n)
 					neigh_release(n);

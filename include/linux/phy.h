@@ -26,7 +26,11 @@
 #include <linux/workqueue.h>
 #include <linux/mod_devicetable.h>
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define PHY_BASIC_FEATURES	(SUPPORTED_10baseT_Half | \
 				 SUPPORTED_10baseT_Full | \
@@ -53,6 +57,10 @@
 
 /* Interface Mode definitions */
 typedef enum {
+<<<<<<< HEAD
+=======
+	PHY_INTERFACE_MODE_NA,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	PHY_INTERFACE_MODE_MII,
 	PHY_INTERFACE_MODE_GMII,
 	PHY_INTERFACE_MODE_SGMII,
@@ -62,7 +70,12 @@ typedef enum {
 	PHY_INTERFACE_MODE_RGMII_ID,
 	PHY_INTERFACE_MODE_RGMII_RXID,
 	PHY_INTERFACE_MODE_RGMII_TXID,
+<<<<<<< HEAD
 	PHY_INTERFACE_MODE_RTBI
+=======
+	PHY_INTERFACE_MODE_RTBI,
+	PHY_INTERFACE_MODE_SMII,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 } phy_interface_t;
 
 

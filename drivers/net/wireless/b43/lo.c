@@ -6,7 +6,11 @@
 
   Copyright (c) 2005 Martin Langer <martin-langer@gmx.de>,
   Copyright (c) 2005, 2006 Stefano Brivio <stefano.brivio@polimi.it>
+<<<<<<< HEAD
   Copyright (c) 2005-2007 Michael Buesch <mb@bu3sch.de>
+=======
+  Copyright (c) 2005-2007 Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
   Copyright (c) 2005, 2006 Danny van Dyk <kugelfang@gentoo.org>
   Copyright (c) 2005, 2006 Andreas Jaggi <andreas.jaggi@waterwave.ch>
 
@@ -98,7 +102,11 @@ static u16 lo_measure_feedthrough(struct b43_wldev *dev,
 		rfover |= pga;
 		rfover |= lna;
 		rfover |= trsw_rx;
+<<<<<<< HEAD
 		if ((dev->sdev->bus->sprom.boardflags_lo & B43_BFL_EXTLNA)
+=======
+		if ((dev->dev->bus_sprom->boardflags_lo & B43_BFL_EXTLNA)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		    && phy->rev > 6)
 			rfover |= B43_PHY_RFOVERVAL_EXTLNA;
 
@@ -301,14 +309,20 @@ static void lo_measure_gain_values(struct b43_wldev *dev,
 		max_rx_gain = 0;
 
 	if (has_loopback_gain(phy)) {
+<<<<<<< HEAD
 		int trsw_rx = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int trsw_rx_gain;
 
 		if (use_trsw_rx) {
 			trsw_rx_gain = gphy->trsw_rx_gain / 2;
 			if (max_rx_gain >= trsw_rx_gain) {
 				trsw_rx_gain = max_rx_gain - trsw_rx_gain;
+<<<<<<< HEAD
 				trsw_rx = 0x20;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 		} else
 			trsw_rx_gain = max_rx_gain;
@@ -387,7 +401,11 @@ struct lo_g_saved_values {
 static void lo_measure_setup(struct b43_wldev *dev,
 			     struct lo_g_saved_values *sav)
 {
+<<<<<<< HEAD
 	struct ssb_sprom *sprom = &dev->sdev->bus->sprom;
+=======
+	struct ssb_sprom *sprom = dev->dev->bus_sprom;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct b43_phy *phy = &dev->phy;
 	struct b43_phy_g *gphy = phy->g;
 	struct b43_txpower_lo_control *lo = gphy->lo_control;

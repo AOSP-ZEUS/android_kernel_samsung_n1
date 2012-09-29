@@ -109,6 +109,10 @@ typedef enum {
 	SCTP_CMD_SEND_MSG,	 /* Send the whole use message */
 	SCTP_CMD_SEND_NEXT_ASCONF, /* Send the next ASCONF after ACK */
 	SCTP_CMD_PURGE_ASCONF_QUEUE, /* Purge all asconf queues.*/
+<<<<<<< HEAD
+=======
+	SCTP_CMD_SET_ASOC,	 /* Restore association context */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	SCTP_CMD_LAST
 } sctp_verb_t;
 

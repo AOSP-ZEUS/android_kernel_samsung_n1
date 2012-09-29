@@ -29,9 +29,37 @@
 #include <linux/completion.h>
 #include <linux/mutex.h>
 #include <linux/syscore_ops.h>
+<<<<<<< HEAD
 
 #include <trace/events/power.h>
 
+=======
+#include <linux/pm_qos_params.h>
+
+#include <trace/events/power.h>
+
+/* Description of __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+ *
+ * When the kobject of cpufreq's ref count is zero in show/store function,
+ * cpufreq_cpu_put() causes a deadlock because the active count of the
+ * accessing file is incremented just before calling show/store at
+ * fill_read(write)_buffer.
+ * (This happens when show/store is called first and then the cpu_down is called
+ * before the show/store function is finished)
+ * So basically, cpufreq_cpu_put() in show/store must not release the kobject
+ * of cpufreq. To make sure that kobj ref count of the cpufreq is not 0 in this
+ * case, a per cpu mutex is used.
+ * This per cpu mutex wraps the whole show/store function and kobject_put()
+ * function in __cpufreq_remove_dev().
+ */
+#define __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+
+
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+static DEFINE_PER_CPU(struct mutex, cpufreq_remove_mutex);
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * The "cpufreq driver" - the arch- or hardware-dependent low
  * level driver of CPUFreq support, and its spinlock. This lock
@@ -176,6 +204,29 @@ void cpufreq_cpu_put(struct cpufreq_policy *data)
 }
 EXPORT_SYMBOL_GPL(cpufreq_cpu_put);
 
+<<<<<<< HEAD
+=======
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+/* just peek to see if the cpufreq policy is available.
+ * The caller must hold cpufreq_driver_lock
+ */
+struct cpufreq_policy *cpufreq_cpu_peek(unsigned int cpu)
+{
+	struct cpufreq_policy *data;
+
+	if (cpu >= nr_cpu_ids)
+		return NULL;
+
+	if (!cpufreq_driver)
+		return NULL;
+
+	/* get the CPU */
+	data = per_cpu(cpufreq_cpu_data, cpu);
+
+	return data;
+}
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*********************************************************************
  *            EXTERNALLY AFFECTING FREQUENCY CHANGES                 *
@@ -364,6 +415,11 @@ show_one(cpuinfo_transition_latency, cpuinfo.transition_latency);
 show_one(scaling_min_freq, min);
 show_one(scaling_max_freq, max);
 show_one(scaling_cur_freq, cur);
+<<<<<<< HEAD
+=======
+show_one(policy_min_freq, user_policy.min);
+show_one(policy_max_freq, user_policy.max);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int __cpufreq_set_policy(struct cpufreq_policy *data,
 				struct cpufreq_policy *policy);
@@ -387,7 +443,11 @@ static ssize_t store_##file_name					\
 		return -EINVAL;						\
 									\
 	ret = __cpufreq_set_policy(policy, &new_policy);		\
+<<<<<<< HEAD
 	policy->user_policy.object = policy->object;			\
+=======
+	policy->user_policy.object = new_policy.object;			\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 									\
 	return ret ? ret : count;					\
 }
@@ -582,6 +642,11 @@ cpufreq_freq_attr_rw(scaling_min_freq);
 cpufreq_freq_attr_rw(scaling_max_freq);
 cpufreq_freq_attr_rw(scaling_governor);
 cpufreq_freq_attr_rw(scaling_setspeed);
+<<<<<<< HEAD
+=======
+cpufreq_freq_attr_ro(policy_min_freq);
+cpufreq_freq_attr_ro(policy_max_freq);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct attribute *default_attrs[] = {
 	&cpuinfo_min_freq.attr,
@@ -595,6 +660,11 @@ static struct attribute *default_attrs[] = {
 	&scaling_driver.attr,
 	&scaling_available_governors.attr,
 	&scaling_setspeed.attr,
+<<<<<<< HEAD
+=======
+	&policy_min_freq.attr,
+	&policy_max_freq.attr,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	NULL
 };
 
@@ -609,6 +679,30 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
 	struct cpufreq_policy *policy = to_policy(kobj);
 	struct freq_attr *fattr = to_attr(attr);
 	ssize_t ret = -EINVAL;
+<<<<<<< HEAD
+=======
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+	unsigned int cpu;
+	unsigned long flags;
+#endif
+
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+	spin_lock_irqsave(&cpufreq_driver_lock, flags);
+	policy = cpufreq_cpu_peek(policy->cpu);
+	if (!policy) {
+		spin_unlock_irqrestore(&cpufreq_driver_lock, flags);
+		return -EINVAL;
+	}
+	cpu = policy->cpu;
+	if (mutex_trylock(&per_cpu(cpufreq_remove_mutex, cpu)) == 0) {
+		spin_unlock_irqrestore(&cpufreq_driver_lock, flags);
+		pr_info("!WARN %s failed because cpu%u is going down\n",
+			__func__, cpu);
+		return -EINVAL;
+	}
+	spin_unlock_irqrestore(&cpufreq_driver_lock, flags);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	policy = cpufreq_cpu_get(policy->cpu);
 	if (!policy)
 		goto no_policy;
@@ -625,6 +719,12 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
 fail:
 	cpufreq_cpu_put(policy);
 no_policy:
+<<<<<<< HEAD
+=======
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+	mutex_unlock(&per_cpu(cpufreq_remove_mutex, cpu));
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
@@ -634,6 +734,30 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
 	struct cpufreq_policy *policy = to_policy(kobj);
 	struct freq_attr *fattr = to_attr(attr);
 	ssize_t ret = -EINVAL;
+<<<<<<< HEAD
+=======
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+	unsigned int cpu;
+	unsigned long flags;
+#endif
+
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+	spin_lock_irqsave(&cpufreq_driver_lock, flags);
+	policy = cpufreq_cpu_peek(policy->cpu);
+	if (!policy) {
+		spin_unlock_irqrestore(&cpufreq_driver_lock, flags);
+		return -EINVAL;
+	}
+	cpu = policy->cpu;
+	if (mutex_trylock(&per_cpu(cpufreq_remove_mutex, cpu)) == 0) {
+		spin_unlock_irqrestore(&cpufreq_driver_lock, flags);
+		pr_info("!WARN %s failed because cpu%u is going down\n",
+			__func__, cpu);
+		return -EINVAL;
+	}
+	spin_unlock_irqrestore(&cpufreq_driver_lock, flags);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	policy = cpufreq_cpu_get(policy->cpu);
 	if (!policy)
 		goto no_policy;
@@ -650,6 +774,12 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
 fail:
 	cpufreq_cpu_put(policy);
 no_policy:
+<<<<<<< HEAD
+=======
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+	mutex_unlock(&per_cpu(cpufreq_remove_mutex, cpu));
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
@@ -1089,7 +1219,17 @@ static int __cpufreq_remove_dev(struct sys_device *sys_dev)
 	kobj = &data->kobj;
 	cmp = &data->kobj_unregister;
 	unlock_policy_rwsem_write(cpu);
+<<<<<<< HEAD
 	kobject_put(kobj);
+=======
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+	mutex_lock(&per_cpu(cpufreq_remove_mutex, cpu));
+#endif
+	kobject_put(kobj);
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+	mutex_unlock(&per_cpu(cpufreq_remove_mutex, cpu));
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* we need to make sure that the underlying kobj is actually
 	 * not referenced anymore by anybody before we proceed with
@@ -1199,6 +1339,29 @@ unsigned int cpufreq_quick_get(unsigned int cpu)
 }
 EXPORT_SYMBOL(cpufreq_quick_get);
 
+<<<<<<< HEAD
+=======
+/**
+ * cpufreq_quick_get_max - get the max reported CPU frequency for this CPU
+ * @cpu: CPU number
+ *
+ * Just return the max possible frequency for a given CPU.
+ */
+unsigned int cpufreq_quick_get_max(unsigned int cpu)
+{
+	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+	unsigned int ret_freq = 0;
+
+	if (policy) {
+		ret_freq = policy->max;
+		cpufreq_cpu_put(policy);
+	}
+
+	return ret_freq;
+}
+EXPORT_SYMBOL(cpufreq_quick_get_max);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static unsigned int __cpufreq_get(unsigned int cpu)
 {
@@ -1422,8 +1585,15 @@ int __cpufreq_driver_target(struct cpufreq_policy *policy,
 
 	pr_debug("target for CPU %u: %u kHz, relation %u\n", policy->cpu,
 		target_freq, relation);
+<<<<<<< HEAD
 	if (cpu_online(policy->cpu) && cpufreq_driver->target)
 		retval = cpufreq_driver->target(policy, target_freq, relation);
+=======
+	trace_cpu_scale(policy->cpu, policy->cur, POWER_CPU_SCALE_START);
+	if (cpu_online(policy->cpu) && cpufreq_driver->target)
+		retval = cpufreq_driver->target(policy, target_freq, relation);
+	trace_cpu_scale(policy->cpu, target_freq, POWER_CPU_SCALE_DONE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return retval;
 }
@@ -1606,9 +1776,27 @@ static int __cpufreq_set_policy(struct cpufreq_policy *data,
 				struct cpufreq_policy *policy)
 {
 	int ret = 0;
+<<<<<<< HEAD
 
 	pr_debug("setting new policy for CPU %u: %u - %u kHz\n", policy->cpu,
 		policy->min, policy->max);
+=======
+	unsigned int qmin, qmax;
+	unsigned int pmin = policy->min;
+	unsigned int pmax = policy->max;
+
+	qmin = min((unsigned int)pm_qos_request(PM_QOS_CPU_FREQ_MIN),
+		   data->max);
+	qmax = max((unsigned int)pm_qos_request(PM_QOS_CPU_FREQ_MAX),
+		   data->min);
+
+	pr_debug("setting new policy for CPU %u: %u - %u (%u - %u) kHz\n",
+		policy->cpu, pmin, pmax, qmin, qmax);
+
+	/* clamp the new policy to PM QoS limits */
+	policy->min = max(pmin, qmin);
+	policy->max = min(pmax, qmax);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	memcpy(&policy->cpuinfo, &data->cpuinfo,
 				sizeof(struct cpufreq_cpuinfo));
@@ -1683,6 +1871,12 @@ static int __cpufreq_set_policy(struct cpufreq_policy *data,
 	}
 
 error_out:
+<<<<<<< HEAD
+=======
+	/* restore the limits that the policy requested */
+	policy->min = pmin;
+	policy->max = pmax;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
@@ -1741,6 +1935,59 @@ no_policy:
 }
 EXPORT_SYMBOL(cpufreq_update_policy);
 
+<<<<<<< HEAD
+=======
+/*
+ *	cpufreq_set_gov - set governor for a cpu
+ *	@cpu: CPU whose governor needs to be changed
+ *	@target_gov: new governor to be set
+ */
+int cpufreq_set_gov(char *target_gov, unsigned int cpu)
+{
+	int ret = 0;
+	struct cpufreq_policy new_policy;
+	struct cpufreq_policy *cur_policy;
+
+	if (target_gov == NULL)
+		return -EINVAL;
+
+	/* Get current governer */
+	cur_policy = cpufreq_cpu_get(cpu);
+	if (!cur_policy)
+		return -EINVAL;
+
+	new_policy = *cur_policy;
+	if (!strncmp(cur_policy->governor->name, target_gov,
+			strlen(target_gov))) {
+		/* Target governer & current governer is same */
+		ret = -EINVAL;
+		goto err_out;
+	} else {
+		if (cpufreq_parse_governor(target_gov, &new_policy.policy,
+				&new_policy.governor)) {
+			ret = -EINVAL;
+			goto err_out;
+		}
+
+		if (lock_policy_rwsem_write(cur_policy->cpu) < 0) {
+			ret = -EINVAL;
+			goto err_out;
+		}
+
+		ret = __cpufreq_set_policy(cur_policy, &new_policy);
+
+		cur_policy->user_policy.policy = cur_policy->policy;
+		cur_policy->user_policy.governor = cur_policy->governor;
+
+		unlock_policy_rwsem_write(cur_policy->cpu);
+	}
+err_out:
+	cpufreq_cpu_put(cur_policy);
+	return ret;
+}
+EXPORT_SYMBOL(cpufreq_set_gov);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __cpuinit cpufreq_cpu_callback(struct notifier_block *nfb,
 					unsigned long action, void *hcpu)
 {
@@ -1878,19 +2125,67 @@ int cpufreq_unregister_driver(struct cpufreq_driver *driver)
 }
 EXPORT_SYMBOL_GPL(cpufreq_unregister_driver);
 
+<<<<<<< HEAD
 static int __init cpufreq_core_init(void)
 {
 	int cpu;
+=======
+static int cpu_freq_notify(struct notifier_block *b,
+			   unsigned long l, void *v);
+
+static struct notifier_block min_freq_notifier = {
+	.notifier_call = cpu_freq_notify,
+};
+static struct notifier_block max_freq_notifier = {
+	.notifier_call = cpu_freq_notify,
+};
+
+static int cpu_freq_notify(struct notifier_block *b,
+			   unsigned long l, void *v)
+{
+	int cpu;
+	pr_debug("PM QoS %s %lu\n",
+		b == &min_freq_notifier ? "min" : "max", l);
+	for_each_online_cpu(cpu) {
+		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+		if (policy) {
+			cpufreq_update_policy(policy->cpu);
+			cpufreq_cpu_put(policy);
+		}
+	}
+	return NOTIFY_OK;
+}
+
+static int __init cpufreq_core_init(void)
+{
+	int cpu;
+	int rc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	for_each_possible_cpu(cpu) {
 		per_cpu(cpufreq_policy_cpu, cpu) = -1;
 		init_rwsem(&per_cpu(cpu_policy_rwsem, cpu));
+<<<<<<< HEAD
+=======
+#ifdef __CPUFREQ_KOBJ_DEL_DEADLOCK_FIX
+		mutex_init(&per_cpu(cpufreq_remove_mutex, cpu));
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	cpufreq_global_kobject = kobject_create_and_add("cpufreq",
 						&cpu_sysdev_class.kset.kobj);
 	BUG_ON(!cpufreq_global_kobject);
 	register_syscore_ops(&cpufreq_syscore_ops);
+<<<<<<< HEAD
+=======
+	rc = pm_qos_add_notifier(PM_QOS_CPU_FREQ_MIN,
+				 &min_freq_notifier);
+	BUG_ON(rc);
+	rc = pm_qos_add_notifier(PM_QOS_CPU_FREQ_MAX,
+				 &max_freq_notifier);
+	BUG_ON(rc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

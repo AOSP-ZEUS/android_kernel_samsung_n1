@@ -9,6 +9,10 @@
 #include <linux/mm.h>
 #include <linux/pm.h>
 #include <linux/memblock.h>
+<<<<<<< HEAD
+=======
+#include <linux/cpuidle.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/elf.h>
 #include <asm/vdso.h>
@@ -92,8 +96,11 @@ static unsigned long __init xen_release_chunk(phys_addr_t start_addr,
 	if (end <= start)
 		return 0;
 
+<<<<<<< HEAD
 	printk(KERN_INFO "xen_release_chunk: looking at area pfn %lx-%lx: ",
 	       start, end);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for(pfn = start; pfn < end; pfn++) {
 		unsigned long mfn = pfn_to_mfn(pfn);
 
@@ -106,14 +113,23 @@ static unsigned long __init xen_release_chunk(phys_addr_t start_addr,
 
 		ret = HYPERVISOR_memory_op(XENMEM_decrease_reservation,
 					   &reservation);
+<<<<<<< HEAD
 		WARN(ret != 1, "Failed to release memory %lx-%lx err=%d\n",
 		     start, end, ret);
+=======
+		WARN(ret != 1, "Failed to release pfn %lx err=%d\n", pfn, ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret == 1) {
 			__set_phys_to_machine(pfn, INVALID_P2M_ENTRY);
 			len++;
 		}
 	}
+<<<<<<< HEAD
 	printk(KERN_CONT "%ld pages freed\n", len);
+=======
+	printk(KERN_INFO "Freeing  %lx-%lx pfn range: %lu pages freed\n",
+	       start, end, len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return len;
 }
@@ -139,7 +155,11 @@ static unsigned long __init xen_return_unused_memory(unsigned long max_pfn,
 	if (last_end < max_addr)
 		released += xen_release_chunk(last_end, max_addr);
 
+<<<<<<< HEAD
 	printk(KERN_INFO "released %ld pages of unused memory\n", released);
+=======
+	printk(KERN_INFO "released %lu pages of unused memory\n", released);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return released;
 }
 
@@ -459,8 +479,14 @@ void __init xen_arch_setup(void)
 #ifdef CONFIG_X86_32
 	boot_cpu_data.hlt_works_ok = 1;
 #endif
+<<<<<<< HEAD
 	pm_idle = default_idle;
 	boot_option_idle_override = IDLE_HALT;
 
+=======
+	disable_cpuidle();
+	boot_option_idle_override = IDLE_HALT;
+	WARN_ON(set_pm_idle_to_default());
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	fiddle_vdso();
 }

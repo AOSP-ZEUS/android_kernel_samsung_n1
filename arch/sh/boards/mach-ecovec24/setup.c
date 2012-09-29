@@ -280,7 +280,11 @@ static struct platform_device usbhs_device = {
 };
 
 /* LCDC */
+<<<<<<< HEAD
 const static struct fb_videomode ecovec_lcd_modes[] = {
+=======
+static const struct fb_videomode ecovec_lcd_modes[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		.name		= "Panel",
 		.xres		= 800,
@@ -295,7 +299,11 @@ const static struct fb_videomode ecovec_lcd_modes[] = {
 	},
 };
 
+<<<<<<< HEAD
 const static struct fb_videomode ecovec_dvi_modes[] = {
+=======
+static const struct fb_videomode ecovec_dvi_modes[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		.name		= "DVI",
 		.xres		= 1280,

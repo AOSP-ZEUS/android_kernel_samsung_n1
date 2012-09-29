@@ -34,6 +34,10 @@ int enic_dev_hang_notify(struct enic *enic);
 int enic_dev_set_ig_vlan_rewrite_mode(struct enic *enic);
 int enic_dev_enable(struct enic *enic);
 int enic_dev_disable(struct enic *enic);
+<<<<<<< HEAD
+=======
+int enic_dev_intr_coal_timer_info(struct enic *enic);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int enic_vnic_dev_deinit(struct enic *enic);
 int enic_dev_init_prov2(struct enic *enic, struct vic_provinfo *vp);
 int enic_dev_deinit_done(struct enic *enic, int *status);

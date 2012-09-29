@@ -170,7 +170,11 @@ void __init reserve_crashkernel(void)
 	if (crashk_res.end == crashk_res.start)
 		goto disable;
 
+<<<<<<< HEAD
 	crash_size = PAGE_ALIGN(crashk_res.end - crashk_res.start + 1);
+=======
+	crash_size = PAGE_ALIGN(resource_size(&crashk_res));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!crashk_res.start) {
 		unsigned long max = memblock_end_of_DRAM() - memory_limit;
 		crashk_res.start = __memblock_alloc_base(crash_size, PAGE_SIZE, max);

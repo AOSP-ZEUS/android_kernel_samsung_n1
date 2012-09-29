@@ -12,6 +12,10 @@
 #include <linux/pci.h>
 #include <linux/slab.h>
 #include <linux/mbus.h>
+<<<<<<< HEAD
+=======
+#include <video/vga.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/irq.h>
 #include <asm/mach/pci.h>
 #include <plat/pcie.h>
@@ -244,7 +248,12 @@ kirkwood_pcie_scan_bus(int nr, struct pci_sys_data *sys)
 	return bus;
 }
 
+<<<<<<< HEAD
 static int __init kirkwood_pcie_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int __init kirkwood_pcie_map_irq(const struct pci_dev *dev, u8 slot,
+	u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct pcie_port *pp = bus_to_port(dev->bus);
 
@@ -271,6 +280,11 @@ static void __init add_pcie_port(int index, unsigned long base)
 
 void __init kirkwood_pcie_init(unsigned int portmask)
 {
+<<<<<<< HEAD
+=======
+	vga_base = KIRKWOOD_PCIE_MEM_PHYS_BASE;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (portmask & KW_PCIE0)
 		add_pcie_port(0, PCIE_VIRT_BASE);
 

@@ -1,6 +1,10 @@
 config ECRYPT_FS
 	tristate "eCrypt filesystem layer support (EXPERIMENTAL)"
+<<<<<<< HEAD
 	depends on EXPERIMENTAL && KEYS && CRYPTO
+=======
+	depends on EXPERIMENTAL && KEYS && CRYPTO && (ENCRYPTED_KEYS || ENCRYPTED_KEYS=n)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select CRYPTO_ECB
 	select CRYPTO_CBC
 	select CRYPTO_MD5
@@ -12,3 +16,13 @@ config ECRYPT_FS
 
 	  To compile this file system support as a module, choose M here: the
 	  module will be called ecryptfs.
+<<<<<<< HEAD
+=======
+
+config WTL_ENCRYPTION_FILTER
+       bool
+       default y
+       depends on ECRYPT_FS
+       help
+         Modification of encrypted filesystem for SD card encryption
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

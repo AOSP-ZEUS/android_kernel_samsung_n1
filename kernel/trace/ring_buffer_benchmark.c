@@ -106,7 +106,11 @@ static enum event_status read_page(int cpu)
 	int inc;
 	int i;
 
+<<<<<<< HEAD
 	bpage = ring_buffer_alloc_read_page(buffer);
+=======
+	bpage = ring_buffer_alloc_read_page(buffer, cpu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!bpage)
 		return EVENT_DROPPED;
 

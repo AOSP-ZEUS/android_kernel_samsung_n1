@@ -7,7 +7,11 @@
  */
 #define _GNU_SOURCE
 #include <string.h>
+<<<<<<< HEAD
 #define LKC_DIRECT_LINK
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "lkc.h"
 #include "nconf.h"
 #include <ctype.h>
@@ -1067,7 +1071,10 @@ static void conf(struct menu *menu)
 	struct menu *submenu = 0;
 	const char *prompt = menu_get_prompt(menu);
 	struct symbol *sym;
+<<<<<<< HEAD
 	struct menu *active_menu = NULL;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int res;
 	int current_index = 0;
 	int last_top_row = 0;
@@ -1152,6 +1159,7 @@ static void conf(struct menu *menu)
 			continue;
 
 		submenu = (struct menu *) item_data();
+<<<<<<< HEAD
 		active_menu = (struct menu *)item_data();
 		if (!submenu || !menu_is_visible(submenu))
 			continue;
@@ -1159,6 +1167,11 @@ static void conf(struct menu *menu)
 			sym = submenu->sym;
 		else
 			sym = NULL;
+=======
+		if (!submenu || !menu_is_visible(submenu))
+			continue;
+		sym = submenu->sym;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		switch (res) {
 		case ' ':
@@ -1222,6 +1235,7 @@ static void conf_message_callback(const char *fmt, va_list ap)
 
 static void show_help(struct menu *menu)
 {
+<<<<<<< HEAD
 	struct gstr help = str_new();
 
 	if (menu && menu->sym && menu_has_help(menu)) {
@@ -1236,6 +1250,15 @@ static void show_help(struct menu *menu)
 	} else {
 		str_append(&help, nohelp_text);
 	}
+=======
+	struct gstr help;
+
+	if (!menu)
+		return;
+
+	help = str_new();
+	menu_get_ext_help(menu, &help);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	show_scroll_win(main_window, _(menu_get_prompt(menu)), str_get(&help));
 	str_free(&help);
 }

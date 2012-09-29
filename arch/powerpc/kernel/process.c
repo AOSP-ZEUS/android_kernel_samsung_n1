@@ -96,6 +96,10 @@ void flush_fp_to_thread(struct task_struct *tsk)
 		preempt_enable();
 	}
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(flush_fp_to_thread);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void enable_kernel_fp(void)
 {
@@ -145,6 +149,10 @@ void flush_altivec_to_thread(struct task_struct *tsk)
 		preempt_enable();
 	}
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(flush_altivec_to_thread);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* CONFIG_ALTIVEC */
 
 #ifdef CONFIG_VSX
@@ -186,6 +194,10 @@ void flush_vsx_to_thread(struct task_struct *tsk)
 		preempt_enable();
 	}
 }
+<<<<<<< HEAD
+=======
+EXPORT_SYMBOL_GPL(flush_vsx_to_thread);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* CONFIG_VSX */
 
 #ifdef CONFIG_SPE
@@ -213,6 +225,10 @@ void flush_spe_to_thread(struct task_struct *tsk)
 #ifdef CONFIG_SMP
 			BUG_ON(tsk != current);
 #endif
+<<<<<<< HEAD
+=======
+			tsk->thread.spefscr = mfspr(SPRN_SPEFSCR);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			giveup_spe(tsk);
 		}
 		preempt_enable();
@@ -650,6 +666,11 @@ void show_regs(struct pt_regs * regs)
 	printbits(regs->msr, msr_bits);
 	printk("  CR: %08lx  XER: %08lx\n", regs->ccr, regs->xer);
 	trap = TRAP(regs);
+<<<<<<< HEAD
+=======
+	if ((regs->trap != 0xc00) && cpu_has_feature(CPU_FTR_CFAR))
+		printk("CFAR: "REG"\n", regs->orig_gpr3);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (trap == 0x300 || trap == 0x600)
 #ifdef CONFIG_PPC_ADV_DEBUG_REGS
 		printk("DEAR: "REG", ESR: "REG"\n", regs->dar, regs->dsisr);
@@ -831,8 +852,11 @@ void start_thread(struct pt_regs *regs, unsigned long start, unsigned long sp)
 	unsigned long load_addr = regs->gpr[2];	/* saved by ELF_PLAT_INIT */
 #endif
 
+<<<<<<< HEAD
 	set_fs(USER_DS);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * If we exec out of a kernel thread then thread.regs will not be
 	 * set.  Do it now.

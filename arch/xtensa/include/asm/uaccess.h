@@ -17,6 +17,11 @@
 #define _XTENSA_UACCESS_H
 
 #include <linux/errno.h>
+<<<<<<< HEAD
+=======
+#include <linux/prefetch.h>
+#include <asm/types.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define VERIFY_READ    0
 #define VERIFY_WRITE   1
@@ -26,7 +31,10 @@
 #include <asm/current.h>
 #include <asm/asm-offsets.h>
 #include <asm/processor.h>
+<<<<<<< HEAD
 #include <asm/types.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * These assembly macros mirror the C macros that follow below.  They
@@ -157,7 +165,10 @@
 #else /* __ASSEMBLY__ not defined */
 
 #include <linux/sched.h>
+<<<<<<< HEAD
 #include <asm/types.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * The fs value determines whether argument validity checking should

@@ -196,6 +196,10 @@ MACHINE_START(PXA_IDP, "Vibren PXA255 IDP")
 	/* Maintainer: Vibren Technologies */
 	.map_io		= idp_map_io,
 	.init_irq	= pxa25x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa25x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 	.init_machine	= idp_init,
 MACHINE_END

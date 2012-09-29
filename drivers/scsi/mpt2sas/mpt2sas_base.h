@@ -69,11 +69,19 @@
 #define MPT2SAS_DRIVER_NAME		"mpt2sas"
 #define MPT2SAS_AUTHOR	"LSI Corporation <DL-MPTFusionLinux@lsi.com>"
 #define MPT2SAS_DESCRIPTION	"LSI MPT Fusion SAS 2.0 Device Driver"
+<<<<<<< HEAD
 #define MPT2SAS_DRIVER_VERSION		"08.100.00.02"
 #define MPT2SAS_MAJOR_VERSION		08
 #define MPT2SAS_MINOR_VERSION		100
 #define MPT2SAS_BUILD_VERSION		00
 #define MPT2SAS_RELEASE_VERSION		02
+=======
+#define MPT2SAS_DRIVER_VERSION		"09.100.00.00"
+#define MPT2SAS_MAJOR_VERSION		09
+#define MPT2SAS_MINOR_VERSION		100
+#define MPT2SAS_BUILD_VERSION		00
+#define MPT2SAS_RELEASE_VERSION		00
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Set MPT2SAS_SG_DEPTH value based on user input.
@@ -592,6 +600,19 @@ struct mpt2sas_port_facts {
 };
 
 /**
+<<<<<<< HEAD
+=======
+ * enum mutex_type - task management mutex type
+ * @TM_MUTEX_OFF: mutex is not required becuase calling function is acquiring it
+ * @TM_MUTEX_ON: mutex is required
+ */
+enum mutex_type {
+	TM_MUTEX_OFF = 0,
+	TM_MUTEX_ON = 1,
+};
+
+/**
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * struct MPT2SAS_ADAPTER - per adapter struct
  * @list: ioc_list
  * @shost: shost object
@@ -751,6 +772,10 @@ struct MPT2SAS_ADAPTER {
 	 /* misc flags */
 	int		aen_event_read_flag;
 	u8		broadcast_aen_busy;
+<<<<<<< HEAD
+=======
+	u16		broadcast_aen_pending;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8		shost_recovery;
 
 	struct mutex	reset_in_progress_mutex;
@@ -978,8 +1003,13 @@ void mpt2sas_halt_firmware(struct MPT2SAS_ADAPTER *ioc);
 u8 mpt2sas_scsih_event_callback(struct MPT2SAS_ADAPTER *ioc, u8 msix_index,
     u32 reply);
 int mpt2sas_scsih_issue_tm(struct MPT2SAS_ADAPTER *ioc, u16 handle,
+<<<<<<< HEAD
     uint channel, uint id, uint lun, u8 type, u16 smid_task,
     ulong timeout, struct scsi_cmnd *scmd);
+=======
+	uint channel, uint id, uint lun, u8 type, u16 smid_task,
+	ulong timeout, unsigned long serial_number, enum mutex_type m_type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void mpt2sas_scsih_set_tm_flag(struct MPT2SAS_ADAPTER *ioc, u16 handle);
 void mpt2sas_scsih_clear_tm_flag(struct MPT2SAS_ADAPTER *ioc, u16 handle);
 void mpt2sas_expander_remove(struct MPT2SAS_ADAPTER *ioc, u64 sas_address);

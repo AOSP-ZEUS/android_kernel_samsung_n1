@@ -24,11 +24,19 @@
 #include <drm/drmP.h>
 #include <asm/mrst.h>
 
+<<<<<<< HEAD
 #include "psb_intel_bios.h"
 #include "psb_drv.h"
 #include "psb_intel_drv.h"
 #include "psb_intel_reg.h"
 #include "psb_powermgmt.h"
+=======
+#include "intel_bios.h"
+#include "psb_drv.h"
+#include "psb_intel_drv.h"
+#include "psb_intel_reg.h"
+#include "power.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/pm_runtime.h>
 
 /* The max/min PWM frequency in BPCR[31:17] - */
@@ -46,8 +54,12 @@ static void mrst_lvds_set_power(struct drm_device *dev,
 				struct psb_intel_output *output, bool on)
 {
 	u32 pp_status;
+<<<<<<< HEAD
 	DRM_DRIVER_PRIVATE_T *dev_priv = dev->dev_private;
 	PSB_DEBUG_ENTRY("\n");
+=======
+	struct drm_psb_private *dev_priv = dev->dev_private;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!gma_power_begin(dev, true))
 		return;
@@ -59,7 +71,15 @@ static void mrst_lvds_set_power(struct drm_device *dev,
 			pp_status = REG_READ(PP_STATUS);
 		} while ((pp_status & (PP_ON | PP_READY)) == PP_READY);
 		dev_priv->is_lvds_on = true;
+<<<<<<< HEAD
 	} else {
+=======
+		if (dev_priv->ops->lvds_bl_power)
+			dev_priv->ops->lvds_bl_power(dev, true);
+	} else {
+		if (dev_priv->ops->lvds_bl_power)
+			dev_priv->ops->lvds_bl_power(dev, false);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		REG_WRITE(PP_CONTROL, REG_READ(PP_CONTROL) &
 			  ~POWER_TARGET_ON);
 		do {
@@ -68,7 +88,10 @@ static void mrst_lvds_set_power(struct drm_device *dev,
 		dev_priv->is_lvds_on = false;
 		pm_request_idle(&dev->pdev->dev);
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	gma_power_end(dev);
 }
 
@@ -77,8 +100,11 @@ static void mrst_lvds_dpms(struct drm_encoder *encoder, int mode)
 	struct drm_device *dev = encoder->dev;
 	struct psb_intel_output *output = enc_to_psb_intel_output(encoder);
 
+<<<<<<< HEAD
 	PSB_DEBUG_ENTRY("\n");
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (mode == DRM_MODE_DPMS_ON)
 		mrst_lvds_set_power(dev, output, true);
 	else
@@ -94,11 +120,18 @@ static void mrst_lvds_mode_set(struct drm_encoder *encoder,
 	struct psb_intel_mode_device *mode_dev =
 				enc_to_psb_intel_output(encoder)->mode_dev;
 	struct drm_device *dev = encoder->dev;
+<<<<<<< HEAD
 	u32 lvds_port;
 	uint64_t v = DRM_MODE_SCALE_FULLSCREEN;
 
 	PSB_DEBUG_ENTRY("\n");
 
+=======
+	struct drm_psb_private *dev_priv = dev->dev_private;
+	u32 lvds_port;
+	uint64_t v = DRM_MODE_SCALE_FULLSCREEN;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!gma_power_begin(dev, true))
 		return;
 
@@ -112,7 +145,13 @@ static void mrst_lvds_mode_set(struct drm_encoder *encoder,
 		    LVDS_PORT_EN |
 		    LVDS_BORDER_EN;
 
+<<<<<<< HEAD
 	if (mode_dev->panel_wants_dither)
+=======
+	/* If the firmware says dither on Moorestown, or the BIOS does
+	   on Oaktrail then enable dithering */
+	if (mode_dev->panel_wants_dither || dev_priv->lvds_dither)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		lvds_port |= MRST_PANEL_8TO6_DITHER_ENABLE;
 
 	REG_WRITE(LVDS, lvds_port);
@@ -146,13 +185,68 @@ static void mrst_lvds_mode_set(struct drm_encoder *encoder,
 	gma_power_end(dev);
 }
 
+<<<<<<< HEAD
+=======
+static void mrst_lvds_prepare(struct drm_encoder *encoder)
+{
+	struct drm_device *dev = encoder->dev;
+	struct psb_intel_output *output = enc_to_psb_intel_output(encoder);
+	struct psb_intel_mode_device *mode_dev = output->mode_dev;
+
+	if (!gma_power_begin(dev, true))
+		return;
+
+	mode_dev->saveBLC_PWM_CTL = REG_READ(BLC_PWM_CTL);
+	mode_dev->backlight_duty_cycle = (mode_dev->saveBLC_PWM_CTL &
+					  BACKLIGHT_DUTY_CYCLE_MASK);
+	mrst_lvds_set_power(dev, output, false);
+	gma_power_end(dev);
+}
+
+static u32 mrst_lvds_get_max_backlight(struct drm_device *dev)
+{
+	struct drm_psb_private *dev_priv = dev->dev_private;
+	u32 ret;
+
+	if (gma_power_begin(dev, false)) {
+		ret = ((REG_READ(BLC_PWM_CTL) &
+			  BACKLIGHT_MODULATION_FREQ_MASK) >>
+			  BACKLIGHT_MODULATION_FREQ_SHIFT) * 2;
+
+		gma_power_end(dev);
+	} else
+		ret = ((dev_priv->saveBLC_PWM_CTL &
+			  BACKLIGHT_MODULATION_FREQ_MASK) >>
+			  BACKLIGHT_MODULATION_FREQ_SHIFT) * 2;
+
+	return ret;
+}
+
+static void mrst_lvds_commit(struct drm_encoder *encoder)
+{
+	struct drm_device *dev = encoder->dev;
+	struct psb_intel_output *output = enc_to_psb_intel_output(encoder);
+	struct psb_intel_mode_device *mode_dev = output->mode_dev;
+
+	if (mode_dev->backlight_duty_cycle == 0)
+		mode_dev->backlight_duty_cycle =
+					mrst_lvds_get_max_backlight(dev);
+	mrst_lvds_set_power(dev, output, true);
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static const struct drm_encoder_helper_funcs mrst_lvds_helper_funcs = {
 	.dpms = mrst_lvds_dpms,
 	.mode_fixup = psb_intel_lvds_mode_fixup,
+<<<<<<< HEAD
 	.prepare = psb_intel_lvds_prepare,
 	.mode_set = mrst_lvds_mode_set,
 	.commit = psb_intel_lvds_commit,
+=======
+	.prepare = mrst_lvds_prepare,
+	.mode_set = mrst_lvds_mode_set,
+	.commit = mrst_lvds_commit,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct drm_display_mode lvds_configuration_modes[] = {
@@ -252,8 +346,11 @@ void mrst_lvds_init(struct drm_device *dev,
 	struct i2c_adapter *i2c_adap;
 	struct drm_display_mode *scan;	/* *modes, *bios_mode; */
 
+<<<<<<< HEAD
 	PSB_DEBUG_ENTRY("\n");
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	psb_intel_output = kzalloc(sizeof(struct psb_intel_output), GFP_KERNEL);
 	if (!psb_intel_output)
 		return;
@@ -302,6 +399,7 @@ void mrst_lvds_init(struct drm_device *dev,
 	 *    if closed, act like it's not there for now
 	 */
 
+<<<<<<< HEAD
 	 /* This ifdef can go once the cpu ident stuff is cleaned up in arch */
 #if defined(CONFIG_X86_MRST)
 	if (mrst_identify_cpu())
@@ -312,6 +410,12 @@ void mrst_lvds_init(struct drm_device *dev,
 
 	if (i2c_adap == NULL)
 		printk(KERN_ALERT "No ddc adapter available!\n");
+=======
+	i2c_adap = i2c_get_adapter(dev_priv->ops->i2c_bus);
+
+	if (i2c_adap == NULL)
+		dev_err(dev->dev, "No ddc adapter available!\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Attempt to get the fixed panel mode from DDC.  Assume that the
 	 * preferred mode is the right one.
@@ -333,7 +437,10 @@ void mrst_lvds_init(struct drm_device *dev,
 			}
 		}
 	}
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * If we didn't get EDID, try geting panel timing
 	 * from configuration data
@@ -341,15 +448,23 @@ void mrst_lvds_init(struct drm_device *dev,
 	mode_dev->panel_fixed_mode = mrst_lvds_get_configuration_mode(dev);
 
 	if (mode_dev->panel_fixed_mode) {
+<<<<<<< HEAD
 		mode_dev->panel_fixed_mode->type |=
 		    DRM_MODE_TYPE_PREFERRED;
+=======
+		mode_dev->panel_fixed_mode->type |= DRM_MODE_TYPE_PREFERRED;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto out;	/* FIXME: check for quirks */
 	}
 
 	/* If we still don't have a mode after all that, give up. */
 	if (!mode_dev->panel_fixed_mode) {
+<<<<<<< HEAD
 		DRM_DEBUG
 		    ("Found no modes on the lvds, ignoring the LVDS\n");
+=======
+		dev_err(dev->dev, "Found no modes on the lvds, ignoring the LVDS\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto failed_find;
 	}
 
@@ -358,7 +473,11 @@ out:
 	return;
 
 failed_find:
+<<<<<<< HEAD
 	DRM_DEBUG("No LVDS modes found, disabling.\n");
+=======
+	dev_dbg(dev->dev, "No LVDS modes found, disabling.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (psb_intel_output->ddc_bus)
 		psb_intel_i2c_destroy(psb_intel_output->ddc_bus);
 

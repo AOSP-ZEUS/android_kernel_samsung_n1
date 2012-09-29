@@ -3,10 +3,19 @@
 # Licensed under the GPL
 #
 
+<<<<<<< HEAD
 obj-y = aio.o elf_aux.o execvp.o file.o helper.o irq.o main.o mem.o process.o \
 	registers.o sigio.o signal.o start_up.o time.o tty.o uaccess.o \
 	umid.o tls.o user_syms.o util.o drivers/ sys-$(SUBARCH)/ skas/
 
+=======
+obj-y = aio.o execvp.o file.o helper.o irq.o main.o mem.o process.o \
+	registers.o sigio.o signal.o start_up.o time.o tty.o uaccess.o \
+	umid.o tls.o user_syms.o util.o drivers/ sys-$(SUBARCH)/ skas/
+
+obj-$(CONFIG_ARCH_REUSE_HOST_VSYSCALL_AREA) += elf_aux.o
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 USER_OBJS := $(user-objs-y) aio.o elf_aux.o execvp.o file.o helper.o irq.o \
 	main.o mem.o process.o registers.o sigio.o signal.o start_up.o time.o \
 	tty.o tls.o uaccess.o umid.o util.o

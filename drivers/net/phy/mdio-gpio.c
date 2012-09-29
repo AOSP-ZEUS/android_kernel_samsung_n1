@@ -241,7 +241,11 @@ MODULE_DEVICE_TABLE(of, mdio_ofgpio_match);
 
 static struct platform_driver mdio_ofgpio_driver = {
 	.driver = {
+<<<<<<< HEAD
 		.name = "mdio-ofgpio",
+=======
+		.name = "mdio-gpio",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.owner = THIS_MODULE,
 		.of_match_table = mdio_ofgpio_match,
 	},

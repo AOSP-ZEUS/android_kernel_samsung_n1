@@ -769,4 +769,15 @@ config INTEL_OAKTRAIL
 	  enable/disable the Camera, WiFi, BT etc. devices. If in doubt, say Y
 	  here; it will only load on supported platforms.
 
+<<<<<<< HEAD
+=======
+config SAMSUNG_Q10
+	tristate "Samsung Q10 Extras"
+	depends on SERIO_I8042
+	select BACKLIGHT_CLASS_DEVICE
+	---help---
+	  This driver provides support for backlight control on Samsung Q10
+	  and related laptops, including Dell Latitude X200.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endif # X86_PLATFORM_DEVICES

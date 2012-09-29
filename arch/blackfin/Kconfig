@@ -953,6 +953,19 @@ config BFIN_GPTIMERS
 	  To compile this driver as a module, choose M here: the module
 	  will be called gptimers.
 
+<<<<<<< HEAD
+=======
+config HAVE_PWM
+	tristate "Enable PWM API support"
+	depends on BFIN_GPTIMERS
+	help
+	  Enable support for the Pulse Width Modulation framework (as
+	  found in linux/pwm.h).
+
+	  To compile this driver as a module, choose M here: the module
+	  will be called pwm.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 choice
 	prompt "Uncached DMA region"
 	default DMA_UNCACHED_1M

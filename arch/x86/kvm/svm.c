@@ -1496,11 +1496,21 @@ static void svm_set_cr0(struct kvm_vcpu *vcpu, unsigned long cr0)
 	update_cr0_intercept(svm);
 }
 
+<<<<<<< HEAD
 static void svm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
+=======
+static int svm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	unsigned long host_cr4_mce = read_cr4() & X86_CR4_MCE;
 	unsigned long old_cr4 = to_svm(vcpu)->vmcb->save.cr4;
 
+<<<<<<< HEAD
+=======
+	if (cr4 & X86_CR4_VMXE)
+		return 1;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (npt_enabled && ((old_cr4 ^ cr4) & X86_CR4_PGE))
 		svm_flush_tlb(vcpu);
 
@@ -1510,6 +1520,10 @@ static void svm_set_cr4(struct kvm_vcpu *vcpu, unsigned long cr4)
 	cr4 |= host_cr4_mce;
 	to_svm(vcpu)->vmcb->save.cr4 = cr4;
 	mark_dirty(to_svm(vcpu)->vmcb, VMCB_CR);
+<<<<<<< HEAD
+=======
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void svm_set_segment(struct kvm_vcpu *vcpu,

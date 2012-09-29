@@ -87,7 +87,10 @@ struct rt6_info {
 	struct dst_entry		dst;
 
 #define rt6i_dev			dst.dev
+<<<<<<< HEAD
 #define rt6i_nexthop			dst.neighbour
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define rt6i_expires			dst.expires
 
 	/*

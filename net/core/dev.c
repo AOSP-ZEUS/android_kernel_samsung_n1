@@ -199,6 +199,14 @@ static struct list_head ptype_all __read_mostly;	/* Taps */
 DEFINE_RWLOCK(dev_base_lock);
 EXPORT_SYMBOL(dev_base_lock);
 
+<<<<<<< HEAD
+=======
+static inline void dev_base_seq_inc(struct net *net)
+{
+	while (++net->dev_base_seq == 0);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline struct hlist_head *dev_name_hash(struct net *net, const char *name)
 {
 	unsigned hash = full_name_hash(name, strnlen(name, IFNAMSIZ));
@@ -237,6 +245,12 @@ static int list_netdevice(struct net_device *dev)
 	hlist_add_head_rcu(&dev->index_hlist,
 			   dev_index_hash(net, dev->ifindex));
 	write_unlock_bh(&dev_base_lock);
+<<<<<<< HEAD
+=======
+
+	dev_base_seq_inc(net);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -253,6 +267,11 @@ static void unlist_netdevice(struct net_device *dev)
 	hlist_del_rcu(&dev->name_hlist);
 	hlist_del_rcu(&dev->index_hlist);
 	write_unlock_bh(&dev_base_lock);
+<<<<<<< HEAD
+=======
+
+	dev_base_seq_inc(dev_net(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -1505,6 +1524,17 @@ static inline bool is_skb_forwardable(struct net_device *dev,
  */
 int dev_forward_skb(struct net_device *dev, struct sk_buff *skb)
 {
+<<<<<<< HEAD
+=======
+	if (skb_shinfo(skb)->tx_flags & SKBTX_DEV_ZEROCOPY) {
+		if (skb_copy_ubufs(skb, GFP_ATOMIC)) {
+			atomic_long_inc(&dev->rx_dropped);
+			kfree_skb(skb);
+			return NET_RX_DROP;
+		}
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	skb_orphan(skb);
 	nf_reset(skb);
 
@@ -2532,7 +2562,11 @@ __u32 __skb_get_rxhash(struct sk_buff *skb)
 			goto done;
 
 		ip = (const struct iphdr *) (skb->data + nhoff);
+<<<<<<< HEAD
 		if (ip->frag_off & htons(IP_MF | IP_OFFSET))
+=======
+		if (ip_is_fragment(ip))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ip_proto = 0;
 		else
 			ip_proto = ip->protocol;
@@ -3434,13 +3468,17 @@ static inline gro_result_t
 __napi_gro_receive(struct napi_struct *napi, struct sk_buff *skb)
 {
 	struct sk_buff *p;
+<<<<<<< HEAD
 	unsigned int maclen = skb->dev->hard_header_len;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	for (p = napi->gro_list; p; p = p->next) {
 		unsigned long diffs;
 
 		diffs = (unsigned long)p->dev ^ (unsigned long)skb->dev;
 		diffs |= p->vlan_tci ^ skb->vlan_tci;
+<<<<<<< HEAD
 		if (maclen == ETH_HLEN)
 			diffs |= compare_ether_header(skb_mac_header(p),
 						      skb_gro_mac_header(skb));
@@ -3448,6 +3486,10 @@ __napi_gro_receive(struct napi_struct *napi, struct sk_buff *skb)
 			diffs = memcmp(skb_mac_header(p),
 				       skb_gro_mac_header(skb),
 				       maclen);
+=======
+		diffs |= compare_ether_header(skb_mac_header(p),
+					      skb_gro_mac_header(skb));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		NAPI_GRO_CB(p)->same_flow = !diffs;
 		NAPI_GRO_CB(p)->flush = 0;
 	}
@@ -3504,8 +3546,12 @@ EXPORT_SYMBOL(napi_gro_receive);
 static void napi_reuse_skb(struct napi_struct *napi, struct sk_buff *skb)
 {
 	__skb_pull(skb, skb_headlen(skb));
+<<<<<<< HEAD
 	/* restore the reserve we had after netdev_alloc_skb_ip_align() */
 	skb_reserve(skb, NET_SKB_PAD + NET_IP_ALIGN - skb_headroom(skb));
+=======
+	skb_reserve(skb, NET_IP_ALIGN - skb_headroom(skb));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	skb->vlan_tci = 0;
 	skb->dev = napi->dev;
 	skb->skb_iif = 0;
@@ -4494,10 +4540,17 @@ void __dev_set_rx_mode(struct net_device *dev)
 		 */
 		if (!netdev_uc_empty(dev) && !dev->uc_promisc) {
 			__dev_set_promiscuity(dev, 1);
+<<<<<<< HEAD
 			dev->uc_promisc = 1;
 		} else if (netdev_uc_empty(dev) && dev->uc_promisc) {
 			__dev_set_promiscuity(dev, -1);
 			dev->uc_promisc = 0;
+=======
+			dev->uc_promisc = true;
+		} else if (netdev_uc_empty(dev) && dev->uc_promisc) {
+			__dev_set_promiscuity(dev, -1);
+			dev->uc_promisc = false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 		if (ops->ndo_set_multicast_list)
@@ -5206,7 +5259,11 @@ static void rollback_registered(struct net_device *dev)
 	list_del(&single);
 }
 
+<<<<<<< HEAD
 u32 netdev_fix_features(struct net_device *dev, u32 features)
+=======
+static u32 netdev_fix_features(struct net_device *dev, u32 features)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	/* Fix illegal checksum combinations */
 	if ((features & NETIF_F_HW_CSUM) &&
@@ -5265,7 +5322,10 @@ u32 netdev_fix_features(struct net_device *dev, u32 features)
 
 	return features;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(netdev_fix_features);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 int __netdev_update_features(struct net_device *dev)
 {
@@ -5485,11 +5545,17 @@ int register_netdevice(struct net_device *dev)
 		dev->features |= NETIF_F_NOCACHE_COPY;
 	}
 
+<<<<<<< HEAD
 	/* Enable GRO and NETIF_F_HIGHDMA for vlans by default,
 	 * vlan_dev_init() will do the dev->features check, so these features
 	 * are enabled only if supported by underlying device.
 	 */
 	dev->vlan_features |= (NETIF_F_GRO | NETIF_F_HIGHDMA);
+=======
+	/* Make NETIF_F_HIGHDMA inheritable to VLAN devices.
+	 */
+	dev->vlan_features |= NETIF_F_HIGHDMA;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = call_netdevice_notifiers(NETDEV_POST_INIT, dev);
 	ret = notifier_to_errno(ret);
@@ -5874,8 +5940,11 @@ struct net_device *alloc_netdev_mqs(int sizeof_priv, const char *name,
 
 	dev->gso_max_size = GSO_MAX_SIZE;
 
+<<<<<<< HEAD
 	INIT_LIST_HEAD(&dev->ethtool_ntuple_list.list);
 	dev->ethtool_ntuple_list.count = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	INIT_LIST_HEAD(&dev->napi_list);
 	INIT_LIST_HEAD(&dev->unreg_list);
 	INIT_LIST_HEAD(&dev->link_watch_list);
@@ -5939,9 +6008,12 @@ void free_netdev(struct net_device *dev)
 	/* Flush device addresses */
 	dev_addr_flush(dev);
 
+<<<<<<< HEAD
 	/* Clear ethtool n-tuple list */
 	ethtool_ntuple_flush(dev);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	list_for_each_entry_safe(p, n, &dev->napi_list, dev_list)
 		netif_napi_del(p);
 

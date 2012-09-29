@@ -69,10 +69,14 @@
 #include <linux/firmware.h>
 #include <linux/slab.h>
 #include <linux/prefetch.h>
+<<<<<<< HEAD
 
 #if defined(CONFIG_VLAN_8021Q) || defined(CONFIG_VLAN_8021Q_MODULE)
 #include <linux/if_vlan.h>
 #endif
+=======
+#include <linux/if_vlan.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef SIOCETHTOOL
 #include <linux/ethtool.h>
@@ -171,6 +175,7 @@ MODULE_DEVICE_TABLE(pci, acenic_pci_tbl);
 #define BOARD_IDX_STATIC	0
 #define BOARD_IDX_OVERFLOW	-1
 
+<<<<<<< HEAD
 #if (defined(CONFIG_VLAN_8021Q) || defined(CONFIG_VLAN_8021Q_MODULE)) && \
 	defined(NETIF_F_HW_VLAN_RX)
 #define ACENIC_DO_VLAN		1
@@ -180,6 +185,8 @@ MODULE_DEVICE_TABLE(pci, acenic_pci_tbl);
 #define ACE_RCB_VLAN_FLAG	0
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "acenic.h"
 
 /*
@@ -465,9 +472,12 @@ static const struct net_device_ops ace_netdev_ops = {
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_set_mac_address	= ace_set_mac_addr,
 	.ndo_change_mtu		= ace_change_mtu,
+<<<<<<< HEAD
 #if ACENIC_DO_VLAN
 	.ndo_vlan_rx_register	= ace_vlan_rx_register,
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static int __devinit acenic_probe_one(struct pci_dev *pdev,
@@ -491,9 +501,13 @@ static int __devinit acenic_probe_one(struct pci_dev *pdev,
 	ap->name = pci_name(pdev);
 
 	dev->features |= NETIF_F_SG | NETIF_F_IP_CSUM;
+<<<<<<< HEAD
 #if ACENIC_DO_VLAN
 	dev->features |= NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX;
 #endif
+=======
+	dev->features |= NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	dev->watchdog_timeo = 5*HZ;
 
@@ -1248,7 +1262,11 @@ static int __devinit ace_init(struct net_device *dev)
 	set_aceaddr(&info->rx_std_ctrl.rngptr, ap->rx_ring_base_dma);
 	info->rx_std_ctrl.max_len = ACE_STD_BUFSIZE;
 	info->rx_std_ctrl.flags =
+<<<<<<< HEAD
 	  RCB_FLG_TCP_UDP_SUM | RCB_FLG_NO_PSEUDO_HDR | ACE_RCB_VLAN_FLAG;
+=======
+	  RCB_FLG_TCP_UDP_SUM | RCB_FLG_NO_PSEUDO_HDR | RCB_FLG_VLAN_ASSIST;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	memset(ap->rx_std_ring, 0,
 	       RX_STD_RING_ENTRIES * sizeof(struct rx_desc));
@@ -1264,7 +1282,11 @@ static int __devinit ace_init(struct net_device *dev)
 		     (sizeof(struct rx_desc) * RX_STD_RING_ENTRIES)));
 	info->rx_jumbo_ctrl.max_len = 0;
 	info->rx_jumbo_ctrl.flags =
+<<<<<<< HEAD
 	  RCB_FLG_TCP_UDP_SUM | RCB_FLG_NO_PSEUDO_HDR | ACE_RCB_VLAN_FLAG;
+=======
+	  RCB_FLG_TCP_UDP_SUM | RCB_FLG_NO_PSEUDO_HDR | RCB_FLG_VLAN_ASSIST;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	memset(ap->rx_jumbo_ring, 0,
 	       RX_JUMBO_RING_ENTRIES * sizeof(struct rx_desc));
@@ -1286,7 +1308,11 @@ static int __devinit ace_init(struct net_device *dev)
 			       RX_JUMBO_RING_ENTRIES))));
 		info->rx_mini_ctrl.max_len = ACE_MINI_SIZE;
 		info->rx_mini_ctrl.flags =
+<<<<<<< HEAD
 		  RCB_FLG_TCP_UDP_SUM|RCB_FLG_NO_PSEUDO_HDR|ACE_RCB_VLAN_FLAG;
+=======
+		  RCB_FLG_TCP_UDP_SUM|RCB_FLG_NO_PSEUDO_HDR|RCB_FLG_VLAN_ASSIST;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		for (i = 0; i < RX_MINI_RING_ENTRIES; i++)
 			ap->rx_mini_ring[i].flags =
@@ -1332,7 +1358,11 @@ static int __devinit ace_init(struct net_device *dev)
 	}
 
 	info->tx_ctrl.max_len = ACE_TX_RING_ENTRIES(ap);
+<<<<<<< HEAD
 	tmp = RCB_FLG_TCP_UDP_SUM | RCB_FLG_NO_PSEUDO_HDR | ACE_RCB_VLAN_FLAG;
+=======
+	tmp = RCB_FLG_TCP_UDP_SUM | RCB_FLG_NO_PSEUDO_HDR | RCB_FLG_VLAN_ASSIST;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * The Tigon I does not like having the TX ring in host memory ;-(
@@ -1519,13 +1549,21 @@ static int __devinit ace_init(struct net_device *dev)
 	 * firmware to wipe the ring without re-initializing it.
 	 */
 	if (!test_and_set_bit(0, &ap->std_refill_busy))
+<<<<<<< HEAD
 		ace_load_std_rx_ring(ap, RX_RING_SIZE);
+=======
+		ace_load_std_rx_ring(dev, RX_RING_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	else
 		printk(KERN_ERR "%s: Someone is busy refilling the RX ring\n",
 		       ap->name);
 	if (ap->version >= 2) {
 		if (!test_and_set_bit(0, &ap->mini_refill_busy))
+<<<<<<< HEAD
 			ace_load_mini_rx_ring(ap, RX_MINI_SIZE);
+=======
+			ace_load_mini_rx_ring(dev, RX_MINI_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		else
 			printk(KERN_ERR "%s: Someone is busy refilling "
 			       "the RX mini ring\n", ap->name);
@@ -1601,9 +1639,16 @@ static void ace_watchdog(struct net_device *data)
 }
 
 
+<<<<<<< HEAD
 static void ace_tasklet(unsigned long dev)
 {
 	struct ace_private *ap = netdev_priv((struct net_device *)dev);
+=======
+static void ace_tasklet(unsigned long arg)
+{
+	struct net_device *dev = (struct net_device *) arg;
+	struct ace_private *ap = netdev_priv(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int cur_size;
 
 	cur_size = atomic_read(&ap->cur_rx_bufs);
@@ -1612,7 +1657,11 @@ static void ace_tasklet(unsigned long dev)
 #ifdef DEBUG
 		printk("refilling buffers (current %i)\n", cur_size);
 #endif
+<<<<<<< HEAD
 		ace_load_std_rx_ring(ap, RX_RING_SIZE - cur_size);
+=======
+		ace_load_std_rx_ring(dev, RX_RING_SIZE - cur_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (ap->version >= 2) {
@@ -1623,7 +1672,11 @@ static void ace_tasklet(unsigned long dev)
 			printk("refilling mini buffers (current %i)\n",
 			       cur_size);
 #endif
+<<<<<<< HEAD
 			ace_load_mini_rx_ring(ap, RX_MINI_SIZE - cur_size);
+=======
+			ace_load_mini_rx_ring(dev, RX_MINI_SIZE - cur_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 
@@ -1633,7 +1686,11 @@ static void ace_tasklet(unsigned long dev)
 #ifdef DEBUG
 		printk("refilling jumbo buffers (current %i)\n", cur_size);
 #endif
+<<<<<<< HEAD
 		ace_load_jumbo_rx_ring(ap, RX_JUMBO_SIZE - cur_size);
+=======
+		ace_load_jumbo_rx_ring(dev, RX_JUMBO_SIZE - cur_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	ap->tasklet_pending = 0;
 }
@@ -1659,8 +1716,14 @@ static void ace_dump_trace(struct ace_private *ap)
  * done only before the device is enabled, thus no interrupts are
  * generated and by the interrupt handler/tasklet handler.
  */
+<<<<<<< HEAD
 static void ace_load_std_rx_ring(struct ace_private *ap, int nr_bufs)
 {
+=======
+static void ace_load_std_rx_ring(struct net_device *dev, int nr_bufs)
+{
+	struct ace_private *ap = netdev_priv(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ace_regs __iomem *regs = ap->regs;
 	short i, idx;
 
@@ -1674,11 +1737,18 @@ static void ace_load_std_rx_ring(struct ace_private *ap, int nr_bufs)
 		struct rx_desc *rd;
 		dma_addr_t mapping;
 
+<<<<<<< HEAD
 		skb = alloc_skb(ACE_STD_BUFSIZE + NET_IP_ALIGN, GFP_ATOMIC);
 		if (!skb)
 			break;
 
 		skb_reserve(skb, NET_IP_ALIGN);
+=======
+		skb = netdev_alloc_skb_ip_align(dev, ACE_STD_BUFSIZE);
+		if (!skb)
+			break;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		mapping = pci_map_page(ap->pdev, virt_to_page(skb->data),
 				       offset_in_page(skb->data),
 				       ACE_STD_BUFSIZE,
@@ -1722,8 +1792,14 @@ static void ace_load_std_rx_ring(struct ace_private *ap, int nr_bufs)
 }
 
 
+<<<<<<< HEAD
 static void ace_load_mini_rx_ring(struct ace_private *ap, int nr_bufs)
 {
+=======
+static void ace_load_mini_rx_ring(struct net_device *dev, int nr_bufs)
+{
+	struct ace_private *ap = netdev_priv(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ace_regs __iomem *regs = ap->regs;
 	short i, idx;
 
@@ -1735,11 +1811,18 @@ static void ace_load_mini_rx_ring(struct ace_private *ap, int nr_bufs)
 		struct rx_desc *rd;
 		dma_addr_t mapping;
 
+<<<<<<< HEAD
 		skb = alloc_skb(ACE_MINI_BUFSIZE + NET_IP_ALIGN, GFP_ATOMIC);
 		if (!skb)
 			break;
 
 		skb_reserve(skb, NET_IP_ALIGN);
+=======
+		skb = netdev_alloc_skb_ip_align(dev, ACE_MINI_BUFSIZE);
+		if (!skb)
+			break;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		mapping = pci_map_page(ap->pdev, virt_to_page(skb->data),
 				       offset_in_page(skb->data),
 				       ACE_MINI_BUFSIZE,
@@ -1779,8 +1862,14 @@ static void ace_load_mini_rx_ring(struct ace_private *ap, int nr_bufs)
  * Load the jumbo rx ring, this may happen at any time if the MTU
  * is changed to a value > 1500.
  */
+<<<<<<< HEAD
 static void ace_load_jumbo_rx_ring(struct ace_private *ap, int nr_bufs)
 {
+=======
+static void ace_load_jumbo_rx_ring(struct net_device *dev, int nr_bufs)
+{
+	struct ace_private *ap = netdev_priv(dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct ace_regs __iomem *regs = ap->regs;
 	short i, idx;
 
@@ -1791,11 +1880,18 @@ static void ace_load_jumbo_rx_ring(struct ace_private *ap, int nr_bufs)
 		struct rx_desc *rd;
 		dma_addr_t mapping;
 
+<<<<<<< HEAD
 		skb = alloc_skb(ACE_JUMBO_BUFSIZE + NET_IP_ALIGN, GFP_ATOMIC);
 		if (!skb)
 			break;
 
 		skb_reserve(skb, NET_IP_ALIGN);
+=======
+		skb = netdev_alloc_skb_ip_align(dev, ACE_JUMBO_BUFSIZE);
+		if (!skb)
+			break;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		mapping = pci_map_page(ap->pdev, virt_to_page(skb->data),
 				       offset_in_page(skb->data),
 				       ACE_JUMBO_BUFSIZE,
@@ -2038,12 +2134,18 @@ static void ace_rx_int(struct net_device *dev, u32 rxretprd, u32 rxretcsm)
 		}
 
 		/* send it up */
+<<<<<<< HEAD
 #if ACENIC_DO_VLAN
 		if (ap->vlgrp && (bd_flags & BD_FLG_VLAN_TAG)) {
 			vlan_hwaccel_rx(skb, ap->vlgrp, retdesc->vlan);
 		} else
 #endif
 			netif_rx(skb);
+=======
+		if ((bd_flags & BD_FLG_VLAN_TAG))
+			__vlan_hwaccel_put_tag(skb, retdesc->vlan);
+		netif_rx(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		dev->stats.rx_packets++;
 		dev->stats.rx_bytes += retdesc->size;
@@ -2216,7 +2318,11 @@ static irqreturn_t ace_interrupt(int irq, void *dev_id)
 #ifdef DEBUG
 				printk("low on std buffers %i\n", cur_size);
 #endif
+<<<<<<< HEAD
 				ace_load_std_rx_ring(ap,
+=======
+				ace_load_std_rx_ring(dev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 						     RX_RING_SIZE - cur_size);
 			} else
 				run_tasklet = 1;
@@ -2232,7 +2338,12 @@ static irqreturn_t ace_interrupt(int irq, void *dev_id)
 					printk("low on mini buffers %i\n",
 					       cur_size);
 #endif
+<<<<<<< HEAD
 					ace_load_mini_rx_ring(ap, RX_MINI_SIZE - cur_size);
+=======
+					ace_load_mini_rx_ring(dev,
+							      RX_MINI_SIZE - cur_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				} else
 					run_tasklet = 1;
 			}
@@ -2248,7 +2359,12 @@ static irqreturn_t ace_interrupt(int irq, void *dev_id)
 					printk("low on jumbo buffers %i\n",
 					       cur_size);
 #endif
+<<<<<<< HEAD
 					ace_load_jumbo_rx_ring(ap, RX_JUMBO_SIZE - cur_size);
+=======
+					ace_load_jumbo_rx_ring(dev,
+							       RX_JUMBO_SIZE - cur_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				} else
 					run_tasklet = 1;
 			}
@@ -2262,6 +2378,7 @@ static irqreturn_t ace_interrupt(int irq, void *dev_id)
 	return IRQ_HANDLED;
 }
 
+<<<<<<< HEAD
 
 #if ACENIC_DO_VLAN
 static void ace_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
@@ -2280,6 +2397,8 @@ static void ace_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 #endif /* ACENIC_DO_VLAN */
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int ace_open(struct net_device *dev)
 {
 	struct ace_private *ap = netdev_priv(dev);
@@ -2305,7 +2424,11 @@ static int ace_open(struct net_device *dev)
 
 	if (ap->jumbo &&
 	    !test_and_set_bit(0, &ap->jumbo_refill_busy))
+<<<<<<< HEAD
 		ace_load_jumbo_rx_ring(ap, RX_JUMBO_SIZE);
+=======
+		ace_load_jumbo_rx_ring(dev, RX_JUMBO_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (dev->flags & IFF_PROMISC) {
 		cmd.evt = C_SET_PROMISC_MODE;
@@ -2449,16 +2572,24 @@ ace_load_tx_bd(struct ace_private *ap, struct tx_desc *desc, u64 addr,
 		writel(addr >> 32, &io->addr.addrhi);
 		writel(addr & 0xffffffff, &io->addr.addrlo);
 		writel(flagsize, &io->flagsize);
+<<<<<<< HEAD
 #if ACENIC_DO_VLAN
 		writel(vlan_tag, &io->vlanres);
 #endif
+=======
+		writel(vlan_tag, &io->vlanres);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else {
 		desc->addr.addrhi = addr >> 32;
 		desc->addr.addrlo = addr;
 		desc->flagsize = flagsize;
+<<<<<<< HEAD
 #if ACENIC_DO_VLAN
 		desc->vlanres = vlan_tag;
 #endif
+=======
+		desc->vlanres = vlan_tag;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 
@@ -2486,12 +2617,18 @@ restart:
 		flagsize = (skb->len << 16) | (BD_FLG_END);
 		if (skb->ip_summed == CHECKSUM_PARTIAL)
 			flagsize |= BD_FLG_TCP_UDP_SUM;
+<<<<<<< HEAD
 #if ACENIC_DO_VLAN
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (vlan_tx_tag_present(skb)) {
 			flagsize |= BD_FLG_VLAN_TAG;
 			vlan_tag = vlan_tx_tag_get(skb);
 		}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		desc = ap->tx_ring + idx;
 		idx = (idx + 1) % ACE_TX_RING_ENTRIES(ap);
 
@@ -2509,12 +2646,18 @@ restart:
 		flagsize = (skb_headlen(skb) << 16);
 		if (skb->ip_summed == CHECKSUM_PARTIAL)
 			flagsize |= BD_FLG_TCP_UDP_SUM;
+<<<<<<< HEAD
 #if ACENIC_DO_VLAN
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (vlan_tx_tag_present(skb)) {
 			flagsize |= BD_FLG_VLAN_TAG;
 			vlan_tag = vlan_tx_tag_get(skb);
 		}
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		ace_load_tx_bd(ap, ap->tx_ring + idx, mapping, flagsize, vlan_tag);
 
@@ -2621,7 +2764,11 @@ static int ace_change_mtu(struct net_device *dev, int new_mtu)
 			       "support\n", dev->name);
 			ap->jumbo = 1;
 			if (!test_and_set_bit(0, &ap->jumbo_refill_busy))
+<<<<<<< HEAD
 				ace_load_jumbo_rx_ring(ap, RX_JUMBO_SIZE);
+=======
+				ace_load_jumbo_rx_ring(dev, RX_JUMBO_SIZE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ace_set_rxtx_parms(dev, 1);
 		}
 	} else {

@@ -1268,9 +1268,15 @@ static int wm8903_set_dai_fmt(struct snd_soc_dai *codec_dai,
 		aif1 |= 0x2;
 		break;
 	case SND_SOC_DAIFMT_RIGHT_J:
+<<<<<<< HEAD
 		aif1 |= 0x1;
 		break;
 	case SND_SOC_DAIFMT_LEFT_J:
+=======
+		break;
+	case SND_SOC_DAIFMT_LEFT_J:
+		aif1 |= 0x1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		return -EINVAL;
@@ -1457,6 +1463,10 @@ static int wm8903_hw_params(struct snd_pcm_substream *substream,
 	int fs = params_rate(params);
 	int bclk;
 	int bclk_div;
+<<<<<<< HEAD
+=======
+	int real_bclk_div;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int i;
 	int dsp_config;
 	int clk_config;
@@ -1493,7 +1503,11 @@ static int wm8903_hw_params(struct snd_pcm_substream *substream,
 	clock1 |= sample_rates[dsp_config].value;
 
 	aif1 &= ~WM8903_AIF_WL_MASK;
+<<<<<<< HEAD
 	bclk = 2 * fs;
+=======
+	bclk = 4 * fs;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (params_format(params)) {
 	case SNDRV_PCM_FORMAT_S16_LE:
 		bclk *= 16;
@@ -1561,6 +1575,7 @@ static int wm8903_hw_params(struct snd_pcm_substream *substream,
 	 * higher than the target (we need to ensure that there enough
 	 * BCLKs to clock out the samples).
 	 */
+<<<<<<< HEAD
 	bclk_div = 0;
 	best_val = ((clk_sys * 10) / bclk_divs[0].ratio) - bclk;
 	i = 1;
@@ -1572,16 +1587,33 @@ static int wm8903_hw_params(struct snd_pcm_substream *substream,
 		best_val = cur_val;
 		i++;
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	aif2 &= ~WM8903_BCLK_DIV_MASK;
 	aif3 &= ~WM8903_LRCLK_RATE_MASK;
 
+<<<<<<< HEAD
 	dev_dbg(codec->dev, "BCLK ratio %d for %dHz - actual BCLK = %dHz\n",
 		bclk_divs[bclk_div].ratio / 10, bclk,
 		(clk_sys * 10) / bclk_divs[bclk_div].ratio);
 
 	aif2 |= bclk_divs[bclk_div].div;
 	aif3 |= bclk / fs;
+=======
+	bclk_div = real_bclk_div = 0;
+	cur_val = clk_sys;
+	best_val = clk_sys;
+	while(!(best_val % fs) &&
+			(cur_val >= bclk)){
+		real_bclk_div = bclk_div;
+		bclk_div++;
+		cur_val = best_val;
+		best_val /= 2;
+	}
+	aif2 |= (real_bclk_div ? 1<<real_bclk_div : 0);
+	aif3 |= cur_val / fs;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	wm8903->fs = params_rate(params);
 	wm8903_set_deemph(codec);
@@ -1761,6 +1793,14 @@ static struct snd_soc_dai_driver wm8903_dai = {
 
 static int wm8903_suspend(struct snd_soc_codec *codec, pm_message_t state)
 {
+<<<<<<< HEAD
+=======
+	struct wm8903_priv *wm8903 = snd_soc_codec_get_drvdata(codec);
+
+	if (wm8903->irq)
+		disable_irq(wm8903->irq);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wm8903_set_bias_level(codec, SND_SOC_BIAS_OFF);
 
 	return 0;
@@ -1768,13 +1808,22 @@ static int wm8903_suspend(struct snd_soc_codec *codec, pm_message_t state)
 
 static int wm8903_resume(struct snd_soc_codec *codec)
 {
+<<<<<<< HEAD
+=======
+	struct wm8903_priv *wm8903 = snd_soc_codec_get_drvdata(codec);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int i;
 	u16 *reg_cache = codec->reg_cache;
 	u16 *tmp_cache = kmemdup(reg_cache, sizeof(wm8903_reg_defaults),
 				 GFP_KERNEL);
 
+<<<<<<< HEAD
 	/* Bring the codec back up to standby first to minimise pop/clicks */
 	wm8903_set_bias_level(codec, SND_SOC_BIAS_STANDBY);
+=======
+	if (wm8903->irq)
+		enable_irq(wm8903->irq);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Sync back everything else */
 	if (tmp_cache) {
@@ -1786,6 +1835,12 @@ static int wm8903_resume(struct snd_soc_codec *codec)
 		dev_err(codec->dev, "Failed to allocate temporary cache\n");
 	}
 
+<<<<<<< HEAD
+=======
+	/* Bring the codec back up to standby first to minimise pop/clicks */
+	wm8903_set_bias_level(codec, SND_SOC_BIAS_STANDBY);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -2046,8 +2101,18 @@ static int wm8903_probe(struct snd_soc_codec *codec)
 /* power down chip */
 static int wm8903_remove(struct snd_soc_codec *codec)
 {
+<<<<<<< HEAD
 	wm8903_free_gpio(codec);
 	wm8903_set_bias_level(codec, SND_SOC_BIAS_OFF);
+=======
+	struct wm8903_priv *wm8903 = snd_soc_codec_get_drvdata(codec);
+
+	wm8903_free_gpio(codec);
+	wm8903_set_bias_level(codec, SND_SOC_BIAS_OFF);
+	if (wm8903->irq)
+		free_irq(wm8903->irq, codec);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

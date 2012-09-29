@@ -45,8 +45,18 @@
 #define L2X0_CLEAN_INV_LINE_PA		0x7F0
 #define L2X0_CLEAN_INV_LINE_IDX		0x7F8
 #define L2X0_CLEAN_INV_WAY		0x7FC
+<<<<<<< HEAD
 #define L2X0_LOCKDOWN_WAY_D		0x900
 #define L2X0_LOCKDOWN_WAY_I		0x904
+=======
+/*
+ * The lockdown registers repeat 8 times for L310, the L210 has only one
+ * D and one I lockdown register at 0x0900 and 0x0904.
+ */
+#define L2X0_LOCKDOWN_WAY_D_BASE	0x900
+#define L2X0_LOCKDOWN_WAY_I_BASE	0x904
+#define L2X0_LOCKDOWN_STRIDE		0x08
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define L2X0_TEST_OPERATION		0xF00
 #define L2X0_LINE_DATA			0xF10
 #define L2X0_LINE_TAG			0xF30
@@ -76,7 +86,12 @@
 #define REV_PL310_R2P0				4
 
 #ifndef __ASSEMBLY__
+<<<<<<< HEAD
 extern void __init l2x0_init(void __iomem *base, __u32 aux_val, __u32 aux_mask);
+=======
+extern void l2x0_init(void __iomem *base, __u32 aux_val, __u32 aux_mask);
+extern void l2x0_enable(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 #endif

@@ -3,6 +3,10 @@
    video modes.
    (C) 1999-2003 Nemosoft Unv.
    (C) 2004-2006 Luc Saillard (luc@saillard.org)
+<<<<<<< HEAD
+=======
+   (C) 2011 Hans de Goede <hdegoede@redhat.com>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
    NOTE: this version of pwc is an unofficial (modified) release of pwc & pcwx
    driver and thus may have bugs that are not present in the original version.
@@ -43,12 +47,16 @@
 #include <asm/errno.h>
 
 #include "pwc.h"
+<<<<<<< HEAD
 #include "pwc-uncompress.h"
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "pwc-kiara.h"
 #include "pwc-timon.h"
 #include "pwc-dec1.h"
 #include "pwc-dec23.h"
 
+<<<<<<< HEAD
 /* Request types: video */
 #define SET_LUM_CTL			0x01
 #define GET_LUM_CTL			0x02
@@ -98,6 +106,9 @@
 #define READ_SHUTTER_FORMATTER			0x0600
 #define READ_RED_GAIN_FORMATTER			0x0700
 #define READ_BLUE_GAIN_FORMATTER		0x0800
+=======
+/* Selectors for status controls used only in this file */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define GET_STATUS_B00				0x0B00
 #define SENSOR_TYPE_FORMATTER1			0x0C00
 #define GET_STATUS_3000				0x3000
@@ -116,11 +127,14 @@
 /* Formatters for the Video Endpoint controls [GS]ET_EP_STREAM_CTL */
 #define VIDEO_OUTPUT_CONTROL_FORMATTER		0x0100
 
+<<<<<<< HEAD
 /* Formatters for the motorized pan & tilt [GS]ET_MPT_CTL */
 #define PT_RELATIVE_CONTROL_FORMATTER		0x01
 #define PT_RESET_CONTROL_FORMATTER		0x02
 #define PT_STATUS_FORMATTER			0x03
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const char *size2name[PSZ_MAX] =
 {
 	"subQCIF",
@@ -160,7 +174,11 @@ static void pwc_set_image_buffer_size(struct pwc_device *pdev);
 /****************************************************************************/
 
 static int _send_control_msg(struct pwc_device *pdev,
+<<<<<<< HEAD
 	u8 request, u16 value, int index, void *buf, int buflen, int timeout)
+=======
+	u8 request, u16 value, int index, void *buf, int buflen)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int rc;
 	void *kbuf = NULL;
@@ -177,7 +195,11 @@ static int _send_control_msg(struct pwc_device *pdev,
 		USB_DIR_OUT | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
 		value,
 		index,
+<<<<<<< HEAD
 		kbuf, buflen, timeout);
+=======
+		kbuf, buflen, USB_CTRL_SET_TIMEOUT);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	kfree(kbuf);
 	return rc;
@@ -197,9 +219,19 @@ static int recv_control_msg(struct pwc_device *pdev,
 		USB_DIR_IN | USB_TYPE_VENDOR | USB_RECIP_DEVICE,
 		value,
 		pdev->vcinterface,
+<<<<<<< HEAD
 		kbuf, buflen, 500);
 	memcpy(buf, kbuf, buflen);
 	kfree(kbuf);
+=======
+		kbuf, buflen, USB_CTRL_GET_TIMEOUT);
+	memcpy(buf, kbuf, buflen);
+	kfree(kbuf);
+
+	if (rc < 0)
+		PWC_ERROR("recv_control_msg error %d req %02x val %04x\n",
+			  rc, request, value);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return rc;
 }
 
@@ -210,6 +242,7 @@ static inline int send_video_command(struct pwc_device *pdev,
 		SET_EP_STREAM_CTL,
 		VIDEO_OUTPUT_CONTROL_FORMATTER,
 		index,
+<<<<<<< HEAD
 		buf, buflen, 1000);
 }
 
@@ -222,6 +255,18 @@ static inline int send_control_msg(struct pwc_device *pdev,
 
 
 
+=======
+		buf, buflen);
+}
+
+int send_control_msg(struct pwc_device *pdev,
+	u8 request, u16 value, void *buf, int buflen)
+{
+	return _send_control_msg(pdev,
+		request, value, pdev->vcinterface, buf, buflen);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int set_video_mode_Nala(struct pwc_device *pdev, int size, int frames)
 {
 	unsigned char buf[3];
@@ -261,8 +306,16 @@ static int set_video_mode_Nala(struct pwc_device *pdev, int size, int frames)
 		PWC_DEBUG_MODULE("Failed to send video command... %d\n", ret);
 		return ret;
 	}
+<<<<<<< HEAD
 	if (pEntry->compressed && pdev->pixfmt == V4L2_PIX_FMT_YUV420)
 		pwc_dec1_init(pdev->type, pdev->release, buf, pdev->decompress_data);
+=======
+	if (pEntry->compressed && pdev->pixfmt == V4L2_PIX_FMT_YUV420) {
+		ret = pwc_dec1_init(pdev, pdev->type, pdev->release, buf);
+		if (ret < 0)
+			return ret;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pdev->cmd_len = 3;
 	memcpy(pdev->cmd_buf, buf, 3);
@@ -321,8 +374,16 @@ static int set_video_mode_Timon(struct pwc_device *pdev, int size, int frames, i
 	if (ret < 0)
 		return ret;
 
+<<<<<<< HEAD
 	if (pChoose->bandlength > 0 && pdev->pixfmt == V4L2_PIX_FMT_YUV420)
 		pwc_dec23_init(pdev, pdev->type, buf);
+=======
+	if (pChoose->bandlength > 0 && pdev->pixfmt == V4L2_PIX_FMT_YUV420) {
+		ret = pwc_dec23_init(pdev, pdev->type, buf);
+		if (ret < 0)
+			return ret;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pdev->cmd_len = 13;
 	memcpy(pdev->cmd_buf, buf, 13);
@@ -394,8 +455,16 @@ static int set_video_mode_Kiara(struct pwc_device *pdev, int size, int frames, i
 	if (ret < 0)
 		return ret;
 
+<<<<<<< HEAD
 	if (pChoose->bandlength > 0 && pdev->pixfmt == V4L2_PIX_FMT_YUV420)
 		pwc_dec23_init(pdev, pdev->type, buf);
+=======
+	if (pChoose->bandlength > 0 && pdev->pixfmt == V4L2_PIX_FMT_YUV420) {
+		ret = pwc_dec23_init(pdev, pdev->type, buf);
+		if (ret < 0)
+			return ret;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pdev->cmd_len = 12;
 	memcpy(pdev->cmd_buf, buf, 12);
@@ -452,6 +521,10 @@ int pwc_set_video_mode(struct pwc_device *pdev, int width, int height, int frame
 	}
 	pdev->view.x = width;
 	pdev->view.y = height;
+<<<<<<< HEAD
+=======
+	pdev->vcompression = compression;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	pdev->frame_total_size = pdev->frame_size + pdev->frame_header_size + pdev->frame_trailer_size;
 	pwc_set_image_buffer_size(pdev);
 	PWC_DEBUG_SIZE("Set viewport to %dx%d, image size is %dx%d.\n", width, height, pwc_image_sizes[size].x, pwc_image_sizes[size].y);
@@ -511,6 +584,7 @@ unsigned int pwc_get_fps(struct pwc_device *pdev, unsigned int index, unsigned i
 	return ret;
 }
 
+<<<<<<< HEAD
 #define BLACK_Y 0
 #define BLACK_U 128
 #define BLACK_V 128
@@ -518,6 +592,11 @@ unsigned int pwc_get_fps(struct pwc_device *pdev, unsigned int index, unsigned i
 static void pwc_set_image_buffer_size(struct pwc_device *pdev)
 {
 	int i, factor = 0;
+=======
+static void pwc_set_image_buffer_size(struct pwc_device *pdev)
+{
+	int factor = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* for V4L2_PIX_FMT_YUV420 */
 	switch (pdev->pixfmt) {
@@ -541,6 +620,7 @@ static void pwc_set_image_buffer_size(struct pwc_device *pdev)
 	 */
 	pdev->offset.x = ((pdev->view.x - pdev->image.x) / 2) & 0xFFFC;
 	pdev->offset.y = ((pdev->view.y - pdev->image.y) / 2) & 0xFFFE;
+<<<<<<< HEAD
 
 	/* Fill buffers with black colors */
 	for (i = 0; i < pwc_mbufs; i++) {
@@ -808,11 +888,102 @@ int pwc_camera_power(struct pwc_device *pdev, int power)
 
 	if (pdev->type < 675 || (pdev->type < 730 && pdev->release < 6))
 		return 0;	/* Not supported by Nala or Timon < release 6 */
+=======
+}
+
+int pwc_get_u8_ctrl(struct pwc_device *pdev, u8 request, u16 value, int *data)
+{
+	int ret;
+	u8 buf;
+
+	ret = recv_control_msg(pdev, request, value, &buf, sizeof(buf));
+	if (ret < 0)
+		return ret;
+
+	*data = buf;
+	return 0;
+}
+
+int pwc_set_u8_ctrl(struct pwc_device *pdev, u8 request, u16 value, u8 data)
+{
+	int ret;
+
+	ret = send_control_msg(pdev, request, value, &data, sizeof(data));
+	if (ret < 0)
+		return ret;
+
+	return 0;
+}
+
+int pwc_get_s8_ctrl(struct pwc_device *pdev, u8 request, u16 value, int *data)
+{
+	int ret;
+	s8 buf;
+
+	ret = recv_control_msg(pdev, request, value, &buf, sizeof(buf));
+	if (ret < 0)
+		return ret;
+
+	*data = buf;
+	return 0;
+}
+
+int pwc_get_u16_ctrl(struct pwc_device *pdev, u8 request, u16 value, int *data)
+{
+	int ret;
+	u8 buf[2];
+
+	ret = recv_control_msg(pdev, request, value, buf, sizeof(buf));
+	if (ret < 0)
+		return ret;
+
+	*data = (buf[1] << 8) | buf[0];
+	return 0;
+}
+
+int pwc_set_u16_ctrl(struct pwc_device *pdev, u8 request, u16 value, u16 data)
+{
+	int ret;
+	u8 buf[2];
+
+	buf[0] = data & 0xff;
+	buf[1] = data >> 8;
+	ret = send_control_msg(pdev, request, value, buf, sizeof(buf));
+	if (ret < 0)
+		return ret;
+
+	return 0;
+}
+
+int pwc_button_ctrl(struct pwc_device *pdev, u16 value)
+{
+	int ret;
+
+	ret = send_control_msg(pdev, SET_STATUS_CTL, value, NULL, 0);
+	if (ret < 0)
+		return ret;
+
+	return 0;
+}
+
+/* POWER */
+void pwc_camera_power(struct pwc_device *pdev, int power)
+{
+	char buf;
+	int r;
+
+	if (!pdev->power_save)
+		return;
+
+	if (pdev->type < 675 || (pdev->type < 730 && pdev->release < 6))
+		return;	/* Not supported by Nala or Timon < release 6 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (power)
 		buf = 0x00; /* active */
 	else
 		buf = 0xFF; /* power save */
+<<<<<<< HEAD
 	return send_control_msg(pdev,
 		SET_STATUS_CTL, SET_POWER_SAVE_MODE_FORMATTER,
 		&buf, sizeof(buf));
@@ -977,6 +1148,17 @@ static int pwc_read_blue_gain(struct pwc_device *pdev, int *value)
 }
 
 
+=======
+	r = send_control_msg(pdev,
+		SET_STATUS_CTL, SET_POWER_SAVE_MODE_FORMATTER,
+		&buf, sizeof(buf));
+
+	if (r < 0)
+		PWC_ERROR("Failed to power %s camera (%d)\n",
+			  power ? "on" : "off", r);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int pwc_set_wb_speed(struct pwc_device *pdev, int speed)
 {
 	unsigned char buf;
@@ -1028,6 +1210,10 @@ static int pwc_get_wb_delay(struct pwc_device *pdev, int *value)
 int pwc_set_leds(struct pwc_device *pdev, int on_value, int off_value)
 {
 	unsigned char buf[2];
+<<<<<<< HEAD
+=======
+	int r;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (pdev->type < 730)
 		return 0;
@@ -1045,8 +1231,17 @@ int pwc_set_leds(struct pwc_device *pdev, int on_value, int off_value)
 	buf[0] = on_value;
 	buf[1] = off_value;
 
+<<<<<<< HEAD
 	return send_control_msg(pdev,
 		SET_STATUS_CTL, LED_FORMATTER, &buf, sizeof(buf));
+=======
+	r = send_control_msg(pdev,
+		SET_STATUS_CTL, LED_FORMATTER, &buf, sizeof(buf));
+	if (r < 0)
+		PWC_ERROR("Failed to set LED on/off time (%d)\n", r);
+
+	return r;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int pwc_get_leds(struct pwc_device *pdev, int *on_value, int *off_value)
@@ -1069,6 +1264,7 @@ static int pwc_get_leds(struct pwc_device *pdev, int *on_value, int *off_value)
 	return 0;
 }
 
+<<<<<<< HEAD
 int pwc_set_contour(struct pwc_device *pdev, int contour)
 {
 	unsigned char buf;
@@ -1227,6 +1423,8 @@ int pwc_get_dynamic_noise(struct pwc_device *pdev, int *noise)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int _pwc_mpt_reset(struct pwc_device *pdev, int flags)
 {
 	unsigned char buf;
@@ -1309,7 +1507,11 @@ static int pwc_mpt_get_status(struct pwc_device *pdev, struct pwc_mpt_status *st
 	return 0;
 }
 
+<<<<<<< HEAD
 
+=======
+#ifdef CONFIG_USB_PWC_DEBUG
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int pwc_get_cmos_sensor(struct pwc_device *pdev, int *sensor)
 {
 	unsigned char buf;
@@ -1332,7 +1534,11 @@ int pwc_get_cmos_sensor(struct pwc_device *pdev, int *sensor)
 		*sensor = buf;
 	return 0;
 }
+<<<<<<< HEAD
 
+=======
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
  /* End of Add-Ons                                    */
  /* ************************************************* */
@@ -1356,12 +1562,29 @@ int pwc_get_cmos_sensor(struct pwc_device *pdev, int *sensor)
 /* copy local variable to arg */
 #define ARG_OUT(ARG_name) /* nothing */
 
+<<<<<<< HEAD
+=======
+/*
+ * Our ctrls use native values, but the old custom pwc ioctl interface expects
+ * values from 0 - 65535, define 2 helper functions to scale things. */
+static int pwc_ioctl_g_ctrl(struct v4l2_ctrl *ctrl)
+{
+	return v4l2_ctrl_g_ctrl(ctrl) * 65535 / ctrl->maximum;
+}
+
+static int pwc_ioctl_s_ctrl(struct v4l2_ctrl *ctrl, int val)
+{
+	return v4l2_ctrl_s_ctrl(ctrl, val * ctrl->maximum / 65535);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 {
 	long ret = 0;
 
 	switch(cmd) {
 	case VIDIOCPWCRUSER:
+<<<<<<< HEAD
 	{
 		if (pwc_restore_user(pdev))
 			ret = -EINVAL;
@@ -1381,12 +1604,28 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 			ret = -EINVAL;
 		break;
 	}
+=======
+		ret = pwc_button_ctrl(pdev, RESTORE_USER_DEFAULTS_FORMATTER);
+		break;
+
+	case VIDIOCPWCSUSER:
+		ret = pwc_button_ctrl(pdev, SAVE_USER_DEFAULTS_FORMATTER);
+		break;
+
+	case VIDIOCPWCFACTORY:
+		ret = pwc_button_ctrl(pdev, RESTORE_FACTORY_DEFAULTS_FORMATTER);
+		break;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	case VIDIOCPWCSCQUAL:
 	{
 		ARG_DEF(int, qual)
 
+<<<<<<< HEAD
 		if (pdev->iso_init) {
+=======
+		if (vb2_is_streaming(&pdev->vb_queue)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ret = -EBUSY;
 			break;
 		}
@@ -1396,8 +1635,11 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 			ret = -EINVAL;
 		else
 			ret = pwc_set_video_mode(pdev, pdev->view.x, pdev->view.y, pdev->vframes, ARGR(qual), pdev->vsnapshot);
+<<<<<<< HEAD
 		if (ret >= 0)
 			pdev->vcompression = ARGR(qual);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 
@@ -1432,35 +1674,60 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 	case VIDIOCPWCSAGC:
 	{
 		ARG_DEF(int, agc)
+<<<<<<< HEAD
 
 		ARG_IN(agc)
 		if (pwc_set_agc(pdev, ARGR(agc) < 0 ? 1 : 0, ARGR(agc)))
 			ret = -EINVAL;
+=======
+		ARG_IN(agc)
+		ret = v4l2_ctrl_s_ctrl(pdev->autogain, ARGR(agc) < 0);
+		if (ret == 0 && ARGR(agc) >= 0)
+			ret = pwc_ioctl_s_ctrl(pdev->gain, ARGR(agc));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 
 	case VIDIOCPWCGAGC:
 	{
 		ARG_DEF(int, agc)
+<<<<<<< HEAD
 
 		if (pwc_get_agc(pdev, ARGA(agc)))
 			ret = -EINVAL;
+=======
+		if (v4l2_ctrl_g_ctrl(pdev->autogain))
+			ARGR(agc) = -1;
+		else
+			ARGR(agc) = pwc_ioctl_g_ctrl(pdev->gain);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ARG_OUT(agc)
 		break;
 	}
 
 	case VIDIOCPWCSSHUTTER:
 	{
+<<<<<<< HEAD
 		ARG_DEF(int, shutter_speed)
 
 		ARG_IN(shutter_speed)
 		ret = pwc_set_shutter_speed(pdev, ARGR(shutter_speed) < 0 ? 1 : 0, ARGR(shutter_speed));
+=======
+		ARG_DEF(int, shutter)
+		ARG_IN(shutter)
+		ret = v4l2_ctrl_s_ctrl(pdev->exposure_auto,
+				       /* Menu idx 0 = auto, idx 1 = manual */
+				       ARGR(shutter) >= 0);
+		if (ret == 0 && ARGR(shutter) >= 0)
+			ret = pwc_ioctl_s_ctrl(pdev->exposure, ARGR(shutter));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 
 	case VIDIOCPWCSAWB:
 	{
 		ARG_DEF(struct pwc_whitebalance, wb)
+<<<<<<< HEAD
 
 		ARG_IN(wb)
 		ret = pwc_set_awb(pdev, ARGR(wb).mode);
@@ -1468,12 +1735,24 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 			pwc_set_red_gain(pdev, ARGR(wb).manual_red);
 			pwc_set_blue_gain(pdev, ARGR(wb).manual_blue);
 		}
+=======
+		ARG_IN(wb)
+		ret = v4l2_ctrl_s_ctrl(pdev->auto_white_balance,
+				       ARGR(wb).mode);
+		if (ret == 0 && ARGR(wb).mode == PWC_WB_MANUAL)
+			ret = pwc_ioctl_s_ctrl(pdev->red_balance,
+					       ARGR(wb).manual_red);
+		if (ret == 0 && ARGR(wb).mode == PWC_WB_MANUAL)
+			ret = pwc_ioctl_s_ctrl(pdev->blue_balance,
+					       ARGR(wb).manual_blue);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 
 	case VIDIOCPWCGAWB:
 	{
 		ARG_DEF(struct pwc_whitebalance, wb)
+<<<<<<< HEAD
 
 		memset(ARGA(wb), 0, sizeof(struct pwc_whitebalance));
 		ARGR(wb).mode = pwc_get_awb(pdev);
@@ -1497,6 +1776,13 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 					break;
 			}
 		}
+=======
+		ARGR(wb).mode = v4l2_ctrl_g_ctrl(pdev->auto_white_balance);
+		ARGR(wb).manual_red = ARGR(wb).read_red =
+			pwc_ioctl_g_ctrl(pdev->red_balance);
+		ARGR(wb).manual_blue = ARGR(wb).read_blue =
+			pwc_ioctl_g_ctrl(pdev->blue_balance);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ARG_OUT(wb)
 		break;
 	}
@@ -1550,17 +1836,31 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 	case VIDIOCPWCSCONTOUR:
 	{
 		ARG_DEF(int, contour)
+<<<<<<< HEAD
 
 		ARG_IN(contour)
 		ret = pwc_set_contour(pdev, ARGR(contour));
+=======
+		ARG_IN(contour)
+		ret = v4l2_ctrl_s_ctrl(pdev->autocontour, ARGR(contour) < 0);
+		if (ret == 0 && ARGR(contour) >= 0)
+			ret = pwc_ioctl_s_ctrl(pdev->contour, ARGR(contour));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 
 	case VIDIOCPWCGCONTOUR:
 	{
 		ARG_DEF(int, contour)
+<<<<<<< HEAD
 
 		ret = pwc_get_contour(pdev, ARGA(contour));
+=======
+		if (v4l2_ctrl_g_ctrl(pdev->autocontour))
+			ARGR(contour) = -1;
+		else
+			ARGR(contour) = pwc_ioctl_g_ctrl(pdev->contour);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ARG_OUT(contour)
 		break;
 	}
@@ -1568,17 +1868,26 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 	case VIDIOCPWCSBACKLIGHT:
 	{
 		ARG_DEF(int, backlight)
+<<<<<<< HEAD
 
 		ARG_IN(backlight)
 		ret = pwc_set_backlight(pdev, ARGR(backlight));
+=======
+		ARG_IN(backlight)
+		ret = v4l2_ctrl_s_ctrl(pdev->backlight, ARGR(backlight));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 
 	case VIDIOCPWCGBACKLIGHT:
 	{
 		ARG_DEF(int, backlight)
+<<<<<<< HEAD
 
 		ret = pwc_get_backlight(pdev, ARGA(backlight));
+=======
+		ARGR(backlight) = v4l2_ctrl_g_ctrl(pdev->backlight);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ARG_OUT(backlight)
 		break;
 	}
@@ -1586,17 +1895,26 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 	case VIDIOCPWCSFLICKER:
 	{
 		ARG_DEF(int, flicker)
+<<<<<<< HEAD
 
 		ARG_IN(flicker)
 		ret = pwc_set_flicker(pdev, ARGR(flicker));
+=======
+		ARG_IN(flicker)
+		ret = v4l2_ctrl_s_ctrl(pdev->flicker, ARGR(flicker));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 
 	case VIDIOCPWCGFLICKER:
 	{
 		ARG_DEF(int, flicker)
+<<<<<<< HEAD
 
 		ret = pwc_get_flicker(pdev, ARGA(flicker));
+=======
+		ARGR(flicker) = v4l2_ctrl_g_ctrl(pdev->flicker);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ARG_OUT(flicker)
 		break;
 	}
@@ -1604,17 +1922,26 @@ long pwc_ioctl(struct pwc_device *pdev, unsigned int cmd, void *arg)
 	case VIDIOCPWCSDYNNOISE:
 	{
 		ARG_DEF(int, dynnoise)
+<<<<<<< HEAD
 
 		ARG_IN(dynnoise)
 		ret = pwc_set_dynamic_noise(pdev, ARGR(dynnoise));
+=======
+		ARG_IN(dynnoise)
+		ret = v4l2_ctrl_s_ctrl(pdev->noise_reduction, ARGR(dynnoise));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 
 	case VIDIOCPWCGDYNNOISE:
 	{
 		ARG_DEF(int, dynnoise)
+<<<<<<< HEAD
 
 		ret = pwc_get_dynamic_noise(pdev, ARGA(dynnoise));
+=======
+		ARGR(dynnoise) = v4l2_ctrl_g_ctrl(pdev->noise_reduction);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ARG_OUT(dynnoise);
 		break;
 	}

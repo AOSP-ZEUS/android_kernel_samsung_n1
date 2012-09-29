@@ -455,7 +455,11 @@ __SYSCALL(203, sys_reboot, 3)
 #define __NR_quotactl 				204
 __SYSCALL(204, sys_quotactl, 4)
 #define __NR_nfsservctl 			205
+<<<<<<< HEAD
 __SYSCALL(205, sys_nfsservctl, 3)
+=======
+__SYSCALL(205, sys_ni_syscall, 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define __NR__sysctl 				206
 __SYSCALL(206, sys_sysctl, 1)
 #define __NR_bdflush 				207

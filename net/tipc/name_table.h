@@ -2,7 +2,11 @@
  * net/tipc/name_table.h: Include file for TIPC name table code
  *
  * Copyright (c) 2000-2006, Ericsson AB
+<<<<<<< HEAD
  * Copyright (c) 2004-2005, Wind River Systems
+=======
+ * Copyright (c) 2004-2005, 2010-2011, Wind River Systems
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,9 +65,15 @@ struct port_list;
  * @subscr: subscription to "node down" event (for off-node publications only)
  * @local_list: adjacent entries in list of publications made by this node
  * @pport_list: adjacent entries in list of publications made by this port
+<<<<<<< HEAD
  * @node_list: next matching name seq publication with >= node scope
  * @cluster_list: next matching name seq publication with >= cluster scope
  * @zone_list: next matching name seq publication with >= zone scope
+=======
+ * @node_list: adjacent matching name seq publications with >= node scope
+ * @cluster_list: adjacent matching name seq publications with >= cluster scope
+ * @zone_list: adjacent matching name seq publications with >= zone scope
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Note that the node list, cluster list, and zone list are circular lists.
  */
@@ -79,9 +89,15 @@ struct publication {
 	struct tipc_node_subscr subscr;
 	struct list_head local_list;
 	struct list_head pport_list;
+<<<<<<< HEAD
 	struct publication *node_list_next;
 	struct publication *cluster_list_next;
 	struct publication *zone_list_next;
+=======
+	struct list_head node_list;
+	struct list_head cluster_list;
+	struct list_head zone_list;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 

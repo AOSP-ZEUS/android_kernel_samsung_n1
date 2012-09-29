@@ -929,6 +929,10 @@ static int standard_setup_req(struct fsg_dev *fsg,
 
 		case USB_DT_DEVICE:
 			VDBG(fsg, "get device descriptor\n");
+<<<<<<< HEAD
+=======
+			device_desc.bMaxPacketSize0 = fsg->ep0->maxpacket;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			value = sizeof device_desc;
 			memcpy(req->buf, &device_desc, value);
 			break;
@@ -936,6 +940,14 @@ static int standard_setup_req(struct fsg_dev *fsg,
 			VDBG(fsg, "get device qualifier\n");
 			if (!gadget_is_dualspeed(fsg->gadget))
 				break;
+<<<<<<< HEAD
+=======
+			/*
+			 * Assume ep0 uses the same maxpacket value for both
+			 * speeds
+			 */
+			dev_qualifier.bMaxPacketSize0 = fsg->ep0->maxpacket;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			value = sizeof dev_qualifier;
 			memcpy(req->buf, &dev_qualifier, value);
 			break;
@@ -2553,7 +2565,11 @@ static int do_scsi_command(struct fsg_dev *fsg)
 		fsg->data_size_from_cmnd = 0;
 		sprintf(unknown, "Unknown x%02x", fsg->cmnd[0]);
 		if ((reply = check_command(fsg, fsg->cmnd_size,
+<<<<<<< HEAD
 				DATA_DIR_UNKNOWN, ~0, 0, unknown)) == 0) {
+=======
+				DATA_DIR_UNKNOWN, 0xff, 0, unknown)) == 0) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			fsg->curlun->sense_data = SS_INVALID_COMMAND;
 			reply = -EINVAL;
 		}
@@ -2713,7 +2729,12 @@ static int enable_endpoint(struct fsg_dev *fsg, struct usb_ep *ep,
 	int	rc;
 
 	ep->driver_data = fsg;
+<<<<<<< HEAD
 	rc = usb_ep_enable(ep, d);
+=======
+	ep->desc = d;
+	rc = usb_ep_enable(ep);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (rc)
 		ERROR(fsg, "can't enable %s, result %d\n", ep->name, rc);
 	return rc;
@@ -3416,7 +3437,10 @@ static int __init fsg_bind(struct usb_gadget *gadget)
 	}
 
 	/* Fix up the descriptors */
+<<<<<<< HEAD
 	device_desc.bMaxPacketSize0 = fsg->ep0->maxpacket;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	device_desc.idVendor = cpu_to_le16(mod_data.vendor);
 	device_desc.idProduct = cpu_to_le16(mod_data.product);
 	device_desc.bcdDevice = cpu_to_le16(mod_data.release);
@@ -3430,9 +3454,12 @@ static int __init fsg_bind(struct usb_gadget *gadget)
 	if (gadget_is_dualspeed(gadget)) {
 		fsg_hs_function[i + FSG_HS_FUNCTION_PRE_EP_ENTRIES] = NULL;
 
+<<<<<<< HEAD
 		/* Assume ep0 uses the same maxpacket value for both speeds */
 		dev_qualifier.bMaxPacketSize0 = fsg->ep0->maxpacket;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* Assume endpoint addresses are the same for both speeds */
 		fsg_hs_bulk_in_desc.bEndpointAddress =
 			fsg_fs_bulk_in_desc.bEndpointAddress;
@@ -3486,6 +3513,11 @@ static int __init fsg_bind(struct usb_gadget *gadget)
 	}
 
 	INFO(fsg, DRIVER_DESC ", version: " DRIVER_VERSION "\n");
+<<<<<<< HEAD
+=======
+	INFO(fsg, "NOTE: This driver is deprecated.  "
+			"Consider using g_mass_storage instead.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	INFO(fsg, "Number of LUNs=%d\n", fsg->nluns);
 
 	pathbuf = kmalloc(PATH_MAX, GFP_KERNEL);

@@ -13,7 +13,11 @@ obj-				:=
 # Core support for S5P64X0 system
 
 obj-$(CONFIG_ARCH_S5P64X0)	+= cpu.o init.o clock.o dma.o gpiolib.o
+<<<<<<< HEAD
 obj-$(CONFIG_ARCH_S5P64X0)	+= setup-i2c0.o
+=======
+obj-$(CONFIG_ARCH_S5P64X0)	+= setup-i2c0.o irq-eint.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_CPU_S5P6440)	+= clock-s5p6440.o
 obj-$(CONFIG_CPU_S5P6450)	+= clock-s5p6450.o
 

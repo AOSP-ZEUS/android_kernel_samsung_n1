@@ -328,6 +328,10 @@ void tcp_time_wait(struct sock *sk, int state, int timeo)
 		struct tcp_timewait_sock *tcptw = tcp_twsk((struct sock *)tw);
 		const int rto = (icsk->icsk_rto << 2) - (icsk->icsk_rto >> 1);
 
+<<<<<<< HEAD
+=======
+		tw->tw_transparent	= inet_sk(sk)->transparent;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tw->tw_rcv_wscale	= tp->rx_opt.rcv_wscale;
 		tcptw->tw_rcv_nxt	= tp->rcv_nxt;
 		tcptw->tw_snd_nxt	= tp->snd_nxt;
@@ -486,7 +490,11 @@ struct sock *tcp_create_openreq_child(struct sock *sk, struct request_sock *req,
 		 * algorithms that we must have the following bandaid to talk
 		 * efficiently to them.  -DaveM
 		 */
+<<<<<<< HEAD
 		newtp->snd_cwnd = 2;
+=======
+		newtp->snd_cwnd = TCP_INIT_CWND;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		newtp->snd_cwnd_cnt = 0;
 		newtp->bytes_acked = 0;
 
@@ -720,6 +728,13 @@ struct sock *tcp_check_req(struct sock *sk, struct sk_buff *skb,
 		NET_INC_STATS_BH(sock_net(sk), LINUX_MIB_TCPDEFERACCEPTDROP);
 		return NULL;
 	}
+<<<<<<< HEAD
+=======
+	if (tmp_opt.saw_tstamp && tmp_opt.rcv_tsecr)
+		tcp_rsk(req)->snt_synack = tmp_opt.rcv_tsecr;
+	else if (req->retrans) /* don't take RTT sample if retrans && ~TS */
+		tcp_rsk(req)->snt_synack = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* OK, ACK is valid, create big socket and
 	 * feed this segment to it. It will repeat all

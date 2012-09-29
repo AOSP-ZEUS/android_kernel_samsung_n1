@@ -783,9 +783,12 @@ struct amd8111e_priv{
 	struct net_device *next;
 	int mii;
 	struct mii_if_info mii_if;
+<<<<<<< HEAD
 #if AMD8111E_VLAN_TAG_USED
 	struct vlan_group		*vlgrp;
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char opened;
 	unsigned int drv_rx_errors;
 	struct amd8111e_coalesce_conf coal_conf;

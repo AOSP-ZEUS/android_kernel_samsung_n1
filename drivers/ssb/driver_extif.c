@@ -3,7 +3,11 @@
  * Broadcom EXTIF core driver
  *
  * Copyright 2005, Broadcom Corporation
+<<<<<<< HEAD
  * Copyright 2006, 2007, Michael Buesch <mb@bu3sch.de>
+=======
+ * Copyright 2006, 2007, Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Copyright 2006, 2007, Felix Fietkau <nbd@openwrt.org>
  * Copyright 2007, Aurelien Jarno <aurelien@aurel32.net>
  *

@@ -4,6 +4,10 @@
 #include <linux/sysdev.h>
 #include <linux/delay.h>
 #include <linux/errno.h>
+<<<<<<< HEAD
+=======
+#include <linux/i8253.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h>
 #include <linux/hpet.h>
 #include <linux/init.h>
@@ -12,8 +16,13 @@
 #include <linux/io.h>
 
 #include <asm/fixmap.h>
+<<<<<<< HEAD
 #include <asm/i8253.h>
 #include <asm/hpet.h>
+=======
+#include <asm/hpet.h>
+#include <asm/time.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define HPET_MASK			CLOCKSOURCE_MASK(32)
 
@@ -71,7 +80,11 @@ static inline void hpet_set_mapping(void)
 {
 	hpet_virt_address = ioremap_nocache(hpet_address, HPET_MMAP_SIZE);
 #ifdef CONFIG_X86_64
+<<<<<<< HEAD
 	__set_fixmap(VSYSCALL_HPET, hpet_address, PAGE_KERNEL_VSYSCALL_NOCACHE);
+=======
+	__set_fixmap(VSYSCALL_HPET, hpet_address, PAGE_KERNEL_VVAR_NOCACHE);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 }
 
@@ -738,6 +751,7 @@ static cycle_t read_hpet(struct clocksource *cs)
 	return (cycle_t)hpet_readl(HPET_COUNTER);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_X86_64
 static cycle_t __vsyscall_fn vread_hpet(void)
 {
@@ -745,6 +759,8 @@ static cycle_t __vsyscall_fn vread_hpet(void)
 }
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct clocksource clocksource_hpet = {
 	.name		= "hpet",
 	.rating		= 250,
@@ -753,7 +769,11 @@ static struct clocksource clocksource_hpet = {
 	.flags		= CLOCK_SOURCE_IS_CONTINUOUS,
 	.resume		= hpet_resume_counter,
 #ifdef CONFIG_X86_64
+<<<<<<< HEAD
 	.vread		= vread_hpet,
+=======
+	.archdata	= { .vclock_mode = VCLOCK_HPET },
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 };
 

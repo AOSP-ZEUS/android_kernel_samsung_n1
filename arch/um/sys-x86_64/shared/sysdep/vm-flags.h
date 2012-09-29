@@ -7,6 +7,7 @@
 #ifndef __VM_FLAGS_X86_64_H
 #define __VM_FLAGS_X86_64_H
 
+<<<<<<< HEAD
 #define __VM_DATA_DEFAULT_FLAGS	(VM_READ | VM_WRITE | VM_EXEC | \
 				 VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC)
 #define __VM_STACK_FLAGS 	(VM_GROWSDOWN | VM_READ | VM_WRITE | \
@@ -29,5 +30,11 @@ extern unsigned long vm_force_exec32;
 #define VM_DATA_DEFAULT_FLAGS vm_data_default_flags
 
 #define VM_STACK_DEFAULT_FLAGS vm_stack_flags
+=======
+#define VM_DATA_DEFAULT_FLAGS (VM_READ | VM_WRITE | VM_EXEC | \
+	VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC)
+#define VM_STACK_DEFAULT_FLAGS (VM_GROWSDOWN | VM_READ | VM_WRITE | \
+	VM_EXEC | VM_MAYREAD | VM_MAYWRITE | VM_MAYEXEC)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif

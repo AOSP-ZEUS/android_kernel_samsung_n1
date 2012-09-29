@@ -44,6 +44,7 @@ struct bus_type iio_bus_type = {
 EXPORT_SYMBOL(iio_bus_type);
 
 static const char * const iio_chan_type_name_spec_shared[] = {
+<<<<<<< HEAD
 	[IIO_TIMESTAMP] = "timestamp",
 	[IIO_ACCEL] = "accel",
 	[IIO_IN] = "in",
@@ -58,6 +59,24 @@ static const char * const iio_chan_type_name_spec_shared[] = {
 	[IIO_INTENSITY] = "intensity",
 	[IIO_LIGHT] = "illuminance",
 	[IIO_ANGL] = "angl",
+=======
+	[IIO_IN] = "in",
+	[IIO_OUT] = "out",
+	[IIO_CURRENT] = "current",
+	[IIO_POWER] = "power",
+	[IIO_ACCEL] = "accel",
+	[IIO_IN_DIFF] = "in-in",
+	[IIO_GYRO] = "gyro",
+	[IIO_MAGN] = "magn",
+	[IIO_LIGHT] = "illuminance",
+	[IIO_INTENSITY] = "intensity",
+	[IIO_PROXIMITY] = "proximity",
+	[IIO_TEMP] = "temp",
+	[IIO_INCLI] = "incli",
+	[IIO_ROT] = "rot",
+	[IIO_ANGL] = "angl",
+	[IIO_TIMESTAMP] = "timestamp",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const char * const iio_chan_type_name_spec_complex[] = {
@@ -396,6 +415,14 @@ static ssize_t iio_read_channel_info(struct device *dev,
 			return sprintf(buf, "-%d.%06u\n", val, -val2);
 		else
 			return sprintf(buf, "%d.%06u\n", val, val2);
+<<<<<<< HEAD
+=======
+	} else if (ret == IIO_VAL_INT_PLUS_NANO) {
+		if (val2 < 0)
+			return sprintf(buf, "-%d.%09u\n", val, -val2);
+		else
+			return sprintf(buf, "%d.%09u\n", val, val2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	} else
 		return 0;
 }
@@ -407,25 +434,57 @@ static ssize_t iio_write_channel_info(struct device *dev,
 {
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
 	struct iio_dev_attr *this_attr = to_iio_dev_attr(attr);
+<<<<<<< HEAD
 	int ret, integer = 0, micro = 0, micro_mult = 100000;
+=======
+	int ret, integer = 0, fract = 0, fract_mult = 100000;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bool integer_part = true, negative = false;
 
 	/* Assumes decimal - precision based on number of digits */
 	if (!indio_dev->info->write_raw)
 		return -EINVAL;
+<<<<<<< HEAD
+=======
+
+	if (indio_dev->info->write_raw_get_fmt)
+		switch (indio_dev->info->write_raw_get_fmt(indio_dev,
+			this_attr->c, this_attr->address)) {
+		case IIO_VAL_INT_PLUS_MICRO:
+			fract_mult = 100000;
+			break;
+		case IIO_VAL_INT_PLUS_NANO:
+			fract_mult = 100000000;
+			break;
+		default:
+			return -EINVAL;
+		}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (buf[0] == '-') {
 		negative = true;
 		buf++;
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	while (*buf) {
 		if ('0' <= *buf && *buf <= '9') {
 			if (integer_part)
 				integer = integer*10 + *buf - '0';
 			else {
+<<<<<<< HEAD
 				micro += micro_mult*(*buf - '0');
 				if (micro_mult == 1)
 					break;
 				micro_mult /= 10;
+=======
+				fract += fract_mult*(*buf - '0');
+				if (fract_mult == 1)
+					break;
+				fract_mult /= 10;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 		} else if (*buf == '\n') {
 			if (*(buf + 1) == '\0')
@@ -443,11 +502,19 @@ static ssize_t iio_write_channel_info(struct device *dev,
 		if (integer)
 			integer = -integer;
 		else
+<<<<<<< HEAD
 			micro = -micro;
 	}
 
 	ret = indio_dev->info->write_raw(indio_dev, this_attr->c,
 					 integer, micro, this_attr->address);
+=======
+			fract = -fract;
+	}
+
+	ret = indio_dev->info->write_raw(indio_dev, this_attr->c,
+					 integer, fract, this_attr->address);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		return ret;
 
@@ -655,7 +722,12 @@ static int iio_device_add_channel_sysfs(struct iio_dev *dev_info,
 	else
 		ret = __iio_add_chan_devattr("raw", NULL, chan,
 					     &iio_read_channel_info,
+<<<<<<< HEAD
 					     NULL,
+=======
+					     (chan->type == IIO_OUT ?
+					     &iio_write_channel_info : NULL),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					     0,
 					     0,
 					     &dev_info->dev,

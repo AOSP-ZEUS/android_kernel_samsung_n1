@@ -185,7 +185,11 @@ EXPORT_SYMBOL(kernel_thread);
 void flush_thread(void)
 {
 	unsigned long zero = 0;
+<<<<<<< HEAD
 	set_fs(USER_DS);
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	current->thread.fs = __USER_DS;
 	if (!FPU_IS_EMU)
 		asm volatile (".chip 68k/68881\n\t"

@@ -132,11 +132,19 @@ exit:
 }
 
 
+<<<<<<< HEAD
 int coda_permission(struct inode *inode, int mask, unsigned int flags)
 {
 	int error;
 
 	if (flags & IPERM_FLAG_RCU)
+=======
+int coda_permission(struct inode *inode, int mask)
+{
+	int error;
+
+	if (mask & MAY_NOT_BLOCK)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ECHILD;
 
 	mask &= MAY_READ | MAY_WRITE | MAY_EXEC;
@@ -449,8 +457,12 @@ static int coda_venus_readdir(struct file *coda_file, void *buf,
 	struct file *host_file;
 	struct dentry *de;
 	struct venus_dirent *vdir;
+<<<<<<< HEAD
 	unsigned long vdir_size =
 	    (unsigned long)(&((struct venus_dirent *)0)->d_name);
+=======
+	unsigned long vdir_size = offsetof(struct venus_dirent, d_name);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned int type;
 	struct qstr name;
 	ino_t ino;
@@ -474,7 +486,11 @@ static int coda_venus_readdir(struct file *coda_file, void *buf,
 		coda_file->f_pos++;
 	}
 	if (coda_file->f_pos == 1) {
+<<<<<<< HEAD
 		ret = filldir(buf, "..", 2, 1, de->d_parent->d_inode->i_ino, DT_DIR);
+=======
+		ret = filldir(buf, "..", 2, 1, parent_ino(de), DT_DIR);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (ret < 0)
 			goto out;
 		result++;

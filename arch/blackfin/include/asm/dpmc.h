@@ -117,7 +117,10 @@
 #ifndef __ASSEMBLY__
 
 void sleep_mode(u32 sic_iwr0, u32 sic_iwr1, u32 sic_iwr2);
+<<<<<<< HEAD
 void hibernate_mode(u32 sic_iwr0, u32 sic_iwr1, u32 sic_iwr2);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void sleep_deeper(u32 sic_iwr0, u32 sic_iwr1, u32 sic_iwr2);
 void do_hibernate(int wakeup);
 void set_dram_srfs(void);
@@ -134,6 +137,7 @@ struct bfin_dpmc_platform_data {
 	unsigned short vr_settling_time; /* in us */
 };
 
+<<<<<<< HEAD
 #else
 
 #define PM_PUSH(x) \
@@ -160,6 +164,8 @@ struct bfin_dpmc_platform_data {
 	R0 = [SP++];\
 	w[P0 + (x - PLL_CTL)] = R0;\
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 #endif	/*_BLACKFIN_DPMC_H_*/

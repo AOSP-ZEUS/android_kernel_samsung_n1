@@ -443,7 +443,11 @@ struct clk *clk_get(struct device *dev, const char *id)
 		return &vbus_clk;
 	if (!strcmp(id, "cpu"))
 		return &cpu_clk;
+<<<<<<< HEAD
 	if (!strcmp(id, "dsp"));
+=======
+	if (!strcmp(id, "dsp"))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return &dsp_clk;
 	if (!strcmp(id, "vbus"))
 		return &vbus_clk;

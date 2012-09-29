@@ -169,6 +169,7 @@ int ethtool_op_set_flags(struct net_device *dev, u32 data, u32 supported)
 }
 EXPORT_SYMBOL(ethtool_op_set_flags);
 
+<<<<<<< HEAD
 void ethtool_ntuple_flush(struct net_device *dev)
 {
 	struct ethtool_rx_ntuple_flow_spec_container *fsc, *f;
@@ -181,6 +182,8 @@ void ethtool_ntuple_flush(struct net_device *dev)
 }
 EXPORT_SYMBOL(ethtool_ntuple_flush);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Handlers for each ethtool command */
 
 #define ETHTOOL_DEV_FEATURE_WORDS	1
@@ -865,6 +868,7 @@ out:
 	return ret;
 }
 
+<<<<<<< HEAD
 static void __rx_ntuple_filter_add(struct ethtool_rx_ntuple_list *list,
 			struct ethtool_rx_ntuple_flow_spec *spec,
 			struct ethtool_rx_ntuple_flow_spec_container *fsc)
@@ -893,6 +897,8 @@ static void __rx_ntuple_filter_add(struct ethtool_rx_ntuple_list *list,
 	list->count++;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * ethtool does not (or did not) set masks for flow parameters that are
  * not specified, so if both value and mask are 0 then this must be
@@ -930,8 +936,11 @@ static noinline_for_stack int ethtool_set_rx_ntuple(struct net_device *dev,
 {
 	struct ethtool_rx_ntuple cmd;
 	const struct ethtool_ops *ops = dev->ethtool_ops;
+<<<<<<< HEAD
 	struct ethtool_rx_ntuple_flow_spec_container *fsc = NULL;
 	int ret;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!ops->set_rx_ntuple)
 		return -EOPNOTSUPP;
@@ -944,6 +953,7 @@ static noinline_for_stack int ethtool_set_rx_ntuple(struct net_device *dev,
 
 	rx_ntuple_fix_masks(&cmd.fs);
 
+<<<<<<< HEAD
 	/*
 	 * Cache filter in dev struct for GET operation only if
 	 * the underlying driver doesn't have its own GET operation, and
@@ -1207,6 +1217,9 @@ copy:
 out:
 	kfree(data);
 	return ret;
+=======
+	return ops->set_rx_ntuple(dev, &cmd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int ethtool_get_regs(struct net_device *dev, char __user *useraddr)
@@ -2101,9 +2114,12 @@ int dev_ethtool(struct net *net, struct ifreq *ifr)
 	case ETHTOOL_SRXNTUPLE:
 		rc = ethtool_set_rx_ntuple(dev, useraddr);
 		break;
+<<<<<<< HEAD
 	case ETHTOOL_GRXNTUPLE:
 		rc = ethtool_get_rx_ntuple(dev, useraddr);
 		break;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case ETHTOOL_GSSET_INFO:
 		rc = ethtool_get_sset_info(dev, useraddr);
 		break;

@@ -23,7 +23,10 @@
 #define DSS_SUBSYS_NAME "DPI"
 
 #include <linux/kernel.h>
+<<<<<<< HEAD
 #include <linux/clk.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/delay.h>
 #include <linux/err.h>
 #include <linux/errno.h>
@@ -130,8 +133,11 @@ static int dpi_set_mode(struct omap_dss_device *dssdev)
 	bool is_tft;
 	int r = 0;
 
+<<<<<<< HEAD
 	dss_clk_enable(DSS_CLK_ICK | DSS_CLK_FCK);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dispc_set_pol_freq(dssdev->manager->id, dssdev->panel.config,
 			dssdev->panel.acbi, dssdev->panel.acb);
 
@@ -144,7 +150,11 @@ static int dpi_set_mode(struct omap_dss_device *dssdev)
 		r = dpi_set_dispc_clk(dssdev, is_tft, t->pixel_clock * 1000,
 				&fck, &lck_div, &pck_div);
 	if (r)
+<<<<<<< HEAD
 		goto err0;
+=======
+		return r;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pck = fck / lck_div / pck_div / 1000;
 
@@ -158,12 +168,19 @@ static int dpi_set_mode(struct omap_dss_device *dssdev)
 
 	dispc_set_lcd_timings(dssdev->manager->id, t);
 
+<<<<<<< HEAD
 err0:
 	dss_clk_disable(DSS_CLK_ICK | DSS_CLK_FCK);
 	return r;
 }
 
 static int dpi_basic_init(struct omap_dss_device *dssdev)
+=======
+	return 0;
+}
+
+static void dpi_basic_init(struct omap_dss_device *dssdev)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	bool is_tft;
 
@@ -175,8 +192,11 @@ static int dpi_basic_init(struct omap_dss_device *dssdev)
 			OMAP_DSS_LCD_DISPLAY_TFT : OMAP_DSS_LCD_DISPLAY_STN);
 	dispc_set_tft_data_lines(dssdev->manager->id,
 			dssdev->phy.dpi.data_lines);
+<<<<<<< HEAD
 
 	return 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int omapdss_dpi_display_enable(struct omap_dss_device *dssdev)
@@ -186,12 +206,17 @@ int omapdss_dpi_display_enable(struct omap_dss_device *dssdev)
 	r = omap_dss_start_device(dssdev);
 	if (r) {
 		DSSERR("failed to start device\n");
+<<<<<<< HEAD
 		goto err0;
+=======
+		goto err_start_dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (cpu_is_omap34xx()) {
 		r = regulator_enable(dpi.vdds_dsi_reg);
 		if (r)
+<<<<<<< HEAD
 			goto err1;
 	}
 
@@ -206,11 +231,38 @@ int omapdss_dpi_display_enable(struct omap_dss_device *dssdev)
 		r = dsi_pll_init(dpi.dsidev, 0, 1);
 		if (r)
 			goto err3;
+=======
+			goto err_reg_enable;
+	}
+
+	r = dss_runtime_get();
+	if (r)
+		goto err_get_dss;
+
+	r = dispc_runtime_get();
+	if (r)
+		goto err_get_dispc;
+
+	dpi_basic_init(dssdev);
+
+	if (dpi_use_dsi_pll(dssdev)) {
+		r = dsi_runtime_get(dpi.dsidev);
+		if (r)
+			goto err_get_dsi;
+
+		r = dsi_pll_init(dpi.dsidev, 0, 1);
+		if (r)
+			goto err_dsi_pll_init;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	r = dpi_set_mode(dssdev);
 	if (r)
+<<<<<<< HEAD
 		goto err4;
+=======
+		goto err_set_mode;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mdelay(2);
 
@@ -218,6 +270,7 @@ int omapdss_dpi_display_enable(struct omap_dss_device *dssdev)
 
 	return 0;
 
+<<<<<<< HEAD
 err4:
 	if (dpi_use_dsi_pll(dssdev))
 		dsi_pll_uninit(dpi.dsidev, true);
@@ -231,6 +284,24 @@ err2:
 err1:
 	omap_dss_stop_device(dssdev);
 err0:
+=======
+err_set_mode:
+	if (dpi_use_dsi_pll(dssdev))
+		dsi_pll_uninit(dpi.dsidev, true);
+err_dsi_pll_init:
+	if (dpi_use_dsi_pll(dssdev))
+		dsi_runtime_put(dpi.dsidev);
+err_get_dsi:
+	dispc_runtime_put();
+err_get_dispc:
+	dss_runtime_put();
+err_get_dss:
+	if (cpu_is_omap34xx())
+		regulator_disable(dpi.vdds_dsi_reg);
+err_reg_enable:
+	omap_dss_stop_device(dssdev);
+err_start_dev:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return r;
 }
 EXPORT_SYMBOL(omapdss_dpi_display_enable);
@@ -242,10 +313,18 @@ void omapdss_dpi_display_disable(struct omap_dss_device *dssdev)
 	if (dpi_use_dsi_pll(dssdev)) {
 		dss_select_dispc_clk_source(OMAP_DSS_CLK_SRC_FCK);
 		dsi_pll_uninit(dpi.dsidev, true);
+<<<<<<< HEAD
 		dss_clk_disable(DSS_CLK_SYSCK);
 	}
 
 	dss_clk_disable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+		dsi_runtime_put(dpi.dsidev);
+	}
+
+	dispc_runtime_put();
+	dss_runtime_put();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (cpu_is_omap34xx())
 		regulator_disable(dpi.vdds_dsi_reg);
@@ -257,11 +336,34 @@ EXPORT_SYMBOL(omapdss_dpi_display_disable);
 void dpi_set_timings(struct omap_dss_device *dssdev,
 			struct omap_video_timings *timings)
 {
+<<<<<<< HEAD
 	DSSDBG("dpi_set_timings\n");
 	dssdev->panel.timings = *timings;
 	if (dssdev->state == OMAP_DSS_DISPLAY_ACTIVE) {
 		dpi_set_mode(dssdev);
 		dispc_go(dssdev->manager->id);
+=======
+	int r;
+
+	DSSDBG("dpi_set_timings\n");
+	dssdev->panel.timings = *timings;
+	if (dssdev->state == OMAP_DSS_DISPLAY_ACTIVE) {
+		r = dss_runtime_get();
+		if (r)
+			return;
+
+		r = dispc_runtime_get();
+		if (r) {
+			dss_runtime_put();
+			return;
+		}
+
+		dpi_set_mode(dssdev);
+		dispc_go(dssdev->manager->id);
+
+		dispc_runtime_put();
+		dss_runtime_put();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 EXPORT_SYMBOL(dpi_set_timings);

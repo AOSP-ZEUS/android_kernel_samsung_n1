@@ -193,6 +193,10 @@ struct mlx4_ib_dev {
 	struct mutex		cap_mask_mutex;
 	bool			ib_active;
 	struct mlx4_ib_iboe	iboe;
+<<<<<<< HEAD
+=======
+	int			counters[MLX4_MAX_PORTS];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static inline struct mlx4_ib_dev *to_mdev(struct ib_device *ibdev)

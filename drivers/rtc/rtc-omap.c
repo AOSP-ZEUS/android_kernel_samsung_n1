@@ -368,7 +368,11 @@ static int __init omap_rtc_probe(struct platform_device *pdev)
 		pr_info("%s: already running\n", pdev->name);
 
 	/* force to 24 hour mode */
+<<<<<<< HEAD
 	new_ctrl = reg & ~(OMAP_RTC_CTRL_SPLIT|OMAP_RTC_CTRL_AUTO_COMP);
+=======
+	new_ctrl = reg & (OMAP_RTC_CTRL_SPLIT|OMAP_RTC_CTRL_AUTO_COMP);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	new_ctrl |= OMAP_RTC_CTRL_STOP;
 
 	/* BOARD-SPECIFIC CUSTOMIZATION CAN GO HERE:

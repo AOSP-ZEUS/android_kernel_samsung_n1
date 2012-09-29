@@ -205,6 +205,11 @@ struct drm_display_info {
 	enum subpixel_order subpixel_order;
 	u32 color_formats;
 
+<<<<<<< HEAD
+=======
+	u8 cea_rev;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	char *raw_edid; /* if any */
 };
 

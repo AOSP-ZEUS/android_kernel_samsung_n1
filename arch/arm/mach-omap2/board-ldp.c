@@ -199,22 +199,30 @@ static void __init omap_ldp_init_early(void)
 	omap2_init_common_devices(NULL, NULL);
 }
 
+<<<<<<< HEAD
 static struct twl4030_usb_data ldp_usb_data = {
 	.usb_mode	= T2_USB_MODE_ULPI,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct twl4030_gpio_platform_data ldp_gpio_data = {
 	.gpio_base	= OMAP_MAX_GPIO_LINES,
 	.irq_base	= TWL4030_GPIO_IRQ_BASE,
 	.irq_end	= TWL4030_GPIO_IRQ_END,
 };
 
+<<<<<<< HEAD
 static struct twl4030_madc_platform_data ldp_madc_data = {
 	.irq_line	= 1,
 };
 
 static struct regulator_consumer_supply ldp_vmmc1_supply = {
 	.supply			= "vmmc",
+=======
+static struct regulator_consumer_supply ldp_vmmc1_supply[] = {
+	REGULATOR_SUPPLY("vmmc", "omap_hsmmc.0"),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* VMMC1 for MMC1 pins CMD, CLK, DAT0..DAT3 (20 mA, plus card == max 220 mA) */
@@ -228,8 +236,13 @@ static struct regulator_init_data ldp_vmmc1 = {
 					| REGULATOR_CHANGE_MODE
 					| REGULATOR_CHANGE_STATUS,
 	},
+<<<<<<< HEAD
 	.num_consumer_supplies	= 1,
 	.consumer_supplies	= &ldp_vmmc1_supply,
+=======
+	.num_consumer_supplies	= ARRAY_SIZE(ldp_vmmc1_supply),
+	.consumer_supplies	= ldp_vmmc1_supply,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* ads7846 on SPI */
@@ -253,12 +266,16 @@ static struct regulator_init_data ldp_vaux1 = {
 };
 
 static struct twl4030_platform_data ldp_twldata = {
+<<<<<<< HEAD
 	.irq_base	= TWL4030_IRQ_BASE,
 	.irq_end	= TWL4030_IRQ_END,
 
 	/* platform_data for children goes here */
 	.madc		= &ldp_madc_data,
 	.usb		= &ldp_usb_data,
+=======
+	/* platform_data for children goes here */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.vmmc1		= &ldp_vmmc1,
 	.vaux1		= &ldp_vaux1,
 	.gpio		= &ldp_gpio_data,
@@ -267,6 +284,11 @@ static struct twl4030_platform_data ldp_twldata = {
 
 static int __init omap_i2c_init(void)
 {
+<<<<<<< HEAD
+=======
+	omap3_pmic_get_config(&ldp_twldata,
+			  TWL_COMMON_PDATA_USB | TWL_COMMON_PDATA_MADC, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	omap3_pmic_init("twl4030", &ldp_twldata);
 	omap_register_i2c_bus(2, 400, NULL, 0);
 	omap_register_i2c_bus(3, 400, NULL, 0);
@@ -341,8 +363,11 @@ static void __init omap_ldp_init(void)
 		ARRAY_SIZE(ldp_nand_partitions), ZOOM_NAND_CS, 0);
 
 	omap2_hsmmc_init(mmc);
+<<<<<<< HEAD
 	/* link regulators to MMC adapters */
 	ldp_vmmc1_supply.dev = mmc[0].dev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 MACHINE_START(OMAP_LDP, "OMAP LDP board")
@@ -350,7 +375,13 @@ MACHINE_START(OMAP_LDP, "OMAP LDP board")
 	.reserve	= omap_reserve,
 	.map_io		= omap3_map_io,
 	.init_early	= omap_ldp_init_early,
+<<<<<<< HEAD
 	.init_irq	= omap_init_irq,
 	.init_machine	= omap_ldp_init,
 	.timer		= &omap_timer,
+=======
+	.init_irq	= omap3_init_irq,
+	.init_machine	= omap_ldp_init,
+	.timer		= &omap3_timer,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MACHINE_END

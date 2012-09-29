@@ -181,6 +181,10 @@ static int pci_bios_read(unsigned int seg, unsigned int bus,
 	unsigned long flags;
 	unsigned long bx = (bus << 8) | devfn;
 
+<<<<<<< HEAD
+=======
+	WARN_ON(seg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!value || (bus > 255) || (devfn > 255) || (reg > 255))
 		return -EINVAL;
 
@@ -247,6 +251,10 @@ static int pci_bios_write(unsigned int seg, unsigned int bus,
 	unsigned long flags;
 	unsigned long bx = (bus << 8) | devfn;
 
+<<<<<<< HEAD
+=======
+	WARN_ON(seg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if ((bus > 255) || (devfn > 255) || (reg > 255)) 
 		return -EINVAL;
 

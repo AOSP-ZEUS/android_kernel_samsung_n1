@@ -99,6 +99,7 @@ static int c2_query_port(struct ib_device *ibdev,
 	return 0;
 }
 
+<<<<<<< HEAD
 static int c2_modify_port(struct ib_device *ibdev,
 			  u8 port, int port_modify_mask,
 			  struct ib_port_modify *props)
@@ -107,6 +108,8 @@ static int c2_modify_port(struct ib_device *ibdev,
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int c2_query_pkey(struct ib_device *ibdev,
 			 u8 port, u16 index, u16 * pkey)
 {
@@ -817,7 +820,10 @@ int c2_register_device(struct c2_dev *dev)
 	dev->ibdev.dma_device = &dev->pcidev->dev;
 	dev->ibdev.query_device = c2_query_device;
 	dev->ibdev.query_port = c2_query_port;
+<<<<<<< HEAD
 	dev->ibdev.modify_port = c2_modify_port;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev->ibdev.query_pkey = c2_query_pkey;
 	dev->ibdev.query_gid = c2_query_gid;
 	dev->ibdev.alloc_ucontext = c2_alloc_ucontext;

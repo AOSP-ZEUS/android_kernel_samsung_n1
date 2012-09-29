@@ -247,6 +247,7 @@ static const struct dmi_system_id __devinitconst pciprobe_dmi_table[] = {
 	},
 #endif		/* __i386__ */
 	{
+<<<<<<< HEAD
 		.callback = find_sort_method,
 		.ident = "Dell System",
 		.matches = {
@@ -254,6 +255,8 @@ static const struct dmi_system_id __devinitconst pciprobe_dmi_table[] = {
 		},
 	},
 	{
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.callback = set_bf_sort,
 		.ident = "Dell PowerEdge 1950",
 		.matches = {
@@ -294,6 +297,16 @@ static const struct dmi_system_id __devinitconst pciprobe_dmi_table[] = {
 		},
 	},
 	{
+<<<<<<< HEAD
+=======
+		.callback = find_sort_method,
+		.ident = "Dell System",
+		.matches = {
+			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc"),
+		},
+	},
+	{
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.callback = set_bf_sort,
 		.ident = "HP ProLiant BL20p G3",
 		.matches = {

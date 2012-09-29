@@ -452,6 +452,7 @@ out:
  */
 int __cpuinit start_secondary(void *cpuvoid)
 {
+<<<<<<< HEAD
 	/* Setup the cpu */
 	cpu_init();
 	preempt_disable();
@@ -469,6 +470,23 @@ int __cpuinit start_secondary(void *cpuvoid)
 	set_cpu_online(smp_processor_id(), true);
 	ipi_call_unlock();
 	/* Switch on interrupts */
+=======
+	cpu_init();
+	preempt_disable();
+	init_cpu_timer();
+	init_cpu_vtimer();
+	pfault_init();
+
+	notify_cpu_starting(smp_processor_id());
+	ipi_call_lock();
+	set_cpu_online(smp_processor_id(), true);
+	ipi_call_unlock();
+	__ctl_clear_bit(0, 28); /* Disable lowcore protection */
+	S390_lowcore.restart_psw.mask = PSW_BASE_BITS | PSW_DEFAULT_KEY;
+	S390_lowcore.restart_psw.addr =
+		PSW_ADDR_AMODE | (unsigned long) psw_restart_int_handler;
+	__ctl_set_bit(0, 28); /* Enable lowcore protection */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	local_irq_enable();
 	/* cpu_idle will call schedule for us */
 	cpu_idle();
@@ -507,7 +525,15 @@ static int __cpuinit smp_alloc_lowcore(int cpu)
 	memset((char *)lowcore + 512, 0, sizeof(*lowcore) - 512);
 	lowcore->async_stack = async_stack + ASYNC_SIZE;
 	lowcore->panic_stack = panic_stack + PAGE_SIZE;
+<<<<<<< HEAD
 
+=======
+	lowcore->restart_psw.mask = PSW_BASE_BITS | PSW_DEFAULT_KEY;
+	lowcore->restart_psw.addr =
+		PSW_ADDR_AMODE | (unsigned long) restart_int_handler;
+	if (user_mode != HOME_SPACE_MODE)
+		lowcore->restart_psw.mask |= PSW_ASC_HOME;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef CONFIG_64BIT
 	if (MACHINE_HAS_IEEE) {
 		unsigned long save_area;
@@ -654,7 +680,12 @@ int __cpu_disable(void)
 	/* disable all external interrupts */
 	cr_parms.orvals[0] = 0;
 	cr_parms.andvals[0] = ~(1 << 15 | 1 << 14 | 1 << 13 | 1 << 11 |
+<<<<<<< HEAD
 				1 << 10 | 1 <<	9 | 1 <<  6 | 1 <<  4);
+=======
+				1 << 10 | 1 <<	9 | 1 <<  6 | 1 <<  5 |
+				1 <<  4);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* disable all I/O interrupts */
 	cr_parms.orvals[6] = 0;
 	cr_parms.andvals[6] = ~(1 << 31 | 1 << 30 | 1 << 29 | 1 << 28 |

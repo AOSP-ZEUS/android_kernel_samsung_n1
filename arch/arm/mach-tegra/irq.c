@@ -4,7 +4,11 @@
  * Author:
  *	Colin Cross <ccross@android.com>
  *
+<<<<<<< HEAD
  * Copyright (C) 2010, NVIDIA Corporation
+=======
+ * Copyright (C) 2010-2012, NVIDIA Corporation
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * This software is licensed under the terms of the GNU General Public
  * License version 2, as published by the Free Software Foundation, and
@@ -21,12 +25,24 @@
 #include <linux/interrupt.h>
 #include <linux/irq.h>
 #include <linux/io.h>
+<<<<<<< HEAD
+=======
+#include <linux/syscore_ops.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/hardware/gic.h>
 
 #include <mach/iomap.h>
+<<<<<<< HEAD
 
 #include "board.h"
+=======
+#include <mach/legacy_irq.h>
+
+#include "board.h"
+#include "gic.h"
+#include "pm-irq.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define INT_SYS_NR	(INT_GPIO_BASE - INT_PRI_BASE)
 #define INT_SYS_SZ	(INT_SEC_BASE - INT_PRI_BASE)
@@ -47,7 +63,11 @@
 #define ICTLR_COP_IER_CLR	0x38
 #define ICTLR_COP_IEP_CLASS	0x3c
 
+<<<<<<< HEAD
 #define NUM_ICTLRS 4
+=======
+#define NUM_ICTLRS (INT_MAIN_NR/32)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define FIRST_LEGACY_IRQ 32
 
 static void __iomem *ictlr_reg_base[] = {
@@ -55,8 +75,22 @@ static void __iomem *ictlr_reg_base[] = {
 	IO_ADDRESS(TEGRA_SECONDARY_ICTLR_BASE),
 	IO_ADDRESS(TEGRA_TERTIARY_ICTLR_BASE),
 	IO_ADDRESS(TEGRA_QUATERNARY_ICTLR_BASE),
+<<<<<<< HEAD
 };
 
+=======
+#if (NUM_ICTLRS > 4)
+	IO_ADDRESS(TEGRA_QUINARY_ICTLR_BASE),
+#endif
+};
+
+#ifdef CONFIG_PM_SLEEP
+static u32 cop_ier[NUM_ICTLRS];
+static u32 cpu_ier[NUM_ICTLRS];
+static u32 cpu_iep[NUM_ICTLRS];
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline void tegra_irq_write_mask(unsigned int irq, unsigned long reg)
 {
 	void __iomem *base;
@@ -113,6 +147,73 @@ static int tegra_retrigger(struct irq_data *d)
 	return 1;
 }
 
+<<<<<<< HEAD
+=======
+static int tegra_set_type(struct irq_data *d, unsigned int flow_type)
+{
+	return tegra_pm_irq_set_wake_type(d->irq, flow_type);
+}
+
+
+#ifdef CONFIG_PM_SLEEP
+static int tegra_set_wake(struct irq_data *d, unsigned int enable)
+{
+	return tegra_pm_irq_set_wake(d->irq, enable);
+}
+
+static int tegra_legacy_irq_suspend(void)
+{
+	unsigned long flags;
+	int i;
+
+	local_irq_save(flags);
+	for (i = 0; i < NUM_ICTLRS; i++) {
+		void __iomem *ictlr = ictlr_reg_base[i];
+		cpu_ier[i] = readl(ictlr + ICTLR_CPU_IER);
+		cpu_iep[i] = readl(ictlr + ICTLR_CPU_IEP_CLASS);
+		cop_ier[i] = readl(ictlr + ICTLR_COP_IER);
+		writel(~0, ictlr + ICTLR_COP_IER_CLR);
+	}
+	local_irq_restore(flags);
+
+	return 0;
+}
+
+static void tegra_legacy_irq_resume(void)
+{
+	unsigned long flags;
+	int i;
+
+	local_irq_save(flags);
+	for (i = 0; i < NUM_ICTLRS; i++) {
+		void __iomem *ictlr = ictlr_reg_base[i];
+		writel(cpu_iep[i], ictlr + ICTLR_CPU_IEP_CLASS);
+		writel(~0ul, ictlr + ICTLR_CPU_IER_CLR);
+		writel(cpu_ier[i], ictlr + ICTLR_CPU_IER_SET);
+		writel(0, ictlr + ICTLR_COP_IEP_CLASS);
+		writel(~0ul, ictlr + ICTLR_COP_IER_CLR);
+		writel(cop_ier[i], ictlr + ICTLR_COP_IER_SET);
+	}
+	local_irq_restore(flags);
+}
+
+static struct syscore_ops tegra_legacy_irq_syscore_ops = {
+	.suspend = tegra_legacy_irq_suspend,
+	.resume = tegra_legacy_irq_resume,
+};
+
+static int tegra_legacy_irq_syscore_init(void)
+{
+	register_syscore_ops(&tegra_legacy_irq_syscore_ops);
+
+	return 0;
+}
+subsys_initcall(tegra_legacy_irq_syscore_init);
+#else
+#define tegra_set_wake NULL
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init tegra_init_irq(void)
 {
 	int i;
@@ -121,6 +222,10 @@ void __init tegra_init_irq(void)
 		void __iomem *ictlr = ictlr_reg_base[i];
 		writel(~0, ictlr + ICTLR_CPU_IER_CLR);
 		writel(0, ictlr + ICTLR_CPU_IEP_CLASS);
+<<<<<<< HEAD
+=======
+		writel(~0, ictlr + ICTLR_CPU_IEP_FIR_CLR);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	gic_arch_extn.irq_ack = tegra_ack;
@@ -128,7 +233,26 @@ void __init tegra_init_irq(void)
 	gic_arch_extn.irq_mask = tegra_mask;
 	gic_arch_extn.irq_unmask = tegra_unmask;
 	gic_arch_extn.irq_retrigger = tegra_retrigger;
+<<<<<<< HEAD
 
 	gic_init(0, 29, IO_ADDRESS(TEGRA_ARM_INT_DIST_BASE),
 		 IO_ADDRESS(TEGRA_ARM_PERIF_BASE + 0x100));
+=======
+	gic_arch_extn.irq_set_type = tegra_set_type;
+	gic_arch_extn.irq_set_wake = tegra_set_wake;
+	gic_arch_extn.flags = IRQCHIP_MASK_ON_SUSPEND;
+
+	tegra_gic_init();
+}
+
+void tegra_init_legacy_irq_cop(void)
+{
+	int i;
+
+	for (i = 0; i < NUM_ICTLRS; i++) {
+		void __iomem *ictlr = ictlr_reg_base[i];
+		writel(~0, ictlr + ICTLR_COP_IER_CLR);
+		writel(0, ictlr + ICTLR_COP_IEP_CLASS);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

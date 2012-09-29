@@ -13,11 +13,19 @@
  */
 
 #include <linux/bug.h>
+<<<<<<< HEAD
+=======
+#include <linux/err.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/i2c.h>
 #include <linux/kernel.h>
 #include <linux/mfd/core.h>
 #include <linux/mfd/wm8400-private.h>
 #include <linux/mfd/wm8400-audio.h>
+<<<<<<< HEAD
+=======
+#include <linux/regmap.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/slab.h>
 
 static struct {
@@ -123,6 +131,7 @@ static int wm8400_read(struct wm8400 *wm8400, u8 reg, int num_regs, u16 *dest)
 	/* If there are any volatile reads then read back the entire block */
 	for (i = reg; i < reg + num_regs; i++)
 		if (reg_data[i].vol) {
+<<<<<<< HEAD
 			ret = wm8400->read_dev(wm8400->io_data, reg,
 					       num_regs, dest);
 			if (ret != 0)
@@ -131,6 +140,11 @@ static int wm8400_read(struct wm8400 *wm8400, u8 reg, int num_regs, u16 *dest)
 				dest[i] = be16_to_cpu(dest[i]);
 
 			return 0;
+=======
+			ret = regmap_bulk_read(wm8400->regmap, reg, dest,
+					       num_regs);
+			return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 	/* Otherwise use the cache */
@@ -149,6 +163,7 @@ static int wm8400_write(struct wm8400 *wm8400, u8 reg, int num_regs,
 	for (i = 0; i < num_regs; i++) {
 		BUG_ON(!reg_data[reg + i].writable);
 		wm8400->reg_cache[reg + i] = src[i];
+<<<<<<< HEAD
 		src[i] = cpu_to_be16(src[i]);
 	}
 
@@ -157,6 +172,13 @@ static int wm8400_write(struct wm8400 *wm8400, u8 reg, int num_regs,
 	if (ret != 0)
 		return -EIO;
 
+=======
+		ret = regmap_write(wm8400->regmap, reg, src[i]);
+		if (ret != 0)
+			return ret;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -270,14 +292,24 @@ static int wm8400_init(struct wm8400 *wm8400,
 	dev_set_drvdata(wm8400->dev, wm8400);
 
 	/* Check that this is actually a WM8400 */
+<<<<<<< HEAD
 	ret = wm8400->read_dev(wm8400->io_data, WM8400_RESET_ID, 1, &reg);
+=======
+	ret = regmap_read(wm8400->regmap, WM8400_RESET_ID, &i);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret != 0) {
 		dev_err(wm8400->dev, "Chip ID register read failed\n");
 		return -EIO;
 	}
+<<<<<<< HEAD
 	if (be16_to_cpu(reg) != reg_data[WM8400_RESET_ID].default_val) {
 		dev_err(wm8400->dev, "Device is not a WM8400, ID is %x\n",
 			be16_to_cpu(reg));
+=======
+	if (i != reg_data[WM8400_RESET_ID].default_val) {
+		dev_err(wm8400->dev, "Device is not a WM8400, ID is %x\n",
+			reg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return -ENODEV;
 	}
 
@@ -285,9 +317,14 @@ static int wm8400_init(struct wm8400 *wm8400,
 	 * is a PMIC we can't reset it safely so initialise the register
 	 * cache from the hardware.
 	 */
+<<<<<<< HEAD
 	ret = wm8400->read_dev(wm8400->io_data, 0,
 			       ARRAY_SIZE(wm8400->reg_cache),
 			       wm8400->reg_cache);
+=======
+	ret = regmap_raw_read(wm8400->regmap, 0, wm8400->reg_cache,
+			      ARRAY_SIZE(wm8400->reg_cache));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret != 0) {
 		dev_err(wm8400->dev, "Register cache read failed\n");
 		return -EIO;
@@ -337,6 +374,7 @@ static void wm8400_release(struct wm8400 *wm8400)
 	mfd_remove_devices(wm8400->dev);
 }
 
+<<<<<<< HEAD
 #if defined(CONFIG_I2C) || defined(CONFIG_I2C_MODULE)
 static int wm8400_i2c_read(void *io_data, char reg, int count, u16 *dest)
 {
@@ -391,6 +429,15 @@ static int wm8400_i2c_write(void *io_data, char reg, int count, const u16 *src)
 	return ret;
 }
 
+=======
+static const struct regmap_config wm8400_regmap_config = {
+	.reg_bits = 8,
+	.val_bits = 16,
+	.max_register = WM8400_REGISTER_COUNT - 1,
+};
+
+#if defined(CONFIG_I2C) || defined(CONFIG_I2C_MODULE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int wm8400_i2c_probe(struct i2c_client *i2c,
 			    const struct i2c_device_id *id)
 {
@@ -403,18 +450,36 @@ static int wm8400_i2c_probe(struct i2c_client *i2c,
 		goto err;
 	}
 
+<<<<<<< HEAD
 	wm8400->io_data = i2c;
 	wm8400->read_dev = wm8400_i2c_read;
 	wm8400->write_dev = wm8400_i2c_write;
+=======
+	wm8400->regmap = regmap_init_i2c(i2c, &wm8400_regmap_config);
+	if (IS_ERR(wm8400->regmap)) {
+		ret = PTR_ERR(wm8400->regmap);
+		goto struct_err;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	wm8400->dev = &i2c->dev;
 	i2c_set_clientdata(i2c, wm8400);
 
 	ret = wm8400_init(wm8400, i2c->dev.platform_data);
 	if (ret != 0)
+<<<<<<< HEAD
 		goto struct_err;
 
 	return 0;
 
+=======
+		goto map_err;
+
+	return 0;
+
+map_err:
+	regmap_exit(wm8400->regmap);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct_err:
 	kfree(wm8400);
 err:
@@ -426,6 +491,10 @@ static int wm8400_i2c_remove(struct i2c_client *i2c)
 	struct wm8400 *wm8400 = i2c_get_clientdata(i2c);
 
 	wm8400_release(wm8400);
+<<<<<<< HEAD
+=======
+	regmap_exit(wm8400->regmap);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(wm8400);
 
 	return 0;

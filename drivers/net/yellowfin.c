@@ -442,19 +442,31 @@ static int __devinit yellowfin_init_one(struct pci_dev *pdev,
 	ring_space = pci_alloc_consistent(pdev, TX_TOTAL_SIZE, &ring_dma);
 	if (!ring_space)
 		goto err_out_cleardev;
+<<<<<<< HEAD
 	np->tx_ring = (struct yellowfin_desc *)ring_space;
+=======
+	np->tx_ring = ring_space;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	np->tx_ring_dma = ring_dma;
 
 	ring_space = pci_alloc_consistent(pdev, RX_TOTAL_SIZE, &ring_dma);
 	if (!ring_space)
 		goto err_out_unmap_tx;
+<<<<<<< HEAD
 	np->rx_ring = (struct yellowfin_desc *)ring_space;
+=======
+	np->rx_ring = ring_space;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	np->rx_ring_dma = ring_dma;
 
 	ring_space = pci_alloc_consistent(pdev, STATUS_TOTAL_SIZE, &ring_dma);
 	if (!ring_space)
 		goto err_out_unmap_rx;
+<<<<<<< HEAD
 	np->tx_status = (struct tx_status_words *)ring_space;
+=======
+	np->tx_status = ring_space;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	np->tx_status_dma = ring_dma;
 
 	if (dev->mem_start)

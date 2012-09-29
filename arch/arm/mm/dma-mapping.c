@@ -25,9 +25,17 @@
 #include <asm/tlbflush.h>
 #include <asm/sizes.h>
 
+<<<<<<< HEAD
 static u64 get_coherent_dma_mask(struct device *dev)
 {
 	u64 mask = ISA_DMA_THRESHOLD;
+=======
+#include "mm.h"
+
+static u64 get_coherent_dma_mask(struct device *dev)
+{
+	u64 mask = (u64)arm_dma_limit;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (dev) {
 		mask = dev->coherent_dma_mask;
@@ -41,10 +49,17 @@ static u64 get_coherent_dma_mask(struct device *dev)
 			return 0;
 		}
 
+<<<<<<< HEAD
 		if ((~mask) & ISA_DMA_THRESHOLD) {
 			dev_warn(dev, "coherent DMA mask %#llx is smaller "
 				 "than system GFP_DMA mask %#llx\n",
 				 mask, (unsigned long long)ISA_DMA_THRESHOLD);
+=======
+		if ((~mask) & (u64)arm_dma_limit) {
+			dev_warn(dev, "coherent DMA mask %#llx is smaller "
+				 "than system GFP_DMA mask %#llx\n",
+				 mask, (u64)arm_dma_limit);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			return 0;
 		}
 	}
@@ -308,6 +323,16 @@ __dma_alloc(struct device *dev, size_t size, dma_addr_t *handle, gfp_t gfp,
 	struct page *page;
 	void *addr;
 
+<<<<<<< HEAD
+=======
+	/* Following is a work-around (a.k.a. hack) to prevent pages
+	 * with __GFP_COMP being passed to split_page() which cannot
+	 * handle them.  The real problem is that this flag probably
+	 * should be 0 on ARM as it is not supported on this
+	 * platform--see CONFIG_HUGETLB_PAGE. */
+	gfp &= ~(__GFP_COMP);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	*handle = ~0;
 	size = PAGE_ALIGN(size);
 
@@ -659,6 +684,36 @@ void dma_sync_sg_for_device(struct device *dev, struct scatterlist *sg,
 }
 EXPORT_SYMBOL(dma_sync_sg_for_device);
 
+<<<<<<< HEAD
+=======
+/*
+ * Return whether the given device DMA address mask can be supported
+ * properly.  For example, if your device can only drive the low 24-bits
+ * during bus mastering, then you would pass 0x00ffffff as the mask
+ * to this function.
+ */
+int dma_supported(struct device *dev, u64 mask)
+{
+	if (mask < (u64)arm_dma_limit)
+		return 0;
+	return 1;
+}
+EXPORT_SYMBOL(dma_supported);
+
+int dma_set_mask(struct device *dev, u64 dma_mask)
+{
+	if (!dev->dma_mask || !dma_supported(dev, dma_mask))
+		return -EIO;
+
+#ifndef CONFIG_DMABOUNCE
+	*dev->dma_mask = dma_mask;
+#endif
+
+	return 0;
+}
+EXPORT_SYMBOL(dma_set_mask);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PREALLOC_DMA_DEBUG_ENTRIES	4096
 
 static int __init dma_debug_do_init(void)

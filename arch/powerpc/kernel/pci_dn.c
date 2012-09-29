@@ -142,6 +142,7 @@ void __devinit pci_devs_phb_init_dynamic(struct pci_controller *phb)
 	traverse_pci_devices(dn, update_dn_pci_info, phb);
 }
 
+<<<<<<< HEAD
 /*
  * Traversal func that looks for a <busno,devfcn> value.
  * If found, the pci_dn is returned (thus terminating the traversal).
@@ -189,6 +190,8 @@ struct device_node *fetch_dev_dn(struct pci_dev *dev)
 }
 EXPORT_SYMBOL(fetch_dev_dn);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /** 
  * pci_devs_phb_init - Initialize phbs and pci devs under them.
  * 

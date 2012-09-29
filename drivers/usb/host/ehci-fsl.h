@@ -45,6 +45,9 @@
 #define FSL_SOC_USB_PRICTRL	0x40c	/* NOTE: big-endian */
 #define FSL_SOC_USB_SICTRL	0x410	/* NOTE: big-endian */
 #define FSL_SOC_USB_CTRL	0x500	/* NOTE: big-endian */
+<<<<<<< HEAD
 #define CTRL_UTMI_PHY_EN	(1<<9)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define SNOOP_SIZE_2GB		0x1e
 #endif				/* _EHCI_FSL_H */

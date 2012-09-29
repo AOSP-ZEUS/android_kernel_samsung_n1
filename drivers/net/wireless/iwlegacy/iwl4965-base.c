@@ -488,6 +488,7 @@ static void iwl4965_bg_statistics_periodic(unsigned long data)
 	iwl_legacy_send_statistics_request(priv, CMD_ASYNC, false);
 }
 
+<<<<<<< HEAD
 
 static void iwl4965_print_cont_event_trace(struct iwl_priv *priv, u32 base,
 					u32 start_idx, u32 num_events,
@@ -616,6 +617,8 @@ static void iwl4965_bg_ucode_trace(unsigned long data)
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void iwl4965_rx_beacon_notif(struct iwl_priv *priv,
 				struct iwl_rx_mem_buffer *rxb)
 {
@@ -1612,7 +1615,11 @@ static const char * const desc_lookup_text[] = {
 	"NMI_INTERRUPT_DATA_ACTION_PT",
 	"NMI_TRM_HW_ER",
 	"NMI_INTERRUPT_TRM",
+<<<<<<< HEAD
 	"NMI_INTERRUPT_BREAK_POINT"
+=======
+	"NMI_INTERRUPT_BREAK_POINT",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	"DEBUG_0",
 	"DEBUG_1",
 	"DEBUG_2",
@@ -1711,6 +1718,7 @@ void iwl4965_dump_nic_error_log(struct iwl_priv *priv)
 		pc, blink1, blink2, ilink1, ilink2, hcmd);
 }
 
+<<<<<<< HEAD
 #define EVENT_START_OFFSET  (4 * sizeof(u32))
 
 /**
@@ -1914,6 +1922,8 @@ int iwl4965_dump_nic_event_log(struct iwl_priv *priv, bool full_log,
 	return pos;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void iwl4965_rf_kill_ct_config(struct iwl_priv *priv)
 {
 	struct iwl_ct_kill_config cmd;
@@ -2773,20 +2783,26 @@ int iwl4965_mac_ampdu_action(struct ieee80211_hw *hw,
 	case IEEE80211_AMPDU_TX_START:
 		IWL_DEBUG_HT(priv, "start Tx\n");
 		ret = iwl4965_tx_agg_start(priv, vif, sta, tid, ssn);
+<<<<<<< HEAD
 		if (ret == 0) {
 			priv->_4965.agg_tids_count++;
 			IWL_DEBUG_HT(priv, "priv->_4965.agg_tids_count = %u\n",
 				     priv->_4965.agg_tids_count);
 		}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case IEEE80211_AMPDU_TX_STOP:
 		IWL_DEBUG_HT(priv, "stop Tx\n");
 		ret = iwl4965_tx_agg_stop(priv, vif, sta, tid);
+<<<<<<< HEAD
 		if ((ret == 0) && (priv->_4965.agg_tids_count > 0)) {
 			priv->_4965.agg_tids_count--;
 			IWL_DEBUG_HT(priv, "priv->_4965.agg_tids_count = %u\n",
 				     priv->_4965.agg_tids_count);
 		}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (test_bit(STATUS_EXIT_PENDING, &priv->status))
 			ret = 0;
 		break;
@@ -2851,7 +2867,10 @@ void iwl4965_mac_channel_switch(struct ieee80211_hw *hw,
 
 	struct iwl_rxon_context *ctx = &priv->contexts[IWL_RXON_CTX_BSS];
 	u16 ch;
+<<<<<<< HEAD
 	unsigned long flags = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	IWL_DEBUG_MAC80211(priv, "enter\n");
 
@@ -2868,6 +2887,7 @@ void iwl4965_mac_channel_switch(struct ieee80211_hw *hw,
 	if (!iwl_legacy_is_associated_ctx(ctx))
 		goto out;
 
+<<<<<<< HEAD
 	if (priv->cfg->ops->lib->set_channel_switch) {
 
 		ch = channel->hw_value;
@@ -2926,6 +2946,66 @@ void iwl4965_mac_channel_switch(struct ieee80211_hw *hw,
 			}
 		}
 	}
+=======
+	if (!priv->cfg->ops->lib->set_channel_switch)
+		goto out;
+
+	ch = channel->hw_value;
+	if (le16_to_cpu(ctx->active.channel) == ch)
+		goto out;
+
+	ch_info = iwl_legacy_get_channel_info(priv, channel->band, ch);
+	if (!iwl_legacy_is_channel_valid(ch_info)) {
+		IWL_DEBUG_MAC80211(priv, "invalid channel\n");
+		goto out;
+	}
+
+	spin_lock_irq(&priv->lock);
+
+	priv->current_ht_config.smps = conf->smps_mode;
+
+	/* Configure HT40 channels */
+	ctx->ht.enabled = conf_is_ht(conf);
+	if (ctx->ht.enabled) {
+		if (conf_is_ht40_minus(conf)) {
+			ctx->ht.extension_chan_offset =
+				IEEE80211_HT_PARAM_CHA_SEC_BELOW;
+			ctx->ht.is_40mhz = true;
+		} else if (conf_is_ht40_plus(conf)) {
+			ctx->ht.extension_chan_offset =
+				IEEE80211_HT_PARAM_CHA_SEC_ABOVE;
+			ctx->ht.is_40mhz = true;
+		} else {
+			ctx->ht.extension_chan_offset =
+				IEEE80211_HT_PARAM_CHA_SEC_NONE;
+			ctx->ht.is_40mhz = false;
+		}
+	} else
+		ctx->ht.is_40mhz = false;
+
+	if ((le16_to_cpu(ctx->staging.channel) != ch))
+		ctx->staging.flags = 0;
+
+	iwl_legacy_set_rxon_channel(priv, channel, ctx);
+	iwl_legacy_set_rxon_ht(priv, ht_conf);
+	iwl_legacy_set_flags_for_band(priv, ctx, channel->band, ctx->vif);
+
+	spin_unlock_irq(&priv->lock);
+
+	iwl_legacy_set_rate(priv);
+	/*
+	 * at this point, staging_rxon has the
+	 * configuration for channel switch
+	 */
+	set_bit(STATUS_CHANNEL_SWITCH_PENDING, &priv->status);
+	priv->switch_channel = cpu_to_le16(ch);
+	if (priv->cfg->ops->lib->set_channel_switch(priv, ch_switch)) {
+		clear_bit(STATUS_CHANNEL_SWITCH_PENDING, &priv->status);
+		priv->switch_channel = 0;
+		ieee80211_chswitch_done(ctx->vif, false);
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out:
 	mutex_unlock(&priv->mutex);
 	IWL_DEBUG_MAC80211(priv, "leave\n");
@@ -3034,10 +3114,13 @@ static void iwl4965_setup_deferred_work(struct iwl_priv *priv)
 	priv->statistics_periodic.data = (unsigned long)priv;
 	priv->statistics_periodic.function = iwl4965_bg_statistics_periodic;
 
+<<<<<<< HEAD
 	init_timer(&priv->ucode_trace);
 	priv->ucode_trace.data = (unsigned long)priv;
 	priv->ucode_trace.function = iwl4965_bg_ucode_trace;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	init_timer(&priv->watchdog);
 	priv->watchdog.data = (unsigned long)priv;
 	priv->watchdog.function = iwl_legacy_bg_watchdog;
@@ -3056,7 +3139,10 @@ static void iwl4965_cancel_deferred_work(struct iwl_priv *priv)
 	iwl_legacy_cancel_scan_deferred_work(priv);
 
 	del_timer_sync(&priv->statistics_periodic);
+<<<<<<< HEAD
 	del_timer_sync(&priv->ucode_trace);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void iwl4965_init_hw_rates(struct iwl_priv *priv,
@@ -3132,6 +3218,7 @@ static int iwl4965_init_drv(struct iwl_priv *priv)
 	priv->iw_mode = NL80211_IFTYPE_STATION;
 	priv->current_ht_config.smps = IEEE80211_SMPS_STATIC;
 	priv->missed_beacon_threshold = IWL_MISSED_BEACON_THRESHOLD_DEF;
+<<<<<<< HEAD
 	priv->_4965.agg_tids_count = 0;
 
 	/* initialize force reset */
@@ -3139,6 +3226,11 @@ static int iwl4965_init_drv(struct iwl_priv *priv)
 		IWL_DELAY_NEXT_FORCE_RF_RESET;
 	priv->force_reset[IWL_FW_RESET].reset_duration =
 		IWL_DELAY_NEXT_FORCE_FW_RELOAD;
+=======
+
+	/* initialize force reset */
+	priv->force_reset.reset_duration = IWL_DELAY_NEXT_FORCE_FW_RELOAD;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Choose which receivers/antennas to use */
 	if (priv->cfg->ops->hcmd->set_rxon_chain)

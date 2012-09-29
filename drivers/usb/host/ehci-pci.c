@@ -144,6 +144,7 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
 			hcd->has_tt = 1;
 			tdi_reset(ehci);
 		}
+<<<<<<< HEAD
 		if (pdev->subsystem_vendor == PCI_VENDOR_ID_ASUSTEK) {
 			/* EHCI #1 or #2 on 6 Series/C200 Series chipset */
 			if (pdev->device == 0x1c26 || pdev->device == 0x1c2d) {
@@ -152,6 +153,8 @@ static int ehci_pci_setup(struct usb_hcd *hcd)
 				device_set_wakeup_capable(&pdev->dev, false);
 			}
 		}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case PCI_VENDOR_ID_TDI:
 		if (pdev->device == PCI_DEVICE_ID_TDI_EHCI) {

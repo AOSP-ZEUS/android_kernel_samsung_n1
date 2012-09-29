@@ -155,32 +155,52 @@ static void __irq_entry indy_buserror_irq(void)
 
 static struct irqaction local0_cascade = {
 	.handler	= no_action,
+<<<<<<< HEAD
 	.flags		= IRQF_DISABLED,
+=======
+	.flags		= IRQF_DISABLED | IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.name		= "local0 cascade",
 };
 
 static struct irqaction local1_cascade = {
 	.handler	= no_action,
+<<<<<<< HEAD
 	.flags		= IRQF_DISABLED,
+=======
+	.flags		= IRQF_DISABLED | IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.name		= "local1 cascade",
 };
 
 static struct irqaction buserr = {
 	.handler	= no_action,
+<<<<<<< HEAD
 	.flags		= IRQF_DISABLED,
+=======
+	.flags		= IRQF_DISABLED | IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.name		= "Bus Error",
 };
 
 static struct irqaction map0_cascade = {
 	.handler	= no_action,
+<<<<<<< HEAD
 	.flags		= IRQF_DISABLED,
+=======
+	.flags		= IRQF_DISABLED | IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.name		= "mapable0 cascade",
 };
 
 #ifdef USE_LIO3_IRQ
 static struct irqaction map1_cascade = {
 	.handler	= no_action,
+<<<<<<< HEAD
 	.flags		= IRQF_DISABLED,
+=======
+	.flags		= IRQF_DISABLED | IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.name		= "mapable1 cascade",
 };
 #define SGI_INTERRUPTS	SGINT_END

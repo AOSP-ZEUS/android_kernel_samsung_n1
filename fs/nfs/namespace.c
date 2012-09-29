@@ -119,7 +119,11 @@ Elong:
 }
 
 #ifdef CONFIG_NFS_V4
+<<<<<<< HEAD
 static rpc_authflavor_t nfs_find_best_sec(struct nfs4_secinfo_flavors *flavors)
+=======
+rpc_authflavor_t nfs_find_best_sec(struct nfs4_secinfo_flavors *flavors)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct gss_api_mech *mech;
 	struct xdr_netobj oid;

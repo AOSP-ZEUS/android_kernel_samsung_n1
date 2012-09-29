@@ -100,7 +100,11 @@ orinoco_dl_firmware(struct orinoco_private *priv,
 	/* Plug Data Area (PDA) */
 	__le16 *pda;
 
+<<<<<<< HEAD
 	hermes_t *hw = &priv->hw;
+=======
+	struct hermes *hw = &priv->hw;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	const struct firmware *fw_entry;
 	const struct orinoco_fw_header *hdr;
 	const unsigned char *first_block;
@@ -205,7 +209,11 @@ symbol_dl_image(struct orinoco_private *priv, const struct fw_info *fw,
 		const unsigned char *image, const void *end,
 		int secondary)
 {
+<<<<<<< HEAD
 	hermes_t *hw = &priv->hw;
+=======
+	struct hermes *hw = &priv->hw;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret = 0;
 	const unsigned char *ptr;
 	const unsigned char *first_block;
@@ -322,9 +330,14 @@ symbol_dl_firmware(struct orinoco_private *priv,
 			      fw_entry->data + fw_entry->size, 1);
 	if (!orinoco_cached_fw_get(priv, false))
 		release_firmware(fw_entry);
+<<<<<<< HEAD
 	if (ret) {
 		dev_err(dev, "Secondary firmware download failed\n");
 	}
+=======
+	if (ret)
+		dev_err(dev, "Secondary firmware download failed\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return ret;
 }

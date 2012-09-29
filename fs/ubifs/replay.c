@@ -523,8 +523,12 @@ static int is_last_bud(struct ubifs_info *c, struct ubifs_bud *bud)
 	if (!list_is_last(&next->list, &jh->buds_list))
 		return 0;
 
+<<<<<<< HEAD
 	err = ubi_read(c->ubi, next->lnum, (char *)&data,
 		       next->start, 4);
+=======
+	err = ubifs_leb_read(c, next->lnum, (char *)&data, next->start, 4, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (err)
 		return 0;
 

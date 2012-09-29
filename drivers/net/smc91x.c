@@ -1425,11 +1425,14 @@ static void smc_set_multicast_list(struct net_device *dev)
 		netdev_for_each_mc_addr(ha, dev) {
 			int position;
 
+<<<<<<< HEAD
 			/* make sure this is a multicast address -
 		   	   shouldn't this be a given if we have it here ? */
 			if (!(*ha->addr & 1))
 				continue;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* only use the low order bits */
 			position = crc32_le(~0, ha->addr, 6) & 0x3f;
 

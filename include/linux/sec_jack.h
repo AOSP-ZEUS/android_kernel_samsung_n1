@@ -54,7 +54,14 @@ struct sec_jack_platform_data {
 	int	send_end_gpio;
 	bool	det_active_high;
 	bool	send_end_active_high;
+<<<<<<< HEAD
 };
+=======
+	int jack_status;
+};
+
+extern struct sec_jack_platform_data sec_jack_pdata;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 #endif

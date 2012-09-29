@@ -1596,6 +1596,7 @@ int rtsx_write_cfg_seq(struct rtsx_chip *chip, u8 func, u16 addr, u8 *buf, int l
 	}
 	RTSX_DEBUGP("dw_len = %d\n", dw_len);
 
+<<<<<<< HEAD
 	data = (u32 *)vmalloc(dw_len * 4);
 	if (!data) {
 		TRACE_RET(chip, STATUS_NOMEM);
@@ -1603,11 +1604,22 @@ int rtsx_write_cfg_seq(struct rtsx_chip *chip, u8 func, u16 addr, u8 *buf, int l
 	memset(data, 0, dw_len * 4);
 
 	mask = (u32 *)vmalloc(dw_len * 4);
+=======
+	data = vzalloc(dw_len * 4);
+	if (!data) {
+		TRACE_RET(chip, STATUS_NOMEM);
+	}
+
+	mask = vzalloc(dw_len * 4);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!mask) {
 		vfree(data);
 		TRACE_RET(chip, STATUS_NOMEM);
 	}
+<<<<<<< HEAD
 	memset(mask, 0, dw_len * 4);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	j = 0;
 	for (i = 0; i < len; i++) {

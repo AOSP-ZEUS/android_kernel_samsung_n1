@@ -43,8 +43,11 @@
 #include <linux/smp.h>
 #include <linux/nmi.h>
 #include <linux/hw_breakpoint.h>
+<<<<<<< HEAD
 #include <linux/uaccess.h>
 #include <linux/memory.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/debugreg.h>
 #include <asm/apicdef.h>
@@ -610,7 +613,11 @@ int kgdb_arch_init(void)
 	return register_die_notifier(&kgdb_notifier);
 }
 
+<<<<<<< HEAD
 static void kgdb_hw_overflow_handler(struct perf_event *event, int nmi,
+=======
+static void kgdb_hw_overflow_handler(struct perf_event *event,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		struct perf_sample_data *data, struct pt_regs *regs)
 {
 	struct task_struct *tsk = current;
@@ -640,7 +647,11 @@ void kgdb_arch_late(void)
 	for (i = 0; i < HBP_NUM; i++) {
 		if (breakinfo[i].pev)
 			continue;
+<<<<<<< HEAD
 		breakinfo[i].pev = register_wide_hw_breakpoint(&attr, NULL);
+=======
+		breakinfo[i].pev = register_wide_hw_breakpoint(&attr, NULL, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (IS_ERR((void * __force)breakinfo[i].pev)) {
 			printk(KERN_ERR "kgdb: Could not allocate hw"
 			       "breakpoints\nDisabling the kernel debugger\n");
@@ -712,6 +723,7 @@ void kgdb_arch_set_pc(struct pt_regs *regs, unsigned long ip)
 	regs->ip = ip;
 }
 
+<<<<<<< HEAD
 int kgdb_arch_set_breakpoint(struct kgdb_bkpt *bpt)
 {
 	int err;
@@ -770,6 +782,8 @@ knl_write:
 				  (char *)bpt->saved_instr, BREAK_INSTR_SIZE);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct kgdb_arch arch_kgdb_ops = {
 	/* Breakpoint instruction: */
 	.gdb_bpt_instr		= { 0xcc },

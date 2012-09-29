@@ -46,13 +46,20 @@ u32 rtl92c_phy_query_rf_reg(struct ieee80211_hw *hw,
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
 	u32 original_value, readback_value, bitshift;
 	struct rtl_phy *rtlphy = &(rtlpriv->phy);
+<<<<<<< HEAD
 	unsigned long flags;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	RT_TRACE(rtlpriv, COMP_RF, DBG_TRACE, ("regaddr(%#x), "
 					       "rfpath(%#x), bitmask(%#x)\n",
 					       regaddr, rfpath, bitmask));
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&rtlpriv->locks.rf_lock, flags);
+=======
+	spin_lock(&rtlpriv->locks.rf_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (rtlphy->rf_mode != RF_OP_BY_FW) {
 		original_value = _rtl92c_phy_rf_serial_read(hw,
@@ -65,7 +72,11 @@ u32 rtl92c_phy_query_rf_reg(struct ieee80211_hw *hw,
 	bitshift = _rtl92c_phy_calculate_bit_shift(bitmask);
 	readback_value = (original_value & bitmask) >> bitshift;
 
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&rtlpriv->locks.rf_lock, flags);
+=======
+	spin_unlock(&rtlpriv->locks.rf_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	RT_TRACE(rtlpriv, COMP_RF, DBG_TRACE,
 		 ("regaddr(%#x), rfpath(%#x), "
@@ -120,13 +131,20 @@ void rtl92ce_phy_set_rf_reg(struct ieee80211_hw *hw,
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
 	struct rtl_phy *rtlphy = &(rtlpriv->phy);
 	u32 original_value, bitshift;
+<<<<<<< HEAD
 	unsigned long flags;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	RT_TRACE(rtlpriv, COMP_RF, DBG_TRACE,
 		 ("regaddr(%#x), bitmask(%#x), data(%#x), rfpath(%#x)\n",
 		  regaddr, bitmask, data, rfpath));
 
+<<<<<<< HEAD
 	spin_lock_irqsave(&rtlpriv->locks.rf_lock, flags);
+=======
+	spin_lock(&rtlpriv->locks.rf_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (rtlphy->rf_mode != RF_OP_BY_FW) {
 		if (bitmask != RFREG_OFFSET_MASK) {
@@ -153,7 +171,11 @@ void rtl92ce_phy_set_rf_reg(struct ieee80211_hw *hw,
 		_rtl92c_phy_fw_rf_serial_write(hw, rfpath, regaddr, data);
 	}
 
+<<<<<<< HEAD
 	spin_unlock_irqrestore(&rtlpriv->locks.rf_lock, flags);
+=======
+	spin_unlock(&rtlpriv->locks.rf_lock);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	RT_TRACE(rtlpriv, COMP_RF, DBG_TRACE, ("regaddr(%#x), "
 					       "bitmask(%#x), data(%#x), "
@@ -281,7 +303,10 @@ bool rtl92c_phy_config_rf_with_headerfile(struct ieee80211_hw *hw,
 {
 
 	int i;
+<<<<<<< HEAD
 	bool rtstatus = true;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 *radioa_array_table;
 	u32 *radiob_array_table;
 	u16 radioa_arraylen, radiob_arraylen;
@@ -308,7 +333,10 @@ bool rtl92c_phy_config_rf_with_headerfile(struct ieee80211_hw *hw,
 			 ("Radio_B:RTL8192CE_RADIOB_1TARRAY\n"));
 	}
 	RT_TRACE(rtlpriv, COMP_INIT, DBG_TRACE, ("Radio No %x\n", rfpath));
+<<<<<<< HEAD
 	rtstatus = true;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (rfpath) {
 	case RF90_PATH_A:
 		for (i = 0; i < radioa_arraylen; i = i + 2) {
@@ -521,7 +549,10 @@ static bool _rtl92ce_phy_set_rf_power_state(struct ieee80211_hw *hw,
 	u8 i, queue_id;
 	struct rtl8192_tx_ring *ring = NULL;
 
+<<<<<<< HEAD
 	ppsc->set_rfpowerstate_inprogress = true;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (rfpwr_state) {
 	case ERFON:{
 			if ((ppsc->rfpwr_state == ERFOFF) &&
@@ -574,7 +605,11 @@ static bool _rtl92ce_phy_set_rf_power_state(struct ieee80211_hw *hw,
 		}
 	case ERFSLEEP:{
 			if (ppsc->rfpwr_state == ERFOFF)
+<<<<<<< HEAD
 				break;
+=======
+				return false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			for (queue_id = 0, i = 0;
 			     queue_id < RTL_PCI_MAX_TX_QUEUE_COUNT;) {
 				ring = &pcipriv->dev.tx_ring[queue_id];
@@ -617,7 +652,10 @@ static bool _rtl92ce_phy_set_rf_power_state(struct ieee80211_hw *hw,
 	}
 	if (bresult)
 		ppsc->rfpwr_state = rfpwr_state;
+<<<<<<< HEAD
 	ppsc->set_rfpowerstate_inprogress = false;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return bresult;
 }
 

@@ -364,10 +364,19 @@ static void notify_ring(struct drm_device *dev,
 
 	ring->irq_seqno = seqno;
 	wake_up_all(&ring->irq_queue);
+<<<<<<< HEAD
 
 	dev_priv->hangcheck_count = 0;
 	mod_timer(&dev_priv->hangcheck_timer,
 		  jiffies + msecs_to_jiffies(DRM_I915_HANGCHECK_PERIOD));
+=======
+	if (i915_enable_hangcheck) {
+		dev_priv->hangcheck_count = 0;
+		mod_timer(&dev_priv->hangcheck_timer,
+			  jiffies +
+			  msecs_to_jiffies(DRM_I915_HANGCHECK_PERIOD));
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void gen6_pm_rps_work(struct work_struct *work)
@@ -1665,9 +1674,18 @@ void i915_hangcheck_elapsed(unsigned long data)
 {
 	struct drm_device *dev = (struct drm_device *)data;
 	drm_i915_private_t *dev_priv = dev->dev_private;
+<<<<<<< HEAD
 	uint32_t acthd, instdone, instdone1, acthd_bsd, acthd_blt;
 	bool err = false;
 
+=======
+	uint32_t acthd, instdone, instdone1;
+	bool err = false;
+
+	if (!i915_enable_hangcheck)
+		return;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* If all work is done then ACTHD clearly hasn't advanced. */
 	if (i915_hangcheck_ring_idle(&dev_priv->ring[RCS], &err) &&
 	    i915_hangcheck_ring_idle(&dev_priv->ring[VCS], &err) &&
@@ -1679,6 +1697,7 @@ void i915_hangcheck_elapsed(unsigned long data)
 	}
 
 	if (INTEL_INFO(dev)->gen < 4) {
+<<<<<<< HEAD
 		instdone = I915_READ(INSTDONE);
 		instdone1 = 0;
 	} else {
@@ -1694,6 +1713,18 @@ void i915_hangcheck_elapsed(unsigned long data)
 	if (dev_priv->last_acthd == acthd &&
 	    dev_priv->last_acthd_bsd == acthd_bsd &&
 	    dev_priv->last_acthd_blt == acthd_blt &&
+=======
+		acthd = I915_READ(ACTHD);
+		instdone = I915_READ(INSTDONE);
+		instdone1 = 0;
+	} else {
+		acthd = I915_READ(ACTHD_I965);
+		instdone = I915_READ(INSTDONE_I965);
+		instdone1 = I915_READ(INSTDONE1);
+	}
+
+	if (dev_priv->last_acthd == acthd &&
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	    dev_priv->last_instdone == instdone &&
 	    dev_priv->last_instdone1 == instdone1) {
 		if (dev_priv->hangcheck_count++ > 1) {
@@ -1725,8 +1756,11 @@ void i915_hangcheck_elapsed(unsigned long data)
 		dev_priv->hangcheck_count = 0;
 
 		dev_priv->last_acthd = acthd;
+<<<<<<< HEAD
 		dev_priv->last_acthd_bsd = acthd_bsd;
 		dev_priv->last_acthd_blt = acthd_blt;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dev_priv->last_instdone = instdone;
 		dev_priv->last_instdone1 = instdone1;
 	}
@@ -2061,8 +2095,15 @@ void intel_irq_init(struct drm_device *dev)
 		dev->driver->get_vblank_counter = gm45_get_vblank_counter;
 	}
 
+<<<<<<< HEAD
 
 	dev->driver->get_vblank_timestamp = i915_get_vblank_timestamp;
+=======
+	if (drm_core_check_feature(dev, DRIVER_MODESET))
+		dev->driver->get_vblank_timestamp = i915_get_vblank_timestamp;
+	else
+		dev->driver->get_vblank_timestamp = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev->driver->get_scanout_position = i915_get_crtc_scanoutpos;
 
 	if (IS_IVYBRIDGE(dev)) {

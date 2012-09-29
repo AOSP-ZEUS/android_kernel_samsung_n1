@@ -1158,7 +1158,11 @@ static bool bio_attempt_front_merge(struct request_queue *q,
  * true if merge was successful, otherwise false.
  */
 static bool attempt_plug_merge(struct task_struct *tsk, struct request_queue *q,
+<<<<<<< HEAD
 			       struct bio *bio)
+=======
+			       struct bio *bio, unsigned int *request_count)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct blk_plug *plug;
 	struct request *rq;
@@ -1167,10 +1171,19 @@ static bool attempt_plug_merge(struct task_struct *tsk, struct request_queue *q,
 	plug = tsk->plug;
 	if (!plug)
 		goto out;
+<<<<<<< HEAD
+=======
+	*request_count = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	list_for_each_entry_reverse(rq, &plug->list, queuelist) {
 		int el_ret;
 
+<<<<<<< HEAD
+=======
+		(*request_count)++;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (rq->q != q)
 			continue;
 
@@ -1210,6 +1223,10 @@ static int __make_request(struct request_queue *q, struct bio *bio)
 	struct blk_plug *plug;
 	int el_ret, rw_flags, where = ELEVATOR_INSERT_SORT;
 	struct request *req;
+<<<<<<< HEAD
+=======
+	unsigned int request_count = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * low level driver can indicate that it wants pages above a
@@ -1228,7 +1245,11 @@ static int __make_request(struct request_queue *q, struct bio *bio)
 	 * Check if we can merge with the plugged list before grabbing
 	 * any locks.
 	 */
+<<<<<<< HEAD
 	if (attempt_plug_merge(current, q, bio))
+=======
+	if (attempt_plug_merge(current, q, bio, &request_count))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto out;
 
 	spin_lock_irq(q->queue_lock);
@@ -1273,10 +1294,15 @@ get_rq:
 	init_request_from_bio(req, bio);
 
 	if (test_bit(QUEUE_FLAG_SAME_COMP, &q->queue_flags) ||
+<<<<<<< HEAD
 	    bio_flagged(bio, BIO_CPU_AFFINE)) {
 		req->cpu = blk_cpu_to_group(get_cpu());
 		put_cpu();
 	}
+=======
+	    bio_flagged(bio, BIO_CPU_AFFINE))
+		req->cpu = raw_smp_processor_id();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	plug = current->plug;
 	if (plug) {
@@ -1295,6 +1321,11 @@ get_rq:
 			if (__rq->q != q)
 				plug->should_sort = 1;
 		}
+<<<<<<< HEAD
+=======
+		if (request_count >= BLK_MAX_REQUEST_COUNT)
+			blk_flush_plug_list(plug, false);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		list_add_tail(&req->queuelist, &plug->list);
 		drive_stat_acct(req, 1);
 	} else {
@@ -1351,6 +1382,7 @@ static int __init setup_fail_make_request(char *str)
 }
 __setup("fail_make_request=", setup_fail_make_request);
 
+<<<<<<< HEAD
 static int should_fail_request(struct bio *bio)
 {
 	struct hd_struct *part = bio->bi_bdev->bd_part;
@@ -1359,21 +1391,40 @@ static int should_fail_request(struct bio *bio)
 		return should_fail(&fail_make_request, bio->bi_size);
 
 	return 0;
+=======
+static bool should_fail_request(struct hd_struct *part, unsigned int bytes)
+{
+	return part->make_it_fail && should_fail(&fail_make_request, bytes);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int __init fail_make_request_debugfs(void)
 {
+<<<<<<< HEAD
 	return init_fault_attr_dentries(&fail_make_request,
 					"fail_make_request");
+=======
+	struct dentry *dir = fault_create_debugfs_attr("fail_make_request",
+						NULL, &fail_make_request);
+
+	return IS_ERR(dir) ? PTR_ERR(dir) : 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 late_initcall(fail_make_request_debugfs);
 
 #else /* CONFIG_FAIL_MAKE_REQUEST */
 
+<<<<<<< HEAD
 static inline int should_fail_request(struct bio *bio)
 {
 	return 0;
+=======
+static inline bool should_fail_request(struct hd_struct *part,
+					unsigned int bytes)
+{
+	return false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #endif /* CONFIG_FAIL_MAKE_REQUEST */
@@ -1456,6 +1507,10 @@ static inline void __generic_make_request(struct bio *bio)
 	old_dev = 0;
 	do {
 		char b[BDEVNAME_SIZE];
+<<<<<<< HEAD
+=======
+		struct hd_struct *part;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		q = bdev_get_queue(bio->bi_bdev);
 		if (unlikely(!q)) {
@@ -1479,7 +1534,14 @@ static inline void __generic_make_request(struct bio *bio)
 		if (unlikely(test_bit(QUEUE_FLAG_DEAD, &q->queue_flags)))
 			goto end_io;
 
+<<<<<<< HEAD
 		if (should_fail_request(bio))
+=======
+		part = bio->bi_bdev->bd_part;
+		if (should_fail_request(part, bio->bi_size) ||
+		    should_fail_request(&part_to_disk(part)->part0,
+					bio->bi_size))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			goto end_io;
 
 		/*
@@ -1690,15 +1752,25 @@ EXPORT_SYMBOL_GPL(blk_rq_check_limits);
 int blk_insert_cloned_request(struct request_queue *q, struct request *rq)
 {
 	unsigned long flags;
+<<<<<<< HEAD
+=======
+	int where = ELEVATOR_INSERT_BACK;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (blk_rq_check_limits(q, rq))
 		return -EIO;
 
+<<<<<<< HEAD
 #ifdef CONFIG_FAIL_MAKE_REQUEST
 	if (rq->rq_disk && rq->rq_disk->part0.make_it_fail &&
 	    should_fail(&fail_make_request, blk_rq_bytes(rq)))
 		return -EIO;
 #endif
+=======
+	if (rq->rq_disk &&
+	    should_fail_request(&rq->rq_disk->part0, blk_rq_bytes(rq)))
+		return -EIO;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_lock_irqsave(q->queue_lock, flags);
 
@@ -1708,7 +1780,16 @@ int blk_insert_cloned_request(struct request_queue *q, struct request *rq)
 	 */
 	BUG_ON(blk_queued_rq(rq));
 
+<<<<<<< HEAD
 	add_acct_request(q, rq, ELEVATOR_INSERT_BACK);
+=======
+	if (rq->cmd_flags & (REQ_FLUSH|REQ_FUA))
+		where = ELEVATOR_INSERT_FLUSH;
+
+	add_acct_request(q, rq, where);
+	if (where == ELEVATOR_INSERT_FLUSH)
+		__blk_run_queue(q);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock_irqrestore(q->queue_lock, flags);
 
 	return 0;
@@ -2265,7 +2346,11 @@ static bool blk_end_bidi_request(struct request *rq, int error,
  *     %false - we are done with this request
  *     %true  - still buffers pending for this request
  **/
+<<<<<<< HEAD
 static bool __blk_end_bidi_request(struct request *rq, int error,
+=======
+bool __blk_end_bidi_request(struct request *rq, int error,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				   unsigned int nr_bytes, unsigned int bidi_bytes)
 {
 	if (blk_update_bidi_request(rq, error, nr_bytes, bidi_bytes))

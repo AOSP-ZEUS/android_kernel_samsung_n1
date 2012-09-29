@@ -56,7 +56,12 @@
 #define INTC_PIN	IXP23XX_GPIO_PIN_11
 #define INTD_PIN	IXP23XX_GPIO_PIN_12
 
+<<<<<<< HEAD
 static int __init roadrunner_map_irq(struct pci_dev *dev, u8 idsel, u8 pin)
+=======
+static int __init roadrunner_map_irq(const struct pci_dev *dev, u8 idsel,
+	u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	static int pci_card_slot_irq[] = {INTB, INTC, INTD, INTA};
 	static int pmc_card_slot_irq[] = {INTA, INTB, INTC, INTD};

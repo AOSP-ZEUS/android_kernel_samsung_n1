@@ -23,6 +23,7 @@
 
 struct timb_radio_platform_data {
 	int i2c_adapter; /* I2C adapter where the tuner and dsp are attached */
+<<<<<<< HEAD
 	struct {
 		struct i2c_board_info *info;
 	} tuner;
@@ -30,6 +31,10 @@ struct timb_radio_platform_data {
 		const char *module_name;
 		struct i2c_board_info *info;
 	} dsp;
+=======
+	struct i2c_board_info *tuner;
+	struct i2c_board_info *dsp;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #endif

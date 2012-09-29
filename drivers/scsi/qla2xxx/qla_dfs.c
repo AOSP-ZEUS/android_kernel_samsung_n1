@@ -64,7 +64,11 @@ qla2x00_dfs_fce_open(struct inode *inode, struct file *file)
 	/* Pause tracing to flush FCE buffers. */
 	rval = qla2x00_disable_fce_trace(vha, &ha->fce_wr, &ha->fce_rd);
 	if (rval)
+<<<<<<< HEAD
 		qla_printk(KERN_WARNING, ha,
+=======
+		ql_dbg(ql_dbg_user, vha, 0x705c,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		    "DebugFS: Unable to disable FCE (%d).\n", rval);
 
 	ha->flags.fce_enabled = 0;
@@ -92,7 +96,11 @@ qla2x00_dfs_fce_release(struct inode *inode, struct file *file)
 	rval = qla2x00_enable_fce_trace(vha, ha->fce_dma, ha->fce_bufs,
 	    ha->fce_mb, &ha->fce_bufs);
 	if (rval) {
+<<<<<<< HEAD
 		qla_printk(KERN_WARNING, ha,
+=======
+		ql_dbg(ql_dbg_user, vha, 0x700d,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		    "DebugFS: Unable to reinitialize FCE (%d).\n", rval);
 		ha->flags.fce_enabled = 0;
 	}
@@ -125,8 +133,13 @@ qla2x00_dfs_setup(scsi_qla_host_t *vha)
 	atomic_set(&qla2x00_dfs_root_count, 0);
 	qla2x00_dfs_root = debugfs_create_dir(QLA2XXX_DRIVER_NAME, NULL);
 	if (!qla2x00_dfs_root) {
+<<<<<<< HEAD
 		qla_printk(KERN_NOTICE, ha,
 		    "DebugFS: Unable to create root directory.\n");
+=======
+		ql_log(ql_log_warn, vha, 0x00f7,
+		    "Unable to create debugfs root directory.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto out;
 	}
 
@@ -137,8 +150,13 @@ create_dir:
 	mutex_init(&ha->fce_mutex);
 	ha->dfs_dir = debugfs_create_dir(vha->host_str, qla2x00_dfs_root);
 	if (!ha->dfs_dir) {
+<<<<<<< HEAD
 		qla_printk(KERN_NOTICE, ha,
 		    "DebugFS: Unable to create ha directory.\n");
+=======
+		ql_log(ql_log_warn, vha, 0x00f8,
+		    "Unable to create debugfs ha directory.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto out;
 	}
 
@@ -148,8 +166,13 @@ create_nodes:
 	ha->dfs_fce = debugfs_create_file("fce", S_IRUSR, ha->dfs_dir, vha,
 	    &dfs_fce_ops);
 	if (!ha->dfs_fce) {
+<<<<<<< HEAD
 		qla_printk(KERN_NOTICE, ha,
 		    "DebugFS: Unable to fce node.\n");
+=======
+		ql_log(ql_log_warn, vha, 0x00f9,
+		    "Unable to create debugfs fce node.\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto out;
 	}
 out:

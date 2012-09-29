@@ -293,6 +293,7 @@ static void bau_process_message(struct msg_desc *mdp,
 }
 
 /*
+<<<<<<< HEAD
  * Determine the first cpu on a uvhub.
  */
 static int uvhub_to_first_cpu(int uvhub)
@@ -301,6 +302,20 @@ static int uvhub_to_first_cpu(int uvhub)
 	for_each_present_cpu(cpu)
 		if (uvhub == uv_cpu_to_blade_id(cpu))
 			return cpu;
+=======
+ * Determine the first cpu on a pnode.
+ */
+static int pnode_to_first_cpu(int pnode, struct bau_control *smaster)
+{
+	int cpu;
+	struct hub_and_pnode *hpp;
+
+	for_each_present_cpu(cpu) {
+		hpp = &smaster->thp[cpu];
+		if (pnode == hpp->pnode)
+			return cpu;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return -1;
 }
 
@@ -363,6 +378,7 @@ static void do_reset(void *ptr)
  * Use IPI to get all target uvhubs to release resources held by
  * a given sending cpu number.
  */
+<<<<<<< HEAD
 static void reset_with_ipi(struct bau_targ_hubmask *distribution, int sender)
 {
 	int uvhub;
@@ -385,6 +401,34 @@ static void reset_with_ipi(struct bau_targ_hubmask *distribution, int sender)
 
 	/* IPI all cpus; preemption is already disabled */
 	smp_call_function_many(&mask, do_reset, (void *)&reset_args, 1);
+=======
+static void reset_with_ipi(struct pnmask *distribution, struct bau_control *bcp)
+{
+	int pnode;
+	int apnode;
+	int maskbits;
+	int sender = bcp->cpu;
+	cpumask_t *mask = bcp->uvhub_master->cpumask;
+	struct bau_control *smaster = bcp->socket_master;
+	struct reset_args reset_args;
+
+	reset_args.sender = sender;
+	cpus_clear(*mask);
+	/* find a single cpu for each uvhub in this distribution mask */
+	maskbits = sizeof(struct pnmask) * BITSPERBYTE;
+	/* each bit is a pnode relative to the partition base pnode */
+	for (pnode = 0; pnode < maskbits; pnode++) {
+		int cpu;
+		if (!bau_uvhub_isset(pnode, distribution))
+			continue;
+		apnode = pnode + bcp->partition_base_pnode;
+		cpu = pnode_to_first_cpu(apnode, smaster);
+		cpu_set(cpu, *mask);
+	}
+
+	/* IPI all cpus; preemption is already disabled */
+	smp_call_function_many(mask, do_reset, (void *)&reset_args, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return;
 }
 
@@ -601,7 +645,11 @@ static void destination_plugged(struct bau_desc *bau_desc,
 		quiesce_local_uvhub(hmaster);
 
 		spin_lock(&hmaster->queue_lock);
+<<<<<<< HEAD
 		reset_with_ipi(&bau_desc->distribution, bcp->cpu);
+=======
+		reset_with_ipi(&bau_desc->distribution, bcp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_unlock(&hmaster->queue_lock);
 
 		end_uvhub_quiesce(hmaster);
@@ -623,7 +671,11 @@ static void destination_timeout(struct bau_desc *bau_desc,
 		quiesce_local_uvhub(hmaster);
 
 		spin_lock(&hmaster->queue_lock);
+<<<<<<< HEAD
 		reset_with_ipi(&bau_desc->distribution, bcp->cpu);
+=======
+		reset_with_ipi(&bau_desc->distribution, bcp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_unlock(&hmaster->queue_lock);
 
 		end_uvhub_quiesce(hmaster);
@@ -1331,9 +1383,16 @@ static ssize_t tunables_write(struct file *file, const char __user *user,
 
 	instr[count] = '\0';
 
+<<<<<<< HEAD
 	bcp = &per_cpu(bau_control, smp_processor_id());
 
 	ret = parse_tunables_write(bcp, instr, count);
+=======
+	cpu = get_cpu();
+	bcp = &per_cpu(bau_control, cpu);
+	ret = parse_tunables_write(bcp, instr, count);
+	put_cpu();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		return ret;
 
@@ -1575,6 +1634,7 @@ static int calculate_destination_timeout(void)
 		ts_ns = base * mult1 * mult2;
 		ret = ts_ns / 1000;
 	} else {
+<<<<<<< HEAD
 		/* 4 bits  0/1 for 10/80us base, 3 bits of multiplier */
 		mmr_image = uv_read_local_mmr(UVH_LB_BAU_MISC_CONTROL);
 		mmr_image = (mmr_image & UV_SA_MASK) >> UV_SA_SHFT;
@@ -1583,6 +1643,16 @@ static int calculate_destination_timeout(void)
 		else
 			base = 10;
 		mult1 = mmr_image & UV2_ACK_MASK;
+=======
+		/* 4 bits  0/1 for 10/80us, 3 bits of multiplier */
+		mmr_image = uv_read_local_mmr(UVH_AGING_PRESCALE_SEL);
+		mmr_image = (mmr_image & UV_SA_MASK) >> UV_SA_SHFT;
+		if (mmr_image & (1L << UV2_ACK_UNITS_SHFT))
+			mult1 = 80;
+		else
+			mult1 = 10;
+		base = mmr_image & UV2_ACK_MASK;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = mult1 * base;
 	}
 	return ret;
@@ -1684,6 +1754,19 @@ static void make_per_cpu_thp(struct bau_control *smaster)
 }
 
 /*
+<<<<<<< HEAD
+=======
+ * Each uvhub is to get a local cpumask.
+ */
+static void make_per_hub_cpumask(struct bau_control *hmaster)
+{
+	int sz = sizeof(cpumask_t);
+
+	hmaster->cpumask = kzalloc_node(sz, GFP_KERNEL, hmaster->osnode);
+}
+
+/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Initialize all the per_cpu information for the cpu's on a given socket,
  * given what has been gathered into the socket_desc struct.
  * And reports the chosen hub and socket masters back to the caller.
@@ -1748,11 +1831,20 @@ static int __init summarize_uvhub_sockets(int nuvhubs,
 				sdp = &bdp->socket[socket];
 				if (scan_sock(sdp, bdp, &smaster, &hmaster))
 					return 1;
+<<<<<<< HEAD
 			}
 			socket++;
 			socket_mask = (socket_mask >> 1);
 			make_per_cpu_thp(smaster);
 		}
+=======
+				make_per_cpu_thp(smaster);
+			}
+			socket++;
+			socket_mask = (socket_mask >> 1);
+		}
+		make_per_hub_cpumask(hmaster);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return 0;
 }
@@ -1774,15 +1866,30 @@ static int __init init_per_cpu(int nuvhubs, int base_part_pnode)
 	uvhub_mask = kzalloc((nuvhubs+7)/8, GFP_KERNEL);
 
 	if (get_cpu_topology(base_part_pnode, uvhub_descs, uvhub_mask))
+<<<<<<< HEAD
 		return 1;
 
 	if (summarize_uvhub_sockets(nuvhubs, uvhub_descs, uvhub_mask))
 		return 1;
+=======
+		goto fail;
+
+	if (summarize_uvhub_sockets(nuvhubs, uvhub_descs, uvhub_mask))
+		goto fail;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	kfree(uvhub_descs);
 	kfree(uvhub_mask);
 	init_per_cpu_tunables();
 	return 0;
+<<<<<<< HEAD
+=======
+
+fail:
+	kfree(uvhub_descs);
+	kfree(uvhub_mask);
+	return 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -1820,8 +1927,11 @@ static int __init uv_bau_init(void)
 			uv_base_pnode = uv_blade_to_pnode(uvhub);
 	}
 
+<<<<<<< HEAD
 	enable_timeouts();
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (init_per_cpu(nuvhubs, uv_base_pnode)) {
 		nobau = 1;
 		return 0;
@@ -1832,6 +1942,10 @@ static int __init uv_bau_init(void)
 		if (uv_blade_nr_possible_cpus(uvhub))
 			init_uvhub(uvhub, vector, uv_base_pnode);
 
+<<<<<<< HEAD
+=======
+	enable_timeouts();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	alloc_intr_gate(vector, uv_bau_message_intr1);
 
 	for_each_possible_blade(uvhub) {

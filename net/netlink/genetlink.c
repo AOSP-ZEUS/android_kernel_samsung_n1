@@ -525,7 +525,11 @@ static int genl_rcv_msg(struct sk_buff *skb, struct nlmsghdr *nlh)
 
 		genl_unlock();
 		err = netlink_dump_start(net->genl_sock, skb, nlh,
+<<<<<<< HEAD
 					 ops->dumpit, ops->done);
+=======
+					 ops->dumpit, ops->done, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		genl_lock();
 		return err;
 	}

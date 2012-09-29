@@ -127,8 +127,13 @@ struct pch_gbe_regs {
 
 /* Reset */
 #define PCH_GBE_ALL_RST         0x80000000  /* All reset */
+<<<<<<< HEAD
 #define PCH_GBE_TX_RST          0x40000000  /* TX MAC, TX FIFO, TX DMA reset */
 #define PCH_GBE_RX_RST          0x04000000  /* RX MAC, RX FIFO, RX DMA reset */
+=======
+#define PCH_GBE_TX_RST          0x00008000  /* TX MAC, TX FIFO, TX DMA reset */
+#define PCH_GBE_RX_RST          0x00004000  /* RX MAC, RX FIFO, RX DMA reset */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* TCP/IP Accelerator Control */
 #define PCH_GBE_EX_LIST_EN      0x00000008  /* External List Enable */
@@ -276,6 +281,12 @@ struct pch_gbe_regs {
 #define PCH_GBE_RX_DMA_EN       0x00000002   /* Enables Receive DMA */
 #define PCH_GBE_TX_DMA_EN       0x00000001   /* Enables Transmission DMA */
 
+<<<<<<< HEAD
+=======
+/* RX DMA STATUS */
+#define PCH_GBE_IDLE_CHECK       0xFFFFFFFE
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Wake On LAN Status */
 #define PCH_GBE_WLS_BR          0x00000008 /* Broadcas Address */
 #define PCH_GBE_WLS_MLT         0x00000004 /* Multicast Address */
@@ -471,6 +482,10 @@ struct pch_gbe_tx_desc {
 struct pch_gbe_buffer {
 	struct sk_buff *skb;
 	dma_addr_t dma;
+<<<<<<< HEAD
+=======
+	unsigned char *rx_buffer;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long time_stamp;
 	u16 length;
 	bool mapped;
@@ -511,6 +526,12 @@ struct pch_gbe_tx_ring {
 struct pch_gbe_rx_ring {
 	struct pch_gbe_rx_desc *desc;
 	dma_addr_t dma;
+<<<<<<< HEAD
+=======
+	unsigned char *rx_buff_pool;
+	dma_addr_t rx_buff_pool_logic;
+	unsigned int rx_buff_pool_size;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned int size;
 	unsigned int count;
 	unsigned int next_to_use;
@@ -622,6 +643,10 @@ struct pch_gbe_adapter {
 	unsigned long rx_buffer_len;
 	unsigned long tx_queue_len;
 	bool have_msi;
+<<<<<<< HEAD
+=======
+	bool rx_stop_flag;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 extern const char pch_driver_version[];

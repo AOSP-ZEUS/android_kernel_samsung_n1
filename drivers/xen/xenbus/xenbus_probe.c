@@ -378,6 +378,7 @@ static void xenbus_dev_release(struct device *dev)
 		kfree(to_xenbus_device(dev));
 }
 
+<<<<<<< HEAD
 static ssize_t xendev_show_nodename(struct device *dev,
 				    struct device_attribute *attr, char *buf)
 {
@@ -398,6 +399,34 @@ static ssize_t xendev_show_modalias(struct device *dev,
 	return sprintf(buf, "xen:%s\n", to_xenbus_device(dev)->devicetype);
 }
 static DEVICE_ATTR(modalias, S_IRUSR | S_IRGRP | S_IROTH, xendev_show_modalias, NULL);
+=======
+static ssize_t nodename_show(struct device *dev,
+			     struct device_attribute *attr, char *buf)
+{
+	return sprintf(buf, "%s\n", to_xenbus_device(dev)->nodename);
+}
+
+static ssize_t devtype_show(struct device *dev,
+			    struct device_attribute *attr, char *buf)
+{
+	return sprintf(buf, "%s\n", to_xenbus_device(dev)->devicetype);
+}
+
+static ssize_t modalias_show(struct device *dev,
+			     struct device_attribute *attr, char *buf)
+{
+	return sprintf(buf, "%s:%s\n", dev->bus->name,
+		       to_xenbus_device(dev)->devicetype);
+}
+
+struct device_attribute xenbus_dev_attrs[] = {
+	__ATTR_RO(nodename),
+	__ATTR_RO(devtype),
+	__ATTR_RO(modalias),
+	__ATTR_NULL
+};
+EXPORT_SYMBOL_GPL(xenbus_dev_attrs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 int xenbus_probe_node(struct xen_bus_type *bus,
 		      const char *type,
@@ -449,6 +478,7 @@ int xenbus_probe_node(struct xen_bus_type *bus,
 	if (err)
 		goto fail;
 
+<<<<<<< HEAD
 	err = device_create_file(&xendev->dev, &dev_attr_nodename);
 	if (err)
 		goto fail_unregister;
@@ -468,6 +498,9 @@ fail_remove_nodename:
 	device_remove_file(&xendev->dev, &dev_attr_nodename);
 fail_unregister:
 	device_unregister(&xendev->dev);
+=======
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 fail:
 	kfree(xendev);
 	return err;

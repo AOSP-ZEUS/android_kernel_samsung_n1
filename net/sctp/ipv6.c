@@ -112,6 +112,10 @@ static int sctp_inet6addr_event(struct notifier_block *this, unsigned long ev,
 			addr->valid = 1;
 			spin_lock_bh(&sctp_local_addr_lock);
 			list_add_tail_rcu(&addr->list, &sctp_local_addr_list);
+<<<<<<< HEAD
+=======
+			sctp_addr_wq_mgmt(addr, SCTP_ADDR_NEW);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			spin_unlock_bh(&sctp_local_addr_lock);
 		}
 		break;
@@ -122,6 +126,10 @@ static int sctp_inet6addr_event(struct notifier_block *this, unsigned long ev,
 			if (addr->a.sa.sa_family == AF_INET6 &&
 					ipv6_addr_equal(&addr->a.v6.sin6_addr,
 						&ifa->addr)) {
+<<<<<<< HEAD
+=======
+				sctp_addr_wq_mgmt(addr, SCTP_ADDR_DEL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				found = 1;
 				addr->valid = 0;
 				list_del_rcu(&addr->list);

@@ -1172,6 +1172,35 @@ static ssize_t show_alarm(struct device *dev, struct device_attribute *attr,
 	struct it87_data *data = it87_update_device(dev);
 	return sprintf(buf, "%u\n", (data->alarms >> bitnr) & 1);
 }
+<<<<<<< HEAD
+=======
+
+static ssize_t clear_intrusion(struct device *dev, struct device_attribute
+		*attr, const char *buf, size_t count)
+{
+	struct it87_data *data = dev_get_drvdata(dev);
+	long val;
+	int config;
+
+	if (strict_strtol(buf, 10, &val) < 0 || val != 0)
+		return -EINVAL;
+
+	mutex_lock(&data->update_lock);
+	config = it87_read_value(data, IT87_REG_CONFIG);
+	if (config < 0) {
+		count = config;
+	} else {
+		config |= 1 << 5;
+		it87_write_value(data, IT87_REG_CONFIG, config);
+		/* Invalidate cache to force re-read */
+		data->valid = 0;
+	}
+	mutex_unlock(&data->update_lock);
+
+	return count;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static SENSOR_DEVICE_ATTR(in0_alarm, S_IRUGO, show_alarm, NULL, 8);
 static SENSOR_DEVICE_ATTR(in1_alarm, S_IRUGO, show_alarm, NULL, 9);
 static SENSOR_DEVICE_ATTR(in2_alarm, S_IRUGO, show_alarm, NULL, 10);
@@ -1188,6 +1217,11 @@ static SENSOR_DEVICE_ATTR(fan5_alarm, S_IRUGO, show_alarm, NULL, 6);
 static SENSOR_DEVICE_ATTR(temp1_alarm, S_IRUGO, show_alarm, NULL, 16);
 static SENSOR_DEVICE_ATTR(temp2_alarm, S_IRUGO, show_alarm, NULL, 17);
 static SENSOR_DEVICE_ATTR(temp3_alarm, S_IRUGO, show_alarm, NULL, 18);
+<<<<<<< HEAD
+=======
+static SENSOR_DEVICE_ATTR(intrusion0_alarm, S_IRUGO | S_IWUSR,
+			  show_alarm, clear_intrusion, 4);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static ssize_t show_beep(struct device *dev, struct device_attribute *attr,
 		char *buf)
@@ -1350,6 +1384,10 @@ static struct attribute *it87_attributes[] = {
 	&sensor_dev_attr_temp3_alarm.dev_attr.attr,
 
 	&dev_attr_alarms.attr,
+<<<<<<< HEAD
+=======
+	&sensor_dev_attr_intrusion0_alarm.dev_attr.attr,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	&dev_attr_name.attr,
 	NULL
 };

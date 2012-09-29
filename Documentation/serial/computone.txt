@@ -87,7 +87,11 @@ c) Set address on ISA cards then:
 	   edit /usr/src/linux/drivers/char/ip2.c  
            (Optional - may be specified on kernel command line now)
 d) Run "make zImage" or whatever target you prefer.
+<<<<<<< HEAD
 e) mv /usr/src/linux/arch/i386/boot/zImage to /boot.
+=======
+e) mv /usr/src/linux/arch/x86/boot/zImage to /boot.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 f) Add new config for this kernel into /etc/lilo.conf, run "lilo"
 	or copy to a floppy disk and boot from that floppy disk.
 g) Reboot using this kernel

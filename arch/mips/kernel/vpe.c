@@ -46,7 +46,11 @@
 #include <asm/mipsregs.h>
 #include <asm/mipsmtregs.h>
 #include <asm/cacheflush.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/cpu.h>
 #include <asm/mips_mt.h>
 #include <asm/processor.h>
@@ -192,7 +196,11 @@ static struct tc *get_tc(int index)
 	}
 	spin_unlock(&vpecontrol.tc_list_lock);
 
+<<<<<<< HEAD
 	return NULL;
+=======
+	return res;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /* allocate a vpe and associate it with this minor (or index) */

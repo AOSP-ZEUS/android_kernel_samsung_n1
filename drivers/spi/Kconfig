@@ -86,9 +86,12 @@ config SPI_BFIN_SPORT
 	help
 	  Enable support for a SPI bus via the Blackfin SPORT peripheral.
 
+<<<<<<< HEAD
 	  This driver can also be built as a module.  If so, the module
 	  will be called spi_bfin_sport.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SPI_AU1550
 	tristate "Au1550/Au12x0 SPI Controller"
 	depends on (SOC_AU1550 || SOC_AU1200) && EXPERIMENTAL
@@ -97,9 +100,12 @@ config SPI_AU1550
 	  If you say yes to this option, support will be included for the
 	  Au1550 SPI controller (may also work with Au1200,Au1210,Au1250).
 
+<<<<<<< HEAD
 	  This driver can also be built as a module.  If so, the module
 	  will be called au1550_spi.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SPI_BITBANG
 	tristate "Utilities for Bitbanging SPI masters"
 	help
@@ -130,9 +136,12 @@ config SPI_COLDFIRE_QSPI
 	  This enables support for the Coldfire QSPI controller in master
 	  mode.
 
+<<<<<<< HEAD
 	  This driver can also be built as a module.  If so, the module
 	  will be called coldfire_qspi.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SPI_DAVINCI
 	tristate "Texas Instruments DaVinci/DA8x/OMAP-L/AM1x SoC SPI controller"
 	depends on SPI_MASTER && ARCH_DAVINCI
@@ -140,9 +149,12 @@ config SPI_DAVINCI
 	help
 	  SPI master controller for DaVinci/DA8x/OMAP-L/AM1x SPI modules.
 
+<<<<<<< HEAD
 	  This driver can also be built as a module. The module will be called
 	  davinci_spi.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SPI_EP93XX
 	tristate "Cirrus Logic EP93xx SPI controller"
 	depends on ARCH_EP93XX
@@ -150,9 +162,12 @@ config SPI_EP93XX
 	  This enables using the Cirrus EP93xx SPI controller in master
 	  mode.
 
+<<<<<<< HEAD
 	  To compile this driver as a module, choose M here. The module will be
 	  called ep93xx_spi.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SPI_GPIO
 	tristate "GPIO-based bitbanging SPI Master"
 	depends on GENERIC_GPIO
@@ -169,6 +184,7 @@ config SPI_GPIO
 	  GPIO operations, you should be able to leverage that for better
 	  speed with a custom version of this driver; see the source code.
 
+<<<<<<< HEAD
 config SPI_IMX_VER_IMX1
 	def_bool y if SOC_IMX1
 
@@ -184,6 +200,8 @@ config SPI_IMX_VER_0_7
 config SPI_IMX_VER_2_3
 	def_bool y if SOC_IMX51 || SOC_IMX53
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SPI_IMX
 	tristate "Freescale i.MX SPI controllers"
 	depends on ARCH_MXC
@@ -328,6 +346,7 @@ config SPI_S3C24XX_FIQ
 	  no free DMA channels, or when doing transfers that required both
 	  TX and RX data paths.
 
+<<<<<<< HEAD
 config SPI_S3C24XX_GPIO
 	tristate "Samsung S3C24XX series SPI by GPIO"
 	depends on ARCH_S3C2410 && EXPERIMENTAL
@@ -338,6 +357,8 @@ config SPI_S3C24XX_GPIO
 	  the inbuilt hardware cannot provide the transfer mode, or
 	  where the board is using non hardware connected pins.
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SPI_S3C64XX
 	tristate "Samsung S3C64XX series type SPI"
 	depends on (ARCH_S3C64XX || ARCH_S5P64X0)
@@ -378,6 +399,19 @@ config SPI_TEGRA
 	help
 	  SPI driver for NVidia Tegra SoCs
 
+<<<<<<< HEAD
+=======
+config SPI_SLAVE_TEGRA
+	tristate "Nvidia Tegra SPI slave controller"
+	depends on ARCH_TEGRA
+	select TEGRA_SYSTEM_DMA
+	default n
+	help
+	  SPI Slave driver for NVidia Tegra SoCs.
+	  Say yes if slave spi functionality is required from the tegra spi controller.
+	  The interface is same as the master spi.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SPI_TI_SSP
 	tristate "TI Sequencer Serial Port - SPI Support"
 	depends on MFD_TI_SSP
@@ -385,16 +419,27 @@ config SPI_TI_SSP
 	  This selects an SPI master implementation using a TI sequencer
 	  serial port.
 
+<<<<<<< HEAD
 	  To compile this driver as a module, choose M here: the
 	  module will be called ti-ssp-spi.
 
 config SPI_TOPCLIFF_PCH
 	tristate "Topcliff PCH SPI Controller"
+=======
+config SPI_TOPCLIFF_PCH
+	tristate "Intel EG20T PCH/OKI SEMICONDUCTOR ML7213 IOH SPI controller"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	depends on PCI
 	help
 	  SPI driver for the Topcliff PCH (Platform Controller Hub) SPI bus
 	  used in some x86 embedded processors.
 
+<<<<<<< HEAD
+=======
+	  This driver also supports the ML7213, a companion chip for the
+	  Atom E6xx series and compatible with the Intel EG20T PCH.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config SPI_TXX9
 	tristate "Toshiba TXx9 SPI controller"
 	depends on GENERIC_GPIO && CPU_TX49XX

@@ -20,7 +20,10 @@ struct dlm_config_info {
 	int ci_tcp_port;
 	int ci_buffer_size;
 	int ci_rsbtbl_size;
+<<<<<<< HEAD
 	int ci_lkbtbl_size;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ci_dirtbl_size;
 	int ci_recover_timer;
 	int ci_toss_secs;
@@ -29,6 +32,10 @@ struct dlm_config_info {
 	int ci_protocol;
 	int ci_timewarn_cs;
 	int ci_waitwarn_us;
+<<<<<<< HEAD
+=======
+	int ci_new_rsb_count;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 extern struct dlm_config_info dlm_config;

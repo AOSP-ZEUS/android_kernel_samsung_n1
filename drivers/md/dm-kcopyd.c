@@ -10,7 +10,11 @@
  */
 
 #include <linux/types.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/blkdev.h>
 #include <linux/fs.h>
 #include <linux/init.h>
@@ -224,8 +228,11 @@ struct kcopyd_job {
 	unsigned int num_dests;
 	struct dm_io_region dests[DM_KCOPYD_MAX_REGIONS];
 
+<<<<<<< HEAD
 	sector_t offset;
 	unsigned int nr_pages;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct page_list *pages;
 
 	/*
@@ -380,7 +387,11 @@ static int run_io_job(struct kcopyd_job *job)
 		.bi_rw = job->rw,
 		.mem.type = DM_IO_PAGE_LIST,
 		.mem.ptr.pl = job->pages,
+<<<<<<< HEAD
 		.mem.offset = job->offset,
+=======
+		.mem.offset = 0,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		.notify.fn = complete_io,
 		.notify.context = job,
 		.client = job->kc->io_client,
@@ -397,10 +408,16 @@ static int run_io_job(struct kcopyd_job *job)
 static int run_pages_job(struct kcopyd_job *job)
 {
 	int r;
+<<<<<<< HEAD
 
 	job->nr_pages = dm_div_up(job->dests[0].count + job->offset,
 				  PAGE_SIZE >> 9);
 	r = kcopyd_get_pages(job->kc, job->nr_pages, &job->pages);
+=======
+	unsigned nr_pages = dm_div_up(job->dests[0].count, PAGE_SIZE >> 9);
+
+	r = kcopyd_get_pages(job->kc, nr_pages, &job->pages);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!r) {
 		/* this job is ready for io */
 		push(&job->kc->io_jobs, job);
@@ -602,8 +619,11 @@ int dm_kcopyd_copy(struct dm_kcopyd_client *kc, struct dm_io_region *from,
 	job->num_dests = num_dests;
 	memcpy(&job->dests, dests, sizeof(*dests) * num_dests);
 
+<<<<<<< HEAD
 	job->offset = 0;
 	job->nr_pages = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	job->pages = NULL;
 
 	job->fn = fn;
@@ -622,6 +642,41 @@ int dm_kcopyd_copy(struct dm_kcopyd_client *kc, struct dm_io_region *from,
 }
 EXPORT_SYMBOL(dm_kcopyd_copy);
 
+<<<<<<< HEAD
+=======
+void *dm_kcopyd_prepare_callback(struct dm_kcopyd_client *kc,
+				 dm_kcopyd_notify_fn fn, void *context)
+{
+	struct kcopyd_job *job;
+
+	job = mempool_alloc(kc->job_pool, GFP_NOIO);
+
+	memset(job, 0, sizeof(struct kcopyd_job));
+	job->kc = kc;
+	job->fn = fn;
+	job->context = context;
+	job->master_job = job;
+
+	atomic_inc(&kc->nr_jobs);
+
+	return job;
+}
+EXPORT_SYMBOL(dm_kcopyd_prepare_callback);
+
+void dm_kcopyd_do_callback(void *j, int read_err, unsigned long write_err)
+{
+	struct kcopyd_job *job = j;
+	struct dm_kcopyd_client *kc = job->kc;
+
+	job->read_err = read_err;
+	job->write_err = write_err;
+
+	push(&kc->complete_jobs, job);
+	wake(kc);
+}
+EXPORT_SYMBOL(dm_kcopyd_do_callback);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Cancels a kcopyd job, eg. someone might be deactivating a
  * mirror.

@@ -668,6 +668,7 @@ static int pxa_ssp_hw_params(struct snd_pcm_substream *substream,
 	return 0;
 }
 
+<<<<<<< HEAD
 static void pxa_ssp_set_running_bit(struct snd_pcm_substream *substream,
 				    struct ssp_device *ssp, int value)
 {
@@ -700,6 +701,8 @@ static void pxa_ssp_set_running_bit(struct snd_pcm_substream *substream,
 	}
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int pxa_ssp_trigger(struct snd_pcm_substream *substream, int cmd,
 			   struct snd_soc_dai *cpu_dai)
 {
@@ -713,21 +716,57 @@ static int pxa_ssp_trigger(struct snd_pcm_substream *substream, int cmd,
 		pxa_ssp_enable(ssp);
 		break;
 	case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
+<<<<<<< HEAD
 		pxa_ssp_set_running_bit(substream, ssp, 1);
+=======
+		val = pxa_ssp_read_reg(ssp, SSCR1);
+		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+			val |= SSCR1_TSRE;
+		else
+			val |= SSCR1_RSRE;
+		pxa_ssp_write_reg(ssp, SSCR1, val);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		val = pxa_ssp_read_reg(ssp, SSSR);
 		pxa_ssp_write_reg(ssp, SSSR, val);
 		break;
 	case SNDRV_PCM_TRIGGER_START:
+<<<<<<< HEAD
 		pxa_ssp_set_running_bit(substream, ssp, 1);
 		break;
 	case SNDRV_PCM_TRIGGER_STOP:
 		pxa_ssp_set_running_bit(substream, ssp, 0);
+=======
+		val = pxa_ssp_read_reg(ssp, SSCR1);
+		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+			val |= SSCR1_TSRE;
+		else
+			val |= SSCR1_RSRE;
+		pxa_ssp_write_reg(ssp, SSCR1, val);
+		pxa_ssp_enable(ssp);
+		break;
+	case SNDRV_PCM_TRIGGER_STOP:
+		val = pxa_ssp_read_reg(ssp, SSCR1);
+		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+			val &= ~SSCR1_TSRE;
+		else
+			val &= ~SSCR1_RSRE;
+		pxa_ssp_write_reg(ssp, SSCR1, val);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case SNDRV_PCM_TRIGGER_SUSPEND:
 		pxa_ssp_disable(ssp);
 		break;
 	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+<<<<<<< HEAD
 		pxa_ssp_set_running_bit(substream, ssp, 0);
+=======
+		val = pxa_ssp_read_reg(ssp, SSCR1);
+		if (substream->stream == SNDRV_PCM_STREAM_PLAYBACK)
+			val &= ~SSCR1_TSRE;
+		else
+			val &= ~SSCR1_RSRE;
+		pxa_ssp_write_reg(ssp, SSCR1, val);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 
 	default:

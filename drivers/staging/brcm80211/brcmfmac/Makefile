@@ -16,6 +16,7 @@
 # CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.
 
 ccflags-y :=			\
+<<<<<<< HEAD
 	-DARP_OFFLOAD_SUPPORT	\
 	-DBCMLXSDMMC		\
 	-DBCMPLATFORM_BUS	\
@@ -33,6 +34,13 @@ ccflags-y :=			\
 	-DTOE
 
 ccflags-$(CONFIG_BRCMDBG)	+= -DDHD_DEBUG
+=======
+	-DBRCMF_FIRSTREAD=64	\
+	-DBRCMF_SDALIGN=64	\
+	-DMAX_HDR_READ=64
+
+ccflags-$(CONFIG_BRCMDBG)	+= -DSHOW_EVENTS
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 ccflags-y += \
 	-Idrivers/staging/brcm80211/brcmfmac	\
@@ -40,6 +48,7 @@ ccflags-y += \
 
 DHDOFILES = \
 	wl_cfg80211.o \
+<<<<<<< HEAD
 	wl_iw.o \
 	dhd_cdc.o \
 	dhd_common.o \
@@ -51,6 +60,14 @@ DHDOFILES = \
 	bcmsdh_linux.o	\
 	bcmsdh_sdmmc.o \
 	bcmsdh_sdmmc_linux.o
+=======
+	dhd_cdc.o \
+	dhd_common.o \
+	dhd_sdio.o	\
+	dhd_linux.o \
+	bcmsdh.o \
+	bcmsdh_sdmmc.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 obj-$(CONFIG_BRCMFMAC) += brcmfmac.o
 brcmfmac-objs += $(DHDOFILES)

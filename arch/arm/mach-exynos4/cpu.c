@@ -16,6 +16,7 @@
 
 #include <asm/proc-fns.h>
 #include <asm/hardware/cache-l2x0.h>
+<<<<<<< HEAD
 
 #include <plat/cpu.h>
 #include <plat/clock.h>
@@ -26,6 +27,23 @@
 #include <plat/iic-core.h>
 
 #include <mach/regs-irq.h>
+=======
+#include <asm/hardware/gic.h>
+
+#include <plat/cpu.h>
+#include <plat/clock.h>
+#include <plat/devs.h>
+#include <plat/exynos4.h>
+#include <plat/adc-core.h>
+#include <plat/sdhci.h>
+#include <plat/fb-core.h>
+#include <plat/fimc-core.h>
+#include <plat/iic-core.h>
+#include <plat/reset.h>
+
+#include <mach/regs-irq.h>
+#include <mach/regs-pmu.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern int combiner_init(unsigned int combiner_nr, void __iomem *base,
 			 unsigned int irq_start);
@@ -103,7 +121,21 @@ static struct map_desc exynos4_iodesc[] __initdata = {
 		.pfn		= __phys_to_pfn(EXYNOS4_PA_HSPHY),
 		.length		= SZ_4K,
 		.type		= MT_DEVICE,
+<<<<<<< HEAD
 	}
+=======
+	}, {
+		.virtual	= (unsigned long)S5P_VA_GIC_CPU,
+		.pfn		= __phys_to_pfn(EXYNOS4_PA_GIC_CPU),
+		.length		= SZ_64K,
+		.type		= MT_DEVICE,
+	}, {
+		.virtual	= (unsigned long)S5P_VA_GIC_DIST,
+		.pfn		= __phys_to_pfn(EXYNOS4_PA_GIC_DIST),
+		.length		= SZ_64K,
+		.type		= MT_DEVICE,
+	},
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static void exynos4_idle(void)
@@ -114,6 +146,14 @@ static void exynos4_idle(void)
 	local_irq_enable();
 }
 
+<<<<<<< HEAD
+=======
+static void exynos4_sw_reset(void)
+{
+	__raw_writel(0x1, S5P_SWRESET);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * exynos4_map_io
  *
@@ -129,6 +169,11 @@ void __init exynos4_map_io(void)
 	exynos4_default_sdhci2();
 	exynos4_default_sdhci3();
 
+<<<<<<< HEAD
+=======
+	s3c_adc_setname("samsung-adc-v3");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	s3c_fimc_setname(0, "exynos4-fimc");
 	s3c_fimc_setname(1, "exynos4-fimc");
 	s3c_fimc_setname(2, "exynos4-fimc");
@@ -138,6 +183,11 @@ void __init exynos4_map_io(void)
 	s3c_i2c0_setname("s3c2440-i2c");
 	s3c_i2c1_setname("s3c2440-i2c");
 	s3c_i2c2_setname("s3c2440-i2c");
+<<<<<<< HEAD
+=======
+
+	s5p_fb_setname(0, "exynos4-fb");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void __init exynos4_init_clocks(int xtal)
@@ -150,10 +200,22 @@ void __init exynos4_init_clocks(int xtal)
 	exynos4_setup_clocks();
 }
 
+<<<<<<< HEAD
+=======
+static void exynos4_gic_irq_eoi(struct irq_data *d)
+{
+	struct gic_chip_data *gic_data = irq_data_get_irq_chip_data(d);
+
+	gic_data->cpu_base = S5P_VA_GIC_CPU +
+			    (EXYNOS4_GIC_BANK_OFFSET * smp_processor_id());
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init exynos4_init_irq(void)
 {
 	int irq;
 
+<<<<<<< HEAD
 	gic_init(0, IRQ_LOCALTIMER, S5P_VA_GIC_DIST, S5P_VA_GIC_CPU);
 
 	for (irq = 0; irq < MAX_COMBINER_NR; irq++) {
@@ -166,6 +228,13 @@ void __init exynos4_init_irq(void)
 		if ((irq >= 40) && !(irq == 51) && !(irq == 53))
 			continue;
 
+=======
+	gic_init(0, IRQ_SPI(0), S5P_VA_GIC_DIST, S5P_VA_GIC_CPU);
+	gic_arch_extn.irq_eoi = exynos4_gic_irq_eoi;
+
+	for (irq = 0; irq < MAX_COMBINER_NR; irq++) {
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		combiner_init(irq, (void __iomem *)S5P_VA_COMBINER(irq),
 				COMBINER_IRQ(irq, 0));
 		combiner_cascade_irq(irq, IRQ_SPI(irq));
@@ -222,5 +291,11 @@ int __init exynos4_init(void)
 	/* set idle function */
 	pm_idle = exynos4_idle;
 
+<<<<<<< HEAD
+=======
+	/* set sw_reset function */
+	s5p_reset_hook = exynos4_sw_reset;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return sysdev_register(&exynos4_sysdev);
 }

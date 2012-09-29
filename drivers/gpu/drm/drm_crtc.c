@@ -499,6 +499,10 @@ void drm_connector_cleanup(struct drm_connector *connector)
 	mutex_lock(&dev->mode_config.mutex);
 	drm_mode_object_put(dev, &connector->base);
 	list_del(&connector->head);
+<<<<<<< HEAD
+=======
+	dev->mode_config.num_connector--;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mutex_unlock(&dev->mode_config.mutex);
 }
 EXPORT_SYMBOL(drm_connector_cleanup);
@@ -529,6 +533,10 @@ void drm_encoder_cleanup(struct drm_encoder *encoder)
 	mutex_lock(&dev->mode_config.mutex);
 	drm_mode_object_put(dev, &encoder->base);
 	list_del(&encoder->head);
+<<<<<<< HEAD
+=======
+	dev->mode_config.num_encoder--;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mutex_unlock(&dev->mode_config.mutex);
 }
 EXPORT_SYMBOL(drm_encoder_cleanup);

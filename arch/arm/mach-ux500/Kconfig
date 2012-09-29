@@ -7,7 +7,10 @@ config UX500_SOC_COMMON
 	select HAS_MTU
 	select ARM_ERRATA_753970
 	select ARM_ERRATA_754322
+<<<<<<< HEAD
 	select ARM_ERRATA_764369
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 menu "Ux500 SoC"
 
@@ -22,7 +25,11 @@ config UX500_SOC_DB8500
 
 endmenu
 
+<<<<<<< HEAD
 menu "Ux500 target platform"
+=======
+menu "Ux500 target platform (boards)"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 config MACH_U8500
 	bool "U8500 Development platform"
@@ -31,6 +38,22 @@ config MACH_U8500
 	help
 	  Include support for the mop500 development platform.
 
+<<<<<<< HEAD
+=======
+config MACH_HREFV60
+       bool "U85000 Development platform, HREFv60 version"
+       depends on UX500_SOC_DB8500
+       help
+         Include support for the HREFv60 new development platform.
+
+config MACH_SNOWBALL
+	bool "U8500 Snowball platform"
+	depends on UX500_SOC_DB8500
+	select MACH_U8500
+	help
+	  Include support for the snowball development platform.
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 config MACH_U5500
 	bool "U5500 Development platform"
 	depends on UX500_SOC_DB5500

@@ -114,6 +114,13 @@ static ushort qib_singleport;
 module_param_named(singleport, qib_singleport, ushort, S_IRUGO);
 MODULE_PARM_DESC(singleport, "Use only IB port 1; more per-port buffer space");
 
+<<<<<<< HEAD
+=======
+static ushort qib_krcvq01_no_msi;
+module_param_named(krcvq01_no_msi, qib_krcvq01_no_msi, ushort, S_IRUGO);
+MODULE_PARM_DESC(krcvq01_no_msi, "No MSI for kctx < 2");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Receive header queue sizes
  */
@@ -397,7 +404,10 @@ MODULE_PARM_DESC(txselect, \
 #define crp_txdroppedpkt CREG_IDX(TxDroppedPktCnt)
 #define crp_txhdrerr CREG_IDX(TxHeadersErrCnt)
 #define crp_txlenerr CREG_IDX(TxLenErrCnt)
+<<<<<<< HEAD
 #define crp_txlenerr CREG_IDX(TxLenErrCnt)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define crp_txminmaxlenerr CREG_IDX(TxMaxMinLenErrCnt)
 #define crp_txsdmadesc CREG_IDX(TxSDmaDescCnt)
 #define crp_txunderrun CREG_IDX(TxUnderrunCnt)
@@ -1107,9 +1117,15 @@ static inline u32 read_7322_creg32_port(const struct qib_pportdata *ppd,
 #define AUTONEG_TRIES 3 /* sequential retries to negotiate DDR */
 
 #define HWE_AUTO(fldname) { .mask = SYM_MASK(HwErrMask, fldname##Mask), \
+<<<<<<< HEAD
 	.msg = #fldname }
 #define HWE_AUTO_P(fldname, port) { .mask = SYM_MASK(HwErrMask, \
 	fldname##Mask##_##port), .msg = #fldname }
+=======
+	.msg = #fldname , .sz = sizeof(#fldname) }
+#define HWE_AUTO_P(fldname, port) { .mask = SYM_MASK(HwErrMask, \
+	fldname##Mask##_##port), .msg = #fldname , .sz = sizeof(#fldname) }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct qib_hwerror_msgs qib_7322_hwerror_msgs[] = {
 	HWE_AUTO_P(IBSerdesPClkNotDetect, 1),
 	HWE_AUTO_P(IBSerdesPClkNotDetect, 0),
@@ -1127,6 +1143,7 @@ static const struct qib_hwerror_msgs qib_7322_hwerror_msgs[] = {
 	HWE_AUTO_P(IBCBusFromSPCParityErr, 0),
 	HWE_AUTO(statusValidNoEop),
 	HWE_AUTO(LATriggered),
+<<<<<<< HEAD
 	{ .mask = 0 }
 };
 
@@ -1135,6 +1152,18 @@ static const struct qib_hwerror_msgs qib_7322_hwerror_msgs[] = {
 #define E_P_AUTO(fldname) { .mask = SYM_MASK(ErrMask_0, fldname##Mask), \
 	.msg = #fldname }
 static const struct qib_hwerror_msgs qib_7322error_msgs[] = {
+=======
+	{ .mask = 0, .sz = 0 }
+};
+
+#define E_AUTO(fldname) { .mask = SYM_MASK(ErrMask, fldname##Mask), \
+	.msg = #fldname, .sz = sizeof(#fldname) }
+#define E_P_AUTO(fldname) { .mask = SYM_MASK(ErrMask_0, fldname##Mask), \
+	.msg = #fldname, .sz = sizeof(#fldname) }
+static const struct qib_hwerror_msgs qib_7322error_msgs[] = {
+	E_AUTO(RcvEgrFullErr),
+	E_AUTO(RcvHdrFullErr),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	E_AUTO(ResetNegated),
 	E_AUTO(HardwareErr),
 	E_AUTO(InvalidAddrErr),
@@ -1147,9 +1176,13 @@ static const struct qib_hwerror_msgs qib_7322error_msgs[] = {
 	E_AUTO(SendSpecialTriggerErr),
 	E_AUTO(SDmaWrongPortErr),
 	E_AUTO(SDmaBufMaskDuplicateErr),
+<<<<<<< HEAD
 	E_AUTO(RcvHdrFullErr),
 	E_AUTO(RcvEgrFullErr),
 	{ .mask = 0 }
+=======
+	{ .mask = 0, .sz = 0 }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const struct  qib_hwerror_msgs qib_7322p_error_msgs[] = {
@@ -1159,7 +1192,12 @@ static const struct  qib_hwerror_msgs qib_7322p_error_msgs[] = {
 	/*
 	 * SDmaHaltErr is not really an error, make it clearer;
 	 */
+<<<<<<< HEAD
 	{.mask = SYM_MASK(ErrMask_0, SDmaHaltErrMask), .msg = "SDmaHalted"},
+=======
+	{.mask = SYM_MASK(ErrMask_0, SDmaHaltErrMask), .msg = "SDmaHalted",
+		.sz = 11},
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	E_P_AUTO(SDmaDescAddrMisalignErr),
 	E_P_AUTO(SDmaUnexpDataErr),
 	E_P_AUTO(SDmaMissingDwErr),
@@ -1195,7 +1233,11 @@ static const struct  qib_hwerror_msgs qib_7322p_error_msgs[] = {
 	E_P_AUTO(RcvICRCErr),
 	E_P_AUTO(RcvVCRCErr),
 	E_P_AUTO(RcvFormatErr),
+<<<<<<< HEAD
 	{ .mask = 0 }
+=======
+	{ .mask = 0, .sz = 0 }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*
@@ -1203,17 +1245,29 @@ static const struct  qib_hwerror_msgs qib_7322p_error_msgs[] = {
  * context
  */
 #define INTR_AUTO(fldname) { .mask = SYM_MASK(IntMask, fldname##Mask), \
+<<<<<<< HEAD
 	.msg = #fldname }
+=======
+	.msg = #fldname, .sz = sizeof(#fldname) }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Below generates "auto-message" for interrupts specific to a port */
 #define INTR_AUTO_P(fldname) { .mask = MASK_ACROSS(\
 	SYM_LSB(IntMask, fldname##Mask##_0), \
 	SYM_LSB(IntMask, fldname##Mask##_1)), \
+<<<<<<< HEAD
 	.msg = #fldname "_P" }
+=======
+	.msg = #fldname "_P", .sz = sizeof(#fldname "_P") }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* For some reason, the SerDesTrimDone bits are reversed */
 #define INTR_AUTO_PI(fldname) { .mask = MASK_ACROSS(\
 	SYM_LSB(IntMask, fldname##Mask##_1), \
 	SYM_LSB(IntMask, fldname##Mask##_0)), \
+<<<<<<< HEAD
 	.msg = #fldname "_P" }
+=======
+	.msg = #fldname "_P", .sz = sizeof(#fldname "_P") }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Below generates "auto-message" for interrupts specific to a context,
  * with ctxt-number appended
@@ -1221,7 +1275,11 @@ static const struct  qib_hwerror_msgs qib_7322p_error_msgs[] = {
 #define INTR_AUTO_C(fldname) { .mask = MASK_ACROSS(\
 	SYM_LSB(IntMask, fldname##0IntMask), \
 	SYM_LSB(IntMask, fldname##17IntMask)), \
+<<<<<<< HEAD
 	.msg = #fldname "_C"}
+=======
+	.msg = #fldname "_C", .sz = sizeof(#fldname "_C") }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static const struct  qib_hwerror_msgs qib_7322_intr_msgs[] = {
 	INTR_AUTO_P(SDmaInt),
@@ -1235,11 +1293,20 @@ static const struct  qib_hwerror_msgs qib_7322_intr_msgs[] = {
 	INTR_AUTO_P(SendDoneInt),
 	INTR_AUTO(SendBufAvailInt),
 	INTR_AUTO_C(RcvAvail),
+<<<<<<< HEAD
 	{ .mask = 0 }
 };
 
 #define TXSYMPTOM_AUTO_P(fldname) \
 	{ .mask = SYM_MASK(SendHdrErrSymptom_0, fldname), .msg = #fldname }
+=======
+	{ .mask = 0, .sz = 0 }
+};
+
+#define TXSYMPTOM_AUTO_P(fldname) \
+	{ .mask = SYM_MASK(SendHdrErrSymptom_0, fldname), \
+	.msg = #fldname, .sz = sizeof(#fldname) }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct  qib_hwerror_msgs hdrchk_msgs[] = {
 	TXSYMPTOM_AUTO_P(NonKeyPacket),
 	TXSYMPTOM_AUTO_P(GRHFail),
@@ -1248,7 +1315,11 @@ static const struct  qib_hwerror_msgs hdrchk_msgs[] = {
 	TXSYMPTOM_AUTO_P(SLIDFail),
 	TXSYMPTOM_AUTO_P(RawIPV6),
 	TXSYMPTOM_AUTO_P(PacketTooSmall),
+<<<<<<< HEAD
 	{ .mask = 0 }
+=======
+	{ .mask = 0, .sz = 0 }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #define IBA7322_HDRHEAD_PKTINT_SHIFT 32 /* interrupt cnt in upper 32 bits */
@@ -1293,7 +1364,11 @@ static void err_decode(char *msg, size_t len, u64 errs,
 	u64 these, lmask;
 	int took, multi, n = 0;
 
+<<<<<<< HEAD
 	while (msp && msp->mask) {
+=======
+	while (errs && msp && msp->mask) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		multi = (msp->mask & (msp->mask - 1));
 		while (errs & msp->mask) {
 			these = (errs & msp->mask);
@@ -1304,9 +1379,20 @@ static void err_decode(char *msg, size_t len, u64 errs,
 					*msg++ = ',';
 					len--;
 				}
+<<<<<<< HEAD
 				took = scnprintf(msg, len, "%s", msp->msg);
 				len -= took;
 				msg += took;
+=======
+				BUG_ON(!msp->sz);
+				/* msp->sz counts the nul */
+				took = min_t(size_t, msp->sz - (size_t)1, len);
+				memcpy(msg,  msp->msg, took);
+				len -= took;
+				msg += took;
+				if (len)
+					*msg = '\0';
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			}
 			errs &= ~lmask;
 			if (len && multi) {
@@ -1644,6 +1730,17 @@ done:
 	return;
 }
 
+<<<<<<< HEAD
+=======
+static void qib_error_tasklet(unsigned long data)
+{
+	struct qib_devdata *dd = (struct qib_devdata *)data;
+
+	handle_7322_errors(dd);
+	qib_write_kreg(dd, kr_errmask, dd->cspec->errormask);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void reenable_chase(unsigned long opaque)
 {
 	struct qib_pportdata *ppd = (struct qib_pportdata *)opaque;
@@ -2725,8 +2822,15 @@ static noinline void unlikely_7322_intr(struct qib_devdata *dd, u64 istat)
 		unknown_7322_ibits(dd, istat);
 	if (istat & QIB_I_GPIO)
 		unknown_7322_gpio_intr(dd);
+<<<<<<< HEAD
 	if (istat & QIB_I_C_ERROR)
 		handle_7322_errors(dd);
+=======
+	if (istat & QIB_I_C_ERROR) {
+		qib_write_kreg(dd, kr_errmask, 0ULL);
+		tasklet_schedule(&dd->error_tasklet);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (istat & INT_MASK_P(Err, 0) && dd->rcd[0])
 		handle_7322_p_errors(dd->rcd[0]->ppd);
 	if (istat & INT_MASK_P(Err, 1) && dd->rcd[1])
@@ -3125,6 +3229,11 @@ try_intx:
 			arg = dd->rcd[ctxt];
 			if (!arg)
 				continue;
+<<<<<<< HEAD
+=======
+			if (qib_krcvq01_no_msi && ctxt < 2)
+				continue;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			lsb = QIB_I_RCVAVAIL_LSB + ctxt;
 			handler = qib_7322pintr;
 			name = QIB_DRV_NAME " (kctx)";
@@ -3159,6 +3268,11 @@ try_intx:
 	for (i = 0; i < ARRAY_SIZE(redirect); i++)
 		qib_write_kreg(dd, kr_intredirect + i, redirect[i]);
 	dd->cspec->main_int_mask = mask;
+<<<<<<< HEAD
+=======
+	tasklet_init(&dd->error_tasklet, qib_error_tasklet,
+		(unsigned long)dd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 bail:;
 }
 
@@ -6790,6 +6904,13 @@ struct qib_devdata *qib_init_iba7322_funcs(struct pci_dev *pdev,
 		    (i >= ARRAY_SIZE(irq_table) &&
 		     dd->rcd[i - ARRAY_SIZE(irq_table)]))
 			actual_cnt++;
+<<<<<<< HEAD
+=======
+	/* reduce by ctxt's < 2 */
+	if (qib_krcvq01_no_msi)
+		actual_cnt -= dd->num_pports;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tabsize = actual_cnt;
 	dd->cspec->msix_entries = kmalloc(tabsize *
 			sizeof(struct msix_entry), GFP_KERNEL);

@@ -9,6 +9,10 @@
  * published by the Free Software Foundation.
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/dma-mapping.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/init.h>
 #include <linux/platform_device.h>
 #include <linux/err.h>
@@ -23,6 +27,10 @@
 
 #include <mach/ipu.h>
 
+<<<<<<< HEAD
+=======
+#include "../dmaengine.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "ipu_intern.h"
 
 #define FS_VF_IN_VALID	0x00000002
@@ -887,6 +895,7 @@ static dma_cookie_t idmac_tx_submit(struct dma_async_tx_descriptor *tx)
 
 	dev_dbg(dev, "Submitting sg %p\n", &desc->sg[0]);
 
+<<<<<<< HEAD
 	cookie = ichan->dma_chan.cookie;
 
 	if (++cookie < 0)
@@ -895,6 +904,9 @@ static dma_cookie_t idmac_tx_submit(struct dma_async_tx_descriptor *tx)
 	/* from dmaengine.h: "last cookie value returned to client" */
 	ichan->dma_chan.cookie = cookie;
 	tx->cookie = cookie;
+=======
+	cookie = dma_cookie_assign(tx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* ipu->lock can be taken under ichan->lock, but not v.v. */
 	spin_lock_irqsave(&ichan->lock, flags);
@@ -1315,7 +1327,11 @@ static irqreturn_t idmac_interrupt(int irq, void *dev_id)
 	/* Flip the active buffer - even if update above failed */
 	ichan->active_buffer = !ichan->active_buffer;
 	if (done)
+<<<<<<< HEAD
 		ichan->completed = desc->txd.cookie;
+=======
+		dma_cookie_complete(&desc->txd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	callback = desc->txd.callback;
 	callback_param = desc->txd.callback_param;
@@ -1361,7 +1377,12 @@ static void ipu_gc_tasklet(unsigned long arg)
 /* Allocate and initialise a transfer descriptor. */
 static struct dma_async_tx_descriptor *idmac_prep_slave_sg(struct dma_chan *chan,
 		struct scatterlist *sgl, unsigned int sg_len,
+<<<<<<< HEAD
 		enum dma_data_direction direction, unsigned long tx_flags)
+=======
+		enum dma_transfer_direction direction, unsigned long tx_flags,
+		void *context)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct idmac_channel *ichan = to_idmac_chan(chan);
 	struct idmac_tx_desc *desc = NULL;
@@ -1511,8 +1532,12 @@ static int idmac_alloc_chan_resources(struct dma_chan *chan)
 	BUG_ON(chan->client_count > 1);
 	WARN_ON(ichan->status != IPU_CHANNEL_FREE);
 
+<<<<<<< HEAD
 	chan->cookie		= 1;
 	ichan->completed	= -ENXIO;
+=======
+	dma_cookie_init(chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = ipu_irq_map(chan->chan_id);
 	if (ret < 0)
@@ -1601,9 +1626,13 @@ static void idmac_free_chan_resources(struct dma_chan *chan)
 static enum dma_status idmac_tx_status(struct dma_chan *chan,
 		       dma_cookie_t cookie, struct dma_tx_state *txstate)
 {
+<<<<<<< HEAD
 	struct idmac_channel *ichan = to_idmac_chan(chan);
 
 	dma_set_tx_state(txstate, ichan->completed, chan->cookie, 0);
+=======
+	dma_set_tx_state(txstate, chan->completed_cookie, chan->cookie, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (cookie != chan->cookie)
 		return DMA_ERROR;
 	return DMA_SUCCESS;
@@ -1639,11 +1668,18 @@ static int __init ipu_idmac_init(struct ipu *ipu)
 
 		ichan->status		= IPU_CHANNEL_FREE;
 		ichan->sec_chan_en	= false;
+<<<<<<< HEAD
 		ichan->completed	= -ENXIO;
 		snprintf(ichan->eof_name, sizeof(ichan->eof_name), "IDMAC EOF %d", i);
 
 		dma_chan->device	= &idmac->dma;
 		dma_chan->cookie	= 1;
+=======
+		snprintf(ichan->eof_name, sizeof(ichan->eof_name), "IDMAC EOF %d", i);
+
+		dma_chan->device	= &idmac->dma;
+		dma_cookie_init(dma_chan);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		dma_chan->chan_id	= i;
 		list_add_tail(&dma_chan->device_node, &dma->channels);
 	}
@@ -1705,16 +1741,24 @@ static int __init ipu_probe(struct platform_device *pdev)
 		ipu_data.irq_fn, ipu_data.irq_err, ipu_data.irq_base);
 
 	/* Remap IPU common registers */
+<<<<<<< HEAD
 	ipu_data.reg_ipu = ioremap(mem_ipu->start,
 				   mem_ipu->end - mem_ipu->start + 1);
+=======
+	ipu_data.reg_ipu = ioremap(mem_ipu->start, resource_size(mem_ipu));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ipu_data.reg_ipu) {
 		ret = -ENOMEM;
 		goto err_ioremap_ipu;
 	}
 
 	/* Remap Image Converter and Image DMA Controller registers */
+<<<<<<< HEAD
 	ipu_data.reg_ic = ioremap(mem_ic->start,
 				  mem_ic->end - mem_ic->start + 1);
+=======
+	ipu_data.reg_ic = ioremap(mem_ic->start, resource_size(mem_ic));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ipu_data.reg_ic) {
 		ret = -ENOMEM;
 		goto err_ioremap_ic;

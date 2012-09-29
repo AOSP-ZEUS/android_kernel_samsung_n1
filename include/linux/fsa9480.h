@@ -21,12 +21,38 @@
 
 #ifndef _FSA9480_H_
 #define _FSA9480_H_
+<<<<<<< HEAD
+=======
+#include <linux/wakelock.h>
+
+struct fsa9480_usbsw {
+	struct i2c_client		*client;
+	struct fsa9480_platform_data	*pdata;
+	int				dev1;
+	int				dev2;
+	int				mansw;
+	struct mutex			lock;
+#if defined(CONFIG_MACH_BOSE_ATT)
+	struct wake_lock mhl_wake_lock;
+#endif
+};
+
+struct otg_id_open_data{
+	void (*id_open)(struct fsa9480_usbsw *);
+	void (*otg_cb)(bool);
+	struct fsa9480_usbsw *otg_open_data;
+	int otg_enabled;
+	int *otg_state;
+	int *host_state;
+};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 enum {
 	FSA9480_DETACHED,
 	FSA9480_ATTACHED
 };
 
+<<<<<<< HEAD
 struct fsa9480_platform_data {
 	void (*cfg_gpio) (void);
 	void (*usb_cb) (bool attached);
@@ -38,4 +64,41 @@ struct fsa9480_platform_data {
 	void (*reset_cb) (void);
 };
 
+=======
+enum {
+	FSA9480_RECOVER_OVP,
+	FSA9480_OVP,
+};
+
+struct fsa9480_platform_data {
+	void (*cfg_gpio) (void);
+	void (*otg_cb) (bool attached);
+	void (*usb_cb) (bool attached);
+	int (*uart_cb) (bool attached);
+	void (*charger_cb) (bool attached);
+	void (*charger_ovp_cb) (bool attached);
+	void (*jig_cb) (bool attached);
+	void (*dock_charger_cb) (bool attached);
+	void (*deskdock_cb) (bool attached);
+#if defined(CONFIG_MACH_BOSE_ATT)
+	 void (*mhldock_cb) (bool attached);
+#endif
+	void (*cardock_cb) (bool attached);
+	void (*reset_cb) (void);
+	void (*set_otg_func)(void(*)(struct fsa9480_usbsw *),
+				struct fsa9480_usbsw *);
+	void (*inform_charger_connection) (int);
+};
+
+enum {
+	AUTO_SWITCH = 0,
+	SWITCH_USB_Port,
+	SWITCH_Audio_Port,
+	SWITCH_UART_Port,
+	SWITCH_V_Audio_Port
+};
+
+void fsa9480_manual_switching(int path);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* _FSA9480_H_ */

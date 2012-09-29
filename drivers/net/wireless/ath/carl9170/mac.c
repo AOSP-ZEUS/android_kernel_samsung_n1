@@ -455,6 +455,7 @@ int carl9170_set_beacon_timers(struct ar9170 *ar)
 	return carl9170_regwrite_result();
 }
 
+<<<<<<< HEAD
 int carl9170_update_beacon(struct ar9170 *ar, const bool submit)
 {
 	struct sk_buff *skb = NULL;
@@ -584,6 +585,8 @@ err_free:
 	return err;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int carl9170_upload_key(struct ar9170 *ar, const u8 id, const u8 *mac,
 			const u8 ktype, const u8 keyidx, const u8 *keydata,
 			const int keylen)

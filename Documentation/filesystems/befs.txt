@@ -27,7 +27,11 @@ His original code can still be found at:
 Does anyone know of a more current email address for Makoto? He doesn't
 respond to the address given above...
 
+<<<<<<< HEAD
 Current maintainer: Sergey S. Kostyliov <rathamahata@php4.ru>
+=======
+This filesystem doesn't have a maintainer.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 WHAT IS THIS DRIVER?
 ==================

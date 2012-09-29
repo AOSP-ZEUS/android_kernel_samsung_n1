@@ -25,6 +25,10 @@
 #include <sound/core.h>
 
 #include "ctvmem.h"
+<<<<<<< HEAD
+=======
+#include "cthardware.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "ctresource.h"
 
 enum CTALSADEVS {		/* Types of alsa devices */
@@ -115,12 +119,24 @@ struct ct_atc {
 	int (*line_clfe_unmute)(struct ct_atc *atc, unsigned char state);
 	int (*line_rear_unmute)(struct ct_atc *atc, unsigned char state);
 	int (*line_in_unmute)(struct ct_atc *atc, unsigned char state);
+<<<<<<< HEAD
+=======
+	int (*mic_unmute)(struct ct_atc *atc, unsigned char state);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int (*spdif_out_unmute)(struct ct_atc *atc, unsigned char state);
 	int (*spdif_in_unmute)(struct ct_atc *atc, unsigned char state);
 	int (*spdif_out_get_status)(struct ct_atc *atc, unsigned int *status);
 	int (*spdif_out_set_status)(struct ct_atc *atc, unsigned int status);
 	int (*spdif_out_passthru)(struct ct_atc *atc, unsigned char state);
+<<<<<<< HEAD
 	int (*have_digit_io_switch)(struct ct_atc *atc);
+=======
+	struct capabilities (*capabilities)(struct ct_atc *atc);
+	int (*output_switch_get)(struct ct_atc *atc);
+	int (*output_switch_put)(struct ct_atc *atc, int position);
+	int (*mic_source_switch_get)(struct ct_atc *atc);
+	int (*mic_source_switch_put)(struct ct_atc *atc, int position);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Don't touch! Used for internal object. */
 	void *rsc_mgrs[NUM_RSCTYP]; /* chip resource managers */

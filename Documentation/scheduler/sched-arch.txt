@@ -66,7 +66,11 @@ Your cpu_idle routines need to obey the following rules:
 	    barrier issued (followed by a test of need_resched with
 	    interrupts disabled, as explained in 3).
 
+<<<<<<< HEAD
 arch/i386/kernel/process.c has examples of both polling and
+=======
+arch/x86/kernel/process.c has examples of both polling and
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 sleeping idle functions.
 
 

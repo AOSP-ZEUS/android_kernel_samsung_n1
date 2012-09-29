@@ -2479,7 +2479,11 @@ static int __devinit snd_rme9652_create(struct snd_card *card,
 	}
 	
 	if (request_irq(pci->irq, snd_rme9652_interrupt, IRQF_SHARED,
+<<<<<<< HEAD
 			"rme9652", rme9652)) {
+=======
+			KBUILD_MODNAME, rme9652)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		snd_printk(KERN_ERR "unable to request IRQ %d\n", pci->irq);
 		return -EBUSY;
 	}
@@ -2632,7 +2636,11 @@ static void __devexit snd_rme9652_remove(struct pci_dev *pci)
 }
 
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name	  = "RME Digi9652 (Hammerfall)",
+=======
+	.name	  = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_rme9652_ids,
 	.probe	  = snd_rme9652_probe,
 	.remove	  = __devexit_p(snd_rme9652_remove),

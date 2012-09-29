@@ -175,6 +175,10 @@ struct sh_mmcif_host {
 	enum mmcif_state state;
 	spinlock_t lock;
 	bool power;
+<<<<<<< HEAD
+=======
+	bool card_present;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* DMA support */
 	struct dma_chan		*chan_rx;
@@ -228,8 +232,13 @@ static void sh_mmcif_start_dma_rx(struct sh_mmcif_host *host)
 			 DMA_FROM_DEVICE);
 	if (ret > 0) {
 		host->dma_active = true;
+<<<<<<< HEAD
 		desc = chan->device->device_prep_slave_sg(chan, sg, ret,
 			DMA_FROM_DEVICE, DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+=======
+		desc = dmaengine_prep_slave_sg(chan, sg, ret,
+			DMA_DEV_TO_MEM, DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (desc) {
@@ -276,8 +285,18 @@ static void sh_mmcif_start_dma_tx(struct sh_mmcif_host *host)
 			 DMA_TO_DEVICE);
 	if (ret > 0) {
 		host->dma_active = true;
+<<<<<<< HEAD
 		desc = chan->device->device_prep_slave_sg(chan, sg, ret,
 			DMA_TO_DEVICE, DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+=======
+<<<<<<< HEAD
+		desc = chan->device->device_prep_slave_sg(chan, sg, ret,
+			DMA_TO_DEVICE, DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+=======
+		desc = dmaengine_prep_slave_sg(chan, sg, ret,
+			DMA_MEM_TO_DEV, DMA_PREP_INTERRUPT | DMA_CTRL_ACK);
+>>>>>>> 1605282... dmaengine/dma_slave: introduce inline wrappers
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (desc) {
@@ -877,6 +896,7 @@ static void sh_mmcif_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 	spin_unlock_irqrestore(&host->lock, flags);
 
 	if (ios->power_mode == MMC_POWER_UP) {
+<<<<<<< HEAD
 		if (p->set_pwr)
 			p->set_pwr(host->pd, ios->power_mode);
 		if (!host->power) {
@@ -884,16 +904,33 @@ static void sh_mmcif_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 			sh_mmcif_request_dma(host, host->pd->dev.platform_data);
 			pm_runtime_get_sync(&host->pd->dev);
 			host->power = true;
+=======
+		if (!host->card_present) {
+			/* See if we also get DMA */
+			sh_mmcif_request_dma(host, host->pd->dev.platform_data);
+			host->card_present = true;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	} else if (ios->power_mode == MMC_POWER_OFF || !ios->clock) {
 		/* clock stop */
 		sh_mmcif_clock_control(host, 0);
 		if (ios->power_mode == MMC_POWER_OFF) {
+<<<<<<< HEAD
 			if (host->power) {
 				pm_runtime_put(&host->pd->dev);
 				sh_mmcif_release_dma(host);
 				host->power = false;
 			}
+=======
+			if (host->card_present) {
+				sh_mmcif_release_dma(host);
+				host->card_present = false;
+			}
+		}
+		if (host->power) {
+			pm_runtime_put(&host->pd->dev);
+			host->power = false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (p->down_pwr)
 				p->down_pwr(host->pd);
 		}
@@ -901,8 +938,21 @@ static void sh_mmcif_set_ios(struct mmc_host *mmc, struct mmc_ios *ios)
 		return;
 	}
 
+<<<<<<< HEAD
 	if (ios->clock)
 		sh_mmcif_clock_control(host, ios->clock);
+=======
+	if (ios->clock) {
+		if (!host->power) {
+			if (p->set_pwr)
+				p->set_pwr(host->pd, ios->power_mode);
+			pm_runtime_get_sync(&host->pd->dev);
+			host->power = true;
+			sh_mmcif_sync_reset(host);
+		}
+		sh_mmcif_clock_control(host, ios->clock);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	host->bus_width = ios->bus_width;
 	host->state = STATE_IDLE;

@@ -11,7 +11,11 @@
  *   NON INFRINGEMENT.  See the GNU General Public License for
  *   more details.
  *
+<<<<<<< HEAD
  * Do not include directly; use <asm/atomic.h>.
+=======
+ * Do not include directly; use <linux/atomic.h>.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 
 #ifndef _ASM_TILE_ATOMIC_32_H
@@ -21,7 +25,11 @@
 
 #ifndef __ASSEMBLY__
 
+<<<<<<< HEAD
 /* Tile-specific routines to support <asm/atomic.h>. */
+=======
+/* Tile-specific routines to support <linux/atomic.h>. */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int _atomic_xchg(atomic_t *v, int n);
 int _atomic_xchg_add(atomic_t *v, int i);
 int _atomic_xchg_add_unless(atomic_t *v, int a, int u);
@@ -81,18 +89,31 @@ static inline int atomic_add_return(int i, atomic_t *v)
 }
 
 /**
+<<<<<<< HEAD
  * atomic_add_unless - add unless the number is already a given value
+=======
+ * __atomic_add_unless - add unless the number is already a given value
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @v: pointer of type atomic_t
  * @a: the amount to add to v...
  * @u: ...unless v is equal to u.
  *
  * Atomically adds @a to @v, so long as @v was not already @u.
+<<<<<<< HEAD
  * Returns non-zero if @v was not @u, and zero otherwise.
  */
 static inline int atomic_add_unless(atomic_t *v, int a, int u)
 {
 	smp_mb();  /* barrier for proper semantics */
 	return _atomic_xchg_add_unless(v, a, u) != u;
+=======
+ * Returns the old value of @v.
+ */
+static inline int __atomic_add_unless(atomic_t *v, int a, int u)
+{
+	smp_mb();  /* barrier for proper semantics */
+	return _atomic_xchg_add_unless(v, a, u);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -199,7 +220,11 @@ static inline u64 atomic64_add_return(u64 i, atomic64_t *v)
  * @u: ...unless v is equal to u.
  *
  * Atomically adds @a to @v, so long as @v was not already @u.
+<<<<<<< HEAD
  * Returns non-zero if @v was not @u, and zero otherwise.
+=======
+ * Returns the old value of @v.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 static inline u64 atomic64_add_unless(atomic64_t *v, u64 a, u64 u)
 {

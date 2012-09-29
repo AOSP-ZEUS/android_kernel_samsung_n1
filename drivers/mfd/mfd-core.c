@@ -122,7 +122,11 @@ static int mfd_add_device(struct device *parent, int id,
 		}
 
 		if (!cell->ignore_resource_conflicts) {
+<<<<<<< HEAD
 			ret = acpi_check_resource_conflict(&res[r]);
+=======
+			ret = acpi_check_resource_conflict(res);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			if (ret)
 				goto fail_res;
 		}

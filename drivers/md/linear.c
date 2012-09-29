@@ -213,12 +213,15 @@ static int linear_run (mddev_t *mddev)
 	return md_integrity_register(mddev);
 }
 
+<<<<<<< HEAD
 static void free_conf(struct rcu_head *head)
 {
 	linear_conf_t *conf = container_of(head, linear_conf_t, rcu);
 	kfree(conf);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int linear_add(mddev_t *mddev, mdk_rdev_t *rdev)
 {
 	/* Adding a drive to a linear array allows the array to grow.
@@ -247,7 +250,11 @@ static int linear_add(mddev_t *mddev, mdk_rdev_t *rdev)
 	md_set_array_sectors(mddev, linear_size(mddev, 0, 0));
 	set_capacity(mddev->gendisk, mddev->array_sectors);
 	revalidate_disk(mddev->gendisk);
+<<<<<<< HEAD
 	call_rcu(&oldconf->rcu, free_conf);
+=======
+	kfree_rcu(oldconf, rcu);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 

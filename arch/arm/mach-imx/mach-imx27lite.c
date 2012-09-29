@@ -59,6 +59,11 @@ static const struct imxuart_platform_data uart_pdata __initconst = {
 
 static void __init mx27lite_init(void)
 {
+<<<<<<< HEAD
+=======
+	imx27_soc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mxc_gpio_setup_multiple_pins(mx27lite_pins, ARRAY_SIZE(mx27lite_pins),
 		"imx27lite");
 	imx27_add_imx_uart0(&uart_pdata);

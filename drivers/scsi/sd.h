@@ -80,6 +80,17 @@ struct scsi_disk {
 	unsigned	lbpws : 1;
 	unsigned	lbpws10 : 1;
 	unsigned	lbpvpd : 1;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_USB_HOST_NOTIFY
+	wait_queue_head_t	delay_wait;
+	struct completion	scanning_done;
+	struct task_struct *th;
+	int		thread_remove;
+	int		async_end;
+	int		prv_media_present;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 #define to_scsi_disk(obj) container_of(obj,struct scsi_disk,dev)
 

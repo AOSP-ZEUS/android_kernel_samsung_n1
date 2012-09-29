@@ -165,7 +165,10 @@ union intel_mid_dma_cfg_hi {
  * @dma_base: MMIO register space DMA engine base pointer
  * @ch_id: DMA channel id
  * @lock: channel spinlock
+<<<<<<< HEAD
  * @completed: DMA cookie
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @active_list: current active descriptors
  * @queue: current queued up descriptors
  * @free_list: current free descriptors
@@ -183,7 +186,10 @@ struct intel_mid_dma_chan {
 	void __iomem		*dma_base;
 	int			ch_id;
 	spinlock_t		lock;
+<<<<<<< HEAD
 	dma_cookie_t		completed;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct list_head	active_list;
 	struct list_head	queue;
 	struct list_head	free_list;

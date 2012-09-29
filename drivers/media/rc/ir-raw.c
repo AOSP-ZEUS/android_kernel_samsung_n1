@@ -355,6 +355,10 @@ static void init_decoders(struct work_struct *work)
 	load_rc6_decode();
 	load_jvc_decode();
 	load_sony_decode();
+<<<<<<< HEAD
+=======
+	load_mce_kbd_decode();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	load_lirc_codec();
 
 	/* If needed, we may later add some init code. In this case,

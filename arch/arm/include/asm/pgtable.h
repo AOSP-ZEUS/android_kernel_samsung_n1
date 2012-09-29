@@ -189,6 +189,10 @@ extern void __pgd_error(const char *file, int line, pgd_t);
 #define L_PTE_MT_DEV_WC		(_AT(pteval_t, 0x09) << 2)	/* 1001 */
 #define L_PTE_MT_DEV_CACHED	(_AT(pteval_t, 0x0b) << 2)	/* 1011 */
 #define L_PTE_MT_MASK		(_AT(pteval_t, 0x0f) << 2)
+<<<<<<< HEAD
+=======
+#define L_PTE_MT_INNER_WB	(_AT(pteval_t, 0x05) << 2)	/* 0101 (armv6, armv7) */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifndef __ASSEMBLY__
 
@@ -244,6 +248,12 @@ extern pgprot_t phys_mem_access_prot(struct file *file, unsigned long pfn,
 	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_UNCACHED | L_PTE_XN)
 #endif
 
+<<<<<<< HEAD
+=======
+#define pgprot_inner_writeback(prot) \
+	__pgprot_modify(prot, L_PTE_MT_MASK, L_PTE_MT_INNER_WB)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* __ASSEMBLY__ */
 
 /*
@@ -325,6 +335,27 @@ extern pgd_t swapper_pg_dir[PTRS_PER_PGD];
 		clean_pmd_entry(pmdp);	\
 	} while (0)
 
+<<<<<<< HEAD
+=======
+extern spinlock_t pgd_lock;
+extern struct list_head pgd_list;
+
+pte_t *lookup_address(unsigned long address, unsigned int *level);
+enum {
+	PG_LEVEL_NONE,
+	PG_LEVEL_4K,
+	PG_LEVEL_2M,
+	PG_LEVEL_NUM
+};
+
+#ifdef CONFIG_PROC_FS
+extern void update_page_count(int level, unsigned long pages);
+#else
+static inline void update_page_count(int level, unsigned long pages) { }
+#endif
+
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline pte_t *pmd_page_vaddr(pmd_t pmd)
 {
 	return __va(pmd_val(pmd) & PAGE_MASK);
@@ -354,6 +385,12 @@ static inline pte_t *pmd_page_vaddr(pmd_t pmd)
 #define pte_pfn(pte)		(pte_val(pte) >> PAGE_SHIFT)
 #define pfn_pte(pfn,prot)	__pte(__pfn_to_phys(pfn) | pgprot_val(prot))
 
+<<<<<<< HEAD
+=======
+#define pmd_pfn(pmd)		((pmd_val(pmd) & SECTION_MASK) >> PAGE_SHIFT)
+#define pte_pgprot(pte)		((pgprot_t)(pte_val(pte) & ~PAGE_MASK))
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define pte_page(pte)		pfn_to_page(pte_pfn(pte))
 #define mk_pte(page,prot)	pfn_pte(page_to_pfn(page), prot)
 

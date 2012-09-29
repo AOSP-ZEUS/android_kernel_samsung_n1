@@ -165,7 +165,11 @@ static inline int sizeof_gpio_leds_priv(int num_leds)
 }
 
 /* Code to create from OpenFirmware platform devices */
+<<<<<<< HEAD
 #ifdef CONFIG_LEDS_GPIO_OF
+=======
+#ifdef CONFIG_OF_GPIO
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct gpio_leds_priv * __devinit gpio_leds_create_of(struct platform_device *pdev)
 {
 	struct device_node *np = pdev->dev.of_node, *child;
@@ -223,13 +227,21 @@ static const struct of_device_id of_gpio_leds_match[] = {
 	{ .compatible = "gpio-leds", },
 	{},
 };
+<<<<<<< HEAD
 #else
+=======
+#else /* CONFIG_OF_GPIO */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct gpio_leds_priv * __devinit gpio_leds_create_of(struct platform_device *pdev)
 {
 	return NULL;
 }
 #define of_gpio_leds_match NULL
+<<<<<<< HEAD
 #endif
+=======
+#endif /* CONFIG_OF_GPIO */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 static int __devinit gpio_led_probe(struct platform_device *pdev)

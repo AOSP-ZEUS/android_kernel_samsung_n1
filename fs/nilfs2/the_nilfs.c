@@ -515,7 +515,10 @@ static int nilfs_load_super_block(struct the_nilfs *nilfs,
 		brelse(sbh[1]);
 		sbh[1] = NULL;
 		sbp[1] = NULL;
+<<<<<<< HEAD
 		valid[1] = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		swp = 0;
 	}
 	if (!valid[swp]) {

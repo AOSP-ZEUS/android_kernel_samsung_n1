@@ -41,7 +41,11 @@ void __init nas100d_pci_preinit(void)
 	ixp4xx_pci_preinit();
 }
 
+<<<<<<< HEAD
 static int __init nas100d_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int __init nas100d_map_irq(const struct pci_dev *dev, u8 slot, u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	static int pci_irq_table[MAX_DEV][IRQ_LINES] = {
 		{ IXP4XX_GPIO_IRQ(INTA), -1, -1 },

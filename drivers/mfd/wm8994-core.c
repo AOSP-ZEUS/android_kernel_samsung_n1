@@ -16,9 +16,17 @@
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/i2c.h>
+<<<<<<< HEAD
 #include <linux/delay.h>
 #include <linux/mfd/core.h>
 #include <linux/pm_runtime.h>
+=======
+#include <linux/err.h>
+#include <linux/delay.h>
+#include <linux/mfd/core.h>
+#include <linux/pm_runtime.h>
+#include <linux/regmap.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/regulator/consumer.h>
 #include <linux/regulator/machine.h>
 
@@ -29,6 +37,7 @@
 static int wm8994_read(struct wm8994 *wm8994, unsigned short reg,
 		       int bytes, void *dest)
 {
+<<<<<<< HEAD
 	int ret, i;
 	u16 *buf = dest;
 
@@ -45,6 +54,9 @@ static int wm8994_read(struct wm8994 *wm8994, unsigned short reg,
 	}
 
 	return 0;
+=======
+	return regmap_raw_read(wm8994->regmap, reg, dest, bytes);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -55,6 +67,7 @@ static int wm8994_read(struct wm8994 *wm8994, unsigned short reg,
  */
 int wm8994_reg_read(struct wm8994 *wm8994, unsigned short reg)
 {
+<<<<<<< HEAD
 	unsigned short val;
 	int ret;
 
@@ -63,11 +76,21 @@ int wm8994_reg_read(struct wm8994 *wm8994, unsigned short reg)
 	ret = wm8994_read(wm8994, reg, 2, &val);
 
 	mutex_unlock(&wm8994->io_lock);
+=======
+	unsigned int val;
+	int ret;
+
+	ret = regmap_read(wm8994->regmap, reg, &val);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ret < 0)
 		return ret;
 	else
+<<<<<<< HEAD
 		return be16_to_cpu(val);
+=======
+		return val;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(wm8994_reg_read);
 
@@ -82,6 +105,7 @@ EXPORT_SYMBOL_GPL(wm8994_reg_read);
 int wm8994_bulk_read(struct wm8994 *wm8994, unsigned short reg,
 		     int count, u16 *buf)
 {
+<<<<<<< HEAD
 	int ret;
 
 	mutex_lock(&wm8994->io_lock);
@@ -93,10 +117,15 @@ int wm8994_bulk_read(struct wm8994 *wm8994, unsigned short reg,
 	return ret;
 }
 EXPORT_SYMBOL_GPL(wm8994_bulk_read);
+=======
+	return regmap_bulk_read(wm8994->regmap, reg, buf, count);
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int wm8994_write(struct wm8994 *wm8994, unsigned short reg,
 			int bytes, const void *src)
 {
+<<<<<<< HEAD
 	const u16 *buf = src;
 	int i;
 
@@ -109,6 +138,9 @@ static int wm8994_write(struct wm8994 *wm8994, unsigned short reg,
 	}
 
 	return wm8994->write_dev(wm8994, reg, bytes, src);
+=======
+	return regmap_raw_write(wm8994->regmap, reg, src, bytes);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -121,6 +153,7 @@ static int wm8994_write(struct wm8994 *wm8994, unsigned short reg,
 int wm8994_reg_write(struct wm8994 *wm8994, unsigned short reg,
 		     unsigned short val)
 {
+<<<<<<< HEAD
 	int ret;
 
 	val = cpu_to_be16(val);
@@ -132,6 +165,9 @@ int wm8994_reg_write(struct wm8994 *wm8994, unsigned short reg,
 	mutex_unlock(&wm8994->io_lock);
 
 	return ret;
+=======
+	return regmap_write(wm8994->regmap, reg, val);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(wm8994_reg_write);
 
@@ -146,6 +182,7 @@ EXPORT_SYMBOL_GPL(wm8994_reg_write);
 int wm8994_bulk_write(struct wm8994 *wm8994, unsigned short reg,
 		      int count, const u16 *buf)
 {
+<<<<<<< HEAD
 	int ret;
 
 	mutex_lock(&wm8994->io_lock);
@@ -155,6 +192,9 @@ int wm8994_bulk_write(struct wm8994 *wm8994, unsigned short reg,
 	mutex_unlock(&wm8994->io_lock);
 
 	return ret;
+=======
+	return regmap_raw_write(wm8994->regmap, reg, buf, count * sizeof(u16));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(wm8994_bulk_write);
 
@@ -169,6 +209,7 @@ EXPORT_SYMBOL_GPL(wm8994_bulk_write);
 int wm8994_set_bits(struct wm8994 *wm8994, unsigned short reg,
 		    unsigned short mask, unsigned short val)
 {
+<<<<<<< HEAD
 	int ret;
 	u16 r;
 
@@ -191,6 +232,9 @@ out:
 	mutex_unlock(&wm8994->io_lock);
 
 	return ret;
+=======
+	return regmap_update_bits(wm8994->regmap, reg, mask, val);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(wm8994_set_bits);
 
@@ -316,7 +360,11 @@ static int wm8994_suspend(struct device *dev)
 static int wm8994_resume(struct device *dev)
 {
 	struct wm8994 *wm8994 = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	int ret;
+=======
+	int ret, i;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* We may have lied to the PM core about suspending */
 	if (!wm8994->suspended)
@@ -329,10 +377,23 @@ static int wm8994_resume(struct device *dev)
 		return ret;
 	}
 
+<<<<<<< HEAD
 	ret = wm8994_write(wm8994, WM8994_INTERRUPT_STATUS_1_MASK,
 			   WM8994_NUM_IRQ_REGS * 2, &wm8994->irq_masks_cur);
 	if (ret < 0)
 		dev_err(dev, "Failed to restore interrupt masks: %d\n", ret);
+=======
+	/* Write register at a time as we use the cache on the CPU so store
+	 * it in native endian.
+	 */
+	for (i = 0; i < ARRAY_SIZE(wm8994->irq_masks_cur); i++) {
+		ret = wm8994_reg_write(wm8994, WM8994_INTERRUPT_STATUS_1_MASK
+				       + i, wm8994->irq_masks_cur[i]);
+		if (ret < 0)
+			dev_err(dev, "Failed to restore interrupt masks: %d\n",
+				ret);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = wm8994_write(wm8994, WM8994_LDO_1, WM8994_NUM_LDO_REGS * 2,
 			   &wm8994->ldo_regs);
@@ -372,6 +433,14 @@ static int wm8994_ldo_in_use(struct wm8994_pdata *pdata, int ldo)
 }
 #endif
 
+<<<<<<< HEAD
+=======
+static struct regmap_config wm8994_regmap_config = {
+	.reg_bits = 16,
+	.val_bits = 16,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Instantiate the generic non-control parts of the device.
  */
@@ -381,7 +450,10 @@ static int wm8994_device_init(struct wm8994 *wm8994, int irq)
 	const char *devname;
 	int ret, i;
 
+<<<<<<< HEAD
 	mutex_init(&wm8994->io_lock);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev_set_drvdata(wm8994->dev, wm8994);
 
 	/* Add the on-chip regulators first for bootstrapping */
@@ -391,7 +463,11 @@ static int wm8994_device_init(struct wm8994 *wm8994, int irq)
 			      NULL, 0);
 	if (ret != 0) {
 		dev_err(wm8994->dev, "Failed to add children: %d\n", ret);
+<<<<<<< HEAD
 		goto err;
+=======
+		goto err_regmap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	switch (wm8994->type) {
@@ -403,7 +479,11 @@ static int wm8994_device_init(struct wm8994 *wm8994, int irq)
 		break;
 	default:
 		BUG();
+<<<<<<< HEAD
 		return -EINVAL;
+=======
+		goto err_regmap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	wm8994->supplies = kzalloc(sizeof(struct regulator_bulk_data) *
@@ -411,7 +491,11 @@ static int wm8994_device_init(struct wm8994 *wm8994, int irq)
 				   GFP_KERNEL);
 	if (!wm8994->supplies) {
 		ret = -ENOMEM;
+<<<<<<< HEAD
 		goto err;
+=======
+		goto err_regmap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	switch (wm8994->type) {
@@ -425,7 +509,11 @@ static int wm8994_device_init(struct wm8994 *wm8994, int irq)
 		break;
 	default:
 		BUG();
+<<<<<<< HEAD
 		return -EINVAL;
+=======
+		goto err_regmap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 		
 	ret = regulator_bulk_get(wm8994->dev, wm8994->num_supplies,
@@ -476,6 +564,7 @@ static int wm8994_device_init(struct wm8994 *wm8994, int irq)
 		goto err_enable;
 	}
 
+<<<<<<< HEAD
 	switch (ret) {
 	case 0:
 	case 1:
@@ -483,6 +572,20 @@ static int wm8994_device_init(struct wm8994 *wm8994, int irq)
 			dev_warn(wm8994->dev,
 				 "revision %c not fully supported\n",
 				 'A' + ret);
+=======
+	switch (wm8994->type) {
+	case WM8994:
+		switch (ret) {
+		case 0:
+		case 1:
+			dev_warn(wm8994->dev,
+				 "revision %c not fully supported\n",
+				 'A' + ret);
+			break;
+		default:
+			break;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		break;
@@ -543,7 +646,12 @@ err_get:
 	regulator_bulk_free(wm8994->num_supplies, wm8994->supplies);
 err_supplies:
 	kfree(wm8994->supplies);
+<<<<<<< HEAD
 err:
+=======
+err_regmap:
+	regmap_exit(wm8994->regmap);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mfd_remove_devices(wm8994->dev);
 	kfree(wm8994);
 	return ret;
@@ -558,6 +666,7 @@ static void wm8994_device_exit(struct wm8994 *wm8994)
 			       wm8994->supplies);
 	regulator_bulk_free(wm8994->num_supplies, wm8994->supplies);
 	kfree(wm8994->supplies);
+<<<<<<< HEAD
 	kfree(wm8994);
 }
 
@@ -610,10 +719,20 @@ static int wm8994_i2c_write_device(struct wm8994 *wm8994, unsigned short reg,
 	return 0;
 }
 
+=======
+	regmap_exit(wm8994->regmap);
+	kfree(wm8994);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int wm8994_i2c_probe(struct i2c_client *i2c,
 			    const struct i2c_device_id *id)
 {
 	struct wm8994 *wm8994;
+<<<<<<< HEAD
+=======
+	int ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	wm8994 = kzalloc(sizeof(struct wm8994), GFP_KERNEL);
 	if (wm8994 == NULL)
@@ -621,12 +740,27 @@ static int wm8994_i2c_probe(struct i2c_client *i2c,
 
 	i2c_set_clientdata(i2c, wm8994);
 	wm8994->dev = &i2c->dev;
+<<<<<<< HEAD
 	wm8994->control_data = i2c;
 	wm8994->read_dev = wm8994_i2c_read_device;
 	wm8994->write_dev = wm8994_i2c_write_device;
 	wm8994->irq = i2c->irq;
 	wm8994->type = id->driver_data;
 
+=======
+	wm8994->irq = i2c->irq;
+	wm8994->type = id->driver_data;
+
+	wm8994->regmap = regmap_init_i2c(i2c, &wm8994_regmap_config);
+	if (IS_ERR(wm8994->regmap)) {
+		ret = PTR_ERR(wm8994->regmap);
+		dev_err(wm8994->dev, "Failed to allocate register map: %d\n",
+			ret);
+		kfree(wm8994);
+		return ret;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return wm8994_device_init(wm8994, i2c->irq);
 }
 

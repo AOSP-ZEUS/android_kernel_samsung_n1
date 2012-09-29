@@ -20,6 +20,10 @@
 #include <linux/if_arcnet.h>
 
 #ifdef __KERNEL__
+<<<<<<< HEAD
+=======
+#include  <linux/irqreturn.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifndef bool
 #define bool int

@@ -137,7 +137,11 @@ static void __init process_switch(char c)
 		prom_halt();
 		break;
 	case 'p':
+<<<<<<< HEAD
 		/* Just ignore, this behavior is now the default.  */
+=======
+		prom_early_console.flags &= ~CON_BOOT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	default:
 		printk("Unknown boot switch (-%c)\n", c);

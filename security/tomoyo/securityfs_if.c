@@ -1,9 +1,15 @@
 /*
+<<<<<<< HEAD
  * security/tomoyo/common.c
  *
  * Securityfs interface for TOMOYO.
  *
  * Copyright (C) 2005-2010  NTT DATA CORPORATION
+=======
+ * security/tomoyo/securityfs_if.c
+ *
+ * Copyright (C) 2005-2011  NTT DATA CORPORATION
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 
 #include <linux/security.h>
@@ -34,11 +40,19 @@ static int tomoyo_open(struct inode *inode, struct file *file)
  */
 static int tomoyo_release(struct inode *inode, struct file *file)
 {
+<<<<<<< HEAD
 	return tomoyo_close_control(file);
 }
 
 /**
  * tomoyo_poll - poll() for /proc/ccs/ interface.
+=======
+	return tomoyo_close_control(file->private_data);
+}
+
+/**
+ * tomoyo_poll - poll() for /sys/kernel/security/tomoyo/ interface.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * @file: Pointer to "struct file".
  * @wait: Pointer to "poll_table".
@@ -63,7 +77,11 @@ static unsigned int tomoyo_poll(struct file *file, poll_table *wait)
 static ssize_t tomoyo_read(struct file *file, char __user *buf, size_t count,
 			   loff_t *ppos)
 {
+<<<<<<< HEAD
 	return tomoyo_read_control(file, buf, count);
+=======
+	return tomoyo_read_control(file->private_data, buf, count);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**
@@ -79,7 +97,11 @@ static ssize_t tomoyo_read(struct file *file, char __user *buf, size_t count,
 static ssize_t tomoyo_write(struct file *file, const char __user *buf,
 			    size_t count, loff_t *ppos)
 {
+<<<<<<< HEAD
 	return tomoyo_write_control(file, buf, count);
+=======
+	return tomoyo_write_control(file->private_data, buf, count);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -135,6 +157,7 @@ static int __init tomoyo_initerface_init(void)
 			    TOMOYO_DOMAINPOLICY);
 	tomoyo_create_entry("exception_policy", 0600, tomoyo_dir,
 			    TOMOYO_EXCEPTIONPOLICY);
+<<<<<<< HEAD
 	tomoyo_create_entry("self_domain",      0400, tomoyo_dir,
 			    TOMOYO_SELFDOMAIN);
 	tomoyo_create_entry(".domain_status",   0600, tomoyo_dir,
@@ -143,6 +166,16 @@ static int __init tomoyo_initerface_init(void)
 			    TOMOYO_PROCESS_STATUS);
 	tomoyo_create_entry("meminfo",          0600, tomoyo_dir,
 			    TOMOYO_MEMINFO);
+=======
+	tomoyo_create_entry("audit",            0400, tomoyo_dir,
+			    TOMOYO_AUDIT);
+	tomoyo_create_entry("self_domain",      0400, tomoyo_dir,
+			    TOMOYO_SELFDOMAIN);
+	tomoyo_create_entry(".process_status",  0600, tomoyo_dir,
+			    TOMOYO_PROCESS_STATUS);
+	tomoyo_create_entry("stat",             0644, tomoyo_dir,
+			    TOMOYO_STAT);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tomoyo_create_entry("profile",          0600, tomoyo_dir,
 			    TOMOYO_PROFILE);
 	tomoyo_create_entry("manager",          0600, tomoyo_dir,

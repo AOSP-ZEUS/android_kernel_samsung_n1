@@ -39,6 +39,7 @@
 
 /* #define DEBUG */
 
+<<<<<<< HEAD
 #ifdef DEBUG
 #define DPRINTK(fmt, args...)				\
 do {							\
@@ -60,6 +61,19 @@ do {							\
 	printk(KERN_ERR "pid %d: %s: " fmt "\n",	\
 		current->pid, __func__, ##args);	\
 } while (0)
+=======
+#define DPRINTK(fmt, ...)				\
+	pr_debug("pid %d: %s: " fmt "\n",		\
+		current->pid, __func__, ##__VA_ARGS__)
+
+#define AUTOFS_WARN(fmt, ...)				\
+	printk(KERN_WARNING "pid %d: %s: " fmt "\n",	\
+		current->pid, __func__, ##__VA_ARGS__)
+
+#define AUTOFS_ERROR(fmt, ...)				\
+	printk(KERN_ERR "pid %d: %s: " fmt "\n",	\
+		current->pid, __func__, ##__VA_ARGS__)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Unified info structure.  This is pointed to by both the dentry and
    inode structures.  Each file in the filesystem has an instance of this
@@ -278,6 +292,7 @@ int autofs4_fill_super(struct super_block *, void *, int);
 struct autofs_info *autofs4_new_ino(struct autofs_sb_info *);
 void autofs4_clean_ino(struct autofs_info *);
 
+<<<<<<< HEAD
 static inline int autofs_prepare_pipe(struct file *pipe)
 {
 	if (!pipe->f_op || !pipe->f_op->write)
@@ -289,6 +304,8 @@ static inline int autofs_prepare_pipe(struct file *pipe)
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Queue management functions */
 
 int autofs4_wait(struct autofs_sb_info *,struct dentry *, enum autofs_notify);

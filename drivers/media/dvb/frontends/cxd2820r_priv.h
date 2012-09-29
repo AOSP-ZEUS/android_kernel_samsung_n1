@@ -55,13 +55,21 @@ struct cxd2820r_priv {
 	struct mutex fe_lock; /* FE lock */
 	int active_fe:2; /* FE lock, -1=NONE, 0=DVB-T/T2, 1=DVB-C */
 
+<<<<<<< HEAD
 	int ber_running:1;
+=======
+	bool ber_running;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u8 bank[2];
 	u8 gpio[3];
 
 	fe_delivery_system_t delivery_system;
+<<<<<<< HEAD
 	int last_tune_failed:1; /* for switch between T and T2 tune */
+=======
+	bool last_tune_failed; /* for switch between T and T2 tune */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* cxd2820r_core.c */

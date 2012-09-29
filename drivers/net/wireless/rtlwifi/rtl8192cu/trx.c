@@ -342,7 +342,11 @@ bool rtl92cu_rx_query_desc(struct ieee80211_hw *hw,
 						(u8)GET_RX_DESC_RX_MCS(pdesc),
 						(bool)GET_RX_DESC_PAGGR(pdesc));
 	rx_status->mactime = GET_RX_DESC_TSFL(pdesc);
+<<<<<<< HEAD
 	if (phystatus == true) {
+=======
+	if (phystatus) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		p_drvinfo = (struct rx_fwinfo_92c *)(pdesc + RTL_RX_DESC_SIZE);
 		rtl92c_translate_rx_signal_stuff(hw, skb, stats, pdesc,
 						 p_drvinfo);

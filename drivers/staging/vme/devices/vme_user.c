@@ -41,7 +41,11 @@
 #include "vme_user.h"
 
 static DEFINE_MUTEX(vme_user_mutex);
+<<<<<<< HEAD
 static char driver_name[] = "vme_user";
+=======
+static const char driver_name[] = "vme_user";
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int bus[USER_BUS_MAX];
 static unsigned int bus_num;
@@ -91,7 +95,11 @@ static unsigned int bus_num;
 /*
  * Structure to handle image related parameters.
  */
+<<<<<<< HEAD
 typedef struct {
+=======
+struct image_desc {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	void *kern_buf;	/* Buffer address in kernel space */
 	dma_addr_t pci_buf;	/* Buffer address in PCI address space */
 	unsigned long long size_buf;	/* Buffer size */
@@ -99,10 +107,17 @@ typedef struct {
 	struct device *device;	/* Sysfs device */
 	struct vme_resource *resource;	/* VME resource */
 	int users;		/* Number of current users */
+<<<<<<< HEAD
 } image_desc_t;
 static image_desc_t image[VME_DEVS];
 
 typedef struct {
+=======
+};
+static struct image_desc image[VME_DEVS];
+
+struct driver_stats {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long reads;
 	unsigned long writes;
 	unsigned long ioctls;
@@ -111,8 +126,13 @@ typedef struct {
 	unsigned long dmaErrors;
 	unsigned long timeouts;
 	unsigned long external;
+<<<<<<< HEAD
 } driver_stats_t;
 static driver_stats_t statistics;
+=======
+};
+static struct driver_stats statistics;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static struct cdev *vme_user_cdev;		/* Character device */
 static struct class *vme_user_sysfs_class;	/* Sysfs class */
@@ -138,7 +158,11 @@ static long vme_user_unlocked_ioctl(struct file *, unsigned int, unsigned long);
 static int __devinit vme_user_probe(struct device *, int, int);
 static int __devexit vme_user_remove(struct device *, int, int);
 
+<<<<<<< HEAD
 static struct file_operations vme_user_fops = {
+=======
+static const struct file_operations vme_user_fops = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.open = vme_user_open,
 	.release = vme_user_release,
 	.read = vme_user_read,
@@ -168,8 +192,13 @@ static int vme_user_open(struct inode *inode, struct file *file)
 	unsigned int minor = MINOR(inode->i_rdev);
 
 	down(&image[minor].sem);
+<<<<<<< HEAD
 	/* Only allow device to be opened if a resource is allocated */
 	if (image[minor].resource == NULL) {
+=======
+	/* Allow device to be opened if a resource is needed and allocated. */
+	if (minor < CONTROL_MINOR && image[minor].resource == NULL) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		printk(KERN_ERR "No resources allocated for device\n");
 		err = -EINVAL;
 		goto err_res;
@@ -321,6 +350,12 @@ static ssize_t vme_user_read(struct file *file, char __user *buf, size_t count,
 	size_t image_size;
 	size_t okcount;
 
+<<<<<<< HEAD
+=======
+	if (minor == CONTROL_MINOR)
+		return 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	down(&image[minor].sem);
 
 	/* XXX Do we *really* want this helper - we can use vme_*_get ? */
@@ -365,6 +400,12 @@ static ssize_t vme_user_write(struct file *file, const char __user *buf,
 	size_t image_size;
 	size_t okcount;
 
+<<<<<<< HEAD
+=======
+	if (minor == CONTROL_MINOR)
+		return 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	down(&image[minor].sem);
 
 	image_size = vme_get_size(image[minor].resource);
@@ -406,6 +447,12 @@ static loff_t vme_user_llseek(struct file *file, loff_t off, int whence)
 	unsigned int minor = MINOR(file->f_dentry->d_inode->i_rdev);
 	size_t image_size;
 
+<<<<<<< HEAD
+=======
+	if (minor == CONTROL_MINOR)
+		return -EINVAL;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	down(&image[minor].sem);
 	image_size = vme_get_size(image[minor].resource);
 
@@ -452,6 +499,10 @@ static int vme_user_ioctl(struct inode *inode, struct file *file,
 {
 	struct vme_master master;
 	struct vme_slave slave;
+<<<<<<< HEAD
+=======
+	struct vme_irq_id irq_req;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long copied;
 	unsigned int minor = MINOR(inode->i_rdev);
 	int retval;
@@ -462,6 +513,24 @@ static int vme_user_ioctl(struct inode *inode, struct file *file,
 
 	switch (type[minor]) {
 	case CONTROL_MINOR:
+<<<<<<< HEAD
+=======
+		switch (cmd) {
+		case VME_IRQ_GEN:
+			copied = copy_from_user(&irq_req, (char *)arg,
+						sizeof(struct vme_irq_id));
+			if (copied != 0) {
+				printk(KERN_WARNING "Partial copy from userspace\n");
+				return -EFAULT;
+			}
+
+			retval = vme_irq_generate(vme_user_bridge,
+						  irq_req.level,
+						  irq_req.statid);
+
+			return retval;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case MASTER_MINOR:
 		switch (cmd) {
@@ -773,6 +842,10 @@ static int __devinit vme_user_probe(struct device *dev, int cur_bus,
 
 	/* Add sysfs Entries */
 	for (i = 0; i < VME_DEVS; i++) {
+<<<<<<< HEAD
+=======
+		int num;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		switch (type[i]) {
 		case MASTER_MINOR:
 			sprintf(name, "bus/vme/m%%d");
@@ -789,10 +862,16 @@ static int __devinit vme_user_probe(struct device *dev, int cur_bus,
 			break;
 		}
 
+<<<<<<< HEAD
 		image[i].device =
 			device_create(vme_user_sysfs_class, NULL,
 				MKDEV(VME_MAJOR, i), NULL, name,
 				(type[i] == SLAVE_MINOR) ? i - (MASTER_MAX + 1) : i);
+=======
+		num = (type[i] == SLAVE_MINOR) ? i - (MASTER_MAX + 1) : i;
+		image[i].device = device_create(vme_user_sysfs_class, NULL,
+					MKDEV(VME_MAJOR, i), NULL, name, num);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (IS_ERR(image[i].device)) {
 			printk(KERN_INFO "%s: Error creating sysfs device\n",
 				driver_name);

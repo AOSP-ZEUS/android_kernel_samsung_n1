@@ -2,6 +2,7 @@ To Do List for Broadcom Mac80211 driver before getting in mainline
 
 Bugs
 ====
+<<<<<<< HEAD
 - Oops on AMPDU traffic, to be solved by new ucode (currently under test)
 
 brcmfmac and brcmsmac
@@ -13,3 +14,14 @@ brcmfmac
 =====================
 - Replace driver's proprietary ssb interface with generic kernel ssb module
 - Build and test on 64 bit linux kernel
+=======
+- none known at this moment
+
+brcmfmac
+=====================
+- ASSERTS deprecated in mainline, replace by warning + error handling
+
+brcm80211 info page
+=====================
+http://linuxwireless.org/en/users/Drivers/brcm80211
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

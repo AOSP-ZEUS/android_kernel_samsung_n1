@@ -11,6 +11,10 @@ config SUPERH
 	select HAVE_DMA_ATTRS
 	select HAVE_IRQ_WORK
 	select HAVE_PERF_EVENTS
+<<<<<<< HEAD
+=======
+	select ARCH_HAVE_NMI_SAFE_CMPXCHG if (GUSA_RB || CPU_SH4A)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	select PERF_USE_VMALLOC
 	select HAVE_KERNEL_GZIP
 	select HAVE_KERNEL_BZIP2
@@ -897,6 +901,7 @@ source "security/Kconfig"
 
 source "crypto/Kconfig"
 
+<<<<<<< HEAD
 menuconfig VIRTUALIZATION
 	bool "Virtualization"
 	default n
@@ -913,4 +918,6 @@ source drivers/virtio/Kconfig
 
 endif # VIRTUALIZATION
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "lib/Kconfig"

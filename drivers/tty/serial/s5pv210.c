@@ -18,6 +18,10 @@
 #include <linux/init.h>
 #include <linux/serial_core.h>
 #include <linux/serial.h>
+<<<<<<< HEAD
+=======
+#include <linux/delay.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/irq.h>
 #include <mach/hardware.h>
@@ -35,7 +39,11 @@ static int s5pv210_serial_setsource(struct uart_port *port,
 
 	if (strcmp(clk->name, "pclk") == 0)
 		ucon &= ~S5PV210_UCON_CLKMASK;
+<<<<<<< HEAD
 	else if (strcmp(clk->name, "sclk") == 0)
+=======
+	else if (strcmp(clk->name, "uclk1") == 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ucon |= S5PV210_UCON_CLKMASK;
 	else {
 		printk(KERN_ERR "unknown clock source %s\n", clk->name);
@@ -63,7 +71,11 @@ static int s5pv210_serial_getsource(struct uart_port *port,
 		clk->name = "pclk";
 		break;
 	case S5PV210_UCON_UCLK:
+<<<<<<< HEAD
 		clk->name = "sclk";
+=======
+		clk->name = "uclk1";
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	}
 
@@ -83,6 +95,12 @@ static int s5pv210_serial_resetport(struct uart_port *port,
 	wr_regl(port, S3C2410_UFCON, cfg->ufcon | S3C2410_UFCON_RESETBOTH);
 	wr_regl(port, S3C2410_UFCON, cfg->ufcon);
 
+<<<<<<< HEAD
+=======
+	/* It is need to delay When reset FIFO register */
+	udelay(1);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -135,6 +153,7 @@ static struct platform_driver s5p_serial_driver = {
 	},
 };
 
+<<<<<<< HEAD
 static int __init s5pv210_serial_console_init(void)
 {
 	return s3c24xx_serial_initconsole(&s5p_serial_driver, s5p_uart_inf);
@@ -142,6 +161,8 @@ static int __init s5pv210_serial_console_init(void)
 
 console_initcall(s5pv210_serial_console_init);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __init s5p_serial_init(void)
 {
 	return s3c24xx_serial_init(&s5p_serial_driver, *s5p_uart_inf);

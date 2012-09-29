@@ -115,7 +115,11 @@ int cpm_muram_init(void)
 			max = r.end;
 
 		rh_attach_region(&cpm_muram_info, r.start - muram_pbase,
+<<<<<<< HEAD
 		                 r.end - r.start + 1);
+=======
+				 resource_size(&r));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	muram_vbase = ioremap(muram_pbase, max - muram_pbase + 1);

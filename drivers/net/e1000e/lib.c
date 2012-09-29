@@ -56,7 +56,11 @@ s32 e1000e_get_bus_info_pcie(struct e1000_hw *hw)
 	struct e1000_adapter *adapter = hw->adapter;
 	u16 pcie_link_status, cap_offset;
 
+<<<<<<< HEAD
 	cap_offset = pci_find_capability(adapter->pdev, PCI_CAP_ID_EXP);
+=======
+	cap_offset = adapter->pdev->pcie_cap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!cap_offset) {
 		bus->width = e1000_bus_width_unknown;
 	} else {
@@ -201,10 +205,17 @@ s32 e1000_check_alt_mac_addr_generic(struct e1000_hw *hw)
 		goto out;
 	}
 
+<<<<<<< HEAD
 	if (nvm_alt_mac_addr_offset == 0xFFFF) {
 		/* There is no Alternate MAC Address */
 		goto out;
 	}
+=======
+	if ((nvm_alt_mac_addr_offset == 0xFFFF) ||
+	    (nvm_alt_mac_addr_offset == 0x0000))
+		/* There is no Alternate MAC Address */
+		goto out;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (hw->bus.func == E1000_FUNC_1)
 		nvm_alt_mac_addr_offset += E1000_ALT_MAC_ADDRESS_OFFSET_LAN1;
@@ -221,7 +232,11 @@ s32 e1000_check_alt_mac_addr_generic(struct e1000_hw *hw)
 	}
 
 	/* if multicast bit is set, the alternate address will not be used */
+<<<<<<< HEAD
 	if (alt_mac_addr[0] & 0x01) {
+=======
+	if (is_multicast_ether_addr(alt_mac_addr)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		e_dbg("Ignoring Alternate Mac Address with MC bit set\n");
 		goto out;
 	}
@@ -1987,6 +2002,10 @@ static s32 e1000_ready_nvm_eeprom(struct e1000_hw *hw)
 		/* Clear SK and CS */
 		eecd &= ~(E1000_EECD_CS | E1000_EECD_SK);
 		ew32(EECD, eecd);
+<<<<<<< HEAD
+=======
+		e1e_flush();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		udelay(1);
 
 		/*

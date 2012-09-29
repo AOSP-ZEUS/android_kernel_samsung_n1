@@ -266,7 +266,11 @@ struct drm_encoder *radeon_atom_get_external_encoder(struct drm_encoder *encoder
 	return NULL;
 }
 
+<<<<<<< HEAD
 bool radeon_encoder_is_dp_bridge(struct drm_encoder *encoder)
+=======
+u16 radeon_encoder_get_dp_bridge_encoder_id(struct drm_encoder *encoder)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct drm_encoder *other_encoder = radeon_atom_get_external_encoder(encoder);
 
@@ -368,7 +372,11 @@ static bool radeon_atom_mode_fixup(struct drm_encoder *encoder,
 
 	if (ASIC_IS_DCE3(rdev) &&
 	    ((radeon_encoder->active_device & (ATOM_DEVICE_DFP_SUPPORT | ATOM_DEVICE_LCD_SUPPORT)) ||
+<<<<<<< HEAD
 	     radeon_encoder_is_dp_bridge(encoder))) {
+=======
+	     (radeon_encoder_get_dp_bridge_encoder_id(encoder) != ENCODER_OBJECT_ID_NONE))) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		struct drm_connector *connector = radeon_get_connector_for_encoder(encoder);
 		radeon_dp_set_link_config(connector, mode);
 	}
@@ -658,7 +666,11 @@ atombios_get_encoder_mode(struct drm_encoder *encoder)
 	struct radeon_connector_atom_dig *dig_connector;
 
 	/* dp bridges are always DP */
+<<<<<<< HEAD
 	if (radeon_encoder_is_dp_bridge(encoder))
+=======
+	if (radeon_encoder_get_dp_bridge_encoder_id(encoder) != ENCODER_OBJECT_ID_NONE)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return ATOM_ENCODER_MODE_DP;
 
 	/* DVO is always DVO */
@@ -1638,7 +1650,21 @@ atombios_set_encoder_crtc_source(struct drm_encoder *encoder)
 			break;
 		case 2:
 			args.v2.ucCRTC = radeon_crtc->crtc_id;
+<<<<<<< HEAD
 			args.v2.ucEncodeMode = atombios_get_encoder_mode(encoder);
+=======
+			if (radeon_encoder_get_dp_bridge_encoder_id(encoder) != ENCODER_OBJECT_ID_NONE) {
+				struct drm_connector *connector = radeon_get_connector_for_encoder(encoder);
+
+				if (connector->connector_type == DRM_MODE_CONNECTOR_LVDS)
+					args.v2.ucEncodeMode = ATOM_ENCODER_MODE_LVDS;
+				else if (connector->connector_type == DRM_MODE_CONNECTOR_VGA)
+					args.v2.ucEncodeMode = ATOM_ENCODER_MODE_CRT;
+				else
+					args.v2.ucEncodeMode = atombios_get_encoder_mode(encoder);
+			} else
+				args.v2.ucEncodeMode = atombios_get_encoder_mode(encoder);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			switch (radeon_encoder->encoder_id) {
 			case ENCODER_OBJECT_ID_INTERNAL_UNIPHY:
 			case ENCODER_OBJECT_ID_INTERNAL_UNIPHY1:
@@ -1756,10 +1782,22 @@ static int radeon_atom_pick_dig_encoder(struct drm_encoder *encoder)
 	if (ASIC_IS_DCE4(rdev)) {
 		dig = radeon_encoder->enc_priv;
 		if (ASIC_IS_DCE41(rdev)) {
+<<<<<<< HEAD
 			if (dig->linkb)
 				return 1;
 			else
 				return 0;
+=======
+			/* ontario follows DCE4 */
+			if (rdev->family == CHIP_PALM) {
+				if (dig->linkb)
+					return 1;
+				else
+					return 0;
+			} else
+				/* llano follows DCE3.2 */
+				return radeon_crtc->crtc_id;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else {
 			switch (radeon_encoder->encoder_id) {
 			case ENCODER_OBJECT_ID_INTERNAL_UNIPHY:
@@ -2084,7 +2122,12 @@ static void radeon_atom_encoder_prepare(struct drm_encoder *encoder)
 
 	if ((radeon_encoder->active_device &
 	     (ATOM_DEVICE_DFP_SUPPORT | ATOM_DEVICE_LCD_SUPPORT)) ||
+<<<<<<< HEAD
 	    radeon_encoder_is_dp_bridge(encoder)) {
+=======
+	    (radeon_encoder_get_dp_bridge_encoder_id(encoder) !=
+	     ENCODER_OBJECT_ID_NONE)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		struct radeon_encoder_atom_dig *dig = radeon_encoder->enc_priv;
 		if (dig)
 			dig->dig_encoder = radeon_atom_pick_dig_encoder(encoder);

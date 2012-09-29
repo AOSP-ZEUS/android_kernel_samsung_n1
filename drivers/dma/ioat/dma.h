@@ -90,7 +90,10 @@ struct ioat_chan_common {
 	void __iomem *reg_base;
 	unsigned long last_completion;
 	spinlock_t cleanup_lock;
+<<<<<<< HEAD
 	dma_cookie_t completed_cookie;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long state;
 	#define IOAT_COMPLETION_PENDING 0
 	#define IOAT_COMPLETION_ACK 1
@@ -143,6 +146,7 @@ static inline struct ioat_dma_chan *to_ioat_chan(struct dma_chan *c)
 	return container_of(chan, struct ioat_dma_chan, base);
 }
 
+<<<<<<< HEAD
 /**
  * ioat_tx_status - poll the status of an ioat transaction
  * @c: channel handle
@@ -165,6 +169,8 @@ ioat_tx_status(struct dma_chan *c, dma_cookie_t cookie,
 	return dma_async_is_complete(cookie, last_complete, last_used);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* wrapper around hardware descriptor format + additional software fields */
 
 /**

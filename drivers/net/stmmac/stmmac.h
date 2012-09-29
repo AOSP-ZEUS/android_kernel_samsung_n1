@@ -20,7 +20,11 @@
   Author: Giuseppe Cavallaro <peppe.cavallaro@st.com>
 *******************************************************************************/
 
+<<<<<<< HEAD
 #define DRV_MODULE_VERSION	"Nov_2010"
+=======
+#define DRV_MODULE_VERSION	"July_2011"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/stmmac.h>
 
 #include "common.h"
@@ -56,6 +60,7 @@ struct stmmac_priv {
 	struct stmmac_extra_stats xstats;
 	struct napi_struct napi;
 
+<<<<<<< HEAD
 	phy_interface_t phy_interface;
 	int phy_addr;
 	int phy_mask;
@@ -64,6 +69,11 @@ struct stmmac_priv {
 	int no_csum_insertion;
 
 	int phy_irq;
+=======
+	int rx_coe;
+	int no_csum_insertion;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct phy_device *phydev;
 	int oldlink;
 	int speed;
@@ -71,6 +81,10 @@ struct stmmac_priv {
 	unsigned int flow_ctrl;
 	unsigned int pause;
 	struct mii_bus *mii;
+<<<<<<< HEAD
+=======
+	int mii_irq[PHY_MAX_ADDR];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u32 msg_enable;
 	spinlock_t lock;
@@ -79,9 +93,12 @@ struct stmmac_priv {
 #ifdef CONFIG_STMMAC_TIMER
 	struct stmmac_timer *tm;
 #endif
+<<<<<<< HEAD
 #ifdef STMMAC_VLAN_TAG_USED
 	struct vlan_group *vlgrp;
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct plat_stmmacenet_data *plat;
 };
 

@@ -22,11 +22,19 @@
 
 #include <asm/io.h>
 #include <linux/delay.h>
+<<<<<<< HEAD
 #include <linux/interrupt.h>
 #include <linux/init.h>
 #include <linux/slab.h>
 #include <linux/version.h>
 #include <sound/core.h>
+=======
+#include <linux/init.h>
+#include <linux/slab.h>
+#include <linux/version.h>
+#include <media/v4l2-dev.h>
+#include <media/v4l2-ioctl.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <sound/tea575x-tuner.h>
 
 MODULE_AUTHOR("Jaroslav Kysela <perex@perex.cz>");
@@ -62,6 +70,7 @@ module_param(radio_nr, int, 0);
 #define TEA575X_BIT_DUMMY	(1<<15)		/* buffer */
 #define TEA575X_BIT_FREQ_MASK	0x7fff
 
+<<<<<<< HEAD
 static struct v4l2_queryctrl radio_qctrl[] = {
 	{
 		.id            = V4L2_CID_AUDIO_MUTE,
@@ -73,6 +82,8 @@ static struct v4l2_queryctrl radio_qctrl[] = {
 	}
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * lowlevel part
  */
@@ -266,6 +277,7 @@ static int vidioc_s_audio(struct file *file, void *priv,
 	return 0;
 }
 
+<<<<<<< HEAD
 static int vidioc_queryctrl(struct file *file, void *priv,
 					struct v4l2_queryctrl *qc)
 {
@@ -343,6 +355,25 @@ static const struct v4l2_file_operations tea575x_fops = {
 	.open           = snd_tea575x_exclusive_open,
 	.release        = snd_tea575x_exclusive_release,
 	.ioctl		= video_ioctl2,
+=======
+static int tea575x_s_ctrl(struct v4l2_ctrl *ctrl)
+{
+	struct snd_tea575x *tea = container_of(ctrl->handler, struct snd_tea575x, ctrl_handler);
+
+	switch (ctrl->id) {
+	case V4L2_CID_AUDIO_MUTE:
+		tea->mute = ctrl->val;
+		snd_tea575x_set_freq(tea);
+		return 0;
+	}
+
+	return -EINVAL;
+}
+
+static const struct v4l2_file_operations tea575x_fops = {
+	.owner		= THIS_MODULE,
+	.unlocked_ioctl	= video_ioctl2,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static const struct v4l2_ioctl_ops tea575x_ioctl_ops = {
@@ -351,6 +382,7 @@ static const struct v4l2_ioctl_ops tea575x_ioctl_ops = {
 	.vidioc_s_tuner     = vidioc_s_tuner,
 	.vidioc_g_audio     = vidioc_g_audio,
 	.vidioc_s_audio     = vidioc_s_audio,
+<<<<<<< HEAD
 	.vidioc_g_input     = vidioc_g_input,
 	.vidioc_s_input     = vidioc_s_input,
 	.vidioc_g_frequency = vidioc_g_frequency,
@@ -358,13 +390,25 @@ static const struct v4l2_ioctl_ops tea575x_ioctl_ops = {
 	.vidioc_queryctrl   = vidioc_queryctrl,
 	.vidioc_g_ctrl      = vidioc_g_ctrl,
 	.vidioc_s_ctrl      = vidioc_s_ctrl,
+=======
+	.vidioc_g_frequency = vidioc_g_frequency,
+	.vidioc_s_frequency = vidioc_s_frequency,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct video_device tea575x_radio = {
 	.name           = "tea575x-tuner",
 	.fops           = &tea575x_fops,
 	.ioctl_ops 	= &tea575x_ioctl_ops,
+<<<<<<< HEAD
 	.release	= video_device_release,
+=======
+	.release	= video_device_release_empty,
+};
+
+static const struct v4l2_ctrl_ops tea575x_ctrl_ops = {
+	.s_ctrl = tea575x_s_ctrl,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*
@@ -373,7 +417,10 @@ static struct video_device tea575x_radio = {
 int snd_tea575x_init(struct snd_tea575x *tea)
 {
 	int retval;
+<<<<<<< HEAD
 	struct video_device *tea575x_radio_inst;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	tea->mute = 1;
 
@@ -381,6 +428,7 @@ int snd_tea575x_init(struct snd_tea575x *tea)
 	if (snd_tea575x_read(tea) != 0x55AA)
 		return -ENODEV;
 
+<<<<<<< HEAD
 	tea->in_use = 0;
 	tea->val = TEA575X_BIT_BAND_FM | TEA575X_BIT_SEARCH_10_40;
 	tea->freq = 90500 * 16;		/* 90.5Mhz default */
@@ -409,15 +457,58 @@ int snd_tea575x_init(struct snd_tea575x *tea)
 	snd_tea575x_set_freq(tea);
 	tea->vd = tea575x_radio_inst;
 
+=======
+	tea->val = TEA575X_BIT_BAND_FM | TEA575X_BIT_SEARCH_10_40;
+	tea->freq = 90500 * 16;		/* 90.5Mhz default */
+	snd_tea575x_set_freq(tea);
+
+	tea->vd = tea575x_radio;
+	video_set_drvdata(&tea->vd, tea);
+	mutex_init(&tea->mutex);
+	tea->vd.lock = &tea->mutex;
+
+	v4l2_ctrl_handler_init(&tea->ctrl_handler, 1);
+	tea->vd.ctrl_handler = &tea->ctrl_handler;
+	v4l2_ctrl_new_std(&tea->ctrl_handler, &tea575x_ctrl_ops, V4L2_CID_AUDIO_MUTE, 0, 1, 1, 1);
+	retval = tea->ctrl_handler.error;
+	if (retval) {
+		printk(KERN_ERR "tea575x-tuner: can't initialize controls\n");
+		v4l2_ctrl_handler_free(&tea->ctrl_handler);
+		return retval;
+	}
+
+	if (tea->ext_init) {
+		retval = tea->ext_init(tea);
+		if (retval) {
+			v4l2_ctrl_handler_free(&tea->ctrl_handler);
+			return retval;
+		}
+	}
+
+	v4l2_ctrl_handler_setup(&tea->ctrl_handler);
+
+	retval = video_register_device(&tea->vd, VFL_TYPE_RADIO, radio_nr);
+	if (retval) {
+		printk(KERN_ERR "tea575x-tuner: can't register video device!\n");
+		v4l2_ctrl_handler_free(&tea->ctrl_handler);
+		return retval;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
 void snd_tea575x_exit(struct snd_tea575x *tea)
 {
+<<<<<<< HEAD
 	if (tea->vd) {
 		video_unregister_device(tea->vd);
 		tea->vd = NULL;
 	}
+=======
+	video_unregister_device(&tea->vd);
+	v4l2_ctrl_handler_free(&tea->ctrl_handler);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int __init alsa_tea575x_module_init(void)

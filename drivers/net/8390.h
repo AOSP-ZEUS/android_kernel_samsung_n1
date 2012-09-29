@@ -9,6 +9,10 @@
 
 #include <linux/if_ether.h>
 #include <linux/ioport.h>
+<<<<<<< HEAD
+=======
+#include <linux/irqreturn.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/skbuff.h>
 
 #define TX_PAGES 12	/* Two Tx slots */

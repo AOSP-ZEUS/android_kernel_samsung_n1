@@ -466,7 +466,11 @@ config KEYBOARD_SH_KEYSC
 
 config KEYBOARD_STMPE
 	tristate "STMPE keypad support"
+<<<<<<< HEAD
 	depends on MFD_STMPE
+=======
+	depends on I2C
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	help
 	  Say Y here if you want to use the keypad controller on STMPE I/O
 	  expanders.
@@ -563,6 +567,7 @@ config KEYBOARD_W90P910
 	  To compile this driver as a module, choose M here: the
 	  module will be called w90p910_keypad.
 
+<<<<<<< HEAD
 config KEYPAD_CYPRESS_TOUCH
 	tristate "Cypress touch keypad support"
 	default n
@@ -571,5 +576,18 @@ config KEYPAD_CYPRESS_TOUCH
 
 	  To compile this driver as a module, choose M here: the
 	  module will be called cypress-touchkey.
+=======
+config KEYBOARD_CYPRESS_TOUCH
+    tristate "CYPRESS Touchkey"
+    depends on I2C
+    help
+      Say Y here if you have the CYPRESS touchkey controller
+      chip in your system.
+
+      If unsure, say N.
+
+      To compile this driver as a module, choose M here: the
+      module will be called mcs_touchkey.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 endif

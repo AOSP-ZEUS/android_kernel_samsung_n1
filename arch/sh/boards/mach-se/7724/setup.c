@@ -145,7 +145,11 @@ static struct platform_device nor_flash_device = {
 };
 
 /* LCDC */
+<<<<<<< HEAD
 const static struct fb_videomode lcdc_720p_modes[] = {
+=======
+static const struct fb_videomode lcdc_720p_modes[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		.name		= "LB070WV1",
 		.sync		= 0, /* hsync and vsync are active low */
@@ -160,7 +164,11 @@ const static struct fb_videomode lcdc_720p_modes[] = {
 	},
 };
 
+<<<<<<< HEAD
 const static struct fb_videomode lcdc_vga_modes[] = {
+=======
+static const struct fb_videomode lcdc_vga_modes[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		.name		= "LB070WV1",
 		.sync		= 0, /* hsync and vsync are active low */

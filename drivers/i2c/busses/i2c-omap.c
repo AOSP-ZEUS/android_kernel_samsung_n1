@@ -204,7 +204,11 @@ struct omap_i2c_dev {
 	u16			errata;
 };
 
+<<<<<<< HEAD
 const static u8 reg_map[] = {
+=======
+static const u8 reg_map[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	[OMAP_I2C_REV_REG] = 0x00,
 	[OMAP_I2C_IE_REG] = 0x01,
 	[OMAP_I2C_STAT_REG] = 0x02,
@@ -225,7 +229,11 @@ const static u8 reg_map[] = {
 	[OMAP_I2C_BUFSTAT_REG] = 0x10,
 };
 
+<<<<<<< HEAD
 const static u8 omap4_reg_map[] = {
+=======
+static const u8 omap4_reg_map[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	[OMAP_I2C_REV_REG] = 0x04,
 	[OMAP_I2C_IE_REG] = 0x2c,
 	[OMAP_I2C_STAT_REG] = 0x28,
@@ -235,7 +243,11 @@ const static u8 omap4_reg_map[] = {
 	[OMAP_I2C_BUF_REG] = 0x94,
 	[OMAP_I2C_CNT_REG] = 0x98,
 	[OMAP_I2C_DATA_REG] = 0x9c,
+<<<<<<< HEAD
 	[OMAP_I2C_SYSC_REG] = 0x10,
+=======
+	[OMAP_I2C_SYSC_REG] = 0x20,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	[OMAP_I2C_CON_REG] = 0xa4,
 	[OMAP_I2C_OA_REG] = 0xa8,
 	[OMAP_I2C_SA_REG] = 0xac,
@@ -1139,6 +1151,7 @@ omap_i2c_remove(struct platform_device *pdev)
 	return 0;
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_SUSPEND
 static int omap_i2c_suspend(struct device *dev)
 {
@@ -1167,13 +1180,18 @@ static struct dev_pm_ops omap_i2c_pm_ops = {
 #define OMAP_I2C_PM_OPS NULL
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct platform_driver omap_i2c_driver = {
 	.probe		= omap_i2c_probe,
 	.remove		= omap_i2c_remove,
 	.driver		= {
 		.name	= "omap_i2c",
 		.owner	= THIS_MODULE,
+<<<<<<< HEAD
 		.pm	= OMAP_I2C_PM_OPS,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 };
 

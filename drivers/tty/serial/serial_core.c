@@ -175,7 +175,11 @@ static int uart_startup(struct tty_struct *tty, struct uart_state *state, int in
 	if (retval == 0) {
 		if (uart_console(uport) && uport->cons->cflag) {
 			tty->termios->c_cflag = uport->cons->cflag;
+<<<<<<< HEAD
 			uport->cons->cflag = 0;
+=======
+			/* uport->cons->cflag = 0; */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		/*
 		 * Initialise the hardware port settings.
@@ -203,6 +207,14 @@ static int uart_startup(struct tty_struct *tty, struct uart_state *state, int in
 		clear_bit(TTY_IO_ERROR, &tty->flags);
 	}
 
+<<<<<<< HEAD
+=======
+	/*
+	 * This is to allow setserial on this port. People may want to set
+	 * port/irq/type and then reconfigure the port properly if it failed
+	 * now.
+	 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (retval && capable(CAP_SYS_ADMIN))
 		retval = 0;
 
@@ -2008,6 +2020,10 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
 
 		if (console_suspend_enabled)
 			uart_change_pm(state, 0);
+<<<<<<< HEAD
+=======
+/*		if (uport->type != PORT_TEGRA) */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		uport->ops->set_termios(uport, &termios, NULL);
 		if (console_suspend_enabled)
 			console_start(uport->cons);

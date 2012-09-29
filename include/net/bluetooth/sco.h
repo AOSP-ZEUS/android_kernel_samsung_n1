@@ -22,6 +22,12 @@
    SOFTWARE IS DISCLAIMED.
 */
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_BT_MGMT
+#include "sco_mgmt.h"
+#else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef __SCO_H
 #define __SCO_H
 
@@ -79,3 +85,7 @@ struct sco_pinfo {
 };
 
 #endif /* __SCO_H */
+<<<<<<< HEAD
+=======
+#endif /* CONFIG_BT_MGMT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

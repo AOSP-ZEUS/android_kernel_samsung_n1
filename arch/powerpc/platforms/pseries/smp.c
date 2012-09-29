@@ -27,7 +27,11 @@
 #include <linux/cpu.h>
 
 #include <asm/ptrace.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/irq.h>
 #include <asm/page.h>
 #include <asm/pgtable.h>
@@ -44,7 +48,10 @@
 #include <asm/mpic.h>
 #include <asm/vdso_datapage.h>
 #include <asm/cputhreads.h>
+<<<<<<< HEAD
 #include <asm/mpic.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/xics.h>
 
 #include "plpar_wrappers.h"
@@ -207,7 +214,11 @@ static struct smp_ops_t pSeries_mpic_smp_ops = {
 };
 
 static struct smp_ops_t pSeries_xics_smp_ops = {
+<<<<<<< HEAD
 	.message_pass	= smp_muxed_ipi_message_pass,
+=======
+	.message_pass	= NULL,	/* Use smp_muxed_ipi_message_pass */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.cause_ipi	= NULL,	/* Filled at runtime by xics_smp_probe() */
 	.probe		= xics_smp_probe,
 	.kick_cpu	= smp_pSeries_kick_cpu,

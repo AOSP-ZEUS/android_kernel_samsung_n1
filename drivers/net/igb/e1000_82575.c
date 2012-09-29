@@ -1,7 +1,11 @@
 /*******************************************************************************
 
   Intel(R) Gigabit Ethernet Linux driver
+<<<<<<< HEAD
   Copyright(c) 2007-2009 Intel Corporation.
+=======
+  Copyright(c) 2007-2011 Intel Corporation.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
   This program is free software; you can redistribute it and/or modify it
   under the terms and conditions of the GNU General Public License,
@@ -1156,10 +1160,20 @@ static s32 igb_setup_serdes_link_82575(struct e1000_hw *hw)
 {
 	u32 ctrl_ext, ctrl_reg, reg;
 	bool pcs_autoneg;
+<<<<<<< HEAD
 
 	if ((hw->phy.media_type != e1000_media_type_internal_serdes) &&
 	    !igb_sgmii_active_82575(hw))
 		return 0;
+=======
+	s32 ret_val = E1000_SUCCESS;
+	u16 data;
+
+	if ((hw->phy.media_type != e1000_media_type_internal_serdes) &&
+	    !igb_sgmii_active_82575(hw))
+		return ret_val;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * On the 82575, SerDes loopback mode persists until it is
@@ -1203,6 +1217,21 @@ static s32 igb_setup_serdes_link_82575(struct e1000_hw *hw)
 		/* disable PCS autoneg and support parallel detect only */
 		pcs_autoneg = false;
 	default:
+<<<<<<< HEAD
+=======
+		if (hw->mac.type == e1000_82575 ||
+		    hw->mac.type == e1000_82576) {
+			ret_val = hw->nvm.ops.read(hw, NVM_COMPAT, 1, &data);
+			if (ret_val) {
+				printk(KERN_DEBUG "NVM Read Error\n\n");
+				return ret_val;
+			}
+
+			if (data & E1000_EEPROM_PCS_AUTONEG_DISABLE_BIT)
+				pcs_autoneg = false;
+		}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * non-SGMII modes only supports a speed of 1000/Full for the
 		 * link so it is best to just force the MAC and let the pcs
@@ -1250,7 +1279,11 @@ static s32 igb_setup_serdes_link_82575(struct e1000_hw *hw)
 	if (!igb_sgmii_active_82575(hw))
 		igb_force_mac_fc(hw);
 
+<<<<<<< HEAD
 	return 0;
+=======
+	return ret_val;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /**

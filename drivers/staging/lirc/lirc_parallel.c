@@ -615,9 +615,12 @@ static struct platform_driver lirc_parallel_driver = {
 	},
 };
 
+<<<<<<< HEAD
 static int pf(void *handle);
 static void kf(void *handle);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int pf(void *handle)
 {
 	parport_disable_irq(pport);
@@ -730,6 +733,12 @@ static void __exit lirc_parallel_exit(void)
 {
 	parport_unregister_device(ppdevice);
 	lirc_unregister_driver(driver.minor);
+<<<<<<< HEAD
+=======
+
+	platform_device_unregister(lirc_parallel_dev);
+	platform_driver_unregister(&lirc_parallel_driver);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 module_init(lirc_parallel_init);

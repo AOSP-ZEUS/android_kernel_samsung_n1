@@ -37,6 +37,50 @@
 
 static uint profile_numbers[5] = {0, 1, 2, 3, 4};
 
+<<<<<<< HEAD
+=======
+static int kone_receive(struct usb_device *usb_dev, uint usb_command,
+		void *data, uint size)
+{
+	char *buf;
+	int len;
+
+	buf = kmalloc(size, GFP_KERNEL);
+	if (buf == NULL)
+		return -ENOMEM;
+
+	len = usb_control_msg(usb_dev, usb_rcvctrlpipe(usb_dev, 0),
+			HID_REQ_GET_REPORT,
+			USB_TYPE_CLASS | USB_RECIP_INTERFACE | USB_DIR_IN,
+			usb_command, 0, buf, size, USB_CTRL_SET_TIMEOUT);
+
+	memcpy(data, buf, size);
+	kfree(buf);
+	return ((len < 0) ? len : ((len != size) ? -EIO : 0));
+}
+
+static int kone_send(struct usb_device *usb_dev, uint usb_command,
+		void const *data, uint size)
+{
+	char *buf;
+	int len;
+
+	buf = kmalloc(size, GFP_KERNEL);
+	if (buf == NULL)
+		return -ENOMEM;
+
+	memcpy(buf, data, size);
+
+	len = usb_control_msg(usb_dev, usb_sndctrlpipe(usb_dev, 0),
+			HID_REQ_SET_REPORT,
+			USB_TYPE_CLASS | USB_RECIP_INTERFACE | USB_DIR_OUT,
+			usb_command, 0, buf, size, USB_CTRL_SET_TIMEOUT);
+
+	kfree(buf);
+	return ((len < 0) ? len : ((len != size) ? -EIO : 0));
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* kone_class is used for creating sysfs attributes via roccat char device */
 static struct class *kone_class;
 
@@ -68,7 +112,11 @@ static int kone_check_write(struct usb_device *usb_dev)
 		 */
 		msleep(80);
 
+<<<<<<< HEAD
 		retval = roccat_common_receive(usb_dev,
+=======
+		retval = kone_receive(usb_dev,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				kone_command_confirm_write, &data, 1);
 		if (retval)
 			return retval;
@@ -96,7 +144,11 @@ static int kone_check_write(struct usb_device *usb_dev)
 static int kone_get_settings(struct usb_device *usb_dev,
 		struct kone_settings *buf)
 {
+<<<<<<< HEAD
 	return roccat_common_receive(usb_dev, kone_command_settings, buf,
+=======
+	return kone_receive(usb_dev, kone_command_settings, buf,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			sizeof(struct kone_settings));
 }
 
@@ -109,7 +161,11 @@ static int kone_set_settings(struct usb_device *usb_dev,
 		struct kone_settings const *settings)
 {
 	int retval;
+<<<<<<< HEAD
 	retval = roccat_common_send(usb_dev, kone_command_settings,
+=======
+	retval = kone_send(usb_dev, kone_command_settings,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			settings, sizeof(struct kone_settings));
 	if (retval)
 		return retval;
@@ -182,7 +238,11 @@ static int kone_get_weight(struct usb_device *usb_dev, int *result)
 	int retval;
 	uint8_t data;
 
+<<<<<<< HEAD
 	retval = roccat_common_receive(usb_dev, kone_command_weight, &data, 1);
+=======
+	retval = kone_receive(usb_dev, kone_command_weight, &data, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (retval)
 		return retval;
@@ -201,7 +261,11 @@ static int kone_get_firmware_version(struct usb_device *usb_dev, int *result)
 	int retval;
 	uint16_t data;
 
+<<<<<<< HEAD
 	retval = roccat_common_receive(usb_dev, kone_command_firmware_version,
+=======
+	retval = kone_receive(usb_dev, kone_command_firmware_version,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			&data, 2);
 	if (retval)
 		return retval;
@@ -384,7 +448,11 @@ static int kone_tcu_command(struct usb_device *usb_dev, int number)
 {
 	unsigned char value;
 	value = number;
+<<<<<<< HEAD
 	return roccat_common_send(usb_dev, kone_command_calibrate, &value, 1);
+=======
+	return kone_send(usb_dev, kone_command_calibrate, &value, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -791,6 +859,12 @@ static int kone_raw_event(struct hid_device *hdev, struct hid_report *report,
 	if (size != sizeof(struct kone_mouse_event))
 		return 0;
 
+<<<<<<< HEAD
+=======
+	if (kone == NULL)
+		return 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Firmware 1.38 introduced new behaviour for tilt and special buttons.
 	 * Pressed button is reported in each movement event.

@@ -55,12 +55,20 @@ ath5k_hw_setup_2word_tx_desc(struct ath5k_hw *ah, struct ath5k_desc *desc,
 	 *   noise on the channel, so it is important to avoid this.
 	 */
 	if (unlikely(tx_tries0 == 0)) {
+<<<<<<< HEAD
 		ATH5K_ERR(ah->ah_sc, "zero retries\n");
+=======
+		ATH5K_ERR(ah, "zero retries\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		WARN_ON(1);
 		return -EINVAL;
 	}
 	if (unlikely(tx_rate0 == 0)) {
+<<<<<<< HEAD
 		ATH5K_ERR(ah->ah_sc, "zero rate\n");
+=======
+		ATH5K_ERR(ah, "zero rate\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		WARN_ON(1);
 		return -EINVAL;
 	}
@@ -203,12 +211,20 @@ static int ath5k_hw_setup_4word_tx_desc(struct ath5k_hw *ah,
 	 *   noise on the channel, so it is important to avoid this.
 	 */
 	if (unlikely(tx_tries0 == 0)) {
+<<<<<<< HEAD
 		ATH5K_ERR(ah->ah_sc, "zero retries\n");
+=======
+		ATH5K_ERR(ah, "zero retries\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		WARN_ON(1);
 		return -EINVAL;
 	}
 	if (unlikely(tx_rate0 == 0)) {
+<<<<<<< HEAD
 		ATH5K_ERR(ah->ah_sc, "zero rate\n");
+=======
+		ATH5K_ERR(ah, "zero rate\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		WARN_ON(1);
 		return -EINVAL;
 	}
@@ -316,7 +332,11 @@ ath5k_hw_setup_mrr_tx_desc(struct ath5k_hw *ah, struct ath5k_desc *desc,
 	if (unlikely((tx_rate1 == 0 && tx_tries1 != 0) ||
 		     (tx_rate2 == 0 && tx_tries2 != 0) ||
 		     (tx_rate3 == 0 && tx_tries3 != 0))) {
+<<<<<<< HEAD
 		ATH5K_ERR(ah->ah_sc, "zero rate\n");
+=======
+		ATH5K_ERR(ah, "zero rate\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		WARN_ON(1);
 		return -EINVAL;
 	}

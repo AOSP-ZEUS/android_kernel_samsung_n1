@@ -382,7 +382,11 @@ bool efuse_shadow_update_chk(struct ieee80211_hw *hw)
 			}
 		}
 
+<<<<<<< HEAD
 		if (wordchanged == true)
+=======
+		if (wordchanged)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			hdr_num++;
 	}
 
@@ -453,7 +457,11 @@ bool efuse_shadow_update(struct ieee80211_hw *hw)
 		base = offset * 8;
 
 		for (i = 0; i < 8; i++) {
+<<<<<<< HEAD
 			if (first_pg == true) {
+=======
+			if (first_pg) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 				word_en &= ~(BIT(i / 2));
 
@@ -505,7 +513,11 @@ void rtl_efuse_shadow_map_update(struct ieee80211_hw *hw)
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
 	struct rtl_efuse *rtlefuse = rtl_efuse(rtl_priv(hw));
 
+<<<<<<< HEAD
 	if (rtlefuse->autoload_failflag == true)
+=======
+	if (rtlefuse->autoload_failflag)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		memset(&rtlefuse->efuse_map[EFUSE_INIT_MAP][0], 0xFF,
 			rtlpriv->cfg->maps[EFUSE_HWSET_MAX_SIZE]);
 	else
@@ -690,7 +702,11 @@ static void efuse_read_data_case1(struct ieee80211_hw *hw, u16 *efuse_addr,
 			}
 		}
 
+<<<<<<< HEAD
 		if (dataempty == true) {
+=======
+		if (dataempty) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			*readstate = PG_STATE_DATA;
 		} else {
 			*efuse_addr = *efuse_addr + (word_cnts * 2) + 1;
@@ -925,7 +941,11 @@ static int efuse_pg_packet_write(struct ieee80211_hw *hw,
 	struct rtl_priv *rtlpriv = rtl_priv(hw);
 	struct pgpkt_struct target_pkt;
 	u8 write_state = PG_STATE_HEADER;
+<<<<<<< HEAD
 	int continual = true, dataempty = true, result = true;
+=======
+	int continual = true, result = true;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16 efuse_addr = 0;
 	u8 efuse_data;
 	u8 target_word_cnts = 0;
@@ -953,7 +973,10 @@ static int efuse_pg_packet_write(struct ieee80211_hw *hw,
 	       (EFUSE_MAX_SIZE - EFUSE_OOB_PROTECT_BYTES))) {
 
 		if (write_state == PG_STATE_HEADER) {
+<<<<<<< HEAD
 			dataempty = true;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			badworden = 0x0F;
 			RTPRINT(rtlpriv, FEEPROM, EFUSE_PG,
 				("efuse PG_STATE_HEADER\n"));
@@ -1176,13 +1199,20 @@ static u16 efuse_get_current_size(struct ieee80211_hw *hw)
 {
 	int continual = true;
 	u16 efuse_addr = 0;
+<<<<<<< HEAD
 	u8 hoffset, hworden;
+=======
+	u8 hworden;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8 efuse_data, word_cnts;
 
 	while (continual && efuse_one_byte_read(hw, efuse_addr, &efuse_data)
 	       && (efuse_addr < EFUSE_MAX_SIZE)) {
 		if (efuse_data != 0xFF) {
+<<<<<<< HEAD
 			hoffset = (efuse_data >> 4) & 0x0F;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			hworden = efuse_data & 0x0F;
 			word_cnts = efuse_calculate_word_cnts(hworden);
 			efuse_addr = efuse_addr + (word_cnts * 2) + 1;

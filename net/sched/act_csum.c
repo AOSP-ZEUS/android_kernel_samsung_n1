@@ -500,7 +500,11 @@ fail:
 }
 
 static int tcf_csum(struct sk_buff *skb,
+<<<<<<< HEAD
 		    struct tc_action *a, struct tcf_result *res)
+=======
+		    const struct tc_action *a, struct tcf_result *res)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct tcf_csum *p = a->priv;
 	int action;

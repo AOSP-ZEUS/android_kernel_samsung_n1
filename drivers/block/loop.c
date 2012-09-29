@@ -75,11 +75,19 @@
 #include <linux/kthread.h>
 #include <linux/splice.h>
 #include <linux/sysfs.h>
+<<<<<<< HEAD
 
 #include <asm/uaccess.h>
 
 static LIST_HEAD(loop_devices);
 static DEFINE_MUTEX(loop_devices_mutex);
+=======
+#include <linux/miscdevice.h>
+#include <asm/uaccess.h>
+
+static DEFINE_IDR(loop_index_idr);
+static DEFINE_MUTEX(loop_index_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int max_part;
 static int part_shift;
@@ -722,6 +730,7 @@ static inline int is_loop_device(struct file *file)
 static ssize_t loop_attr_show(struct device *dev, char *page,
 			      ssize_t (*callback)(struct loop_device *, char *))
 {
+<<<<<<< HEAD
 	struct loop_device *l, *lo = NULL;
 
 	mutex_lock(&loop_devices_mutex);
@@ -733,6 +742,12 @@ static ssize_t loop_attr_show(struct device *dev, char *page,
 	mutex_unlock(&loop_devices_mutex);
 
 	return lo ? callback(lo, page) : -EIO;
+=======
+	struct gendisk *disk = dev_to_disk(dev);
+	struct loop_device *lo = disk->private_data;
+
+	return callback(lo, page);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #define LOOP_ATTR_RO(_name)						\
@@ -1487,13 +1502,31 @@ static int lo_compat_ioctl(struct block_device *bdev, fmode_t mode,
 
 static int lo_open(struct block_device *bdev, fmode_t mode)
 {
+<<<<<<< HEAD
 	struct loop_device *lo = bdev->bd_disk->private_data;
+=======
+	struct loop_device *lo;
+	int err = 0;
+
+	mutex_lock(&loop_index_mutex);
+	lo = bdev->bd_disk->private_data;
+	if (!lo) {
+		err = -ENXIO;
+		goto out;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&lo->lo_ctl_mutex);
 	lo->lo_refcnt++;
 	mutex_unlock(&lo->lo_ctl_mutex);
+<<<<<<< HEAD
 
 	return 0;
+=======
+out:
+	mutex_unlock(&loop_index_mutex);
+	return err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int lo_release(struct gendisk *disk, fmode_t mode)
@@ -1559,16 +1592,35 @@ int loop_register_transfer(struct loop_func_table *funcs)
 	return 0;
 }
 
+<<<<<<< HEAD
 int loop_unregister_transfer(int number)
 {
 	unsigned int n = number;
 	struct loop_device *lo;
+=======
+static int unregister_transfer_cb(int id, void *ptr, void *data)
+{
+	struct loop_device *lo = ptr;
+	struct loop_func_table *xfer = data;
+
+	mutex_lock(&lo->lo_ctl_mutex);
+	if (lo->lo_encryption == xfer)
+		loop_release_xfer(lo);
+	mutex_unlock(&lo->lo_ctl_mutex);
+	return 0;
+}
+
+int loop_unregister_transfer(int number)
+{
+	unsigned int n = number;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct loop_func_table *xfer;
 
 	if (n == 0 || n >= MAX_LO_CRYPT || (xfer = xfer_funcs[n]) == NULL)
 		return -EINVAL;
 
 	xfer_funcs[n] = NULL;
+<<<<<<< HEAD
 
 	list_for_each_entry(lo, &loop_devices, lo_list) {
 		mutex_lock(&lo->lo_ctl_mutex);
@@ -1579,12 +1631,16 @@ int loop_unregister_transfer(int number)
 		mutex_unlock(&lo->lo_ctl_mutex);
 	}
 
+=======
+	idr_for_each(&loop_index_idr, &unregister_transfer_cb, xfer);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
 EXPORT_SYMBOL(loop_register_transfer);
 EXPORT_SYMBOL(loop_unregister_transfer);
 
+<<<<<<< HEAD
 static struct loop_device *loop_alloc(int i)
 {
 	struct loop_device *lo;
@@ -1593,6 +1649,45 @@ static struct loop_device *loop_alloc(int i)
 	lo = kzalloc(sizeof(*lo), GFP_KERNEL);
 	if (!lo)
 		goto out;
+=======
+static int loop_add(struct loop_device **l, int i)
+{
+	struct loop_device *lo;
+	struct gendisk *disk;
+	int err;
+
+	lo = kzalloc(sizeof(*lo), GFP_KERNEL);
+	if (!lo) {
+		err = -ENOMEM;
+		goto out;
+	}
+
+	err = idr_pre_get(&loop_index_idr, GFP_KERNEL);
+	if (err < 0)
+		goto out_free_dev;
+
+	if (i >= 0) {
+		int m;
+
+		/* create specific i in the index */
+		err = idr_get_new_above(&loop_index_idr, lo, i, &m);
+		if (err >= 0 && i != m) {
+			idr_remove(&loop_index_idr, m);
+			err = -EEXIST;
+		}
+	} else if (i == -1) {
+		int m;
+
+		/* get next free nr */
+		err = idr_get_new(&loop_index_idr, lo, &m);
+		if (err >= 0)
+			i = m;
+	} else {
+		err = -EINVAL;
+	}
+	if (err < 0)
+		goto out_free_dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	lo->lo_queue = blk_alloc_queue(GFP_KERNEL);
 	if (!lo->lo_queue)
@@ -1613,13 +1708,20 @@ static struct loop_device *loop_alloc(int i)
 	disk->private_data	= lo;
 	disk->queue		= lo->lo_queue;
 	sprintf(disk->disk_name, "loop%d", i);
+<<<<<<< HEAD
 	return lo;
+=======
+	add_disk(disk);
+	*l = lo;
+	return lo->lo_number;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 out_free_queue:
 	blk_cleanup_queue(lo->lo_queue);
 out_free_dev:
 	kfree(lo);
 out:
+<<<<<<< HEAD
 	return NULL;
 }
 
@@ -1652,26 +1754,157 @@ static void loop_del_one(struct loop_device *lo)
 {
 	del_gendisk(lo->lo_disk);
 	loop_free(lo);
+=======
+	return err;
+}
+
+static void loop_remove(struct loop_device *lo)
+{
+	del_gendisk(lo->lo_disk);
+	blk_cleanup_queue(lo->lo_queue);
+	put_disk(lo->lo_disk);
+	kfree(lo);
+}
+
+static int find_free_cb(int id, void *ptr, void *data)
+{
+	struct loop_device *lo = ptr;
+	struct loop_device **l = data;
+
+	if (lo->lo_state == Lo_unbound) {
+		*l = lo;
+		return 1;
+	}
+	return 0;
+}
+
+static int loop_lookup(struct loop_device **l, int i)
+{
+	struct loop_device *lo;
+	int ret = -ENODEV;
+
+	if (i < 0) {
+		int err;
+
+		err = idr_for_each(&loop_index_idr, &find_free_cb, &lo);
+		if (err == 1) {
+			*l = lo;
+			ret = lo->lo_number;
+		}
+		goto out;
+	}
+
+	/* lookup and return a specific i */
+	lo = idr_find(&loop_index_idr, i);
+	if (lo) {
+		*l = lo;
+		ret = lo->lo_number;
+	}
+out:
+	return ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct kobject *loop_probe(dev_t dev, int *part, void *data)
 {
 	struct loop_device *lo;
 	struct kobject *kobj;
+<<<<<<< HEAD
 
 	mutex_lock(&loop_devices_mutex);
 	lo = loop_init_one(MINOR(dev) >> part_shift);
 	kobj = lo ? get_disk(lo->lo_disk) : ERR_PTR(-ENOMEM);
 	mutex_unlock(&loop_devices_mutex);
+=======
+	int err;
+
+	mutex_lock(&loop_index_mutex);
+	err = loop_lookup(&lo, MINOR(dev) >> part_shift);
+	if (err < 0)
+		err = loop_add(&lo, MINOR(dev) >> part_shift);
+	if (err < 0)
+		kobj = ERR_PTR(err);
+	else
+		kobj = get_disk(lo->lo_disk);
+	mutex_unlock(&loop_index_mutex);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	*part = 0;
 	return kobj;
 }
 
+<<<<<<< HEAD
+=======
+static long loop_control_ioctl(struct file *file, unsigned int cmd,
+			       unsigned long parm)
+{
+	struct loop_device *lo;
+	int ret = -ENOSYS;
+
+	mutex_lock(&loop_index_mutex);
+	switch (cmd) {
+	case LOOP_CTL_ADD:
+		ret = loop_lookup(&lo, parm);
+		if (ret >= 0) {
+			ret = -EEXIST;
+			break;
+		}
+		ret = loop_add(&lo, parm);
+		break;
+	case LOOP_CTL_REMOVE:
+		ret = loop_lookup(&lo, parm);
+		if (ret < 0)
+			break;
+		mutex_lock(&lo->lo_ctl_mutex);
+		if (lo->lo_state != Lo_unbound) {
+			ret = -EBUSY;
+			mutex_unlock(&lo->lo_ctl_mutex);
+			break;
+		}
+		if (lo->lo_refcnt > 0) {
+			ret = -EBUSY;
+			mutex_unlock(&lo->lo_ctl_mutex);
+			break;
+		}
+		lo->lo_disk->private_data = NULL;
+		mutex_unlock(&lo->lo_ctl_mutex);
+		idr_remove(&loop_index_idr, lo->lo_number);
+		loop_remove(lo);
+		break;
+	case LOOP_CTL_GET_FREE:
+		ret = loop_lookup(&lo, -1);
+		if (ret >= 0)
+			break;
+		ret = loop_add(&lo, -1);
+	}
+	mutex_unlock(&loop_index_mutex);
+
+	return ret;
+}
+
+static const struct file_operations loop_ctl_fops = {
+	.open		= nonseekable_open,
+	.unlocked_ioctl	= loop_control_ioctl,
+	.compat_ioctl	= loop_control_ioctl,
+	.owner		= THIS_MODULE,
+	.llseek		= noop_llseek,
+};
+
+static struct miscdevice loop_misc = {
+	.minor		= LOOP_CTRL_MINOR,
+	.name		= "loop-control",
+	.fops		= &loop_ctl_fops,
+};
+
+MODULE_ALIAS_MISCDEV(LOOP_CTRL_MINOR);
+MODULE_ALIAS("devname:loop-control");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __init loop_init(void)
 {
 	int i, nr;
 	unsigned long range;
+<<<<<<< HEAD
 	struct loop_device *lo, *next;
 
 	/*
@@ -1688,6 +1921,14 @@ static int __init loop_init(void)
 	 *     themselves and have kernel automatically instantiate actual
 	 *     device on-demand.
 	 */
+=======
+	struct loop_device *lo;
+	int err;
+
+	err = misc_register(&loop_misc);
+	if (err < 0)
+		return err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	part_shift = 0;
 	if (max_part > 0) {
@@ -1710,17 +1951,33 @@ static int __init loop_init(void)
 	if (max_loop > 1UL << (MINORBITS - part_shift))
 		return -EINVAL;
 
+<<<<<<< HEAD
+=======
+	/*
+	 * If max_loop is specified, create that many devices upfront.
+	 * This also becomes a hard limit. If max_loop is not specified,
+	 * create CONFIG_BLK_DEV_LOOP_MIN_COUNT loop devices at module
+	 * init time. Loop devices can be requested on-demand with the
+	 * /dev/loop-control interface, or be instantiated by accessing
+	 * a 'dead' device node.
+	 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (max_loop) {
 		nr = max_loop;
 		range = max_loop << part_shift;
 	} else {
+<<<<<<< HEAD
 		nr = 8;
+=======
+		nr = CONFIG_BLK_DEV_LOOP_MIN_COUNT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		range = 1UL << MINORBITS;
 	}
 
 	if (register_blkdev(LOOP_MAJOR, "loop"))
 		return -EIO;
 
+<<<<<<< HEAD
 	for (i = 0; i < nr; i++) {
 		lo = loop_alloc(i);
 		if (!lo)
@@ -1747,11 +2004,33 @@ Enomem:
 
 	unregister_blkdev(LOOP_MAJOR, "loop");
 	return -ENOMEM;
+=======
+	blk_register_region(MKDEV(LOOP_MAJOR, 0), range,
+				  THIS_MODULE, loop_probe, NULL, NULL);
+
+	/* pre-create number of devices given by config or max_loop */
+	mutex_lock(&loop_index_mutex);
+	for (i = 0; i < nr; i++)
+		loop_add(&lo, i);
+	mutex_unlock(&loop_index_mutex);
+
+	printk(KERN_INFO "loop: module loaded\n");
+	return 0;
+}
+
+static int loop_exit_cb(int id, void *ptr, void *data)
+{
+	struct loop_device *lo = ptr;
+
+	loop_remove(lo);
+	return 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void __exit loop_exit(void)
 {
 	unsigned long range;
+<<<<<<< HEAD
 	struct loop_device *lo, *next;
 
 	range = max_loop ? max_loop << part_shift : 1UL << MINORBITS;
@@ -1761,6 +2040,19 @@ static void __exit loop_exit(void)
 
 	blk_unregister_region(MKDEV(LOOP_MAJOR, 0), range);
 	unregister_blkdev(LOOP_MAJOR, "loop");
+=======
+
+	range = max_loop ? max_loop << part_shift : 1UL << MINORBITS;
+
+	idr_for_each(&loop_index_idr, &loop_exit_cb, NULL);
+	idr_remove_all(&loop_index_idr);
+	idr_destroy(&loop_index_idr);
+
+	blk_unregister_region(MKDEV(LOOP_MAJOR, 0), range);
+	unregister_blkdev(LOOP_MAJOR, "loop");
+
+	misc_deregister(&loop_misc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 module_init(loop_init);

@@ -88,6 +88,11 @@ struct ehci_hcd {			/* one per controller */
 	union ehci_shadow	*pshadow;	/* mirror hw periodic table */
 	int			next_uframe;	/* scan periodic, start here */
 	unsigned		periodic_sched;	/* periodic activity count */
+<<<<<<< HEAD
+=======
+	unsigned		uframe_periodic_max; /* max periodic time per uframe */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* list of itds & sitds completed while clock_frame was still active */
 	struct list_head	cached_itd_list;
@@ -138,6 +143,13 @@ struct ehci_hcd {			/* one per controller */
 	unsigned		use_dummy_qh:1;	/* AMD Frame List table quirk*/
 	unsigned		has_synopsys_hc_bug:1; /* Synopsys HC */
 	unsigned		frame_index_bug:1; /* MosChip (AKA NetMos) */
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_USB_EHCI_TEGRA
+	unsigned		controller_resets_phy:1;
+	unsigned		controller_remote_wakeup:1;
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* required for usb32 quirk */
 	#define OHCI_CTRL_HCFS          (3 << 6)
@@ -164,10 +176,13 @@ struct ehci_hcd {			/* one per controller */
 #ifdef DEBUG
 	struct dentry		*debug_dir;
 #endif
+<<<<<<< HEAD
 	/*
 	 * OTG controllers and transceivers need software interaction
 	 */
 	struct otg_transceiver	*transceiver;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* convert between an HCD pointer and the corresponding EHCI_HCD */
@@ -737,6 +752,7 @@ static inline u32 hc32_to_cpup (const struct ehci_hcd *ehci, const __hc32 *x)
 
 #endif
 
+<<<<<<< HEAD
 /*
  * Writing to dma coherent memory on ARM may be delayed via L2
  * writing buffer, so introduce the helper which can flush L2 writing
@@ -754,6 +770,8 @@ static inline void ehci_sync_mem()
 }
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*-------------------------------------------------------------------------*/
 
 #ifdef CONFIG_PCI
@@ -770,6 +788,26 @@ static inline unsigned ehci_read_frame_index(struct ehci_hcd *ehci)
 
 #endif
 
+<<<<<<< HEAD
+=======
+/*
+ * Writing to dma coherent memory on ARM may be delayed via L2
+ * writing buffer, so introduce the helper which can flush L2 writing
+ * buffer into memory immediately, especially used to flush ehci
+ * descriptor to memory.
+ * */
+#ifdef	CONFIG_ARM_DMA_MEM_BUFFERABLE
+static inline void ehci_sync_mem(void)
+{
+	mb();
+}
+#else
+static inline void ehci_sync_mem()
+{
+}
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*-------------------------------------------------------------------------*/
 
 #ifndef DEBUG

@@ -19,6 +19,7 @@ void samsung_keypad_cfg_gpio(unsigned int rows, unsigned int cols)
 
 	if (rows > 8) {
 		/* Set all the necessary GPX2 pins: KP_ROW[0~7] */
+<<<<<<< HEAD
 		s3c_gpio_cfgrange_nopull(EXYNOS4_GPX2(0), 8, S3C_GPIO_SFN(3));
 
 		/* Set all the necessary GPX3 pins: KP_ROW[8~] */
@@ -28,6 +29,18 @@ void samsung_keypad_cfg_gpio(unsigned int rows, unsigned int cols)
 		/* Set all the necessary GPX2 pins: KP_ROW[x] */
 		s3c_gpio_cfgrange_nopull(EXYNOS4_GPX2(0), rows,
 					 S3C_GPIO_SFN(3));
+=======
+		s3c_gpio_cfgall_range(EXYNOS4_GPX2(0), 8, S3C_GPIO_SFN(3),
+					S3C_GPIO_PULL_UP);
+
+		/* Set all the necessary GPX3 pins: KP_ROW[8~] */
+		s3c_gpio_cfgall_range(EXYNOS4_GPX3(0), (rows - 8),
+					 S3C_GPIO_SFN(3), S3C_GPIO_PULL_UP);
+	} else {
+		/* Set all the necessary GPX2 pins: KP_ROW[x] */
+		s3c_gpio_cfgall_range(EXYNOS4_GPX2(0), rows, S3C_GPIO_SFN(3),
+					S3C_GPIO_PULL_UP);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* Set all the necessary GPX1 pins to special-function 3: KP_COL[x] */

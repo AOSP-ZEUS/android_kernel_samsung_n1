@@ -91,11 +91,18 @@ void __init s3c_nand_set_platdata(struct s3c2410_platform_nand *nand)
 	 * time then there is little chance the system is going to run.
 	 */ 
 
+<<<<<<< HEAD
 	npd = kmemdup(nand, sizeof(struct s3c2410_platform_nand), GFP_KERNEL);
 	if (!npd) {
 		printk(KERN_ERR "%s: failed copying platform data\n", __func__);
 		return;
 	}
+=======
+	npd = s3c_set_platdata(nand, sizeof(struct s3c2410_platform_nand),
+				&s3c_device_nand);
+	if (!npd)
+		return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* now see if we need to copy any of the nand set data */
 
@@ -123,6 +130,9 @@ void __init s3c_nand_set_platdata(struct s3c2410_platform_nand *nand)
 			to++;
 		}
 	}
+<<<<<<< HEAD
 
 	s3c_device_nand.dev.platform_data = npd;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

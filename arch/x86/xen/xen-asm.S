@@ -96,7 +96,11 @@ ENTRY(xen_restore_fl_direct)
 
 	/* check for unmasked and pending */
 	cmpw $0x0001, PER_CPU_VAR(xen_vcpu_info) + XEN_vcpu_info_pending
+<<<<<<< HEAD
 	jnz 1f
+=======
+	jz 1f
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 2:	call check_events
 1:
 ENDPATCH(xen_restore_fl_direct)

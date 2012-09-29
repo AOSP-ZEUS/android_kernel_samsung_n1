@@ -31,7 +31,10 @@
 #include <linux/uio.h>
 #include <linux/security.h>
 #include <linux/gfp.h>
+<<<<<<< HEAD
 #include <linux/socket.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Attempt to steal a page from a pipe buffer. This should perhaps go into
@@ -133,7 +136,11 @@ error:
 	return err;
 }
 
+<<<<<<< HEAD
 static const struct pipe_buf_operations page_cache_pipe_buf_ops = {
+=======
+const struct pipe_buf_operations page_cache_pipe_buf_ops = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.can_merge = 0,
 	.map = generic_pipe_buf_map,
 	.unmap = generic_pipe_buf_unmap,
@@ -265,7 +272,11 @@ ssize_t splice_to_pipe(struct pipe_inode_info *pipe,
 	return ret;
 }
 
+<<<<<<< HEAD
 static void spd_release_page(struct splice_pipe_desc *spd, unsigned int i)
+=======
+void spd_release_page(struct splice_pipe_desc *spd, unsigned int i)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	page_cache_release(spd->pages[i]);
 }
@@ -692,9 +703,13 @@ static int pipe_to_sendpage(struct pipe_inode_info *pipe,
 	if (!likely(file->f_op && file->f_op->sendpage))
 		return -EINVAL;
 
+<<<<<<< HEAD
 	more = (sd->flags & SPLICE_F_MORE) ? MSG_MORE : 0;
 	if (sd->len < sd->total_len)
 		more |= MSG_SENDPAGE_NOTLAST;
+=======
+	more = (sd->flags & SPLICE_F_MORE) || sd->len < sd->total_len;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return file->f_op->sendpage(file, buf->page, buf->offset,
 				    sd->len, &pos, more);
 }

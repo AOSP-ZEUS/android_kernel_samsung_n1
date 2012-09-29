@@ -24,7 +24,11 @@
 #include <linux/interrupt.h>
 #include <linux/smp.h>
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/cpu.h>
 #include <asm/processor.h>
 #include <asm/smtc.h>

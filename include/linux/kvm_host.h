@@ -47,6 +47,10 @@
 #define KVM_REQ_DEACTIVATE_FPU    10
 #define KVM_REQ_EVENT             11
 #define KVM_REQ_APF_HALT          12
+<<<<<<< HEAD
+=======
+#define KVM_REQ_STEAL_UPDATE      13
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define KVM_USERSPACE_IRQ_SOURCE_ID	0
 
@@ -326,12 +330,24 @@ static inline struct kvm_memslots *kvm_memslots(struct kvm *kvm)
 static inline int is_error_hpa(hpa_t hpa) { return hpa >> HPA_MSB; }
 
 extern struct page *bad_page;
+<<<<<<< HEAD
 extern pfn_t bad_pfn;
+=======
+extern struct page *fault_page;
+
+extern pfn_t bad_pfn;
+extern pfn_t fault_pfn;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 int is_error_page(struct page *page);
 int is_error_pfn(pfn_t pfn);
 int is_hwpoison_pfn(pfn_t pfn);
 int is_fault_pfn(pfn_t pfn);
+<<<<<<< HEAD
+=======
+int is_noslot_pfn(pfn_t pfn);
+int is_invalid_pfn(pfn_t pfn);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int kvm_is_error_hva(unsigned long addr);
 int kvm_set_memory_region(struct kvm *kvm,
 			  struct kvm_userspace_memory_region *mem,
@@ -381,6 +397,11 @@ int kvm_read_guest_page(struct kvm *kvm, gfn_t gfn, void *data, int offset,
 int kvm_read_guest_atomic(struct kvm *kvm, gpa_t gpa, void *data,
 			  unsigned long len);
 int kvm_read_guest(struct kvm *kvm, gpa_t gpa, void *data, unsigned long len);
+<<<<<<< HEAD
+=======
+int kvm_read_guest_cached(struct kvm *kvm, struct gfn_to_hva_cache *ghc,
+			   void *data, unsigned long len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int kvm_write_guest_page(struct kvm *kvm, gfn_t gfn, const void *data,
 			 int offset, int len);
 int kvm_write_guest(struct kvm *kvm, gpa_t gpa, const void *data,
@@ -554,7 +575,10 @@ void kvm_free_irq_source_id(struct kvm *kvm, int irq_source_id);
 
 #ifdef CONFIG_IOMMU_API
 int kvm_iommu_map_pages(struct kvm *kvm, struct kvm_memory_slot *slot);
+<<<<<<< HEAD
 void kvm_iommu_unmap_pages(struct kvm *kvm, struct kvm_memory_slot *slot);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int kvm_iommu_map_guest(struct kvm *kvm);
 int kvm_iommu_unmap_guest(struct kvm *kvm);
 int kvm_assign_device(struct kvm *kvm,
@@ -568,11 +592,14 @@ static inline int kvm_iommu_map_pages(struct kvm *kvm,
 	return 0;
 }
 
+<<<<<<< HEAD
 static inline void kvm_iommu_unmap_pages(struct kvm *kvm,
 					 struct kvm_memory_slot *slot)
 {
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int kvm_iommu_map_guest(struct kvm *kvm)
 {
 	return -ENODEV;

@@ -183,7 +183,12 @@ static int omap2_clkdm_clk_enable(struct clockdomain *clkdm)
 		_clkdm_add_autodeps(clkdm);
 		_enable_hwsup(clkdm);
 	} else {
+<<<<<<< HEAD
 		clkdm_wakeup(clkdm);
+=======
+		if (clkdm->flags & CLKDM_CAN_FORCE_WAKEUP)
+			omap2_clkdm_wakeup(clkdm);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return 0;
@@ -205,7 +210,12 @@ static int omap2_clkdm_clk_disable(struct clockdomain *clkdm)
 		_clkdm_del_autodeps(clkdm);
 		_enable_hwsup(clkdm);
 	} else {
+<<<<<<< HEAD
 		clkdm_sleep(clkdm);
+=======
+		if (clkdm->flags & CLKDM_CAN_FORCE_SLEEP)
+			omap2_clkdm_sleep(clkdm);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return 0;

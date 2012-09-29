@@ -47,7 +47,11 @@ struct xfs_trans;
 #define	XFS_SUMOFFSTOBLOCK(mp,s)	\
 	(((s) * (uint)sizeof(xfs_suminfo_t)) >> (mp)->m_sb.sb_blocklog)
 #define	XFS_SUMPTR(mp,bp,so)	\
+<<<<<<< HEAD
 	((xfs_suminfo_t *)((char *)XFS_BUF_PTR(bp) + \
+=======
+	((xfs_suminfo_t *)((bp)->b_addr + \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		(((so) * (uint)sizeof(xfs_suminfo_t)) & XFS_BLOCKMASK(mp))))
 
 #define	XFS_BITTOBLOCK(mp,bi)	((bi) >> (mp)->m_blkbit_log)

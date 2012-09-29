@@ -3,7 +3,11 @@
  *
  * Maintained by Kumar Gala (see MAINTAINERS for contact information)
  *
+<<<<<<< HEAD
  * Copyright 2009 Freescale Semiconductor Inc.
+=======
+ * Copyright 2009-2011 Freescale Semiconductor Inc.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * This program is free software; you can redistribute  it and/or modify it
  * under  the terms of  the GNU General  Public License as published by the
@@ -22,6 +26,10 @@
 #include <asm/time.h>
 #include <asm/machdep.h>
 #include <asm/pci-bridge.h>
+<<<<<<< HEAD
+=======
+#include <asm/ppc-pci.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mm/mmu_decl.h>
 #include <asm/prom.h>
 #include <asm/udbg.h>
@@ -61,10 +69,13 @@ void __init corenet_ds_pic_init(void)
 	mpic_init(mpic);
 }
 
+<<<<<<< HEAD
 #ifdef CONFIG_PCI
 static int primary_phb_addr;
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Setup the architecture
  */
@@ -85,6 +96,7 @@ void __init corenet_ds_setup_arch(void)
 #endif
 
 #ifdef CONFIG_PCI
+<<<<<<< HEAD
 	for_each_compatible_node(np, "pci", "fsl,p4080-pcie") {
 		struct resource rsrc;
 		of_address_to_resource(np, 0, &rsrc);
@@ -97,6 +109,21 @@ void __init corenet_ds_setup_arch(void)
 		max = min(max, hose->dma_window_base_cur +
 				hose->dma_window_size);
 	}
+=======
+	for_each_node_by_type(np, "pci") {
+		if (of_device_is_compatible(np, "fsl,p4080-pcie") ||
+		    of_device_is_compatible(np, "fsl,qoriq-pcie-v2.2")) {
+			fsl_add_bridge(np, 0);
+			hose = pci_find_hose_for_OF_device(np);
+			max = min(max, hose->dma_window_base_cur +
+					hose->dma_window_size);
+		}
+	}
+
+#ifdef CONFIG_PPC64
+	pci_devs_phb_init();
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 #ifdef CONFIG_SWIOTLB
@@ -116,6 +143,22 @@ static const struct of_device_id of_device_ids[] __devinitconst = {
 	{
 		.compatible	= "fsl,rapidio-delta",
 	},
+<<<<<<< HEAD
+=======
+	{
+		.compatible	= "fsl,p4080-pcie",
+	},
+	{
+		.compatible	= "fsl,qoriq-pcie-v2.2",
+	},
+	/* The following two are for the Freescale hypervisor */
+	{
+		.name		= "hypervisor",
+	},
+	{
+		.name		= "handles",
+	},
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{}
 };
 

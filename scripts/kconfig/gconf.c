@@ -285,8 +285,11 @@ void init_left_tree(void)
 static void renderer_edited(GtkCellRendererText * cell,
 			    const gchar * path_string,
 			    const gchar * new_text, gpointer user_data);
+<<<<<<< HEAD
 static void renderer_toggled(GtkCellRendererToggle * cellrenderertoggle,
 			     gchar * arg1, gpointer user_data);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void init_right_tree(void)
 {
@@ -320,8 +323,11 @@ void init_right_tree(void)
 					    "inconsistent", COL_BTNINC,
 					    "visible", COL_BTNVIS,
 					    "radio", COL_BTNRAD, NULL);
+<<<<<<< HEAD
 	/*g_signal_connect(G_OBJECT(renderer), "toggled",
 	   G_CALLBACK(renderer_toggled), NULL); */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	renderer = gtk_cell_renderer_text_new();
 	gtk_tree_view_column_pack_start(GTK_TREE_VIEW_COLUMN(column),
 					renderer, FALSE);
@@ -888,6 +894,7 @@ static void toggle_sym_value(struct menu *menu)
 		display_tree_part();	//fixme: keep exp/coll
 }
 
+<<<<<<< HEAD
 static void renderer_toggled(GtkCellRendererToggle * cell,
 			     gchar * path_string, gpointer user_data)
 {
@@ -917,6 +924,8 @@ static void renderer_toggled(GtkCellRendererToggle * cell,
 	gtk_tree_path_free(path);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static gint column2index(GtkTreeViewColumn * column)
 {
 	gint i;
@@ -1172,6 +1181,10 @@ static gchar **fill_row(struct menu *menu)
 			row[COL_BTNVIS] = GINT_TO_POINTER(TRUE);
 		if (sym_is_choice(sym))
 			break;
+<<<<<<< HEAD
+=======
+		/* fall through */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	case S_TRISTATE:
 		val = sym_get_tristate_value(sym);
 		switch (val) {
@@ -1506,10 +1519,13 @@ int main(int ac, char *av[])
 	char *env;
 	gchar *glade_file;
 
+<<<<<<< HEAD
 #ifndef LKC_DIRECT_LINK
 	kconfig_load();
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bindtextdomain(PACKAGE, LOCALEDIR);
 	bind_textdomain_codeset(PACKAGE, "UTF-8");
 	textdomain(PACKAGE);

@@ -1351,11 +1351,14 @@ static void smc911x_set_multicast_list(struct net_device *dev)
 		netdev_for_each_mc_addr(ha, dev) {
 			u32 position;
 
+<<<<<<< HEAD
 			/* make sure this is a multicast address -
 				shouldn't this be a given if we have it here ? */
 			if (!(*ha->addr & 1))
 				continue;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			/* upper 6 bits are used as hash index */
 			position = ether_crc(ETH_ALEN, ha->addr)>>26;
 

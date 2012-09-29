@@ -48,14 +48,23 @@ nvc0_copy_context_new(struct nouveau_channel *chan, int engine)
 	struct nouveau_gpuobj *ctx = NULL;
 	int ret;
 
+<<<<<<< HEAD
 	ret = nouveau_gpuobj_new(dev, NULL, 256, 256,
+=======
+	ret = nouveau_gpuobj_new(dev, chan, 256, 256,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				 NVOBJ_FLAG_VM | NVOBJ_FLAG_VM_USER |
 				 NVOBJ_FLAG_ZERO_ALLOC, &ctx);
 	if (ret)
 		return ret;
 
+<<<<<<< HEAD
 	nv_wo32(ramin, pcopy->ctx + 0, lower_32_bits(ctx->vinst));
 	nv_wo32(ramin, pcopy->ctx + 4, upper_32_bits(ctx->vinst));
+=======
+	nv_wo32(ramin, pcopy->ctx + 0, lower_32_bits(ctx->linst));
+	nv_wo32(ramin, pcopy->ctx + 4, upper_32_bits(ctx->linst));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev_priv->engine.instmem.flush(dev);
 
 	chan->engctx[engine] = ctx;
@@ -127,7 +136,11 @@ nvc0_copy_init(struct drm_device *dev, int engine)
 }
 
 static int
+<<<<<<< HEAD
 nvc0_copy_fini(struct drm_device *dev, int engine)
+=======
+nvc0_copy_fini(struct drm_device *dev, int engine, bool suspend)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct nvc0_copy_engine *pcopy = nv_engine(dev, engine);
 

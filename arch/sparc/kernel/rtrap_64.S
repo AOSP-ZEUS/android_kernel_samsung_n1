@@ -20,6 +20,14 @@
 
 		.text
 		.align			32
+<<<<<<< HEAD
+=======
+__handle_softirq:
+		call			do_softirq
+		 nop
+		ba,a,pt			%xcc, __handle_softirq_continue
+		 nop
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 __handle_preemption:
 		call			schedule
 		 wrpr			%g0, RTRAP_PSTATE, %pstate
@@ -84,7 +92,13 @@ rtrap:
 		cmp			%l1, 0
 
 		/* mm/ultra.S:xcall_report_regs KNOWS about this load. */
+<<<<<<< HEAD
 		 ldx			[%sp + PTREGS_OFF + PT_V9_TSTATE], %l1
+=======
+		bne,pn			%icc, __handle_softirq
+		 ldx			[%sp + PTREGS_OFF + PT_V9_TSTATE], %l1
+__handle_softirq_continue:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 rtrap_xcall:
 		sethi			%hi(0xf << 20), %l4
 		and			%l1, %l4, %l4

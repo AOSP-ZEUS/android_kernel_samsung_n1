@@ -25,6 +25,10 @@
 #include <linux/slab.h>
 #include <linux/ioport.h>
 #include <linux/init.h>
+<<<<<<< HEAD
+=======
+#include <linux/interrupt.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/if.h>
 #include <linux/hdlc.h>
 #include <asm/io.h>
@@ -1664,10 +1668,16 @@ check_started_ok(struct fst_card_info *card)
 	 * existing firmware etc so we just report it for the moment.
 	 */
 	if (FST_RDL(card, numberOfPorts) != card->nports) {
+<<<<<<< HEAD
 		pr_warning("Port count mismatch on card %d. "
 			   "Firmware thinks %d we say %d\n",
 			   card->card_no,
 			   FST_RDL(card, numberOfPorts), card->nports);
+=======
+		pr_warn("Port count mismatch on card %d.  Firmware thinks %d we say %d\n",
+			card->card_no,
+			FST_RDL(card, numberOfPorts), card->nports);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 

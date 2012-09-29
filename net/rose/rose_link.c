@@ -266,6 +266,7 @@ void rose_transmit_link(struct sk_buff *skb, struct rose_neigh *neigh)
 {
 	unsigned char *dptr;
 
+<<<<<<< HEAD
 #if 0
 	if (call_fw_firewall(PF_ROSE, skb->dev, skb->data, NULL, &skb) != FW_ACCEPT) {
 		kfree_skb(skb);
@@ -273,6 +274,8 @@ void rose_transmit_link(struct sk_buff *skb, struct rose_neigh *neigh)
 	}
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (neigh->loopback) {
 		rose_loopback_queue(skb, neigh);
 		return;

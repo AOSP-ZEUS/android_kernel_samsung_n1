@@ -8,3 +8,9 @@ lguest/
 	- Extremely simple hypervisor for experimental/educational use.
 uml/
 	- User Mode Linux, builds/runs Linux kernel as a userspace program.
+<<<<<<< HEAD
+=======
+virtio.txt
+	- Text version of draft virtio spec.
+          See http://ozlabs.org/~rusty/virtio-spec
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

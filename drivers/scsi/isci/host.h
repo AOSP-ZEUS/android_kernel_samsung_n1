@@ -369,6 +369,12 @@ static inline struct isci_host *dev_to_ihost(struct domain_device *dev)
 #define ISCI_TAG_SEQ(tag) (((tag) >> 12) & (SCI_MAX_SEQ-1))
 #define ISCI_TAG_TCI(tag) ((tag) & (SCI_MAX_IO_REQUESTS-1))
 
+<<<<<<< HEAD
+=======
+/* interrupt coalescing baseline: 9 == 3 to 5us interrupt delay per command */
+#define ISCI_COALESCE_BASE 9
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* expander attached sata devices require 3 rnc slots */
 static inline int sci_remote_device_node_count(struct isci_remote_device *idev)
 {

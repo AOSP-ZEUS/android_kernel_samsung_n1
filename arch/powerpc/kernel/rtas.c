@@ -24,6 +24,10 @@
 #include <linux/cpumask.h>
 #include <linux/memblock.h>
 #include <linux/slab.h>
+<<<<<<< HEAD
+=======
+#include <linux/reboot.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/prom.h>
 #include <asm/rtas.h>
@@ -38,7 +42,11 @@
 #include <asm/udbg.h>
 #include <asm/syscalls.h>
 #include <asm/smp.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/time.h>
 #include <asm/mmu.h>
 #include <asm/topology.h>

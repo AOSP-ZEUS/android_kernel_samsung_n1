@@ -128,6 +128,7 @@ unsigned long long get_msr(int cpu, off_t offset)
 void print_header(void)
 {
 	if (show_pkg)
+<<<<<<< HEAD
 		fprintf(stderr, "pkg ");
 	if (show_core)
 		fprintf(stderr, "core");
@@ -156,6 +157,36 @@ void print_header(void)
 		fprintf(stderr, "  %%pc7 ");
 	if (extra_msr_offset)
 		fprintf(stderr, "       MSR 0x%x ", extra_msr_offset);
+=======
+		fprintf(stderr, "pk");
+	if (show_core)
+		fprintf(stderr, " cr");
+	if (show_cpu)
+		fprintf(stderr, " CPU");
+	if (do_nhm_cstates)
+		fprintf(stderr, "    %%c0 ");
+	if (has_aperf)
+		fprintf(stderr, " GHz");
+	fprintf(stderr, "  TSC");
+	if (do_nhm_cstates)
+		fprintf(stderr, "    %%c1");
+	if (do_nhm_cstates)
+		fprintf(stderr, "    %%c3");
+	if (do_nhm_cstates)
+		fprintf(stderr, "    %%c6");
+	if (do_snb_cstates)
+		fprintf(stderr, "    %%c7");
+	if (do_snb_cstates)
+		fprintf(stderr, "  %%pc2");
+	if (do_nhm_cstates)
+		fprintf(stderr, "  %%pc3");
+	if (do_nhm_cstates)
+		fprintf(stderr, "  %%pc6");
+	if (do_snb_cstates)
+		fprintf(stderr, "  %%pc7");
+	if (extra_msr_offset)
+		fprintf(stderr, "        MSR 0x%x ", extra_msr_offset);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	putc('\n', stderr);
 }
@@ -194,14 +225,22 @@ void print_cnt(struct counters *p)
 	/* topology columns, print blanks on 1st (average) line */
 	if (p == cnt_average) {
 		if (show_pkg)
+<<<<<<< HEAD
 			fprintf(stderr, "    ");
+=======
+			fprintf(stderr, " ");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (show_core)
 			fprintf(stderr, "    ");
 		if (show_cpu)
 			fprintf(stderr, "    ");
 	} else {
 		if (show_pkg)
+<<<<<<< HEAD
 			fprintf(stderr, "%4d", p->pkg);
+=======
+			fprintf(stderr, "%d", p->pkg);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (show_core)
 			fprintf(stderr, "%4d", p->core);
 		if (show_cpu)
@@ -241,6 +280,7 @@ void print_cnt(struct counters *p)
 		if (!skip_c1)
 			fprintf(stderr, "%7.2f", 100.0 * p->c1/p->tsc);
 		else
+<<<<<<< HEAD
 			fprintf(stderr, "   ****");
 	}
 	if (do_nhm_cstates)
@@ -257,6 +297,24 @@ void print_cnt(struct counters *p)
 		fprintf(stderr, "%7.2f", 100.0 * p->pc6/p->tsc);
 	if (do_snb_cstates)
 		fprintf(stderr, "%7.2f", 100.0 * p->pc7/p->tsc);
+=======
+			fprintf(stderr, "  ****");
+	}
+	if (do_nhm_cstates)
+		fprintf(stderr, " %6.2f", 100.0 * p->c3/p->tsc);
+	if (do_nhm_cstates)
+		fprintf(stderr, " %6.2f", 100.0 * p->c6/p->tsc);
+	if (do_snb_cstates)
+		fprintf(stderr, " %6.2f", 100.0 * p->c7/p->tsc);
+	if (do_snb_cstates)
+		fprintf(stderr, " %5.2f", 100.0 * p->pc2/p->tsc);
+	if (do_nhm_cstates)
+		fprintf(stderr, " %5.2f", 100.0 * p->pc3/p->tsc);
+	if (do_nhm_cstates)
+		fprintf(stderr, " %5.2f", 100.0 * p->pc6/p->tsc);
+	if (do_snb_cstates)
+		fprintf(stderr, " %5.2f", 100.0 * p->pc7/p->tsc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (extra_msr_offset)
 		fprintf(stderr, "  0x%016llx", p->extra_msr);
 	putc('\n', stderr);

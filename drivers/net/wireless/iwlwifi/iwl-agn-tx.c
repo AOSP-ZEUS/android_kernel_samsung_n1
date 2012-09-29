@@ -39,6 +39,10 @@
 #include "iwl-helpers.h"
 #include "iwl-agn-hw.h"
 #include "iwl-agn.h"
+<<<<<<< HEAD
+=======
+#include "iwl-trans.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * mac80211 queues, ACs, hardware queues, FIFOs.
@@ -95,6 +99,7 @@ static inline int get_fifo_from_tid(struct iwl_rxon_context *ctx, u16 tid)
 	return -EINVAL;
 }
 
+<<<<<<< HEAD
 /**
  * iwlagn_txq_update_byte_cnt_tbl - Set up entry in Tx byte-count array
  */
@@ -221,6 +226,10 @@ void iwlagn_tx_queue_set_status(struct iwl_priv *priv,
 }
 
 static int iwlagn_txq_agg_enable(struct iwl_priv *priv, int txq_id, int sta_id, int tid)
+=======
+static int iwlagn_txq_agg_enable(struct iwl_priv *priv, int txq_id, int sta_id,
+				int tid)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	if ((IWLAGN_FIRST_AMPDU_QUEUE > txq_id) ||
 	    (IWLAGN_FIRST_AMPDU_QUEUE +
@@ -237,6 +246,7 @@ static int iwlagn_txq_agg_enable(struct iwl_priv *priv, int txq_id, int sta_id, 
 	return iwl_sta_tx_modify_enable_tid(priv, sta_id, tid);
 }
 
+<<<<<<< HEAD
 void iwlagn_txq_agg_queue_setup(struct iwl_priv *priv,
 				struct ieee80211_sta *sta,
 				int tid, int frame_limit)
@@ -337,6 +347,16 @@ static int iwlagn_txq_agg_disable(struct iwl_priv *priv, u16 txq_id,
 void iwlagn_txq_set_sched(struct iwl_priv *priv, u32 mask)
 {
 	iwl_write_prph(priv, IWLAGN_SCD_TXFACT, mask);
+=======
+static void iwlagn_tx_cmd_protection(struct iwl_priv *priv,
+				     struct ieee80211_tx_info *info,
+				     __le16 fc, __le32 *tx_flags)
+{
+	if (info->control.rates[0].flags & IEEE80211_TX_RC_USE_RTS_CTS ||
+	    info->control.rates[0].flags & IEEE80211_TX_RC_USE_CTS_PROTECT ||
+	    info->flags & IEEE80211_TX_CTL_AMPDU)
+		*tx_flags |= TX_CMD_FLG_PROT_REQUIRE_MSK;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -353,6 +373,7 @@ static void iwlagn_tx_cmd_build_basic(struct iwl_priv *priv,
 	__le32 tx_flags = tx_cmd->tx_flags;
 
 	tx_cmd->stop_time.life_time = TX_CMD_LIFE_TIME_INFINITE;
+<<<<<<< HEAD
 	if (!(info->flags & IEEE80211_TX_CTL_NO_ACK)) {
 		tx_flags |= TX_CMD_FLG_ACK_MSK;
 		if (ieee80211_is_mgmt(fc))
@@ -366,6 +387,17 @@ static void iwlagn_tx_cmd_build_basic(struct iwl_priv *priv,
 	}
 
 	if (ieee80211_is_back_req(fc))
+=======
+
+	if (!(info->flags & IEEE80211_TX_CTL_NO_ACK))
+		tx_flags |= TX_CMD_FLG_ACK_MSK;
+	else
+		tx_flags &= ~TX_CMD_FLG_ACK_MSK;
+
+	if (ieee80211_is_probe_resp(fc))
+		tx_flags |= TX_CMD_FLG_TSF_MSK;
+	else if (ieee80211_is_back_req(fc))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tx_flags |= TX_CMD_FLG_ACK_MSK | TX_CMD_FLG_IMM_BA_RSP_MASK;
 	else if (info->band == IEEE80211_BAND_2GHZ &&
 		 priv->cfg->bt_params &&
@@ -391,7 +423,11 @@ static void iwlagn_tx_cmd_build_basic(struct iwl_priv *priv,
 			tx_flags &= ~TX_CMD_FLG_SEQ_CTL_MSK;
 	}
 
+<<<<<<< HEAD
 	priv->cfg->ops->utils->tx_cmd_protection(priv, info, fc, &tx_flags);
+=======
+	iwlagn_tx_cmd_protection(priv, info, fc, &tx_flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	tx_flags &= ~(TX_CMD_FLG_ANT_SEL_MSK);
 	if (ieee80211_is_mgmt(fc)) {
@@ -439,6 +475,21 @@ static void iwlagn_tx_cmd_build_rate(struct iwl_priv *priv,
 	if (ieee80211_is_data(fc)) {
 		tx_cmd->initial_rate_index = 0;
 		tx_cmd->tx_flags |= TX_CMD_FLG_STA_RATE_MSK;
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_IWLWIFI_DEVICE_SVTOOL
+		if (priv->tm_fixed_rate) {
+			/*
+			 * rate overwrite by testmode
+			 * we not only send lq command to change rate
+			 * we also re-enforce per data pkt base.
+			 */
+			tx_cmd->tx_flags &= ~TX_CMD_FLG_STA_RATE_MSK;
+			memcpy(&tx_cmd->rate_n_flags, &priv->tm_fixed_rate,
+			       sizeof(tx_cmd->rate_n_flags));
+		}
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 	}
 
@@ -500,8 +551,12 @@ static void iwlagn_tx_cmd_build_hwcrypto(struct iwl_priv *priv,
 
 	case WLAN_CIPHER_SUITE_TKIP:
 		tx_cmd->sec_ctl = TX_CMD_SEC_TKIP;
+<<<<<<< HEAD
 		ieee80211_get_tkip_key(keyconf, skb_frag,
 			IEEE80211_TKIP_P2_KEY, tx_cmd->key);
+=======
+		ieee80211_get_tkip_p2k(keyconf, skb_frag, tx_cmd->key);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		IWL_DEBUG_TX(priv, "tx_cmd with tkip hwcrypto\n");
 		break;
 
@@ -531,6 +586,7 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 {
 	struct ieee80211_hdr *hdr = (struct ieee80211_hdr *)skb->data;
 	struct ieee80211_tx_info *info = IEEE80211_SKB_CB(skb);
+<<<<<<< HEAD
 	struct ieee80211_sta *sta = info->control.sta;
 	struct iwl_station_priv *sta_priv = NULL;
 	struct iwl_tx_queue *txq;
@@ -551,6 +607,19 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 	u8 wait_write_ptr = 0;
 	u8 tid = 0;
 	u8 *qc = NULL;
+=======
+	struct iwl_station_priv *sta_priv = NULL;
+	struct iwl_rxon_context *ctx = &priv->contexts[IWL_RXON_CTX_BSS];
+	struct iwl_tx_cmd *tx_cmd;
+	int txq_id;
+
+	u16 seq_number = 0;
+	__le16 fc;
+	u8 hdr_len;
+	u16 len;
+	u8 sta_id;
+	u8 tid = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long flags;
 	bool is_agg = false;
 
@@ -598,8 +667,13 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 
 	IWL_DEBUG_TX(priv, "station Id %d\n", sta_id);
 
+<<<<<<< HEAD
 	if (sta)
 		sta_priv = (void *)sta->drv_priv;
+=======
+	if (info->control.sta)
+		sta_priv = (void *)info->control.sta->drv_priv;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (sta_priv && sta_priv->asleep &&
 	    (info->flags & IEEE80211_TX_CTL_PSPOLL_RESPONSE)) {
@@ -634,6 +708,10 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 	spin_lock(&priv->sta_lock);
 
 	if (ieee80211_is_data_qos(fc)) {
+<<<<<<< HEAD
+=======
+		u8 *qc = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		qc = ieee80211_get_qos_ctl(hdr);
 		tid = qc[0] & IEEE80211_QOS_CTL_TID_MASK;
 
@@ -654,6 +732,7 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 		}
 	}
 
+<<<<<<< HEAD
 	txq = &priv->txq[txq_id];
 	q = &txq->q;
 
@@ -686,6 +765,15 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 	memcpy(tx_cmd->hdr, hdr, hdr_len);
 
 
+=======
+	tx_cmd = trans_get_tx_cmd(&priv->trans, txq_id);
+	if (unlikely(!tx_cmd))
+		goto drop_unlock_sta;
+
+	/* Copy MAC header from skb into command buffer */
+	memcpy(tx_cmd->hdr, hdr, hdr_len);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Total # bytes to be transmitted */
 	len = (u16)skb->len;
 	tx_cmd->len = cpu_to_le16(len);
@@ -700,6 +788,7 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 	iwlagn_tx_cmd_build_rate(priv, tx_cmd, info, fc);
 
 	iwl_update_stats(priv, true, fc, len);
+<<<<<<< HEAD
 	/*
 	 * Use the first empty entry in this queue's command buffer array
 	 * to contain the Tx command and MAC header concatenated together
@@ -748,6 +837,11 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 			goto drop_unlock_sta;
 		}
 	}
+=======
+
+	if (trans_tx(&priv->trans, skb, tx_cmd, txq_id, fc, is_agg, ctx))
+		goto drop_unlock_sta;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (ieee80211_is_data_qos(fc)) {
 		priv->stations[sta_id].tid[tid].tfds_in_queue++;
@@ -756,6 +850,7 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 	}
 
 	spin_unlock(&priv->sta_lock);
+<<<<<<< HEAD
 
 	/* Attach buffers to TFD */
 	iwlagn_txq_attach_buf_to_tfd(priv, txq, txcmd_phys, firstlen, 1);
@@ -802,6 +897,11 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 	 */
 
 	/*
+=======
+	spin_unlock_irqrestore(&priv->lock, flags);
+
+	/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * Avoid atomic ops if it isn't an associated client.
 	 * Also, if this is a packet for aggregation, don't
 	 * increase the counter because the ucode will stop
@@ -811,6 +911,7 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 	if (sta_priv && sta_priv->client && !is_agg)
 		atomic_inc(&sta_priv->pending_frames);
 
+<<<<<<< HEAD
 	if ((iwl_queue_space(q) < q->high_mark) && priv->mac80211_registered) {
 		if (wait_write_ptr) {
 			spin_lock_irqsave(&priv->lock, flags);
@@ -822,6 +923,8 @@ int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb)
 		}
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
 drop_unlock_sta:
@@ -831,6 +934,7 @@ drop_unlock_priv:
 	return -1;
 }
 
+<<<<<<< HEAD
 static inline int iwlagn_alloc_dma_ptr(struct iwl_priv *priv,
 				    struct iwl_dma_ptr *ptr, size_t size)
 {
@@ -1003,6 +1107,8 @@ void iwlagn_txq_ctx_stop(struct iwl_priv *priv)
 			iwl_tx_queue_unmap(priv, txq_id);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Find first available (lowest unused) Tx Queue, mark it "active".
  * Called only when finding queue for aggregation.
@@ -1033,8 +1139,13 @@ int iwlagn_tx_agg_start(struct iwl_priv *priv, struct ieee80211_vif *vif,
 	if (unlikely(tx_fifo < 0))
 		return tx_fifo;
 
+<<<<<<< HEAD
 	IWL_WARN(priv, "%s on ra = %pM tid = %d\n",
 			__func__, sta->addr, tid);
+=======
+	IWL_DEBUG_HT(priv, "TX AGG request on ra = %pM tid = %d\n",
+		     sta->addr, tid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	sta_id = iwl_sta_id(sta);
 	if (sta_id == IWL_INVALID_STATION) {
@@ -1150,7 +1261,11 @@ int iwlagn_tx_agg_stop(struct iwl_priv *priv, struct ieee80211_vif *vif,
 	 * to deactivate the uCode queue, just return "success" to allow
 	 *  mac80211 to clean up it own data.
 	 */
+<<<<<<< HEAD
 	iwlagn_txq_agg_disable(priv, txq_id, ssn, tx_fifo_id);
+=======
+	trans_txq_agg_disable(&priv->trans, txq_id, ssn, tx_fifo_id);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	spin_unlock_irqrestore(&priv->lock, flags);
 
 	ieee80211_stop_tx_ba_cb_irqsafe(vif, sta->addr, tid);
@@ -1179,7 +1294,12 @@ int iwlagn_txq_check_empty(struct iwl_priv *priv,
 			u16 ssn = SEQ_TO_SN(tid_data->seq_number);
 			int tx_fifo = get_fifo_from_tid(ctx, tid);
 			IWL_DEBUG_HT(priv, "HW queue empty: continue DELBA flow\n");
+<<<<<<< HEAD
 			iwlagn_txq_agg_disable(priv, txq_id, ssn, tx_fifo);
+=======
+			trans_txq_agg_disable(&priv->trans, txq_id,
+				ssn, tx_fifo);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			tid_data->agg.state = IWL_AGG_OFF;
 			ieee80211_stop_tx_ba_cb_irqsafe(ctx->vif, addr, tid);
 		}
@@ -1236,9 +1356,15 @@ int iwlagn_tx_queue_reclaim(struct iwl_priv *priv, int txq_id, int index)
 	struct ieee80211_hdr *hdr;
 
 	if ((index >= q->n_bd) || (iwl_queue_used(q, index) == 0)) {
+<<<<<<< HEAD
 		IWL_ERR(priv, "Read index for DMA queue txq id (%d), index %d, "
 			  "is out of range [0-%d] %d %d.\n", txq_id,
 			  index, q->n_bd, q->write_ptr, q->read_ptr);
+=======
+		IWL_ERR(priv, "%s: Read index for DMA queue txq id (%d), "
+			  "index %d is out of range [0-%d] %d %d.\n", __func__,
+			  txq_id, index, q->n_bd, q->write_ptr, q->read_ptr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 	}
 
@@ -1261,7 +1387,11 @@ int iwlagn_tx_queue_reclaim(struct iwl_priv *priv, int txq_id, int index)
 
 		iwlagn_txq_inval_byte_cnt_tbl(priv, txq);
 
+<<<<<<< HEAD
 		iwlagn_txq_free_tfd(priv, txq);
+=======
+		iwlagn_txq_free_tfd(priv, txq, txq->q.read_ptr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return nfreed;
 }

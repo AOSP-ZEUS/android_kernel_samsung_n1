@@ -230,7 +230,12 @@ static void pci_parse_of_addrs(struct platform_device *op,
 			res = &dev->resource[(i - PCI_BASE_ADDRESS_0) >> 2];
 		} else if (i == dev->rom_base_reg) {
 			res = &dev->resource[PCI_ROM_RESOURCE];
+<<<<<<< HEAD
 			flags |= IORESOURCE_READONLY | IORESOURCE_CACHEABLE;
+=======
+			flags |= IORESOURCE_READONLY | IORESOURCE_CACHEABLE
+			      | IORESOURCE_SIZEALIGN;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		} else {
 			printk(KERN_ERR "PCI: bad cfg reg num 0x%x\n", i);
 			continue;
@@ -284,7 +289,11 @@ static struct pci_dev *of_create_pci_dev(struct pci_pbm_info *pbm,
 	dev->sysdata = node;
 	dev->dev.parent = bus->bridge;
 	dev->dev.bus = &pci_bus_type;
+<<<<<<< HEAD
 	dev->dev.of_node = node;
+=======
+	dev->dev.of_node = of_node_get(node);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev->devfn = devfn;
 	dev->multifunction = 0;		/* maybe a lie? */
 	set_pcie_port_type(dev);
@@ -820,11 +829,17 @@ static int __pci_mmap_make_offset_bus(struct pci_dev *pdev, struct vm_area_struc
 	unsigned long space_size, user_offset, user_size;
 
 	if (mmap_state == pci_mmap_io) {
+<<<<<<< HEAD
 		space_size = (pbm->io_space.end -
 			      pbm->io_space.start) + 1;
 	} else {
 		space_size = (pbm->mem_space.end -
 			      pbm->mem_space.start) + 1;
+=======
+		space_size = resource_size(&pbm->io_space);
+	} else {
+		space_size = resource_size(&pbm->mem_space);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* Make sure the request is in range. */
@@ -1021,12 +1036,15 @@ void arch_teardown_msi_irq(unsigned int irq)
 }
 #endif /* !(CONFIG_PCI_MSI) */
 
+<<<<<<< HEAD
 struct device_node *pci_device_to_OF_node(struct pci_dev *pdev)
 {
 	return pdev->dev.of_node;
 }
 EXPORT_SYMBOL(pci_device_to_OF_node);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void ali_sound_dma_hack(struct pci_dev *pdev, int set_bit)
 {
 	struct pci_dev *ali_isa_bridge;

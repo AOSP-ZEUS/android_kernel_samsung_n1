@@ -546,7 +546,12 @@ static int i2c_pnx_controller_suspend(struct platform_device *pdev,
 {
 	struct i2c_pnx_algo_data *alg_data = platform_get_drvdata(pdev);
 
+<<<<<<< HEAD
 	clk_disable(alg_data->clk);
+=======
+	/* FIXME: shouldn't this be clk_disable? */
+	clk_enable(alg_data->clk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

@@ -194,8 +194,12 @@ static int sl_alloc_bufs(struct slip *sl, int mtu)
 err_exit:
 #ifdef SL_INCLUDE_CSLIP
 	kfree(cbuff);
+<<<<<<< HEAD
 	if (slcomp)
 		slhc_free(slcomp);
+=======
+	slhc_free(slcomp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 	kfree(xbuff);
 	kfree(rbuff);
@@ -248,7 +252,11 @@ static int sl_realloc_bufs(struct slip *sl, int mtu)
 #else
 	if (xbuff == NULL || rbuff == NULL)  {
 #endif
+<<<<<<< HEAD
 		if (mtu >= sl->mtu) {
+=======
+		if (mtu > sl->mtu) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			printk(KERN_WARNING "%s: unable to grow slip buffers, MTU change cancelled.\n",
 			       dev->name);
 			err = -ENOBUFS;
@@ -368,7 +376,11 @@ static void sl_bump(struct slip *sl)
 	memcpy(skb_put(skb, count), sl->rbuff, count);
 	skb_reset_mac_header(skb);
 	skb->protocol = htons(ETH_P_IP);
+<<<<<<< HEAD
 	netif_rx(skb);
+=======
+	netif_rx_ni(skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dev->stats.rx_packets++;
 }
 
@@ -724,12 +736,19 @@ static void sl_sync(void)
 static struct slip *sl_alloc(dev_t line)
 {
 	int i;
+<<<<<<< HEAD
 	struct net_device *dev = NULL;
 	struct slip       *sl;
 
 	if (slip_devs == NULL)
 		return NULL;	/* Master array missing ! */
 
+=======
+	char name[IFNAMSIZ];
+	struct net_device *dev = NULL;
+	struct slip       *sl;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	for (i = 0; i < slip_maxdev; i++) {
 		dev = slip_devs[i];
 		if (dev == NULL)
@@ -739,6 +758,7 @@ static struct slip *sl_alloc(dev_t line)
 	if (i >= slip_maxdev)
 		return NULL;
 
+<<<<<<< HEAD
 	if (dev) {
 		sl = netdev_priv(dev);
 		if (test_bit(SLF_INUSE, &sl->flags)) {
@@ -758,6 +778,14 @@ static struct slip *sl_alloc(dev_t line)
 		dev->base_addr  = i;
 	}
 
+=======
+	sprintf(name, "sl%d", i);
+	dev = alloc_netdev(sizeof(*sl), name, sl_setup);
+	if (!dev)
+		return NULL;
+
+	dev->base_addr  = i;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sl = netdev_priv(dev);
 
 	/* Initialize channel control data */
@@ -823,7 +851,10 @@ static int slip_open(struct tty_struct *tty)
 
 	sl->tty = tty;
 	tty->disc_data = sl;
+<<<<<<< HEAD
 	sl->line = tty_devnum(tty);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sl->pid = current->pid;
 
 	if (!test_bit(SLF_INUSE, &sl->flags)) {
@@ -890,8 +921,11 @@ static void slip_close(struct tty_struct *tty)
 
 	tty->disc_data = NULL;
 	sl->tty = NULL;
+<<<<<<< HEAD
 	if (!sl->leased)
 		sl->line = 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* VSV = very important to remove timers */
 #ifdef CONFIG_SLIP_SMART

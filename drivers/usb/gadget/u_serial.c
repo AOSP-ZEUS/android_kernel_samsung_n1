@@ -380,7 +380,12 @@ __acquires(&port->port_lock)
 
 		req->length = len;
 		list_del(&req->list);
+<<<<<<< HEAD
 		req->zero = (gs_buf_data_avail(&port->port_write_buf) == 0);
+=======
+		req->zero = (gs_buf_data_avail(&port->port_write_buf) == 0)
+			&&  (req->length % in->maxpacket == 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		pr_vdebug(PREFIX "%d: tx len=%d, 0x%02x 0x%02x 0x%02x ...\n",
 				port->port_num, len, *((u8 *)req->buf),
@@ -1247,12 +1252,20 @@ int gserial_connect(struct gserial *gser, u8 port_num)
 	port = ports[port_num].port;
 
 	/* activate the endpoints */
+<<<<<<< HEAD
 	status = usb_ep_enable(gser->in, gser->in_desc);
+=======
+	status = usb_ep_enable(gser->in);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (status < 0)
 		return status;
 	gser->in->driver_data = port;
 
+<<<<<<< HEAD
 	status = usb_ep_enable(gser->out, gser->out_desc);
+=======
+	status = usb_ep_enable(gser->out);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (status < 0)
 		goto fail_out;
 	gser->out->driver_data = port;

@@ -255,7 +255,11 @@ int qib_pcie_params(struct qib_devdata *dd, u32 minw, u32 *nent,
 	u16 linkstat, speed;
 	int pos = 0, pose, ret = 1;
 
+<<<<<<< HEAD
 	pose = pci_find_capability(dd->pcidev, PCI_CAP_ID_EXP);
+=======
+	pose = pci_pcie_cap(dd->pcidev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!pose) {
 		qib_dev_err(dd, "Can't find PCI Express capability!\n");
 		/* set up something... */
@@ -509,7 +513,11 @@ static int qib_tune_pcie_coalesce(struct qib_devdata *dd)
 		qib_devinfo(dd->pcidev, "Parent not root\n");
 		return 1;
 	}
+<<<<<<< HEAD
 	ppos = pci_find_capability(parent, PCI_CAP_ID_EXP);
+=======
+	ppos = pci_pcie_cap(parent);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!ppos)
 		return 1;
 	if (parent->vendor != 0x8086)
@@ -578,14 +586,22 @@ static int qib_tune_pcie_caps(struct qib_devdata *dd)
 		qib_devinfo(dd->pcidev, "Parent not root\n");
 		goto bail;
 	}
+<<<<<<< HEAD
 	ppos = pci_find_capability(parent, PCI_CAP_ID_EXP);
+=======
+	ppos = pci_pcie_cap(parent);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ppos) {
 		pci_read_config_word(parent, ppos + PCI_EXP_DEVCAP, &pcaps);
 		pci_read_config_word(parent, ppos + PCI_EXP_DEVCTL, &pctl);
 	} else
 		goto bail;
 	/* Find out supported and configured values for endpoint (us) */
+<<<<<<< HEAD
 	epos = pci_find_capability(dd->pcidev, PCI_CAP_ID_EXP);
+=======
+	epos = pci_pcie_cap(dd->pcidev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (epos) {
 		pci_read_config_word(dd->pcidev, epos + PCI_EXP_DEVCAP, &ecaps);
 		pci_read_config_word(dd->pcidev, epos + PCI_EXP_DEVCTL, &ectl);

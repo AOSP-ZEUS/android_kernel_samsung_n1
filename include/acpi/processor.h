@@ -337,7 +337,11 @@ extern struct cpuidle_driver acpi_idle_driver;
 
 /* in processor_thermal.c */
 int acpi_processor_get_limit_info(struct acpi_processor *pr);
+<<<<<<< HEAD
 extern struct thermal_cooling_device_ops processor_cooling_ops;
+=======
+extern const struct thermal_cooling_device_ops processor_cooling_ops;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_CPU_FREQ
 void acpi_thermal_cpufreq_init(void);
 void acpi_thermal_cpufreq_exit(void);

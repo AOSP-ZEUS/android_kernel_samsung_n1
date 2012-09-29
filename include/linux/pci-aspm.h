@@ -29,7 +29,11 @@ extern void pcie_aspm_pm_state_change(struct pci_dev *pdev);
 extern void pcie_aspm_powersave_config_link(struct pci_dev *pdev);
 extern void pci_disable_link_state(struct pci_dev *pdev, int state);
 extern void pci_disable_link_state_locked(struct pci_dev *pdev, int state);
+<<<<<<< HEAD
 extern void pcie_clear_aspm(struct pci_bus *bus);
+=======
+extern void pcie_clear_aspm(void);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void pcie_no_aspm(void);
 #else
 static inline void pcie_aspm_init_link_state(struct pci_dev *pdev)
@@ -47,7 +51,11 @@ static inline void pcie_aspm_powersave_config_link(struct pci_dev *pdev)
 static inline void pci_disable_link_state(struct pci_dev *pdev, int state)
 {
 }
+<<<<<<< HEAD
 static inline void pcie_clear_aspm(struct pci_bus *bus)
+=======
+static inline void pcie_clear_aspm(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 }
 static inline void pcie_no_aspm(void)

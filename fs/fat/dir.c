@@ -1240,7 +1240,11 @@ int fat_add_entries(struct inode *dir, void *slots, int nr_slots,
 	struct super_block *sb = dir->i_sb;
 	struct msdos_sb_info *sbi = MSDOS_SB(sb);
 	struct buffer_head *bh, *prev, *bhs[3]; /* 32*slots (672bytes) */
+<<<<<<< HEAD
 	struct msdos_dir_entry *de;
+=======
+	struct msdos_dir_entry *uninitialized_var(de);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int err, free_slots, i, nr_bhs;
 	loff_t pos, i_pos;
 

@@ -6,6 +6,14 @@ typedef struct mirror_info mirror_info_t;
 struct mirror_info {
 	mdk_rdev_t	*rdev;
 	sector_t	head_position;
+<<<<<<< HEAD
+=======
+	int		recovery_disabled;	/* matches
+						 * mddev->recovery_disabled
+						 * when we shouldn't try
+						 * recovering this device.
+						 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 typedef struct r10bio_s r10bio_t;
@@ -113,10 +121,32 @@ struct r10bio_s {
  * level, we store IO_BLOCKED in the appropriate 'bios' pointer
  */
 #define IO_BLOCKED ((struct bio*)1)
+<<<<<<< HEAD
+=======
+/* When we successfully write to a known bad-block, we need to remove the
+ * bad-block marking which must be done from process context.  So we record
+ * the success by setting devs[n].bio to IO_MADE_GOOD
+ */
+#define IO_MADE_GOOD ((struct bio *)2)
+
+#define BIO_SPECIAL(bio) ((unsigned long)bio <= 2)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* bits for r10bio.state */
 #define	R10BIO_Uptodate	0
 #define	R10BIO_IsSync	1
 #define	R10BIO_IsRecover 2
 #define	R10BIO_Degraded 3
+<<<<<<< HEAD
+=======
+/* Set ReadError on bios that experience a read error
+ * so that raid10d knows what to do with them.
+ */
+#define	R10BIO_ReadError 4
+/* If a write for this request means we can clear some
+ * known-bad-block records, we set this flag.
+ */
+#define	R10BIO_MadeGood 5
+#define	R10BIO_WriteError 6
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif

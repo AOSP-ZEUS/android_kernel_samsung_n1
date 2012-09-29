@@ -1184,6 +1184,10 @@ static struct of_device_id swim3_match[] =
 	{
 	.compatible	= "swim3"
 	},
+<<<<<<< HEAD
+=======
+	{ /* end of list */ }
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct macio_driver swim3_driver =

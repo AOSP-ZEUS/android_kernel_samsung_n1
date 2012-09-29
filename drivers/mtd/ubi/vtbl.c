@@ -307,8 +307,12 @@ static int create_vtbl(struct ubi_device *ubi, struct ubi_scan_info *si,
 {
 	int err, tries = 0;
 	static struct ubi_vid_hdr *vid_hdr;
+<<<<<<< HEAD
 	struct ubi_scan_volume *sv;
 	struct ubi_scan_leb *new_seb, *old_seb = NULL;
+=======
+	struct ubi_scan_leb *new_seb;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ubi_msg("create volume table (copy #%d)", copy + 1);
 
@@ -316,6 +320,7 @@ static int create_vtbl(struct ubi_device *ubi, struct ubi_scan_info *si,
 	if (!vid_hdr)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	/*
 	 * Check if there is a logical eraseblock which would have to contain
 	 * this volume table copy was found during scanning. It has to be wiped
@@ -325,6 +330,8 @@ static int create_vtbl(struct ubi_device *ubi, struct ubi_scan_info *si,
 	if (sv)
 		old_seb = ubi_scan_find_seb(sv, copy);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 retry:
 	new_seb = ubi_scan_get_free_peb(ubi, si);
 	if (IS_ERR(new_seb)) {
@@ -351,8 +358,13 @@ retry:
 		goto write_error;
 
 	/*
+<<<<<<< HEAD
 	 * And add it to the scanning information. Don't delete the old
 	 * @old_seb as it will be deleted and freed in 'ubi_scan_add_used()'.
+=======
+	 * And add it to the scanning information. Don't delete the old version
+	 * of this LEB as it will be deleted and freed in 'ubi_scan_add_used()'.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 */
 	err = ubi_scan_add_used(ubi, si, new_seb->pnum, new_seb->ec,
 				vid_hdr, 0);
@@ -876,7 +888,11 @@ out_free:
  */
 static void paranoid_vtbl_check(const struct ubi_device *ubi)
 {
+<<<<<<< HEAD
 	if (!(ubi_chk_flags & UBI_CHK_GEN))
+=======
+	if (!ubi->dbg->chk_gen)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 
 	if (vtbl_check(ubi, ubi->vtbl)) {

@@ -41,11 +41,15 @@
 #include <sound/tlv.h>
 #include <sound/hwdep.h>
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("AudioScience inc. <support@audioscience.com>");
 MODULE_DESCRIPTION("AudioScience ALSA ASI5000 ASI6000 ASI87xx ASI89xx");
 
+<<<<<<< HEAD
 #if defined CONFIG_SND_DEBUG
 /* copied from pcm_lib.c, hope later patch will make that version public
 and this copy can be removed */
@@ -64,6 +68,8 @@ static void pcm_debug_name(struct snd_pcm_substream *substream,
 #define DEBUG_NAME(name, substream) do { } while (0)
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined CONFIG_SND_DEBUG_VERBOSE
 /**
  * snd_printddd - very verbose debug printk
@@ -304,7 +310,12 @@ static u16 handle_error(u16 err, int line, char *filename)
 static void print_hwparams(struct snd_pcm_substream *substream,
 				struct snd_pcm_hw_params *p)
 {
+<<<<<<< HEAD
 	DEBUG_NAME(substream, name);
+=======
+	char name[16];
+	snd_pcm_debug_name(substream, name, sizeof(name));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	snd_printd("%s HWPARAMS\n", name);
 	snd_printd(" samplerate %d Hz\n", params_rate(p));
 	snd_printd(" channels %d\n", params_channels(p));
@@ -576,8 +587,14 @@ static int snd_card_asihpi_trigger(struct snd_pcm_substream *substream,
 	struct snd_card_asihpi *card = snd_pcm_substream_chip(substream);
 	struct snd_pcm_substream *s;
 	u16 e;
+<<<<<<< HEAD
 	DEBUG_NAME(substream, name);
 
+=======
+	char name[16];
+
+	snd_pcm_debug_name(substream, name, sizeof(name));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	snd_printdd("%s trigger\n", name);
 
 	switch (cmd) {
@@ -741,7 +758,13 @@ static void snd_card_asihpi_timer_function(unsigned long data)
 	int loops = 0;
 	u16 state;
 	u32 buffer_size, bytes_avail, samples_played, on_card_bytes;
+<<<<<<< HEAD
 	DEBUG_NAME(substream, name);
+=======
+	char name[16];
+
+	snd_pcm_debug_name(substream, name, sizeof(name));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	snd_printdd("%s snd_card_asihpi_timer_function\n", name);
 
@@ -1323,10 +1346,19 @@ static const char * const asihpi_src_names[] = {
 	"RF",
 	"Clock",
 	"Bitstream",
+<<<<<<< HEAD
 	"Microphone",
 	"Cobranet",
 	"Analog",
 	"Adapter",
+=======
+	"Mic",
+	"Net",
+	"Analog",
+	"Adapter",
+	"RTP",
+	"GPI",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 compile_time_assert(
@@ -1341,8 +1373,15 @@ static const char * const asihpi_dst_names[] = {
 	"Digital",
 	"RF",
 	"Speaker",
+<<<<<<< HEAD
 	"Cobranet Out",
 	"Analog"
+=======
+	"Net",
+	"Analog",
+	"RTP",
+	"GPO",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 compile_time_assert(
@@ -1476,11 +1515,46 @@ static int snd_asihpi_volume_put(struct snd_kcontrol *kcontrol,
 
 static const DECLARE_TLV_DB_SCALE(db_scale_100, -10000, VOL_STEP_mB, 0);
 
+<<<<<<< HEAD
+=======
+#define snd_asihpi_volume_mute_info	snd_ctl_boolean_mono_info
+
+static int snd_asihpi_volume_mute_get(struct snd_kcontrol *kcontrol,
+				 struct snd_ctl_elem_value *ucontrol)
+{
+	u32 h_control = kcontrol->private_value;
+	u32 mute;
+
+	hpi_handle_error(hpi_volume_get_mute(h_control, &mute));
+	ucontrol->value.integer.value[0] = mute ? 0 : 1;
+
+	return 0;
+}
+
+static int snd_asihpi_volume_mute_put(struct snd_kcontrol *kcontrol,
+				 struct snd_ctl_elem_value *ucontrol)
+{
+	u32 h_control = kcontrol->private_value;
+	int change = 1;
+	/* HPI currently only supports all or none muting of multichannel volume
+	ALSA Switch element has opposite sense to HPI mute: on==unmuted, off=muted
+	*/
+	int mute =  ucontrol->value.integer.value[0] ? 0 : HPI_BITMASK_ALL_CHANNELS;
+	hpi_handle_error(hpi_volume_set_mute(h_control, mute));
+	return change;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int __devinit snd_asihpi_volume_add(struct snd_card_asihpi *asihpi,
 					struct hpi_control *hpi_ctl)
 {
 	struct snd_card *card = asihpi->card;
 	struct snd_kcontrol_new snd_control;
+<<<<<<< HEAD
+=======
+	int err;
+	u32 mute;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	asihpi_ctl_init(&snd_control, hpi_ctl, "Volume");
 	snd_control.access = SNDRV_CTL_ELEM_ACCESS_READWRITE |
@@ -1490,7 +1564,23 @@ static int __devinit snd_asihpi_volume_add(struct snd_card_asihpi *asihpi,
 	snd_control.put = snd_asihpi_volume_put;
 	snd_control.tlv.p = db_scale_100;
 
+<<<<<<< HEAD
 	return ctl_add(card, &snd_control, asihpi);
+=======
+	err = ctl_add(card, &snd_control, asihpi);
+	if (err)
+		return err;
+
+	if (hpi_volume_get_mute(hpi_ctl->h_control, &mute) == 0) {
+		asihpi_ctl_init(&snd_control, hpi_ctl, "Switch");
+		snd_control.access = SNDRV_CTL_ELEM_ACCESS_READWRITE;
+		snd_control.info = snd_asihpi_volume_mute_info;
+		snd_control.get = snd_asihpi_volume_mute_get;
+		snd_control.put = snd_asihpi_volume_mute_put;
+		err = ctl_add(card, &snd_control, asihpi);
+	}
+	return err;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*------------------------------------------------------------
@@ -2923,7 +3013,11 @@ static DEFINE_PCI_DEVICE_TABLE(asihpi_pci_tbl) = {
 MODULE_DEVICE_TABLE(pci, asihpi_pci_tbl);
 
 static struct pci_driver driver = {
+<<<<<<< HEAD
 	.name = "asihpi",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = asihpi_pci_tbl,
 	.probe = snd_asihpi_probe,
 	.remove = __devexit_p(snd_asihpi_remove),

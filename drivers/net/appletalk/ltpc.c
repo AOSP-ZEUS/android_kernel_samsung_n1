@@ -652,9 +652,15 @@ static int do_write(struct net_device *dev, void *cbuf, int cbuflen,
 	int ret;
 
 	if(i) {
+<<<<<<< HEAD
 		qels[i].cbuf = (unsigned char *) cbuf;
 		qels[i].cbuflen = cbuflen;
 		qels[i].dbuf = (unsigned char *) dbuf;
+=======
+		qels[i].cbuf = cbuf;
+		qels[i].cbuflen = cbuflen;
+		qels[i].dbuf = dbuf;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		qels[i].dbuflen = dbuflen;
 		qels[i].QWrite = 1;
 		qels[i].mailbox = i;  /* this should be initted rather */
@@ -676,9 +682,15 @@ static int do_read(struct net_device *dev, void *cbuf, int cbuflen,
 	int ret;
 
 	if(i) {
+<<<<<<< HEAD
 		qels[i].cbuf = (unsigned char *) cbuf;
 		qels[i].cbuflen = cbuflen;
 		qels[i].dbuf = (unsigned char *) dbuf;
+=======
+		qels[i].cbuf = cbuf;
+		qels[i].cbuflen = cbuflen;
+		qels[i].dbuf = dbuf;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		qels[i].dbuflen = dbuflen;
 		qels[i].QWrite = 0;
 		qels[i].mailbox = i;  /* this should be initted rather */

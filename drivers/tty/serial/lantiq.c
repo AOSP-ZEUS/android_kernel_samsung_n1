@@ -478,8 +478,15 @@ lqasc_set_termios(struct uart_port *port,
 	spin_unlock_irqrestore(&ltq_asc_lock, flags);
 
 	/* Don't rewrite B0 */
+<<<<<<< HEAD
         if (tty_termios_baud_rate(new))
 		tty_termios_encode_baud_rate(new, baud, baud);
+=======
+	if (tty_termios_baud_rate(new))
+		tty_termios_encode_baud_rate(new, baud, baud);
+
+	uart_update_timeout(port, cflag, baud);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static const char*

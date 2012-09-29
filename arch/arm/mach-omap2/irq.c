@@ -141,12 +141,17 @@ omap_alloc_gc(void __iomem *base, unsigned int irq_start, unsigned int num)
 				IRQ_NOREQUEST | IRQ_NOPROBE, 0);
 }
 
+<<<<<<< HEAD
 void __init omap_init_irq(void)
+=======
+static void __init omap_init_irq(u32 base, int nr_irqs)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	unsigned long nr_of_irqs = 0;
 	unsigned int nr_banks = 0;
 	int i, j;
 
+<<<<<<< HEAD
 	for (i = 0; i < ARRAY_SIZE(irq_banks); i++) {
 		unsigned long base = 0;
 		struct omap_irq_bank *bank = irq_banks + i;
@@ -160,6 +165,16 @@ void __init omap_init_irq(void)
 
 		if (cpu_is_ti816x())
 			bank->nr_irqs = 128;
+=======
+	omap_irq_base = ioremap(base, SZ_4K);
+	if (WARN_ON(!omap_irq_base))
+		return;
+
+	for (i = 0; i < ARRAY_SIZE(irq_banks); i++) {
+		struct omap_irq_bank *bank = irq_banks + i;
+
+		bank->nr_irqs = nr_irqs;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		/* Static mapping, never released */
 		bank->base_reg = ioremap(base, SZ_4K);
@@ -181,6 +196,24 @@ void __init omap_init_irq(void)
 	       nr_of_irqs, nr_banks, nr_banks > 1 ? "s" : "");
 }
 
+<<<<<<< HEAD
+=======
+void __init omap2_init_irq(void)
+{
+	omap_init_irq(OMAP24XX_IC_BASE, 96);
+}
+
+void __init omap3_init_irq(void)
+{
+	omap_init_irq(OMAP34XX_IC_BASE, 96);
+}
+
+void __init ti816x_init_irq(void)
+{
+	omap_init_irq(OMAP34XX_IC_BASE, 128);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_ARCH_OMAP3
 static struct omap3_intc_regs intc_context[ARRAY_SIZE(irq_banks)];
 

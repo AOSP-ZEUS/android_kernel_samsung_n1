@@ -44,6 +44,18 @@ int iommu_detected __read_mostly = 0;
  */
 int iommu_pass_through __read_mostly;
 
+<<<<<<< HEAD
+=======
+/*
+ * Group multi-function PCI devices into a single device-group for the
+ * iommu_device_group interface.  This tells the iommu driver to pretend
+ * it cannot distinguish between functions of a device, exposing only one
+ * group for the device.  Useful for disallowing use of individual PCI
+ * functions from userspace drivers.
+ */
+int iommu_group_mf __read_mostly;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern struct iommu_table_entry __iommu_table[], __iommu_table_end[];
 
 /* Dummy device used for NULL arguments (normally ISA). */
@@ -168,6 +180,11 @@ static __init int iommu_setup(char *p)
 #endif
 		if (!strncmp(p, "pt", 2))
 			iommu_pass_through = 1;
+<<<<<<< HEAD
+=======
+		if (!strncmp(p, "group_mf", 8))
+			iommu_group_mf = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		gart_parse_options(p);
 

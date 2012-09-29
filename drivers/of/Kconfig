@@ -71,8 +71,21 @@ config OF_MDIO
 
 config OF_PCI
 	def_tristate PCI
+<<<<<<< HEAD
 	depends on PCI && (PPC || MICROBLAZE || X86)
 	help
 	  OpenFirmware PCI bus accessors
 
+=======
+	depends on PCI
+	help
+	  OpenFirmware PCI bus accessors
+
+config OF_PCI_IRQ
+	def_tristate PCI
+	depends on OF_PCI && OF_IRQ
+	help
+	  OpenFirmware PCI IRQ routing helpers
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endmenu # OF

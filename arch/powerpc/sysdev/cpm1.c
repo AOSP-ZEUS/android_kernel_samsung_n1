@@ -148,7 +148,11 @@ unsigned int cpm_pic_init(void)
 	if (ret)
 		goto end;
 
+<<<<<<< HEAD
 	cpic_reg = ioremap(res.start, res.end - res.start + 1);
+=======
+	cpic_reg = ioremap(res.start, resource_size(&res));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (cpic_reg == NULL)
 		goto end;
 

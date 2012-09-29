@@ -236,6 +236,10 @@ MACHINE_START(GUMSTIX, "Gumstix")
 	.boot_params	= 0xa0000100, /* match u-boot bi_boot_params */
 	.map_io		= pxa25x_map_io,
 	.init_irq	= pxa25x_init_irq,
+<<<<<<< HEAD
+=======
+	.handle_irq	= pxa25x_handle_irq,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.timer		= &pxa_timer,
 	.init_machine	= gumstix_init,
 MACHINE_END

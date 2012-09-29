@@ -98,7 +98,11 @@ static void tm6000_urb_received(struct urb *urb)
 	if (dev->dvb->streams > 0) {
 		ret = usb_submit_urb(urb, GFP_ATOMIC);
 		if (ret < 0) {
+<<<<<<< HEAD
 			printk(KERN_ERR "tm6000:  error %s\n", __FUNCTION__);
+=======
+			printk(KERN_ERR "tm6000:  error %s\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			kfree(urb->transfer_buffer);
 			usb_free_urb(urb);
 		}
@@ -111,7 +115,11 @@ int tm6000_start_stream(struct tm6000_core *dev)
 	unsigned int pipe, size;
 	struct tm6000_dvb *dvb = dev->dvb;
 
+<<<<<<< HEAD
 	printk(KERN_INFO "tm6000: got start stream request %s\n", __FUNCTION__);
+=======
+	printk(KERN_INFO "tm6000: got start stream request %s\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (dev->mode != TM6000_MODE_DIGITAL) {
 		tm6000_init_digital_mode(dev);
@@ -145,7 +153,11 @@ int tm6000_start_stream(struct tm6000_core *dev)
 	ret = usb_clear_halt(dev->udev, pipe);
 	if (ret < 0) {
 		printk(KERN_ERR "tm6000: error %i in %s during pipe reset\n",
+<<<<<<< HEAD
 							ret, __FUNCTION__);
+=======
+							ret, __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return ret;
 	} else
 		printk(KERN_ERR "tm6000: pipe resetted\n");
@@ -185,7 +197,11 @@ int tm6000_start_feed(struct dvb_demux_feed *feed)
 	struct dvb_demux *demux = feed->demux;
 	struct tm6000_core *dev = demux->priv;
 	struct tm6000_dvb *dvb = dev->dvb;
+<<<<<<< HEAD
 	printk(KERN_INFO "tm6000: got start feed request %s\n", __FUNCTION__);
+=======
+	printk(KERN_INFO "tm6000: got start feed request %s\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&dvb->mutex);
 	if (dvb->streams == 0) {
@@ -205,7 +221,11 @@ int tm6000_stop_feed(struct dvb_demux_feed *feed)
 	struct tm6000_core *dev = demux->priv;
 	struct tm6000_dvb *dvb = dev->dvb;
 
+<<<<<<< HEAD
 	printk(KERN_INFO "tm6000: got stop feed request %s\n", __FUNCTION__);
+=======
+	printk(KERN_INFO "tm6000: got stop feed request %s\n", __func__);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&dvb->mutex);
 

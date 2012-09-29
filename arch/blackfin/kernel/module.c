@@ -16,6 +16,7 @@
 #include <asm/cacheflush.h>
 #include <asm/uaccess.h>
 
+<<<<<<< HEAD
 void *module_alloc(unsigned long size)
 {
 	if (size == 0)
@@ -29,6 +30,8 @@ void module_free(struct module *mod, void *module_region)
 	vfree(module_region);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* Transfer the section to the L1 memory */
 int
 module_frob_arch_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
@@ -150,6 +153,7 @@ module_frob_arch_sections(Elf_Ehdr *hdr, Elf_Shdr *sechdrs,
 	return 0;
 }
 
+<<<<<<< HEAD
 int
 apply_relocate(Elf_Shdr * sechdrs, const char *strtab,
 	       unsigned int symindex, unsigned int relsec, struct module *mod)
@@ -158,6 +162,8 @@ apply_relocate(Elf_Shdr * sechdrs, const char *strtab,
 	return -ENOEXEC;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*************************************************************************/
 /* FUNCTION : apply_relocate_add                                         */
 /* ABSTRACT : Blackfin specific relocation handling for the loadable     */

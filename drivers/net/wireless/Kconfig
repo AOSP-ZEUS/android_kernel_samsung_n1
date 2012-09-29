@@ -276,8 +276,15 @@ config WIFI_CONTROL_FUNC
 source "drivers/net/wireless/ath/Kconfig"
 source "drivers/net/wireless/b43/Kconfig"
 source "drivers/net/wireless/b43legacy/Kconfig"
+<<<<<<< HEAD
 source "drivers/net/wireless/bcm4329/Kconfig"
 source "drivers/net/wireless/bcmdhd/Kconfig"
+=======
+#source "drivers/net/wireless/bcm4329/Kconfig"
+source "drivers/net/wireless/bcm4330/Kconfig"
+source "drivers/net/wireless/bcmdhd/Kconfig"
+source "drivers/net/wireless/sd8797/Kconfig"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "drivers/net/wireless/hostap/Kconfig"
 source "drivers/net/wireless/ipw2x00/Kconfig"
 source "drivers/net/wireless/iwlwifi/Kconfig"

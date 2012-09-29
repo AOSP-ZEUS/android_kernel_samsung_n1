@@ -330,7 +330,11 @@ static int cx81801_hangup(struct tty_struct *tty)
 	return 0;
 }
 
+<<<<<<< HEAD
 /* Line discipline .recieve_buf() */
+=======
+/* Line discipline .receive_buf() */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void cx81801_receive(struct tty_struct *tty,
 				const unsigned char *cp, char *fp, int count)
 {
@@ -427,7 +431,12 @@ static struct snd_soc_ops ams_delta_ops = {
 
 /* Board specific codec bias level control */
 static int ams_delta_set_bias_level(struct snd_soc_card *card,
+<<<<<<< HEAD
 					enum snd_soc_bias_level level)
+=======
+				    struct snd_soc_dapm_context *dapm,
+				    enum snd_soc_bias_level level)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct snd_soc_codec *codec = card->rtd->codec;
 
@@ -513,7 +522,11 @@ static int ams_delta_cx20442_init(struct snd_soc_pcm_runtime *rtd)
 	}
 
 	/* Set codec bias level */
+<<<<<<< HEAD
 	ams_delta_set_bias_level(card, SND_SOC_BIAS_STANDBY);
+=======
+	ams_delta_set_bias_level(card, dapm, SND_SOC_BIAS_STANDBY);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Add hook switch - can be used to control the codec from userspace
 	 * even if line discipline fails */
@@ -648,7 +661,13 @@ static void __exit ams_delta_module_exit(void)
 			ams_delta_hook_switch_gpios);
 
 	/* Keep modem power on */
+<<<<<<< HEAD
 	ams_delta_set_bias_level(&ams_delta_audio_card, SND_SOC_BIAS_STANDBY);
+=======
+	ams_delta_set_bias_level(&ams_delta_audio_card,
+				 &ams_delta_audio_card.rtd[0].codec->dapm,
+				 SND_SOC_BIAS_STANDBY);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	platform_device_unregister(cx20442_platform_device);
 	platform_device_unregister(ams_delta_audio_platform_device);

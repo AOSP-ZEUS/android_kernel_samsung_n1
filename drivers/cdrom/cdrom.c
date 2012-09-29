@@ -1929,11 +1929,24 @@ static int dvd_read_manufact(struct cdrom_device_info *cdi, dvd_struct *s,
 		goto out;
 
 	s->manufact.len = buf[0] << 8 | buf[1];
+<<<<<<< HEAD
 	if (s->manufact.len < 0 || s->manufact.len > 2048) {
+=======
+	if (s->manufact.len < 0) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cdinfo(CD_WARNING, "Received invalid manufacture info length"
 				   " (%d)\n", s->manufact.len);
 		ret = -EIO;
 	} else {
+<<<<<<< HEAD
+=======
+		if (s->manufact.len > 2048) {
+			cdinfo(CD_WARNING, "Received invalid manufacture info "
+					"length (%d): truncating to 2048\n",
+					s->manufact.len);
+			s->manufact.len = 2048;
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		memcpy(s->manufact.value, &buf[4], s->manufact.len);
 	}
 
@@ -2114,6 +2127,14 @@ static int cdrom_read_cdda_old(struct cdrom_device_info *cdi, __u8 __user *ubuf,
 	if (!nr)
 		return -ENOMEM;
 
+<<<<<<< HEAD
+=======
+	if (!access_ok(VERIFY_WRITE, ubuf, nframes * CD_FRAMESIZE_RAW)) {
+		ret = -EFAULT;
+		goto out;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	cgc.data_direction = CGC_DATA_READ;
 	while (nframes > 0) {
 		if (nr > nframes)
@@ -2122,7 +2143,11 @@ static int cdrom_read_cdda_old(struct cdrom_device_info *cdi, __u8 __user *ubuf,
 		ret = cdrom_read_block(cdi, &cgc, lba, nr, 1, CD_FRAMESIZE_RAW);
 		if (ret)
 			break;
+<<<<<<< HEAD
 		if (copy_to_user(ubuf, cgc.buffer, CD_FRAMESIZE_RAW * nr)) {
+=======
+		if (__copy_to_user(ubuf, cgc.buffer, CD_FRAMESIZE_RAW * nr)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ret = -EFAULT;
 			break;
 		}
@@ -2130,6 +2155,10 @@ static int cdrom_read_cdda_old(struct cdrom_device_info *cdi, __u8 __user *ubuf,
 		nframes -= nr;
 		lba += nr;
 	}
+<<<<<<< HEAD
+=======
+out:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(cgc.buffer);
 	return ret;
 }
@@ -2735,11 +2764,19 @@ int cdrom_ioctl(struct cdrom_device_info *cdi, struct block_device *bdev,
 {
 	void __user *argp = (void __user *)arg;
 	int ret;
+<<<<<<< HEAD
+=======
+	struct gendisk *disk = bdev->bd_disk;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Try the generic SCSI command ioctl's first.
 	 */
+<<<<<<< HEAD
 	ret = scsi_cmd_blk_ioctl(bdev, mode, cmd, argp);
+=======
+	ret = scsi_cmd_ioctl(disk->queue, disk, mode, cmd, argp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret != -ENOTTY)
 		return ret;
 

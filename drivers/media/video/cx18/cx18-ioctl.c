@@ -469,7 +469,10 @@ static int cx18_querycap(struct file *file, void *fh,
 	strlcpy(vcap->card, cx->card_name, sizeof(vcap->card));
 	snprintf(vcap->bus_info, sizeof(vcap->bus_info),
 		 "PCI:%s", pci_name(cx->pci_dev));
+<<<<<<< HEAD
 	vcap->version = CX18_DRIVER_VERSION; 	    /* version */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	vcap->capabilities = cx->v4l2_cap; 	    /* capabilities */
 	return 0;
 }

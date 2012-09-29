@@ -369,15 +369,25 @@ nouveau_vm_link(struct nouveau_vm *vm, struct nouveau_gpuobj *pgd)
 }
 
 static void
+<<<<<<< HEAD
 nouveau_vm_unlink(struct nouveau_vm *vm, struct nouveau_gpuobj *pgd)
 {
 	struct nouveau_vm_pgd *vpgd, *tmp;
 
 	if (!pgd)
+=======
+nouveau_vm_unlink(struct nouveau_vm *vm, struct nouveau_gpuobj *mpgd)
+{
+	struct nouveau_vm_pgd *vpgd, *tmp;
+	struct nouveau_gpuobj *pgd = NULL;
+
+	if (!mpgd)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 
 	mutex_lock(&vm->mm->mutex);
 	list_for_each_entry_safe(vpgd, tmp, &vm->pgd_list, head) {
+<<<<<<< HEAD
 		if (vpgd->obj != pgd)
 			continue;
 
@@ -386,6 +396,18 @@ nouveau_vm_unlink(struct nouveau_vm *vm, struct nouveau_gpuobj *pgd)
 		kfree(vpgd);
 	}
 	mutex_unlock(&vm->mm->mutex);
+=======
+		if (vpgd->obj == mpgd) {
+			pgd = vpgd->obj;
+			list_del(&vpgd->head);
+			kfree(vpgd);
+			break;
+		}
+	}
+	mutex_unlock(&vm->mm->mutex);
+
+	nouveau_gpuobj_ref(NULL, &pgd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void
@@ -396,8 +418,13 @@ nouveau_vm_del(struct nouveau_vm *vm)
 	list_for_each_entry_safe(vpgd, tmp, &vm->pgd_list, head) {
 		nouveau_vm_unlink(vm, vpgd->obj);
 	}
+<<<<<<< HEAD
 	WARN_ON(nouveau_mm_fini(&vm->mm) != 0);
 
+=======
+
+	nouveau_mm_fini(&vm->mm);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(vm->pgt);
 	kfree(vm);
 }

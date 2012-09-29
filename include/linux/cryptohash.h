@@ -3,7 +3,11 @@
 
 #define SHA_DIGEST_WORDS 5
 #define SHA_MESSAGE_BYTES (512 /*bits*/ / 8)
+<<<<<<< HEAD
 #define SHA_WORKSPACE_WORDS 80
+=======
+#define SHA_WORKSPACE_WORDS 16
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void sha_init(__u32 *buf);
 void sha_transform(__u32 *digest, const char *data, __u32 *W);

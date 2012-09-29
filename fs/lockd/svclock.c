@@ -632,7 +632,11 @@ nlmsvc_cancel_blocked(struct nlm_file *file, struct nlm_lock *lock)
 
 /*
  * This is a callback from the filesystem for VFS file lock requests.
+<<<<<<< HEAD
  * It will be used if fl_grant is defined and the filesystem can not
+=======
+ * It will be used if lm_grant is defined and the filesystem can not
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * respond to the request immediately.
  * For GETLK request it will copy the reply to the nlm_block.
  * For SETLK or SETLKW request it will get the local posix lock.
@@ -719,9 +723,15 @@ static int nlmsvc_same_owner(struct file_lock *fl1, struct file_lock *fl2)
 }
 
 const struct lock_manager_operations nlmsvc_lock_operations = {
+<<<<<<< HEAD
 	.fl_compare_owner = nlmsvc_same_owner,
 	.fl_notify = nlmsvc_notify_blocked,
 	.fl_grant = nlmsvc_grant_deferred,
+=======
+	.lm_compare_owner = nlmsvc_same_owner,
+	.lm_notify = nlmsvc_notify_blocked,
+	.lm_grant = nlmsvc_grant_deferred,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /*

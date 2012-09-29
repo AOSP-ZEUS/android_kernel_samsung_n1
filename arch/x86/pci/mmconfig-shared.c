@@ -519,7 +519,12 @@ static int __init acpi_mcfg_check_entry(struct acpi_table_mcfg *mcfg,
 	if (cfg->address < 0xFFFFFFFF)
 		return 0;
 
+<<<<<<< HEAD
 	if (!strcmp(mcfg->header.oem_id, "SGI"))
+=======
+	if (!strcmp(mcfg->header.oem_id, "SGI") ||
+			!strcmp(mcfg->header.oem_id, "SGI2"))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	if (mcfg->header.revision >= 1) {

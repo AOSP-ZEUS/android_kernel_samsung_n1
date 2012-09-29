@@ -1,7 +1,11 @@
 TODO:
 
 We are working hard on cleaning up the driver. There's sooooooooo much todo
+<<<<<<< HEAD
 so instead of editign this file please use the wiki:
+=======
+so instead of editing this file please use the wiki:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 http://wireless.kernel.org/en/users/Drivers/ath6kl
 

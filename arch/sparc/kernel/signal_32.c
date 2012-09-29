@@ -62,12 +62,22 @@ struct rt_signal_frame {
 
 static int _sigpause_common(old_sigset_t set)
 {
+<<<<<<< HEAD
 	set &= _BLOCKABLE;
 	spin_lock_irq(&current->sighand->siglock);
 	current->saved_sigmask = current->blocked;
 	siginitset(&current->blocked, set);
 	recalc_sigpending();
 	spin_unlock_irq(&current->sighand->siglock);
+=======
+	sigset_t blocked;
+
+	current->saved_sigmask = current->blocked;
+
+	set &= _BLOCKABLE;
+	siginitset(&blocked, set);
+	set_current_blocked(&blocked);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	current->state = TASK_INTERRUPTIBLE;
 	schedule();
@@ -139,10 +149,14 @@ asmlinkage void do_sigreturn(struct pt_regs *regs)
 		goto segv_and_exit;
 
 	sigdelsetmask(&set, ~_BLOCKABLE);
+<<<<<<< HEAD
 	spin_lock_irq(&current->sighand->siglock);
 	current->blocked = set;
 	recalc_sigpending();
 	spin_unlock_irq(&current->sighand->siglock);
+=======
+	set_current_blocked(&set);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return;
 
 segv_and_exit:
@@ -209,10 +223,14 @@ asmlinkage void do_rt_sigreturn(struct pt_regs *regs)
 	}
 
 	sigdelsetmask(&set, ~_BLOCKABLE);
+<<<<<<< HEAD
 	spin_lock_irq(&current->sighand->siglock);
 	current->blocked = set;
 	recalc_sigpending();
 	spin_unlock_irq(&current->sighand->siglock);
+=======
+	set_current_blocked(&set);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return;
 segv:
 	force_sig(SIGSEGV, current);
@@ -470,6 +488,10 @@ static inline int
 handle_signal(unsigned long signr, struct k_sigaction *ka,
 	      siginfo_t *info, sigset_t *oldset, struct pt_regs *regs)
 {
+<<<<<<< HEAD
+=======
+	sigset_t blocked;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int err;
 
 	if (ka->sa.sa_flags & SA_SIGINFO)
@@ -480,12 +502,19 @@ handle_signal(unsigned long signr, struct k_sigaction *ka,
 	if (err)
 		return err;
 
+<<<<<<< HEAD
 	spin_lock_irq(&current->sighand->siglock);
 	sigorsets(&current->blocked,&current->blocked,&ka->sa.sa_mask);
 	if (!(ka->sa.sa_flags & SA_NOMASK))
 		sigaddset(&current->blocked, signr);
 	recalc_sigpending();
 	spin_unlock_irq(&current->sighand->siglock);
+=======
+	sigorsets(&blocked, &current->blocked, &ka->sa.sa_mask);
+	if (!(ka->sa.sa_flags & SA_NOMASK))
+		sigaddset(&blocked, signr);
+	set_current_blocked(&blocked);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	tracehook_signal_handler(signr, info, ka, regs, 0);
 
@@ -601,7 +630,11 @@ static void do_signal(struct pt_regs *regs, unsigned long orig_i0)
 	 */
 	if (test_thread_flag(TIF_RESTORE_SIGMASK)) {
 		clear_thread_flag(TIF_RESTORE_SIGMASK);
+<<<<<<< HEAD
 		sigprocmask(SIG_SETMASK, &current->saved_sigmask, NULL);
+=======
+		set_current_blocked(&current->saved_sigmask);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 

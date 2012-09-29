@@ -90,7 +90,11 @@ static int autofs4_write(struct file *file, const void *addr, int bytes)
 
 	return (bytes > 0);
 }
+<<<<<<< HEAD
 
+=======
+	
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void autofs4_notify_daemon(struct autofs_sb_info *sbi,
 				 struct autofs_wait_queue *wq,
 				 int type)
@@ -104,7 +108,11 @@ static void autofs4_notify_daemon(struct autofs_sb_info *sbi,
 	size_t pktsz;
 
 	DPRINTK("wait id = 0x%08lx, name = %.*s, type=%d",
+<<<<<<< HEAD
 		wq->wait_queue_token, wq->name.len, wq->name.name, type);
+=======
+		(unsigned long) wq->wait_queue_token, wq->name.len, wq->name.name, type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	memset(&pkt,0,sizeof pkt); /* For security reasons */
 

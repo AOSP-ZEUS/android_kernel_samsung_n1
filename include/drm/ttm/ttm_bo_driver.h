@@ -78,7 +78,11 @@ struct ttm_backend_func {
 	 *
 	 * Bind the backend pages into the aperture in the location
 	 * indicated by @bo_mem. This function should be able to handle
+<<<<<<< HEAD
 	 * differences between aperture- and system page sizes.
+=======
+	 * differences between aperture and system page sizes.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 */
 	int (*bind) (struct ttm_backend *backend, struct ttm_mem_reg *bo_mem);
 
@@ -88,7 +92,11 @@ struct ttm_backend_func {
 	 * @backend: Pointer to a struct ttm_backend.
 	 *
 	 * Unbind previously bound backend pages. This function should be
+<<<<<<< HEAD
 	 * able to handle differences between aperture- and system page sizes.
+=======
+	 * able to handle differences between aperture and system page sizes.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 */
 	int (*unbind) (struct ttm_backend *backend);
 
@@ -786,7 +794,11 @@ extern int ttm_bo_device_release(struct ttm_bo_device *bdev);
  * ttm_bo_device_init
  *
  * @bdev: A pointer to a struct ttm_bo_device to initialize.
+<<<<<<< HEAD
  * @mem_global: A pointer to an initialized struct ttm_mem_global.
+=======
+ * @glob: A pointer to an initialized struct ttm_bo_global.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @driver: A pointer to a struct ttm_bo_driver set up by the caller.
  * @file_page_offset: Offset into the device address space that is available
  * for buffer data. This ensures compatibility with other users of the

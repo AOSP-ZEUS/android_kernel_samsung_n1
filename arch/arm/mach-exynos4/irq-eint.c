@@ -23,6 +23,11 @@
 
 #include <mach/regs-gpio.h>
 
+<<<<<<< HEAD
+=======
+#include <asm/mach/irq.h>
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static DEFINE_SPINLOCK(eint_lock);
 
 static unsigned int eint0_15_data[16];
@@ -184,8 +189,16 @@ static inline void exynos4_irq_demux_eint(unsigned int start)
 
 static void exynos4_irq_demux_eint16_31(unsigned int irq, struct irq_desc *desc)
 {
+<<<<<<< HEAD
 	exynos4_irq_demux_eint(IRQ_EINT(16));
 	exynos4_irq_demux_eint(IRQ_EINT(24));
+=======
+	struct irq_chip *chip = irq_get_chip(irq);
+	chained_irq_enter(chip, desc);
+	exynos4_irq_demux_eint(IRQ_EINT(16));
+	exynos4_irq_demux_eint(IRQ_EINT(24));
+	chained_irq_exit(chip, desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void exynos4_irq_eint0_15(unsigned int irq, struct irq_desc *desc)
@@ -193,6 +206,10 @@ static void exynos4_irq_eint0_15(unsigned int irq, struct irq_desc *desc)
 	u32 *irq_data = irq_get_handler_data(irq);
 	struct irq_chip *chip = irq_get_chip(irq);
 
+<<<<<<< HEAD
+=======
+	chained_irq_enter(chip, desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	chip->irq_mask(&desc->irq_data);
 
 	if (chip->irq_ack)
@@ -201,6 +218,10 @@ static void exynos4_irq_eint0_15(unsigned int irq, struct irq_desc *desc)
 	generic_handle_irq(*irq_data);
 
 	chip->irq_unmask(&desc->irq_data);
+<<<<<<< HEAD
+=======
+	chained_irq_exit(chip, desc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int __init exynos4_init_irq_eint(void)

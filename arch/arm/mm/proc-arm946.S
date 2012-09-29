@@ -306,6 +306,7 @@ ENTRY(arm946_dma_unmap_area)
 	mov	pc, lr
 ENDPROC(arm946_dma_unmap_area)
 
+<<<<<<< HEAD
 ENTRY(arm946_cache_fns)
 	.long	arm946_flush_icache_all
 	.long	arm946_flush_kern_cache_all
@@ -318,6 +319,10 @@ ENTRY(arm946_cache_fns)
 	.long	arm946_dma_unmap_area
 	.long	arm946_dma_flush_range
 
+=======
+	@ define struct cpu_cache_fns (see <asm/cacheflush.h> and proc-macros.S)
+	define_cache_functions arm946
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 ENTRY(cpu_arm946_dcache_clean_area)
 #ifndef CONFIG_CPU_DCACHE_WRITETHROUGH
@@ -403,6 +408,7 @@ __arm946_setup:
 
 	__INITDATA
 
+<<<<<<< HEAD
 /*
  * Purpose : Function pointers used to access above functions - all calls
  *	     come through these
@@ -440,6 +446,16 @@ cpu_elf_name:
 cpu_arm946_name:
 	.ascii	"ARM946E-S"
 	.size	cpu_arm946_name, . - cpu_arm946_name
+=======
+	@ define struct processor (see <asm/proc-fns.h> and proc-macros.S)
+	define_processor_functions arm946, dabort=nommu_early_abort, pabort=legacy_pabort, nommu=1
+
+	.section ".rodata"
+
+	string	cpu_arch_name, "armv5te"
+	string	cpu_elf_name, "v5t"
+	string	cpu_arm946_name, "ARM946E-S"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.align
 
@@ -449,6 +465,10 @@ __arm946_proc_info:
 	.long	0x41009460
 	.long	0xff00fff0
 	.long	0
+<<<<<<< HEAD
+=======
+	.long	0
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	b	__arm946_setup
 	.long	cpu_arch_name
 	.long	cpu_elf_name
@@ -457,6 +477,10 @@ __arm946_proc_info:
 	.long	arm946_processor_functions
 	.long	0
 	.long	0
+<<<<<<< HEAD
 	.long	arm940_cache_fns
+=======
+	.long	arm946_cache_fns
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.size	__arm946_proc_info, . - __arm946_proc_info
 

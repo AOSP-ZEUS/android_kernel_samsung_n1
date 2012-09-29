@@ -22,9 +22,15 @@
 
 #include "ad7476.h"
 
+<<<<<<< HEAD
 int ad7476_scan_from_ring(struct ad7476_state *st)
 {
 	struct iio_ring_buffer *ring = st->indio_dev->ring;
+=======
+int ad7476_scan_from_ring(struct iio_dev *indio_dev)
+{
+	struct iio_ring_buffer *ring = indio_dev->ring;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret;
 	u8 *ring_data;
 
@@ -55,7 +61,11 @@ error_ret:
  **/
 static int ad7476_ring_preenable(struct iio_dev *indio_dev)
 {
+<<<<<<< HEAD
 	struct ad7476_state *st = indio_dev->dev_data;
+=======
+	struct ad7476_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_ring_buffer *ring = indio_dev->ring;
 
 	st->d_size = ring->scan_count *
@@ -79,7 +89,11 @@ static irqreturn_t ad7476_trigger_handler(int irq, void  *p)
 {
 	struct iio_poll_func *pf = p;
 	struct iio_dev *indio_dev = pf->private_data;
+<<<<<<< HEAD
 	struct ad7476_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct ad7476_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	s64 time_ns;
 	__u8 *rxbuf;
 	int b_sent;
@@ -115,7 +129,11 @@ static const struct iio_ring_setup_ops ad7476_ring_setup_ops = {
 
 int ad7476_register_ring_funcs_and_init(struct iio_dev *indio_dev)
 {
+<<<<<<< HEAD
 	struct ad7476_state *st = indio_dev->dev_data;
+=======
+	struct ad7476_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int ret = 0;
 
 	indio_dev->ring = iio_sw_rb_allocate(indio_dev);

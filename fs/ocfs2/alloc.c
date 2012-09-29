@@ -1134,7 +1134,11 @@ static int ocfs2_adjust_rightmost_branch(handle_t *handle,
 	}
 
 	el = path_leaf_el(path);
+<<<<<<< HEAD
 	rec = &el->l_recs[le16_to_cpu(el->l_next_free_rec) - 1];
+=======
+	rec = &el->l_recs[le32_to_cpu(el->l_next_free_rec) - 1];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ocfs2_adjust_rightmost_records(handle, et, path, rec);
 

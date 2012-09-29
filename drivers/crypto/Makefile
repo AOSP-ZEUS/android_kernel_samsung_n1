@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+GCOV_PROFILE := y
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_CRYPTO_DEV_PADLOCK_AES) += padlock-aes.o
 obj-$(CONFIG_CRYPTO_DEV_PADLOCK_SHA) += padlock-sha.o
 obj-$(CONFIG_CRYPTO_DEV_GEODE) += geode-aes.o
@@ -13,3 +18,8 @@ obj-$(CONFIG_CRYPTO_DEV_OMAP_SHAM) += omap-sham.o
 obj-$(CONFIG_CRYPTO_DEV_OMAP_AES) += omap-aes.o
 obj-$(CONFIG_CRYPTO_DEV_PICOXCELL) += picoxcell_crypto.o
 obj-$(CONFIG_CRYPTO_DEV_S5P) += s5p-sss.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_CRYPTO_DEV_TEGRA_AES) += tegra-aes.o
+obj-$(CONFIG_CRYPTO_DEV_TEGRA_SE) += tegra-se.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -19,6 +19,7 @@
 
 #include "../iio.h"
 #include "../sysfs.h"
+<<<<<<< HEAD
 
 #define DRV_NAME "ad2s1210"
 
@@ -57,6 +58,43 @@
 #else
 # define AD2S1210_RES		0
 #endif
+=======
+#include "ad2s1210.h"
+
+#define DRV_NAME "ad2s1210"
+
+#define AD2S1210_DEF_CONTROL		0x7E
+
+#define AD2S1210_MSB_IS_HIGH		0x80
+#define AD2S1210_MSB_IS_LOW		0x7F
+#define AD2S1210_PHASE_LOCK_RANGE_44	0x20
+#define AD2S1210_ENABLE_HYSTERESIS	0x10
+#define AD2S1210_SET_ENRES1		0x08
+#define AD2S1210_SET_ENRES0		0x04
+#define AD2S1210_SET_RES1		0x02
+#define AD2S1210_SET_RES0		0x01
+
+#define AD2S1210_SET_ENRESOLUTION	(AD2S1210_SET_ENRES1 |	\
+					 AD2S1210_SET_ENRES0)
+#define AD2S1210_SET_RESOLUTION		(AD2S1210_SET_RES1 | AD2S1210_SET_RES0)
+
+#define AD2S1210_REG_POSITION		0x80
+#define AD2S1210_REG_VELOCITY		0x82
+#define AD2S1210_REG_LOS_THRD		0x88
+#define AD2S1210_REG_DOS_OVR_THRD	0x89
+#define AD2S1210_REG_DOS_MIS_THRD	0x8A
+#define AD2S1210_REG_DOS_RST_MAX_THRD	0x8B
+#define AD2S1210_REG_DOS_RST_MIN_THRD	0x8C
+#define AD2S1210_REG_LOT_HIGH_THRD	0x8D
+#define AD2S1210_REG_LOT_LOW_THRD	0x8E
+#define AD2S1210_REG_EXCIT_FREQ		0x91
+#define AD2S1210_REG_CONTROL		0x92
+#define AD2S1210_REG_SOFT_RESET		0xF0
+#define AD2S1210_REG_FAULT		0xFF
+
+/* pin SAMPLE, A0, A1, RES0, RES1, is controlled by driver */
+#define AD2S1210_SAA		3
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define AD2S1210_PN		(AD2S1210_SAA + AD2S1210_RES)
 
 #define AD2S1210_MIN_CLKIN	6144000
@@ -75,6 +113,7 @@
 enum ad2s1210_mode {
 	MOD_POS = 0,
 	MOD_VEL,
+<<<<<<< HEAD
 	MOD_RESERVED,
 	MOD_CONFIG,
 };
@@ -139,10 +178,43 @@ static inline void set_mode(enum ad2s1210_mode mode, struct ad2s1210_state *st)
 		gpio_set_value(st->a0, 1);
 		gpio_set_value(st->a1, 0);
 	}
+=======
+	MOD_CONFIG,
+	MOD_RESERVED,
+};
+
+static const unsigned int ad2s1210_resolution_value[] = { 10, 12, 14, 16 };
+
+struct ad2s1210_state {
+	const struct ad2s1210_platform_data *pdata;
+	struct mutex lock;
+	struct spi_device *sdev;
+	unsigned int fclkin;
+	unsigned int fexcit;
+	bool hysteresis;
+	bool old_data;
+	u8 resolution;
+	enum ad2s1210_mode mode;
+	u8 rx[2] ____cacheline_aligned;
+	u8 tx[2] ____cacheline_aligned;
+};
+
+static const int ad2s1210_mode_vals[4][2] = {
+	[MOD_POS] = { 0, 0 },
+	[MOD_VEL] = { 0, 1 },
+	[MOD_CONFIG] = { 1, 0 },
+};
+static inline void ad2s1210_set_mode(enum ad2s1210_mode mode,
+				     struct ad2s1210_state *st)
+{
+	gpio_set_value(st->pdata->a[0], ad2s1210_mode_vals[mode][0]);
+	gpio_set_value(st->pdata->a[1], ad2s1210_mode_vals[mode][1]);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	st->mode = mode;
 }
 
 /* write 1 bytes (address or data) to the chip */
+<<<<<<< HEAD
 static int config_write(struct ad2s1210_state *st,
 					unsigned char data)
 {
@@ -232,33 +304,144 @@ static inline void soft_reset(struct ad2s1210_state *st)
 {
 	config_write(st, REG_SOFT_RESET);
 	config_write(st, 0x0);
+=======
+static int ad2s1210_config_write(struct ad2s1210_state *st, u8 data)
+{
+	int ret;
+
+	ad2s1210_set_mode(MOD_CONFIG, st);
+	st->tx[0] = data;
+	ret = spi_write(st->sdev, st->tx, 1);
+	if (ret < 0)
+		return ret;
+	st->old_data = true;
+
+	return 0;
+}
+
+/* read value from one of the registers */
+static int ad2s1210_config_read(struct ad2s1210_state *st,
+		       unsigned char address)
+{
+	struct spi_transfer xfer = {
+		.len = 2,
+		.rx_buf = st->rx,
+		.tx_buf = st->tx,
+	};
+	struct spi_message msg;
+	int ret = 0;
+
+	ad2s1210_set_mode(MOD_CONFIG, st);
+	spi_message_init(&msg);
+	spi_message_add_tail(&xfer, &msg);
+	st->tx[0] = address | AD2S1210_MSB_IS_HIGH;
+	st->tx[1] = AD2S1210_REG_FAULT;
+	ret = spi_sync(st->sdev, &msg);
+	if (ret < 0)
+		return ret;
+	st->old_data = true;
+
+	return st->rx[1];
+}
+
+static inline
+int ad2s1210_update_frequency_control_word(struct ad2s1210_state *st)
+{
+	int ret;
+	unsigned char fcw;
+
+	fcw = (unsigned char)(st->fexcit * (1 << 15) / st->fclkin);
+	if (fcw < AD2S1210_MIN_FCW || fcw > AD2S1210_MAX_FCW) {
+		pr_err("ad2s1210: FCW out of range\n");
+		return -ERANGE;
+	}
+
+	ret = ad2s1210_config_write(st, AD2S1210_REG_EXCIT_FREQ);
+	if (ret < 0)
+		return ret;
+
+	return ad2s1210_config_write(st, fcw);
+}
+
+static unsigned char ad2s1210_read_resolution_pin(struct ad2s1210_state *st)
+{
+	return ad2s1210_resolution_value[
+		(gpio_get_value(st->pdata->res[0]) << 1) |
+		gpio_get_value(st->pdata->res[1])];
+}
+
+static const int ad2s1210_res_pins[4][2] = {
+	{ 0, 0 }, {0, 1}, {1, 0}, {1, 1}
+};
+
+static inline void ad2s1210_set_resolution_pin(struct ad2s1210_state *st)
+{
+	gpio_set_value(st->pdata->res[0],
+		       ad2s1210_res_pins[(st->resolution - 10)/2][0]);
+	gpio_set_value(st->pdata->res[1],
+		       ad2s1210_res_pins[(st->resolution - 10)/2][1]);
+}
+
+static inline int ad2s1210_soft_reset(struct ad2s1210_state *st)
+{
+	int ret;
+
+	ret = ad2s1210_config_write(st, AD2S1210_REG_SOFT_RESET);
+	if (ret < 0)
+		return ret;
+
+	return ad2s1210_config_write(st, 0x0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 
 /* return the OLD DATA since last spi bus write */
 static ssize_t ad2s1210_show_raw(struct device *dev,
+<<<<<<< HEAD
 			struct device_attribute *attr, char *buf)
 {
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
 	int ret;
+=======
+				 struct device_attribute *attr,
+				 char *buf)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+	int ret = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&st->lock);
 	if (st->old_data) {
 		ret = sprintf(buf, "0x%x\n", st->rx[0]);
+<<<<<<< HEAD
 		st->old_data = 0;
 	} else
 		ret = 0;
 	mutex_unlock(&st->lock);
+=======
+		st->old_data = false;
+	}
+	mutex_unlock(&st->lock);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
 static ssize_t ad2s1210_store_raw(struct device *dev,
+<<<<<<< HEAD
 		struct device_attribute *attr,
 		const char *buf, size_t len)
 {
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
+=======
+				  struct device_attribute *attr,
+				  const char *buf,
+				  size_t len)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long udata;
 	unsigned char data;
 	int ret;
@@ -266,6 +449,7 @@ static ssize_t ad2s1210_store_raw(struct device *dev,
 	ret = strict_strtoul(buf, 16, &udata);
 	if (ret)
 		return -EINVAL;
+<<<<<<< HEAD
 	data = udata & 0xff;
 	mutex_lock(&st->lock);
 	config_write(st, data);
@@ -290,19 +474,59 @@ static ssize_t ad2s1210_show_fclkin(struct device *dev,
 {
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
+=======
+
+	data = udata & 0xff;
+	mutex_lock(&st->lock);
+	ret = ad2s1210_config_write(st, data);
+	mutex_unlock(&st->lock);
+
+	return ret < 0 ? ret : len;
+}
+
+static ssize_t ad2s1210_store_softreset(struct device *dev,
+					struct device_attribute *attr,
+					const char *buf,
+					size_t len)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+	int ret;
+
+	mutex_lock(&st->lock);
+	ret = ad2s1210_soft_reset(st);
+	mutex_unlock(&st->lock);
+
+	return ret < 0 ? ret : len;
+}
+
+static ssize_t ad2s1210_show_fclkin(struct device *dev,
+				    struct device_attribute *attr,
+				    char *buf)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return sprintf(buf, "%d\n", st->fclkin);
 }
 
 static ssize_t ad2s1210_store_fclkin(struct device *dev,
+<<<<<<< HEAD
 			struct device_attribute *attr,
 			const char *buf, size_t len)
 {
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
+=======
+				     struct device_attribute *attr,
+				     const char *buf,
+				     size_t len)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long fclkin;
 	int ret;
 
 	ret = strict_strtoul(buf, 10, &fclkin);
+<<<<<<< HEAD
 	if (!ret && fclkin >= AD2S1210_MIN_CLKIN &&
 				fclkin <= AD2S1210_MAX_CLKIN) {
 		mutex_lock(&st->lock);
@@ -322,19 +546,54 @@ static ssize_t ad2s1210_show_fexcit(struct device *dev,
 {
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
+=======
+	if (ret)
+		return ret;
+	if (fclkin < AD2S1210_MIN_CLKIN || fclkin > AD2S1210_MAX_CLKIN) {
+		pr_err("ad2s1210: fclkin out of range\n");
+		return -EINVAL;
+	}
+
+	mutex_lock(&st->lock);
+	st->fclkin = fclkin;
+
+	ret = ad2s1210_update_frequency_control_word(st);
+	if (ret < 0)
+		goto error_ret;
+	ret = ad2s1210_soft_reset(st);
+error_ret:
+	mutex_unlock(&st->lock);
+
+	return ret < 0 ? ret : len;
+}
+
+static ssize_t ad2s1210_show_fexcit(struct device *dev,
+				    struct device_attribute *attr,
+				    char *buf)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return sprintf(buf, "%d\n", st->fexcit);
 }
 
 static ssize_t ad2s1210_store_fexcit(struct device *dev,
+<<<<<<< HEAD
 			struct device_attribute *attr,
 			const char *buf, size_t len)
 {
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
+=======
+				     struct device_attribute *attr,
+				     const char *buf, size_t len)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long fexcit;
 	int ret;
 
 	ret = strict_strtoul(buf, 10, &fexcit);
+<<<<<<< HEAD
 	if (!ret && fexcit >= AD2S1210_MIN_EXCIT &&
 				fexcit <= AD2S1210_MAX_EXCIT) {
 		mutex_lock(&st->lock);
@@ -359,19 +618,54 @@ static ssize_t ad2s1210_show_control(struct device *dev,
 	config_read(st, REG_CONTROL, &data);
 	mutex_unlock(&st->lock);
 	return sprintf(buf, "0x%x\n", data);
+=======
+	if (ret < 0)
+		return ret;
+	if (fexcit < AD2S1210_MIN_EXCIT || fexcit > AD2S1210_MAX_EXCIT) {
+		pr_err("ad2s1210: excitation frequency out of range\n");
+		return -EINVAL;
+	}
+	mutex_lock(&st->lock);
+	st->fexcit = fexcit;
+	ret = ad2s1210_update_frequency_control_word(st);
+	if (ret < 0)
+		goto error_ret;
+	ret = ad2s1210_soft_reset(st);
+error_ret:
+	mutex_unlock(&st->lock);
+
+	return ret < 0 ? ret : len;
+}
+
+static ssize_t ad2s1210_show_control(struct device *dev,
+				     struct device_attribute *attr,
+				     char *buf)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+	int ret;
+	mutex_lock(&st->lock);
+	ret = ad2s1210_config_read(st, AD2S1210_REG_CONTROL);
+	mutex_unlock(&st->lock);
+	return ret < 0 ? ret : sprintf(buf, "0x%x\n", ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static ssize_t ad2s1210_store_control(struct device *dev,
 			struct device_attribute *attr,
 			const char *buf, size_t len)
 {
+<<<<<<< HEAD
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
+=======
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long udata;
 	unsigned char data;
 	int ret;
 
 	ret = strict_strtoul(buf, 16, &udata);
+<<<<<<< HEAD
 	if (ret) {
 		ret = -EINVAL;
 		goto error_ret;
@@ -382,10 +676,29 @@ static ssize_t ad2s1210_store_control(struct device *dev,
 	config_write(st, data);
 	config_read(st, REG_CONTROL, &data);
 	if (data & MSB_IS_HIGH) {
+=======
+	if (ret)
+		return -EINVAL;
+
+	mutex_lock(&st->lock);
+	ret = ad2s1210_config_write(st, AD2S1210_REG_CONTROL);
+	if (ret < 0)
+		goto error_ret;
+	data = udata & AD2S1210_MSB_IS_LOW;
+	ret = ad2s1210_config_write(st, data);
+	if (ret < 0)
+		goto error_ret;
+
+	ret = ad2s1210_config_read(st, AD2S1210_REG_CONTROL);
+	if (ret < 0)
+		goto error_ret;
+	if (ret & AD2S1210_MSB_IS_HIGH) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = -EIO;
 		pr_err("ad2s1210: write control register fail\n");
 		goto error_ret;
 	}
+<<<<<<< HEAD
 	st->resolution = resolution_value[data & SET_RESOLUTION];
 #if defined(CONFIG_AD2S1210_GPIO_INPUT)
 	data = read_resolution_pin(st);
@@ -399,6 +712,20 @@ static ssize_t ad2s1210_store_control(struct device *dev,
 		st->hysteresis = 1;
 	else
 		st->hysteresis = 0;
+=======
+	st->resolution
+		= ad2s1210_resolution_value[data & AD2S1210_SET_RESOLUTION];
+	if (st->pdata->gpioin) {
+		data = ad2s1210_read_resolution_pin(st);
+		if (data != st->resolution)
+			pr_warning("ad2s1210: resolution settings not match\n");
+	} else
+		ad2s1210_set_resolution_pin(st);
+
+	ret = len;
+	st->hysteresis = !!(data & AD2S1210_ENABLE_HYSTERESIS);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_ret:
 	mutex_unlock(&st->lock);
 	return ret;
@@ -407,8 +734,12 @@ error_ret:
 static ssize_t ad2s1210_show_resolution(struct device *dev,
 			struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
+=======
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return sprintf(buf, "%d\n", st->resolution);
 }
 
@@ -416,18 +747,27 @@ static ssize_t ad2s1210_store_resolution(struct device *dev,
 			struct device_attribute *attr,
 			const char *buf, size_t len)
 {
+<<<<<<< HEAD
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
+=======
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned char data;
 	unsigned long udata;
 	int ret;
 
 	ret = strict_strtoul(buf, 10, &udata);
+<<<<<<< HEAD
 	if (ret || udata < RES_10 || udata > RES_16) {
+=======
+	if (ret || udata < 10 || udata > 16) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		pr_err("ad2s1210: resolution out of range\n");
 		return -EINVAL;
 	}
 	mutex_lock(&st->lock);
+<<<<<<< HEAD
 	config_read(st, REG_CONTROL, &data);
 	data &= ~SET_RESOLUTION;
 	data |= (udata - RES_10) >> 1;
@@ -435,10 +775,30 @@ static ssize_t ad2s1210_store_resolution(struct device *dev,
 	config_write(st, data & MSB_IS_LOW);
 	config_read(st, REG_CONTROL, &data);
 	if (data & MSB_IS_HIGH) {
+=======
+	ret = ad2s1210_config_read(st, AD2S1210_REG_CONTROL);
+	if (ret < 0)
+		goto error_ret;
+	data = ret;
+	data &= ~AD2S1210_SET_RESOLUTION;
+	data |= (udata - 10) >> 1;
+	ret = ad2s1210_config_write(st, AD2S1210_REG_CONTROL);
+	if (ret < 0)
+		goto error_ret;
+	ret = ad2s1210_config_write(st, data & AD2S1210_MSB_IS_LOW);
+	if (ret < 0)
+		goto error_ret;
+	ret = ad2s1210_config_read(st, AD2S1210_REG_CONTROL);
+	if (ret < 0)
+		goto error_ret;
+	data = ret;
+	if (data & AD2S1210_MSB_IS_HIGH) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = -EIO;
 		pr_err("ad2s1210: setting resolution fail\n");
 		goto error_ret;
 	}
+<<<<<<< HEAD
 	st->resolution = resolution_value[data & SET_RESOLUTION];
 #if defined(CONFIG_AD2S1210_GPIO_INPUT)
 	data = read_resolution_pin(st);
@@ -447,15 +807,30 @@ static ssize_t ad2s1210_store_resolution(struct device *dev,
 #elif defined(CONFIG_AD2S1210_GPIO_OUTPUT)
 	set_resolution_pin(st);
 #endif
+=======
+	st->resolution
+		= ad2s1210_resolution_value[data & AD2S1210_SET_RESOLUTION];
+	if (st->pdata->gpioin) {
+		data = ad2s1210_read_resolution_pin(st);
+		if (data != st->resolution)
+			pr_warning("ad2s1210: resolution settings not match\n");
+	} else
+		ad2s1210_set_resolution_pin(st);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = len;
 error_ret:
 	mutex_unlock(&st->lock);
 	return ret;
 }
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* read the fault register since last sample */
 static ssize_t ad2s1210_show_fault(struct device *dev,
 			struct device_attribute *attr, char *buf)
 {
+<<<<<<< HEAD
 	int ret = 0;
 	ssize_t len = 0;
 	unsigned char data;
@@ -506,13 +881,66 @@ static ssize_t ad2s1210_show_reg(struct device *dev,
 	config_read(st, iattr->address, &data);
 	mutex_unlock(&st->lock);
 	return sprintf(buf, "%d\n", data);
+=======
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+	int ret;
+
+	mutex_lock(&st->lock);
+	ret = ad2s1210_config_read(st, AD2S1210_REG_FAULT);
+	mutex_unlock(&st->lock);
+
+	return ret ? ret : sprintf(buf, "0x%x\n", ret);
+}
+
+static ssize_t ad2s1210_clear_fault(struct device *dev,
+				    struct device_attribute *attr,
+				    const char *buf,
+				    size_t len)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+	int ret;
+
+	mutex_lock(&st->lock);
+	gpio_set_value(st->pdata->sample, 0);
+	/* delay (2 * tck + 20) nano seconds */
+	udelay(1);
+	gpio_set_value(st->pdata->sample, 1);
+	ret = ad2s1210_config_read(st, AD2S1210_REG_FAULT);
+	if (ret < 0)
+		goto error_ret;
+	gpio_set_value(st->pdata->sample, 0);
+	gpio_set_value(st->pdata->sample, 1);
+error_ret:
+	mutex_unlock(&st->lock);
+
+	return ret < 0 ? ret : len;
+}
+
+static ssize_t ad2s1210_show_reg(struct device *dev,
+				 struct device_attribute *attr,
+				 char *buf)
+{
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+	struct iio_dev_attr *iattr = to_iio_dev_attr(attr);
+	int ret;
+
+	mutex_lock(&st->lock);
+	ret = ad2s1210_config_read(st, iattr->address);
+	mutex_unlock(&st->lock);
+
+	return ret < 0 ? ret : sprintf(buf, "%d\n", ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static ssize_t ad2s1210_store_reg(struct device *dev,
 		struct device_attribute *attr, const char *buf, size_t len)
 {
+<<<<<<< HEAD
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
+=======
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned long data;
 	int ret;
 	struct iio_dev_attr *iattr = to_iio_dev_attr(attr);
@@ -521,6 +949,7 @@ static ssize_t ad2s1210_store_reg(struct device *dev,
 	if (ret)
 		return -EINVAL;
 	mutex_lock(&st->lock);
+<<<<<<< HEAD
 	config_write(st, iattr->address);
 	config_write(st, data & MSB_IS_LOW);
 	mutex_unlock(&st->lock);
@@ -551,15 +980,50 @@ static ssize_t ad2s1210_show_pos(struct device *dev,
 	if (ret)
 		goto error_ret;
 	pos = ((((u16)(st->rx[0])) << 8) | (st->rx[1]));
+=======
+	ret = ad2s1210_config_write(st, iattr->address);
+	if (ret < 0)
+		goto error_ret;
+	ret = ad2s1210_config_write(st, data & AD2S1210_MSB_IS_LOW);
+error_ret:
+	mutex_unlock(&st->lock);
+	return ret < 0 ? ret : len;
+}
+
+static ssize_t ad2s1210_show_pos(struct device *dev,
+				 struct device_attribute *attr,
+				 char *buf)
+{
+	int ret = 0;
+	ssize_t len = 0;
+	u16 pos;
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+
+	mutex_lock(&st->lock);
+	gpio_set_value(st->pdata->sample, 0);
+	/* delay (6 * tck + 20) nano seconds */
+	udelay(1);
+
+	ad2s1210_set_mode(MOD_POS, st);
+	ret = spi_read(st->sdev, st->rx, 2);
+	if (ret)
+		goto error_ret;
+	pos = be16_to_cpup((u16 *)st->rx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (st->hysteresis)
 		pos >>= 16 - st->resolution;
 	len = sprintf(buf, "%d\n", pos);
 error_ret:
+<<<<<<< HEAD
 	stop_sample(st);
+=======
+	gpio_set_value(st->pdata->sample, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* delay (2 * tck + 20) nano seconds */
 	udelay(1);
 	mutex_unlock(&st->lock);
 
+<<<<<<< HEAD
 	return ret ? ret : len;
 }
 
@@ -567,10 +1031,20 @@ static ssize_t ad2s1210_show_vel(struct device *dev,
 			struct device_attribute *attr, char *buf)
 {
 	struct spi_message msg;
+=======
+	return ret < 0 ? ret : len;
+}
+
+static ssize_t ad2s1210_show_vel(struct device *dev,
+				 struct device_attribute *attr,
+				 char *buf)
+{
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	unsigned short negative;
 	int ret = 0;
 	ssize_t len = 0;
 	s16 vel;
+<<<<<<< HEAD
 	struct iio_dev *idev = dev_get_drvdata(dev);
 	struct ad2s1210_state *st = idev->dev_data;
 
@@ -591,16 +1065,38 @@ static ssize_t ad2s1210_show_vel(struct device *dev,
 	vel = ((((s16)(st->rx[0])) << 8) | (st->rx[1]));
 	vel >>= 16 - st->resolution;
 	if (negative) {
+=======
+	struct ad2s1210_state *st = iio_priv(dev_get_drvdata(dev));
+
+	mutex_lock(&st->lock);
+	gpio_set_value(st->pdata->sample, 0);
+	/* delay (6 * tck + 20) nano seconds */
+	udelay(1);
+
+	ad2s1210_set_mode(MOD_VEL, st);
+	ret = spi_read(st->sdev, st->rx, 2);
+	if (ret)
+		goto error_ret;
+	negative = st->rx[0] & 0x80;
+	vel = be16_to_cpup((s16 *)st->rx);
+	vel >>= 16 - st->resolution;
+	if (vel & 0x8000) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		negative = (0xffff >> st->resolution) << st->resolution;
 		vel |= negative;
 	}
 	len = sprintf(buf, "%d\n", vel);
 error_ret:
+<<<<<<< HEAD
 	stop_sample(st);
+=======
+	gpio_set_value(st->pdata->sample, 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* delay (2 * tck + 20) nano seconds */
 	udelay(1);
 	mutex_unlock(&st->lock);
 
+<<<<<<< HEAD
 	return ret ? ret : len;
 }
 
@@ -698,6 +1194,50 @@ static IIO_DEVICE_ATTR(lot_low_thrd, S_IRUGO | S_IWUSR,
 
 static struct attribute *ad2s1210_attributes[] = {
 	&iio_const_attr_description.dev_attr.attr,
+=======
+	return ret < 0 ? ret : len;
+}
+
+static IIO_DEVICE_ATTR(raw_io, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_raw, ad2s1210_store_raw, 0);
+static IIO_DEVICE_ATTR(reset, S_IWUSR,
+		       NULL, ad2s1210_store_softreset, 0);
+static IIO_DEVICE_ATTR(fclkin, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_fclkin, ad2s1210_store_fclkin, 0);
+static IIO_DEVICE_ATTR(fexcit, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_fexcit,	ad2s1210_store_fexcit, 0);
+static IIO_DEVICE_ATTR(control, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_control, ad2s1210_store_control, 0);
+static IIO_DEVICE_ATTR(bits, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_resolution, ad2s1210_store_resolution, 0);
+static IIO_DEVICE_ATTR(fault, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_fault, ad2s1210_clear_fault, 0);
+static IIO_DEVICE_ATTR(pos, S_IRUGO, ad2s1210_show_pos, NULL, 0);
+static IIO_DEVICE_ATTR(vel, S_IRUGO,  ad2s1210_show_vel, NULL, 0);
+static IIO_DEVICE_ATTR(los_thrd, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_reg, ad2s1210_store_reg,
+		       AD2S1210_REG_LOS_THRD);
+static IIO_DEVICE_ATTR(dos_ovr_thrd, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_reg, ad2s1210_store_reg,
+		       AD2S1210_REG_DOS_OVR_THRD);
+static IIO_DEVICE_ATTR(dos_mis_thrd, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_reg, ad2s1210_store_reg,
+		       AD2S1210_REG_DOS_MIS_THRD);
+static IIO_DEVICE_ATTR(dos_rst_max_thrd, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_reg, ad2s1210_store_reg,
+		       AD2S1210_REG_DOS_RST_MAX_THRD);
+static IIO_DEVICE_ATTR(dos_rst_min_thrd, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_reg, ad2s1210_store_reg,
+		       AD2S1210_REG_DOS_RST_MIN_THRD);
+static IIO_DEVICE_ATTR(lot_high_thrd, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_reg, ad2s1210_store_reg,
+		       AD2S1210_REG_LOT_HIGH_THRD);
+static IIO_DEVICE_ATTR(lot_low_thrd, S_IRUGO | S_IWUSR,
+		       ad2s1210_show_reg, ad2s1210_store_reg,
+		       AD2S1210_REG_LOT_LOW_THRD);
+
+static struct attribute *ad2s1210_attributes[] = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	&iio_dev_attr_raw_io.dev_attr.attr,
 	&iio_dev_attr_reset.dev_attr.attr,
 	&iio_dev_attr_fclkin.dev_attr.attr,
@@ -707,7 +1247,10 @@ static struct attribute *ad2s1210_attributes[] = {
 	&iio_dev_attr_fault.dev_attr.attr,
 	&iio_dev_attr_pos.dev_attr.attr,
 	&iio_dev_attr_vel.dev_attr.attr,
+<<<<<<< HEAD
 	&iio_dev_attr_pos_vel.dev_attr.attr,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	&iio_dev_attr_los_thrd.dev_attr.attr,
 	&iio_dev_attr_dos_ovr_thrd.dev_attr.attr,
 	&iio_dev_attr_dos_mis_thrd.dev_attr.attr,
@@ -729,6 +1272,7 @@ static int __devinit ad2s1210_initial(struct ad2s1210_state *st)
 	int ret;
 
 	mutex_lock(&st->lock);
+<<<<<<< HEAD
 #if defined(CONFIG_AD2S1210_GPIO_INPUT)
 	st->resolution = read_resolution_pin(st);
 #elif defined(CONFIG_AD2S1210_GPIO_OUTPUT)
@@ -744,12 +1288,39 @@ static int __devinit ad2s1210_initial(struct ad2s1210_state *st)
 		goto error_ret;
 
 	if (data & MSB_IS_HIGH) {
+=======
+	if (st->pdata->gpioin)
+		st->resolution = ad2s1210_read_resolution_pin(st);
+	else
+		ad2s1210_set_resolution_pin(st);
+
+	ret = ad2s1210_config_write(st, AD2S1210_REG_CONTROL);
+	if (ret < 0)
+		goto error_ret;
+	data = AD2S1210_DEF_CONTROL & ~(AD2S1210_SET_RESOLUTION);
+	data |= (st->resolution - 10) >> 1;
+	ret = ad2s1210_config_write(st, data);
+	if (ret < 0)
+		goto error_ret;
+	ret = ad2s1210_config_read(st, AD2S1210_REG_CONTROL);
+	if (ret < 0)
+		goto error_ret;
+
+	if (ret & AD2S1210_MSB_IS_HIGH) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = -EIO;
 		goto error_ret;
 	}
 
+<<<<<<< HEAD
 	update_frequency_control_word(st);
 	soft_reset(st);
+=======
+	ret = ad2s1210_update_frequency_control_word(st);
+	if (ret < 0)
+		goto error_ret;
+	ret = ad2s1210_soft_reset(st);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_ret:
 	mutex_unlock(&st->lock);
 	return ret;
@@ -760,6 +1331,7 @@ static const struct iio_info ad2s1210_info = {
 	.driver_module = THIS_MODULE,
 };
 
+<<<<<<< HEAD
 static int __devinit ad2s1210_probe(struct spi_device *spi)
 {
 	struct ad2s1210_state *st;
@@ -835,15 +1407,116 @@ error_free_st:
 error_ret:
 	for (--pn; pn >= 0; pn--)
 		gpio_free(pins[pn]);
+=======
+static int ad2s1210_setup_gpios(struct ad2s1210_state *st)
+{
+	int ret;
+	unsigned long flags = st->pdata->gpioin ? GPIOF_DIR_IN : GPIOF_DIR_OUT;
+
+	ret = gpio_request_one(st->pdata->sample, GPIOF_DIR_IN, "sample");
+	if (ret < 0)
+		goto error_ret;
+	ret = gpio_request_one(st->pdata->a[0], flags, "a0");
+	if (ret < 0)
+		goto error_free_sample;
+	ret = gpio_request_one(st->pdata->a[1], flags, "a1");
+	if (ret < 0)
+		goto error_free_a0;
+	ret = gpio_request_one(st->pdata->res[1], flags, "res0");
+	if (ret < 0)
+		goto error_free_a1;
+	ret = gpio_request_one(st->pdata->res[1], flags, "res1");
+	if (ret < 0)
+		goto error_free_res0;
+
+	return 0;
+error_free_res0:
+	gpio_free(st->pdata->res[0]);
+error_free_a1:
+	gpio_free(st->pdata->a[1]);
+error_free_a0:
+	gpio_free(st->pdata->a[0]);
+error_free_sample:
+	gpio_free(st->pdata->sample);
+error_ret:
+	return ret;
+}
+
+static void ad2s1210_free_gpios(struct ad2s1210_state *st)
+{
+	gpio_free(st->pdata->res[1]);
+	gpio_free(st->pdata->res[0]);
+	gpio_free(st->pdata->a[1]);
+	gpio_free(st->pdata->a[0]);
+	gpio_free(st->pdata->sample);
+}
+
+static int __devinit ad2s1210_probe(struct spi_device *spi)
+{
+	struct iio_dev *indio_dev;
+	struct ad2s1210_state *st;
+	int ret;
+
+	if (spi->dev.platform_data == NULL)
+		return -EINVAL;
+
+	indio_dev = iio_allocate_device(sizeof(*st));
+	if (indio_dev == NULL) {
+		ret = -ENOMEM;
+		goto error_ret;
+	}
+	st = iio_priv(indio_dev);
+	st->pdata = spi->dev.platform_data;
+	ret = ad2s1210_setup_gpios(st);
+	if (ret < 0)
+		goto error_free_dev;
+
+	spi_set_drvdata(spi, indio_dev);
+
+	mutex_init(&st->lock);
+	st->sdev = spi;
+	st->hysteresis = true;
+	st->mode = MOD_CONFIG;
+	st->resolution = 12;
+	st->fexcit = AD2S1210_DEF_EXCIT;
+
+	indio_dev->dev.parent = &spi->dev;
+	indio_dev->info = &ad2s1210_info;
+	indio_dev->modes = INDIO_DIRECT_MODE;
+
+	ret = iio_device_register(indio_dev);
+	if (ret)
+		goto error_free_gpios;
+
+	st->fclkin = spi->max_speed_hz;
+	spi->mode = SPI_MODE_3;
+	spi_setup(spi);
+	ad2s1210_initial(st);
+
+	return 0;
+
+error_free_gpios:
+	ad2s1210_free_gpios(st);
+error_free_dev:
+	iio_free_device(indio_dev);
+error_ret:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return ret;
 }
 
 static int __devexit ad2s1210_remove(struct spi_device *spi)
 {
+<<<<<<< HEAD
 	struct ad2s1210_state *st = spi_get_drvdata(spi);
 
 	iio_device_unregister(st->idev);
 	kfree(st);
+=======
+	struct iio_dev *indio_dev = spi_get_drvdata(spi);
+	struct ad2s1210_state *st = iio_priv(indio_dev);
+	iio_device_unregister(indio_dev);
+	ad2s1210_free_gpios(st);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }

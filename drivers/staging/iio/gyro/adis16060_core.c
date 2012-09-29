@@ -29,27 +29,41 @@
  * struct adis16060_state - device instance specific data
  * @us_w:		actual spi_device to write config
  * @us_r:		actual spi_device to read back data
+<<<<<<< HEAD
  * @indio_dev:		industrial I/O device structure
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * @buf:		transmit or receive buffer
  * @buf_lock:		mutex to protect tx and rx
  **/
 struct adis16060_state {
 	struct spi_device		*us_w;
 	struct spi_device		*us_r;
+<<<<<<< HEAD
 	struct iio_dev			*indio_dev;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct mutex			buf_lock;
 
 	u8 buf[3] ____cacheline_aligned;
 };
 
+<<<<<<< HEAD
 static struct adis16060_state *adis16060_st;
+=======
+static struct iio_dev *adis16060_iio_dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static int adis16060_spi_write(struct device *dev,
 		u8 val)
 {
 	int ret;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adis16060_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16060_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&st->buf_lock);
 	st->buf[2] = val; /* The last 8 bits clocked in are latched */
@@ -64,7 +78,11 @@ static int adis16060_spi_read(struct device *dev,
 {
 	int ret;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adis16060_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16060_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mutex_lock(&st->buf_lock);
 
@@ -141,6 +159,7 @@ static const struct iio_info adis16060_info = {
 static int __devinit adis16060_r_probe(struct spi_device *spi)
 {
 	int ret, regdone = 0;
+<<<<<<< HEAD
 	struct adis16060_state *st = kzalloc(sizeof *st, GFP_KERNEL);
 	if (!st) {
 		ret =  -ENOMEM;
@@ -164,20 +183,52 @@ static int __devinit adis16060_r_probe(struct spi_device *spi)
 	st->indio_dev->modes = INDIO_DIRECT_MODE;
 
 	ret = iio_device_register(st->indio_dev);
+=======
+	struct adis16060_state *st;
+	struct iio_dev *indio_dev;
+
+	/* setup the industrialio driver allocated elements */
+	indio_dev = iio_allocate_device(sizeof(*st));
+	if (indio_dev == NULL) {
+		ret = -ENOMEM;
+		goto error_ret;
+	}
+	/* this is only used for removal purposes */
+	spi_set_drvdata(spi, indio_dev);
+	st = iio_priv(indio_dev);
+	st->us_r = spi;
+	mutex_init(&st->buf_lock);
+
+	indio_dev->dev.parent = &spi->dev;
+	indio_dev->info = &adis16060_info;
+	indio_dev->modes = INDIO_DIRECT_MODE;
+
+	ret = iio_device_register(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (ret)
 		goto error_free_dev;
 	regdone = 1;
 
+<<<<<<< HEAD
 	adis16060_st = st;
+=======
+	adis16060_iio_dev = indio_dev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 
 error_free_dev:
 	if (regdone)
+<<<<<<< HEAD
 		iio_device_unregister(st->indio_dev);
 	else
 		iio_free_device(st->indio_dev);
 error_free_st:
 	kfree(st);
+=======
+		iio_device_unregister(indio_dev);
+	else
+		iio_free_device(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_ret:
 	return ret;
 }
@@ -185,11 +236,15 @@ error_ret:
 /* fixme, confirm ordering in this function */
 static int adis16060_r_remove(struct spi_device *spi)
 {
+<<<<<<< HEAD
 	struct adis16060_state *st = spi_get_drvdata(spi);
 	struct iio_dev *indio_dev = st->indio_dev;
 
 	iio_device_unregister(indio_dev);
 	kfree(st);
+=======
+	iio_device_unregister(spi_get_drvdata(spi));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 0;
 }
@@ -197,12 +252,23 @@ static int adis16060_r_remove(struct spi_device *spi)
 static int __devinit adis16060_w_probe(struct spi_device *spi)
 {
 	int ret;
+<<<<<<< HEAD
 	struct adis16060_state *st = adis16060_st;
 	if (!st) {
 		ret =  -ENODEV;
 		goto error_ret;
 	}
 	spi_set_drvdata(spi, st);
+=======
+	struct iio_dev *indio_dev = adis16060_iio_dev;
+	struct adis16060_state *st;
+	if (!indio_dev) {
+		ret =  -ENODEV;
+		goto error_ret;
+	}
+	st = iio_priv(indio_dev);
+	spi_set_drvdata(spi, indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	st->us_w = spi;
 	return 0;
 

@@ -82,6 +82,7 @@ void exit_io_context(struct task_struct *task)
 
 struct io_context *alloc_io_context(gfp_t gfp_flags, int node)
 {
+<<<<<<< HEAD
 	struct io_context *ret;
 
 	ret = kmem_cache_alloc_node(iocontext_cachep, gfp_flags, node);
@@ -102,6 +103,28 @@ struct io_context *alloc_io_context(gfp_t gfp_flags, int node)
 	}
 
 	return ret;
+=======
+	struct io_context *ioc;
+
+	ioc = kmem_cache_alloc_node(iocontext_cachep, gfp_flags, node);
+	if (ioc) {
+		atomic_long_set(&ioc->refcount, 1);
+		atomic_set(&ioc->nr_tasks, 1);
+		spin_lock_init(&ioc->lock);
+		ioc->ioprio_changed = 0;
+		ioc->ioprio = 0;
+		ioc->last_waited = 0; /* doesn't matter... */
+		ioc->nr_batch_requests = 0; /* because this is 0 */
+		INIT_RADIX_TREE(&ioc->radix_root, GFP_ATOMIC | __GFP_HIGH);
+		INIT_HLIST_HEAD(&ioc->cic_list);
+		ioc->ioc_data = NULL;
+#if defined(CONFIG_BLK_CGROUP) || defined(CONFIG_BLK_CGROUP_MODULE)
+		ioc->cgroup_changed = 0;
+#endif
+	}
+
+	return ioc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*
@@ -139,19 +162,32 @@ struct io_context *current_io_context(gfp_t gfp_flags, int node)
  */
 struct io_context *get_io_context(gfp_t gfp_flags, int node)
 {
+<<<<<<< HEAD
 	struct io_context *ret = NULL;
+=======
+	struct io_context *ioc = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Check for unlikely race with exiting task. ioc ref count is
 	 * zero when ioc is being detached.
 	 */
 	do {
+<<<<<<< HEAD
 		ret = current_io_context(gfp_flags, node);
 		if (unlikely(!ret))
 			break;
 	} while (!atomic_long_inc_not_zero(&ret->refcount));
 
 	return ret;
+=======
+		ioc = current_io_context(gfp_flags, node);
+		if (unlikely(!ioc))
+			break;
+	} while (!atomic_long_inc_not_zero(&ioc->refcount));
+
+	return ioc;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL(get_io_context);
 

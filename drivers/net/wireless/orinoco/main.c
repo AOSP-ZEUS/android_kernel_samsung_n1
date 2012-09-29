@@ -4,7 +4,11 @@
  * adaptors, with Lucent/Agere, Intersil or Symbol firmware.
  *
  * Current maintainers (as of 29 September 2003) are:
+<<<<<<< HEAD
  * 	Pavel Roskin <proski AT gnu.org>
+=======
+ *	Pavel Roskin <proski AT gnu.org>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * and	David Gibson <hermes AT gibson.dropbear.id.au>
  *
  * (C) Copyright David Gibson, IBM Corporation 2001-2003.
@@ -146,10 +150,17 @@ static const u8 encaps_hdr[] = {0xaa, 0xaa, 0x03, 0x00, 0x00, 0x00};
 #define ORINOCO_MAX_MTU		(IEEE80211_MAX_DATA_LEN - ENCAPS_OVERHEAD)
 
 #define MAX_IRQLOOPS_PER_IRQ	10
+<<<<<<< HEAD
 #define MAX_IRQLOOPS_PER_JIFFY	(20000/HZ) /* Based on a guestimate of
 					    * how many events the
 					    * device could
 					    * legitimately generate */
+=======
+#define MAX_IRQLOOPS_PER_JIFFY	(20000 / HZ)	/* Based on a guestimate of
+						 * how many events the
+						 * device could
+						 * legitimately generate */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define DUMMY_FID		0xFFFF
 
@@ -157,7 +168,11 @@ static const u8 encaps_hdr[] = {0xaa, 0xaa, 0x03, 0x00, 0x00, 0x00};
   HERMES_MAX_MULTICAST : 0)*/
 #define MAX_MULTICAST(priv)	(HERMES_MAX_MULTICAST)
 
+<<<<<<< HEAD
 #define ORINOCO_INTEN	 	(HERMES_EV_RX | HERMES_EV_ALLOC \
+=======
+#define ORINOCO_INTEN		(HERMES_EV_RX | HERMES_EV_ALLOC \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				 | HERMES_EV_TX | HERMES_EV_TXEXC \
 				 | HERMES_EV_WTERR | HERMES_EV_INFO \
 				 | HERMES_EV_INFDROP)
@@ -437,12 +452,20 @@ static netdev_tx_t orinoco_xmit(struct sk_buff *skb, struct net_device *dev)
 {
 	struct orinoco_private *priv = ndev_priv(dev);
 	struct net_device_stats *stats = &priv->stats;
+<<<<<<< HEAD
 	hermes_t *hw = &priv->hw;
+=======
+	struct hermes *hw = &priv->hw;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int err = 0;
 	u16 txfid = priv->txfid;
 	int tx_control;
 	unsigned long flags;
+<<<<<<< HEAD
 	u8 mic_buf[MICHAEL_MIC_LEN+1];
+=======
+	u8 mic_buf[MICHAEL_MIC_LEN + 1];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!netif_running(dev)) {
 		printk(KERN_ERR "%s: Tx on stopped device!\n",
@@ -579,7 +602,11 @@ static netdev_tx_t orinoco_xmit(struct sk_buff *skb, struct net_device *dev)
 	return NETDEV_TX_BUSY;
 }
 
+<<<<<<< HEAD
 static void __orinoco_ev_alloc(struct net_device *dev, hermes_t *hw)
+=======
+static void __orinoco_ev_alloc(struct net_device *dev, struct hermes *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct orinoco_private *priv = ndev_priv(dev);
 	u16 fid = hermes_read_regn(hw, ALLOCFID);
@@ -594,7 +621,11 @@ static void __orinoco_ev_alloc(struct net_device *dev, hermes_t *hw)
 	hermes_write_regn(hw, ALLOCFID, DUMMY_FID);
 }
 
+<<<<<<< HEAD
 static void __orinoco_ev_tx(struct net_device *dev, hermes_t *hw)
+=======
+static void __orinoco_ev_tx(struct net_device *dev, struct hermes *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct orinoco_private *priv = ndev_priv(dev);
 	struct net_device_stats *stats = &priv->stats;
@@ -606,7 +637,11 @@ static void __orinoco_ev_tx(struct net_device *dev, hermes_t *hw)
 	hermes_write_regn(hw, TXCOMPLFID, DUMMY_FID);
 }
 
+<<<<<<< HEAD
 static void __orinoco_ev_txexc(struct net_device *dev, hermes_t *hw)
+=======
+static void __orinoco_ev_txexc(struct net_device *dev, struct hermes *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct orinoco_private *priv = ndev_priv(dev);
 	struct net_device_stats *stats = &priv->stats;
@@ -753,7 +788,11 @@ static void orinoco_rx_monitor(struct net_device *dev, u16 rxfid,
 	struct sk_buff *skb;
 	struct orinoco_private *priv = ndev_priv(dev);
 	struct net_device_stats *stats = &priv->stats;
+<<<<<<< HEAD
 	hermes_t *hw = &priv->hw;
+=======
+	struct hermes *hw = &priv->hw;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	len = le16_to_cpu(desc->data_len);
 
@@ -840,7 +879,11 @@ static void orinoco_rx_monitor(struct net_device *dev, u16 rxfid,
 	stats->rx_dropped++;
 }
 
+<<<<<<< HEAD
 void __orinoco_ev_rx(struct net_device *dev, hermes_t *hw)
+=======
+void __orinoco_ev_rx(struct net_device *dev, struct hermes *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct orinoco_private *priv = ndev_priv(dev);
 	struct net_device_stats *stats = &priv->stats;
@@ -918,7 +961,11 @@ void __orinoco_ev_rx(struct net_device *dev, hermes_t *hw)
 	   32bit boundary, plus 1 byte so we can read in odd length
 	   packets from the card, which has an IO granularity of 16
 	   bits */
+<<<<<<< HEAD
 	skb = dev_alloc_skb(length+ETH_HLEN+2+1);
+=======
+	skb = dev_alloc_skb(length + ETH_HLEN + 2 + 1);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!skb) {
 		printk(KERN_WARNING "%s: Can't allocate skb for Rx\n",
 		       dev->name);
@@ -1402,7 +1449,11 @@ static void orinoco_process_scan_results(struct work_struct *work)
 	spin_unlock_irqrestore(&priv->scan_lock, flags);
 }
 
+<<<<<<< HEAD
 void __orinoco_ev_info(struct net_device *dev, hermes_t *hw)
+=======
+void __orinoco_ev_info(struct net_device *dev, struct hermes *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct orinoco_private *priv = ndev_priv(dev);
 	u16 infofid;
@@ -1620,7 +1671,11 @@ void __orinoco_ev_info(struct net_device *dev, hermes_t *hw)
 }
 EXPORT_SYMBOL(__orinoco_ev_info);
 
+<<<<<<< HEAD
 static void __orinoco_ev_infdrop(struct net_device *dev, hermes_t *hw)
+=======
+static void __orinoco_ev_infdrop(struct net_device *dev, struct hermes *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	if (net_ratelimit())
 		printk(KERN_DEBUG "%s: Information frame lost.\n", dev->name);
@@ -1831,7 +1886,11 @@ static int __orinoco_commit(struct orinoco_private *priv)
 int orinoco_commit(struct orinoco_private *priv)
 {
 	struct net_device *dev = priv->ndev;
+<<<<<<< HEAD
 	hermes_t *hw = &priv->hw;
+=======
+	struct hermes *hw = &priv->hw;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int err;
 
 	if (priv->broken_disableport) {
@@ -1874,12 +1933,20 @@ int orinoco_commit(struct orinoco_private *priv)
 /* Interrupt handler                                                */
 /********************************************************************/
 
+<<<<<<< HEAD
 static void __orinoco_ev_tick(struct net_device *dev, hermes_t *hw)
+=======
+static void __orinoco_ev_tick(struct net_device *dev, struct hermes *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	printk(KERN_DEBUG "%s: TICK\n", dev->name);
 }
 
+<<<<<<< HEAD
 static void __orinoco_ev_wterr(struct net_device *dev, hermes_t *hw)
+=======
+static void __orinoco_ev_wterr(struct net_device *dev, struct hermes *hw)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	/* This seems to happen a fair bit under load, but ignoring it
 	   seems to work fine...*/
@@ -1891,7 +1958,11 @@ irqreturn_t orinoco_interrupt(int irq, void *dev_id)
 {
 	struct orinoco_private *priv = dev_id;
 	struct net_device *dev = priv->ndev;
+<<<<<<< HEAD
 	hermes_t *hw = &priv->hw;
+=======
+	struct hermes *hw = &priv->hw;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int count = MAX_IRQLOOPS_PER_IRQ;
 	u16 evstat, events;
 	/* These are used to detect a runaway interrupt situation.
@@ -1958,7 +2029,11 @@ irqreturn_t orinoco_interrupt(int irq, void *dev_id)
 
 		evstat = hermes_read_regn(hw, EVSTAT);
 		events = evstat & hw->inten;
+<<<<<<< HEAD
 	};
+=======
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	orinoco_unlock(priv, &flags);
 	return IRQ_HANDLED;
@@ -2017,8 +2092,13 @@ static void orinoco_unregister_pm_notifier(struct orinoco_private *priv)
 	unregister_pm_notifier(&priv->pm_notifier);
 }
 #else /* !PM_SLEEP || HERMES_CACHE_FW_ON_INIT */
+<<<<<<< HEAD
 #define orinoco_register_pm_notifier(priv) do { } while(0)
 #define orinoco_unregister_pm_notifier(priv) do { } while(0)
+=======
+#define orinoco_register_pm_notifier(priv) do { } while (0)
+#define orinoco_unregister_pm_notifier(priv) do { } while (0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 /********************************************************************/
@@ -2029,7 +2109,11 @@ int orinoco_init(struct orinoco_private *priv)
 {
 	struct device *dev = priv->dev;
 	struct wiphy *wiphy = priv_to_wiphy(priv);
+<<<<<<< HEAD
 	hermes_t *hw = &priv->hw;
+=======
+	struct hermes *hw = &priv->hw;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int err = 0;
 
 	/* No need to lock, the hw_unavailable flag is already set in

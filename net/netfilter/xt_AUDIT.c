@@ -163,6 +163,14 @@ audit_tg(struct sk_buff *skb, const struct xt_action_param *par)
 		break;
 	}
 
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_NETWORK_SECMARK
+	if (skb->secmark)
+		audit_log_secctx(ab, skb->secmark);
+#endif
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	audit_log_end(ab);
 
 errout:

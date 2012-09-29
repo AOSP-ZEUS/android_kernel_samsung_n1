@@ -81,8 +81,17 @@ int kvmppc_core_emulate_mtspr(struct kvm_vcpu *vcpu, int sprn, int rs)
 		kvmppc_set_pid(vcpu, spr_val);
 		break;
 	case SPRN_PID1:
+<<<<<<< HEAD
 		vcpu_e500->pid[1] = spr_val; break;
 	case SPRN_PID2:
+=======
+		if (spr_val != 0)
+			return EMULATE_FAIL;
+		vcpu_e500->pid[1] = spr_val; break;
+	case SPRN_PID2:
+		if (spr_val != 0)
+			return EMULATE_FAIL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		vcpu_e500->pid[2] = spr_val; break;
 	case SPRN_MAS0:
 		vcpu_e500->mas0 = spr_val; break;

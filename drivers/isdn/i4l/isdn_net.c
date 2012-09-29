@@ -1983,13 +1983,22 @@ isdn_net_rebuild_header(struct sk_buff *skb)
 	return ret;
 }
 
+<<<<<<< HEAD
 static int isdn_header_cache(const struct neighbour *neigh, struct hh_cache *hh)
+=======
+static int isdn_header_cache(const struct neighbour *neigh, struct hh_cache *hh,
+			     __be16 type)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	const struct net_device *dev = neigh->dev;
 	isdn_net_local *lp = netdev_priv(dev);
 
 	if (lp->p_encap == ISDN_NET_ENCAP_ETHER)
+<<<<<<< HEAD
 		return eth_header_cache(neigh, hh);
+=======
+		return eth_header_cache(neigh, hh, type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return -1;
 }
 

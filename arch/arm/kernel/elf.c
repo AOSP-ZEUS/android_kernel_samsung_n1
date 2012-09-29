@@ -40,6 +40,7 @@ EXPORT_SYMBOL(elf_check_arch);
 void elf_set_personality(const struct elf32_hdr *x)
 {
 	unsigned int eflags = x->e_flags;
+<<<<<<< HEAD
 	unsigned int personality = current->personality & ~PER_MASK;
 
 	/*
@@ -47,15 +48,25 @@ void elf_set_personality(const struct elf32_hdr *x)
 	 * personality to LINUX.
 	 */
 	personality |= PER_LINUX;
+=======
+	unsigned int personality = PER_LINUX_32BIT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * APCS-26 is only valid for OABI executables
 	 */
+<<<<<<< HEAD
 	if ((eflags & EF_ARM_EABI_MASK) == EF_ARM_EABI_UNKNOWN &&
 	    (eflags & EF_ARM_APCS_26))
 		personality &= ~ADDR_LIMIT_32BIT;
 	else
 		personality |= ADDR_LIMIT_32BIT;
+=======
+	if ((eflags & EF_ARM_EABI_MASK) == EF_ARM_EABI_UNKNOWN) {
+		if (eflags & EF_ARM_APCS_26)
+			personality = PER_LINUX;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	set_personality(personality);
 

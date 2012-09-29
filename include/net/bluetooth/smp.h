@@ -19,7 +19,13 @@
    COPYRIGHTS, TRADEMARKS OR OTHER RIGHTS, RELATING TO USE OF THIS
    SOFTWARE IS DISCLAIMED.
 */
+<<<<<<< HEAD
 
+=======
+#ifdef CONFIG_BT_MGMT
+#include "smp_mgmt.h"
+#else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef __SMP_H
 #define __SMP_H
 
@@ -121,3 +127,8 @@ int smp_sig_channel(struct l2cap_conn *conn, struct sk_buff *skb);
 int smp_distribute_keys(struct l2cap_conn *conn, __u8 force);
 
 #endif /* __SMP_H */
+<<<<<<< HEAD
+=======
+
+#endif /* BT_MGMT */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

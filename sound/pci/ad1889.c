@@ -944,7 +944,11 @@ snd_ad1889_create(struct snd_card *card,
 	spin_lock_init(&chip->lock);	/* only now can we call ad1889_free */
 
 	if (request_irq(pci->irq, snd_ad1889_interrupt,
+<<<<<<< HEAD
 			IRQF_SHARED, card->driver, chip)) {
+=======
+			IRQF_SHARED, KBUILD_MODNAME, chip)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		printk(KERN_ERR PFX "cannot obtain IRQ %d\n", pci->irq);
 		snd_ad1889_free(chip);
 		return -EBUSY;
@@ -1055,7 +1059,11 @@ static DEFINE_PCI_DEVICE_TABLE(snd_ad1889_ids) = {
 MODULE_DEVICE_TABLE(pci, snd_ad1889_ids);
 
 static struct pci_driver ad1889_pci_driver = {
+<<<<<<< HEAD
 	.name = "AD1889 Audio",
+=======
+	.name = KBUILD_MODNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.id_table = snd_ad1889_ids,
 	.probe = snd_ad1889_probe,
 	.remove = __devexit_p(snd_ad1889_remove),

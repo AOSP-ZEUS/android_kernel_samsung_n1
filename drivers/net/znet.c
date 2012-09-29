@@ -731,7 +731,11 @@ static void znet_rx(struct net_device *dev)
 		cur_frame_end_offset -= ((count + 1)>>1) + 3;
 		if (cur_frame_end_offset < 0)
 		  cur_frame_end_offset += RX_BUF_SIZE/2;
+<<<<<<< HEAD
 	};
+=======
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Now step  forward through the list. */
 	do {

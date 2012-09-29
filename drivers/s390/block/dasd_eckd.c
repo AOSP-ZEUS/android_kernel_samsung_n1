@@ -18,12 +18,19 @@
 #include <linux/hdreg.h>	/* HDIO_GETGEO			    */
 #include <linux/bio.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <linux/compat.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/init.h>
 
 #include <asm/debug.h>
 #include <asm/idals.h>
 #include <asm/ebcdic.h>
+<<<<<<< HEAD
+=======
+#include <asm/compat.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/io.h>
 #include <asm/uaccess.h>
 #include <asm/cio.h>
@@ -1461,6 +1468,18 @@ dasd_eckd_check_characteristics(struct dasd_device *device)
 				"Read device characteristic failed, rc=%d", rc);
 		goto out_err3;
 	}
+<<<<<<< HEAD
+=======
+
+	if ((device->features & DASD_FEATURE_USERAW) &&
+	    !(private->rdc_data.facilities.RT_in_LR)) {
+		dev_err(&device->cdev->dev, "The storage server does not "
+			"support raw-track access\n");
+		rc = -EINVAL;
+		goto out_err3;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* find the valid cylinder size */
 	if (private->rdc_data.no_cyl == LV_COMPAT_CYL &&
 	    private->rdc_data.long_no_cyl)

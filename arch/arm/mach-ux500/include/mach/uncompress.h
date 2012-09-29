@@ -54,7 +54,12 @@ static inline void arch_decomp_setup(void)
 	if (machine_is_u8500() ||
 	    machine_is_svp8500v1() ||
 	    machine_is_svp8500v2() ||
+<<<<<<< HEAD
 	    machine_is_hrefv60())
+=======
+	    machine_is_hrefv60()   ||
+	    machine_is_snowball())
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ux500_uart_base = U8500_UART2_BASE;
 	else if (machine_is_u5500())
 		ux500_uart_base = U5500_UART0_BASE;

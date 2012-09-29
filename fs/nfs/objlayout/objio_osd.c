@@ -996,18 +996,40 @@ static bool objio_pg_test(struct nfs_pageio_descriptor *pgio,
 	if (!pnfs_generic_pg_test(pgio, prev, req))
 		return false;
 
+<<<<<<< HEAD
 	if (pgio->pg_lseg == NULL)
 		return true;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return pgio->pg_count + req->wb_bytes <=
 			OBJIO_LSEG(pgio->pg_lseg)->max_io_size;
 }
 
+<<<<<<< HEAD
 static struct pnfs_layoutdriver_type objlayout_type = {
 	.id = LAYOUT_OSD2_OBJECTS,
 	.name = "LAYOUT_OSD2_OBJECTS",
 	.flags                   = PNFS_LAYOUTRET_ON_SETATTR |
 				   PNFS_LAYOUTRET_ON_ERROR,
+=======
+static const struct nfs_pageio_ops objio_pg_read_ops = {
+	.pg_init = pnfs_generic_pg_init_read,
+	.pg_test = objio_pg_test,
+	.pg_doio = pnfs_generic_pg_readpages,
+};
+
+static const struct nfs_pageio_ops objio_pg_write_ops = {
+	.pg_init = pnfs_generic_pg_init_write,
+	.pg_test = objio_pg_test,
+	.pg_doio = pnfs_generic_pg_writepages,
+};
+
+static struct pnfs_layoutdriver_type objlayout_type = {
+	.id = LAYOUT_OSD2_OBJECTS,
+	.name = "LAYOUT_OSD2_OBJECTS",
+	.flags                   = PNFS_LAYOUTRET_ON_SETATTR,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.alloc_layout_hdr        = objlayout_alloc_layout_hdr,
 	.free_layout_hdr         = objlayout_free_layout_hdr,
@@ -1017,7 +1039,12 @@ static struct pnfs_layoutdriver_type objlayout_type = {
 
 	.read_pagelist           = objlayout_read_pagelist,
 	.write_pagelist          = objlayout_write_pagelist,
+<<<<<<< HEAD
 	.pg_test                 = objio_pg_test,
+=======
+	.pg_read_ops             = &objio_pg_read_ops,
+	.pg_write_ops            = &objio_pg_write_ops,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	.free_deviceid_node	 = objio_free_deviceid_node,
 
@@ -1052,5 +1079,10 @@ objlayout_exit(void)
 	       __func__);
 }
 
+<<<<<<< HEAD
+=======
+MODULE_ALIAS("nfs-layouttype4-2");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 module_init(objlayout_init);
 module_exit(objlayout_exit);

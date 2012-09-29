@@ -51,7 +51,11 @@ void orion5x_pci_disable(void);
 void orion5x_pci_set_cardbus_mode(void);
 int orion5x_pci_sys_setup(int nr, struct pci_sys_data *sys);
 struct pci_bus *orion5x_pci_sys_scan_bus(int nr, struct pci_sys_data *sys);
+<<<<<<< HEAD
 int orion5x_pci_map_irq(struct pci_dev *dev, u8 slot, u8 pin);
+=======
+int orion5x_pci_map_irq(const struct pci_dev *dev, u8 slot, u8 pin);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct machine_desc;
 struct meminfo;

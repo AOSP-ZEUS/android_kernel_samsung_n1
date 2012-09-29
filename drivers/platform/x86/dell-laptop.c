@@ -612,7 +612,10 @@ static int __init dell_init(void)
 	if (!bufferpage)
 		goto fail_buffer;
 	buffer = page_address(bufferpage);
+<<<<<<< HEAD
 	mutex_init(&buffer_mutex);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = dell_setup_rfkill();
 

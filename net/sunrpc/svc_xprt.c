@@ -901,7 +901,18 @@ void svc_delete_xprt(struct svc_xprt *xprt)
 	spin_lock_bh(&serv->sv_lock);
 	if (!test_and_set_bit(XPT_DETACHED, &xprt->xpt_flags))
 		list_del_init(&xprt->xpt_list);
+<<<<<<< HEAD
 	BUG_ON(!list_empty(&xprt->xpt_ready));
+=======
+	/*
+	 * The only time we're called while xpt_ready is still on a list
+	 * is while the list itself is about to be destroyed (in
+	 * svc_destroy).  BUT svc_xprt_enqueue could still be attempting
+	 * to add new entries to the sp_sockets list, so we can't leave
+	 * a freed xprt on it.
+	 */
+	list_del_init(&xprt->xpt_ready);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (test_bit(XPT_TEMP, &xprt->xpt_flags))
 		serv->sv_tmpcnt--;
 	spin_unlock_bh(&serv->sv_lock);
@@ -929,6 +940,7 @@ void svc_close_xprt(struct svc_xprt *xprt)
 }
 EXPORT_SYMBOL_GPL(svc_close_xprt);
 
+<<<<<<< HEAD
 static void svc_close_list(struct list_head *xprt_list)
 {
 	struct svc_xprt *xprt;
@@ -971,6 +983,24 @@ void svc_close_all(struct svc_serv *serv)
 
 	BUG_ON(!list_empty(&serv->sv_permsocks));
 	BUG_ON(!list_empty(&serv->sv_tempsocks));
+=======
+void svc_close_all(struct list_head *xprt_list)
+{
+	struct svc_xprt *xprt;
+	struct svc_xprt *tmp;
+
+	/*
+	 * The server is shutting down, and no more threads are running.
+	 * svc_xprt_enqueue() might still be running, but at worst it
+	 * will re-add the xprt to sp_sockets, which will soon get
+	 * freed.  So we don't bother with any more locking, and don't
+	 * leave the close to the (nonexistent) server threads:
+	 */
+	list_for_each_entry_safe(xprt, tmp, xprt_list, xpt_list) {
+		set_bit(XPT_CLOSE, &xprt->xpt_flags);
+		svc_delete_xprt(xprt);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 /*

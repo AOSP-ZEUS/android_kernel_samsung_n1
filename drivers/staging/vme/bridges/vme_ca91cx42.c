@@ -42,7 +42,11 @@ static void __exit ca91cx42_exit(void);
 /* Module parameters */
 static int geoid;
 
+<<<<<<< HEAD
 static char driver_name[] = "vme_ca91cx42";
+=======
+static const char driver_name[] = "vme_ca91cx42";
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static DEFINE_PCI_DEVICE_TABLE(ca91cx42_ids) = {
 	{ PCI_DEVICE(PCI_VENDOR_ID_TUNDRA, PCI_DEVICE_ID_TUNDRA_CA91C142) },
@@ -190,7 +194,11 @@ static irqreturn_t ca91cx42_irqhandler(int irq, void *ptr)
 		serviced |= ca91cx42_VIRQ_irqhandler(ca91cx42_bridge, stat);
 
 	/* Clear serviced interrupts */
+<<<<<<< HEAD
 	iowrite32(stat, bridge->base + LINT_STAT);
+=======
+	iowrite32(serviced, bridge->base + LINT_STAT);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return IRQ_HANDLED;
 }
@@ -256,6 +264,21 @@ static void ca91cx42_irq_exit(struct ca91cx42_driver *bridge,
 	free_irq(pdev->irq, pdev);
 }
 
+<<<<<<< HEAD
+=======
+static int ca91cx42_iack_received(struct ca91cx42_driver *bridge, int level)
+{
+	u32 tmp;
+
+	tmp = ioread32(bridge->base + LINT_STAT);
+
+	if (tmp & (1 << level))
+		return 0;
+	else
+		return 1;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Set up an VME interrupt
  */
@@ -311,7 +334,12 @@ static int ca91cx42_irq_generate(struct vme_bridge *ca91cx42_bridge, int level,
 	iowrite32(tmp, bridge->base + VINT_EN);
 
 	/* Wait for IACK */
+<<<<<<< HEAD
 	wait_event_interruptible(bridge->iack_queue, 0);
+=======
+	wait_event_interruptible(bridge->iack_queue,
+				 ca91cx42_iack_received(bridge, level));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Return interrupt to low state */
 	tmp = ioread32(bridge->base + VINT_EN);

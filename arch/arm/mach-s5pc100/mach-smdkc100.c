@@ -29,7 +29,10 @@
 #include <asm/mach/map.h>
 
 #include <mach/map.h>
+<<<<<<< HEAD
 #include <mach/regs-fb.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <mach/regs-gpio.h>
 
 #include <video/platform_lcd.h>
@@ -51,6 +54,11 @@
 #include <plat/keypad.h>
 #include <plat/ts.h>
 #include <plat/audio.h>
+<<<<<<< HEAD
+=======
+#include <plat/backlight.h>
+#include <plat/regs-fb-v4.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Following are default values for UCON, ULCON and UFCON UART registers */
 #define SMDKC100_UCON_DEFAULT	(S3C2410_UCON_TXILEVEL |	\
@@ -179,6 +187,7 @@ static struct samsung_keypad_platdata smdkc100_keypad_data __initdata = {
 	.cols		= 8,
 };
 
+<<<<<<< HEAD
 static int smdkc100_backlight_init(struct device *dev)
 {
 	int ret;
@@ -218,6 +227,8 @@ static struct platform_device smdkc100_backlight_device = {
 	},
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct platform_device *smdkc100_devices[] __initdata = {
 	&s3c_device_adc,
 	&s3c_device_cfcon,
@@ -239,8 +250,11 @@ static struct platform_device *smdkc100_devices[] __initdata = {
 	&s5p_device_fimc1,
 	&s5p_device_fimc2,
 	&s5pc100_device_spdif,
+<<<<<<< HEAD
 	&s3c_device_timer[0],
 	&smdkc100_backlight_device,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct s3c2410_ts_mach_info s3c_ts_platform __initdata = {
@@ -249,6 +263,19 @@ static struct s3c2410_ts_mach_info s3c_ts_platform __initdata = {
 	.oversampling_shift	= 2,
 };
 
+<<<<<<< HEAD
+=======
+/* LCD Backlight data */
+static struct samsung_bl_gpio_info smdkc100_bl_gpio_info = {
+	.no = S5PC100_GPD(0),
+	.func = S3C_GPIO_SFN(2),
+};
+
+static struct platform_pwm_backlight_data smdkc100_bl_data = {
+	.pwm_id = 0,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init smdkc100_map_io(void)
 {
 	s5p_init_io(NULL, 0, S5P_VA_CHIPID);
@@ -276,6 +303,12 @@ static void __init smdkc100_machine_init(void)
 	/* LCD init */
 	gpio_request(S5PC100_GPH0(6), "GPH0");
 	smdkc100_lcd_power_set(&smdkc100_lcd_power_data, 0);
+<<<<<<< HEAD
+=======
+
+	samsung_bl_set(&smdkc100_bl_gpio_info, &smdkc100_bl_data);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	platform_add_devices(smdkc100_devices, ARRAY_SIZE(smdkc100_devices));
 }
 

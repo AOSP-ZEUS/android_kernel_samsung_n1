@@ -93,7 +93,11 @@ int omfs_make_empty(struct inode *inode, struct super_block *sb)
 
 	memset(bh->b_data, 0, sizeof(struct omfs_inode));
 
+<<<<<<< HEAD
 	if (inode->i_mode & S_IFDIR) {
+=======
+	if (S_ISDIR(inode->i_mode)) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		memset(&bh->b_data[OMFS_DIR_START], 0xff,
 			sbi->s_sys_blocksize - OMFS_DIR_START);
 	} else

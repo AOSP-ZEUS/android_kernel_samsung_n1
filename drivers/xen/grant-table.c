@@ -82,7 +82,11 @@ static inline grant_ref_t *__gnttab_entry(grant_ref_t entry)
 static int get_free_entries(unsigned count)
 {
 	unsigned long flags;
+<<<<<<< HEAD
 	int ref, rc;
+=======
+	int ref, rc = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	grant_ref_t head;
 
 	spin_lock_irqsave(&gnttab_list_lock, flags);

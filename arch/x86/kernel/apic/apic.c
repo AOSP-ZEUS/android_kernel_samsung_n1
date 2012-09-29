@@ -27,6 +27,10 @@
 #include <linux/syscore_ops.h>
 #include <linux/delay.h>
 #include <linux/timex.h>
+<<<<<<< HEAD
+=======
+#include <linux/i8253.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/dmar.h>
 #include <linux/init.h>
 #include <linux/cpu.h>
@@ -37,9 +41,14 @@
 #include <asm/perf_event.h>
 #include <asm/x86_init.h>
 #include <asm/pgalloc.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
 #include <asm/mpspec.h>
 #include <asm/i8253.h>
+=======
+#include <linux/atomic.h>
+#include <asm/mpspec.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/i8259.h>
 #include <asm/proto.h>
 #include <asm/apic.h>
@@ -48,6 +57,10 @@
 #include <asm/hpet.h>
 #include <asm/idle.h>
 #include <asm/mtrr.h>
+<<<<<<< HEAD
+=======
+#include <asm/time.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/smp.h>
 #include <asm/mce.h>
 #include <asm/tsc.h>
@@ -1429,22 +1442,34 @@ void enable_x2apic(void)
 	rdmsr(MSR_IA32_APICBASE, msr, msr2);
 	if (!(msr & X2APIC_ENABLE)) {
 		printk_once(KERN_INFO "Enabling x2apic\n");
+<<<<<<< HEAD
 		wrmsr(MSR_IA32_APICBASE, msr | X2APIC_ENABLE, 0);
+=======
+		wrmsr(MSR_IA32_APICBASE, msr | X2APIC_ENABLE, msr2);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 #endif /* CONFIG_X86_X2APIC */
 
 int __init enable_IR(void)
 {
+<<<<<<< HEAD
 #ifdef CONFIG_INTR_REMAP
 	if (!intr_remapping_supported()) {
 		pr_debug("intr-remapping not supported\n");
 		return 0;
+=======
+#ifdef CONFIG_IRQ_REMAP
+	if (!intr_remapping_supported()) {
+		pr_debug("intr-remapping not supported\n");
+		return -1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (!x2apic_preenabled && skip_ioapic_setup) {
 		pr_info("Skipped enabling intr-remap because of skipping "
 			"io-apic setup\n");
+<<<<<<< HEAD
 		return 0;
 	}
 
@@ -1457,6 +1482,14 @@ int __init enable_IR(void)
 
 #endif
 	return 0;
+=======
+		return -1;
+	}
+
+	return enable_intr_remapping();
+#endif
+	return -1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void __init enable_IR_x2apic(void)
@@ -1480,11 +1513,19 @@ void __init enable_IR_x2apic(void)
 	mask_ioapic_entries();
 
 	if (dmar_table_init_ret)
+<<<<<<< HEAD
 		ret = 0;
 	else
 		ret = enable_IR();
 
 	if (!ret) {
+=======
+		ret = -1;
+	else
+		ret = enable_IR();
+
+	if (ret < 0) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/* IR is required if there is APIC ID > 255 even when running
 		 * under KVM
 		 */
@@ -1498,6 +1539,12 @@ void __init enable_IR_x2apic(void)
 		x2apic_force_phys();
 	}
 
+<<<<<<< HEAD
+=======
+	if (ret == IRQ_REMAP_XAPIC_MODE)
+		goto nox2apic;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	x2apic_enabled = 1;
 
 	if (x2apic_supported() && !x2apic_mode) {
@@ -1507,19 +1554,34 @@ void __init enable_IR_x2apic(void)
 	}
 
 nox2apic:
+<<<<<<< HEAD
 	if (!ret) /* IR enabling failed */
+=======
+	if (ret < 0) /* IR enabling failed */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		restore_ioapic_entries();
 	legacy_pic->restore_mask();
 	local_irq_restore(flags);
 
 out:
+<<<<<<< HEAD
 	if (x2apic_enabled)
+=======
+	if (x2apic_enabled || !x2apic_supported())
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return;
 
 	if (x2apic_preenabled)
 		panic("x2apic: enabled by BIOS but kernel init failed.");
+<<<<<<< HEAD
 	else if (cpu_has_x2apic)
 		pr_info("Not enabling x2apic, Intr-remapping init failed.\n");
+=======
+	else if (ret == IRQ_REMAP_XAPIC_MODE)
+		pr_info("x2apic not enabled, IRQ remapping is in xapic mode\n");
+	else if (ret < 0)
+		pr_info("x2apic not enabled, IRQ remapping init failed\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #ifdef CONFIG_X86_64
@@ -1558,11 +1620,17 @@ static int __init apic_verify(void)
 	mp_lapic_addr = APIC_DEFAULT_PHYS_BASE;
 
 	/* The BIOS may have set up the APIC at some other address */
+<<<<<<< HEAD
 	if (boot_cpu_data.x86 >= 6) {
 		rdmsr(MSR_IA32_APICBASE, l, h);
 		if (l & MSR_IA32_APICBASE_ENABLE)
 			mp_lapic_addr = l & MSR_IA32_APICBASE_BASE;
 	}
+=======
+	rdmsr(MSR_IA32_APICBASE, l, h);
+	if (l & MSR_IA32_APICBASE_ENABLE)
+		mp_lapic_addr = l & MSR_IA32_APICBASE_BASE;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pr_info("Found and enabled local APIC!\n");
 	return 0;
@@ -1580,6 +1648,7 @@ int __init apic_force_enable(unsigned long addr)
 	 * MSR. This can only be done in software for Intel P6 or later
 	 * and AMD K7 (Model > 1) or later.
 	 */
+<<<<<<< HEAD
 	if (boot_cpu_data.x86 >= 6) {
 		rdmsr(MSR_IA32_APICBASE, l, h);
 		if (!(l & MSR_IA32_APICBASE_ENABLE)) {
@@ -1589,6 +1658,15 @@ int __init apic_force_enable(unsigned long addr)
 			wrmsr(MSR_IA32_APICBASE, l, h);
 			enabled_via_apicbase = 1;
 		}
+=======
+	rdmsr(MSR_IA32_APICBASE, l, h);
+	if (!(l & MSR_IA32_APICBASE_ENABLE)) {
+		pr_info("Local APIC disabled by BIOS -- reenabling.\n");
+		l &= ~MSR_IA32_APICBASE_BASE;
+		l |= MSR_IA32_APICBASE_ENABLE | addr;
+		wrmsr(MSR_IA32_APICBASE, l, h);
+		enabled_via_apicbase = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	return apic_verify();
 }
@@ -1947,10 +2025,35 @@ void disconnect_bsp_APIC(int virt_wire_setup)
 
 void __cpuinit generic_processor_info(int apicid, int version)
 {
+<<<<<<< HEAD
 	int cpu;
 
 	if (num_processors >= nr_cpu_ids) {
 		int max = nr_cpu_ids;
+=======
+	int cpu, max = nr_cpu_ids;
+	bool boot_cpu_detected = physid_isset(boot_cpu_physical_apicid,
+				phys_cpu_present_map);
+
+	/*
+	 * If boot cpu has not been detected yet, then only allow upto
+	 * nr_cpu_ids - 1 processors and keep one slot free for boot cpu
+	 */
+	if (!boot_cpu_detected && num_processors >= nr_cpu_ids - 1 &&
+	    apicid != boot_cpu_physical_apicid) {
+		int thiscpu = max + disabled_cpus - 1;
+
+		pr_warning(
+			"ACPI: NR_CPUS/possible_cpus limit of %i almost"
+			" reached. Keeping one slot for boot cpu."
+			"  Processor %d/0x%x ignored.\n", max, thiscpu, apicid);
+
+		disabled_cpus++;
+		return;
+	}
+
+	if (num_processors >= nr_cpu_ids) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int thiscpu = max + disabled_cpus;
 
 		pr_warning(
@@ -2116,12 +2219,19 @@ static void lapic_resume(void)
 		 * FIXME! This will be wrong if we ever support suspend on
 		 * SMP! We'll need to do this as part of the CPU restore!
 		 */
+<<<<<<< HEAD
 		if (boot_cpu_data.x86 >= 6) {
 			rdmsr(MSR_IA32_APICBASE, l, h);
 			l &= ~MSR_IA32_APICBASE_BASE;
 			l |= MSR_IA32_APICBASE_ENABLE | mp_lapic_addr;
 			wrmsr(MSR_IA32_APICBASE, l, h);
 		}
+=======
+		rdmsr(MSR_IA32_APICBASE, l, h);
+		l &= ~MSR_IA32_APICBASE_BASE;
+		l |= MSR_IA32_APICBASE_ENABLE | mp_lapic_addr;
+		wrmsr(MSR_IA32_APICBASE, l, h);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	maxlvt = lapic_get_maxlvt();

@@ -43,6 +43,7 @@ struct platform_device s3c_device_i2c4 = {
 	.resource	= s3c_i2c_resource,
 };
 
+<<<<<<< HEAD
 static struct s3c2410_platform_i2c default_i2c_data4 __initdata = {
 	.flags		= 0,
 	.bus_num	= 4,
@@ -51,10 +52,13 @@ static struct s3c2410_platform_i2c default_i2c_data4 __initdata = {
 	.sda_delay	= 100,
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void __init s3c_i2c4_set_platdata(struct s3c2410_platform_i2c *pd)
 {
 	struct s3c2410_platform_i2c *npd;
 
+<<<<<<< HEAD
 	if (!pd)
 		pd = &default_i2c_data4;
 
@@ -65,4 +69,16 @@ void __init s3c_i2c4_set_platdata(struct s3c2410_platform_i2c *pd)
 		npd->cfg_gpio = s3c_i2c4_cfg_gpio;
 
 	s3c_device_i2c4.dev.platform_data = npd;
+=======
+	if (!pd) {
+		pd = &default_i2c_data;
+		pd->bus_num = 4;
+	}
+
+	npd = s3c_set_platdata(pd, sizeof(struct s3c2410_platform_i2c),
+			       &s3c_device_i2c4);
+
+	if (!npd->cfg_gpio)
+		npd->cfg_gpio = s3c_i2c4_cfg_gpio;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }

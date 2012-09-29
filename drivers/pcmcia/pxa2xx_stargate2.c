@@ -28,7 +28,10 @@
 
 #include "soc_common.h"
 
+<<<<<<< HEAD
 #define SG2_S0_BUFF_CTL		120
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define SG2_S0_POWER_CTL	108
 #define SG2_S0_GPIO_RESET	82
 #define SG2_S0_GPIO_DETECT	53
@@ -38,6 +41,14 @@ static struct pcmcia_irqs irqs[] = {
 	{ 0, IRQ_GPIO(SG2_S0_GPIO_DETECT), "PCMCIA0 CD" },
 };
 
+<<<<<<< HEAD
+=======
+static struct gpio sg2_pcmcia_gpios[] = {
+	{ SG2_S0_GPIO_RESET, GPIOF_OUT_INIT_HIGH, "PCMCIA Reset" },
+	{ SG2_S0_POWER_CTL, GPIOF_OUT_INIT_HIGH, "PCMCIA Power Ctrl" },
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int sg2_pcmcia_hw_init(struct soc_pcmcia_socket *skt)
 {
 	skt->socket.pci_irq = IRQ_GPIO(SG2_S0_GPIO_READY);
@@ -122,6 +133,7 @@ static int __init sg2_pcmcia_init(void)
 	if (!sg2_pcmcia_device)
 		return -ENOMEM;
 
+<<<<<<< HEAD
 	ret = gpio_request(SG2_S0_BUFF_CTL, "SG2 CF buff ctl");
 	if (ret)
 		goto error_put_platform_device;
@@ -135,11 +147,17 @@ static int __init sg2_pcmcia_init(void)
 	gpio_direction_output(SG2_S0_BUFF_CTL, 0);
 	gpio_direction_output(SG2_S0_POWER_CTL, 1);
 	gpio_direction_output(SG2_S0_GPIO_RESET, 1);
+=======
+	ret = gpio_request_array(sg2_pcmcia_gpios, ARRAY_SIZE(sg2_pcmcia_gpios));
+	if (ret)
+		goto error_put_platform_device;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	ret = platform_device_add_data(sg2_pcmcia_device,
 				       &sg2_pcmcia_ops,
 				       sizeof(sg2_pcmcia_ops));
 	if (ret)
+<<<<<<< HEAD
 		goto error_free_gpio_reset;
 
 	ret = platform_device_add(sg2_pcmcia_device);
@@ -153,6 +171,17 @@ error_free_gpio_power_ctl:
 	gpio_free(SG2_S0_POWER_CTL);
 error_free_gpio_buff_ctl:
 	gpio_free(SG2_S0_BUFF_CTL);
+=======
+		goto error_free_gpios;
+
+	ret = platform_device_add(sg2_pcmcia_device);
+	if (ret)
+		goto error_free_gpios;
+
+	return 0;
+error_free_gpios:
+	gpio_free_array(sg2_pcmcia_gpios, ARRAY_SIZE(sg2_pcmcia_gpios));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 error_put_platform_device:
 	platform_device_put(sg2_pcmcia_device);
 
@@ -162,9 +191,13 @@ error_put_platform_device:
 static void __exit sg2_pcmcia_exit(void)
 {
 	platform_device_unregister(sg2_pcmcia_device);
+<<<<<<< HEAD
 	gpio_free(SG2_S0_BUFF_CTL);
 	gpio_free(SG2_S0_POWER_CTL);
 	gpio_free(SG2_S0_GPIO_RESET);
+=======
+	gpio_free_array(sg2_pcmcia_gpios, ARRAY_SIZE(sg2_pcmcia_gpios));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 fs_initcall(sg2_pcmcia_init);

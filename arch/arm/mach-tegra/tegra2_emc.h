@@ -22,6 +22,25 @@ struct tegra_emc_table {
 	u32 regs[TEGRA_EMC_NUM_REGS];
 };
 
+<<<<<<< HEAD
 int tegra_emc_set_rate(unsigned long rate);
 long tegra_emc_round_rate(unsigned long rate);
 void tegra_init_emc(const struct tegra_emc_table *table, int table_size);
+=======
+struct tegra_emc_chip {
+	const char *description;
+	int mem_manufacturer_id; /* LPDDR2 MR5 or -1 to ignore */
+	int mem_revision_id1;    /* LPDDR2 MR6 or -1 to ignore */
+	int mem_revision_id2;    /* LPDDR2 MR7 or -1 to ignore */
+	int mem_pid;             /* LPDDR2 MR8 or -1 to ignore */
+
+	const struct tegra_emc_table *table;
+	int table_size;
+};
+
+#ifdef CONFIG_MACH_N1
+void tegra_init_emc(const struct tegra_emc_table *table, int table_size);
+#else
+void tegra_init_emc(const struct tegra_emc_chip *chips, int chips_size);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

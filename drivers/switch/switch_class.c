@@ -2,6 +2,10 @@
  *  drivers/switch/switch_class.c
  *
  * Copyright (C) 2008 Google, Inc.
+<<<<<<< HEAD
+=======
+ * Copyright (C) 2012 - NVIDIA, Inc.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Author: Mike Lockwood <lockwood@android.com>
  *
  * This software is licensed under the terms of the GNU General Public
@@ -22,7 +26,10 @@
 #include <linux/fs.h>
 #include <linux/err.h>
 #include <linux/switch.h>
+<<<<<<< HEAD
 #include <linux/hrtimer.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct class *switch_class;
 static atomic_t device_count;
@@ -62,9 +69,14 @@ void switch_set_state(struct switch_dev *sdev, int state)
 {
 	char name_buf[120];
 	char state_buf[120];
+<<<<<<< HEAD
 	char timestamp_buf[120];
 	char *prop_buf;
 	char *envp[4];
+=======
+	char *prop_buf;
+	char *envp[3];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int env_offset = 0;
 	int length;
 
@@ -89,9 +101,12 @@ void switch_set_state(struct switch_dev *sdev, int state)
 					"SWITCH_STATE=%s", prop_buf);
 				envp[env_offset++] = state_buf;
 			}
+<<<<<<< HEAD
 			snprintf(timestamp_buf, sizeof(timestamp_buf),
 				 "SWITCH_TIME=%llu", ktime_to_ns(ktime_get()));
 			envp[env_offset++] = timestamp_buf;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			envp[env_offset] = NULL;
 			kobject_uevent_env(&sdev->dev->kobj, KOBJ_CHANGE, envp);
 			free_page((unsigned long)prop_buf);
@@ -156,8 +171,13 @@ void switch_dev_unregister(struct switch_dev *sdev)
 {
 	device_remove_file(sdev->dev, &dev_attr_name);
 	device_remove_file(sdev->dev, &dev_attr_state);
+<<<<<<< HEAD
 	device_destroy(switch_class, MKDEV(0, sdev->index));
 	dev_set_drvdata(sdev->dev, NULL);
+=======
+	dev_set_drvdata(sdev->dev, NULL);
+	device_destroy(switch_class, MKDEV(0, sdev->index));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 EXPORT_SYMBOL_GPL(switch_dev_unregister);
 

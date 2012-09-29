@@ -109,13 +109,17 @@ extern struct iwl_cfg iwl135_bg_cfg;
 extern struct iwl_cfg iwl135_bgn_cfg;
 
 extern struct iwl_mod_params iwlagn_mod_params;
+<<<<<<< HEAD
 extern struct iwl_hcmd_ops iwlagn_hcmd;
 extern struct iwl_hcmd_ops iwlagn_bt_hcmd;
 extern struct iwl_hcmd_utils_ops iwlagn_hcmd_utils;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 extern struct ieee80211_ops iwlagn_hw_ops;
 
 int iwl_reset_ict(struct iwl_priv *priv);
+<<<<<<< HEAD
 void iwl_disable_ict(struct iwl_priv *priv);
 int iwl_alloc_isr_ict(struct iwl_priv *priv);
 void iwl_free_isr_ict(struct iwl_priv *priv);
@@ -141,10 +145,26 @@ void iwlagn_tx_queue_set_status(struct iwl_priv *priv,
 			     struct iwl_tx_queue *txq,
 			     int tx_fifo_id, int scd_retry);
 void iwlagn_txq_set_sched(struct iwl_priv *priv, u32 mask);
+=======
+
+static inline void iwl_set_calib_hdr(struct iwl_calib_hdr *hdr, u8 cmd)
+{
+	hdr->op_code = cmd;
+	hdr->first_group = 0;
+	hdr->groups_num = 1;
+	hdr->data_valid = 1;
+}
+
+/* tx queue */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void iwl_free_tfds_in_queue(struct iwl_priv *priv,
 			    int sta_id, int tid, int freed);
 
 /* RXON */
+<<<<<<< HEAD
+=======
+int iwlagn_set_pan_params(struct iwl_priv *priv);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int iwlagn_commit_rxon(struct iwl_priv *priv, struct iwl_rxon_context *ctx);
 void iwlagn_set_rxon_chain(struct iwl_priv *priv, struct iwl_rxon_context *ctx);
 int iwlagn_mac_config(struct ieee80211_hw *hw, u32 changed);
@@ -163,17 +183,25 @@ void iwlagn_send_prio_tbl(struct iwl_priv *priv);
 int iwlagn_run_init_ucode(struct iwl_priv *priv);
 int iwlagn_load_ucode_wait_alive(struct iwl_priv *priv,
 				 struct fw_img *image,
+<<<<<<< HEAD
 				 int subtype, int alternate_subtype);
+=======
+				 enum iwlagn_ucode_type ucode_type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* lib */
 void iwl_check_abort_status(struct iwl_priv *priv,
 			    u8 frame_count, u32 status);
+<<<<<<< HEAD
 void iwlagn_rx_handler_setup(struct iwl_priv *priv);
 void iwlagn_setup_deferred_work(struct iwl_priv *priv);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int iwlagn_hw_valid_rtc_data_addr(u32 addr);
 int iwlagn_send_tx_power(struct iwl_priv *priv);
 void iwlagn_temperature(struct iwl_priv *priv);
 u16 iwlagn_eeprom_calib_version(struct iwl_priv *priv);
+<<<<<<< HEAD
 const u8 *iwlagn_eeprom_query_addr(const struct iwl_priv *priv,
 				   size_t offset);
 void iwlagn_rx_queue_reset(struct iwl_priv *priv, struct iwl_rx_queue *rxq);
@@ -198,6 +226,22 @@ void iwlagn_txq_free_tfd(struct iwl_priv *priv, struct iwl_tx_queue *txq);
 int iwlagn_txq_attach_buf_to_tfd(struct iwl_priv *priv,
 				 struct iwl_tx_queue *txq,
 				 dma_addr_t addr, u16 len, u8 reset);
+=======
+int iwlagn_wait_tx_queue_empty(struct iwl_priv *priv);
+int iwlagn_txfifo_flush(struct iwl_priv *priv, u16 flush_control);
+void iwlagn_dev_txfifo_flush(struct iwl_priv *priv, u16 flush_control);
+int iwlagn_send_beacon_cmd(struct iwl_priv *priv);
+
+/* rx */
+int iwlagn_hwrate_to_mac80211_idx(u32 rate_n_flags, enum ieee80211_band band);
+void iwl_setup_rx_handlers(struct iwl_priv *priv);
+void iwl_rx_dispatch(struct iwl_priv *priv, struct iwl_rx_mem_buffer *rxb);
+
+
+/* tx */
+void iwlagn_txq_free_tfd(struct iwl_priv *priv, struct iwl_tx_queue *txq,
+				int index);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void iwlagn_hwrate_to_tx_control(struct iwl_priv *priv, u32 rate_n_flags,
 			      struct ieee80211_tx_info *info);
 int iwlagn_tx_skb(struct iwl_priv *priv, struct sk_buff *skb);
@@ -205,18 +249,26 @@ int iwlagn_tx_agg_start(struct iwl_priv *priv, struct ieee80211_vif *vif,
 			struct ieee80211_sta *sta, u16 tid, u16 *ssn);
 int iwlagn_tx_agg_stop(struct iwl_priv *priv, struct ieee80211_vif *vif,
 		       struct ieee80211_sta *sta, u16 tid);
+<<<<<<< HEAD
 void iwlagn_txq_agg_queue_setup(struct iwl_priv *priv,
 				struct ieee80211_sta *sta,
 				int tid, int frame_limit);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int iwlagn_txq_check_empty(struct iwl_priv *priv,
 			   int sta_id, u8 tid, int txq_id);
 void iwlagn_rx_reply_compressed_ba(struct iwl_priv *priv,
 				struct iwl_rx_mem_buffer *rxb);
+<<<<<<< HEAD
 int iwlagn_tx_queue_reclaim(struct iwl_priv *priv, int txq_id, int index);
 void iwlagn_hw_txq_ctx_free(struct iwl_priv *priv);
 int iwlagn_txq_ctx_alloc(struct iwl_priv *priv);
 void iwlagn_txq_ctx_reset(struct iwl_priv *priv);
 void iwlagn_txq_ctx_stop(struct iwl_priv *priv);
+=======
+void iwlagn_rx_reply_tx(struct iwl_priv *priv, struct iwl_rx_mem_buffer *rxb);
+int iwlagn_tx_queue_reclaim(struct iwl_priv *priv, int txq_id, int index);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline u32 iwl_tx_status_to_mac80211(u32 status)
 {
@@ -251,10 +303,13 @@ void iwlagn_post_scan(struct iwl_priv *priv);
 int iwlagn_manage_ibss_station(struct iwl_priv *priv,
 			       struct ieee80211_vif *vif, bool add);
 
+<<<<<<< HEAD
 /* hcmd */
 int iwlagn_send_tx_ant_config(struct iwl_priv *priv, u8 valid_tx_ant);
 int iwlagn_send_beacon_cmd(struct iwl_priv *priv);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* bt coex */
 void iwlagn_send_advance_bt_config(struct iwl_priv *priv);
 void iwlagn_bt_coex_profile_notif(struct iwl_priv *priv,
@@ -262,6 +317,11 @@ void iwlagn_bt_coex_profile_notif(struct iwl_priv *priv,
 void iwlagn_bt_rx_handler_setup(struct iwl_priv *priv);
 void iwlagn_bt_setup_deferred_work(struct iwl_priv *priv);
 void iwlagn_bt_cancel_deferred_work(struct iwl_priv *priv);
+<<<<<<< HEAD
+=======
+void iwlagn_bt_coex_rssi_monitor(struct iwl_priv *priv);
+void iwlagn_bt_adjust_rssi_monitor(struct iwl_priv *priv, bool rssi_ena);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_IWLWIFI_DEBUG
 const char *iwl_get_tx_fail_reason(u32 status);
@@ -285,11 +345,21 @@ int iwl_set_default_wep_key(struct iwl_priv *priv,
 int iwl_restore_default_wep_keys(struct iwl_priv *priv,
 				 struct iwl_rxon_context *ctx);
 int iwl_set_dynamic_key(struct iwl_priv *priv, struct iwl_rxon_context *ctx,
+<<<<<<< HEAD
 			struct ieee80211_key_conf *key, u8 sta_id);
 int iwl_remove_dynamic_key(struct iwl_priv *priv, struct iwl_rxon_context *ctx,
 			   struct ieee80211_key_conf *key, u8 sta_id);
 void iwl_update_tkip_key(struct iwl_priv *priv,
 			 struct iwl_rxon_context *ctx,
+=======
+			struct ieee80211_key_conf *key,
+			struct ieee80211_sta *sta);
+int iwl_remove_dynamic_key(struct iwl_priv *priv, struct iwl_rxon_context *ctx,
+			   struct ieee80211_key_conf *key,
+			   struct ieee80211_sta *sta);
+void iwl_update_tkip_key(struct iwl_priv *priv,
+			 struct ieee80211_vif *vif,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			 struct ieee80211_key_conf *keyconf,
 			 struct ieee80211_sta *sta, u32 iv32, u16 *phase1key);
 int iwl_sta_tx_modify_enable_tid(struct iwl_priv *priv, int sta_id, int tid);
@@ -298,6 +368,11 @@ int iwl_sta_rx_agg_start(struct iwl_priv *priv, struct ieee80211_sta *sta,
 int iwl_sta_rx_agg_stop(struct iwl_priv *priv, struct ieee80211_sta *sta,
 			int tid);
 void iwl_sta_modify_sleep_tx_count(struct iwl_priv *priv, int sta_id, int cnt);
+<<<<<<< HEAD
+=======
+int iwl_update_bcast_station(struct iwl_priv *priv,
+			     struct iwl_rxon_context *ctx);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int iwl_update_bcast_stations(struct iwl_priv *priv);
 void iwlagn_mac_sta_notify(struct ieee80211_hw *hw,
 			   struct ieee80211_vif *vif,
@@ -345,6 +420,12 @@ extern int iwl_alive_start(struct iwl_priv *priv);
 /* svtool */
 #ifdef CONFIG_IWLWIFI_DEVICE_SVTOOL
 extern int iwl_testmode_cmd(struct ieee80211_hw *hw, void *data, int len);
+<<<<<<< HEAD
+=======
+extern int iwl_testmode_dump(struct ieee80211_hw *hw, struct sk_buff *skb,
+			     struct netlink_callback *cb,
+			     void *data, int len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern void iwl_testmode_init(struct iwl_priv *priv);
 extern void iwl_testmode_cleanup(struct iwl_priv *priv);
 #else
@@ -354,6 +435,16 @@ int iwl_testmode_cmd(struct ieee80211_hw *hw, void *data, int len)
 	return -ENOSYS;
 }
 static inline
+<<<<<<< HEAD
+=======
+int iwl_testmode_dump(struct ieee80211_hw *hw, struct sk_buff *skb,
+		      struct netlink_callback *cb,
+		      void *data, int len)
+{
+	return -ENOSYS;
+}
+static inline
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void iwl_testmode_init(struct iwl_priv *priv)
 {
 }

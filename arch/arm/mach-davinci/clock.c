@@ -44,7 +44,11 @@ static void __clk_enable(struct clk *clk)
 		__clk_enable(clk->parent);
 	if (clk->usecount++ == 0 && (clk->flags & CLK_PSC))
 		davinci_psc_config(psc_domain(clk), clk->gpsc, clk->lpsc,
+<<<<<<< HEAD
 				PSC_STATE_ENABLE);
+=======
+				true, clk->flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void __clk_disable(struct clk *clk)
@@ -54,8 +58,12 @@ static void __clk_disable(struct clk *clk)
 	if (--clk->usecount == 0 && !(clk->flags & CLK_PLL) &&
 	    (clk->flags & CLK_PSC))
 		davinci_psc_config(psc_domain(clk), clk->gpsc, clk->lpsc,
+<<<<<<< HEAD
 				(clk->flags & PSC_SWRSTDISABLE) ?
 				PSC_STATE_SWRSTDISABLE : PSC_STATE_DISABLE);
+=======
+				false, clk->flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (clk->parent)
 		__clk_disable(clk->parent);
 }
@@ -239,8 +247,12 @@ static int __init clk_disable_unused(void)
 		pr_debug("Clocks: disable unused %s\n", ck->name);
 
 		davinci_psc_config(psc_domain(ck), ck->gpsc, ck->lpsc,
+<<<<<<< HEAD
 				(ck->flags & PSC_SWRSTDISABLE) ?
 				PSC_STATE_SWRSTDISABLE : PSC_STATE_DISABLE);
+=======
+				false, ck->flags);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	spin_unlock_irq(&clockfw_lock);
 
@@ -368,6 +380,15 @@ static unsigned long clk_leafclk_recalc(struct clk *clk)
 	return clk->parent->rate;
 }
 
+<<<<<<< HEAD
+=======
+int davinci_simple_set_rate(struct clk *clk, unsigned long rate)
+{
+	clk->rate = rate;
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static unsigned long clk_pllclk_recalc(struct clk *clk)
 {
 	u32 ctrl, mult = 1, prediv = 1, postdiv = 1;
@@ -506,6 +527,41 @@ int davinci_set_pllrate(struct pll_data *pll, unsigned int prediv,
 }
 EXPORT_SYMBOL(davinci_set_pllrate);
 
+<<<<<<< HEAD
+=======
+/**
+ * davinci_set_refclk_rate() - Set the reference clock rate
+ * @rate:	The new rate.
+ *
+ * Sets the reference clock rate to a given value. This will most likely
+ * result in the entire clock tree getting updated.
+ *
+ * This is used to support boards which use a reference clock different
+ * than that used by default in <soc>.c file. The reference clock rate
+ * should be updated early in the boot process; ideally soon after the
+ * clock tree has been initialized once with the default reference clock
+ * rate (davinci_common_init()).
+ *
+ * Returns 0 on success, error otherwise.
+ */
+int davinci_set_refclk_rate(unsigned long rate)
+{
+	struct clk *refclk;
+
+	refclk = clk_get(NULL, "ref");
+	if (IS_ERR(refclk)) {
+		pr_err("%s: failed to get reference clock.\n", __func__);
+		return PTR_ERR(refclk);
+	}
+
+	clk_set_rate(refclk, rate);
+
+	clk_put(refclk);
+
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int __init davinci_clk_init(struct clk_lookup *clocks)
   {
 	struct clk_lookup *c;

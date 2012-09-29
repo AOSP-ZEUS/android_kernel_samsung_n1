@@ -51,7 +51,11 @@ static int __init walnut_probe(void)
 	if (!of_flat_dt_is_compatible(root, "ibm,walnut"))
 		return 0;
 
+<<<<<<< HEAD
 	ppc_pci_flags = PPC_PCI_REASSIGN_ALL_RSRC;
+=======
+	pci_set_flags(PCI_REASSIGN_ALL_RSRC);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return 1;
 }

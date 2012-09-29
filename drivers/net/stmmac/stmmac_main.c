@@ -49,7 +49,10 @@
 #include "stmmac.h"
 
 #define STMMAC_RESOURCE_NAME	"stmmaceth"
+<<<<<<< HEAD
 #define PHY_RESOURCE_NAME	"stmmacphy"
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #undef STMMAC_DEBUG
 /*#define STMMAC_DEBUG*/
@@ -305,6 +308,7 @@ static int stmmac_init_phy(struct net_device *dev)
 	priv->speed = 0;
 	priv->oldduplex = -1;
 
+<<<<<<< HEAD
 	if (priv->phy_addr == -1) {
 		/* We don't have a PHY, so do nothing */
 		return 0;
@@ -317,6 +321,15 @@ static int stmmac_init_phy(struct net_device *dev)
 
 	phydev = phy_connect(dev, phy_id, &stmmac_adjust_link, 0,
 			priv->phy_interface);
+=======
+	snprintf(bus_id, MII_BUS_ID_SIZE, "%x", priv->plat->bus_id);
+	snprintf(phy_id, MII_BUS_ID_SIZE + 3, PHY_ID_FMT, bus_id,
+		 priv->plat->phy_addr);
+	pr_debug("stmmac_init_phy:  trying to attach to %s\n", phy_id);
+
+	phydev = phy_connect(dev, phy_id, &stmmac_adjust_link, 0,
+			     priv->plat->interface);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (IS_ERR(phydev)) {
 		pr_err("%s: Could not attach to PHY\n", dev->name);
@@ -335,7 +348,11 @@ static int stmmac_init_phy(struct net_device *dev)
 		return -ENODEV;
 	}
 	pr_debug("stmmac_init_phy:  %s: attached to PHY (UID 0x%x)"
+<<<<<<< HEAD
 	       " Link = %d\n", dev->name, phydev->phy_id, phydev->link);
+=======
+		 " Link = %d\n", dev->name, phydev->phy_id, phydev->link);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	priv->phydev = phydev;
 
@@ -557,9 +574,17 @@ static void free_dma_desc_resources(struct stmmac_priv *priv)
  */
 static void stmmac_dma_operation_mode(struct stmmac_priv *priv)
 {
+<<<<<<< HEAD
 	if (likely((priv->plat->tx_coe) && (!priv->no_csum_insertion))) {
 		/* In case of GMAC, SF mode has to be enabled
 		 * to perform the TX COE. This depends on:
+=======
+	if (likely(priv->plat->force_sf_dma_mode ||
+		((priv->plat->tx_coe) && (!priv->no_csum_insertion)))) {
+		/*
+		 * In case of GMAC, SF mode can be enabled
+		 * to perform the TX COE in HW. This depends on:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 * 1) TX COE if actually supported
 		 * 2) There is no bugged Jumbo frame support
 		 *    that needs to not insert csum in the TDES.
@@ -1045,6 +1070,10 @@ static netdev_tx_t stmmac_xmit(struct sk_buff *skb, struct net_device *dev)
 					  len, DMA_TO_DEVICE);
 		priv->tx_skbuff[entry] = NULL;
 		priv->hw->desc->prepare_tx_desc(desc, 0, len, csum_insertion);
+<<<<<<< HEAD
+=======
+		wmb();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		priv->hw->desc->set_tx_owner(desc);
 	}
 
@@ -1056,6 +1085,12 @@ static netdev_tx_t stmmac_xmit(struct sk_buff *skb, struct net_device *dev)
 	if (likely(priv->tm->enable))
 		priv->hw->desc->clear_tx_ic(desc);
 #endif
+<<<<<<< HEAD
+=======
+
+	wmb();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* To avoid raise condition */
 	priv->hw->desc->set_tx_owner(first);
 
@@ -1079,6 +1114,11 @@ static netdev_tx_t stmmac_xmit(struct sk_buff *skb, struct net_device *dev)
 
 	dev->stats.tx_bytes += skb->len;
 
+<<<<<<< HEAD
+=======
+	skb_tx_timestamp(skb);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	priv->hw->dma->enable_dma_transmission(priv->ioaddr);
 
 	return NETDEV_TX_OK;
@@ -1116,6 +1156,10 @@ static inline void stmmac_rx_refill(struct stmmac_priv *priv)
 			}
 			RX_DBG(KERN_INFO "\trefill entry #%d\n", entry);
 		}
+<<<<<<< HEAD
+=======
+		wmb();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		priv->hw->desc->set_rx_owner(p + entry);
 	}
 }
@@ -1412,6 +1456,7 @@ static int stmmac_ioctl(struct net_device *dev, struct ifreq *rq, int cmd)
 	return ret;
 }
 
+<<<<<<< HEAD
 #ifdef STMMAC_VLAN_TAG_USED
 static void stmmac_vlan_rx_register(struct net_device *dev,
 				    struct vlan_group *grp)
@@ -1426,6 +1471,8 @@ static void stmmac_vlan_rx_register(struct net_device *dev,
 }
 #endif
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static const struct net_device_ops stmmac_netdev_ops = {
 	.ndo_open = stmmac_open,
 	.ndo_start_xmit = stmmac_xmit,
@@ -1436,9 +1483,12 @@ static const struct net_device_ops stmmac_netdev_ops = {
 	.ndo_tx_timeout = stmmac_tx_timeout,
 	.ndo_do_ioctl = stmmac_ioctl,
 	.ndo_set_config = stmmac_config,
+<<<<<<< HEAD
 #ifdef STMMAC_VLAN_TAG_USED
 	.ndo_vlan_rx_register = stmmac_vlan_rx_register,
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_NET_POLL_CONTROLLER
 	.ndo_poll_controller = stmmac_poll_controller,
 #endif
@@ -1536,6 +1586,7 @@ static int stmmac_mac_device_setup(struct net_device *dev)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int stmmacphy_dvr_probe(struct platform_device *pdev)
 {
 	struct plat_stmmacphy_data *plat_dat = pdev->dev.platform_data;
@@ -1601,6 +1652,8 @@ static int stmmac_associate_phy(struct device *dev, void *data)
 	return 1;	/* forces exit of driver_for_each_device() */
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /**
  * stmmac_dvr_probe
  * @pdev: platform device pointer
@@ -1691,6 +1744,7 @@ static int stmmac_dvr_probe(struct platform_device *pdev)
 	if (ret < 0)
 		goto out_plat_exit;
 
+<<<<<<< HEAD
 	/* associate a PHY - it is provided by another platform bus */
 	if (!driver_for_each_device
 	    (&(stmmacphy_driver.driver), NULL, (void *)priv,
@@ -1699,6 +1753,12 @@ static int stmmac_dvr_probe(struct platform_device *pdev)
 		ret = -ENODEV;
 		goto out_unregister;
 	}
+=======
+	/* Override with kernel parameters if supplied XXX CRS XXX
+	 * this needs to have multiple instances */
+	if ((phyaddr >= 0) && (phyaddr <= 31))
+		priv->plat->phy_addr = phyaddr;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	pr_info("\t%s - (dev. name: %s - id: %d, IRQ #%d\n"
 	       "\tIO base addr: 0x%p)\n", ndev->name, pdev->name,
@@ -1898,11 +1958,14 @@ static int __init stmmac_init_module(void)
 {
 	int ret;
 
+<<<<<<< HEAD
 	if (platform_driver_register(&stmmacphy_driver)) {
 		pr_err("No PHY devices registered!\n");
 		return -ENODEV;
 	}
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ret = platform_driver_register(&stmmac_driver);
 	return ret;
 }
@@ -1913,7 +1976,10 @@ static int __init stmmac_init_module(void)
  */
 static void __exit stmmac_cleanup_module(void)
 {
+<<<<<<< HEAD
 	platform_driver_unregister(&stmmacphy_driver);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	platform_driver_unregister(&stmmac_driver);
 }
 
@@ -1925,6 +1991,7 @@ static int __init stmmac_cmdline_opt(char *str)
 	if (!str || !*str)
 		return -EINVAL;
 	while ((opt = strsep(&str, ",")) != NULL) {
+<<<<<<< HEAD
 		if (!strncmp(opt, "debug:", 6))
 			strict_strtoul(opt + 6, 0, (unsigned long *)&debug);
 		else if (!strncmp(opt, "phyaddr:", 8))
@@ -1952,6 +2019,54 @@ static int __init stmmac_cmdline_opt(char *str)
 #endif
 	}
 	return 0;
+=======
+		if (!strncmp(opt, "debug:", 6)) {
+			if (strict_strtoul(opt + 6, 0, (unsigned long *)&debug))
+				goto err;
+		} else if (!strncmp(opt, "phyaddr:", 8)) {
+			if (strict_strtoul(opt + 8, 0,
+					   (unsigned long *)&phyaddr))
+				goto err;
+		} else if (!strncmp(opt, "dma_txsize:", 11)) {
+			if (strict_strtoul(opt + 11, 0,
+					   (unsigned long *)&dma_txsize))
+				goto err;
+		} else if (!strncmp(opt, "dma_rxsize:", 11)) {
+			if (strict_strtoul(opt + 11, 0,
+					   (unsigned long *)&dma_rxsize))
+				goto err;
+		} else if (!strncmp(opt, "buf_sz:", 7)) {
+			if (strict_strtoul(opt + 7, 0,
+					   (unsigned long *)&buf_sz))
+				goto err;
+		} else if (!strncmp(opt, "tc:", 3)) {
+			if (strict_strtoul(opt + 3, 0, (unsigned long *)&tc))
+				goto err;
+		} else if (!strncmp(opt, "watchdog:", 9)) {
+			if (strict_strtoul(opt + 9, 0,
+					   (unsigned long *)&watchdog))
+				goto err;
+		} else if (!strncmp(opt, "flow_ctrl:", 10)) {
+			if (strict_strtoul(opt + 10, 0,
+					   (unsigned long *)&flow_ctrl))
+				goto err;
+		} else if (!strncmp(opt, "pause:", 6)) {
+			if (strict_strtoul(opt + 6, 0, (unsigned long *)&pause))
+				goto err;
+#ifdef CONFIG_STMMAC_TIMER
+		} else if (!strncmp(opt, "tmrate:", 7)) {
+			if (strict_strtoul(opt + 7, 0,
+					   (unsigned long *)&tmrate))
+				goto err;
+#endif
+		}
+	}
+	return 0;
+
+err:
+	pr_err("%s: ERROR broken module parameter conversion", __func__);
+	return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 __setup("stmmaceth=", stmmac_cmdline_opt);

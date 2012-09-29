@@ -425,7 +425,11 @@ static struct snd_soc_dai_link neo1973_dai[] = {
 	.platform_name = "samsung-audio",
 	.cpu_dai_name = "s3c24xx-iis",
 	.codec_dai_name = "wm8753-hifi",
+<<<<<<< HEAD
 	.codec_name = "wm8753.0-001a",
+=======
+	.codec_name = "wm8753-codec.0-001a",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.init = neo1973_wm8753_init,
 	.ops = &neo1973_hifi_ops,
 },
@@ -434,7 +438,11 @@ static struct snd_soc_dai_link neo1973_dai[] = {
 	.stream_name = "Voice",
 	.cpu_dai_name = "dfbmcs320-pcm",
 	.codec_dai_name = "wm8753-voice",
+<<<<<<< HEAD
 	.codec_name = "wm8753.0-001a",
+=======
+	.codec_name = "wm8753-codec.0-001a",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.ops = &neo1973_voice_ops,
 },
 };

@@ -51,4 +51,8 @@ struct mmc_ioc_cmd {
  * block device operations.
  */
 #define MMC_IOC_MAX_BYTES  (512L * 256)
+<<<<<<< HEAD
 #endif  /* LINUX_MMC_IOCTL_H */
+=======
+#endif /* LINUX_MMC_IOCTL_H */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -384,6 +384,7 @@ acpi_status acpi_ds_get_region_arguments(union acpi_operand_object *obj_desc)
 
 	/* Execute the argument AML */
 
+<<<<<<< HEAD
 	status = acpi_ds_execute_arguments(node, extra_desc->extra.scope_node,
 					   extra_desc->extra.aml_length,
 					   extra_desc->extra.aml_start);
@@ -411,5 +412,10 @@ acpi_status acpi_ds_get_region_arguments(union acpi_operand_object *obj_desc)
 		status = AE_OK;
 	}
 
+=======
+	status = acpi_ds_execute_arguments(node, node->parent,
+					   extra_desc->extra.aml_length,
+					   extra_desc->extra.aml_start);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return_ACPI_STATUS(status);
 }

@@ -430,8 +430,13 @@ void tcp_v4_err(struct sk_buff *icmp_skb, u32 info)
 			break;
 
 		icsk->icsk_backoff--;
+<<<<<<< HEAD
 		inet_csk(sk)->icsk_rto = __tcp_set_rto(tp) <<
 					 icsk->icsk_backoff;
+=======
+		inet_csk(sk)->icsk_rto = (tp->srtt ? __tcp_set_rto(tp) :
+			TCP_TIMEOUT_INIT) << icsk->icsk_backoff;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tcp_bound_rto(sk);
 
 		skb = tcp_write_queue_head(sk);
@@ -650,11 +655,14 @@ static void tcp_v4_send_reset(struct sock *sk, struct sk_buff *skb)
 				      arg.iov[0].iov_len, IPPROTO_TCP, 0);
 	arg.csumoffset = offsetof(struct tcphdr, check) / 2;
 	arg.flags = (sk && inet_sk(sk)->transparent) ? IP_REPLY_ARG_NOSRCCHECK : 0;
+<<<<<<< HEAD
 	/* When socket is gone, all binding information is lost.
 	 * routing might fail in this case. using iif for oif to
 	 * make sure we can deliver it
 	 */
 	arg.bound_dev_if = sk ? sk->sk_bound_dev_if : inet_iif(skb);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	net = dev_net(skb_dst(skb)->dev);
 	ip_send_reply(net->ipv4.tcp_sock, skb, ip_hdr(skb)->saddr,
@@ -813,6 +821,7 @@ static void tcp_v4_reqsk_destructor(struct request_sock *req)
 	kfree(inet_rsk(req)->opt);
 }
 
+<<<<<<< HEAD
 static void syn_flood_warning(const struct sk_buff *skb)
 {
 	const char *msg;
@@ -827,6 +836,40 @@ static void syn_flood_warning(const struct sk_buff *skb)
 	pr_info("TCP: Possible SYN flooding on port %d. %s.\n",
 				ntohs(tcp_hdr(skb)->dest), msg);
 }
+=======
+/*
+ * Return 1 if a syncookie should be sent
+ */
+int tcp_syn_flood_action(struct sock *sk,
+			 const struct sk_buff *skb,
+			 const char *proto)
+{
+	const char *msg = "Dropping request";
+	int want_cookie = 0;
+	struct listen_sock *lopt;
+
+
+
+#ifdef CONFIG_SYN_COOKIES
+	if (sysctl_tcp_syncookies) {
+		msg = "Sending cookies";
+		want_cookie = 1;
+		NET_INC_STATS_BH(sock_net(sk), LINUX_MIB_TCPREQQFULLDOCOOKIES);
+	} else
+#endif
+		NET_INC_STATS_BH(sock_net(sk), LINUX_MIB_TCPREQQFULLDROP);
+
+	lopt = inet_csk(sk)->icsk_accept_queue.listen_opt;
+	if (!lopt->synflood_warned) {
+		lopt->synflood_warned = 1;
+		pr_info("%s: Possible SYN flooding on port %d. %s. "
+			" Check SNMP counters.\n",
+			proto, ntohs(tcp_hdr(skb)->dest), msg);
+	}
+	return want_cookie;
+}
+EXPORT_SYMBOL(tcp_syn_flood_action);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Save and compile IPv4 options into the request_sock if needed.
@@ -1243,11 +1286,15 @@ int tcp_v4_conn_request(struct sock *sk, struct sk_buff *skb)
 	__be32 saddr = ip_hdr(skb)->saddr;
 	__be32 daddr = ip_hdr(skb)->daddr;
 	__u32 isn = TCP_SKB_CB(skb)->when;
+<<<<<<< HEAD
 #ifdef CONFIG_SYN_COOKIES
 	int want_cookie = 0;
 #else
 #define want_cookie 0 /* Argh, why doesn't gcc optimize this :( */
 #endif
+=======
+	int want_cookie = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Never answer to SYNs send to broadcast or multicast */
 	if (skb_rtable(skb)->rt_flags & (RTCF_BROADCAST | RTCF_MULTICAST))
@@ -1258,6 +1305,7 @@ int tcp_v4_conn_request(struct sock *sk, struct sk_buff *skb)
 	 * evidently real one.
 	 */
 	if (inet_csk_reqsk_queue_is_full(sk) && !isn) {
+<<<<<<< HEAD
 		if (net_ratelimit())
 			syn_flood_warning(skb);
 #ifdef CONFIG_SYN_COOKIES
@@ -1266,6 +1314,11 @@ int tcp_v4_conn_request(struct sock *sk, struct sk_buff *skb)
 		} else
 #endif
 		goto drop;
+=======
+		want_cookie = tcp_syn_flood_action(sk, skb, "TCP");
+		if (!want_cookie)
+			goto drop;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	/* Accept backlog is full. If we have already queued enough
@@ -1311,9 +1364,13 @@ int tcp_v4_conn_request(struct sock *sk, struct sk_buff *skb)
 		while (l-- > 0)
 			*c++ ^= *hash_location++;
 
+<<<<<<< HEAD
 #ifdef CONFIG_SYN_COOKIES
 		want_cookie = 0;	/* not our kind of cookie */
 #endif
+=======
+		want_cookie = 0;	/* not our kind of cookie */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tmp_ext.cookie_out_never = 0; /* false */
 		tmp_ext.cookie_plus = tmp_opt.cookie_plus;
 	} else if (!tp->rx_opt.cookie_in_always) {
@@ -1393,6 +1450,10 @@ int tcp_v4_conn_request(struct sock *sk, struct sk_buff *skb)
 		isn = tcp_v4_init_sequence(skb);
 	}
 	tcp_rsk(req)->snt_isn = isn;
+<<<<<<< HEAD
+=======
+	tcp_rsk(req)->snt_synack = tcp_time_stamp;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (tcp_v4_send_synack(sk, dst, req,
 			       (struct request_values *)&tmp_ext) ||
@@ -1454,6 +1515,7 @@ struct sock *tcp_v4_syn_recv_sock(struct sock *sk, struct sk_buff *skb,
 		inet_csk(newsk)->icsk_ext_hdr_len = inet_opt->opt.optlen;
 	newinet->inet_id = newtp->write_seq ^ jiffies;
 
+<<<<<<< HEAD
 	if (!dst) {
 		dst = inet_csk_route_child_sock(sk, newsk, req);
 		if (!dst)
@@ -1461,6 +1523,11 @@ struct sock *tcp_v4_syn_recv_sock(struct sock *sk, struct sk_buff *skb,
 	} else {
 		/* syncookie case : see end of cookie_v4_check() */
 	}
+=======
+	if (!dst && (dst = inet_csk_route_child_sock(sk, newsk, req)) == NULL)
+		goto put_and_exit;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	sk_setup_caps(newsk, dst);
 
 	tcp_mtup_init(newsk);
@@ -1471,6 +1538,13 @@ struct sock *tcp_v4_syn_recv_sock(struct sock *sk, struct sk_buff *skb,
 		newtp->advmss = tcp_sk(sk)->rx_opt.user_mss;
 
 	tcp_initialize_rcv_mss(newsk);
+<<<<<<< HEAD
+=======
+	if (tcp_rsk(req)->snt_synack)
+		tcp_valid_rtt_meas(newsk,
+		    tcp_time_stamp - tcp_rsk(req)->snt_synack);
+	newtp->total_retrans = req->retrans;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #ifdef CONFIG_TCP_MD5SIG
 	/* Copy over the MD5 key from the original socket */
@@ -1868,7 +1942,11 @@ static int tcp_v4_init_sock(struct sock *sk)
 	 * algorithms that we must have the following bandaid to talk
 	 * efficiently to them.  -DaveM
 	 */
+<<<<<<< HEAD
 	tp->snd_cwnd = 2;
+=======
+	tp->snd_cwnd = TCP_INIT_CWND;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* See draft-stevens-tcpca-spec-01 for discussion of the
 	 * initialization of these values.

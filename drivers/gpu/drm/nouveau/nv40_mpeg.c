@@ -137,7 +137,11 @@ nv40_mpeg_init(struct drm_device *dev, int engine)
 }
 
 static int
+<<<<<<< HEAD
 nv40_mpeg_fini(struct drm_device *dev, int engine)
+=======
+nv40_mpeg_fini(struct drm_device *dev, int engine, bool suspend)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	/*XXX: context save? */
 	nv_mask(dev, 0x00b32c, 0x00000001, 0x00000000);

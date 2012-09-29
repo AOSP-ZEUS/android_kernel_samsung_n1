@@ -916,6 +916,7 @@ void pwc_dec23_decompress(const struct pwc_device *pwc,
 			pout_planar_v += pwc->view.x;
 
 		}
+<<<<<<< HEAD
 
 	}
 
@@ -940,3 +941,7 @@ int pwc_dec23_alloc(struct pwc_device *pwc)
 }
 
 /* vim: set cino= formatoptions=croql cindent shiftwidth=8 tabstop=8: */
+=======
+	}
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

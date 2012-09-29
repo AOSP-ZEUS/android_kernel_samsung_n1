@@ -554,6 +554,11 @@ static void __init alloc_init_section(pud_t *pud, unsigned long addr,
 				      const struct mem_type *type)
 {
 	pmd_t *pmd = pmd_offset(pud, addr);
+<<<<<<< HEAD
+=======
+	unsigned long pages_2m = 0, pages_4k = 0;
+	unsigned long stash_phys = phys;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/*
 	 * Try a section mapping - end, addr and phys must all be aligned
@@ -564,6 +569,11 @@ static void __init alloc_init_section(pud_t *pud, unsigned long addr,
 	if (((addr | end | phys) & ~SECTION_MASK) == 0) {
 		pmd_t *p = pmd;
 
+<<<<<<< HEAD
+=======
+		pages_2m = (end - addr) >> (PGDIR_SHIFT);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (addr & SECTION_SIZE)
 			pmd++;
 
@@ -574,12 +584,24 @@ static void __init alloc_init_section(pud_t *pud, unsigned long addr,
 
 		flush_pmd_entry(p);
 	} else {
+<<<<<<< HEAD
+=======
+		pages_4k = (end - addr) >> PAGE_SHIFT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		/*
 		 * No need to loop; pte's aren't interested in the
 		 * individual L1 entries.
 		 */
 		alloc_init_pte(pmd, addr, end, __phys_to_pfn(phys), type);
 	}
+<<<<<<< HEAD
+=======
+
+	if ((stash_phys >= PHYS_OFFSET) && (stash_phys < lowmem_limit)) {
+		update_page_count(PG_LEVEL_2M, pages_2m);
+		update_page_count(PG_LEVEL_4K, pages_4k);
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void alloc_init_pud(pgd_t *pgd, unsigned long addr, unsigned long end,
@@ -757,7 +779,11 @@ static int __init early_vmalloc(char *arg)
 }
 early_param("vmalloc", early_vmalloc);
 
+<<<<<<< HEAD
 static phys_addr_t lowmem_limit __initdata = 0;
+=======
+phys_addr_t lowmem_limit;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 void __init sanity_check_meminfo(void)
 {

@@ -2,7 +2,11 @@
  * arch/arm/mach-ep93xx/simone.c
  * Simplemachines Sim.One support.
  *
+<<<<<<< HEAD
  * Copyright (C) 2010 Ryan Mallon <ryan@bluewatersys.com>
+=======
+ * Copyright (C) 2010 Ryan Mallon
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Based on the 2.6.24.7 support:
  *   Copyright (C) 2009 Simplemachines
@@ -65,7 +69,11 @@ static void __init simone_init_machine(void)
 }
 
 MACHINE_START(SIM_ONE, "Simplemachines Sim.One Board")
+<<<<<<< HEAD
 /* Maintainer: Ryan Mallon <ryan@bluewatersys.com> */
+=======
+/* Maintainer: Ryan Mallon */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.boot_params	= EP93XX_SDCE0_PHYS_BASE + 0x100,
 	.map_io		= ep93xx_map_io,
 	.init_irq	= ep93xx_init_irq,

@@ -60,7 +60,11 @@ static ssize_t show_power(struct device *dev,
 	pci_bus_read_config_dword(f4->bus, PCI_DEVFN(PCI_SLOT(f4->devfn), 5),
 				  REG_TDP_RUNNING_AVERAGE, &val);
 	running_avg_capture = (val >> 4) & 0x3fffff;
+<<<<<<< HEAD
 	running_avg_capture = sign_extend32(running_avg_capture, 21);
+=======
+	running_avg_capture = sign_extend32(running_avg_capture, 22);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	running_avg_range = val & 0xf;
 
 	pci_bus_read_config_dword(f4->bus, PCI_DEVFN(PCI_SLOT(f4->devfn), 5),
@@ -122,6 +126,7 @@ static bool __devinit fam15h_power_is_internal_node0(struct pci_dev *f4)
 	return true;
 }
 
+<<<<<<< HEAD
 /*
  * Newer BKDG versions have an updated recommendation on how to properly
  * initialize the running average range (was: 0xE, now: 0x9). This avoids
@@ -157,6 +162,8 @@ static void __devinit tweak_runavg_range(struct pci_dev *pdev)
 		REG_TDP_RUNNING_AVERAGE, val);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __devinit fam15h_power_init_data(struct pci_dev *f4,
 					     struct fam15h_power_data *data)
 {
@@ -190,6 +197,7 @@ static int __devinit fam15h_power_probe(struct pci_dev *pdev,
 	struct device *dev;
 	int err;
 
+<<<<<<< HEAD
 	/*
 	 * though we ignore every other northbridge, we still have to
 	 * do the tweaking on _each_ node in MCM processors as the counters
@@ -197,6 +205,8 @@ static int __devinit fam15h_power_probe(struct pci_dev *pdev,
 	 */
 	tweak_runavg_range(pdev);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!fam15h_power_is_internal_node0(pdev)) {
 		err = -ENODEV;
 		goto exit;

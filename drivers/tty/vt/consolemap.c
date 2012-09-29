@@ -516,7 +516,10 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 	int err = 0, err1, i;
 	struct uni_pagedir *p, *q;
 
+<<<<<<< HEAD
 	/* Save original vc_unipagdir_loc in case we allocate a new one */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	p = (struct uni_pagedir *)*vc->vc_uni_pagedir_loc;
 	if (p->readonly) return -EIO;
 	
@@ -529,6 +532,7 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 		err1 = con_clear_unimap(vc, NULL);
 		if (err1) return err1;
 		
+<<<<<<< HEAD
 		/*
 		 * Since refcount was > 1, con_clear_unimap() allocated a
 		 * a new uni_pagedir for this vc.  Re: p != q
@@ -552,12 +556,22 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 					 * Found one, copy entry for unicode
 					 * l with fontpos value p2[k].
 					 */
+=======
+		q = (struct uni_pagedir *)*vc->vc_uni_pagedir_loc;
+		for (i = 0, l = 0; i < 32; i++)
+		if ((p1 = p->uni_pgdir[i]))
+			for (j = 0; j < 32; j++)
+			if ((p2 = p1[j]))
+				for (k = 0; k < 64; k++, l++)
+				if (p2[k] != 0xffff) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					err1 = con_insert_unipair(q, l, p2[k]);
 					if (err1) {
 						p->refcount++;
 						*vc->vc_uni_pagedir_loc = (unsigned long)p;
 						con_release_unimap(q);
 						kfree(q);
+<<<<<<< HEAD
 						return err1;
 					}
 				}
@@ -580,6 +594,15 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 	/*
 	 * Insert user specified unicode pairs into new table.
 	 */
+=======
+						return err1; 
+					}
+              			}
+              	p = q;
+	} else if (p == dflt)
+		dflt = NULL;
+	
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	while (ct--) {
 		unsigned short unicode, fontpos;
 		__get_user(unicode, &list->unicode);
@@ -589,14 +612,21 @@ int con_set_unimap(struct vc_data *vc, ushort ct, struct unipair __user *list)
 		list++;
 	}
 	
+<<<<<<< HEAD
 	/*
 	 * Merge with fontmaps of any other virtual consoles.
 	 */
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (con_unify_unimap(vc, p))
 		return err;
 
 	for (i = 0; i <= 3; i++)
+<<<<<<< HEAD
 		set_inverse_transl(vc, p, i); /* Update inverse translations */
+=======
+		set_inverse_transl(vc, p, i); /* Update all inverse translations */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	set_inverse_trans_unicode(vc, p);
   
 	return err;

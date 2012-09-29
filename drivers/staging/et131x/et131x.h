@@ -108,12 +108,20 @@ void et131x_setphy_normal(struct et131x_adapter *adapter);
 int PhyMiRead(struct et131x_adapter *adapter, u8 xcvrAddr,
 	      u8 xcvrReg, u16 *value);
 #define MiRead(adapter, xcvrReg, value) \
+<<<<<<< HEAD
 	PhyMiRead((adapter), (adapter)->Stats.xcvr_addr, (xcvrReg), (value))
+=======
+	PhyMiRead((adapter), (adapter)->stats.xcvr_addr, (xcvrReg), (value))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 int32_t MiWrite(struct et131x_adapter *adapter,
 		u8 xcvReg, u16 value);
 void et131x_Mii_check(struct et131x_adapter *pAdapter,
+<<<<<<< HEAD
 		      MI_BMSR_t bmsr, MI_BMSR_t bmsr_ints);
+=======
+		      u16 bmsr, u16 bmsr_ints);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* This last is not strictly required (the driver could call the TPAL
  * version instead), but this sets the adapter up correctly, and calls the

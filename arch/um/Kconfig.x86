@@ -1,3 +1,8 @@
+<<<<<<< HEAD
+=======
+mainmenu "User Mode Linux/$SUBARCH $KERNELVERSION Kernel Configuration"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "arch/um/Kconfig.common"
 
 menu "UML-specific options"
@@ -8,6 +13,13 @@ config CMPXCHG_LOCAL
 	bool
 	default n
 
+<<<<<<< HEAD
+=======
+config CMPXCHG_DOUBLE
+	bool
+	default n
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 source "arch/x86/Kconfig.cpu"
 
 endmenu

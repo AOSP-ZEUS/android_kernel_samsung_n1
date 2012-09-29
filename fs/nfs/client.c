@@ -105,7 +105,11 @@ struct rpc_program nfs_program = {
 	.nrvers			= ARRAY_SIZE(nfs_version),
 	.version		= nfs_version,
 	.stats			= &nfs_rpcstat,
+<<<<<<< HEAD
 	.pipe_dir_name		= "/nfs",
+=======
+	.pipe_dir_name		= NFS_PIPE_DIRNAME,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct rpc_stat nfs_rpcstat = {
@@ -188,9 +192,12 @@ static struct nfs_client *nfs_alloc_client(const struct nfs_client_initdata *cl_
 	cred = rpc_lookup_machine_cred();
 	if (!IS_ERR(cred))
 		clp->cl_machine_cred = cred;
+<<<<<<< HEAD
 #if defined(CONFIG_NFS_V4_1)
 	INIT_LIST_HEAD(&clp->cl_layouts);
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	nfs_fscache_get_client_cookie(clp);
 
 	return clp;
@@ -293,6 +300,10 @@ static void nfs_free_client(struct nfs_client *clp)
 	nfs4_deviceid_purge_client(clp);
 
 	kfree(clp->cl_hostname);
+<<<<<<< HEAD
+=======
+	kfree(clp->server_scope);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(clp);
 
 	dprintk("<-- nfs_free_client()\n");
@@ -906,7 +917,13 @@ error:
 /*
  * Load up the server record from information gained in an fsinfo record
  */
+<<<<<<< HEAD
 static void nfs_server_set_fsinfo(struct nfs_server *server, struct nfs_fsinfo *fsinfo)
+=======
+static void nfs_server_set_fsinfo(struct nfs_server *server,
+				  struct nfs_fh *mntfh,
+				  struct nfs_fsinfo *fsinfo)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	unsigned long max_rpc_payload;
 
@@ -936,7 +953,12 @@ static void nfs_server_set_fsinfo(struct nfs_server *server, struct nfs_fsinfo *
 	if (server->wsize > NFS_MAX_FILE_IO_SIZE)
 		server->wsize = NFS_MAX_FILE_IO_SIZE;
 	server->wpages = (server->wsize + PAGE_CACHE_SIZE - 1) >> PAGE_CACHE_SHIFT;
+<<<<<<< HEAD
 	set_pnfs_layoutdriver(server, fsinfo->layouttype);
+=======
+	server->pnfs_blksize = fsinfo->blksize;
+	set_pnfs_layoutdriver(server, mntfh, fsinfo->layouttype);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	server->wtmult = nfs_block_bits(fsinfo->wtmult, NULL);
 
@@ -982,7 +1004,11 @@ static int nfs_probe_fsinfo(struct nfs_server *server, struct nfs_fh *mntfh, str
 	if (error < 0)
 		goto out_error;
 
+<<<<<<< HEAD
 	nfs_server_set_fsinfo(server, &fsinfo);
+=======
+	nfs_server_set_fsinfo(server, mntfh, &fsinfo);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Get some general file system info */
 	if (server->namelen == 0) {
@@ -1062,6 +1088,10 @@ static struct nfs_server *nfs_alloc_server(void)
 	INIT_LIST_HEAD(&server->client_link);
 	INIT_LIST_HEAD(&server->master_link);
 	INIT_LIST_HEAD(&server->delegations);
+<<<<<<< HEAD
+=======
+	INIT_LIST_HEAD(&server->layouts);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	atomic_set(&server->active, 0);
 
@@ -1464,7 +1494,11 @@ struct nfs_client *nfs4_set_ds_client(struct nfs_client* mds_clp,
 	dprintk("<-- %s %p\n", __func__, clp);
 	return clp;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(nfs4_set_ds_client);
+=======
+EXPORT_SYMBOL_GPL(nfs4_set_ds_client);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Session has been established, and the client marked ready.

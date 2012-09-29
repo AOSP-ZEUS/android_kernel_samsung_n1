@@ -1,6 +1,10 @@
 /*
  * This file contains the handling of TX in wlan driver.
  */
+<<<<<<< HEAD
+=======
+#include <linux/hardirq.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/netdevice.h>
 #include <linux/etherdevice.h>
 #include <linux/sched.h>
@@ -198,7 +202,11 @@ void lbs_send_tx_feedback(struct lbs_private *priv, u32 try_count)
 	if (priv->connect_status == LBS_CONNECTED)
 		netif_wake_queue(priv->dev);
 
+<<<<<<< HEAD
 	if (priv->mesh_dev && lbs_mesh_connected(priv))
+=======
+	if (priv->mesh_dev && netif_running(priv->mesh_dev))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		netif_wake_queue(priv->mesh_dev);
 }
 EXPORT_SYMBOL_GPL(lbs_send_tx_feedback);

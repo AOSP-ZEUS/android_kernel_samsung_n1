@@ -298,7 +298,11 @@ static int cbaf_cdid_get(struct cbaf *cbaf)
 	if (result < needed) {
 		dev_err(dev, "Not enough data in DEVICE_INFO reply (%zu vs "
 			"%zu bytes needed)\n", (size_t)result, needed);
+<<<<<<< HEAD
 		return result;
+=======
+		return -ENOENT;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	strlcpy(cbaf->device_name, di->DeviceFriendlyName, CBA_NAME_LEN);
@@ -350,7 +354,11 @@ static ssize_t cbaf_wusb_chid_store(struct device *dev,
 		return result;
 	result = cbaf_cdid_get(cbaf);
 	if (result < 0)
+<<<<<<< HEAD
 		return -result;
+=======
+		return result;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return size;
 }
 static DEVICE_ATTR(wusb_chid, 0600, cbaf_wusb_chid_show, cbaf_wusb_chid_store);

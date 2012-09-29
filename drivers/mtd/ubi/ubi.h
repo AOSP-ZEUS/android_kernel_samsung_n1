@@ -44,7 +44,10 @@
 
 #include "ubi-media.h"
 #include "scan.h"
+<<<<<<< HEAD
 #include "debug.h"
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Maximum number of supported UBI devices */
 #define UBI_MAX_DEVICES 32
@@ -392,6 +395,11 @@ struct ubi_wl_entry;
  * @peb_buf2: another buffer of PEB size used for different purposes
  * @buf_mutex: protects @peb_buf1 and @peb_buf2
  * @ckvol_mutex: serializes static volume checking when opening
+<<<<<<< HEAD
+=======
+ *
+ * @dbg: debugging information for this UBI device
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  */
 struct ubi_device {
 	struct cdev cdev;
@@ -474,8 +482,17 @@ struct ubi_device {
 	void *peb_buf2;
 	struct mutex buf_mutex;
 	struct mutex ckvol_mutex;
+<<<<<<< HEAD
 };
 
+=======
+
+	struct ubi_debug_info *dbg;
+};
+
+#include "debug.h"
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern struct kmem_cache *ubi_wl_entry_slab;
 extern const struct file_operations ubi_ctrl_cdev_operations;
 extern const struct file_operations ubi_cdev_operations;
@@ -664,6 +681,10 @@ static inline void ubi_ro_mode(struct ubi_device *ubi)
 	if (!ubi->ro_mode) {
 		ubi->ro_mode = 1;
 		ubi_warn("switch to read-only mode");
+<<<<<<< HEAD
+=======
+		ubi_dbg_dump_stack();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 }
 

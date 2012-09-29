@@ -6,7 +6,11 @@
  *          Title:  MPI Configuration messages and pages
  *  Creation Date:  November 10, 2006
  *
+<<<<<<< HEAD
  *    mpi2_cnfg.h Version:  02.00.16
+=======
+ *    mpi2_cnfg.h Version:  02.00.17
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  *  Version History
  *  ---------------
@@ -127,6 +131,16 @@
  *                      Added MPI2_SAS_NEG_LINK_RATE_UNSUPPORTED_PHY define.
  *  08-11-10  02.00.16  Removed IO Unit Page 1 device path (multi-pathing)
  *                      defines.
+<<<<<<< HEAD
+=======
+ *  11-10-10  02.00.17  Added ReceptacleID field (replacing Reserved1) to
+ *                      MPI2_MANPAGE7_CONNECTOR_INFO and reworked defines for
+ *                      the Pinout field.
+ *                      Added BoardTemperature and BoardTemperatureUnits fields
+ *                      to MPI2_CONFIG_PAGE_IO_UNIT_7.
+ *                      Added MPI2_CONFIG_EXTPAGETYPE_EXT_MANUFACTURING define
+ *                      and MPI2_CONFIG_PAGE_EXT_MAN_PS structure.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *  --------------------------------------------------------------------------
  */
 
@@ -210,6 +224,10 @@ typedef union _MPI2_CONFIG_EXT_PAGE_HEADER_UNION
 #define MPI2_CONFIG_EXTPAGETYPE_DRIVER_MAPPING      (0x17)
 #define MPI2_CONFIG_EXTPAGETYPE_SAS_PORT            (0x18)
 #define MPI2_CONFIG_EXTPAGETYPE_ETHERNET            (0x19)
+<<<<<<< HEAD
+=======
+#define MPI2_CONFIG_EXTPAGETYPE_EXT_MANUFACTURING   (0x1A)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /*****************************************************************************
@@ -612,13 +630,18 @@ typedef struct _MPI2_MANPAGE7_CONNECTOR_INFO
     U32                         Pinout;                 /* 0x00 */
     U8                          Connector[16];          /* 0x04 */
     U8                          Location;               /* 0x14 */
+<<<<<<< HEAD
     U8                          Reserved1;              /* 0x15 */
+=======
+	U8                          ReceptacleID;           /* 0x15 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
     U16                         Slot;                   /* 0x16 */
     U32                         Reserved2;              /* 0x18 */
 } MPI2_MANPAGE7_CONNECTOR_INFO, MPI2_POINTER PTR_MPI2_MANPAGE7_CONNECTOR_INFO,
   Mpi2ManPage7ConnectorInfo_t, MPI2_POINTER pMpi2ManPage7ConnectorInfo_t;
 
 /* defines for the Pinout field */
+<<<<<<< HEAD
 #define MPI2_MANPAGE7_PINOUT_SFF_8484_L4                (0x00080000)
 #define MPI2_MANPAGE7_PINOUT_SFF_8484_L3                (0x00040000)
 #define MPI2_MANPAGE7_PINOUT_SFF_8484_L2                (0x00020000)
@@ -629,6 +652,26 @@ typedef struct _MPI2_MANPAGE7_CONNECTOR_INFO
 #define MPI2_MANPAGE7_PINOUT_SFF_8470_L1                (0x00000100)
 #define MPI2_MANPAGE7_PINOUT_SFF_8482                   (0x00000002)
 #define MPI2_MANPAGE7_PINOUT_CONNECTION_UNKNOWN         (0x00000001)
+=======
+#define MPI2_MANPAGE7_PINOUT_LANE_MASK                  (0x0000FF00)
+#define MPI2_MANPAGE7_PINOUT_LANE_SHIFT                 (8)
+
+#define MPI2_MANPAGE7_PINOUT_TYPE_MASK                  (0x000000FF)
+#define MPI2_MANPAGE7_PINOUT_TYPE_UNKNOWN               (0x00)
+#define MPI2_MANPAGE7_PINOUT_SATA_SINGLE                (0x01)
+#define MPI2_MANPAGE7_PINOUT_SFF_8482                   (0x02)
+#define MPI2_MANPAGE7_PINOUT_SFF_8486                   (0x03)
+#define MPI2_MANPAGE7_PINOUT_SFF_8484                   (0x04)
+#define MPI2_MANPAGE7_PINOUT_SFF_8087                   (0x05)
+#define MPI2_MANPAGE7_PINOUT_SFF_8643_4I                (0x06)
+#define MPI2_MANPAGE7_PINOUT_SFF_8643_8I                (0x07)
+#define MPI2_MANPAGE7_PINOUT_SFF_8470                   (0x08)
+#define MPI2_MANPAGE7_PINOUT_SFF_8088                   (0x09)
+#define MPI2_MANPAGE7_PINOUT_SFF_8644_4X                (0x0A)
+#define MPI2_MANPAGE7_PINOUT_SFF_8644_8X                (0x0B)
+#define MPI2_MANPAGE7_PINOUT_SFF_8644_16X               (0x0C)
+#define MPI2_MANPAGE7_PINOUT_SFF_8436                   (0x0D)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* defines for the Location field */
 #define MPI2_MANPAGE7_LOCATION_UNKNOWN                  (0x01)
@@ -662,7 +705,11 @@ typedef struct _MPI2_CONFIG_PAGE_MAN_7
   MPI2_POINTER PTR_MPI2_CONFIG_PAGE_MAN_7,
   Mpi2ManufacturingPage7_t, MPI2_POINTER pMpi2ManufacturingPage7_t;
 
+<<<<<<< HEAD
 #define MPI2_MANUFACTURING7_PAGEVERSION                 (0x00)
+=======
+#define MPI2_MANUFACTURING7_PAGEVERSION                 (0x01)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* defines for the Flags field */
 #define MPI2_MANPAGE7_FLAG_USE_SLOT_INFO                (0x00000001)
@@ -849,11 +896,21 @@ typedef struct _MPI2_CONFIG_PAGE_IO_UNIT_7 {
     U16                     IOCTemperature;                         /* 0x10 */
     U8                      IOCTemperatureUnits;                    /* 0x12 */
     U8                      IOCSpeed;                               /* 0x13 */
+<<<<<<< HEAD
     U32                     Reserved3;                              /* 0x14 */
 } MPI2_CONFIG_PAGE_IO_UNIT_7, MPI2_POINTER PTR_MPI2_CONFIG_PAGE_IO_UNIT_7,
   Mpi2IOUnitPage7_t, MPI2_POINTER pMpi2IOUnitPage7_t;
 
 #define MPI2_IOUNITPAGE7_PAGEVERSION                    (0x01)
+=======
+	U16                     BoardTemperature;              /* 0x14 */
+	U8                      BoardTemperatureUnits;         /* 0x16 */
+	U8                      Reserved3;                     /* 0x17 */
+} MPI2_CONFIG_PAGE_IO_UNIT_7, MPI2_POINTER PTR_MPI2_CONFIG_PAGE_IO_UNIT_7,
+  Mpi2IOUnitPage7_t, MPI2_POINTER pMpi2IOUnitPage7_t;
+
+#define MPI2_IOUNITPAGE7_PAGEVERSION                    (0x02)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* defines for IO Unit Page 7 PCIeWidth field */
 #define MPI2_IOUNITPAGE7_PCIE_WIDTH_X1              (0x01)
@@ -881,7 +938,10 @@ typedef struct _MPI2_CONFIG_PAGE_IO_UNIT_7 {
 #define MPI2_IOUNITPAGE7_PMCAP_PCIE_WIDTH_CHANGE    (0x00000008)
 #define MPI2_IOUNITPAGE7_PMCAP_PCIE_SPEED_CHANGE    (0x00000004)
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* defines for IO Unit Page 7 IOCTemperatureUnits field */
 #define MPI2_IOUNITPAGE7_IOC_TEMP_NOT_PRESENT       (0x00)
 #define MPI2_IOUNITPAGE7_IOC_TEMP_FAHRENHEIT        (0x01)
@@ -893,6 +953,14 @@ typedef struct _MPI2_CONFIG_PAGE_IO_UNIT_7 {
 #define MPI2_IOUNITPAGE7_IOC_SPEED_QUARTER          (0x04)
 #define MPI2_IOUNITPAGE7_IOC_SPEED_EIGHTH           (0x08)
 
+<<<<<<< HEAD
+=======
+/* defines for IO Unit Page 7 BoardTemperatureUnits field */
+#define MPI2_IOUNITPAGE7_BOARD_TEMP_NOT_PRESENT     (0x00)
+#define MPI2_IOUNITPAGE7_BOARD_TEMP_FAHRENHEIT      (0x01)
+#define MPI2_IOUNITPAGE7_BOARD_TEMP_CELSIUS         (0x02)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 
 /****************************************************************************
@@ -2799,5 +2867,28 @@ typedef struct _MPI2_CONFIG_PAGE_ETHERNET_1 {
 #define MPI2_ETHPG1_MS_DATA_RATE_1GBIT              (0x03)
 
 
+<<<<<<< HEAD
+=======
+/****************************************************************************
+*   Extended Manufacturing Config Pages
+****************************************************************************/
+
+/*
+ * Generic structure to use for product-specific extended manufacturing pages
+ * (currently Extended Manufacturing Page 40 through Extended Manufacturing
+ * Page 60).
+ */
+
+typedef struct _MPI2_CONFIG_PAGE_EXT_MAN_PS {
+	MPI2_CONFIG_EXTENDED_PAGE_HEADER    Header;                 /* 0x00 */
+	U32                                 ProductSpecificInfo;    /* 0x08 */
+}	MPI2_CONFIG_PAGE_EXT_MAN_PS,
+	MPI2_POINTER PTR_MPI2_CONFIG_PAGE_EXT_MAN_PS,
+	Mpi2ExtManufacturingPagePS_t,
+	MPI2_POINTER pMpi2ExtManufacturingPagePS_t;
+
+/* PageVersion should be provided by product-specific code */
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 

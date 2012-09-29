@@ -22,8 +22,11 @@
    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
+<<<<<<< HEAD
 
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifndef PWC_DEC1_H
 #define PWC_DEC1_H
 
@@ -32,6 +35,7 @@
 struct pwc_dec1_private
 {
 	int version;
+<<<<<<< HEAD
 
 };
 
@@ -41,3 +45,10 @@ void pwc_dec1_exit(void);
 
 #endif
 
+=======
+};
+
+int pwc_dec1_init(struct pwc_device *pwc, int type, int release, void *buffer);
+
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

@@ -6,6 +6,10 @@
 
 #include <linux/bcma/bcma_driver_chipcommon.h>
 #include <linux/bcma/bcma_driver_pci.h>
+<<<<<<< HEAD
+=======
+#include <linux/ssb/ssb.h> /* SPROM sharing */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include "bcma_regs.h"
 
@@ -24,6 +28,14 @@ struct bcma_chipinfo {
 	u8 pkg;
 };
 
+<<<<<<< HEAD
+=======
+enum bcma_clkmode {
+	BCMA_CLKMODE_FAST,
+	BCMA_CLKMODE_DYNAMIC,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct bcma_host_ops {
 	u8 (*read8)(struct bcma_device *core, u16 offset);
 	u16 (*read16)(struct bcma_device *core, u16 offset);
@@ -31,6 +43,15 @@ struct bcma_host_ops {
 	void (*write8)(struct bcma_device *core, u16 offset, u8 value);
 	void (*write16)(struct bcma_device *core, u16 offset, u16 value);
 	void (*write32)(struct bcma_device *core, u16 offset, u32 value);
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_BCMA_BLOCKIO
+	void (*block_read)(struct bcma_device *core, void *buffer,
+			   size_t count, u16 offset, u8 reg_width);
+	void (*block_write)(struct bcma_device *core, const void *buffer,
+			    size_t count, u16 offset, u8 reg_width);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Agent ops */
 	u32 (*aread32)(struct bcma_device *core, u16 offset);
 	void (*awrite32)(struct bcma_device *core, u16 offset, u32 value);
@@ -117,6 +138,11 @@ struct bcma_device {
 	struct bcma_device_id id;
 
 	struct device dev;
+<<<<<<< HEAD
+=======
+	struct device *dma_dev;
+	unsigned int irq;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	bool dev_registered;
 
 	u8 core_index;
@@ -179,6 +205,13 @@ struct bcma_bus {
 
 	struct bcma_drv_cc drv_cc;
 	struct bcma_drv_pci drv_pci;
+<<<<<<< HEAD
+=======
+
+	/* We decided to share SPROM struct with SSB as long as we do not need
+	 * any hacks for BCMA. This simplifies drivers code. */
+	struct ssb_sprom sprom;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 extern inline u32 bcma_read8(struct bcma_device *core, u16 offset)
@@ -208,6 +241,21 @@ void bcma_write32(struct bcma_device *core, u16 offset, u32 value)
 {
 	core->bus->ops->write32(core, offset, value);
 }
+<<<<<<< HEAD
+=======
+#ifdef CONFIG_BCMA_BLOCKIO
+extern inline void bcma_block_read(struct bcma_device *core, void *buffer,
+				   size_t count, u16 offset, u8 reg_width)
+{
+	core->bus->ops->block_read(core, buffer, count, offset, reg_width);
+}
+extern inline void bcma_block_write(struct bcma_device *core, const void *buffer,
+				    size_t count, u16 offset, u8 reg_width)
+{
+	core->bus->ops->block_write(core, buffer, count, offset, reg_width);
+}
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 extern inline u32 bcma_aread32(struct bcma_device *core, u16 offset)
 {
 	return core->bus->ops->aread32(core, offset);
@@ -218,7 +266,29 @@ void bcma_awrite32(struct bcma_device *core, u16 offset, u32 value)
 	core->bus->ops->awrite32(core, offset, value);
 }
 
+<<<<<<< HEAD
 extern bool bcma_core_is_enabled(struct bcma_device *core);
 extern int bcma_core_enable(struct bcma_device *core, u32 flags);
+=======
+#define bcma_mask32(cc, offset, mask) \
+	bcma_write32(cc, offset, bcma_read32(cc, offset) & (mask))
+#define bcma_set32(cc, offset, set) \
+	bcma_write32(cc, offset, bcma_read32(cc, offset) | (set))
+#define bcma_maskset32(cc, offset, mask, set) \
+	bcma_write32(cc, offset, (bcma_read32(cc, offset) & (mask)) | (set))
+
+extern bool bcma_core_is_enabled(struct bcma_device *core);
+extern void bcma_core_disable(struct bcma_device *core, u32 flags);
+extern int bcma_core_enable(struct bcma_device *core, u32 flags);
+extern void bcma_core_set_clockmode(struct bcma_device *core,
+				    enum bcma_clkmode clkmode);
+extern void bcma_core_pll_ctl(struct bcma_device *core, u32 req, u32 status,
+			      bool on);
+#define BCMA_DMA_TRANSLATION_MASK	0xC0000000
+#define  BCMA_DMA_TRANSLATION_NONE	0x00000000
+#define  BCMA_DMA_TRANSLATION_DMA32_CMT	0x40000000 /* Client Mode Translation for 32-bit DMA */
+#define  BCMA_DMA_TRANSLATION_DMA64_CMT	0x80000000 /* Client Mode Translation for 64-bit DMA */
+extern u32 bcma_core_dma_translation(struct bcma_device *core);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #endif /* LINUX_BCMA_H_ */

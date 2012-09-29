@@ -38,8 +38,12 @@ EXPORT_TRACEPOINT_SYMBOL(iwlwifi_legacy_dev_ioread32);
 EXPORT_TRACEPOINT_SYMBOL(iwlwifi_legacy_dev_iowrite32);
 EXPORT_TRACEPOINT_SYMBOL(iwlwifi_legacy_dev_rx);
 EXPORT_TRACEPOINT_SYMBOL(iwlwifi_legacy_dev_tx);
+<<<<<<< HEAD
 EXPORT_TRACEPOINT_SYMBOL(iwlwifi_legacy_dev_ucode_event);
 EXPORT_TRACEPOINT_SYMBOL(iwlwifi_legacy_dev_ucode_error);
 EXPORT_TRACEPOINT_SYMBOL(iwlwifi_legacy_dev_ucode_cont_event);
 EXPORT_TRACEPOINT_SYMBOL(iwlwifi_legacy_dev_ucode_wrap_event);
+=======
+EXPORT_TRACEPOINT_SYMBOL(iwlwifi_legacy_dev_ucode_error);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif

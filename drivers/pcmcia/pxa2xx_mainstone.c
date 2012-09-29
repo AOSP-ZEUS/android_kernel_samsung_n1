@@ -128,6 +128,7 @@ static int mst_pcmcia_configure_socket(struct soc_pcmcia_socket *skt,
 	return ret;
 }
 
+<<<<<<< HEAD
 static void mst_pcmcia_socket_init(struct soc_pcmcia_socket *skt)
 {
 }
@@ -136,14 +137,19 @@ static void mst_pcmcia_socket_suspend(struct soc_pcmcia_socket *skt)
 {
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct pcmcia_low_level mst_pcmcia_ops __initdata = {
 	.owner			= THIS_MODULE,
 	.hw_init		= mst_pcmcia_hw_init,
 	.hw_shutdown		= mst_pcmcia_hw_shutdown,
 	.socket_state		= mst_pcmcia_socket_state,
 	.configure_socket	= mst_pcmcia_configure_socket,
+<<<<<<< HEAD
 	.socket_init		= mst_pcmcia_socket_init,
 	.socket_suspend		= mst_pcmcia_socket_suspend,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.nr			= 2,
 };
 

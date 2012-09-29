@@ -13,6 +13,10 @@
  *		Catalin(ux aka Dino) BOIE <catab at umbrella dot ro>
  */
 
+<<<<<<< HEAD
+=======
+#include <linux/mm.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/module.h>
 #include <linux/slab.h>
 #include <linux/types.h>
@@ -117,7 +121,12 @@ struct netem_skb_cb {
 
 static inline struct netem_skb_cb *netem_skb_cb(struct sk_buff *skb)
 {
+<<<<<<< HEAD
 	qdisc_cb_private_validate(skb, sizeof(struct netem_skb_cb));
+=======
+	BUILD_BUG_ON(sizeof(skb->cb) <
+		sizeof(struct qdisc_skb_cb) + sizeof(struct netem_skb_cb));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return (struct netem_skb_cb *)qdisc_skb_cb(skb)->data;
 }
 
@@ -381,8 +390,13 @@ static int netem_enqueue(struct sk_buff *skb, struct Qdisc *sch)
 		q->counter = 0;
 
 		__skb_queue_head(&q->qdisc->q, skb);
+<<<<<<< HEAD
 		sch->qstats.backlog += qdisc_pkt_len(skb);
 		sch->qstats.requeues++;
+=======
+		q->qdisc->qstats.backlog += qdisc_pkt_len(skb);
+		q->qdisc->qstats.requeues++;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		ret = NET_XMIT_SUCCESS;
 	}
 

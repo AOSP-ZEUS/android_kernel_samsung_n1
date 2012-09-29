@@ -438,7 +438,11 @@
 struct bfin_pint_regs {
 	u32 mask_set;
 	u32 mask_clear;
+<<<<<<< HEAD
 	u32 irq;
+=======
+	u32 request;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 assign;
 	u32 edge_set;
 	u32 edge_clear;

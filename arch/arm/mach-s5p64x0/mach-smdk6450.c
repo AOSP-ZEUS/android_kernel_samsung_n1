@@ -46,6 +46,10 @@
 #include <plat/adc.h>
 #include <plat/ts.h>
 #include <plat/s5p-time.h>
+<<<<<<< HEAD
+=======
+#include <plat/backlight.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define SMDK6450_UCON_DEFAULT	(S3C2410_UCON_TXILEVEL |	\
 				S3C2410_UCON_RXILEVEL |		\
@@ -109,6 +113,7 @@ static struct s3c2410_uartcfg smdk6450_uartcfgs[] __initdata = {
 #endif
 };
 
+<<<<<<< HEAD
 static int smdk6450_backlight_init(struct device *dev)
 {
 	int ret;
@@ -148,6 +153,8 @@ static struct platform_device smdk6450_backlight_device = {
 	},
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct platform_device *smdk6450_devices[] __initdata = {
 	&s3c_device_adc,
 	&s3c_device_rtc,
@@ -157,8 +164,11 @@ static struct platform_device *smdk6450_devices[] __initdata = {
 	&s3c_device_wdt,
 	&samsung_asoc_dma,
 	&s5p6450_device_iis0,
+<<<<<<< HEAD
 	&s3c_device_timer[1],
 	&smdk6450_backlight_device,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* s5p6450_device_spi0 will be added */
 };
 
@@ -194,6 +204,19 @@ static struct s3c2410_ts_mach_info s3c_ts_platform __initdata = {
 	.oversampling_shift	= 2,
 };
 
+<<<<<<< HEAD
+=======
+/* LCD Backlight data */
+static struct samsung_bl_gpio_info smdk6450_bl_gpio_info = {
+	.no = S5P6450_GPF(15),
+	.func = S3C_GPIO_SFN(2),
+};
+
+static struct platform_pwm_backlight_data smdk6450_bl_data = {
+	.pwm_id = 1,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init smdk6450_map_io(void)
 {
 	s5p_init_io(NULL, 0, S5P64X0_SYS_ID);
@@ -213,6 +236,11 @@ static void __init smdk6450_machine_init(void)
 	i2c_register_board_info(1, smdk6450_i2c_devs1,
 			ARRAY_SIZE(smdk6450_i2c_devs1));
 
+<<<<<<< HEAD
+=======
+	samsung_bl_set(&smdk6450_bl_gpio_info, &smdk6450_bl_data);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	platform_add_devices(smdk6450_devices, ARRAY_SIZE(smdk6450_devices));
 }
 

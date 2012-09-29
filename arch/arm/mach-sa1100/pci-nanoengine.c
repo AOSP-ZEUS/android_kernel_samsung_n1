@@ -28,6 +28,10 @@
 #include <asm/mach-types.h>
 
 #include <mach/nanoengine.h>
+<<<<<<< HEAD
+=======
+#include <mach/hardware.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static DEFINE_SPINLOCK(nano_lock);
 
@@ -122,7 +126,12 @@ static struct pci_ops pci_nano_ops = {
 	.write	= nanoengine_write_config,
 };
 
+<<<<<<< HEAD
 static int __init pci_nanoengine_map_irq(struct pci_dev *dev, u8 slot, u8 pin)
+=======
+static int __init pci_nanoengine_map_irq(const struct pci_dev *dev, u8 slot,
+	u8 pin)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return NANOENGINE_IRQ_GPIO_PCI;
 }
@@ -252,6 +261,12 @@ int __init pci_nanoengine_setup(int nr, struct pci_sys_data *sys)
 {
 	int ret = 0;
 
+<<<<<<< HEAD
+=======
+	pcibios_min_io = 0;
+	pcibios_min_mem = 0;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (nr == 0) {
 		sys->mem_offset = NANO_PCI_MEM_RW_PHYS;
 		sys->io_offset = 0x400;

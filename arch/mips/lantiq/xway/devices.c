@@ -16,11 +16,17 @@
 #include <linux/platform_device.h>
 #include <linux/leds.h>
 #include <linux/etherdevice.h>
+<<<<<<< HEAD
 #include <linux/reboot.h>
 #include <linux/time.h>
 #include <linux/io.h>
 #include <linux/gpio.h>
 #include <linux/leds.h>
+=======
+#include <linux/time.h>
+#include <linux/io.h>
+#include <linux/gpio.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/bootinfo.h>
 #include <asm/irq.h>

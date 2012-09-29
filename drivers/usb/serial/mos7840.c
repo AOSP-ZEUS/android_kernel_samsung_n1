@@ -174,7 +174,10 @@
 
 #define CLK_MULTI_REGISTER         ((__u16)(0x02))
 #define CLK_START_VALUE_REGISTER   ((__u16)(0x03))
+<<<<<<< HEAD
 #define GPIO_REGISTER              ((__u16)(0x07))
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define SERIAL_LCR_DLAB            ((__u16)(0x0080))
 
@@ -1104,6 +1107,7 @@ static int mos7840_open(struct tty_struct *tty, struct usb_serial_port *port)
 	mos7840_port->read_urb = port->read_urb;
 
 	/* set up our bulk in urb */
+<<<<<<< HEAD
 	if ((serial->num_ports == 2)
 		&& ((((__u16)port->number -
 			(__u16)(port->serial->minor)) % 2) != 0)) {
@@ -1123,6 +1127,16 @@ static int mos7840_open(struct tty_struct *tty, struct usb_serial_port *port)
 			mos7840_port->read_urb->transfer_buffer_length,
 			mos7840_bulk_in_callback, mos7840_port);
 	}
+=======
+
+	usb_fill_bulk_urb(mos7840_port->read_urb,
+			  serial->dev,
+			  usb_rcvbulkpipe(serial->dev,
+					  port->bulk_in_endpointAddress),
+			  port->bulk_in_buffer,
+			  mos7840_port->read_urb->transfer_buffer_length,
+			  mos7840_bulk_in_callback, mos7840_port);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	dbg("mos7840_open: bulkin endpoint is %d",
 	    port->bulk_in_endpointAddress);
@@ -1533,6 +1547,7 @@ static int mos7840_write(struct tty_struct *tty, struct usb_serial_port *port,
 	memcpy(urb->transfer_buffer, current_position, transfer_size);
 
 	/* fill urb with data and submit  */
+<<<<<<< HEAD
 	if ((serial->num_ports == 2)
 		&& ((((__u16)port->number -
 			(__u16)(port->serial->minor)) % 2) != 0)) {
@@ -1552,6 +1567,15 @@ static int mos7840_write(struct tty_struct *tty, struct usb_serial_port *port,
 			transfer_size,
 			mos7840_bulk_out_data_callback, mos7840_port);
 	}
+=======
+	usb_fill_bulk_urb(urb,
+			  serial->dev,
+			  usb_sndbulkpipe(serial->dev,
+					  port->bulk_out_endpointAddress),
+			  urb->transfer_buffer,
+			  transfer_size,
+			  mos7840_bulk_out_data_callback, mos7840_port);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	data1 = urb->transfer_buffer;
 	dbg("bulkout endpoint is %d", port->bulk_out_endpointAddress);
@@ -1864,7 +1888,11 @@ static int mos7840_send_cmd_write_baud_rate(struct moschip_port *mos7840_port,
 
 	} else {
 #ifdef HW_flow_control
+<<<<<<< HEAD
 		/* setting h/w flow control bit to 0 */
+=======
+		/ *setting h/w flow control bit to 0 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		Data = 0xb;
 		mos7840_port->shadowMCR = Data;
 		status = mos7840_set_uart_reg(port, MODEM_CONTROL_REGISTER,
@@ -2334,6 +2362,7 @@ static int mos7840_ioctl(struct tty_struct *tty,
 
 static int mos7840_calc_num_ports(struct usb_serial *serial)
 {
+<<<<<<< HEAD
 	__u16 Data = 0x00;
 	int ret = 0;
 	int mos7840_num_ports;
@@ -2354,6 +2383,21 @@ static int mos7840_calc_num_ports(struct usb_serial *serial)
 		serial->num_ports = 4;
 	}
 
+=======
+	int mos7840_num_ports = 0;
+
+	dbg("numberofendpoints: cur %d, alt %d",
+	    (int)serial->interface->cur_altsetting->desc.bNumEndpoints,
+	    (int)serial->interface->altsetting->desc.bNumEndpoints);
+	if (serial->interface->cur_altsetting->desc.bNumEndpoints == 5) {
+		mos7840_num_ports = serial->num_ports = 2;
+	} else if (serial->interface->cur_altsetting->desc.bNumEndpoints == 9) {
+		serial->num_bulk_in = 4;
+		serial->num_bulk_out = 4;
+		mos7840_num_ports = serial->num_ports = 4;
+	}
+	dbg ("mos7840_num_ports = %d", mos7840_num_ports);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return mos7840_num_ports;
 }
 

@@ -28,6 +28,11 @@
 #include <linux/delay.h>
 #include <linux/seq_file.h>
 #include <linux/clk.h>
+<<<<<<< HEAD
+=======
+#include <linux/platform_device.h>
+#include <linux/pm_runtime.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <video/omapdss.h>
 #include <plat/clock.h>
@@ -59,6 +64,7 @@ struct dss_reg {
 static struct {
 	struct platform_device *pdev;
 	void __iomem    *base;
+<<<<<<< HEAD
 	int             ctx_id;
 
 	struct clk	*dpll4_m4_ck;
@@ -68,6 +74,11 @@ static struct {
 	struct clk	*dss_tv_fck;
 	struct clk	*dss_video_fck;
 	unsigned	num_clks_enabled;
+=======
+
+	struct clk	*dpll4_m4_ck;
+	struct clk	*dss_clk;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	unsigned long	cache_req_pck;
 	unsigned long	cache_prate;
@@ -78,6 +89,10 @@ static struct {
 	enum omap_dss_clk_source dispc_clk_source;
 	enum omap_dss_clk_source lcd_clk_source[MAX_DSS_LCD_MANAGERS];
 
+<<<<<<< HEAD
+=======
+	bool		ctx_valid;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32		ctx[DSS_SZ_REGS / sizeof(u32)];
 } dss;
 
@@ -87,6 +102,7 @@ static const char * const dss_generic_clk_source_names[] = {
 	[OMAP_DSS_CLK_SRC_FCK]			= "DSS_FCK",
 };
 
+<<<<<<< HEAD
 static void dss_clk_enable_all_no_ctx(void);
 static void dss_clk_disable_all_no_ctx(void);
 static void dss_clk_enable_no_ctx(enum dss_clock clks);
@@ -94,6 +110,8 @@ static void dss_clk_disable_no_ctx(enum dss_clock clks);
 
 static int _omap_dss_wait_reset(void);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline void dss_write_reg(const struct dss_reg idx, u32 val)
 {
 	__raw_writel(val, dss.base + idx.idx);
@@ -109,12 +127,19 @@ static inline u32 dss_read_reg(const struct dss_reg idx)
 #define RR(reg) \
 	dss_write_reg(DSS_##reg, dss.ctx[(DSS_##reg).idx / sizeof(u32)])
 
+<<<<<<< HEAD
 void dss_save_context(void)
 {
 	if (cpu_is_omap24xx())
 		return;
 
 	SR(SYSCONFIG);
+=======
+static void dss_save_context(void)
+{
+	DSSDBG("dss_save_context\n");
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	SR(CONTROL);
 
 	if (dss_feat_get_supported_displays(OMAP_DSS_CHANNEL_LCD) &
@@ -122,6 +147,7 @@ void dss_save_context(void)
 		SR(SDI_CONTROL);
 		SR(PLL_CONTROL);
 	}
+<<<<<<< HEAD
 }
 
 void dss_restore_context(void)
@@ -130,6 +156,21 @@ void dss_restore_context(void)
 		DSSERR("DSS not coming out of reset after sleep\n");
 
 	RR(SYSCONFIG);
+=======
+
+	dss.ctx_valid = true;
+
+	DSSDBG("context saved\n");
+}
+
+static void dss_restore_context(void)
+{
+	DSSDBG("dss_restore_context\n");
+
+	if (!dss.ctx_valid)
+		return;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	RR(CONTROL);
 
 	if (dss_feat_get_supported_displays(OMAP_DSS_CHANNEL_LCD) &
@@ -137,6 +178,11 @@ void dss_restore_context(void)
 		RR(SDI_CONTROL);
 		RR(PLL_CONTROL);
 	}
+<<<<<<< HEAD
+=======
+
+	DSSDBG("context restored\n");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 #undef SR
@@ -234,6 +280,10 @@ const char *dss_get_generic_clk_source_name(enum omap_dss_clk_source clk_src)
 	return dss_generic_clk_source_names[clk_src];
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void dss_dump_clocks(struct seq_file *s)
 {
 	unsigned long dpll4_ck_rate;
@@ -241,13 +291,22 @@ void dss_dump_clocks(struct seq_file *s)
 	const char *fclk_name, *fclk_real_name;
 	unsigned long fclk_rate;
 
+<<<<<<< HEAD
 	dss_clk_enable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+	if (dss_runtime_get())
+		return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	seq_printf(s, "- DSS -\n");
 
 	fclk_name = dss_get_generic_clk_source_name(OMAP_DSS_CLK_SRC_FCK);
 	fclk_real_name = dss_feat_get_clk_source_name(OMAP_DSS_CLK_SRC_FCK);
+<<<<<<< HEAD
 	fclk_rate = dss_clk_get_rate(DSS_CLK_FCK);
+=======
+	fclk_rate = clk_get_rate(dss.dss_clk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (dss.dpll4_m4_ck) {
 		dpll4_ck_rate = clk_get_rate(clk_get_parent(dss.dpll4_m4_ck));
@@ -273,14 +332,23 @@ void dss_dump_clocks(struct seq_file *s)
 				fclk_rate);
 	}
 
+<<<<<<< HEAD
 	dss_clk_disable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+	dss_runtime_put();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 void dss_dump_regs(struct seq_file *s)
 {
 #define DUMPREG(r) seq_printf(s, "%-35s %08x\n", #r, dss_read_reg(r))
 
+<<<<<<< HEAD
 	dss_clk_enable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+	if (dss_runtime_get())
+		return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	DUMPREG(DSS_REVISION);
 	DUMPREG(DSS_SYSCONFIG);
@@ -294,7 +362,11 @@ void dss_dump_regs(struct seq_file *s)
 		DUMPREG(DSS_SDI_STATUS);
 	}
 
+<<<<<<< HEAD
 	dss_clk_disable(DSS_CLK_ICK | DSS_CLK_FCK);
+=======
+	dss_runtime_put();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #undef DUMPREG
 }
 
@@ -437,7 +509,11 @@ int dss_calc_clock_rates(struct dss_clock_info *cinfo)
 	} else {
 		if (cinfo->fck_div != 0)
 			return -EINVAL;
+<<<<<<< HEAD
 		cinfo->fck = dss_clk_get_rate(DSS_CLK_FCK);
+=======
+		cinfo->fck = clk_get_rate(dss.dss_clk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return 0;
@@ -467,7 +543,11 @@ int dss_set_clock_div(struct dss_clock_info *cinfo)
 
 int dss_get_clock_div(struct dss_clock_info *cinfo)
 {
+<<<<<<< HEAD
 	cinfo->fck = dss_clk_get_rate(DSS_CLK_FCK);
+=======
+	cinfo->fck = clk_get_rate(dss.dss_clk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (dss.dpll4_m4_ck) {
 		unsigned long prate;
@@ -512,7 +592,11 @@ int dss_calc_clock_div(bool is_tft, unsigned long req_pck,
 
 	max_dss_fck = dss_feat_get_param_max(FEAT_PARAM_DSS_FCK);
 
+<<<<<<< HEAD
 	fck = dss_clk_get_rate(DSS_CLK_FCK);
+=======
+	fck = clk_get_rate(dss.dss_clk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (req_pck == dss.cache_req_pck &&
 			((cpu_is_omap34xx() && prate == dss.cache_prate) ||
 			 dss.cache_dss_cinfo.fck == fck)) {
@@ -539,7 +623,11 @@ retry:
 	if (dss.dpll4_m4_ck == NULL) {
 		struct dispc_clock_info cur_dispc;
 		/* XXX can we change the clock on omap2? */
+<<<<<<< HEAD
 		fck = dss_clk_get_rate(DSS_CLK_FCK);
+=======
+		fck = clk_get_rate(dss.dss_clk);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		fck_div = 1;
 
 		dispc_find_clk_divs(is_tft, req_pck, fck, &cur_dispc);
@@ -616,6 +704,7 @@ found:
 	return 0;
 }
 
+<<<<<<< HEAD
 static int _omap_dss_wait_reset(void)
 {
 	int t = 0;
@@ -638,6 +727,8 @@ static int _omap_dss_reset(void)
 	return _omap_dss_wait_reset();
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void dss_set_venc_output(enum omap_dss_venc_type type)
 {
 	int l = 0;
@@ -663,6 +754,7 @@ void dss_select_hdmi_venc_clk_source(enum dss_hdmi_venc_clk_source_select hdmi)
 	REG_FLD_MOD(DSS_CONTROL, hdmi, 15, 15);	/* VENC_HDMI_SWITCH */
 }
 
+<<<<<<< HEAD
 static int dss_init(void)
 {
 	int r;
@@ -897,11 +989,56 @@ err:
 	if (dss.dss_video_fck)
 		clk_put(dss.dss_video_fck);
 
+=======
+static int dss_get_clocks(void)
+{
+	struct clk *clk;
+	int r;
+
+	clk = clk_get(&dss.pdev->dev, "fck");
+	if (IS_ERR(clk)) {
+		DSSERR("can't get clock fck\n");
+		r = PTR_ERR(clk);
+		goto err;
+	}
+
+	dss.dss_clk = clk;
+
+	if (cpu_is_omap34xx()) {
+		clk = clk_get(NULL, "dpll4_m4_ck");
+		if (IS_ERR(clk)) {
+			DSSERR("Failed to get dpll4_m4_ck\n");
+			r = PTR_ERR(clk);
+			goto err;
+		}
+	} else if (cpu_is_omap44xx()) {
+		clk = clk_get(NULL, "dpll_per_m5x2_ck");
+		if (IS_ERR(clk)) {
+			DSSERR("Failed to get dpll_per_m5x2_ck\n");
+			r = PTR_ERR(clk);
+			goto err;
+		}
+	} else { /* omap24xx */
+		clk = NULL;
+	}
+
+	dss.dpll4_m4_ck = clk;
+
+	return 0;
+
+err:
+	if (dss.dss_clk)
+		clk_put(dss.dss_clk);
+	if (dss.dpll4_m4_ck)
+		clk_put(dss.dpll4_m4_ck);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return r;
 }
 
 static void dss_put_clocks(void)
 {
+<<<<<<< HEAD
 	if (dss.dss_video_fck)
 		clk_put(dss.dss_video_fck);
 	if (dss.dss_tv_fck)
@@ -1075,12 +1212,47 @@ static void core_dump_clocks(struct seq_file *s)
 	}
 }
 #endif /* defined(CONFIG_DEBUG_FS) && defined(CONFIG_OMAP2_DSS_DEBUG_SUPPORT) */
+=======
+	if (dss.dpll4_m4_ck)
+		clk_put(dss.dpll4_m4_ck);
+	clk_put(dss.dss_clk);
+}
+
+struct clk *dss_get_ick(void)
+{
+	return clk_get(&dss.pdev->dev, "ick");
+}
+
+int dss_runtime_get(void)
+{
+	int r;
+
+	DSSDBG("dss_runtime_get\n");
+
+	r = pm_runtime_get_sync(&dss.pdev->dev);
+	WARN_ON(r < 0);
+	return r < 0 ? r : 0;
+}
+
+void dss_runtime_put(void)
+{
+	int r;
+
+	DSSDBG("dss_runtime_put\n");
+
+	r = pm_runtime_put(&dss.pdev->dev);
+	WARN_ON(r < 0);
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* DEBUGFS */
 #if defined(CONFIG_DEBUG_FS) && defined(CONFIG_OMAP2_DSS_DEBUG_SUPPORT)
 void dss_debug_dump_clocks(struct seq_file *s)
 {
+<<<<<<< HEAD
 	core_dump_clocks(s);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dss_dump_clocks(s);
 	dispc_dump_clocks(s);
 #ifdef CONFIG_OMAP2_DSS_DSI
@@ -1089,18 +1261,43 @@ void dss_debug_dump_clocks(struct seq_file *s)
 }
 #endif
 
+<<<<<<< HEAD
 
 /* DSS HW IP initialisation */
 static int omap_dsshw_probe(struct platform_device *pdev)
 {
+=======
+/* DSS HW IP initialisation */
+static int omap_dsshw_probe(struct platform_device *pdev)
+{
+	struct resource *dss_mem;
+	u32 rev;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int r;
 
 	dss.pdev = pdev;
 
+<<<<<<< HEAD
+=======
+	dss_mem = platform_get_resource(dss.pdev, IORESOURCE_MEM, 0);
+	if (!dss_mem) {
+		DSSERR("can't get IORESOURCE_MEM DSS\n");
+		r = -EINVAL;
+		goto err_ioremap;
+	}
+	dss.base = ioremap(dss_mem->start, resource_size(dss_mem));
+	if (!dss.base) {
+		DSSERR("can't ioremap DSS\n");
+		r = -ENOMEM;
+		goto err_ioremap;
+	}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	r = dss_get_clocks();
 	if (r)
 		goto err_clocks;
 
+<<<<<<< HEAD
 	dss_clk_enable_all_no_ctx();
 
 	dss.ctx_id = dss_get_ctx_id();
@@ -1111,6 +1308,27 @@ static int omap_dsshw_probe(struct platform_device *pdev)
 		DSSERR("Failed to initialize DSS\n");
 		goto err_dss;
 	}
+=======
+	pm_runtime_enable(&pdev->dev);
+
+	r = dss_runtime_get();
+	if (r)
+		goto err_runtime_get;
+
+	/* Select DPLL */
+	REG_FLD_MOD(DSS_CONTROL, 0, 0, 0);
+
+#ifdef CONFIG_OMAP2_DSS_VENC
+	REG_FLD_MOD(DSS_CONTROL, 1, 4, 4);	/* venc dac demen */
+	REG_FLD_MOD(DSS_CONTROL, 1, 3, 3);	/* venc clock 4x enable */
+	REG_FLD_MOD(DSS_CONTROL, 0, 2, 2);	/* venc clock mode = normal */
+#endif
+	dss.dsi_clk_source[0] = OMAP_DSS_CLK_SRC_FCK;
+	dss.dsi_clk_source[1] = OMAP_DSS_CLK_SRC_FCK;
+	dss.dispc_clk_source = OMAP_DSS_CLK_SRC_FCK;
+	dss.lcd_clk_source[0] = OMAP_DSS_CLK_SRC_FCK;
+	dss.lcd_clk_source[1] = OMAP_DSS_CLK_SRC_FCK;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	r = dpi_init();
 	if (r) {
@@ -1124,21 +1342,41 @@ static int omap_dsshw_probe(struct platform_device *pdev)
 		goto err_sdi;
 	}
 
+<<<<<<< HEAD
 	dss_clk_disable_all_no_ctx();
+=======
+	rev = dss_read_reg(DSS_REVISION);
+	printk(KERN_INFO "OMAP DSS rev %d.%d\n",
+			FLD_GET(rev, 7, 4), FLD_GET(rev, 3, 0));
+
+	dss_runtime_put();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 err_sdi:
 	dpi_exit();
 err_dpi:
+<<<<<<< HEAD
 	dss_exit();
 err_dss:
 	dss_clk_disable_all_no_ctx();
 	dss_put_clocks();
 err_clocks:
+=======
+	dss_runtime_put();
+err_runtime_get:
+	pm_runtime_disable(&pdev->dev);
+	dss_put_clocks();
+err_clocks:
+	iounmap(dss.base);
+err_ioremap:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return r;
 }
 
 static int omap_dsshw_remove(struct platform_device *pdev)
 {
+<<<<<<< HEAD
 
 	dss_exit();
 
@@ -1154,12 +1392,49 @@ static int omap_dsshw_remove(struct platform_device *pdev)
 	return 0;
 }
 
+=======
+	dpi_exit();
+	sdi_exit();
+
+	iounmap(dss.base);
+
+	pm_runtime_disable(&pdev->dev);
+
+	dss_put_clocks();
+
+	return 0;
+}
+
+static int dss_runtime_suspend(struct device *dev)
+{
+	dss_save_context();
+	clk_disable(dss.dss_clk);
+	return 0;
+}
+
+static int dss_runtime_resume(struct device *dev)
+{
+	clk_enable(dss.dss_clk);
+	dss_restore_context();
+	return 0;
+}
+
+static const struct dev_pm_ops dss_pm_ops = {
+	.runtime_suspend = dss_runtime_suspend,
+	.runtime_resume = dss_runtime_resume,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct platform_driver omap_dsshw_driver = {
 	.probe          = omap_dsshw_probe,
 	.remove         = omap_dsshw_remove,
 	.driver         = {
 		.name   = "omapdss_dss",
 		.owner  = THIS_MODULE,
+<<<<<<< HEAD
+=======
+		.pm	= &dss_pm_ops,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	},
 };
 

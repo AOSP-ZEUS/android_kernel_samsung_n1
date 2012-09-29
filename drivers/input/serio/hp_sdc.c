@@ -795,7 +795,11 @@ int hp_sdc_release_cooked_irq(hp_sdc_irqhook *callback)
 
 /************************* Keepalive timer task *********************/
 
+<<<<<<< HEAD
 void hp_sdc_kicker (unsigned long data)
+=======
+static void hp_sdc_kicker(unsigned long data)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	tasklet_schedule(&hp_sdc.task);
 	/* Re-insert the periodic task. */

@@ -254,7 +254,11 @@ static inline struct dio_driver *dio_dev_driver(const struct dio_dev *d)
 
 #define dio_resource_start(d) ((d)->resource.start)
 #define dio_resource_end(d)   ((d)->resource.end)
+<<<<<<< HEAD
 #define dio_resource_len(d)   ((d)->resource.end-(d)->resource.start+1)
+=======
+#define dio_resource_len(d)   (resource_size(&(d)->resource))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define dio_resource_flags(d) ((d)->resource.flags)
 
 #define dio_request_device(d, name) \

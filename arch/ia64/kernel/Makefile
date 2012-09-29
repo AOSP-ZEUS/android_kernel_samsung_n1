@@ -43,7 +43,11 @@ obj-$(CONFIG_IA64_ESI)		+= esi.o
 ifneq ($(CONFIG_IA64_ESI),)
 obj-y				+= esi_stub.o	# must be in kernel proper
 endif
+<<<<<<< HEAD
 obj-$(CONFIG_DMAR)		+= pci-dma.o
+=======
+obj-$(CONFIG_INTEL_IOMMU)	+= pci-dma.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_SWIOTLB)		+= pci-swiotlb.o
 
 obj-$(CONFIG_BINFMT_ELF)	+= elfcore.o

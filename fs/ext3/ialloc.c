@@ -23,6 +23,10 @@
 #include <linux/buffer_head.h>
 #include <linux/random.h>
 #include <linux/bitops.h>
+<<<<<<< HEAD
+=======
+#include <trace/events/ext3.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/byteorder.h>
 
@@ -118,6 +122,10 @@ void ext3_free_inode (handle_t *handle, struct inode * inode)
 
 	ino = inode->i_ino;
 	ext3_debug ("freeing inode %lu\n", ino);
+<<<<<<< HEAD
+=======
+	trace_ext3_free_inode(inode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	is_directory = S_ISDIR(inode->i_mode);
 
@@ -426,6 +434,10 @@ struct inode *ext3_new_inode(handle_t *handle, struct inode * dir,
 		return ERR_PTR(-EPERM);
 
 	sb = dir->i_sb;
+<<<<<<< HEAD
+=======
+	trace_ext3_request_inode(dir, mode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	inode = new_inode(sb);
 	if (!inode)
 		return ERR_PTR(-ENOMEM);
@@ -601,6 +613,10 @@ got:
 	}
 
 	ext3_debug("allocating inode %lu\n", inode->i_ino);
+<<<<<<< HEAD
+=======
+	trace_ext3_allocate_inode(inode, dir, mode);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	goto really_out;
 fail:
 	ext3_std_error(sb, err);

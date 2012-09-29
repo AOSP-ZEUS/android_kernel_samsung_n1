@@ -68,7 +68,11 @@
 extern unsigned int __mxc_cpu_type;
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MX1
+=======
+#ifdef CONFIG_SOC_IMX1
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 # ifdef mxc_cpu_type
 #  undef mxc_cpu_type
 #  define mxc_cpu_type __mxc_cpu_type
@@ -80,7 +84,11 @@ extern unsigned int __mxc_cpu_type;
 # define cpu_is_mx1()		(0)
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_MACH_MX21
+=======
+#ifdef CONFIG_SOC_IMX21
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 # ifdef mxc_cpu_type
 #  undef mxc_cpu_type
 #  define mxc_cpu_type __mxc_cpu_type
@@ -92,7 +100,11 @@ extern unsigned int __mxc_cpu_type;
 # define cpu_is_mx21()		(0)
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MX25
+=======
+#ifdef CONFIG_SOC_IMX25
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 # ifdef mxc_cpu_type
 #  undef mxc_cpu_type
 #  define mxc_cpu_type __mxc_cpu_type
@@ -104,7 +116,11 @@ extern unsigned int __mxc_cpu_type;
 # define cpu_is_mx25()		(0)
 #endif
 
+<<<<<<< HEAD
 #ifdef CONFIG_MACH_MX27
+=======
+#ifdef CONFIG_SOC_IMX27
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 # ifdef mxc_cpu_type
 #  undef mxc_cpu_type
 #  define mxc_cpu_type __mxc_cpu_type

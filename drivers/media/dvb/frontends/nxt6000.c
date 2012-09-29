@@ -50,7 +50,11 @@ static int nxt6000_writereg(struct nxt6000_state* state, u8 reg, u8 data)
 	if ((ret = i2c_transfer(state->i2c, &msg, 1)) != 1)
 		dprintk("nxt6000: nxt6000_write error (reg: 0x%02X, data: 0x%02X, ret: %d)\n", reg, data, ret);
 
+<<<<<<< HEAD
 	return (ret != 1) ? -EFAULT : 0;
+=======
+	return (ret != 1) ? -EIO : 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static u8 nxt6000_readreg(struct nxt6000_state* state, u8 reg)

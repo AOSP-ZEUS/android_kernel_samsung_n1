@@ -33,11 +33,18 @@ obj-$(CONFIG_TOUCHSCREEN_MCS5000)	+= mcs5000_ts.o
 obj-$(CONFIG_TOUCHSCREEN_MIGOR)		+= migor_ts.o
 obj-$(CONFIG_TOUCHSCREEN_MTOUCH)	+= mtouch.o
 obj-$(CONFIG_TOUCHSCREEN_MK712)		+= mk712.o
+<<<<<<< HEAD
 obj-$(CONFIG_TOUCHSCREEN_MXT224)	+= mxt224.o
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_TOUCHSCREEN_HP600)		+= hp680_ts_input.o
 obj-$(CONFIG_TOUCHSCREEN_HP7XX)		+= jornada720_ts.o
 obj-$(CONFIG_TOUCHSCREEN_HTCPEN)	+= htcpen.o
 obj-$(CONFIG_TOUCHSCREEN_USB_COMPOSITE)	+= usbtouchscreen.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_TOUCHSCREEN_PANJIT_I2C)	+= panjit_i2c.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 obj-$(CONFIG_TOUCHSCREEN_PCAP)		+= pcap_ts.o
 obj-$(CONFIG_TOUCHSCREEN_PENMOUNT)	+= penmount.o
 obj-$(CONFIG_TOUCHSCREEN_S3C2410)	+= s3c2410_ts.o
@@ -62,3 +69,14 @@ obj-$(CONFIG_TOUCHSCREEN_WM97XX_MAINSTONE)	+= mainstone-wm97xx.o
 obj-$(CONFIG_TOUCHSCREEN_WM97XX_ZYLONITE)	+= zylonite-wm97xx.o
 obj-$(CONFIG_TOUCHSCREEN_W90X900)	+= w90p910_ts.o
 obj-$(CONFIG_TOUCHSCREEN_TPS6507X)	+= tps6507x-ts.o
+<<<<<<< HEAD
+=======
+obj-$(CONFIG_TOUCHSCREEN_RM31080A)	+= rm31080a_ts.o
+obj-$(CONFIG_TOUCHSCREEN_SYN_RMI4_SPI)  += rmi4/
+ifeq ($(CONFIG_MACH_BOSE_ATT),y)
+obj-$(CONFIG_TOUCHSCREEN_ATMEL_MXT224E)     += mxt224_bose.o
+else
+obj-$(CONFIG_TOUCHSCREEN_ATMEL_MXT224E)     += atmel_mxt224E.o
+obj-$(CONFIG_TOUCHSCREEN_ATMEL_MXT224E)     += atmel_mxt224E_cfg.o
+endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

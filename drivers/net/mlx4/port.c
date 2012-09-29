@@ -146,7 +146,11 @@ int mlx4_register_mac(struct mlx4_dev *dev, u8 port, u64 mac, int *qpn, u8 wrap)
 	int i, err = 0;
 	int free = -1;
 
+<<<<<<< HEAD
 	if (dev->caps.vep_uc_steering) {
+=======
+	if (dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_UC_STEER) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		err = mlx4_uc_steer_add(dev, port, mac, qpn, 1);
 		if (!err) {
 			entry = kmalloc(sizeof *entry, GFP_KERNEL);
@@ -203,7 +207,11 @@ int mlx4_register_mac(struct mlx4_dev *dev, u8 port, u64 mac, int *qpn, u8 wrap)
 		goto out;
 	}
 
+<<<<<<< HEAD
 	if (!dev->caps.vep_uc_steering)
+=======
+	if (!(dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_UC_STEER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		*qpn = info->base_qpn + free;
 	++table->total;
 out:
@@ -243,7 +251,11 @@ void mlx4_unregister_mac(struct mlx4_dev *dev, u8 port, int qpn)
 	int index = qpn - info->base_qpn;
 	struct mlx4_mac_entry *entry;
 
+<<<<<<< HEAD
 	if (dev->caps.vep_uc_steering) {
+=======
+	if (dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_UC_STEER) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		entry = radix_tree_lookup(&info->mac_tree, qpn);
 		if (entry) {
 			mlx4_uc_steer_release(dev, port, entry->mac, qpn, 1);
@@ -258,9 +270,18 @@ void mlx4_unregister_mac(struct mlx4_dev *dev, u8 port, int qpn)
 	if (validate_index(dev, table, index))
 		goto out;
 
+<<<<<<< HEAD
 	table->entries[index] = 0;
 	mlx4_set_port_mac_table(dev, port, table->entries);
 	--table->total;
+=======
+	/* Check whether this address has reference count */
+	if (!(--table->refs[index])) {
+		table->entries[index] = 0;
+		mlx4_set_port_mac_table(dev, port, table->entries);
+		--table->total;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 out:
 	mutex_unlock(&table->mutex);
 }
@@ -274,7 +295,11 @@ int mlx4_replace_mac(struct mlx4_dev *dev, u8 port, int qpn, u64 new_mac, u8 wra
 	struct mlx4_mac_entry *entry;
 	int err;
 
+<<<<<<< HEAD
 	if (dev->caps.vep_uc_steering) {
+=======
+	if (dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_UC_STEER) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		entry = radix_tree_lookup(&info->mac_tree, qpn);
 		if (!entry)
 			return -EINVAL;

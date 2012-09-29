@@ -511,6 +511,17 @@ struct libfc_function_template {
 	 */
 	int (*ddp_done)(struct fc_lport *, u16);
 	/*
+<<<<<<< HEAD
+=======
+	 * Sets up the DDP context for a given exchange id on the given
+	 * scatterlist if LLD supports DDP for FCoE target.
+	 *
+	 * STATUS: OPTIONAL
+	 */
+	int (*ddp_target)(struct fc_lport *, u16, struct scatterlist *,
+			  unsigned int);
+	/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 * Allow LLD to fill its own Link Error Status Block
 	 *
 	 * STATUS: OPTIONAL

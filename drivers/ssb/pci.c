@@ -1,7 +1,11 @@
 /*
  * Sonics Silicon Backplane PCI-Hostbus related functions.
  *
+<<<<<<< HEAD
  * Copyright (C) 2005-2006 Michael Buesch <mb@bu3sch.de>
+=======
+ * Copyright (C) 2005-2006 Michael Buesch <m@bues.ch>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Copyright (C) 2005 Martin Langer <martin-langer@gmx.de>
  * Copyright (C) 2005 Stefano Brivio <st3@riseup.net>
  * Copyright (C) 2005 Danny van Dyk <kugelfang@gentoo.org>
@@ -734,12 +738,18 @@ out_free:
 static void ssb_pci_get_boardinfo(struct ssb_bus *bus,
 				  struct ssb_boardinfo *bi)
 {
+<<<<<<< HEAD
 	pci_read_config_word(bus->host_pci, PCI_SUBSYSTEM_VENDOR_ID,
 			     &bi->vendor);
 	pci_read_config_word(bus->host_pci, PCI_SUBSYSTEM_ID,
 			     &bi->type);
 	pci_read_config_word(bus->host_pci, PCI_REVISION_ID,
 			     &bi->rev);
+=======
+	bi->vendor = bus->host_pci->subsystem_vendor;
+	bi->type = bus->host_pci->subsystem_device;
+	bi->rev = bus->host_pci->revision;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 int ssb_pci_get_invariants(struct ssb_bus *bus,

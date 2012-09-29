@@ -41,7 +41,11 @@ struct arm_pmu_platdata {
  * encoded error on failure.
  */
 extern struct platform_device *
+<<<<<<< HEAD
 reserve_pmu(enum arm_pmu_type device);
+=======
+reserve_pmu(enum arm_pmu_type type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * release_pmu() - Relinquish control of the performance counters
@@ -52,7 +56,11 @@ reserve_pmu(enum arm_pmu_type device);
  * a cookie.
  */
 extern int
+<<<<<<< HEAD
 release_pmu(struct platform_device *pdev);
+=======
+release_pmu(enum arm_pmu_type type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /**
  * init_pmu() - Initialise the PMU.
@@ -62,26 +70,42 @@ release_pmu(struct platform_device *pdev);
  * the actual hardware initialisation.
  */
 extern int
+<<<<<<< HEAD
 init_pmu(enum arm_pmu_type device);
+=======
+init_pmu(enum arm_pmu_type type);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #else /* CONFIG_CPU_HAS_PMU */
 
 #include <linux/err.h>
 
 static inline struct platform_device *
+<<<<<<< HEAD
 reserve_pmu(enum arm_pmu_type device)
+=======
+reserve_pmu(enum arm_pmu_type type)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return ERR_PTR(-ENODEV);
 }
 
 static inline int
+<<<<<<< HEAD
 release_pmu(struct platform_device *pdev)
+=======
+release_pmu(enum arm_pmu_type type)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return -ENODEV;
 }
 
 static inline int
+<<<<<<< HEAD
 init_pmu(enum arm_pmu_type device)
+=======
+init_pmu(enum arm_pmu_type type)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	return -ENODEV;
 }

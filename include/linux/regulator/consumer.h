@@ -2,6 +2,10 @@
  * consumer.h -- SoC Regulator consumer support.
  *
  * Copyright (C) 2007, 2008 Wolfson Microelectronics PLC.
+<<<<<<< HEAD
+=======
+ * Copyright (C) 2012 NVIDIA Corporation
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * Author: Liam Girdwood <lrg@slimlogic.co.uk>
  *
@@ -92,6 +96,13 @@
  * FORCE_DISABLE  Regulator forcibly shut down by software.
  * VOLTAGE_CHANGE Regulator voltage changed.
  * DISABLE        Regulator was disabled.
+<<<<<<< HEAD
+=======
+ * PRE_ENABLE     Regulator is to be enabled
+ * POST_ENABLE    Regulator was enabled
+ * OUT_PRECHANGE  Regulator is enabled and its voltage is to be changed
+ * OUT_POSTCHANGE Regulator is enabled and its voltage was changed
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  *
  * NOTE: These events can be OR'ed together when passed into handler.
  */
@@ -104,6 +115,13 @@
 #define REGULATOR_EVENT_FORCE_DISABLE		0x20
 #define REGULATOR_EVENT_VOLTAGE_CHANGE		0x40
 #define REGULATOR_EVENT_DISABLE 		0x80
+<<<<<<< HEAD
+=======
+#define REGULATOR_EVENT_PRE_ENABLE		0x100
+#define REGULATOR_EVENT_POST_ENABLE		0x200
+#define REGULATOR_EVENT_OUT_PRECHANGE		0x400
+#define REGULATOR_EVENT_OUT_POSTCHANGE		0x800
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 struct regulator;
 
@@ -122,6 +140,12 @@ struct regulator;
 struct regulator_bulk_data {
 	const char *supply;
 	struct regulator *consumer;
+<<<<<<< HEAD
+=======
+
+	/* private: Internal use */
+	int ret;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #if defined(CONFIG_REGULATOR)
@@ -194,6 +218,15 @@ static inline struct regulator *__must_check regulator_get(struct device *dev,
 	 */
 	return NULL;
 }
+<<<<<<< HEAD
+=======
+static inline struct regulator *__must_check regulator_get_exclusive(
+		struct device *dev, const char *id)
+{
+	/* See comment for regulator_get() stub, above */
+	return NULL;
+}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline void regulator_put(struct regulator *regulator)
 {
 }
@@ -208,6 +241,14 @@ static inline int regulator_disable(struct regulator *regulator)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static inline int regulator_force_disable(struct regulator *regulator)
+{
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int regulator_is_enabled(struct regulator *regulator)
 {
 	return 1;
@@ -237,17 +278,54 @@ static inline void regulator_bulk_free(int num_consumers,
 {
 }
 
+<<<<<<< HEAD
+=======
+static inline int regulator_count_voltages(struct regulator *regulator)
+{
+	return 0;
+}
+
+static inline int regulator_list_voltage(struct regulator *regulator,
+					 unsigned selector)
+{
+	return 0;
+}
+
+static inline int regulator_is_supported_voltage(struct regulator *regulator,
+						 int min_uV, int max_uV)
+{
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int regulator_set_voltage(struct regulator *regulator,
 					int min_uV, int max_uV)
 {
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static inline int regulator_set_voltage_time(struct regulator *regulator,
+					     int old_uV, int new_uV)
+{
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int regulator_get_voltage(struct regulator *regulator)
 {
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static inline int regulator_sync_voltage(struct regulator *regulator)
+{
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static inline int regulator_set_current_limit(struct regulator *regulator,
 					     int min_uA, int max_uA)
 {

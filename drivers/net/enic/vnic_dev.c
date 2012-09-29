@@ -40,6 +40,15 @@ struct vnic_res {
 	unsigned int count;
 };
 
+<<<<<<< HEAD
+=======
+struct vnic_intr_coal_timer_info {
+	u32 mul;
+	u32 div;
+	u32 max_usec;
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct vnic_dev {
 	void *priv;
 	struct pci_dev *pdev;
@@ -58,6 +67,10 @@ struct vnic_dev {
 	enum vnic_proxy_type proxy;
 	u32 proxy_index;
 	u64 args[VNIC_DEVCMD_NARGS];
+<<<<<<< HEAD
+=======
+	struct vnic_intr_coal_timer_info intr_coal_timer_info;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #define VNIC_MAX_RES_HDR_SIZE \
@@ -794,6 +807,45 @@ int vnic_dev_deinit(struct vnic_dev *vdev)
 	return vnic_dev_cmd(vdev, CMD_DEINIT, &a0, &a1, wait);
 }
 
+<<<<<<< HEAD
+=======
+void vnic_dev_intr_coal_timer_info_default(struct vnic_dev *vdev)
+{
+	/* Default: hardware intr coal timer is in units of 1.5 usecs */
+	vdev->intr_coal_timer_info.mul = 2;
+	vdev->intr_coal_timer_info.div = 3;
+	vdev->intr_coal_timer_info.max_usec =
+		vnic_dev_intr_coal_timer_hw_to_usec(vdev, 0xffff);
+}
+
+int vnic_dev_intr_coal_timer_info(struct vnic_dev *vdev)
+{
+	int wait = 1000;
+	int err;
+
+	memset(vdev->args, 0, sizeof(vdev->args));
+
+	err = _vnic_dev_cmd(vdev, CMD_INTR_COAL_CONVERT, wait);
+
+	/* Use defaults when firmware doesn't support the devcmd at all or
+	 * supports it for only specific hardware
+	 */
+	if ((err == ERR_ECMDUNKNOWN) ||
+		(!err && !(vdev->args[0] && vdev->args[1] && vdev->args[2]))) {
+		pr_warning("Using default conversion factor for "
+			"interrupt coalesce timer\n");
+		vnic_dev_intr_coal_timer_info_default(vdev);
+		return 0;
+	}
+
+	vdev->intr_coal_timer_info.mul = (u32) vdev->args[0];
+	vdev->intr_coal_timer_info.div = (u32) vdev->args[1];
+	vdev->intr_coal_timer_info.max_usec = (u32) vdev->args[2];
+
+	return err;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 int vnic_dev_link_status(struct vnic_dev *vdev)
 {
 	if (!vnic_dev_notify_ready(vdev))
@@ -838,6 +890,26 @@ enum vnic_dev_intr_mode vnic_dev_get_intr_mode(
 	return vdev->intr_mode;
 }
 
+<<<<<<< HEAD
+=======
+u32 vnic_dev_intr_coal_timer_usec_to_hw(struct vnic_dev *vdev, u32 usec)
+{
+	return (usec * vdev->intr_coal_timer_info.mul) /
+		vdev->intr_coal_timer_info.div;
+}
+
+u32 vnic_dev_intr_coal_timer_hw_to_usec(struct vnic_dev *vdev, u32 hw_cycles)
+{
+	return (hw_cycles * vdev->intr_coal_timer_info.div) /
+		vdev->intr_coal_timer_info.mul;
+}
+
+u32 vnic_dev_get_intr_coal_timer_max(struct vnic_dev *vdev)
+{
+	return vdev->intr_coal_timer_info.max_usec;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 void vnic_dev_unregister(struct vnic_dev *vdev)
 {
 	if (vdev) {

@@ -217,6 +217,10 @@ struct ceph_osd_request *ceph_osdc_alloc_request(struct ceph_osd_client *osdc,
 	INIT_LIST_HEAD(&req->r_unsafe_item);
 	INIT_LIST_HEAD(&req->r_linger_item);
 	INIT_LIST_HEAD(&req->r_linger_osd);
+<<<<<<< HEAD
+=======
+	INIT_LIST_HEAD(&req->r_req_lru_item);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	req->r_flags = flags;
 
 	WARN_ON((flags & (CEPH_OSD_FLAG_READ|CEPH_OSD_FLAG_WRITE)) == 0);
@@ -685,6 +689,21 @@ static void __remove_osd(struct ceph_osd_client *osdc, struct ceph_osd *osd)
 	put_osd(osd);
 }
 
+<<<<<<< HEAD
+=======
+static void remove_all_osds(struct ceph_osd_client *osdc)
+{
+	dout("__remove_old_osds %p\n", osdc);
+	mutex_lock(&osdc->request_mutex);
+	while (!RB_EMPTY_ROOT(&osdc->osds)) {
+		struct ceph_osd *osd = rb_entry(rb_first(&osdc->osds),
+						struct ceph_osd, o_node);
+		__remove_osd(osdc, osd);
+	}
+	mutex_unlock(&osdc->request_mutex);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __move_osd_to_lru(struct ceph_osd_client *osdc,
 			      struct ceph_osd *osd)
 {
@@ -701,14 +720,22 @@ static void __remove_osd_from_lru(struct ceph_osd *osd)
 		list_del_init(&osd->o_osd_lru);
 }
 
+<<<<<<< HEAD
 static void remove_old_osds(struct ceph_osd_client *osdc, int remove_all)
+=======
+static void remove_old_osds(struct ceph_osd_client *osdc)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct ceph_osd *osd, *nosd;
 
 	dout("__remove_old_osds %p\n", osdc);
 	mutex_lock(&osdc->request_mutex);
 	list_for_each_entry_safe(osd, nosd, &osdc->osd_lru, o_osd_lru) {
+<<<<<<< HEAD
 		if (!remove_all && time_before(jiffies, osd->lru_ttl))
+=======
+		if (time_before(jiffies, osd->lru_ttl))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			break;
 		__remove_osd(osdc, osd);
 	}
@@ -751,6 +778,10 @@ static void __insert_osd(struct ceph_osd_client *osdc, struct ceph_osd *new)
 	struct rb_node *parent = NULL;
 	struct ceph_osd *osd = NULL;
 
+<<<<<<< HEAD
+=======
+	dout("__insert_osd %p osd%d\n", new, new->o_osd);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	while (*p) {
 		parent = *p;
 		osd = rb_entry(parent, struct ceph_osd, o_node);
@@ -803,13 +834,19 @@ static void __register_request(struct ceph_osd_client *osdc,
 {
 	req->r_tid = ++osdc->last_tid;
 	req->r_request->hdr.tid = cpu_to_le64(req->r_tid);
+<<<<<<< HEAD
 	INIT_LIST_HEAD(&req->r_req_lru_item);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dout("__register_request %p tid %lld\n", req, req->r_tid);
 	__insert_request(osdc, req);
 	ceph_osdc_get_request(req);
 	osdc->num_requests++;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (osdc->num_requests == 1) {
 		dout(" first request, scheduling timeout\n");
 		__schedule_osd_timeout(osdc);
@@ -1085,9 +1122,21 @@ static void handle_timeout(struct work_struct *work)
 		req = list_entry(osdc->req_lru.next, struct ceph_osd_request,
 				 r_req_lru_item);
 
+<<<<<<< HEAD
 		if (time_before(jiffies, req->r_stamp + timeout))
 			break;
 
+=======
+		/* hasn't been long enough since we sent it? */
+		if (time_before(jiffies, req->r_stamp + timeout))
+			break;
+
+		/* hasn't been long enough since it was acked? */
+		if (req->r_request->ack_stamp == 0 ||
+		    time_before(jiffies, req->r_request->ack_stamp + timeout))
+			break;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		BUG_ON(req == last_req && req->r_stamp == last_stamp);
 		last_req = req;
 		last_stamp = req->r_stamp;
@@ -1138,7 +1187,11 @@ static void handle_osds_timeout(struct work_struct *work)
 
 	dout("osds timeout\n");
 	down_read(&osdc->map_sem);
+<<<<<<< HEAD
 	remove_old_osds(osdc, 0);
+=======
+	remove_old_osds(osdc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	up_read(&osdc->map_sem);
 
 	schedule_delayed_work(&osdc->osds_timeout_work,
@@ -1856,8 +1909,12 @@ void ceph_osdc_stop(struct ceph_osd_client *osdc)
 		ceph_osdmap_destroy(osdc->osdmap);
 		osdc->osdmap = NULL;
 	}
+<<<<<<< HEAD
 	remove_old_osds(osdc, 1);
 	WARN_ON(!RB_EMPTY_ROOT(&osdc->osds));
+=======
+	remove_all_osds(osdc);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mempool_destroy(osdc->req_mempool);
 	ceph_msgpool_destroy(&osdc->msgpool_op);
 	ceph_msgpool_destroy(&osdc->msgpool_op_reply);

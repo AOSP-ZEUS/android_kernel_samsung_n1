@@ -191,6 +191,7 @@ nfsd4_build_namelist(void *arg, const char *name, int namlen,
 }
 
 static int
+<<<<<<< HEAD
 nfsd4_list_rec_dir(struct dentry *dir, recdir_func *f)
 {
 	const struct cred *original_cred;
@@ -203,10 +204,20 @@ nfsd4_list_rec_dir(struct dentry *dir, recdir_func *f)
 	if (!rec_file)
 		return 0;
 
+=======
+nfsd4_list_rec_dir(recdir_func *f)
+{
+	const struct cred *original_cred;
+	struct dentry *dir = rec_file->f_path.dentry;
+	LIST_HEAD(names);
+	int status;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	status = nfs4_save_creds(&original_cred);
 	if (status < 0)
 		return status;
 
+<<<<<<< HEAD
 	filp = dentry_open(dget(dir), mntget(rec_file->f_path.mnt), O_RDONLY,
 			   current_cred());
 	status = PTR_ERR(filp);
@@ -227,16 +238,42 @@ nfsd4_list_rec_dir(struct dentry *dir, recdir_func *f)
 		dput(dentry);
 		if (status)
 			break;
+=======
+	status = vfs_llseek(rec_file, 0, SEEK_SET);
+	if (status < 0) {
+		nfs4_reset_creds(original_cred);
+		return status;
+	}
+
+	status = vfs_readdir(rec_file, nfsd4_build_namelist, &names);
+	mutex_lock_nested(&dir->d_inode->i_mutex, I_MUTEX_PARENT);
+	while (!list_empty(&names)) {
+		struct name_list *entry;
+		entry = list_entry(names.next, struct name_list, list);
+		if (!status) {
+			struct dentry *dentry;
+			dentry = lookup_one_len(entry->name, dir, HEXDIR_LEN-1);
+			if (IS_ERR(dentry)) {
+				status = PTR_ERR(dentry);
+				break;
+			}
+			status = f(dir, dentry);
+			dput(dentry);
+		}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		list_del(&entry->list);
 		kfree(entry);
 	}
 	mutex_unlock(&dir->d_inode->i_mutex);
+<<<<<<< HEAD
 out:
 	while (!list_empty(&names)) {
 		entry = list_entry(names.next, struct name_list, list);
 		list_del(&entry->list);
 		kfree(entry);
 	}
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	nfs4_reset_creds(original_cred);
 	return status;
 }
@@ -322,7 +359,11 @@ nfsd4_recdir_purge_old(void) {
 	status = mnt_want_write(rec_file->f_path.mnt);
 	if (status)
 		goto out;
+<<<<<<< HEAD
 	status = nfsd4_list_rec_dir(rec_file->f_path.dentry, purge_old);
+=======
+	status = nfsd4_list_rec_dir(purge_old);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (status == 0)
 		vfs_fsync(rec_file, 0);
 	mnt_drop_write(rec_file->f_path.mnt);
@@ -352,7 +393,11 @@ nfsd4_recdir_load(void) {
 	if (!rec_file)
 		return 0;
 
+<<<<<<< HEAD
 	status = nfsd4_list_rec_dir(rec_file->f_path.dentry, load_recdir);
+=======
+	status = nfsd4_list_rec_dir(load_recdir);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (status)
 		printk("nfsd4: failed loading clients from recovery"
 			" directory %s\n", rec_file->f_path.dentry->d_name.name);

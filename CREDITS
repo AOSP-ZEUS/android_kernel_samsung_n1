@@ -504,7 +504,11 @@ N: Dominik Brodowski
 E: linux@brodo.de
 W: http://www.brodo.de/
 P: 1024D/725B37C6  190F 3E77 9C89 3B6D BECD  46EE 67C3 0308 725B 37C6
+<<<<<<< HEAD
 D: parts of CPUFreq code, ACPI bugfixes
+=======
+D: parts of CPUFreq code, ACPI bugfixes, PCMCIA rewrite, cpufrequtils
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 S: Tuebingen, Germany
 
 N: Andries Brouwer
@@ -857,6 +861,13 @@ S: One Dell Way
 S: Round Rock, TX  78682
 S: USA
 
+<<<<<<< HEAD
+=======
+N: Mattia Dongili
+E: malattia@gmail.com
+D: cpufrequtils (precursor to cpupowerutils)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 N: Ben Dooks
 E: ben-linux@fluff.org
 E: ben@simtec.co.uk
@@ -1883,6 +1894,14 @@ S: Kruislaan 419
 S: 1098 VA Amsterdam 
 S: The Netherlands
 
+<<<<<<< HEAD
+=======
+N: Goran Koruga
+E: korugag@siol.net
+D: cpufrequtils (precursor to cpupowerutils)
+S: Slovenia
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 N: Jiri Kosina
 E: jikos@jikos.cz
 E: jkosina@suse.cz
@@ -2916,6 +2935,15 @@ S: Schlossbergring 9
 S: 79098 Freiburg
 S: Germany
 
+<<<<<<< HEAD
+=======
+N: Thomas Renninger
+E: trenn@suse.de
+D: cpupowerutils
+S: SUSE Linux GmbH
+S: Germany
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 N: Joerg Reuter
 E: jreuter@yaina.de
 W: http://yaina.de/jreuter/

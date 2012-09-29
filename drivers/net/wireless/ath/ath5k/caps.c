@@ -52,8 +52,13 @@ int ath5k_hw_set_capabilities(struct ath5k_hw *ah)
 		__set_bit(AR5K_MODE_11A, caps->cap_mode);
 	} else {
 		/*
+<<<<<<< HEAD
 		 * XXX The tranceiver supports frequencies from 4920 to 6100GHz
 		 * XXX and from 2312 to 2732GHz. There are problems with the
+=======
+		 * XXX The transceiver supports frequencies from 4920 to 6100MHz
+		 * XXX and from 2312 to 2732MHz. There are problems with the
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 * XXX current ieee80211 implementation because the IEEE
 		 * XXX channel mapping does not support negative channel
 		 * XXX numbers (2312MHz is channel -19). Of course, this
@@ -112,6 +117,7 @@ int ath5k_hw_set_capabilities(struct ath5k_hw *ah)
 	return 0;
 }
 
+<<<<<<< HEAD
 /* Main function used by the driver part to check caps */
 int ath5k_hw_get_capability(struct ath5k_hw *ah,
 		enum ath5k_capability_type cap_type,
@@ -157,6 +163,8 @@ yes:
 	return 0;
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * TODO: Following functions should be part of a new function
  * set_capability

@@ -132,6 +132,7 @@ struct machine_desc * __init setup_machine_fdt(unsigned int dt_phys)
 
 	return mdesc_best;
 }
+<<<<<<< HEAD
 
 /**
  * irq_create_of_mapping - Hook to resolve OF irq specifier into a Linux irq#
@@ -146,3 +147,5 @@ unsigned int irq_create_of_mapping(struct device_node *controller,
 	return intspec[0];
 }
 EXPORT_SYMBOL_GPL(irq_create_of_mapping);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

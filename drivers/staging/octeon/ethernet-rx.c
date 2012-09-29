@@ -34,6 +34,10 @@
 #include <linux/ip.h>
 #include <linux/string.h>
 #include <linux/prefetch.h>
+<<<<<<< HEAD
+=======
+#include <linux/ratelimit.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/smp.h>
 #include <net/dst.h>
 #ifdef CONFIG_XFRM
@@ -41,7 +45,11 @@
 #include <net/xfrm.h>
 #endif /* CONFIG_XFRM */
 
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/octeon/octeon.h>
 
@@ -186,13 +194,21 @@ static inline int cvm_oct_check_rcv_error(cvmx_wqe_t *work)
 
 			if (*ptr == 0xd5) {
 				/*
+<<<<<<< HEAD
 				   DEBUGPRINT("Port %d received 0xd5 preamble\n", work->ipprt);
+=======
+				  printk_ratelimited("Port %d received 0xd5 preamble\n", work->ipprt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				 */
 				work->packet_ptr.s.addr += i + 1;
 				work->len -= i + 5;
 			} else if ((*ptr & 0xf) == 0xd) {
 				/*
+<<<<<<< HEAD
 				   DEBUGPRINT("Port %d received 0x?d preamble\n", work->ipprt);
+=======
+				  printk_ratelimited("Port %d received 0x?d preamble\n", work->ipprt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				 */
 				work->packet_ptr.s.addr += i;
 				work->len -= i + 4;
@@ -203,9 +219,15 @@ static inline int cvm_oct_check_rcv_error(cvmx_wqe_t *work)
 					ptr++;
 				}
 			} else {
+<<<<<<< HEAD
 				DEBUGPRINT("Port %d unknown preamble, packet "
 					   "dropped\n",
 				     work->ipprt);
+=======
+				printk_ratelimited("Port %d unknown preamble, packet "
+						   "dropped\n",
+						   work->ipprt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				/*
 				   cvmx_helper_dump_packet(work);
 				 */
@@ -214,8 +236,13 @@ static inline int cvm_oct_check_rcv_error(cvmx_wqe_t *work)
 			}
 		}
 	} else {
+<<<<<<< HEAD
 		DEBUGPRINT("Port %d receive error code %d, packet dropped\n",
 			   work->ipprt, work->word2.snoip.err_code);
+=======
+		printk_ratelimited("Port %d receive error code %d, packet dropped\n",
+				   work->ipprt, work->word2.snoip.err_code);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		cvm_oct_free_work(work);
 		return 1;
 	}
@@ -334,8 +361,14 @@ static int cvm_oct_napi_poll(struct napi_struct *napi, int budget)
 			 */
 			skb = dev_alloc_skb(work->len);
 			if (!skb) {
+<<<<<<< HEAD
 				DEBUGPRINT("Port %d failed to allocate skbuff, packet dropped\n",
 					   work->ipprt);
+=======
+				printk_ratelimited("Port %d failed to allocate "
+						   "skbuff, packet dropped\n",
+						   work->ipprt);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				cvm_oct_free_work(work);
 				continue;
 			}
@@ -409,7 +442,12 @@ static int cvm_oct_napi_poll(struct napi_struct *napi, int budget)
 				skb->protocol = eth_type_trans(skb, dev);
 				skb->dev = dev;
 
+<<<<<<< HEAD
 				if (unlikely(work->word2.s.not_IP || work->word2.s.IP_exc || work->word2.s.L4_error))
+=======
+				if (unlikely(work->word2.s.not_IP || work->word2.s.IP_exc ||
+					work->word2.s.L4_error || !work->word2.s.tcp_or_udp))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					skb->ip_summed = CHECKSUM_NONE;
 				else
 					skb->ip_summed = CHECKSUM_UNNECESSARY;
@@ -429,7 +467,11 @@ static int cvm_oct_napi_poll(struct napi_struct *napi, int budget)
 			} else {
 				/* Drop any packet received for a device that isn't up */
 				/*
+<<<<<<< HEAD
 				DEBUGPRINT("%s: Device not up, packet dropped\n",
+=======
+				  printk_ratelimited("%s: Device not up, packet dropped\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 					   dev->name);
 				*/
 #ifdef CONFIG_64BIT
@@ -444,7 +486,11 @@ static int cvm_oct_napi_poll(struct napi_struct *napi, int budget)
 			 * Drop any packet received for a device that
 			 * doesn't exist.
 			 */
+<<<<<<< HEAD
 			DEBUGPRINT("Port %d not controlled by Linux, packet dropped\n",
+=======
+			printk_ratelimited("Port %d not controlled by Linux, packet dropped\n",
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				   work->ipprt);
 			dev_kfree_skb_irq(skb);
 		}

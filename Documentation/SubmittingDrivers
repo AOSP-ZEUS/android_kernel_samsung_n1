@@ -130,7 +130,11 @@ Linux kernel master tree:
 	ftp.??.kernel.org:/pub/linux/kernel/...
 	?? == your country code, such as "us", "uk", "fr", etc.
 
+<<<<<<< HEAD
 	http://git.kernel.org/?p=linux/kernel/git/torvalds/linux-2.6.git
+=======
+	http://git.kernel.org/?p=linux/kernel/git/torvalds/linux.git
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 Linux kernel mailing list:
 	linux-kernel@vger.kernel.org

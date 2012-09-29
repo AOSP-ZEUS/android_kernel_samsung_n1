@@ -568,7 +568,11 @@ static struct pmu fsl_emb_pmu = {
  * here so there is no possibility of being interrupted.
  */
 static void record_and_restart(struct perf_event *event, unsigned long val,
+<<<<<<< HEAD
 			       struct pt_regs *regs, int nmi)
+=======
+			       struct pt_regs *regs)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	u64 period = event->hw.sample_period;
 	s64 prev, delta, left;
@@ -616,7 +620,11 @@ static void record_and_restart(struct perf_event *event, unsigned long val,
 		perf_sample_data_init(&data, 0);
 		data.period = event->hw.last_period;
 
+<<<<<<< HEAD
 		if (perf_event_overflow(event, nmi, &data, regs))
+=======
+		if (perf_event_overflow(event, &data, regs))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			fsl_emb_pmu_stop(event, 0);
 	}
 }
@@ -644,7 +652,11 @@ static void perf_event_interrupt(struct pt_regs *regs)
 			if (event) {
 				/* event has overflowed */
 				found = 1;
+<<<<<<< HEAD
 				record_and_restart(event, val, regs, nmi);
+=======
+				record_and_restart(event, val, regs);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			} else {
 				/*
 				 * Disabled counter is negative,

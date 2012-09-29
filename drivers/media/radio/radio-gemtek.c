@@ -21,21 +21,34 @@
 #include <linux/ioport.h>	/* request_region		*/
 #include <linux/delay.h>	/* udelay			*/
 #include <linux/videodev2.h>	/* kernel radio structs		*/
+<<<<<<< HEAD
 #include <linux/version.h>	/* for KERNEL_VERSION MACRO	*/
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/mutex.h>
 #include <linux/io.h>		/* outb, outb_p			*/
 #include <media/v4l2-ioctl.h>
 #include <media/v4l2-device.h>
 
+<<<<<<< HEAD
 #define RADIO_VERSION KERNEL_VERSION(0, 0, 3)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Module info.
  */
 
+<<<<<<< HEAD
 MODULE_AUTHOR("Jonas Munsin, Pekka Sepp‰nen <pexu@kapsi.fi>");
 MODULE_DESCRIPTION("A driver for the GemTek Radio card.");
 MODULE_LICENSE("GPL");
+=======
+MODULE_AUTHOR("Jonas Munsin, Pekka Sepp√§nen <pexu@kapsi.fi>");
+MODULE_DESCRIPTION("A driver for the GemTek Radio card.");
+MODULE_LICENSE("GPL");
+MODULE_VERSION("0.0.4");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*
  * Module params.
@@ -387,7 +400,10 @@ static int vidioc_querycap(struct file *file, void *priv,
 	strlcpy(v->driver, "radio-gemtek", sizeof(v->driver));
 	strlcpy(v->card, "GemTek", sizeof(v->card));
 	strlcpy(v->bus_info, "ISA", sizeof(v->bus_info));
+<<<<<<< HEAD
 	v->version = RADIO_VERSION;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	v->capabilities = V4L2_CAP_TUNER | V4L2_CAP_RADIO;
 	return 0;
 }

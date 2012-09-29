@@ -27,8 +27,13 @@ static inline void fill_ldt(struct desc_struct *desc, const struct user_desc *in
 
 	desc->base2		= (info->base_addr & 0xff000000) >> 24;
 	/*
+<<<<<<< HEAD
 	 * Don't allow setting of the lm bit. It is useless anyway
 	 * because 64bit system calls require __USER_CS:
+=======
+	 * Don't allow setting of the lm bit. It would confuse
+	 * user_64bit_mode and would get overridden by sysret anyway.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	 */
 	desc->l			= 0;
 }

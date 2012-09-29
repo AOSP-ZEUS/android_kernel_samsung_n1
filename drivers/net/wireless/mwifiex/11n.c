@@ -185,6 +185,7 @@ int mwifiex_ret_11n_addba_req(struct mwifiex_private *priv,
  *
  * Handling includes changing the header fields into CPU format.
  */
+<<<<<<< HEAD
 int mwifiex_ret_11n_cfg(struct host_cmd_ds_command *resp, void *data_buf)
 {
 	struct mwifiex_ds_11n_tx_cfg *tx_cfg;
@@ -192,6 +193,14 @@ int mwifiex_ret_11n_cfg(struct host_cmd_ds_command *resp, void *data_buf)
 
 	if (data_buf) {
 		tx_cfg = (struct mwifiex_ds_11n_tx_cfg *) data_buf;
+=======
+int mwifiex_ret_11n_cfg(struct host_cmd_ds_command *resp,
+			struct mwifiex_ds_11n_tx_cfg *tx_cfg)
+{
+	struct host_cmd_ds_11n_cfg *htcfg = &resp->params.htcfg;
+
+	if (tx_cfg) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		tx_cfg->tx_htcap = le16_to_cpu(htcfg->ht_tx_cap);
 		tx_cfg->tx_htinfo = le16_to_cpu(htcfg->ht_tx_info);
 	}
@@ -208,11 +217,18 @@ int mwifiex_ret_11n_cfg(struct host_cmd_ds_command *resp, void *data_buf)
  */
 int mwifiex_cmd_recfg_tx_buf(struct mwifiex_private *priv,
 			     struct host_cmd_ds_command *cmd, int cmd_action,
+<<<<<<< HEAD
 			     void *data_buf)
 {
 	struct host_cmd_ds_txbuf_cfg *tx_buf = &cmd->params.tx_buf;
 	u16 action = (u16) cmd_action;
 	u16 buf_size = *((u16 *) data_buf);
+=======
+			     u16 *buf_size)
+{
+	struct host_cmd_ds_txbuf_cfg *tx_buf = &cmd->params.tx_buf;
+	u16 action = (u16) cmd_action;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	cmd->command = cpu_to_le16(HostCmd_CMD_RECONFIGURE_TX_BUFF);
 	cmd->size =
@@ -220,8 +236,13 @@ int mwifiex_cmd_recfg_tx_buf(struct mwifiex_private *priv,
 	tx_buf->action = cpu_to_le16(action);
 	switch (action) {
 	case HostCmd_ACT_GEN_SET:
+<<<<<<< HEAD
 		dev_dbg(priv->adapter->dev, "cmd: set tx_buf=%d\n", buf_size);
 		tx_buf->buff_size = cpu_to_le16(buf_size);
+=======
+		dev_dbg(priv->adapter->dev, "cmd: set tx_buf=%d\n", *buf_size);
+		tx_buf->buff_size = cpu_to_le16(*buf_size);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		break;
 	case HostCmd_ACT_GEN_GET:
 	default:
@@ -240,13 +261,21 @@ int mwifiex_cmd_recfg_tx_buf(struct mwifiex_private *priv,
  *      - Ensuring correct endian-ness
  */
 int mwifiex_cmd_amsdu_aggr_ctrl(struct host_cmd_ds_command *cmd,
+<<<<<<< HEAD
 				int cmd_action, void *data_buf)
+=======
+				int cmd_action,
+				struct mwifiex_ds_11n_amsdu_aggr_ctrl *aa_ctrl)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct host_cmd_ds_amsdu_aggr_ctrl *amsdu_ctrl =
 		&cmd->params.amsdu_aggr_ctrl;
 	u16 action = (u16) cmd_action;
+<<<<<<< HEAD
 	struct mwifiex_ds_11n_amsdu_aggr_ctrl *aa_ctrl =
 		(struct mwifiex_ds_11n_amsdu_aggr_ctrl *) data_buf;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	cmd->command = cpu_to_le16(HostCmd_CMD_AMSDU_AGGR_CTRL);
 	cmd->size = cpu_to_le16(sizeof(struct host_cmd_ds_amsdu_aggr_ctrl)
@@ -272,6 +301,7 @@ int mwifiex_cmd_amsdu_aggr_ctrl(struct host_cmd_ds_command *cmd,
  * Handling includes changing the header fields into CPU format.
  */
 int mwifiex_ret_amsdu_aggr_ctrl(struct host_cmd_ds_command *resp,
+<<<<<<< HEAD
 				void *data_buf)
 {
 	struct mwifiex_ds_11n_amsdu_aggr_ctrl *amsdu_aggr_ctrl;
@@ -281,6 +311,15 @@ int mwifiex_ret_amsdu_aggr_ctrl(struct host_cmd_ds_command *resp,
 	if (data_buf) {
 		amsdu_aggr_ctrl =
 			(struct mwifiex_ds_11n_amsdu_aggr_ctrl *) data_buf;
+=======
+				struct mwifiex_ds_11n_amsdu_aggr_ctrl
+				*amsdu_aggr_ctrl)
+{
+	struct host_cmd_ds_amsdu_aggr_ctrl *amsdu_ctrl =
+		&resp->params.amsdu_aggr_ctrl;
+
+	if (amsdu_aggr_ctrl) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		amsdu_aggr_ctrl->enable = le16_to_cpu(amsdu_ctrl->enable);
 		amsdu_aggr_ctrl->curr_buf_size =
 			le16_to_cpu(amsdu_ctrl->curr_buf_size);
@@ -296,12 +335,19 @@ int mwifiex_ret_amsdu_aggr_ctrl(struct host_cmd_ds_command *resp,
  *      - Setting HT Tx capability and HT Tx information fields
  *      - Ensuring correct endian-ness
  */
+<<<<<<< HEAD
 int mwifiex_cmd_11n_cfg(struct host_cmd_ds_command *cmd,
 			u16 cmd_action, void *data_buf)
 {
 	struct host_cmd_ds_11n_cfg *htcfg = &cmd->params.htcfg;
 	struct mwifiex_ds_11n_tx_cfg *txcfg =
 		(struct mwifiex_ds_11n_tx_cfg *) data_buf;
+=======
+int mwifiex_cmd_11n_cfg(struct host_cmd_ds_command *cmd, u16 cmd_action,
+			struct mwifiex_ds_11n_tx_cfg *txcfg)
+{
+	struct host_cmd_ds_11n_cfg *htcfg = &cmd->params.htcfg;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	cmd->command = cpu_to_le16(HostCmd_CMD_11N_CFG);
 	cmd->size = cpu_to_le16(sizeof(struct host_cmd_ds_11n_cfg) + S_DS_GEN);

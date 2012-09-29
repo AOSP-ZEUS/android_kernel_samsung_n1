@@ -108,9 +108,15 @@ static void __init mx51_efikamx_board_id(void)
 	gpio_request(EFIKAMX_PCBID2, "pcbid2");
 	gpio_direction_input(EFIKAMX_PCBID2);
 
+<<<<<<< HEAD
 	id = gpio_get_value(EFIKAMX_PCBID0);
 	id |= gpio_get_value(EFIKAMX_PCBID1) << 1;
 	id |= gpio_get_value(EFIKAMX_PCBID2) << 2;
+=======
+	id = gpio_get_value(EFIKAMX_PCBID0) ? 1 : 0;
+	id |= (gpio_get_value(EFIKAMX_PCBID1) ? 1 : 0) << 1;
+	id |= (gpio_get_value(EFIKAMX_PCBID2) ? 1 : 0) << 2;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	switch (id) {
 	case 7:
@@ -139,7 +145,11 @@ static void __init mx51_efikamx_board_id(void)
 	}
 }
 
+<<<<<<< HEAD
 static struct gpio_led mx51_efikamx_leds[] = {
+=======
+static struct gpio_led mx51_efikamx_leds[] __initdata = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	{
 		.name = "efikamx:green",
 		.default_trigger = "default-on",
@@ -157,11 +167,17 @@ static struct gpio_led mx51_efikamx_leds[] = {
 	},
 };
 
+<<<<<<< HEAD
 static struct gpio_led_platform_data mx51_efikamx_leds_data = {
+=======
+static const struct gpio_led_platform_data
+		mx51_efikamx_leds_data __initconst = {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.leds = mx51_efikamx_leds,
 	.num_leds = ARRAY_SIZE(mx51_efikamx_leds),
 };
 
+<<<<<<< HEAD
 static struct platform_device mx51_efikamx_leds_device = {
 	.name = "leds-gpio",
 	.id = -1,
@@ -170,6 +186,8 @@ static struct platform_device mx51_efikamx_leds_device = {
 	},
 };
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct gpio_keys_button mx51_efikamx_powerkey[] = {
 	{
 		.code = KEY_POWER,
@@ -236,6 +254,11 @@ late_initcall(mx51_efikamx_power_init);
 
 static void __init mx51_efikamx_init(void)
 {
+<<<<<<< HEAD
+=======
+	imx51_soc_init();
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	mxc_iomux_v3_setup_multiple_pads(mx51efikamx_pads,
 					ARRAY_SIZE(mx51efikamx_pads));
 	efika_board_common_init();
@@ -248,7 +271,11 @@ static void __init mx51_efikamx_init(void)
 		mx51_efikamx_leds[2].default_trigger = "mmc1";
 	}
 
+<<<<<<< HEAD
 	platform_device_register(&mx51_efikamx_leds_device);
+=======
+	gpio_led_register_device(-1, &mx51_efikamx_leds_data);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	imx_add_gpio_keys(&mx51_efikamx_powerkey_data);
 
 	if (system_rev == 0x11) {

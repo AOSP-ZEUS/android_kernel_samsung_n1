@@ -26,9 +26,17 @@
 #include <linux/mfd/ab8500/gpio.h>
 #include <linux/leds-lp5521.h>
 #include <linux/input.h>
+<<<<<<< HEAD
 #include <linux/gpio_keys.h>
 #include <linux/delay.h>
 
+=======
+#include <linux/smsc911x.h>
+#include <linux/gpio_keys.h>
+#include <linux/delay.h>
+
+#include <linux/leds.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <asm/mach-types.h>
 #include <asm/mach/arch.h>
 
@@ -47,6 +55,29 @@
 #include "board-mop500.h"
 #include "board-mop500-regulators.h"
 
+<<<<<<< HEAD
+=======
+static struct gpio_led snowball_led_array[] = {
+	{
+		.name = "user_led",
+		.default_trigger = "none",
+		.gpio = 142,
+	},
+};
+
+static struct gpio_led_platform_data snowball_led_data = {
+	.leds = snowball_led_array,
+	.num_leds = ARRAY_SIZE(snowball_led_array),
+};
+
+static struct platform_device snowball_led_dev = {
+	.name = "leds-gpio",
+	.dev = {
+		.platform_data = &snowball_led_data,
+	},
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct ab8500_gpio_platform_data ab8500_gpio_pdata = {
 	.gpio_base		= MOP500_AB8500_GPIO(0),
 	.irq_base		= MOP500_AB8500_VIR_GPIO_IRQ_BASE,
@@ -69,6 +100,100 @@ static struct ab8500_gpio_platform_data ab8500_gpio_pdata = {
 					0x7A, 0x00, 0x00},
 };
 
+<<<<<<< HEAD
+=======
+static struct gpio_keys_button snowball_key_array[] = {
+	{
+		.gpio           = 32,
+		.type           = EV_KEY,
+		.code           = KEY_1,
+		.desc           = "userpb",
+		.active_low     = 1,
+		.debounce_interval = 50,
+		.wakeup         = 1,
+	},
+	{
+		.gpio           = 151,
+		.type           = EV_KEY,
+		.code           = KEY_2,
+		.desc           = "extkb1",
+		.active_low     = 1,
+		.debounce_interval = 50,
+		.wakeup         = 1,
+	},
+	{
+		.gpio           = 152,
+		.type           = EV_KEY,
+		.code           = KEY_3,
+		.desc           = "extkb2",
+		.active_low     = 1,
+		.debounce_interval = 50,
+		.wakeup         = 1,
+	},
+	{
+		.gpio           = 161,
+		.type           = EV_KEY,
+		.code           = KEY_4,
+		.desc           = "extkb3",
+		.active_low     = 1,
+		.debounce_interval = 50,
+		.wakeup         = 1,
+	},
+	{
+		.gpio           = 162,
+		.type           = EV_KEY,
+		.code           = KEY_5,
+		.desc           = "extkb4",
+		.active_low     = 1,
+		.debounce_interval = 50,
+		.wakeup         = 1,
+	},
+};
+
+static struct gpio_keys_platform_data snowball_key_data = {
+	.buttons        = snowball_key_array,
+	.nbuttons       = ARRAY_SIZE(snowball_key_array),
+};
+
+static struct platform_device snowball_key_dev = {
+	.name           = "gpio-keys",
+	.id             = -1,
+	.dev            = {
+		.platform_data  = &snowball_key_data,
+	}
+};
+
+static struct smsc911x_platform_config snowball_sbnet_cfg = {
+	.irq_polarity = SMSC911X_IRQ_POLARITY_ACTIVE_HIGH,
+	.irq_type = SMSC911X_IRQ_TYPE_PUSH_PULL,
+	.flags = SMSC911X_USE_16BIT | SMSC911X_FORCE_INTERNAL_PHY,
+	.shift = 1,
+};
+
+static struct resource sbnet_res[] = {
+	{
+		.name = "smsc911x-memory",
+		.start = (0x5000 << 16),
+		.end  =  (0x5000 << 16) + 0xffff,
+		.flags = IORESOURCE_MEM,
+	},
+	{
+		.start = NOMADIK_GPIO_TO_IRQ(140),
+		.end = NOMADIK_GPIO_TO_IRQ(140),
+		.flags = IORESOURCE_IRQ | IORESOURCE_IRQ_HIGHEDGE,
+	},
+};
+
+static struct platform_device snowball_sbnet_dev = {
+	.name           = "smsc911x",
+	.num_resources  = ARRAY_SIZE(sbnet_res),
+	.resource       = sbnet_res,
+	.dev            = {
+		.platform_data = &snowball_sbnet_cfg,
+	},
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static struct ab8500_platform_data ab8500_platdata = {
 	.irq_base	= MOP500_AB8500_IRQ_BASE,
 	.regulator_reg_init = ab8500_regulator_reg_init,
@@ -295,8 +420,14 @@ static void mop500_prox_deactivate(struct device *dev)
 }
 
 /* add any platform devices here - TODO */
+<<<<<<< HEAD
 static struct platform_device *platform_devs[] __initdata = {
 	&mop500_gpio_keys_device,
+=======
+static struct platform_device *mop500_platform_devs[] __initdata = {
+	&mop500_gpio_keys_device,
+	&ab8500_device,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #ifdef CONFIG_STE_DMA40
@@ -478,6 +609,16 @@ static void __init mop500_uart_init(void)
 	db8500_add_uart2(&uart2_plat);
 }
 
+<<<<<<< HEAD
+=======
+static struct platform_device *snowball_platform_devs[] __initdata = {
+	&snowball_led_dev,
+	&snowball_key_dev,
+	&snowball_sbnet_dev,
+	&ab8500_device,
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void __init mop500_init_machine(void)
 {
 	int i2c0_devs;
@@ -487,24 +628,45 @@ static void __init mop500_init_machine(void)
 	 * all these GPIO pins to the internal GPIO controller
 	 * instead.
 	 */
+<<<<<<< HEAD
 	if (machine_is_hrefv60())
 		mop500_gpio_keys[0].gpio = HREFV60_PROX_SENSE_GPIO;
 	else
 		mop500_gpio_keys[0].gpio = GPIO_PROX_SENSOR;
+=======
+	if (!machine_is_snowball()) {
+		if (machine_is_hrefv60())
+			mop500_gpio_keys[0].gpio = HREFV60_PROX_SENSE_GPIO;
+		else
+			mop500_gpio_keys[0].gpio = GPIO_PROX_SENSOR;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u8500_init_devices();
 
 	mop500_pins_init();
 
+<<<<<<< HEAD
 	platform_add_devices(platform_devs, ARRAY_SIZE(platform_devs));
+=======
+	if (machine_is_snowball())
+		platform_add_devices(snowball_platform_devs,
+					ARRAY_SIZE(snowball_platform_devs));
+	else
+		platform_add_devices(mop500_platform_devs,
+					ARRAY_SIZE(mop500_platform_devs));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mop500_i2c_init();
 	mop500_sdi_init();
 	mop500_spi_init();
 	mop500_uart_init();
 
+<<<<<<< HEAD
 	platform_device_register(&ab8500_device);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	i2c0_devs = ARRAY_SIZE(mop500_i2c0_devices);
 	if (machine_is_hrefv60())
 		i2c0_devs -= NUM_PRE_V60_I2C0_DEVICES;
@@ -512,6 +674,12 @@ static void __init mop500_init_machine(void)
 	i2c_register_board_info(0, mop500_i2c0_devices, i2c0_devs);
 	i2c_register_board_info(2, mop500_i2c2_devices,
 				ARRAY_SIZE(mop500_i2c2_devices));
+<<<<<<< HEAD
+=======
+
+	/* This board has full regulator constraints */
+	regulator_has_full_constraints();
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 MACHINE_START(U8500, "ST-Ericsson MOP500 platform")
@@ -531,3 +699,15 @@ MACHINE_START(HREFV60, "ST-Ericsson U8500 Platform HREFv60+")
 	.timer		= &ux500_timer,
 	.init_machine	= mop500_init_machine,
 MACHINE_END
+<<<<<<< HEAD
+=======
+
+MACHINE_START(SNOWBALL, "Calao Systems Snowball platform")
+	.boot_params	= 0x100,
+	.map_io		= u8500_map_io,
+	.init_irq	= ux500_init_irq,
+	/* we re-use nomadik timer here */
+	.timer		= &ux500_timer,
+	.init_machine	= mop500_init_machine,
+MACHINE_END
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

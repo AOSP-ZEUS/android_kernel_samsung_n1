@@ -30,8 +30,11 @@
 #include <sched.h>
 #include <sys/mman.h>
 
+<<<<<<< HEAD
 #define FD(e, x, y) (*(int *)xyarray__entry(e->fd, x, y))
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 enum write_mode_t {
 	WRITE_FORCE,
 	WRITE_APPEND
@@ -47,7 +50,11 @@ static int			freq				=   1000;
 static int			output;
 static int			pipe_output			=      0;
 static const char		*output_name			= NULL;
+<<<<<<< HEAD
 static int			group				=      0;
+=======
+static bool			group				=  false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int			realtime_prio			=      0;
 static bool			nodelay				=  false;
 static bool			raw_samples			=  false;
@@ -163,6 +170,10 @@ static void config_attr(struct perf_evsel *evsel, struct perf_evlist *evlist)
 	struct perf_event_attr *attr = &evsel->attr;
 	int track = !evsel->idx; /* only the first counter needs these */
 
+<<<<<<< HEAD
+=======
+	attr->disabled		= 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	attr->inherit		= !no_inherit;
 	attr->read_format	= PERF_FORMAT_TOTAL_TIME_ENABLED |
 				  PERF_FORMAT_TOTAL_TIME_RUNNING |
@@ -438,7 +449,10 @@ static void mmap_read_all(void)
 
 static int __cmd_record(int argc, const char **argv)
 {
+<<<<<<< HEAD
 	int i;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct stat st;
 	int flags;
 	int err;
@@ -674,6 +688,11 @@ static int __cmd_record(int argc, const char **argv)
 		}
 	}
 
+<<<<<<< HEAD
+=======
+	perf_evlist__enable(evsel_list);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/*
 	 * Let the child rip
 	 */
@@ -682,7 +701,10 @@ static int __cmd_record(int argc, const char **argv)
 
 	for (;;) {
 		int hits = samples;
+<<<<<<< HEAD
 		int thread;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 		mmap_read_all();
 
@@ -693,6 +715,7 @@ static int __cmd_record(int argc, const char **argv)
 			waking++;
 		}
 
+<<<<<<< HEAD
 		if (done) {
 			for (i = 0; i < evsel_list->cpus->nr; i++) {
 				struct perf_evsel *pos;
@@ -706,6 +729,10 @@ static int __cmd_record(int argc, const char **argv)
 				}
 			}
 		}
+=======
+		if (done)
+			perf_evlist__disable(evsel_list);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	if (quiet || signr == SIGUSR1)
@@ -740,7 +767,11 @@ static bool force, append_file;
 const struct option record_options[] = {
 	OPT_CALLBACK('e', "event", &evsel_list, "event",
 		     "event selector. use 'perf list' to list available events",
+<<<<<<< HEAD
 		     parse_events),
+=======
+		     parse_events_option),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	OPT_CALLBACK(0, "filter", &evsel_list, "filter",
 		     "event filter", parse_filter),
 	OPT_INTEGER('p', "pid", &target_pid,
@@ -768,6 +799,11 @@ const struct option record_options[] = {
 		    "child tasks do not inherit counters"),
 	OPT_UINTEGER('F', "freq", &user_freq, "profile at this frequency"),
 	OPT_UINTEGER('m', "mmap-pages", &mmap_pages, "number of mmap data pages"),
+<<<<<<< HEAD
+=======
+	OPT_BOOLEAN(0, "group", &group,
+		    "put the counters into a counter group"),
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	OPT_BOOLEAN('g', "call-graph", &call_graph,
 		    "do call-graph (stack chain/backtrace) recording"),
 	OPT_INCR('v', "verbose", &verbose,

@@ -419,6 +419,12 @@ static int __find_resource(struct resource *root, struct resource *old,
 		else
 			tmp.end = root->end;
 
+<<<<<<< HEAD
+=======
+		if (tmp.end < tmp.start)
+			goto next;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		resource_clip(&tmp, constraint->min, constraint->max);
 		arch_remove_reservations(&tmp);
 
@@ -436,8 +442,15 @@ static int __find_resource(struct resource *root, struct resource *old,
 				return 0;
 			}
 		}
+<<<<<<< HEAD
 		if (!this)
 			break;
+=======
+
+next:		if (!this || this->end == root->end)
+			break;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (this != old)
 			tmp.start = this->end + 1;
 		this = this->sibling;
@@ -553,6 +566,30 @@ int allocate_resource(struct resource *root, struct resource *new,
 
 EXPORT_SYMBOL(allocate_resource);
 
+<<<<<<< HEAD
+=======
+/**
+ * lookup_resource - find an existing resource by a resource start address
+ * @root: root resource descriptor
+ * @start: resource start address
+ *
+ * Returns a pointer to the resource if found, NULL otherwise
+ */
+struct resource *lookup_resource(struct resource *root, resource_size_t start)
+{
+	struct resource *res;
+
+	read_lock(&resource_lock);
+	for (res = root->child; res; res = res->sibling) {
+		if (res->start == start)
+			break;
+	}
+	read_unlock(&resource_lock);
+
+	return res;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /*
  * Insert a resource into the resource tree. If successful, return NULL,
  * otherwise return the conflicting resource (compare to __request_resource())

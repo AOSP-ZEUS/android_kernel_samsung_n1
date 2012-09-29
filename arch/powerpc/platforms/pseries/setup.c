@@ -324,8 +324,14 @@ static int alloc_dispatch_logs(void)
 	dtl->enqueue_to_dispatch_time = DISPATCH_LOG_BYTES;
 	ret = register_dtl(hard_smp_processor_id(), __pa(dtl));
 	if (ret)
+<<<<<<< HEAD
 		pr_warn("DTL registration failed for boot cpu %d (%d)\n",
 			smp_processor_id(), ret);
+=======
+		pr_err("WARNING: DTL registration of cpu %d (hw %d) failed "
+		       "with %d\n", smp_processor_id(),
+		       hard_smp_processor_id(), ret);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	get_paca()->lppaca_ptr->dtl_enable_mask = 2;
 
 	return 0;
@@ -512,9 +518,16 @@ static void __init pSeries_init_early(void)
 {
 	pr_debug(" -> pSeries_init_early()\n");
 
+<<<<<<< HEAD
 	if (firmware_has_feature(FW_FEATURE_LPAR))
 		find_udbg_vterm();
 
+=======
+#ifdef CONFIG_HVC_CONSOLE
+	if (firmware_has_feature(FW_FEATURE_LPAR))
+		hvc_vio_init_early();
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (firmware_has_feature(FW_FEATURE_DABR))
 		ppc_md.set_dabr = pseries_set_dabr;
 	else if (firmware_has_feature(FW_FEATURE_XDABR))

@@ -241,7 +241,11 @@ static int decode_nlm4_stat(struct xdr_stream *xdr, __be32 *stat)
 	p = xdr_inline_decode(xdr, 4);
 	if (unlikely(p == NULL))
 		goto out_overflow;
+<<<<<<< HEAD
 	if (unlikely(ntohl(*p) > ntohl(nlm4_failed)))
+=======
+	if (unlikely(*p > nlm4_failed))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		goto out_bad_xdr;
 	*stat = *p;
 	return 0;

@@ -97,16 +97,28 @@ struct eth_dev {
 
 static unsigned qmult = 5;
 module_param(qmult, uint, S_IRUGO|S_IWUSR);
+<<<<<<< HEAD
 MODULE_PARM_DESC(qmult, "queue length multiplier at high speed");
+=======
+MODULE_PARM_DESC(qmult, "queue length multiplier at high/super speed");
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #else	/* full speed (low speed doesn't do bulk) */
 #define qmult		1
 #endif
 
+<<<<<<< HEAD
 /* for dual-speed hardware, use deeper queues at highspeed */
 static inline int qlen(struct usb_gadget *gadget)
 {
 	if (gadget_is_dualspeed(gadget) && gadget->speed == USB_SPEED_HIGH)
+=======
+/* for dual-speed hardware, use deeper queues at high/super speed */
+static inline int qlen(struct usb_gadget *gadget)
+{
+	if (gadget_is_dualspeed(gadget) && (gadget->speed == USB_SPEED_HIGH ||
+					    gadget->speed == USB_SPEED_SUPER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return qmult * DEFAULT_QLEN;
 	else
 		return DEFAULT_QLEN;
@@ -249,13 +261,19 @@ rx_submit(struct eth_dev *dev, struct usb_request *req, gfp_t gfp_flags)
 		goto enomem;
 	}
 
+<<<<<<< HEAD
 #ifndef CONFIG_USB_ANDROID_RNDIS_DWORD_ALIGNED
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Some platforms perform better when IP packets are aligned,
 	 * but on at least one, checksumming fails otherwise.  Note:
 	 * RNDIS headers involve variable numbers of LE32 values.
 	 */
 	skb_reserve(skb, NET_IP_ALIGN);
+<<<<<<< HEAD
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	req->buf = skb->data;
 	req->length = size;
@@ -485,10 +503,14 @@ static void tx_complete(struct usb_ep *ep, struct usb_request *req)
 	list_add(&req->list, &dev->tx_reqs);
 	spin_unlock(&dev->req_lock);
 	dev_kfree_skb_any(skb);
+<<<<<<< HEAD
 #ifdef CONFIG_USB_ANDROID_RNDIS_DWORD_ALIGNED
 	if (req->buf != skb->data)
 		kfree(req->buf);
 #endif
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	atomic_dec(&dev->tx_qlen);
 	if (netif_carrier_ok(dev->net))
 		netif_wake_queue(dev->net);
@@ -582,6 +604,7 @@ static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
 
 		length = skb->len;
 	}
+<<<<<<< HEAD
 
 #ifdef CONFIG_USB_ANDROID_RNDIS_DWORD_ALIGNED
     if ((int)skb->data & 3) {
@@ -597,6 +620,9 @@ static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
 	req->buf = skb->data;
 #endif
 
+=======
+	req->buf = skb->data;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	req->context = skb;
 	req->complete = tx_complete;
 
@@ -617,9 +643,16 @@ static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
 
 	req->length = length;
 
+<<<<<<< HEAD
 	/* throttle highspeed IRQ rate back slightly */
 	if (gadget_is_dualspeed(dev->gadget))
 		req->no_interrupt = (dev->gadget->speed == USB_SPEED_HIGH)
+=======
+	/* throttle high/super speed IRQ rate back slightly */
+	if (gadget_is_dualspeed(dev->gadget))
+		req->no_interrupt = (dev->gadget->speed == USB_SPEED_HIGH ||
+				     dev->gadget->speed == USB_SPEED_SUPER)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			? ((atomic_read(&dev->tx_qlen) % qmult) != 0)
 			: 0;
 
@@ -637,10 +670,13 @@ static netdev_tx_t eth_start_xmit(struct sk_buff *skb,
 		dev_kfree_skb_any(skb);
 drop:
 		dev->net->stats.tx_dropped++;
+<<<<<<< HEAD
 #ifdef CONFIG_USB_ANDROID_RNDIS_DWORD_ALIGNED
 		if (req->buf != skb->data)
 			kfree(req->buf);
 #endif
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		spin_lock_irqsave(&dev->req_lock, flags);
 		if (list_empty(&dev->tx_reqs))
 			netif_start_queue(net);
@@ -716,8 +752,13 @@ static int eth_stop(struct net_device *net)
 		usb_ep_disable(link->out_ep);
 		if (netif_carrier_ok(net)) {
 			DBG(dev, "host still using in/out endpoints\n");
+<<<<<<< HEAD
 			usb_ep_enable(link->in_ep, link->in);
 			usb_ep_enable(link->out_ep, link->out);
+=======
+			usb_ep_enable(link->in_ep);
+			usb_ep_enable(link->out_ep);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 	}
 	spin_unlock_irqrestore(&dev->lock, flags);
@@ -835,12 +876,24 @@ int gether_setup_name(struct usb_gadget *g, u8 ethaddr[ETH_ALEN],
 	if (get_ether_addr(dev_addr, net->dev_addr))
 		dev_warn(&g->dev,
 			"using random %s ethernet address\n", "self");
+<<<<<<< HEAD
+=======
+
+#ifdef CONFIG_USB_ANDROID_SAMSUNG_COMPOSITE
+	memcpy(dev->host_mac, ethaddr, ETH_ALEN);
+	printk(KERN_DEBUG "usb: set unique host mac\n");
+#else
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (get_ether_addr(host_addr, dev->host_mac))
 		dev_warn(&g->dev,
 			"using random %s ethernet address\n", "host");
 
 	if (ethaddr)
 		memcpy(ethaddr, dev->host_mac, ETH_ALEN);
+<<<<<<< HEAD
+=======
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	net->netdev_ops = &eth_netdev_ops;
 
@@ -914,7 +967,11 @@ struct net_device *gether_connect(struct gether *link)
 		return ERR_PTR(-EINVAL);
 
 	link->in_ep->driver_data = dev;
+<<<<<<< HEAD
 	result = usb_ep_enable(link->in_ep, link->in);
+=======
+	result = usb_ep_enable(link->in_ep);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (result != 0) {
 		DBG(dev, "enable %s --> %d\n",
 			link->in_ep->name, result);
@@ -922,7 +979,11 @@ struct net_device *gether_connect(struct gether *link)
 	}
 
 	link->out_ep->driver_data = dev;
+<<<<<<< HEAD
 	result = usb_ep_enable(link->out_ep, link->out);
+=======
+	result = usb_ep_enable(link->out_ep);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (result != 0) {
 		DBG(dev, "enable %s --> %d\n",
 			link->out_ep->name, result);
@@ -1011,7 +1072,11 @@ void gether_disconnect(struct gether *link)
 	}
 	spin_unlock(&dev->req_lock);
 	link->in_ep->driver_data = NULL;
+<<<<<<< HEAD
 	link->in = NULL;
+=======
+	link->in_ep->desc = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	usb_ep_disable(link->out_ep);
 	spin_lock(&dev->req_lock);
@@ -1026,7 +1091,11 @@ void gether_disconnect(struct gether *link)
 	}
 	spin_unlock(&dev->req_lock);
 	link->out_ep->driver_data = NULL;
+<<<<<<< HEAD
 	link->out = NULL;
+=======
+	link->out_ep->desc = NULL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* finish forgetting about this USB link episode */
 	dev->header_len = 0;

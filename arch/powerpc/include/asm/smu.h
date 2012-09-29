@@ -547,7 +547,11 @@ struct smu_sdbp_header {
  * (currently, afaik, this concerns only the FVT partition
  * (0x12)
  */
+<<<<<<< HEAD
 #define SMU_U16_MIX(x)	le16_to_cpu(x);
+=======
+#define SMU_U16_MIX(x)	le16_to_cpu(x)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define SMU_U32_MIX(x)  ((((x) & 0xff00ff00u) >> 8)|(((x) & 0x00ff00ffu) << 8))
 
 

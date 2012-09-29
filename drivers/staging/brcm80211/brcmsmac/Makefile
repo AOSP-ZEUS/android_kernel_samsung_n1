@@ -28,6 +28,7 @@ ccflags-y :=				\
 	-Idrivers/staging/brcm80211/include
 
 BRCMSMAC_OFILES := \
+<<<<<<< HEAD
 	wl_mac80211.o \
 	wl_ucode_loader.o \
 	wlc_alloc.o \
@@ -52,6 +53,31 @@ BRCMSMAC_OFILES := \
 	hnddma.o \
 	nicpci.o \
 	nvram.o
+=======
+	mac80211_if.o \
+	ucode_loader.o \
+	alloc.o \
+	ampdu.o \
+	antsel.o \
+	bmac.o \
+	channel.o \
+	main.o \
+	phy_shim.o \
+	pmu.o \
+	rate.o \
+	stf.o \
+	aiutils.o \
+	phy/phy_cmn.o \
+	phy/phy_lcn.o \
+	phy/phy_n.o \
+	phy/phytbl_lcn.o \
+	phy/phytbl_n.o \
+	phy/phy_qmath.o \
+	otp.o \
+	srom.o \
+	dma.o \
+	nicpci.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 MODULEPFX := brcmsmac
 

@@ -836,13 +836,18 @@ static int hardware_init_port(void)
 	return 0;
 }
 
+<<<<<<< HEAD
 static int __devinit lirc_serial_probe(struct platform_device *dev)
+=======
+static int init_port(void)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	int i, nlow, nhigh, result;
 
 	result = request_irq(irq, irq_handler,
 			     IRQF_DISABLED | (share_irq ? IRQF_SHARED : 0),
 			     LIRC_DRIVER_NAME, (void *)&hardware);
+<<<<<<< HEAD
 	if (result < 0) {
 		if (result == -EBUSY)
 			printk(KERN_ERR LIRC_DRIVER_NAME ": IRQ %d busy\n",
@@ -852,6 +857,20 @@ static int __devinit lirc_serial_probe(struct platform_device *dev)
 			       ": Bad irq number or handler\n");
 		return result;
 	}
+=======
+
+	switch (result) {
+	case -EBUSY:
+		printk(KERN_ERR LIRC_DRIVER_NAME ": IRQ %d busy\n", irq);
+		return -EBUSY;
+	case -EINVAL:
+		printk(KERN_ERR LIRC_DRIVER_NAME
+		       ": Bad irq number or handler\n");
+		return -EINVAL;
+	default:
+		break;
+	};
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Reserve io region. */
 	/*
@@ -872,6 +891,7 @@ static int __devinit lirc_serial_probe(struct platform_device *dev)
 		       ": or compile the serial port driver as module and\n");
 		printk(KERN_WARNING LIRC_DRIVER_NAME
 		       ": make sure this module is loaded first\n");
+<<<<<<< HEAD
 		result = -EBUSY;
 		goto exit_free_irq;
 	}
@@ -880,6 +900,13 @@ static int __devinit lirc_serial_probe(struct platform_device *dev)
 		result = -EINVAL;
 		goto exit_release_region;
 	}
+=======
+		return -EBUSY;
+	}
+
+	if (hardware_init_port() < 0)
+		return -EINVAL;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* Initialize pulse/space widths */
 	init_timing_params(duty_cycle, freq);
@@ -911,6 +938,7 @@ static int __devinit lirc_serial_probe(struct platform_device *dev)
 
 	dprintk("Interrupt %d, port %04x obtained\n", irq, io);
 	return 0;
+<<<<<<< HEAD
 
 exit_release_region:
 	if (iommap != 0)
@@ -933,6 +961,8 @@ static int __devexit lirc_serial_remove(struct platform_device *dev)
 		release_region(io, 8);
 
 	return 0;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static int set_use_inc(void *data)
@@ -1098,6 +1128,19 @@ static struct lirc_driver driver = {
 
 static struct platform_device *lirc_serial_dev;
 
+<<<<<<< HEAD
+=======
+static int __devinit lirc_serial_probe(struct platform_device *dev)
+{
+	return 0;
+}
+
+static int __devexit lirc_serial_remove(struct platform_device *dev)
+{
+	return 0;
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int lirc_serial_suspend(struct platform_device *dev,
 			       pm_message_t state)
 {
@@ -1124,8 +1167,15 @@ static int lirc_serial_resume(struct platform_device *dev)
 {
 	unsigned long flags;
 
+<<<<<<< HEAD
 	if (hardware_init_port() < 0)
 		return -EINVAL;
+=======
+	if (hardware_init_port() < 0) {
+		lirc_serial_exit();
+		return -EINVAL;
+	}
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	spin_lock_irqsave(&hardware[type].lock, flags);
 	/* Enable Interrupt */
@@ -1198,6 +1248,13 @@ static int __init lirc_serial_init_module(void)
 {
 	int result;
 
+<<<<<<< HEAD
+=======
+	result = lirc_serial_init();
+	if (result)
+		return result;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	switch (type) {
 	case LIRC_HOMEBREW:
 	case LIRC_IRDEO:
@@ -1217,7 +1274,12 @@ static int __init lirc_serial_init_module(void)
 		break;
 #endif
 	default:
+<<<<<<< HEAD
 		return -EINVAL;
+=======
+		result = -EINVAL;
+		goto exit_serial_exit;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 	if (!softcarrier) {
 		switch (type) {
@@ -1233,26 +1295,56 @@ static int __init lirc_serial_init_module(void)
 		}
 	}
 
+<<<<<<< HEAD
 	result = lirc_serial_init();
 	if (result)
 		return result;
 
+=======
+	result = init_port();
+	if (result < 0)
+		goto exit_serial_exit;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	driver.features = hardware[type].features;
 	driver.dev = &lirc_serial_dev->dev;
 	driver.minor = lirc_register_driver(&driver);
 	if (driver.minor < 0) {
 		printk(KERN_ERR  LIRC_DRIVER_NAME
 		       ": register_chrdev failed!\n");
+<<<<<<< HEAD
 		lirc_serial_exit();
 		return -EIO;
 	}
 	return 0;
+=======
+		result = -EIO;
+		goto exit_release;
+	}
+	return 0;
+exit_release:
+	release_region(io, 8);
+exit_serial_exit:
+	lirc_serial_exit();
+	return result;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void __exit lirc_serial_exit_module(void)
 {
+<<<<<<< HEAD
 	lirc_unregister_driver(driver.minor);
 	lirc_serial_exit();
+=======
+	lirc_serial_exit();
+
+	free_irq(irq, (void *)&hardware);
+
+	if (iommap != 0)
+		release_mem_region(iommap, 8 << ioshift);
+	else
+		release_region(io, 8);
+	lirc_unregister_driver(driver.minor);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	dprintk("cleaned up module\n");
 }
 

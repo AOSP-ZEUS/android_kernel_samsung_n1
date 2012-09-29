@@ -231,6 +231,7 @@ void __init acpi_hest_init(void)
 		goto err;
 	}
 
+<<<<<<< HEAD
 	rc = apei_hest_parse(hest_parse_ghes_count, &ghes_count);
 	if (rc)
 		goto err;
@@ -241,6 +242,19 @@ void __init acpi_hest_init(void)
 		return;
 	}
 
+=======
+	if (!ghes_disable) {
+		rc = apei_hest_parse(hest_parse_ghes_count, &ghes_count);
+		if (rc)
+			goto err;
+		rc = hest_ghes_dev_register(ghes_count);
+		if (rc)
+			goto err;
+	}
+
+	pr_info(HEST_PFX "Table parsing has been initialized.\n");
+	return;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 err:
 	hest_disable = 1;
 }

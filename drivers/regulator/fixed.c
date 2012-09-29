@@ -131,6 +131,10 @@ static int __devinit reg_fixed_voltage_probe(struct platform_device *pdev)
 	drvdata->startup_delay = config->startup_delay;
 
 	if (gpio_is_valid(config->gpio)) {
+<<<<<<< HEAD
+=======
+		int gpio_flag;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		drvdata->enable_high = config->enable_high;
 
 		/* FIXME: Remove below print warning
@@ -148,6 +152,7 @@ static int __devinit reg_fixed_voltage_probe(struct platform_device *pdev)
 			dev_warn(&pdev->dev,
 				"using GPIO 0 for regulator enable control\n");
 
+<<<<<<< HEAD
 		ret = gpio_request(config->gpio, config->supply_name);
 		if (ret) {
 			dev_err(&pdev->dev,
@@ -157,11 +162,16 @@ static int __devinit reg_fixed_voltage_probe(struct platform_device *pdev)
 		}
 
 		/* set output direction without changing state
+=======
+		/*
+		 * set output direction without changing state
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		 * to prevent glitch
 		 */
 		drvdata->is_enabled = config->enabled_at_boot;
 		ret = drvdata->is_enabled ?
 				config->enable_high : !config->enable_high;
+<<<<<<< HEAD
 
 		ret = gpio_direction_output(config->gpio, ret);
 		if (ret) {
@@ -169,6 +179,20 @@ static int __devinit reg_fixed_voltage_probe(struct platform_device *pdev)
 			   "Could not configure regulator enable GPIO %d direction: %d\n",
 							config->gpio, ret);
 			goto err_gpio;
+=======
+		gpio_flag = ret ? GPIOF_OUT_INIT_HIGH : GPIOF_OUT_INIT_LOW;
+
+		if (config->gpio_is_open_drain)
+			gpio_flag |= GPIOF_OPEN_DRAIN;
+
+		ret = gpio_request_one(config->gpio, gpio_flag,
+						config->supply_name);
+		if (ret) {
+			dev_err(&pdev->dev,
+			   "Could not obtain regulator enable GPIO %d: %d\n",
+							config->gpio, ret);
+			goto err_name;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 	} else {

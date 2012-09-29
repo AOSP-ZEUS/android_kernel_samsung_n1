@@ -1438,10 +1438,21 @@ static int udc_wakeup(struct usb_gadget *gadget)
 	return 0;
 }
 
+<<<<<<< HEAD
+=======
+static int amd5536_start(struct usb_gadget_driver *driver,
+		int (*bind)(struct usb_gadget *));
+static int amd5536_stop(struct usb_gadget_driver *driver);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* gadget operations */
 static const struct usb_gadget_ops udc_ops = {
 	.wakeup		= udc_wakeup,
 	.get_frame	= udc_get_frame,
+<<<<<<< HEAD
+=======
+	.start		= amd5536_start,
+	.stop		= amd5536_stop,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 /* Setups endpoint parameters, adds endpoints to linked list */
@@ -1955,7 +1966,11 @@ static int setup_ep0(struct udc *dev)
 }
 
 /* Called by gadget driver to register itself */
+<<<<<<< HEAD
 int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
+=======
+static int amd5536_start(struct usb_gadget_driver *driver,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		int (*bind)(struct usb_gadget *))
 {
 	struct udc		*dev = udc;
@@ -2002,7 +2017,10 @@ int usb_gadget_probe_driver(struct usb_gadget_driver *driver,
 
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_probe_driver);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* shutdown requests and disconnect from gadget */
 static void
@@ -2027,7 +2045,11 @@ __acquires(dev->lock)
 }
 
 /* Called by gadget driver to unregister itself */
+<<<<<<< HEAD
 int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
+=======
+static int amd5536_stop(struct usb_gadget_driver *driver)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct udc	*dev = udc;
 	unsigned long	flags;
@@ -2057,8 +2079,11 @@ int usb_gadget_unregister_driver(struct usb_gadget_driver *driver)
 
 	return 0;
 }
+<<<<<<< HEAD
 EXPORT_SYMBOL(usb_gadget_unregister_driver);
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* Clear pending NAK bits */
 static void udc_process_cnak_queue(struct udc *dev)
@@ -3134,6 +3159,10 @@ static void udc_pci_remove(struct pci_dev *pdev)
 
 	dev = pci_get_drvdata(pdev);
 
+<<<<<<< HEAD
+=======
+	usb_del_gadget_udc(&udc->gadget);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* gadget driver must not be registered */
 	BUG_ON(dev->driver != NULL);
 
@@ -3382,8 +3411,18 @@ static int udc_probe(struct udc *dev)
 		"driver version: %s(for Geode5536 B1)\n", tmp);
 	udc = dev;
 
+<<<<<<< HEAD
 	retval = device_register(&dev->gadget.dev);
 	if (retval) {
+=======
+	retval = usb_add_gadget_udc(&udc->pdev->dev, &dev->gadget);
+	if (retval)
+		goto finished;
+
+	retval = device_register(&dev->gadget.dev);
+	if (retval) {
+		usb_del_gadget_udc(&dev->gadget);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		put_device(&dev->gadget.dev);
 		goto finished;
 	}

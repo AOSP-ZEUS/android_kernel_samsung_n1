@@ -41,13 +41,18 @@ static void kvmppc_mmu_book3s_64_reset_msr(struct kvm_vcpu *vcpu)
 }
 
 static struct kvmppc_slb *kvmppc_mmu_book3s_64_find_slbe(
+<<<<<<< HEAD
 				struct kvmppc_vcpu_book3s *vcpu_book3s,
+=======
+				struct kvm_vcpu *vcpu,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				gva_t eaddr)
 {
 	int i;
 	u64 esid = GET_ESID(eaddr);
 	u64 esid_1t = GET_ESID_1T(eaddr);
 
+<<<<<<< HEAD
 	for (i = 0; i < vcpu_book3s->slb_nr; i++) {
 		u64 cmp_esid = esid;
 
@@ -59,10 +64,24 @@ static struct kvmppc_slb *kvmppc_mmu_book3s_64_find_slbe(
 
 		if (vcpu_book3s->slb[i].esid == cmp_esid)
 			return &vcpu_book3s->slb[i];
+=======
+	for (i = 0; i < vcpu->arch.slb_nr; i++) {
+		u64 cmp_esid = esid;
+
+		if (!vcpu->arch.slb[i].valid)
+			continue;
+
+		if (vcpu->arch.slb[i].tb)
+			cmp_esid = esid_1t;
+
+		if (vcpu->arch.slb[i].esid == cmp_esid)
+			return &vcpu->arch.slb[i];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	dprintk("KVM: No SLB entry found for 0x%lx [%llx | %llx]\n",
 		eaddr, esid, esid_1t);
+<<<<<<< HEAD
 	for (i = 0; i < vcpu_book3s->slb_nr; i++) {
 	    if (vcpu_book3s->slb[i].vsid)
 		dprintk("  %d: %c%c%c %llx %llx\n", i,
@@ -71,6 +90,16 @@ static struct kvmppc_slb *kvmppc_mmu_book3s_64_find_slbe(
 			vcpu_book3s->slb[i].tb    ? 't' : ' ',
 			vcpu_book3s->slb[i].esid,
 			vcpu_book3s->slb[i].vsid);
+=======
+	for (i = 0; i < vcpu->arch.slb_nr; i++) {
+	    if (vcpu->arch.slb[i].vsid)
+		dprintk("  %d: %c%c%c %llx %llx\n", i,
+			vcpu->arch.slb[i].valid ? 'v' : ' ',
+			vcpu->arch.slb[i].large ? 'l' : ' ',
+			vcpu->arch.slb[i].tb    ? 't' : ' ',
+			vcpu->arch.slb[i].esid,
+			vcpu->arch.slb[i].vsid);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	return NULL;
@@ -81,7 +110,11 @@ static u64 kvmppc_mmu_book3s_64_ea_to_vp(struct kvm_vcpu *vcpu, gva_t eaddr,
 {
 	struct kvmppc_slb *slb;
 
+<<<<<<< HEAD
 	slb = kvmppc_mmu_book3s_64_find_slbe(to_book3s(vcpu), eaddr);
+=======
+	slb = kvmppc_mmu_book3s_64_find_slbe(vcpu, eaddr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!slb)
 		return 0;
 
@@ -180,7 +213,11 @@ static int kvmppc_mmu_book3s_64_xlate(struct kvm_vcpu *vcpu, gva_t eaddr,
 		return 0;
 	}
 
+<<<<<<< HEAD
 	slbe = kvmppc_mmu_book3s_64_find_slbe(vcpu_book3s, eaddr);
+=======
+	slbe = kvmppc_mmu_book3s_64_find_slbe(vcpu, eaddr);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	if (!slbe)
 		goto no_seg_found;
 
@@ -320,10 +357,17 @@ static void kvmppc_mmu_book3s_64_slbmte(struct kvm_vcpu *vcpu, u64 rs, u64 rb)
 	esid_1t = GET_ESID_1T(rb);
 	slb_nr = rb & 0xfff;
 
+<<<<<<< HEAD
 	if (slb_nr > vcpu_book3s->slb_nr)
 		return;
 
 	slbe = &vcpu_book3s->slb[slb_nr];
+=======
+	if (slb_nr > vcpu->arch.slb_nr)
+		return;
+
+	slbe = &vcpu->arch.slb[slb_nr];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	slbe->large = (rs & SLB_VSID_L) ? 1 : 0;
 	slbe->tb    = (rs & SLB_VSID_B_1T) ? 1 : 0;
@@ -344,6 +388,7 @@ static void kvmppc_mmu_book3s_64_slbmte(struct kvm_vcpu *vcpu, u64 rs, u64 rb)
 
 static u64 kvmppc_mmu_book3s_64_slbmfee(struct kvm_vcpu *vcpu, u64 slb_nr)
 {
+<<<<<<< HEAD
 	struct kvmppc_vcpu_book3s *vcpu_book3s = to_book3s(vcpu);
 	struct kvmppc_slb *slbe;
 
@@ -351,12 +396,21 @@ static u64 kvmppc_mmu_book3s_64_slbmfee(struct kvm_vcpu *vcpu, u64 slb_nr)
 		return 0;
 
 	slbe = &vcpu_book3s->slb[slb_nr];
+=======
+	struct kvmppc_slb *slbe;
+
+	if (slb_nr > vcpu->arch.slb_nr)
+		return 0;
+
+	slbe = &vcpu->arch.slb[slb_nr];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return slbe->orige;
 }
 
 static u64 kvmppc_mmu_book3s_64_slbmfev(struct kvm_vcpu *vcpu, u64 slb_nr)
 {
+<<<<<<< HEAD
 	struct kvmppc_vcpu_book3s *vcpu_book3s = to_book3s(vcpu);
 	struct kvmppc_slb *slbe;
 
@@ -364,18 +418,33 @@ static u64 kvmppc_mmu_book3s_64_slbmfev(struct kvm_vcpu *vcpu, u64 slb_nr)
 		return 0;
 
 	slbe = &vcpu_book3s->slb[slb_nr];
+=======
+	struct kvmppc_slb *slbe;
+
+	if (slb_nr > vcpu->arch.slb_nr)
+		return 0;
+
+	slbe = &vcpu->arch.slb[slb_nr];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	return slbe->origv;
 }
 
 static void kvmppc_mmu_book3s_64_slbie(struct kvm_vcpu *vcpu, u64 ea)
 {
+<<<<<<< HEAD
 	struct kvmppc_vcpu_book3s *vcpu_book3s = to_book3s(vcpu);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct kvmppc_slb *slbe;
 
 	dprintk("KVM MMU: slbie(0x%llx)\n", ea);
 
+<<<<<<< HEAD
 	slbe = kvmppc_mmu_book3s_64_find_slbe(vcpu_book3s, ea);
+=======
+	slbe = kvmppc_mmu_book3s_64_find_slbe(vcpu, ea);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (!slbe)
 		return;
@@ -389,13 +458,21 @@ static void kvmppc_mmu_book3s_64_slbie(struct kvm_vcpu *vcpu, u64 ea)
 
 static void kvmppc_mmu_book3s_64_slbia(struct kvm_vcpu *vcpu)
 {
+<<<<<<< HEAD
 	struct kvmppc_vcpu_book3s *vcpu_book3s = to_book3s(vcpu);
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int i;
 
 	dprintk("KVM MMU: slbia()\n");
 
+<<<<<<< HEAD
 	for (i = 1; i < vcpu_book3s->slb_nr; i++)
 		vcpu_book3s->slb[i].valid = false;
+=======
+	for (i = 1; i < vcpu->arch.slb_nr; i++)
+		vcpu->arch.slb[i].valid = false;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (vcpu->arch.shared->msr & MSR_IR) {
 		kvmppc_mmu_flush_segments(vcpu);
@@ -464,7 +541,11 @@ static int kvmppc_mmu_book3s_64_esid_to_vsid(struct kvm_vcpu *vcpu, ulong esid,
 	ulong mp_ea = vcpu->arch.magic_page_ea;
 
 	if (vcpu->arch.shared->msr & (MSR_DR|MSR_IR)) {
+<<<<<<< HEAD
 		slb = kvmppc_mmu_book3s_64_find_slbe(to_book3s(vcpu), ea);
+=======
+		slb = kvmppc_mmu_book3s_64_find_slbe(vcpu, ea);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (slb)
 			gvsid = slb->vsid;
 	}

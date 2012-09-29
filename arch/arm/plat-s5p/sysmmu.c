@@ -232,8 +232,13 @@ static int s5p_sysmmu_probe(struct platform_device *pdev)
 			goto err_res;
 		}
 
+<<<<<<< HEAD
 		mem = request_mem_region(res->start,
 				((res->end) - (res->start)) + 1, pdev->name);
+=======
+		mem = request_mem_region(res->start, resource_size(res),
+					 pdev->name);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!mem) {
 			dev_err(dev, "Failed to request the memory region of %s.\n",
 							sysmmu_ips_name[i]);
@@ -241,7 +246,11 @@ static int s5p_sysmmu_probe(struct platform_device *pdev)
 			goto err_res;
 		}
 
+<<<<<<< HEAD
 		sysmmusfrs[i] = ioremap(res->start, res->end - res->start + 1);
+=======
+		sysmmusfrs[i] = ioremap(res->start, resource_size(res));
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (!sysmmusfrs[i]) {
 			dev_err(dev, "Failed to ioremap() for %s.\n",
 							sysmmu_ips_name[i]);

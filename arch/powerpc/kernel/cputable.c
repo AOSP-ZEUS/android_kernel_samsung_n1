@@ -2051,7 +2051,12 @@ static struct cpu_spec __initdata cpu_specs[] = {
 
 static struct cpu_spec the_cpu_spec;
 
+<<<<<<< HEAD
 static void __init setup_cpu_spec(unsigned long offset, struct cpu_spec *s)
+=======
+static struct cpu_spec * __init setup_cpu_spec(unsigned long offset,
+					       struct cpu_spec *s)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	struct cpu_spec *t = &the_cpu_spec;
 	struct cpu_spec old;
@@ -2114,6 +2119,11 @@ static void __init setup_cpu_spec(unsigned long offset, struct cpu_spec *s)
 		t->cpu_setup(offset, t);
 	}
 #endif /* CONFIG_PPC64 || CONFIG_BOOKE */
+<<<<<<< HEAD
+=======
+
+	return t;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 struct cpu_spec * __init identify_cpu(unsigned long offset, unsigned int pvr)
@@ -2124,10 +2134,15 @@ struct cpu_spec * __init identify_cpu(unsigned long offset, unsigned int pvr)
 	s = PTRRELOC(s);
 
 	for (i = 0; i < ARRAY_SIZE(cpu_specs); i++,s++) {
+<<<<<<< HEAD
 		if ((pvr & s->pvr_mask) == s->pvr_value) {
 			setup_cpu_spec(offset, s);
 			return s;
 		}
+=======
+		if ((pvr & s->pvr_mask) == s->pvr_value)
+			return setup_cpu_spec(offset, s);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	BUG();

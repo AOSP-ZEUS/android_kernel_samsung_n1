@@ -38,6 +38,10 @@ nv50_evo_channel_del(struct nouveau_channel **pevo)
 		return;
 	*pevo = NULL;
 
+<<<<<<< HEAD
+=======
+	nouveau_ramht_ref(NULL, &evo->ramht, evo);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	nouveau_gpuobj_channel_takedown(evo);
 	nouveau_bo_unmap(evo->pushbuf_bo);
 	nouveau_bo_ref(NULL, &evo->pushbuf_bo);
@@ -116,7 +120,11 @@ nv50_evo_channel_new(struct drm_device *dev, int chid,
 	evo->user_get = 4;
 	evo->user_put = 0;
 
+<<<<<<< HEAD
 	ret = nouveau_bo_new(dev, NULL, 4096, 0, TTM_PL_FLAG_VRAM, 0, 0,
+=======
+	ret = nouveau_bo_new(dev, 4096, 0, TTM_PL_FLAG_VRAM, 0, 0,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			     &evo->pushbuf_bo);
 	if (ret == 0)
 		ret = nouveau_bo_pin(evo->pushbuf_bo, TTM_PL_FLAG_VRAM);
@@ -153,7 +161,11 @@ nv50_evo_channel_init(struct nouveau_channel *evo)
 {
 	struct drm_device *dev = evo->dev;
 	int id = evo->id, ret, i;
+<<<<<<< HEAD
 	u64 pushbuf = evo->pushbuf_bo->bo.mem.start << PAGE_SHIFT;
+=======
+	u64 pushbuf = evo->pushbuf_bo->bo.offset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 tmp;
 
 	tmp = nv_rd32(dev, NV50_PDISPLAY_EVO_CTRL(id));
@@ -331,16 +343,26 @@ nv50_evo_create(struct drm_device *dev)
 		if (ret)
 			goto err;
 
+<<<<<<< HEAD
 		ret = nouveau_bo_new(dev, NULL, 4096, 0x1000, TTM_PL_FLAG_VRAM,
 				     0, 0x0000, &dispc->sem.bo);
 		if (!ret) {
 			offset = dispc->sem.bo->bo.mem.start << PAGE_SHIFT;
 
+=======
+		ret = nouveau_bo_new(dev, 4096, 0x1000, TTM_PL_FLAG_VRAM,
+				     0, 0x0000, &dispc->sem.bo);
+		if (!ret) {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			ret = nouveau_bo_pin(dispc->sem.bo, TTM_PL_FLAG_VRAM);
 			if (!ret)
 				ret = nouveau_bo_map(dispc->sem.bo);
 			if (ret)
 				nouveau_bo_ref(NULL, &dispc->sem.bo);
+<<<<<<< HEAD
+=======
+			offset = dispc->sem.bo->bo.offset;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 
 		if (ret)

@@ -939,7 +939,10 @@ struct s2io_nic {
 
 	int task_flag;
 	unsigned long long start_time;
+<<<<<<< HEAD
 	struct vlan_group *vlgrp;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	int vlan_strip_flag;
 #define MSIX_FLG                0xA5
 	int num_entries;
@@ -968,8 +971,13 @@ struct s2io_nic {
 	u8  serial_num[VPD_STRING_LEN];
 };
 
+<<<<<<< HEAD
 #define RESET_ERROR 1;
 #define CMD_ERROR   2;
+=======
+#define RESET_ERROR 1
+#define CMD_ERROR   2
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /*  OS related system calls */
 #ifndef readq

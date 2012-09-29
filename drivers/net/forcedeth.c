@@ -820,9 +820,12 @@ struct fe_priv {
 	struct nv_skb_map *tx_end_flip;
 	int tx_stop;
 
+<<<<<<< HEAD
 	/* vlan fields */
 	struct vlan_group *vlangrp;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* msi/msi-x fields */
 	u32 msi_flags;
 	struct msix_entry msi_x_entry[NV_MSI_X_MAX_VECTORS];
@@ -2766,6 +2769,7 @@ static int nv_rx_process_optimized(struct net_device *dev, int limit)
 			skb->protocol = eth_type_trans(skb, dev);
 			prefetch(skb->data);
 
+<<<<<<< HEAD
 			if (likely(!np->vlangrp)) {
 				napi_gro_receive(&np->napi, skb);
 			} else {
@@ -2777,6 +2781,22 @@ static int nv_rx_process_optimized(struct net_device *dev, int limit)
 					napi_gro_receive(&np->napi, skb);
 				}
 			}
+=======
+			vlanflags = le32_to_cpu(np->get_rx.ex->buflow);
+
+			/*
+			 * There's need to check for NETIF_F_HW_VLAN_RX here.
+			 * Even if vlan rx accel is disabled,
+			 * NV_RX3_VLAN_TAG_PRESENT is pseudo randomly set.
+			 */
+			if (dev->features & NETIF_F_HW_VLAN_RX &&
+			    vlanflags & NV_RX3_VLAN_TAG_PRESENT) {
+				u16 vid = vlanflags & NV_RX3_VLAN_TAG_MASK;
+
+				__vlan_hwaccel_put_tag(skb, vid);
+			}
+			napi_gro_receive(&np->napi, skb);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 			dev->stats.rx_packets++;
 			dev->stats.rx_bytes += len;
@@ -4484,6 +4504,30 @@ static u32 nv_fix_features(struct net_device *dev, u32 features)
 	return features;
 }
 
+<<<<<<< HEAD
+=======
+static void nv_vlan_mode(struct net_device *dev, u32 features)
+{
+	struct fe_priv *np = get_nvpriv(dev);
+
+	spin_lock_irq(&np->lock);
+
+	if (features & NETIF_F_HW_VLAN_RX)
+		np->txrxctl_bits |= NVREG_TXRXCTL_VLANSTRIP;
+	else
+		np->txrxctl_bits &= ~NVREG_TXRXCTL_VLANSTRIP;
+
+	if (features & NETIF_F_HW_VLAN_TX)
+		np->txrxctl_bits |= NVREG_TXRXCTL_VLANINS;
+	else
+		np->txrxctl_bits &= ~NVREG_TXRXCTL_VLANINS;
+
+	writel(np->txrxctl_bits, get_hwbase(dev) + NvRegTxRxControl);
+
+	spin_unlock_irq(&np->lock);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static int nv_set_features(struct net_device *dev, u32 features)
 {
 	struct fe_priv *np = netdev_priv(dev);
@@ -4504,6 +4548,12 @@ static int nv_set_features(struct net_device *dev, u32 features)
 		spin_unlock_irq(&np->lock);
 	}
 
+<<<<<<< HEAD
+=======
+	if (changed & (NETIF_F_HW_VLAN_TX | NETIF_F_HW_VLAN_RX))
+		nv_vlan_mode(dev, features);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	return 0;
 }
 
@@ -4879,6 +4929,7 @@ static const struct ethtool_ops ops = {
 	.self_test = nv_self_test,
 };
 
+<<<<<<< HEAD
 static void nv_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 {
 	struct fe_priv *np = get_nvpriv(dev);
@@ -4902,6 +4953,8 @@ static void nv_vlan_rx_register(struct net_device *dev, struct vlan_group *grp)
 	spin_unlock_irq(&np->lock);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* The mgmt unit and driver use a semaphore to access the phy during init */
 static int nv_mgmt_acquire_sema(struct net_device *dev)
 {
@@ -5208,7 +5261,10 @@ static const struct net_device_ops nv_netdev_ops = {
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_set_mac_address	= nv_set_mac_address,
 	.ndo_set_multicast_list	= nv_set_multicast,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register	= nv_vlan_rx_register,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_NET_POLL_CONTROLLER
 	.ndo_poll_controller	= nv_poll_controller,
 #endif
@@ -5226,7 +5282,10 @@ static const struct net_device_ops nv_netdev_ops_optimized = {
 	.ndo_validate_addr	= eth_validate_addr,
 	.ndo_set_mac_address	= nv_set_mac_address,
 	.ndo_set_multicast_list	= nv_set_multicast,
+<<<<<<< HEAD
 	.ndo_vlan_rx_register	= nv_vlan_rx_register,
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef CONFIG_NET_POLL_CONTROLLER
 	.ndo_poll_controller	= nv_poll_controller,
 #endif
@@ -5339,15 +5398,26 @@ static int __devinit nv_probe(struct pci_dev *pci_dev, const struct pci_device_i
 		np->txrxctl_bits |= NVREG_TXRXCTL_RXCHECK;
 		dev->hw_features |= NETIF_F_IP_CSUM | NETIF_F_SG |
 			NETIF_F_TSO | NETIF_F_RXCSUM;
+<<<<<<< HEAD
 		dev->features |= dev->hw_features;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	}
 
 	np->vlanctl_bits = 0;
 	if (id->driver_data & DEV_HAS_VLAN) {
 		np->vlanctl_bits = NVREG_VLANCONTROL_ENABLE;
+<<<<<<< HEAD
 		dev->features |= NETIF_F_HW_VLAN_RX | NETIF_F_HW_VLAN_TX;
 	}
 
+=======
+		dev->hw_features |= NETIF_F_HW_VLAN_RX | NETIF_F_HW_VLAN_TX;
+	}
+
+	dev->features |= dev->hw_features;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	np->pause_flags = NV_PAUSEFRAME_RX_CAPABLE | NV_PAUSEFRAME_RX_REQ | NV_PAUSEFRAME_AUTONEG;
 	if ((id->driver_data & DEV_HAS_PAUSEFRAME_TX_V1) ||
 	    (id->driver_data & DEV_HAS_PAUSEFRAME_TX_V2) ||
@@ -5615,6 +5685,12 @@ static int __devinit nv_probe(struct pci_dev *pci_dev, const struct pci_device_i
 		goto out_error;
 	}
 
+<<<<<<< HEAD
+=======
+	if (id->driver_data & DEV_HAS_VLAN)
+		nv_vlan_mode(dev, dev->features);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	netif_carrier_off(dev);
 
 	dev_info(&pci_dev->dev, "ifname %s, PHY OUI 0x%x @ %d, addr %pM\n",

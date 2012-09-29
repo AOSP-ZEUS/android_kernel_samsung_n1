@@ -14,6 +14,10 @@
 #ifndef BNX2X_H
 #define BNX2X_H
 #include <linux/netdevice.h>
+<<<<<<< HEAD
+=======
+#include <linux/dma-mapping.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/types.h>
 
 /* compilation time flags */
@@ -22,6 +26,7 @@
  * (you will need to reboot afterwards) */
 /* #define BNX2X_STOP_ON_ERROR */
 
+<<<<<<< HEAD
 #define DRV_MODULE_VERSION      "1.62.12-0"
 #define DRV_MODULE_RELDATE      "2011/03/20"
 #define BNX2X_BC_VER            0x040200
@@ -30,6 +35,12 @@
 
 #define BNX2X_NEW_NAPI
 
+=======
+#define DRV_MODULE_VERSION      "1.70.00-0"
+#define DRV_MODULE_RELDATE      "2011/06/13"
+#define BNX2X_BC_VER            0x040200
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #if defined(CONFIG_DCB)
 #define BCM_DCBNL
 #endif
@@ -47,11 +58,19 @@
 #endif
 
 #include <linux/mdio.h>
+<<<<<<< HEAD
 #include <linux/pci.h>
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "bnx2x_reg.h"
 #include "bnx2x_fw_defs.h"
 #include "bnx2x_hsi.h"
 #include "bnx2x_link.h"
+<<<<<<< HEAD
+=======
+#include "bnx2x_sp.h"
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include "bnx2x_dcb.h"
 #include "bnx2x_stats.h"
 
@@ -80,6 +99,15 @@ do {								\
 		       ##__args);				\
 } while (0)
 
+<<<<<<< HEAD
+=======
+#define DP_CONT(__mask, __fmt, __args...)			\
+do {								\
+	if (bp->msg_enable & (__mask))				\
+		pr_cont(__fmt, ##__args);			\
+} while (0)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* errors debug print */
 #define BNX2X_DBG_ERR(__fmt, __args...)				\
 do {								\
@@ -111,9 +139,18 @@ do {								 \
 		dev_info(&bp->pdev->dev, __fmt, ##__args);	 \
 } while (0)
 
+<<<<<<< HEAD
 void bnx2x_panic_dump(struct bnx2x *bp);
 
 #ifdef BNX2X_STOP_ON_ERROR
+=======
+#define BNX2X_MAC_FMT		"%pM"
+#define BNX2X_MAC_PRN_LIST(mac)	(mac)
+
+
+#ifdef BNX2X_STOP_ON_ERROR
+void bnx2x_int_disable(struct bnx2x *bp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define bnx2x_panic() do { \
 		bp->panic = 1; \
 		BNX2X_ERR("driver assert\n"); \
@@ -232,6 +269,7 @@ void bnx2x_panic_dump(struct bnx2x *bp);
  *  FUNC_N_CLID_X = N * NUM_SPECIAL_CLIENTS + FUNC_0_CLID_X
  *
  */
+<<<<<<< HEAD
 /* iSCSI L2 */
 #define BNX2X_ISCSI_ETH_CL_ID		17
 #define BNX2X_ISCSI_ETH_CID		17
@@ -249,6 +287,31 @@ void bnx2x_panic_dump(struct bnx2x *bp);
 #define FCOE_CONTEXT_USE		0
 #endif /* BCM_CNIC */
 #define NONE_ETH_CONTEXT_USE	(FCOE_CONTEXT_USE)
+=======
+enum {
+	BNX2X_ISCSI_ETH_CL_ID_IDX,
+	BNX2X_FCOE_ETH_CL_ID_IDX,
+	BNX2X_MAX_CNIC_ETH_CL_ID_IDX,
+};
+
+#define BNX2X_CNIC_START_ETH_CID	48
+enum {
+	/* iSCSI L2 */
+	BNX2X_ISCSI_ETH_CID = BNX2X_CNIC_START_ETH_CID,
+	/* FCoE L2 */
+	BNX2X_FCOE_ETH_CID,
+};
+
+/** Additional rings budgeting */
+#ifdef BCM_CNIC
+#define CNIC_PRESENT			1
+#define FCOE_PRESENT			1
+#else
+#define CNIC_PRESENT			0
+#define FCOE_PRESENT			0
+#endif /* BCM_CNIC */
+#define NON_ETH_CONTEXT_USE	(FCOE_PRESENT)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define AEU_IN_ATTN_BITS_PXPPCICLOCKCLIENT_PARITY_ERROR \
 	AEU_INPUTS_ATTN_BITS_PXPPCICLOCKCLIENT_PARITY_ERROR
@@ -256,8 +319,40 @@ void bnx2x_panic_dump(struct bnx2x *bp);
 #define SM_RX_ID			0
 #define SM_TX_ID			1
 
+<<<<<<< HEAD
 /* fast path */
 
+=======
+/* defines for multiple tx priority indices */
+#define FIRST_TX_ONLY_COS_INDEX		1
+#define FIRST_TX_COS_INDEX		0
+
+/* defines for decodeing the fastpath index and the cos index out of the
+ * transmission queue index
+ */
+#define MAX_TXQS_PER_COS	FP_SB_MAX_E1x
+
+#define TXQ_TO_FP(txq_index)	((txq_index) % MAX_TXQS_PER_COS)
+#define TXQ_TO_COS(txq_index)	((txq_index) / MAX_TXQS_PER_COS)
+
+/* rules for calculating the cids of tx-only connections */
+#define CID_TO_FP(cid)		((cid) % MAX_TXQS_PER_COS)
+#define CID_COS_TO_TX_ONLY_CID(cid, cos)	(cid + cos * MAX_TXQS_PER_COS)
+
+/* fp index inside class of service range */
+#define FP_COS_TO_TXQ(fp, cos)    ((fp)->index + cos * MAX_TXQS_PER_COS)
+
+/*
+ * 0..15 eth cos0
+ * 16..31 eth cos1 if applicable
+ * 32..47 eth cos2 If applicable
+ * fcoe queue follows eth queues (16, 32, 48 depending on cos)
+ */
+#define MAX_ETH_TXQ_IDX(bp)	(MAX_TXQS_PER_COS * (bp)->max_cos)
+#define FCOE_TXQ_IDX(bp)	(MAX_ETH_TXQ_IDX(bp))
+
+/* fast path */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct sw_rx_bd {
 	struct sk_buff	*skb;
 	DEFINE_DMA_UNMAP_ADDR(mapping);
@@ -281,6 +376,7 @@ union db_prod {
 	u32		raw;
 };
 
+<<<<<<< HEAD
 
 /* MC hsi */
 #define BCM_PAGE_SHIFT			12
@@ -321,6 +417,105 @@ union db_prod {
 /* Number of u64 elements in SGE mask array */
 #define RX_SGE_MASK_LEN			((NUM_RX_SGE_PAGES * RX_SGE_CNT) / \
 					 RX_SGE_MASK_ELEM_SZ)
+=======
+/* dropless fc FW/HW related params */
+#define BRB_SIZE(bp)		(CHIP_IS_E3(bp) ? 1024 : 512)
+#define MAX_AGG_QS(bp)		(CHIP_IS_E1(bp) ? \
+					ETH_MAX_AGGREGATION_QUEUES_E1 :\
+					ETH_MAX_AGGREGATION_QUEUES_E1H_E2)
+#define FW_DROP_LEVEL(bp)	(3 + MAX_SPQ_PENDING + MAX_AGG_QS(bp))
+#define FW_PREFETCH_CNT		16
+#define DROPLESS_FC_HEADROOM	100
+
+/* MC hsi */
+#define BCM_PAGE_SHIFT		12
+#define BCM_PAGE_SIZE		(1 << BCM_PAGE_SHIFT)
+#define BCM_PAGE_MASK		(~(BCM_PAGE_SIZE - 1))
+#define BCM_PAGE_ALIGN(addr)	(((addr) + BCM_PAGE_SIZE - 1) & BCM_PAGE_MASK)
+
+#define PAGES_PER_SGE_SHIFT	0
+#define PAGES_PER_SGE		(1 << PAGES_PER_SGE_SHIFT)
+#define SGE_PAGE_SIZE		PAGE_SIZE
+#define SGE_PAGE_SHIFT		PAGE_SHIFT
+#define SGE_PAGE_ALIGN(addr)	PAGE_ALIGN((typeof(PAGE_SIZE))(addr))
+
+/* SGE ring related macros */
+#define NUM_RX_SGE_PAGES	2
+#define RX_SGE_CNT		(BCM_PAGE_SIZE / sizeof(struct eth_rx_sge))
+#define NEXT_PAGE_SGE_DESC_CNT	2
+#define MAX_RX_SGE_CNT		(RX_SGE_CNT - NEXT_PAGE_SGE_DESC_CNT)
+/* RX_SGE_CNT is promised to be a power of 2 */
+#define RX_SGE_MASK		(RX_SGE_CNT - 1)
+#define NUM_RX_SGE		(RX_SGE_CNT * NUM_RX_SGE_PAGES)
+#define MAX_RX_SGE		(NUM_RX_SGE - 1)
+#define NEXT_SGE_IDX(x)		((((x) & RX_SGE_MASK) == \
+				  (MAX_RX_SGE_CNT - 1)) ? \
+					(x) + 1 + NEXT_PAGE_SGE_DESC_CNT : \
+					(x) + 1)
+#define RX_SGE(x)		((x) & MAX_RX_SGE)
+
+/*
+ * Number of required  SGEs is the sum of two:
+ * 1. Number of possible opened aggregations (next packet for
+ *    these aggregations will probably consume SGE immidiatelly)
+ * 2. Rest of BRB blocks divided by 2 (block will consume new SGE only
+ *    after placement on BD for new TPA aggregation)
+ *
+ * Takes into account NEXT_PAGE_SGE_DESC_CNT "next" elements on each page
+ */
+#define NUM_SGE_REQ		(MAX_AGG_QS(bp) + \
+					(BRB_SIZE(bp) - MAX_AGG_QS(bp)) / 2)
+#define NUM_SGE_PG_REQ		((NUM_SGE_REQ + MAX_RX_SGE_CNT - 1) / \
+						MAX_RX_SGE_CNT)
+#define SGE_TH_LO(bp)		(NUM_SGE_REQ + \
+				 NUM_SGE_PG_REQ * NEXT_PAGE_SGE_DESC_CNT)
+#define SGE_TH_HI(bp)		(SGE_TH_LO(bp) + DROPLESS_FC_HEADROOM)
+
+/* Manipulate a bit vector defined as an array of u64 */
+
+/* Number of bits in one sge_mask array element */
+#define BIT_VEC64_ELEM_SZ		64
+#define BIT_VEC64_ELEM_SHIFT		6
+#define BIT_VEC64_ELEM_MASK		((u64)BIT_VEC64_ELEM_SZ - 1)
+
+
+#define __BIT_VEC64_SET_BIT(el, bit) \
+	do { \
+		el = ((el) | ((u64)0x1 << (bit))); \
+	} while (0)
+
+#define __BIT_VEC64_CLEAR_BIT(el, bit) \
+	do { \
+		el = ((el) & (~((u64)0x1 << (bit)))); \
+	} while (0)
+
+
+#define BIT_VEC64_SET_BIT(vec64, idx) \
+	__BIT_VEC64_SET_BIT((vec64)[(idx) >> BIT_VEC64_ELEM_SHIFT], \
+			   (idx) & BIT_VEC64_ELEM_MASK)
+
+#define BIT_VEC64_CLEAR_BIT(vec64, idx) \
+	__BIT_VEC64_CLEAR_BIT((vec64)[(idx) >> BIT_VEC64_ELEM_SHIFT], \
+			     (idx) & BIT_VEC64_ELEM_MASK)
+
+#define BIT_VEC64_TEST_BIT(vec64, idx) \
+	(((vec64)[(idx) >> BIT_VEC64_ELEM_SHIFT] >> \
+	((idx) & BIT_VEC64_ELEM_MASK)) & 0x1)
+
+/* Creates a bitmask of all ones in less significant bits.
+   idx - index of the most significant bit in the created mask */
+#define BIT_VEC64_ONES_MASK(idx) \
+		(((u64)0x1 << (((idx) & BIT_VEC64_ELEM_MASK) + 1)) - 1)
+#define BIT_VEC64_ELEM_ONE_MASK	((u64)(~0))
+
+/*******************************************************/
+
+
+
+/* Number of u64 elements in SGE mask array */
+#define RX_SGE_MASK_LEN			((NUM_RX_SGE_PAGES * RX_SGE_CNT) / \
+					 BIT_VEC64_ELEM_SZ)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define RX_SGE_MASK_LEN_MASK		(RX_SGE_MASK_LEN - 1)
 #define NEXT_SGE_MASK_ELEM(el)		(((el) + 1) & RX_SGE_MASK_LEN_MASK)
 
@@ -331,7 +526,57 @@ union host_hc_status_block {
 	struct host_hc_status_block_e2  *e2_sb;
 };
 
+<<<<<<< HEAD
 struct bnx2x_fastpath {
+=======
+struct bnx2x_agg_info {
+	/*
+	 * First aggregation buffer is an skb, the following - are pages.
+	 * We will preallocate the skbs for each aggregation when
+	 * we open the interface and will replace the BD at the consumer
+	 * with this one when we receive the TPA_START CQE in order to
+	 * keep the Rx BD ring consistent.
+	 */
+	struct sw_rx_bd		first_buf;
+	u8			tpa_state;
+#define BNX2X_TPA_START			1
+#define BNX2X_TPA_STOP			2
+#define BNX2X_TPA_ERROR			3
+	u8			placement_offset;
+	u16			parsing_flags;
+	u16			vlan_tag;
+	u16			len_on_bd;
+};
+
+#define Q_STATS_OFFSET32(stat_name) \
+			(offsetof(struct bnx2x_eth_q_stats, stat_name) / 4)
+
+struct bnx2x_fp_txdata {
+
+	struct sw_tx_bd		*tx_buf_ring;
+
+	union eth_tx_bd_types	*tx_desc_ring;
+	dma_addr_t		tx_desc_mapping;
+
+	u32			cid;
+
+	union db_prod		tx_db;
+
+	u16			tx_pkt_prod;
+	u16			tx_pkt_cons;
+	u16			tx_bd_prod;
+	u16			tx_bd_cons;
+
+	unsigned long		tx_pkt;
+
+	__le16			*tx_cons_sb;
+
+	int			txq_index;
+};
+
+struct bnx2x_fastpath {
+	struct bnx2x		*bp; /* parent */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define BNX2X_NAPI_WEIGHT       128
 	struct napi_struct	napi;
@@ -346,10 +591,15 @@ struct bnx2x_fastpath {
 
 	dma_addr_t		status_blk_mapping;
 
+<<<<<<< HEAD
 	struct sw_tx_bd		*tx_buf_ring;
 
 	union eth_tx_bd_types	*tx_desc_ring;
 	dma_addr_t		tx_desc_mapping;
+=======
+	u8			max_cos; /* actual number of active tx coses */
+	struct bnx2x_fp_txdata	txdata[BNX2X_MULTI_TX_COS];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	struct sw_rx_bd		*rx_buf_ring;	/* BDs mappings ring */
 	struct sw_rx_page	*rx_page_ring;	/* SGE pages mappings ring */
@@ -366,6 +616,7 @@ struct bnx2x_fastpath {
 
 	u64			sge_mask[RX_SGE_MASK_LEN];
 
+<<<<<<< HEAD
 	int			state;
 #define BNX2X_FP_STATE_CLOSED		0
 #define BNX2X_FP_STATE_IRQ		0x80000
@@ -375,12 +626,18 @@ struct bnx2x_fastpath {
 #define BNX2X_FP_STATE_HALTED		0xc0000
 #define BNX2X_FP_STATE_TERMINATING	0xd0000
 #define BNX2X_FP_STATE_TERMINATED	0xe0000
+=======
+	u32			cid;
+
+	__le16			fp_hc_idx;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u8			index;		/* number in fp array */
 	u8			cl_id;		/* eth client id */
 	u8			cl_qzone_id;
 	u8			fw_sb_id;	/* status block number in FW */
 	u8			igu_sb_id;	/* status block number in HW */
+<<<<<<< HEAD
 	u32			cid;
 
 	union db_prod		tx_db;
@@ -392,6 +649,8 @@ struct bnx2x_fastpath {
 	__le16			*tx_cons_sb;
 
 	__le16			fp_hc_idx;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u16			rx_bd_prod;
 	u16			rx_bd_cons;
@@ -401,6 +660,7 @@ struct bnx2x_fastpath {
 	/* The last maximal completed SGE */
 	u16			last_max_sge;
 	__le16			*rx_cons_sb;
+<<<<<<< HEAD
 
 	unsigned long		tx_pkt,
 				rx_pkt,
@@ -411,14 +671,27 @@ struct bnx2x_fastpath {
 	u8			tpa_state[ETH_MAX_AGGREGATION_QUEUES_E1H];
 #define BNX2X_TPA_START			1
 #define BNX2X_TPA_STOP			2
+=======
+	unsigned long		rx_pkt,
+				rx_calls;
+
+	/* TPA related */
+	struct bnx2x_agg_info	tpa_info[ETH_MAX_AGGREGATION_QUEUES_E1H_E2];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u8			disable_tpa;
 #ifdef BNX2X_STOP_ON_ERROR
 	u64			tpa_queue_used;
 #endif
 
+<<<<<<< HEAD
 	struct tstorm_per_client_stats old_tclient;
 	struct ustorm_per_client_stats old_uclient;
 	struct xstorm_per_client_stats old_xclient;
+=======
+	struct tstorm_per_queue_stats old_tclient;
+	struct ustorm_per_queue_stats old_uclient;
+	struct xstorm_per_queue_stats old_xclient;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct bnx2x_eth_q_stats eth_q_stats;
 
 	/* The size is calculated using the following:
@@ -427,7 +700,17 @@ struct bnx2x_fastpath {
 	     4 (for the digits and to make it DWORD aligned) */
 #define FP_NAME_SIZE		(sizeof(((struct net_device *)0)->name) + 8)
 	char			name[FP_NAME_SIZE];
+<<<<<<< HEAD
 	struct bnx2x		*bp; /* parent */
+=======
+
+	/* MACs object */
+	struct bnx2x_vlan_mac_obj mac_obj;
+
+	/* Queue State object */
+	struct bnx2x_queue_sp_obj q_obj;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #define bnx2x_fp(bp, nr, var)		(bp->fp[nr].var)
@@ -435,11 +718,25 @@ struct bnx2x_fastpath {
 /* Use 2500 as a mini-jumbo MTU for FCoE */
 #define BNX2X_FCOE_MINI_JUMBO_MTU	2500
 
+<<<<<<< HEAD
 #ifdef BCM_CNIC
 /* FCoE L2 `fastpath' is right after the eth entries */
 #define FCOE_IDX			BNX2X_NUM_ETH_QUEUES(bp)
 #define bnx2x_fcoe_fp(bp)		(&bp->fp[FCOE_IDX])
 #define bnx2x_fcoe(bp, var)		(bnx2x_fcoe_fp(bp)->var)
+=======
+/* FCoE L2 `fastpath' entry is right after the eth entries */
+#define FCOE_IDX			BNX2X_NUM_ETH_QUEUES(bp)
+#define bnx2x_fcoe_fp(bp)		(&bp->fp[FCOE_IDX])
+#define bnx2x_fcoe(bp, var)		(bnx2x_fcoe_fp(bp)->var)
+#define bnx2x_fcoe_tx(bp, var)		(bnx2x_fcoe_fp(bp)-> \
+						txdata[FIRST_TX_COS_INDEX].var)
+
+
+#define IS_ETH_FP(fp)			(fp->index < \
+					 BNX2X_NUM_ETH_QUEUES(fp->bp))
+#ifdef BCM_CNIC
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define IS_FCOE_FP(fp)			(fp->index == FCOE_IDX)
 #define IS_FCOE_IDX(idx)		((idx) == FCOE_IDX)
 #else
@@ -449,6 +746,7 @@ struct bnx2x_fastpath {
 
 
 /* MC hsi */
+<<<<<<< HEAD
 #define MAX_FETCH_BD			13	/* HW max BDs per packet */
 #define RX_COPY_THRESH			92
 
@@ -520,6 +818,108 @@ struct bnx2x_fastpath {
 /* used on a CID received from the HW */
 #define SW_CID(x)			(le32_to_cpu(x) & \
 					 (COMMON_RAMROD_ETH_RX_CQE_CID >> 7))
+=======
+#define MAX_FETCH_BD		13	/* HW max BDs per packet */
+#define RX_COPY_THRESH		92
+
+#define NUM_TX_RINGS		16
+#define TX_DESC_CNT		(BCM_PAGE_SIZE / sizeof(union eth_tx_bd_types))
+#define NEXT_PAGE_TX_DESC_CNT	1
+#define MAX_TX_DESC_CNT		(TX_DESC_CNT - NEXT_PAGE_TX_DESC_CNT)
+#define NUM_TX_BD		(TX_DESC_CNT * NUM_TX_RINGS)
+#define MAX_TX_BD		(NUM_TX_BD - 1)
+#define MAX_TX_AVAIL		(MAX_TX_DESC_CNT * NUM_TX_RINGS - 2)
+#define NEXT_TX_IDX(x)		((((x) & MAX_TX_DESC_CNT) == \
+				  (MAX_TX_DESC_CNT - 1)) ? \
+					(x) + 1 + NEXT_PAGE_TX_DESC_CNT : \
+					(x) + 1)
+#define TX_BD(x)		((x) & MAX_TX_BD)
+#define TX_BD_POFF(x)		((x) & MAX_TX_DESC_CNT)
+
+/* The RX BD ring is special, each bd is 8 bytes but the last one is 16 */
+#define NUM_RX_RINGS		8
+#define RX_DESC_CNT		(BCM_PAGE_SIZE / sizeof(struct eth_rx_bd))
+#define NEXT_PAGE_RX_DESC_CNT	2
+#define MAX_RX_DESC_CNT		(RX_DESC_CNT - NEXT_PAGE_RX_DESC_CNT)
+#define RX_DESC_MASK		(RX_DESC_CNT - 1)
+#define NUM_RX_BD		(RX_DESC_CNT * NUM_RX_RINGS)
+#define MAX_RX_BD		(NUM_RX_BD - 1)
+#define MAX_RX_AVAIL		(MAX_RX_DESC_CNT * NUM_RX_RINGS - 2)
+
+/* dropless fc calculations for BDs
+ *
+ * Number of BDs should as number of buffers in BRB:
+ * Low threshold takes into account NEXT_PAGE_RX_DESC_CNT
+ * "next" elements on each page
+ */
+#define NUM_BD_REQ		BRB_SIZE(bp)
+#define NUM_BD_PG_REQ		((NUM_BD_REQ + MAX_RX_DESC_CNT - 1) / \
+					      MAX_RX_DESC_CNT)
+#define BD_TH_LO(bp)		(NUM_BD_REQ + \
+				 NUM_BD_PG_REQ * NEXT_PAGE_RX_DESC_CNT + \
+				 FW_DROP_LEVEL(bp))
+#define BD_TH_HI(bp)		(BD_TH_LO(bp) + DROPLESS_FC_HEADROOM)
+
+#define MIN_RX_AVAIL		((bp)->dropless_fc ? BD_TH_HI(bp) + 128 : 128)
+
+#define MIN_RX_SIZE_TPA_HW	(CHIP_IS_E1(bp) ? \
+					ETH_MIN_RX_CQES_WITH_TPA_E1 : \
+					ETH_MIN_RX_CQES_WITH_TPA_E1H_E2)
+#define MIN_RX_SIZE_NONTPA_HW   ETH_MIN_RX_CQES_WITHOUT_TPA
+#define MIN_RX_SIZE_TPA		(max_t(u32, MIN_RX_SIZE_TPA_HW, MIN_RX_AVAIL))
+#define MIN_RX_SIZE_NONTPA	(max_t(u32, MIN_RX_SIZE_NONTPA_HW,\
+								MIN_RX_AVAIL))
+
+#define NEXT_RX_IDX(x)		((((x) & RX_DESC_MASK) == \
+				  (MAX_RX_DESC_CNT - 1)) ? \
+					(x) + 1 + NEXT_PAGE_RX_DESC_CNT : \
+					(x) + 1)
+#define RX_BD(x)		((x) & MAX_RX_BD)
+
+/*
+ * As long as CQE is X times bigger than BD entry we have to allocate X times
+ * more pages for CQ ring in order to keep it balanced with BD ring
+ */
+#define CQE_BD_REL	(sizeof(union eth_rx_cqe) / sizeof(struct eth_rx_bd))
+#define NUM_RCQ_RINGS		(NUM_RX_RINGS * CQE_BD_REL)
+#define RCQ_DESC_CNT		(BCM_PAGE_SIZE / sizeof(union eth_rx_cqe))
+#define NEXT_PAGE_RCQ_DESC_CNT	1
+#define MAX_RCQ_DESC_CNT	(RCQ_DESC_CNT - NEXT_PAGE_RCQ_DESC_CNT)
+#define NUM_RCQ_BD		(RCQ_DESC_CNT * NUM_RCQ_RINGS)
+#define MAX_RCQ_BD		(NUM_RCQ_BD - 1)
+#define MAX_RCQ_AVAIL		(MAX_RCQ_DESC_CNT * NUM_RCQ_RINGS - 2)
+#define NEXT_RCQ_IDX(x)		((((x) & MAX_RCQ_DESC_CNT) == \
+				  (MAX_RCQ_DESC_CNT - 1)) ? \
+					(x) + 1 + NEXT_PAGE_RCQ_DESC_CNT : \
+					(x) + 1)
+#define RCQ_BD(x)		((x) & MAX_RCQ_BD)
+
+/* dropless fc calculations for RCQs
+ *
+ * Number of RCQs should be as number of buffers in BRB:
+ * Low threshold takes into account NEXT_PAGE_RCQ_DESC_CNT
+ * "next" elements on each page
+ */
+#define NUM_RCQ_REQ		BRB_SIZE(bp)
+#define NUM_RCQ_PG_REQ		((NUM_BD_REQ + MAX_RCQ_DESC_CNT - 1) / \
+					      MAX_RCQ_DESC_CNT)
+#define RCQ_TH_LO(bp)		(NUM_RCQ_REQ + \
+				 NUM_RCQ_PG_REQ * NEXT_PAGE_RCQ_DESC_CNT + \
+				 FW_DROP_LEVEL(bp))
+#define RCQ_TH_HI(bp)		(RCQ_TH_LO(bp) + DROPLESS_FC_HEADROOM)
+
+
+/* This is needed for determining of last_max */
+#define SUB_S16(a, b)		(s16)((s16)(a) - (s16)(b))
+#define SUB_S32(a, b)		(s32)((s32)(a) - (s32)(b))
+
+
+#define BNX2X_SWCID_SHIFT	17
+#define BNX2X_SWCID_MASK	((0x1 << BNX2X_SWCID_SHIFT) - 1)
+
+/* used on a CID received from the HW */
+#define SW_CID(x)			(le32_to_cpu(x) & BNX2X_SWCID_MASK)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define CQE_CMD(x)			(le32_to_cpu(x) >> \
 					COMMON_RAMROD_ETH_RX_CQE_CMD_ID_SHIFT)
 
@@ -529,6 +929,12 @@ struct bnx2x_fastpath {
 
 #define BNX2X_DB_MIN_SHIFT		3	/* 8 bytes */
 #define BNX2X_DB_SHIFT			7	/* 128 bytes*/
+<<<<<<< HEAD
+=======
+#if (BNX2X_DB_SHIFT < BNX2X_DB_MIN_SHIFT)
+#error "Min DB doorbell stride is 8"
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define DPM_TRIGER_TYPE			0x40
 #define DOORBELL(bp, cid, val) \
 	do { \
@@ -557,6 +963,7 @@ struct bnx2x_fastpath {
 
 
 /* stuff added to make the code fit 80Col */
+<<<<<<< HEAD
 
 #define CQE_TYPE(cqe_fp_flags)	((cqe_fp_flags) & ETH_FAST_PATH_RX_CQE_TYPE)
 
@@ -564,6 +971,13 @@ struct bnx2x_fastpath {
 #define TPA_TYPE_END			ETH_FAST_PATH_RX_CQE_END_FLG
 #define TPA_TYPE(cqe_fp_flags)		((cqe_fp_flags) & \
 					 (TPA_TYPE_START | TPA_TYPE_END))
+=======
+#define CQE_TYPE(cqe_fp_flags)	 ((cqe_fp_flags) & ETH_FAST_PATH_RX_CQE_TYPE)
+#define CQE_TYPE_START(cqe_type) ((cqe_type) == RX_ETH_CQE_TYPE_ETH_START_AGG)
+#define CQE_TYPE_STOP(cqe_type)  ((cqe_type) == RX_ETH_CQE_TYPE_ETH_STOP_AGG)
+#define CQE_TYPE_SLOW(cqe_type)  ((cqe_type) == RX_ETH_CQE_TYPE_ETH_RAMROD)
+#define CQE_TYPE_FAST(cqe_type)  ((cqe_type) == RX_ETH_CQE_TYPE_ETH_FASTPATH)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define ETH_RX_ERROR_FALGS		ETH_FAST_PATH_RX_CQE_PHY_DECODE_ERR_FLG
 
@@ -590,6 +1004,7 @@ struct bnx2x_fastpath {
 #define BNX2X_RX_SUM_FIX(cqe) \
 	BNX2X_PRS_FLAG_OVERETH_IPV4(cqe->fast_path_cqe.pars_flags.flags)
 
+<<<<<<< HEAD
 #define U_SB_ETH_RX_CQ_INDEX		1
 #define U_SB_ETH_RX_BD_INDEX		2
 #define C_SB_ETH_TX_CQ_INDEX		5
@@ -599,6 +1014,33 @@ struct bnx2x_fastpath {
 
 #define BNX2X_TX_SB_INDEX \
 	(&fp->sb_index_values[C_SB_ETH_TX_CQ_INDEX])
+=======
+
+#define FP_USB_FUNC_OFF	\
+			offsetof(struct cstorm_status_block_u, func)
+#define FP_CSB_FUNC_OFF	\
+			offsetof(struct cstorm_status_block_c, func)
+
+#define HC_INDEX_ETH_RX_CQ_CONS		1
+
+#define HC_INDEX_OOO_TX_CQ_CONS		4
+
+#define HC_INDEX_ETH_TX_CQ_CONS_COS0	5
+
+#define HC_INDEX_ETH_TX_CQ_CONS_COS1	6
+
+#define HC_INDEX_ETH_TX_CQ_CONS_COS2	7
+
+#define HC_INDEX_ETH_FIRST_TX_CQ_CONS	HC_INDEX_ETH_TX_CQ_CONS_COS0
+
+#define BNX2X_RX_SB_INDEX \
+	(&fp->sb_index_values[HC_INDEX_ETH_RX_CQ_CONS])
+
+#define BNX2X_TX_SB_INDEX_BASE BNX2X_TX_SB_INDEX_COS0
+
+#define BNX2X_TX_SB_INDEX_COS0 \
+	(&fp->sb_index_values[HC_INDEX_ETH_TX_CQ_CONS_COS0])
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 /* end of fast path */
 
@@ -615,11 +1057,24 @@ struct bnx2x_common {
 #define CHIP_NUM_57711			0x164f
 #define CHIP_NUM_57711E			0x1650
 #define CHIP_NUM_57712			0x1662
+<<<<<<< HEAD
 #define CHIP_NUM_57712E			0x1663
+=======
+#define CHIP_NUM_57712_MF		0x1663
+#define CHIP_NUM_57713			0x1651
+#define CHIP_NUM_57713E			0x1652
+#define CHIP_NUM_57800			0x168a
+#define CHIP_NUM_57800_MF		0x16a5
+#define CHIP_NUM_57810			0x168e
+#define CHIP_NUM_57810_MF		0x16ae
+#define CHIP_NUM_57840			0x168d
+#define CHIP_NUM_57840_MF		0x16ab
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define CHIP_IS_E1(bp)			(CHIP_NUM(bp) == CHIP_NUM_57710)
 #define CHIP_IS_57711(bp)		(CHIP_NUM(bp) == CHIP_NUM_57711)
 #define CHIP_IS_57711E(bp)		(CHIP_NUM(bp) == CHIP_NUM_57711E)
 #define CHIP_IS_57712(bp)		(CHIP_NUM(bp) == CHIP_NUM_57712)
+<<<<<<< HEAD
 #define CHIP_IS_57712E(bp)		(CHIP_NUM(bp) == CHIP_NUM_57712E)
 #define CHIP_IS_E1H(bp)			(CHIP_IS_57711(bp) || \
 					 CHIP_IS_57711E(bp))
@@ -638,18 +1093,72 @@ struct bnx2x_common {
 /* FPGA versions are A=>0xf, B=>0xd, C=>0xb, D=>9, E=>7 */
 #define CHIP_REV_IS_FPGA(bp)		((CHIP_REV_IS_SLOW(bp)) && \
 					 (CHIP_REV(bp) & 0x00001000))
+=======
+#define CHIP_IS_57712_MF(bp)		(CHIP_NUM(bp) == CHIP_NUM_57712_MF)
+#define CHIP_IS_57800(bp)		(CHIP_NUM(bp) == CHIP_NUM_57800)
+#define CHIP_IS_57800_MF(bp)		(CHIP_NUM(bp) == CHIP_NUM_57800_MF)
+#define CHIP_IS_57810(bp)		(CHIP_NUM(bp) == CHIP_NUM_57810)
+#define CHIP_IS_57810_MF(bp)		(CHIP_NUM(bp) == CHIP_NUM_57810_MF)
+#define CHIP_IS_57840(bp)		(CHIP_NUM(bp) == CHIP_NUM_57840)
+#define CHIP_IS_57840_MF(bp)		(CHIP_NUM(bp) == CHIP_NUM_57840_MF)
+#define CHIP_IS_E1H(bp)			(CHIP_IS_57711(bp) || \
+					 CHIP_IS_57711E(bp))
+#define CHIP_IS_E2(bp)			(CHIP_IS_57712(bp) || \
+					 CHIP_IS_57712_MF(bp))
+#define CHIP_IS_E3(bp)			(CHIP_IS_57800(bp) || \
+					 CHIP_IS_57800_MF(bp) || \
+					 CHIP_IS_57810(bp) || \
+					 CHIP_IS_57810_MF(bp) || \
+					 CHIP_IS_57840(bp) || \
+					 CHIP_IS_57840_MF(bp))
+#define CHIP_IS_E1x(bp)			(CHIP_IS_E1((bp)) || CHIP_IS_E1H((bp)))
+#define USES_WARPCORE(bp)		(CHIP_IS_E3(bp))
+#define IS_E1H_OFFSET			(!CHIP_IS_E1(bp))
+
+#define CHIP_REV_SHIFT			12
+#define CHIP_REV_MASK			(0xF << CHIP_REV_SHIFT)
+#define CHIP_REV_VAL(bp)		(bp->common.chip_id & CHIP_REV_MASK)
+#define CHIP_REV_Ax			(0x0 << CHIP_REV_SHIFT)
+#define CHIP_REV_Bx			(0x1 << CHIP_REV_SHIFT)
+/* assume maximum 5 revisions */
+#define CHIP_REV_IS_SLOW(bp)		(CHIP_REV_VAL(bp) > 0x00005000)
+/* Emul versions are A=>0xe, B=>0xc, C=>0xa, D=>8, E=>6 */
+#define CHIP_REV_IS_EMUL(bp)		((CHIP_REV_IS_SLOW(bp)) && \
+					 !(CHIP_REV_VAL(bp) & 0x00001000))
+/* FPGA versions are A=>0xf, B=>0xd, C=>0xb, D=>9, E=>7 */
+#define CHIP_REV_IS_FPGA(bp)		((CHIP_REV_IS_SLOW(bp)) && \
+					 (CHIP_REV_VAL(bp) & 0x00001000))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define CHIP_TIME(bp)			((CHIP_REV_IS_EMUL(bp)) ? 2000 : \
 					((CHIP_REV_IS_FPGA(bp)) ? 200 : 1))
 
 #define CHIP_METAL(bp)			(bp->common.chip_id & 0x00000ff0)
 #define CHIP_BOND_ID(bp)		(bp->common.chip_id & 0x0000000f)
+<<<<<<< HEAD
 #define CHIP_PARITY_ENABLED(bp)	(CHIP_IS_E1(bp) || CHIP_IS_E1H(bp))
 
 	int			flash_size;
 #define NVRAM_1MB_SIZE			0x20000	/* 1M bit in bytes */
 #define NVRAM_TIMEOUT_COUNT		30000
 #define NVRAM_PAGE_SIZE			256
+=======
+#define CHIP_REV_SIM(bp)		(((CHIP_REV_MASK - CHIP_REV_VAL(bp)) >>\
+					   (CHIP_REV_SHIFT + 1)) \
+						<< CHIP_REV_SHIFT)
+#define CHIP_REV(bp)			(CHIP_REV_IS_SLOW(bp) ? \
+						CHIP_REV_SIM(bp) :\
+						CHIP_REV_VAL(bp))
+#define CHIP_IS_E3B0(bp)		(CHIP_IS_E3(bp) && \
+					 (CHIP_REV(bp) == CHIP_REV_Bx))
+#define CHIP_IS_E3A0(bp)		(CHIP_IS_E3(bp) && \
+					 (CHIP_REV(bp) == CHIP_REV_Ax))
+
+	int			flash_size;
+#define BNX2X_NVRAM_1MB_SIZE			0x20000	/* 1M bit in bytes */
+#define BNX2X_NVRAM_TIMEOUT_COUNT		30000
+#define BNX2X_NVRAM_PAGE_SIZE			256
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u32			shmem_base;
 	u32			shmem2_base;
@@ -666,7 +1175,11 @@ struct bnx2x_common {
 #define INT_BLOCK_MODE_NORMAL		0
 #define INT_BLOCK_MODE_BW_COMP		2
 #define CHIP_INT_MODE_IS_NBC(bp)		\
+<<<<<<< HEAD
 			(CHIP_IS_E2(bp) &&	\
+=======
+			(!CHIP_IS_E1x(bp) &&	\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			!((bp)->common.int_block & INT_BLOCK_MODE_BW_COMP))
 #define CHIP_INT_MODE_IS_BC(bp) (!CHIP_INT_MODE_IS_NBC(bp))
 
@@ -712,6 +1225,7 @@ struct bnx2x_port {
 
 /* end of port */
 
+<<<<<<< HEAD
 /* e1h Classification CAM line allocations */
 enum {
 	CAM_ETH_LINE = 0,
@@ -725,6 +1239,17 @@ enum {
 /* number of entries in NIG_REG_LLHX_FUNC_MEM */
 #define NIG_LLH_FUNC_MEM_MAX_OFFSET	8
 
+=======
+#define STATS_OFFSET32(stat_name) \
+			(offsetof(struct bnx2x_eth_stats, stat_name) / 4)
+
+/* slow path */
+
+/* slow path work-queue */
+extern struct workqueue_struct *bnx2x_wq;
+
+#define BNX2X_MAX_NUM_OF_VFS	64
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define BNX2X_VF_ID_INVALID	0xFF
 
 /*
@@ -749,6 +1274,7 @@ enum {
  *    L2 queue is supported. the cid for the FCoE L2 queue is always X.
  */
 
+<<<<<<< HEAD
 #define FP_SB_MAX_E1x		16	/* fast-path interrupt contexts E1x */
 #define FP_SB_MAX_E2		16	/* fast-path interrupt contexts E2 */
 
@@ -770,6 +1296,12 @@ enum {
 #define FP_SB_COUNT(cid_cnt)	((cid_cnt) - FCOE_CONTEXT_USE)
 #define NUM_IGU_SB_REQUIRED(cid_cnt) \
 				(FP_SB_COUNT(cid_cnt) - NONE_ETH_CONTEXT_USE)
+=======
+/* fast-path interrupt contexts E1x */
+#define FP_SB_MAX_E1x		16
+/* fast-path interrupt contexts E2 */
+#define FP_SB_MAX_E2		HC_SB_MAX_SB_E2
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 union cdu_context {
 	struct eth_context eth;
@@ -778,7 +1310,11 @@ union cdu_context {
 
 /* CDU host DB constants */
 #define CDU_ILT_PAGE_SZ_HW	3
+<<<<<<< HEAD
 #define CDU_ILT_PAGE_SZ		(4096 << CDU_ILT_PAGE_SZ_HW) /* 32K */
+=======
+#define CDU_ILT_PAGE_SZ		(8192 << CDU_ILT_PAGE_SZ_HW) /* 64K */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define ILT_PAGE_CIDS		(CDU_ILT_PAGE_SZ / sizeof(union cdu_context))
 
 #ifdef BCM_CNIC
@@ -788,27 +1324,43 @@ union cdu_context {
 #define CNIC_ILT_LINES		DIV_ROUND_UP(CNIC_CID_MAX, ILT_PAGE_CIDS)
 #endif
 
+<<<<<<< HEAD
 #define QM_ILT_PAGE_SZ_HW	3
 #define QM_ILT_PAGE_SZ		(4096 << QM_ILT_PAGE_SZ_HW) /* 32K */
+=======
+#define QM_ILT_PAGE_SZ_HW	0
+#define QM_ILT_PAGE_SZ		(4096 << QM_ILT_PAGE_SZ_HW) /* 4K */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define QM_CID_ROUND		1024
 
 #ifdef BCM_CNIC
 /* TM (timers) host DB constants */
+<<<<<<< HEAD
 #define TM_ILT_PAGE_SZ_HW	2
 #define TM_ILT_PAGE_SZ		(4096 << TM_ILT_PAGE_SZ_HW) /* 16K */
+=======
+#define TM_ILT_PAGE_SZ_HW	0
+#define TM_ILT_PAGE_SZ		(4096 << TM_ILT_PAGE_SZ_HW) /* 4K */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* #define TM_CONN_NUM		(CNIC_STARTING_CID+CNIC_ISCSI_CXT_MAX) */
 #define TM_CONN_NUM		1024
 #define TM_ILT_SZ		(8 * TM_CONN_NUM)
 #define TM_ILT_LINES		DIV_ROUND_UP(TM_ILT_SZ, TM_ILT_PAGE_SZ)
 
 /* SRC (Searcher) host DB constants */
+<<<<<<< HEAD
 #define SRC_ILT_PAGE_SZ_HW	3
 #define SRC_ILT_PAGE_SZ		(4096 << SRC_ILT_PAGE_SZ_HW) /* 32K */
+=======
+#define SRC_ILT_PAGE_SZ_HW	0
+#define SRC_ILT_PAGE_SZ		(4096 << SRC_ILT_PAGE_SZ_HW) /* 4K */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define SRC_HASH_BITS		10
 #define SRC_CONN_NUM		(1 << SRC_HASH_BITS) /* 1024 */
 #define SRC_ILT_SZ		(sizeof(struct src_ent) * SRC_CONN_NUM)
 #define SRC_T2_SZ		SRC_ILT_SZ
 #define SRC_ILT_LINES		DIV_ROUND_UP(SRC_ILT_SZ, SRC_ILT_PAGE_SZ)
+<<<<<<< HEAD
 #endif
 
 #define MAX_DMAE_C			8
@@ -820,6 +1372,44 @@ struct bnx2x_slowpath {
 	struct mac_configuration_cmd	mcast_config;
 	struct mac_configuration_cmd	uc_mac_config;
 	struct client_init_ramrod_data	client_init_data;
+=======
+
+#endif
+
+#define MAX_DMAE_C		8
+
+/* DMA memory not used in fastpath */
+struct bnx2x_slowpath {
+	union {
+		struct mac_configuration_cmd		e1x;
+		struct eth_classify_rules_ramrod_data	e2;
+	} mac_rdata;
+
+
+	union {
+		struct tstorm_eth_mac_filter_config	e1x;
+		struct eth_filter_rules_ramrod_data	e2;
+	} rx_mode_rdata;
+
+	union {
+		struct mac_configuration_cmd		e1;
+		struct eth_multicast_rules_ramrod_data  e2;
+	} mcast_rdata;
+
+	struct eth_rss_update_ramrod_data	rss_rdata;
+
+	/* Queue State related ramrods are always sent under rtnl_lock */
+	union {
+		struct client_init_ramrod_data  init_data;
+		struct client_update_ramrod_data update_data;
+	} q_rdata;
+
+	union {
+		struct function_start_data	func_start;
+		/* pfc configuration for DCBX ramrod */
+		struct flow_control_configuration pfc_config;
+	} func_rdata;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* used by dmae command executer */
 	struct dmae_command		dmae[MAX_DMAE_C];
@@ -833,8 +1423,11 @@ struct bnx2x_slowpath {
 
 	u32				wb_comp;
 	u32				wb_data[4];
+<<<<<<< HEAD
 	/* pfc configuration for DCBX ramrod */
 	struct flow_control_configuration pfc_config;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 #define bnx2x_sp(bp, var)		(&bp->slowpath->var)
@@ -846,7 +1439,11 @@ struct bnx2x_slowpath {
 #define MAX_DYNAMIC_ATTN_GRPS		8
 
 struct attn_route {
+<<<<<<< HEAD
 	u32	sig[5];
+=======
+	u32 sig[5];
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct iro {
@@ -866,6 +1463,7 @@ struct hw_context {
 /* forward */
 struct bnx2x_ilt;
 
+<<<<<<< HEAD
 typedef enum {
 	BNX2X_RECOVERY_DONE,
 	BNX2X_RECOVERY_INIT,
@@ -873,6 +1471,17 @@ typedef enum {
 } bnx2x_recovery_state_t;
 
 /**
+=======
+
+enum bnx2x_recovery_state {
+	BNX2X_RECOVERY_DONE,
+	BNX2X_RECOVERY_INIT,
+	BNX2X_RECOVERY_WAIT,
+	BNX2X_RECOVERY_FAILED
+};
+
+/*
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  * Event queue (EQ or event ring) MC hsi
  * NUM_EQ_PAGES and EQ_DESC_CNT_PAGE must be power of 2
  */
@@ -910,6 +1519,34 @@ enum {
 	BNX2X_LINK_REPORT_TX_FC_ON,
 };
 
+<<<<<<< HEAD
+=======
+enum {
+	BNX2X_PORT_QUERY_IDX,
+	BNX2X_PF_QUERY_IDX,
+	BNX2X_FIRST_QUEUE_QUERY_IDX,
+};
+
+struct bnx2x_fw_stats_req {
+	struct stats_query_header hdr;
+	struct stats_query_entry query[STATS_QUERY_CMD_COUNT];
+};
+
+struct bnx2x_fw_stats_data {
+	struct stats_counter	storm_counters;
+	struct per_port_stats	port;
+	struct per_pf_stats	pf;
+	struct per_queue_stats  queue_stats[1];
+};
+
+/* Public slow path states */
+enum {
+	BNX2X_SP_RTNL_SETUP_TC,
+	BNX2X_SP_RTNL_TX_TIMEOUT,
+};
+
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct bnx2x {
 	/* Fields used in the tx and intr/napi performance paths
 	 * are grouped together in the beginning of the structure
@@ -919,6 +1556,7 @@ struct bnx2x {
 	void __iomem		*doorbells;
 	u16			db_size;
 
+<<<<<<< HEAD
 	struct net_device	*dev;
 	struct pci_dev		*pdev;
 
@@ -932,6 +1570,31 @@ struct bnx2x {
 	struct msix_entry	*msix_table;
 #define INT_MODE_INTx			1
 #define INT_MODE_MSI			2
+=======
+	u8			pf_num;	/* absolute PF number */
+	u8			pfid;	/* per-path PF number */
+	int			base_fw_ndsb; /**/
+#define BP_PATH(bp)			(CHIP_IS_E1x(bp) ? 0 : (bp->pf_num & 1))
+#define BP_PORT(bp)			(bp->pfid & 1)
+#define BP_FUNC(bp)			(bp->pfid)
+#define BP_ABS_FUNC(bp)			(bp->pf_num)
+#define BP_VN(bp)			((bp)->pfid >> 1)
+#define BP_MAX_VN_NUM(bp)		(CHIP_MODE_IS_4_PORT(bp) ? 2 : 4)
+#define BP_L_ID(bp)			(BP_VN(bp) << 2)
+#define BP_FW_MB_IDX_VN(bp, vn)		(BP_PORT(bp) +\
+	  (vn) * ((CHIP_IS_E1x(bp) || (CHIP_MODE_IS_4_PORT(bp))) ? 2  : 1))
+#define BP_FW_MB_IDX(bp)		BP_FW_MB_IDX_VN(bp, BP_VN(bp))
+
+	struct net_device	*dev;
+	struct pci_dev		*pdev;
+
+	const struct iro	*iro_arr;
+#define IRO (bp->iro_arr)
+
+	enum bnx2x_recovery_state recovery_state;
+	int			is_leader;
+	struct msix_entry	*msix_table;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int			tx_ring_size;
 
@@ -944,7 +1607,12 @@ struct bnx2x {
 	/* Max supported alignment is 256 (8 shift) */
 #define BNX2X_RX_ALIGN_SHIFT		((L1_CACHE_SHIFT < 8) ? \
 					 L1_CACHE_SHIFT : 8)
+<<<<<<< HEAD
 #define BNX2X_RX_ALIGN			(1 << BNX2X_RX_ALIGN_SHIFT)
+=======
+	/* FW use 2 Cache lines Alignment for start packet and size  */
+#define BNX2X_FW_RX_ALIGN		(2 << BNX2X_RX_ALIGN_SHIFT)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define BNX2X_PXP_DRAM_ALIGN		(BNX2X_RX_ALIGN_SHIFT - 5)
 
 	struct host_sp_status_block *def_status_blk;
@@ -974,10 +1642,19 @@ struct bnx2x {
 	__le16			*eq_cons_sb;
 	atomic_t		eq_spq_left; /* COMMON_XXX ramrods credit */
 
+<<<<<<< HEAD
 	/* Flags for marking that there is a STAT_QUERY or
 	   SET_MAC ramrod pending */
 	int			stats_pending;
 	int			set_mac_pending;
+=======
+
+
+	/* Counter for marking that there is a STAT_QUERY ramrod pending */
+	u16			stats_pending;
+	/*  Counter for completed statistics ramrods */
+	u16			stats_comp;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* End of fields used in the performance code paths */
 
@@ -985,6 +1662,7 @@ struct bnx2x {
 	int			msg_enable;
 
 	u32			flags;
+<<<<<<< HEAD
 #define PCIX_FLAG			1
 #define PCI_32BIT_FLAG			2
 #define ONE_PORT_FLAG			4
@@ -1033,6 +1711,37 @@ struct bnx2x {
 
 	struct delayed_work	sp_task;
 	struct delayed_work	reset_task;
+=======
+#define PCIX_FLAG			(1 << 0)
+#define PCI_32BIT_FLAG			(1 << 1)
+#define ONE_PORT_FLAG			(1 << 2)
+#define NO_WOL_FLAG			(1 << 3)
+#define USING_DAC_FLAG			(1 << 4)
+#define USING_MSIX_FLAG			(1 << 5)
+#define USING_MSI_FLAG			(1 << 6)
+#define DISABLE_MSI_FLAG		(1 << 7)
+#define TPA_ENABLE_FLAG			(1 << 8)
+#define NO_MCP_FLAG			(1 << 9)
+
+#define BP_NOMCP(bp)			(bp->flags & NO_MCP_FLAG)
+#define MF_FUNC_DIS			(1 << 11)
+#define OWN_CNIC_IRQ			(1 << 12)
+#define NO_ISCSI_OOO_FLAG		(1 << 13)
+#define NO_ISCSI_FLAG			(1 << 14)
+#define NO_FCOE_FLAG			(1 << 15)
+
+#define NO_ISCSI(bp)		((bp)->flags & NO_ISCSI_FLAG)
+#define NO_ISCSI_OOO(bp)	((bp)->flags & NO_ISCSI_OOO_FLAG)
+#define NO_FCOE(bp)		((bp)->flags & NO_FCOE_FLAG)
+
+	int			pm_cap;
+	int			mrrs;
+
+	struct delayed_work	sp_task;
+	struct delayed_work	sp_rtnl_task;
+
+	struct delayed_work	period_task;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct timer_list	timer;
 	int			current_interval;
 
@@ -1052,9 +1761,15 @@ struct bnx2x {
 
 	struct cmng_struct_per_port cmng;
 	u32			vn_weight_sum;
+<<<<<<< HEAD
 
 	u32			mf_config[E1HVN_MAX];
 	u32			mf2_config[E2_FUNC_MAX];
+=======
+	u32			mf_config[E1HVN_MAX];
+	u32			mf2_config[E2_FUNC_MAX];
+	u32			path_has_ovlan; /* E3 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u16			mf_ov;
 	u8			mf_mode;
 #define IS_MF(bp)		(bp->mf_mode != 0)
@@ -1079,19 +1794,28 @@ struct bnx2x {
 
 	u32			lin_cnt;
 
+<<<<<<< HEAD
 	int			state;
+=======
+	u16			state;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define BNX2X_STATE_CLOSED		0
 #define BNX2X_STATE_OPENING_WAIT4_LOAD	0x1000
 #define BNX2X_STATE_OPENING_WAIT4_PORT	0x2000
 #define BNX2X_STATE_OPEN		0x3000
 #define BNX2X_STATE_CLOSING_WAIT4_HALT	0x4000
 #define BNX2X_STATE_CLOSING_WAIT4_DELETE 0x5000
+<<<<<<< HEAD
 #define BNX2X_STATE_CLOSING_WAIT4_UNLOAD 0x6000
 #define BNX2X_STATE_FUNC_STARTED	0x7000
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define BNX2X_STATE_DIAG		0xe000
 #define BNX2X_STATE_ERROR		0xf000
 
 	int			multi_mode;
+<<<<<<< HEAD
 	int			num_queues;
 	int			disable_tpa;
 	int			int_mode;
@@ -1106,6 +1830,14 @@ struct bnx2x {
 #define BNX2X_ACCEPT_BROADCAST		0x0010
 #define BNX2X_ACCEPT_UNMATCHED_UCAST	0x0020
 #define BNX2X_PROMISCUOUS_MODE		0x10000
+=======
+#define BNX2X_MAX_PRIORITY		8
+#define BNX2X_MAX_ENTRIES_PER_PRI	16
+#define BNX2X_MAX_COS			3
+#define BNX2X_MAX_TX_COS		2
+	int			num_queues;
+	int			disable_tpa;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u32			rx_mode;
 #define BNX2X_RX_MODE_NONE		0
@@ -1113,7 +1845,10 @@ struct bnx2x {
 #define BNX2X_RX_MODE_ALLMULTI		2
 #define BNX2X_RX_MODE_PROMISC		3
 #define BNX2X_MAX_MULTICAST		64
+<<<<<<< HEAD
 #define BNX2X_MAX_EMUL_MULTI		16
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	u8			igu_dsb_id;
 	u8			igu_base_sb;
@@ -1122,16 +1857,65 @@ struct bnx2x {
 
 	struct bnx2x_slowpath	*slowpath;
 	dma_addr_t		slowpath_mapping;
+<<<<<<< HEAD
+=======
+
+	/* Total number of FW statistics requests */
+	u8			fw_stats_num;
+
+	/*
+	 * This is a memory buffer that will contain both statistics
+	 * ramrod request and data.
+	 */
+	void			*fw_stats;
+	dma_addr_t		fw_stats_mapping;
+
+	/*
+	 * FW statistics request shortcut (points at the
+	 * beginning of fw_stats buffer).
+	 */
+	struct bnx2x_fw_stats_req	*fw_stats_req;
+	dma_addr_t			fw_stats_req_mapping;
+	int				fw_stats_req_sz;
+
+	/*
+	 * FW statistics data shortcut (points at the begining of
+	 * fw_stats buffer + fw_stats_req_sz).
+	 */
+	struct bnx2x_fw_stats_data	*fw_stats_data;
+	dma_addr_t			fw_stats_data_mapping;
+	int				fw_stats_data_sz;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct hw_context	context;
 
 	struct bnx2x_ilt	*ilt;
 #define BP_ILT(bp)		((bp)->ilt)
+<<<<<<< HEAD
 #define ILT_MAX_LINES		128
 
 	int			l2_cid_count;
 #define L2_ILT_LINES(bp)	(DIV_ROUND_UP((bp)->l2_cid_count, \
 				 ILT_PAGE_CIDS))
 #define BNX2X_DB_SIZE(bp)	((bp)->l2_cid_count * (1 << BNX2X_DB_SHIFT))
+=======
+#define ILT_MAX_LINES		256
+/*
+ * Maximum supported number of RSS queues: number of IGU SBs minus one that goes
+ * to CNIC.
+ */
+#define BNX2X_MAX_RSS_COUNT(bp)	((bp)->igu_sb_cnt - CNIC_PRESENT)
+
+/*
+ * Maximum CID count that might be required by the bnx2x:
+ * Max Tss * Max_Tx_Multi_Cos + CNIC L2 Clients (FCoE and iSCSI related)
+ */
+#define BNX2X_L2_CID_COUNT(bp)	(MAX_TXQS_PER_COS * BNX2X_MULTI_TX_COS +\
+					NON_ETH_CONTEXT_USE + CNIC_PRESENT)
+#define L2_ILT_LINES(bp)	(DIV_ROUND_UP(BNX2X_L2_CID_COUNT(bp),\
+					ILT_PAGE_CIDS))
+#define BNX2X_DB_SIZE(bp)	(BNX2X_L2_CID_COUNT(bp) * (1 << BNX2X_DB_SHIFT))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	int			qm_cid_count;
 
@@ -1148,16 +1932,28 @@ struct bnx2x {
 	struct cnic_eth_dev	cnic_eth_dev;
 	union host_hc_status_block cnic_sb;
 	dma_addr_t		cnic_sb_mapping;
+<<<<<<< HEAD
 #define CNIC_SB_ID(bp)		((bp)->base_fw_ndsb + BP_L_ID(bp))
 #define CNIC_IGU_SB_ID(bp)	((bp)->igu_base_sb)
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct eth_spe		*cnic_kwq;
 	struct eth_spe		*cnic_kwq_prod;
 	struct eth_spe		*cnic_kwq_cons;
 	struct eth_spe		*cnic_kwq_last;
 	u16			cnic_kwq_pending;
 	u16			cnic_spq_pending;
+<<<<<<< HEAD
 	struct mutex		cnic_mutex;
 	u8			fip_mac[ETH_ALEN];
+=======
+	u8			fip_mac[ETH_ALEN];
+	struct mutex		cnic_mutex;
+	struct bnx2x_vlan_mac_obj iscsi_l2_mac_obj;
+
+	/* Start index of the "special" (CNIC related) L2 cleints */
+	u8				cnic_base_cl_id;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif
 
 	int			dmae_ready;
@@ -1194,6 +1990,11 @@ struct bnx2x {
 	u16			*init_ops_offsets;
 	/* Data blob - has 32 bit granularity */
 	u32			*init_data;
+<<<<<<< HEAD
+=======
+	u32			init_mode_flags;
+#define INIT_MODE_FLAGS(bp)	(bp->init_mode_flags)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* Zipped PRAM blobs - raw data */
 	const u8		*tsem_int_table_data;
 	const u8		*tsem_pram_data;
@@ -1215,10 +2016,16 @@ struct bnx2x {
 #define INIT_CSEM_INT_TABLE_DATA(bp)	(bp->csem_int_table_data)
 #define INIT_CSEM_PRAM_DATA(bp)		(bp->csem_pram_data)
 
+<<<<<<< HEAD
 	char			fw_ver[32];
 	const struct firmware	*firmware;
 	/* LLDP params */
 	struct bnx2x_config_lldp_params		lldp_config_params;
+=======
+#define PHY_FW_VER_LEN			20
+	char			fw_ver[32];
+	const struct firmware	*firmware;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	/* DCB support on/off */
 	u16 dcb_state;
@@ -1235,6 +2042,7 @@ struct bnx2x {
 	bool dcbx_mode_uset;
 
 	struct bnx2x_config_dcbx_params		dcbx_config_params;
+<<<<<<< HEAD
 
 	struct bnx2x_dcbx_port_params		dcbx_port_params;
 	int					dcb_version;
@@ -1242,11 +2050,41 @@ struct bnx2x {
 	/* DCBX Negotiation results */
 	struct dcbx_features			dcbx_local_feat;
 	u32					dcbx_error;
+=======
+	struct bnx2x_dcbx_port_params		dcbx_port_params;
+	int					dcb_version;
+
+	/* CAM credit pools */
+	struct bnx2x_credit_pool_obj		macs_pool;
+
+	/* RX_MODE object */
+	struct bnx2x_rx_mode_obj		rx_mode_obj;
+
+	/* MCAST object */
+	struct bnx2x_mcast_obj			mcast_obj;
+
+	/* RSS configuration object */
+	struct bnx2x_rss_config_obj		rss_conf_obj;
+
+	/* Function State controlling object */
+	struct bnx2x_func_sp_obj		func_obj;
+
+	unsigned long				sp_state;
+
+	/* operation indication for the sp_rtnl task */
+	unsigned long				sp_rtnl_state;
+
+	/* DCBX Negotation results */
+	struct dcbx_features			dcbx_local_feat;
+	u32					dcbx_error;
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #ifdef BCM_DCBNL
 	struct dcbx_features			dcbx_remote_feat;
 	u32					dcbx_remote_flags;
 #endif
 	u32					pending_max;
+<<<<<<< HEAD
 };
 
 /**
@@ -1288,6 +2126,26 @@ struct bnx2x {
 #define is_multi(bp)		(BNX2X_NUM_QUEUES(bp) > 1)
 
 #define BNX2X_MAX_QUEUES(bp)	(bp->igu_sb_cnt - CNIC_CONTEXT_USE)
+=======
+
+	/* multiple tx classes of service */
+	u8					max_cos;
+
+	/* priority to cos mapping */
+	u8					prio_to_cos[8];
+};
+
+/* Tx queues may be less or equal to Rx queues */
+extern int num_queues;
+#define BNX2X_NUM_QUEUES(bp)	(bp->num_queues)
+#define BNX2X_NUM_ETH_QUEUES(bp) (BNX2X_NUM_QUEUES(bp) - NON_ETH_CONTEXT_USE)
+#define BNX2X_NUM_RX_QUEUES(bp)	BNX2X_NUM_QUEUES(bp)
+
+#define is_multi(bp)		(BNX2X_NUM_QUEUES(bp) > 1)
+
+#define BNX2X_MAX_QUEUES(bp)	BNX2X_MAX_RSS_COUNT(bp)
+/* #define is_eth_multi(bp)	(BNX2X_NUM_ETH_QUEUES(bp) > 1) */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define RSS_IPV4_CAP_MASK						\
 	TSTORM_ETH_FUNCTION_COMMON_CONFIG_RSS_IPV4_CAPABILITY
@@ -1302,6 +2160,7 @@ struct bnx2x {
 	TSTORM_ETH_FUNCTION_COMMON_CONFIG_RSS_IPV6_TCP_CAPABILITY
 
 /* func init flags */
+<<<<<<< HEAD
 #define FUNC_FLG_STATS		0x0001
 #define FUNC_FLG_TPA		0x0002
 #define FUNC_FLG_SPQ		0x0004
@@ -1403,6 +2262,17 @@ struct bnx2x_func_init_params {
 	/* rss */
 	struct bnx2x_rss_params *rss;	/* valid iff FUNC_FLG_RSS */
 
+=======
+#define FUNC_FLG_RSS		0x0001
+#define FUNC_FLG_STATS		0x0002
+/* removed  FUNC_FLG_UNMATCHED	0x0004 */
+#define FUNC_FLG_TPA		0x0008
+#define FUNC_FLG_SPQ		0x0010
+#define FUNC_FLG_LEADING	0x0020	/* PF only */
+
+
+struct bnx2x_func_init_params {
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* dma */
 	dma_addr_t	fw_stat_map;	/* valid iff FUNC_FLG_STATS */
 	dma_addr_t	spq_map;	/* valid iff FUNC_FLG_SPQ */
@@ -1414,6 +2284,7 @@ struct bnx2x_func_init_params {
 };
 
 #define for_each_eth_queue(bp, var) \
+<<<<<<< HEAD
 			for (var = 0; var < BNX2X_NUM_ETH_QUEUES(bp); var++)
 
 #define for_each_nondefault_eth_queue(bp, var) \
@@ -1428,28 +2299,59 @@ struct bnx2x_func_init_params {
 
 #define for_each_queue(bp, var) \
 	for (var = 0; var < BNX2X_NUM_QUEUES(bp); var++) \
+=======
+	for ((var) = 0; (var) < BNX2X_NUM_ETH_QUEUES(bp); (var)++)
+
+#define for_each_nondefault_eth_queue(bp, var) \
+	for ((var) = 1; (var) < BNX2X_NUM_ETH_QUEUES(bp); (var)++)
+
+#define for_each_queue(bp, var) \
+	for ((var) = 0; (var) < BNX2X_NUM_QUEUES(bp); (var)++) \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (skip_queue(bp, var))	\
 			continue;		\
 		else
 
+<<<<<<< HEAD
 #define for_each_rx_queue(bp, var) \
 	for (var = 0; var < BNX2X_NUM_QUEUES(bp); var++) \
+=======
+/* Skip forwarding FP */
+#define for_each_rx_queue(bp, var) \
+	for ((var) = 0; (var) < BNX2X_NUM_QUEUES(bp); (var)++) \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (skip_rx_queue(bp, var))	\
 			continue;		\
 		else
 
+<<<<<<< HEAD
 #define for_each_tx_queue(bp, var) \
 	for (var = 0; var < BNX2X_NUM_QUEUES(bp); var++) \
+=======
+/* Skip OOO FP */
+#define for_each_tx_queue(bp, var) \
+	for ((var) = 0; (var) < BNX2X_NUM_QUEUES(bp); (var)++) \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (skip_tx_queue(bp, var))	\
 			continue;		\
 		else
 
 #define for_each_nondefault_queue(bp, var) \
+<<<<<<< HEAD
 	for (var = 1; var < BNX2X_NUM_QUEUES(bp); var++) \
+=======
+	for ((var) = 1; (var) < BNX2X_NUM_QUEUES(bp); (var)++) \
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		if (skip_queue(bp, var))	\
 			continue;		\
 		else
 
+<<<<<<< HEAD
+=======
+#define for_each_cos_in_tx_queue(fp, var) \
+	for ((var) = 0; (var) < (fp)->max_cos; (var)++)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* skip rx queue
  * if FCOE l2 support is disabled and this is the fcoe L2 queue
  */
@@ -1462,11 +2364,74 @@ struct bnx2x_func_init_params {
 
 #define skip_queue(bp, idx)	(NO_FCOE(bp) && IS_FCOE_IDX(idx))
 
+<<<<<<< HEAD
 #define WAIT_RAMROD_POLL	0x01
 #define WAIT_RAMROD_COMMON	0x02
 
 void bnx2x_read_mf_cfg(struct bnx2x *bp);
 
+=======
+
+
+
+/**
+ * bnx2x_set_mac_one - configure a single MAC address
+ *
+ * @bp:			driver handle
+ * @mac:		MAC to configure
+ * @obj:		MAC object handle
+ * @set:		if 'true' add a new MAC, otherwise - delete
+ * @mac_type:		the type of the MAC to configure (e.g. ETH, UC list)
+ * @ramrod_flags:	RAMROD_XXX flags (e.g. RAMROD_CONT, RAMROD_COMP_WAIT)
+ *
+ * Configures one MAC according to provided parameters or continues the
+ * execution of previously scheduled commands if RAMROD_CONT is set in
+ * ramrod_flags.
+ *
+ * Returns zero if operation has successfully completed, a positive value if the
+ * operation has been successfully scheduled and a negative - if a requested
+ * operations has failed.
+ */
+int bnx2x_set_mac_one(struct bnx2x *bp, u8 *mac,
+		      struct bnx2x_vlan_mac_obj *obj, bool set,
+		      int mac_type, unsigned long *ramrod_flags);
+/**
+ * Deletes all MACs configured for the specific MAC object.
+ *
+ * @param bp Function driver instance
+ * @param mac_obj MAC object to cleanup
+ *
+ * @return zero if all MACs were cleaned
+ */
+
+/**
+ * bnx2x_del_all_macs - delete all MACs configured for the specific MAC object
+ *
+ * @bp:			driver handle
+ * @mac_obj:		MAC object handle
+ * @mac_type:		type of the MACs to clear (BNX2X_XXX_MAC)
+ * @wait_for_comp:	if 'true' block until completion
+ *
+ * Deletes all MACs of the specific type (e.g. ETH, UC list).
+ *
+ * Returns zero if operation has successfully completed, a positive value if the
+ * operation has been successfully scheduled and a negative - if a requested
+ * operations has failed.
+ */
+int bnx2x_del_all_macs(struct bnx2x *bp,
+		       struct bnx2x_vlan_mac_obj *mac_obj,
+		       int mac_type, bool wait_for_comp);
+
+/* Init Function API  */
+void bnx2x_func_init(struct bnx2x *bp, struct bnx2x_func_init_params *p);
+int bnx2x_get_gpio(struct bnx2x *bp, int gpio_num, u8 port);
+int bnx2x_set_gpio(struct bnx2x *bp, int gpio_num, u32 mode, u8 port);
+int bnx2x_set_mult_gpio(struct bnx2x *bp, u8 pins, u32 mode);
+int bnx2x_set_gpio_int(struct bnx2x *bp, int gpio_num, u32 mode, u8 port);
+void bnx2x_read_mf_cfg(struct bnx2x *bp);
+
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 /* dmae */
 void bnx2x_read_dmae(struct bnx2x *bp, u32 src_addr, u32 len32);
 void bnx2x_write_dmae(struct bnx2x *bp, dma_addr_t dma_addr, u32 dst_addr,
@@ -1477,6 +2442,7 @@ u32 bnx2x_dmae_opcode_clr_src_reset(u32 opcode);
 u32 bnx2x_dmae_opcode(struct bnx2x *bp, u8 src_type, u8 dst_type,
 		      bool with_comp, u8 comp_type);
 
+<<<<<<< HEAD
 int bnx2x_get_gpio(struct bnx2x *bp, int gpio_num, u8 port);
 int bnx2x_set_gpio(struct bnx2x *bp, int gpio_num, u32 mode, u8 port);
 int bnx2x_set_gpio_int(struct bnx2x *bp, int gpio_num, u32 mode, u8 port);
@@ -1493,6 +2459,14 @@ void bnx2x_invalidate_uc_list(struct bnx2x *bp);
 
 void bnx2x_update_coalesce(struct bnx2x *bp);
 int bnx2x_get_link_cfg_idx(struct bnx2x *bp);
+=======
+
+void bnx2x_calc_fc_adv(struct bnx2x *bp);
+int bnx2x_sp_post(struct bnx2x *bp, int command, int cid,
+		  u32 data_hi, u32 data_lo, int cmd_type);
+void bnx2x_update_coalesce(struct bnx2x *bp);
+int bnx2x_get_cur_phy_idx(struct bnx2x *bp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 			   int wait)
@@ -1622,7 +2596,11 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 
 #define MAX_DMAE_C_PER_PORT		8
 #define INIT_DMAE_C(bp)			(BP_PORT(bp) * MAX_DMAE_C_PER_PORT + \
+<<<<<<< HEAD
 					 BP_E1HVN(bp))
+=======
+					 BP_VN(bp))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define PMF_DMAE_C(bp)			(BP_PORT(bp) * MAX_DMAE_C_PER_PORT + \
 					 E1HVN_MAX)
 
@@ -1648,7 +2626,12 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 
 /* must be used on a CID before placing it on a HW ring */
 #define HW_CID(bp, x)			((BP_PORT(bp) << 23) | \
+<<<<<<< HEAD
 					 (BP_E1HVN(bp) << 17) | (x))
+=======
+					 (BP_VN(bp) << BNX2X_SWCID_SHIFT) | \
+					 (x))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define SP_DESC_CNT		(BCM_PAGE_SIZE / sizeof(struct eth_spe))
 #define MAX_SP_DESC_CNT			(SP_DESC_CNT - 1)
@@ -1718,12 +2701,22 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 				(AEU_INPUTS_ATTN_BITS_TSDM_HW_INTERRUPT | \
 				 AEU_INPUTS_ATTN_BITS_TCM_HW_INTERRUPT | \
 				 AEU_INPUTS_ATTN_BITS_TSEMI_HW_INTERRUPT | \
+<<<<<<< HEAD
 				 AEU_INPUTS_ATTN_BITS_PBF_HW_INTERRUPT)
+=======
+				 AEU_INPUTS_ATTN_BITS_PBCLIENT_HW_INTERRUPT)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define HW_PRTY_ASSERT_SET_0	(AEU_INPUTS_ATTN_BITS_BRB_PARITY_ERROR | \
 				 AEU_INPUTS_ATTN_BITS_PARSER_PARITY_ERROR | \
 				 AEU_INPUTS_ATTN_BITS_TSDM_PARITY_ERROR | \
 				 AEU_INPUTS_ATTN_BITS_SEARCHER_PARITY_ERROR |\
+<<<<<<< HEAD
 				 AEU_INPUTS_ATTN_BITS_TSEMI_PARITY_ERROR)
+=======
+				 AEU_INPUTS_ATTN_BITS_TSEMI_PARITY_ERROR |\
+				 AEU_INPUTS_ATTN_BITS_TCM_PARITY_ERROR |\
+				 AEU_INPUTS_ATTN_BITS_PBCLIENT_PARITY_ERROR)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define HW_INTERRUT_ASSERT_SET_1 \
 				(AEU_INPUTS_ATTN_BITS_QM_HW_INTERRUPT | \
 				 AEU_INPUTS_ATTN_BITS_TIMERS_HW_INTERRUPT | \
@@ -1736,6 +2729,7 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 				 AEU_INPUTS_ATTN_BITS_UPB_HW_INTERRUPT | \
 				 AEU_INPUTS_ATTN_BITS_CSDM_HW_INTERRUPT | \
 				 AEU_INPUTS_ATTN_BITS_CCM_HW_INTERRUPT)
+<<<<<<< HEAD
 #define HW_PRTY_ASSERT_SET_1	(AEU_INPUTS_ATTN_BITS_PBCLIENT_PARITY_ERROR |\
 				 AEU_INPUTS_ATTN_BITS_QM_PARITY_ERROR | \
 				 AEU_INPUTS_ATTN_BITS_XSDM_PARITY_ERROR | \
@@ -1747,6 +2741,24 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 				 AEU_INPUTS_ATTN_BITS_USEMI_PARITY_ERROR | \
 				 AEU_INPUTS_ATTN_BITS_UPB_PARITY_ERROR | \
 				 AEU_INPUTS_ATTN_BITS_CSDM_PARITY_ERROR)
+=======
+#define HW_PRTY_ASSERT_SET_1	(AEU_INPUTS_ATTN_BITS_PBF_PARITY_ERROR |\
+				 AEU_INPUTS_ATTN_BITS_QM_PARITY_ERROR | \
+				 AEU_INPUTS_ATTN_BITS_TIMERS_PARITY_ERROR |\
+				 AEU_INPUTS_ATTN_BITS_XSDM_PARITY_ERROR | \
+				 AEU_INPUTS_ATTN_BITS_XCM_PARITY_ERROR |\
+				 AEU_INPUTS_ATTN_BITS_XSEMI_PARITY_ERROR | \
+				 AEU_INPUTS_ATTN_BITS_DOORBELLQ_PARITY_ERROR |\
+				 AEU_INPUTS_ATTN_BITS_NIG_PARITY_ERROR |\
+			     AEU_INPUTS_ATTN_BITS_VAUX_PCI_CORE_PARITY_ERROR |\
+				 AEU_INPUTS_ATTN_BITS_DEBUG_PARITY_ERROR | \
+				 AEU_INPUTS_ATTN_BITS_USDM_PARITY_ERROR | \
+				 AEU_INPUTS_ATTN_BITS_UCM_PARITY_ERROR |\
+				 AEU_INPUTS_ATTN_BITS_USEMI_PARITY_ERROR | \
+				 AEU_INPUTS_ATTN_BITS_UPB_PARITY_ERROR | \
+				 AEU_INPUTS_ATTN_BITS_CSDM_PARITY_ERROR |\
+				 AEU_INPUTS_ATTN_BITS_CCM_PARITY_ERROR)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define HW_INTERRUT_ASSERT_SET_2 \
 				(AEU_INPUTS_ATTN_BITS_CSEMI_HW_INTERRUPT | \
 				 AEU_INPUTS_ATTN_BITS_CDU_HW_INTERRUPT | \
@@ -1758,6 +2770,10 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 			AEU_INPUTS_ATTN_BITS_PXPPCICLOCKCLIENT_PARITY_ERROR |\
 				 AEU_INPUTS_ATTN_BITS_CFC_PARITY_ERROR | \
 				 AEU_INPUTS_ATTN_BITS_CDU_PARITY_ERROR | \
+<<<<<<< HEAD
+=======
+				 AEU_INPUTS_ATTN_BITS_DMAE_PARITY_ERROR |\
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				 AEU_INPUTS_ATTN_BITS_IGU_PARITY_ERROR | \
 				 AEU_INPUTS_ATTN_BITS_MISC_PARITY_ERROR)
 
@@ -1766,6 +2782,12 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 		AEU_INPUTS_ATTN_BITS_MCP_LATCHED_UMP_TX_PARITY | \
 		AEU_INPUTS_ATTN_BITS_MCP_LATCHED_SCPAD_PARITY)
 
+<<<<<<< HEAD
+=======
+#define HW_PRTY_ASSERT_SET_4 (AEU_INPUTS_ATTN_BITS_PGLUE_PARITY_ERROR | \
+			      AEU_INPUTS_ATTN_BITS_ATC_PARITY_ERROR)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define RSS_FLAGS(bp) \
 		(TSTORM_ETH_FUNCTION_COMMON_CONFIG_RSS_IPV4_CAPABILITY | \
 		 TSTORM_ETH_FUNCTION_COMMON_CONFIG_RSS_IPV4_TCP_CAPABILITY | \
@@ -1775,6 +2797,33 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 		  TSTORM_ETH_FUNCTION_COMMON_CONFIG_RSS_MODE_SHIFT))
 #define MULTI_MASK			0x7f
 
+<<<<<<< HEAD
+=======
+
+#define DEF_USB_FUNC_OFF	offsetof(struct cstorm_def_status_block_u, func)
+#define DEF_CSB_FUNC_OFF	offsetof(struct cstorm_def_status_block_c, func)
+#define DEF_XSB_FUNC_OFF	offsetof(struct xstorm_def_status_block, func)
+#define DEF_TSB_FUNC_OFF	offsetof(struct tstorm_def_status_block, func)
+
+#define DEF_USB_IGU_INDEX_OFF \
+			offsetof(struct cstorm_def_status_block_u, igu_index)
+#define DEF_CSB_IGU_INDEX_OFF \
+			offsetof(struct cstorm_def_status_block_c, igu_index)
+#define DEF_XSB_IGU_INDEX_OFF \
+			offsetof(struct xstorm_def_status_block, igu_index)
+#define DEF_TSB_IGU_INDEX_OFF \
+			offsetof(struct tstorm_def_status_block, igu_index)
+
+#define DEF_USB_SEGMENT_OFF \
+			offsetof(struct cstorm_def_status_block_u, segment)
+#define DEF_CSB_SEGMENT_OFF \
+			offsetof(struct cstorm_def_status_block_c, segment)
+#define DEF_XSB_SEGMENT_OFF \
+			offsetof(struct xstorm_def_status_block, segment)
+#define DEF_TSB_SEGMENT_OFF \
+			offsetof(struct tstorm_def_status_block, segment)
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define BNX2X_SP_DSB_INDEX \
 		(&bp->def_status_blk->sp_sb.\
 					index_values[HC_SP_INDEX_ETH_DEF_CONS])
@@ -1786,7 +2835,11 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 	} while (0)
 
 #define GET_FLAG(value, mask) \
+<<<<<<< HEAD
 	(((value) &= (mask)) >> (mask##_SHIFT))
+=======
+	(((value) & (mask)) >> (mask##_SHIFT))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define GET_FIELD(value, fname) \
 	(((value) & (fname##_MASK)) >> (fname##_SHIFT))
@@ -1821,6 +2874,7 @@ static inline u32 reg_poll(struct bnx2x *bp, u32 reg, u32 expected, int ms,
 #define HC_SEG_ACCESS_ATTN		4
 #define HC_SEG_ACCESS_NORM		0   /*Driver decision 0-1*/
 
+<<<<<<< HEAD
 #ifdef BNX2X_MAIN
 #define BNX2X_EXTERN
 #else
@@ -1832,4 +2886,15 @@ BNX2X_EXTERN int load_count[2][3]; /* per path: 0-common, 1-port0, 2-port1 */
 extern void bnx2x_set_ethtool_ops(struct net_device *netdev);
 void bnx2x_push_indir_table(struct bnx2x *bp);
 
+=======
+static const u32 dmae_reg_go_c[] = {
+	DMAE_REG_GO_C0, DMAE_REG_GO_C1, DMAE_REG_GO_C2, DMAE_REG_GO_C3,
+	DMAE_REG_GO_C4, DMAE_REG_GO_C5, DMAE_REG_GO_C6, DMAE_REG_GO_C7,
+	DMAE_REG_GO_C8, DMAE_REG_GO_C9, DMAE_REG_GO_C10, DMAE_REG_GO_C11,
+	DMAE_REG_GO_C12, DMAE_REG_GO_C13, DMAE_REG_GO_C14, DMAE_REG_GO_C15
+};
+
+void bnx2x_set_ethtool_ops(struct net_device *netdev);
+void bnx2x_notify_link_changed(struct bnx2x *bp);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #endif /* bnx2x.h */

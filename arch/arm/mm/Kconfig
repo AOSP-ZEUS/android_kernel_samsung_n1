@@ -821,7 +821,12 @@ config CACHE_L2X0
 	depends on REALVIEW_EB_ARM11MP || MACH_REALVIEW_PB11MP || MACH_REALVIEW_PB1176 || \
 		   REALVIEW_EB_A9MP || SOC_IMX35 || SOC_IMX31 || MACH_REALVIEW_PBX || \
 		   ARCH_NOMADIK || ARCH_OMAP4 || ARCH_EXYNOS4 || ARCH_TEGRA || \
+<<<<<<< HEAD
 		   ARCH_U8500 || ARCH_VEXPRESS_CA9X4 || ARCH_SHMOBILE
+=======
+		   ARCH_U8500 || ARCH_VEXPRESS_CA9X4 || ARCH_SHMOBILE || \
+		   ARCH_PRIMA2 || ARCH_ZYNQ || ARCH_CNS3XXX
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	default y
 	select OUTER_CACHE
 	select OUTER_CACHE_SYNC
@@ -889,3 +894,21 @@ config ARCH_HAS_BARRIERS
 	help
 	  This option allows the use of custom mandatory barriers
 	  included via the mach/barriers.h file.
+<<<<<<< HEAD
+=======
+
+config ARM_SAVE_DEBUG_CONTEXT
+	bool "Save CPU debug state across suspend/resume"
+	depends on PM_SLEEP && CPU_V7
+	help
+	  This option enables save/restore of the ARM debug registers
+	  across CPU powerdown.
+
+config CPA
+	bool "Change Page Attributes"
+	depends on CPU_V7
+	help
+	  This option enables Changing Page Attibutes for low memory.
+	  This is needed to avoid conflicting memory mappings for low memory,
+	  One from kernel page table and others from user process page tables.
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7

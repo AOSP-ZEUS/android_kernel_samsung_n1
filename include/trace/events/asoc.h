@@ -9,6 +9,10 @@
 
 struct snd_soc_jack;
 struct snd_soc_codec;
+<<<<<<< HEAD
+=======
+struct snd_soc_platform;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct snd_soc_card;
 struct snd_soc_dapm_widget;
 
@@ -59,6 +63,53 @@ DEFINE_EVENT(snd_soc_reg, snd_soc_reg_read,
 
 );
 
+<<<<<<< HEAD
+=======
+DECLARE_EVENT_CLASS(snd_soc_preg,
+
+	TP_PROTO(struct snd_soc_platform *platform, unsigned int reg,
+		 unsigned int val),
+
+	TP_ARGS(platform, reg, val),
+
+	TP_STRUCT__entry(
+		__string(	name,		platform->name	)
+		__field(	int,		id		)
+		__field(	unsigned int,	reg		)
+		__field(	unsigned int,	val		)
+	),
+
+	TP_fast_assign(
+		__assign_str(name, platform->name);
+		__entry->id = platform->id;
+		__entry->reg = reg;
+		__entry->val = val;
+	),
+
+	TP_printk("platform=%s.%d reg=%x val=%x", __get_str(name),
+		  (int)__entry->id, (unsigned int)__entry->reg,
+		  (unsigned int)__entry->val)
+);
+
+DEFINE_EVENT(snd_soc_preg, snd_soc_preg_write,
+
+	TP_PROTO(struct snd_soc_platform *platform, unsigned int reg,
+		 unsigned int val),
+
+	TP_ARGS(platform, reg, val)
+
+);
+
+DEFINE_EVENT(snd_soc_preg, snd_soc_preg_read,
+
+	TP_PROTO(struct snd_soc_platform *platform, unsigned int reg,
+		 unsigned int val),
+
+	TP_ARGS(platform, reg, val)
+
+);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 DECLARE_EVENT_CLASS(snd_soc_card,
 
 	TP_PROTO(struct snd_soc_card *card, int val),

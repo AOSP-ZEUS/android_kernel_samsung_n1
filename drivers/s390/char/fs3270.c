@@ -14,7 +14,10 @@
 #include <linux/list.h>
 #include <linux/slab.h>
 #include <linux/types.h>
+<<<<<<< HEAD
 #include <linux/compat.h>
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #include <asm/compat.h>
 #include <asm/ccwdev.h>

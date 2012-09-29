@@ -40,7 +40,11 @@
  * to an MMC card
  * # dd if=vrl4.out of=/dev/sdx bs=512 seek=1
  */
+<<<<<<< HEAD
 asmlinkage void mmcif_loader(unsigned char *buf, unsigned long len)
+=======
+asmlinkage void mmc_loader(unsigned char *buf, unsigned long len)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 {
 	mmc_init_progress();
 	mmc_update_progress(MMC_PROGRESS_ENTER);
@@ -82,7 +86,11 @@ asmlinkage void mmcif_loader(unsigned char *buf, unsigned long len)
 
 
 	/* Disable clock to MMC hardware block */
+<<<<<<< HEAD
 	__raw_writel(__raw_readl(SMSTPCR3) & (1 << 12), SMSTPCR3);
+=======
+	__raw_writel(__raw_readl(SMSTPCR3) | (1 << 12), SMSTPCR3);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mmc_update_progress(MMC_PROGRESS_DONE);
 }

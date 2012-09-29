@@ -25,9 +25,12 @@
 #ifndef _BTTVP_H_
 #define _BTTVP_H_
 
+<<<<<<< HEAD
 #include <linux/version.h>
 #define BTTV_VERSION_CODE KERNEL_VERSION(0,9,18)
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/types.h>
 #include <linux/wait.h>
 #include <linux/i2c.h>

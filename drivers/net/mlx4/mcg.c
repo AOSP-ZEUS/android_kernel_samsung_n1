@@ -559,7 +559,12 @@ static int find_entry(struct mlx4_dev *dev, u8 port,
 	struct mlx4_mgm *mgm = mgm_mailbox->buf;
 	u8 *mgid;
 	int err;
+<<<<<<< HEAD
 	u8 op_mod = (prot == MLX4_PROT_ETH) ? !!(dev->caps.vep_mc_steering) : 0;
+=======
+	u8 op_mod = (prot == MLX4_PROT_ETH) ?
+		!!(dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_MC_STEER) : 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	mailbox = mlx4_alloc_cmd_mailbox(dev);
 	if (IS_ERR(mailbox))
@@ -834,7 +839,12 @@ int mlx4_multicast_attach(struct mlx4_dev *dev, struct mlx4_qp *qp, u8 gid[16],
 
 	steer = (is_valid_ether_addr(&gid[10])) ? MLX4_UC_STEER : MLX4_MC_STEER;
 
+<<<<<<< HEAD
 	if (prot == MLX4_PROT_ETH && !dev->caps.vep_mc_steering)
+=======
+	if (prot == MLX4_PROT_ETH &&
+			!(dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_MC_STEER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	if (prot == MLX4_PROT_ETH)
@@ -853,7 +863,12 @@ int mlx4_multicast_detach(struct mlx4_dev *dev, struct mlx4_qp *qp, u8 gid[16],
 
 	steer = (is_valid_ether_addr(&gid[10])) ? MLX4_UC_STEER : MLX4_MC_STEER;
 
+<<<<<<< HEAD
 	if (prot == MLX4_PROT_ETH && !dev->caps.vep_mc_steering)
+=======
+	if (prot == MLX4_PROT_ETH &&
+			!(dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_MC_STEER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	if (prot == MLX4_PROT_ETH) {
@@ -867,7 +882,11 @@ EXPORT_SYMBOL_GPL(mlx4_multicast_detach);
 
 int mlx4_multicast_promisc_add(struct mlx4_dev *dev, u32 qpn, u8 port)
 {
+<<<<<<< HEAD
 	if (!dev->caps.vep_mc_steering)
+=======
+	if (!(dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_MC_STEER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 
@@ -877,7 +896,11 @@ EXPORT_SYMBOL_GPL(mlx4_multicast_promisc_add);
 
 int mlx4_multicast_promisc_remove(struct mlx4_dev *dev, u32 qpn, u8 port)
 {
+<<<<<<< HEAD
 	if (!dev->caps.vep_mc_steering)
+=======
+	if (!(dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_MC_STEER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 
@@ -887,7 +910,11 @@ EXPORT_SYMBOL_GPL(mlx4_multicast_promisc_remove);
 
 int mlx4_unicast_promisc_add(struct mlx4_dev *dev, u32 qpn, u8 port)
 {
+<<<<<<< HEAD
 	if (!dev->caps.vep_mc_steering)
+=======
+	if (!(dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_MC_STEER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 
@@ -897,7 +924,11 @@ EXPORT_SYMBOL_GPL(mlx4_unicast_promisc_add);
 
 int mlx4_unicast_promisc_remove(struct mlx4_dev *dev, u32 qpn, u8 port)
 {
+<<<<<<< HEAD
 	if (!dev->caps.vep_mc_steering)
+=======
+	if (!(dev->caps.flags & MLX4_DEV_CAP_FLAG_VEP_MC_STEER))
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		return 0;
 
 	return remove_promisc_qp(dev, 0, port, MLX4_UC_STEER, qpn);

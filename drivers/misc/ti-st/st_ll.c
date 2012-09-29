@@ -22,6 +22,10 @@
 #define pr_fmt(fmt) "(stll) :" fmt
 #include <linux/skbuff.h>
 #include <linux/module.h>
+<<<<<<< HEAD
+=======
+#include <linux/platform_device.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #include <linux/ti_wilink_st.h>
 
 /**********************************************************************/
@@ -46,6 +50,14 @@ static void ll_device_want_to_sleep(struct st_data_s *st_data)
 	send_ll_cmd(st_data, LL_SLEEP_ACK);
 	/* update state */
 	st_data->ll_state = ST_LL_ASLEEP;
+<<<<<<< HEAD
+=======
+
+	/* communicate to platform about chip asleep */
+#ifdef CONFIG_WAKELOCK
+	wake_unlock(&st_data->st_wk_lock);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static void ll_device_want_to_wakeup(struct st_data_s *st_data)
@@ -53,6 +65,13 @@ static void ll_device_want_to_wakeup(struct st_data_s *st_data)
 	/* diff actions in diff states */
 	switch (st_data->ll_state) {
 	case ST_LL_ASLEEP:
+<<<<<<< HEAD
+=======
+		/* communicate to platform about chip wakeup */
+#ifdef CONFIG_WAKELOCK
+		wake_lock(&st_data->st_wk_lock);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		send_ll_cmd(st_data, LL_WAKE_UP_ACK);	/* send wake_ack */
 		break;
 	case ST_LL_ASLEEP_TO_AWAKE:
@@ -68,6 +87,10 @@ static void ll_device_want_to_wakeup(struct st_data_s *st_data)
 		pr_err("duplicate wake_ind");
 		break;
 	}
+<<<<<<< HEAD
+=======
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* update state */
 	st_data->ll_state = ST_LL_AWAKE;
 }
@@ -79,6 +102,13 @@ static void ll_device_want_to_wakeup(struct st_data_s *st_data)
  * enable ST LL */
 void st_ll_enable(struct st_data_s *ll)
 {
+<<<<<<< HEAD
+=======
+        /* communicate to platform about chip enable */
+#ifdef CONFIG_WAKELOCK
+	wake_lock(&ll->st_wk_lock);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ll->ll_state = ST_LL_AWAKE;
 }
 
@@ -86,13 +116,29 @@ void st_ll_enable(struct st_data_s *ll)
  * disable ST LL */
 void st_ll_disable(struct st_data_s *ll)
 {
+<<<<<<< HEAD
+=======
+        /* communicate to platform about chip disable */
+#ifdef CONFIG_WAKELOCK
+	wake_unlock(&ll->st_wk_lock);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	ll->ll_state = ST_LL_INVALID;
 }
 
 /* called when ST Core wants to update the state */
 void st_ll_wakeup(struct st_data_s *ll)
 {
+<<<<<<< HEAD
 	if (likely(ll->ll_state != ST_LL_AWAKE)) {
+=======
+
+	if (likely(ll->ll_state != ST_LL_AWAKE)) {
+		/* communicate to platform about chip wakeup */
+#ifdef CONFIG_WAKELOCK
+	wake_lock(&ll->st_wk_lock);
+#endif
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		send_ll_cmd(ll, LL_WAKE_UP_IND);	/* WAKE_IND */
 		ll->ll_state = ST_LL_ASLEEP_TO_AWAKE;
 	} else {

@@ -1143,7 +1143,10 @@ int txCommit(tid_t tid,		/* transaction identifier */
 	struct jfs_log *log;
 	struct tblock *tblk;
 	struct lrd *lrd;
+<<<<<<< HEAD
 	int lsn;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct inode *ip;
 	struct jfs_inode_info *jfs_ip;
 	int k, n;
@@ -1310,7 +1313,11 @@ int txCommit(tid_t tid,		/* transaction identifier */
 	 */
 	lrd->type = cpu_to_le16(LOG_COMMIT);
 	lrd->length = 0;
+<<<<<<< HEAD
 	lsn = lmLog(log, tblk, lrd, NULL);
+=======
+	lmLog(log, tblk, lrd, NULL);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	lmGroupCommit(log, tblk);
 
@@ -2935,7 +2942,10 @@ int jfs_sync(void *arg)
 {
 	struct inode *ip;
 	struct jfs_inode_info *jfs_ip;
+<<<<<<< HEAD
 	int rc;
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	tid_t tid;
 
 	do {
@@ -2961,7 +2971,11 @@ int jfs_sync(void *arg)
 				 */
 				TXN_UNLOCK();
 				tid = txBegin(ip->i_sb, COMMIT_INODE);
+<<<<<<< HEAD
 				rc = txCommit(tid, 1, &ip, 0);
+=======
+				txCommit(tid, 1, &ip, 0);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 				txEnd(tid);
 				mutex_unlock(&jfs_ip->commit_mutex);
 

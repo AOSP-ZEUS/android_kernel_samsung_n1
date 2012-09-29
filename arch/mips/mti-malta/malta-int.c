@@ -350,12 +350,22 @@ unsigned int plat_ipi_resched_int_xlate(unsigned int cpu)
 
 static struct irqaction i8259irq = {
 	.handler = no_action,
+<<<<<<< HEAD
 	.name = "XT-PIC cascade"
+=======
+	.name = "XT-PIC cascade",
+	.flags = IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static struct irqaction corehi_irqaction = {
 	.handler = no_action,
+<<<<<<< HEAD
 	.name = "CoreHi"
+=======
+	.name = "CoreHi",
+	.flags = IRQF_NO_THREAD,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 static msc_irqmap_t __initdata msc_irqmap[] = {

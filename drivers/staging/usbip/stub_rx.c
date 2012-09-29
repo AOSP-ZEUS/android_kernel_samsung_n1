@@ -306,18 +306,30 @@ static int stub_recv_cmd_unlink(struct stub_device *sdev,
 static int valid_request(struct stub_device *sdev, struct usbip_header *pdu)
 {
 	struct usbip_device *ud = &sdev->ud;
+<<<<<<< HEAD
+=======
+	int valid = 0;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 	if (pdu->base.devid == sdev->devid) {
 		spin_lock(&ud->lock);
 		if (ud->status == SDEV_ST_USED) {
 			/* A request is valid. */
+<<<<<<< HEAD
 			spin_unlock(&ud->lock);
 			return 1;
+=======
+			valid = 1;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		}
 		spin_unlock(&ud->lock);
 	}
 
+<<<<<<< HEAD
 	return 0;
+=======
+	return valid;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 }
 
 static struct stub_priv *stub_priv_alloc(struct stub_device *sdev,

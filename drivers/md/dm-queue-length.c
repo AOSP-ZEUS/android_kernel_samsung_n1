@@ -20,7 +20,11 @@
 #include <linux/ctype.h>
 #include <linux/errno.h>
 #include <linux/module.h>
+<<<<<<< HEAD
 #include <asm/atomic.h>
+=======
+#include <linux/atomic.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define DM_MSG_PREFIX	"multipath queue-length"
 #define QL_MIN_IO	128

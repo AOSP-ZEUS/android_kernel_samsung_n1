@@ -101,13 +101,26 @@ iscsi_iser_recv(struct iscsi_conn *conn,
 
 	/* verify PDU length */
 	datalen = ntoh24(hdr->dlength);
+<<<<<<< HEAD
 	if (datalen != rx_data_len) {
 		printk(KERN_ERR "iscsi_iser: datalen %d (hdr) != %d (IB) \n",
 		       datalen, rx_data_len);
+=======
+	if (datalen > rx_data_len || (datalen + 4) < rx_data_len) {
+		iser_err("wrong datalen %d (hdr), %d (IB)\n",
+			datalen, rx_data_len);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		rc = ISCSI_ERR_DATALEN;
 		goto error;
 	}
 
+<<<<<<< HEAD
+=======
+	if (datalen != rx_data_len)
+		iser_dbg("aligned datalen (%d) hdr, %d (IB)\n",
+			datalen, rx_data_len);
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* read AHS */
 	ahslen = hdr->hlength * 4;
 
@@ -354,9 +367,12 @@ iscsi_iser_conn_bind(struct iscsi_cls_session *cls_session,
 	}
 	ib_conn = ep->dd_data;
 
+<<<<<<< HEAD
 	if (iser_alloc_rx_descriptors(ib_conn))
 		return -ENOMEM;
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	/* binds the iSER connection retrieved from the previously
 	 * connected ep_handle to the iSCSI layer connection. exchanges
 	 * connection pointers */
@@ -391,6 +407,22 @@ iscsi_iser_conn_stop(struct iscsi_cls_conn *cls_conn, int flag)
 	iser_conn->ib_conn = NULL;
 }
 
+<<<<<<< HEAD
+=======
+static int
+iscsi_iser_conn_start(struct iscsi_cls_conn *cls_conn)
+{
+	struct iscsi_conn *conn = cls_conn->dd_data;
+	int err;
+
+	err = iser_conn_set_full_featured_mode(conn);
+	if (err)
+		return err;
+
+	return iscsi_conn_start(cls_conn);
+}
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void iscsi_iser_session_destroy(struct iscsi_cls_session *cls_session)
 {
 	struct Scsi_Host *shost = iscsi_session_to_shost(cls_session);
@@ -676,7 +708,11 @@ static struct iscsi_transport iscsi_iser_transport = {
 	.get_conn_param		= iscsi_conn_get_param,
 	.get_ep_param		= iscsi_iser_get_ep_param,
 	.get_session_param	= iscsi_session_get_param,
+<<<<<<< HEAD
 	.start_conn             = iscsi_conn_start,
+=======
+	.start_conn             = iscsi_iser_conn_start,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.stop_conn              = iscsi_iser_conn_stop,
 	/* iscsi host params */
 	.get_host_param		= iscsi_host_get_param,

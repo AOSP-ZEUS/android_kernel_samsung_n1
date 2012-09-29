@@ -6,6 +6,7 @@
 
 OBJS		=
 
+<<<<<<< HEAD
 # Ensure that mmcif loader code appears early in the image
 # to minimise that number of bocks that have to be read in
 # order to load it.
@@ -13,6 +14,21 @@ ifeq ($(CONFIG_ZBOOT_ROM_MMCIF),y)
 ifeq ($(CONFIG_ARCH_SH7372),y)
 OBJS		+= mmcif-sh7372.o
 endif
+=======
+# Ensure that MMCIF loader code appears early in the image
+# to minimise that number of bocks that have to be read in
+# order to load it.
+ifeq ($(CONFIG_ZBOOT_ROM_MMCIF),y)
+OBJS		+= mmcif-sh7372.o
+endif
+
+# Ensure that SDHI loader code appears early in the image
+# to minimise that number of bocks that have to be read in
+# order to load it.
+ifeq ($(CONFIG_ZBOOT_ROM_SH_MOBILE_SDHI),y)
+OBJS		+= sdhi-shmobile.o
+OBJS		+= sdhi-sh7372.o
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 endif
 
 AFLAGS_head.o += -DTEXT_OFFSET=$(TEXT_OFFSET)

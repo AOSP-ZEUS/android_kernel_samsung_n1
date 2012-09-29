@@ -143,7 +143,11 @@ ENTRY(ia32_sysenter_target)
 	CFI_REL_OFFSET rip,0
 	pushq_cfi %rax
 	cld
+<<<<<<< HEAD
 	SAVE_ARGS 0,0,1
+=======
+	SAVE_ARGS 0,1,0
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
  	/* no need to do an access_ok check here because rbp has been
  	   32bit zero extended */ 
 1:	movl	(%rbp),%ebp
@@ -173,7 +177,11 @@ sysexit_from_sys_call:
 	andl  $~0x200,EFLAGS-R11(%rsp) 
 	movl	RIP-R11(%rsp),%edx		/* User %eip */
 	CFI_REGISTER rip,rdx
+<<<<<<< HEAD
 	RESTORE_ARGS 1,24,1,1,1,1
+=======
+	RESTORE_ARGS 0,24,0,0,0,0
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	xorq	%r8,%r8
 	xorq	%r9,%r9
 	xorq	%r10,%r10
@@ -289,7 +297,11 @@ ENTRY(ia32_cstar_target)
 	 * disabled irqs and here we enable it straight after entry:
 	 */
 	ENABLE_INTERRUPTS(CLBR_NONE)
+<<<<<<< HEAD
 	SAVE_ARGS 8,1,1
+=======
+	SAVE_ARGS 8,0,0
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	movl 	%eax,%eax	/* zero extension */
 	movq	%rax,ORIG_RAX-ARGOFFSET(%rsp)
 	movq	%rcx,RIP-ARGOFFSET(%rsp)
@@ -328,7 +340,11 @@ cstar_dispatch:
 	jnz sysretl_audit
 sysretl_from_sys_call:
 	andl $~TS_COMPAT,TI_status(%r10)
+<<<<<<< HEAD
 	RESTORE_ARGS 1,-ARG_SKIP,1,1,1
+=======
+	RESTORE_ARGS 0,-ARG_SKIP,0,0,0
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	movl RIP-ARGOFFSET(%rsp),%ecx
 	CFI_REGISTER rip,rcx
 	movl EFLAGS-ARGOFFSET(%rsp),%r11d	
@@ -419,7 +435,11 @@ ENTRY(ia32_syscall)
 	cld
 	/* note the registers are not zero extended to the sf.
 	   this could be a problem. */
+<<<<<<< HEAD
 	SAVE_ARGS 0,0,1
+=======
+	SAVE_ARGS 0,1,0
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	GET_THREAD_INFO(%r10)
 	orl   $TS_COMPAT,TI_status(%r10)
 	testl $_TIF_WORK_SYSCALL_ENTRY,TI_flags(%r10)
@@ -672,7 +692,11 @@ ia32_sys_call_table:
 	.quad sys32_vm86_warning	/* vm86 */ 
 	.quad quiet_ni_syscall	/* query_module */
 	.quad sys_poll
+<<<<<<< HEAD
 	.quad compat_sys_nfsservctl
+=======
+	.quad quiet_ni_syscall /* old nfsservctl */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	.quad sys_setresgid16	/* 170 */
 	.quad sys_getresgid16
 	.quad sys_prctl

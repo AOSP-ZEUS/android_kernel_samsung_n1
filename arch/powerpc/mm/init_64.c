@@ -83,6 +83,7 @@ EXPORT_SYMBOL_GPL(memstart_addr);
 phys_addr_t kernstart_addr;
 EXPORT_SYMBOL_GPL(kernstart_addr);
 
+<<<<<<< HEAD
 void free_initmem(void)
 {
 	unsigned long addr;
@@ -99,6 +100,8 @@ void free_initmem(void)
 		((unsigned long)__init_end - (unsigned long)__init_begin) >> 10);
 }
 
+=======
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 static void pgd_ctor(void *addr)
 {
 	memset(addr, 0, PGD_TABLE_SIZE);

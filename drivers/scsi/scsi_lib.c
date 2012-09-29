@@ -137,6 +137,10 @@ static int __scsi_queue_insert(struct scsi_cmnd *cmd, int reason, int unbusy)
 		host->host_blocked = host->max_host_blocked;
 		break;
 	case SCSI_MLQUEUE_DEVICE_BUSY:
+<<<<<<< HEAD
+=======
+	case SCSI_MLQUEUE_EH_RETRY:
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		device->device_blocked = device->max_device_blocked;
 		break;
 	case SCSI_MLQUEUE_TARGET_BUSY:

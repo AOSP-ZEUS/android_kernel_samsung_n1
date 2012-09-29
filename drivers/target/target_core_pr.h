@@ -49,7 +49,11 @@ extern int core_pr_dump_initiator_port(struct t10_pr_registration *,
 			char *, u32);
 extern int core_scsi2_emulate_crh(struct se_cmd *);
 extern int core_scsi3_alloc_aptpl_registration(
+<<<<<<< HEAD
 			struct t10_reservation_template *, u64,
+=======
+			struct t10_reservation *, u64,
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 			unsigned char *, unsigned char *, u32,
 			unsigned char *, u16, u32, int, int, u8);
 extern int core_scsi3_check_aptpl_registration(struct se_device *,

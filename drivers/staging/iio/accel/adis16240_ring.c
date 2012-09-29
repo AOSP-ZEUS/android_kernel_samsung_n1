@@ -26,7 +26,11 @@ static int adis16240_read_ring_data(struct device *dev, u8 *rx)
 {
 	struct spi_message msg;
 	struct iio_dev *indio_dev = dev_get_drvdata(dev);
+<<<<<<< HEAD
 	struct adis16240_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16240_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct spi_transfer xfers[ADIS16240_OUTPUTS + 1];
 	int ret;
 	int i;
@@ -63,7 +67,11 @@ static irqreturn_t adis16240_trigger_handler(int irq, void *p)
 {
 	struct iio_poll_func *pf = p;
 	struct iio_dev *indio_dev = pf->private_data;
+<<<<<<< HEAD
 	struct adis16240_state *st = iio_dev_get_devdata(indio_dev);
+=======
+	struct adis16240_state *st = iio_priv(indio_dev);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	struct iio_ring_buffer *ring = indio_dev->ring;
 
 	int i = 0;
@@ -77,7 +85,11 @@ static irqreturn_t adis16240_trigger_handler(int irq, void *p)
 	}
 
 	if (ring->scan_count &&
+<<<<<<< HEAD
 	    adis16240_read_ring_data(&st->indio_dev->dev, st->rx) >= 0)
+=======
+	    adis16240_read_ring_data(&indio_dev->dev, st->rx) >= 0)
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		for (; i < ring->scan_count; i++)
 			data[i] = be16_to_cpup((__be16 *)&(st->rx[i*2]));
 
@@ -87,7 +99,11 @@ static irqreturn_t adis16240_trigger_handler(int irq, void *p)
 
 	ring->access->store_to(ring, (u8 *)data, pf->timestamp);
 
+<<<<<<< HEAD
 	iio_trigger_notify_done(st->indio_dev->trig);
+=======
+	iio_trigger_notify_done(indio_dev->trig);
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	kfree(data);
 
 	return IRQ_HANDLED;

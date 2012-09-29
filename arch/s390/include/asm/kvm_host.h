@@ -47,7 +47,11 @@ struct sca_block {
 #define KVM_HPAGE_MASK(x)	(~(KVM_HPAGE_SIZE(x) - 1))
 #define KVM_PAGES_PER_HPAGE(x)	(KVM_HPAGE_SIZE(x) / PAGE_SIZE)
 
+<<<<<<< HEAD
 #define CPUSTAT_HOST       0x80000000
+=======
+#define CPUSTAT_STOPPED    0x80000000
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 #define CPUSTAT_WAIT       0x10000000
 #define CPUSTAT_ECALL_PEND 0x08000000
 #define CPUSTAT_STOP_INT   0x04000000
@@ -93,9 +97,13 @@ struct kvm_s390_sie_block {
 	__u32	scaol;			/* 0x0064 */
 	__u8	reserved68[4];		/* 0x0068 */
 	__u32	todpr;			/* 0x006c */
+<<<<<<< HEAD
 	__u8	reserved70[16];		/* 0x0070 */
 	__u64	gmsor;			/* 0x0080 */
 	__u64	gmslm;			/* 0x0088 */
+=======
+	__u8	reserved70[32];		/* 0x0070 */
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	psw_t	gpsw;			/* 0x0090 */
 	__u64	gg14;			/* 0x00a0 */
 	__u64	gg15;			/* 0x00a8 */
@@ -138,6 +146,10 @@ struct kvm_vcpu_stat {
 	u32 instruction_chsc;
 	u32 instruction_stsi;
 	u32 instruction_stfl;
+<<<<<<< HEAD
+=======
+	u32 instruction_tprot;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 	u32 instruction_sigp_sense;
 	u32 instruction_sigp_emergency;
 	u32 instruction_sigp_stop;
@@ -175,6 +187,13 @@ struct kvm_s390_prefix_info {
 	__u32 address;
 };
 
+<<<<<<< HEAD
+=======
+struct kvm_s390_emerg_info {
+	__u16 code;
+};
+
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 struct kvm_s390_interrupt_info {
 	struct list_head list;
 	u64	type;
@@ -182,6 +201,10 @@ struct kvm_s390_interrupt_info {
 		struct kvm_s390_io_info io;
 		struct kvm_s390_ext_info ext;
 		struct kvm_s390_pgm_info pgm;
+<<<<<<< HEAD
+=======
+		struct kvm_s390_emerg_info emerg;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 		struct kvm_s390_prefix_info prefix;
 	};
 };
@@ -226,6 +249,10 @@ struct kvm_vcpu_arch {
 		struct cpuid	cpu_id;
 		u64		stidp_data;
 	};
+<<<<<<< HEAD
+=======
+	struct gmap *gmap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 struct kvm_vm_stat {
@@ -236,6 +263,10 @@ struct kvm_arch{
 	struct sca_block *sca;
 	debug_info_t *dbf;
 	struct kvm_s390_float_interrupt float_int;
+<<<<<<< HEAD
+=======
+	struct gmap *gmap;
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 };
 
 extern int sie64a(struct kvm_s390_sie_block *, unsigned long *);

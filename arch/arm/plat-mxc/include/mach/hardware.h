@@ -97,6 +97,7 @@
 
 #include <mach/mxc.h>
 
+<<<<<<< HEAD
 #ifdef CONFIG_ARCH_MX5
 #include <mach/mx50.h>
 #include <mach/mx51.h>
@@ -126,6 +127,19 @@
 #ifdef CONFIG_ARCH_MX25
 # include <mach/mx25.h>
 #endif
+=======
+#include <mach/mx50.h>
+#include <mach/mx51.h>
+#include <mach/mx53.h>
+#include <mach/mx3x.h>
+#include <mach/mx31.h>
+#include <mach/mx35.h>
+#include <mach/mx2x.h>
+#include <mach/mx21.h>
+#include <mach/mx27.h>
+#include <mach/mx1.h>
+#include <mach/mx25.h>
+>>>>>>> 0c0a7df444663b2da5ce70e9b9129a9cfe1b07c7
 
 #define imx_map_entry(soc, name, _type)	{				\
 	.virtual = soc ## _IO_P2V(soc ## _ ## name ## _BASE_ADDR),	\
