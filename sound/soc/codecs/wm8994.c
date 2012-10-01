@@ -2968,10 +2968,13 @@ static int wm8994_codec_probe(struct snd_soc_codec *codec)
 		if (ret != 0) {
 			dev_err(codec->dev,
 				"Failed to initialise cache for 0x%x: %d\n",
+<<<<<<< HEAD
 #ifdef CONFIG_SND_VOODOO
 	voodoo_hook_wm8994_pcm_probe(codec);
 #endif
 
+=======
+>>>>>>> f6a4d6928a241365778672f8187a4a0649c1deb9
 				i, ret);
 			goto err;
 		}

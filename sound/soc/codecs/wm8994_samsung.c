@@ -953,6 +953,10 @@ static int wm8994_set_voice_path(struct snd_kcontrol *kcontrol,
 		} else if (wm8994->cur_path == SPK) {
 			DEBUG_LOG("SPK Audience : clock_state_changed %d", clock_state_changed);
 			wm8994_set_voicecall_speaker(codec);
+			wm8994_set_voicecall_receiver_audience(codec);
+		} else if (wm8994->cur_path == SPK) {
+			DEBUG_LOG("SPK Audience : clock_state_changed %d", clock_state_changed);
+			wm8994_set_voicecall_speaker_audience(codec);
 		} else {
 			DEBUG_LOG("Bose Normal Call : clock_state_changed %d", clock_state_changed);
 			wm8994->universal_voicecall_path[wm8994->cur_path] (codec);
@@ -3990,11 +3994,14 @@ static int wm8994_codec_probe(struct snd_soc_codec *codec)
 	codec->control_data = to_i2c_client(codec->dev);
 
 	ret = wm8994_init(wm8994_priv, pdata);
+<<<<<<< HEAD
 
 #ifdef CONFIG_SND_VOODOO
 	voodoo_hook_wm8994_pcm_probe(codec);
 #endif
 
+=======
+>>>>>>> f6a4d6928a241365778672f8187a4a0649c1deb9
 	if (ret < 0) {
 		dev_err(codec->dev, "failed to initialize WM8994\n");
 		goto err_init;
