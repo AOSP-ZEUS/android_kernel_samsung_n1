@@ -1,0 +1,1 @@
+cmd_drivers/input/keyboard/built-in.o :=  /home/dman3285/CM10/prebuilt/linux-x86/toolchain/arm-eabi-4.4.3/bin/arm-eabi-ld -EL    -r -o drivers/input/keyboard/built-in.o drivers/input/keyboard/gpio_keys.o drivers/input/keyboard/stmpe-bose-keypad.o drivers/input/keyboard/tegra-kbc.o drivers/input/keyboard/cypress/built-in.o 
