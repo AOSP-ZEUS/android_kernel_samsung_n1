@@ -3994,14 +3994,11 @@ static int wm8994_codec_probe(struct snd_soc_codec *codec)
 	codec->control_data = to_i2c_client(codec->dev);
 
 	ret = wm8994_init(wm8994_priv, pdata);
-<<<<<<< HEAD
 
 #ifdef CONFIG_SND_VOODOO
 	voodoo_hook_wm8994_pcm_probe(codec);
 #endif
 
-=======
->>>>>>> f6a4d6928a241365778672f8187a4a0649c1deb9
 	if (ret < 0) {
 		dev_err(codec->dev, "failed to initialize WM8994\n");
 		goto err_init;
